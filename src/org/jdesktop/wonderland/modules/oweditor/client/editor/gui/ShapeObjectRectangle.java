@@ -2,6 +2,7 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.gui;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Paint;
 import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
@@ -12,6 +13,7 @@ public class ShapeObjectRectangle extends ShapeObject{
     private Shape transformedShape = null;
     private int id = -1;
     private boolean isSelected = false;
+    private Paint color = GUISettings.objectColor;
     
     public ShapeObjectRectangle(int x, int y, int width, int height, int id){
         
@@ -40,7 +42,7 @@ public class ShapeObjectRectangle extends ShapeObject{
 
     @Override
     public void paintOriginal(Graphics2D g) {
-        g.setPaint(GUISettings.objectColor);  
+        g.setPaint(color);  
 
         g.fill(originalShape);
         
@@ -52,7 +54,7 @@ public class ShapeObjectRectangle extends ShapeObject{
     @Override
     public void paintOriginal(Graphics2D g, AffineTransform at) {
 
-        g.setPaint(GUISettings.objectColor);  
+        g.setPaint(color);  
         
         transformedShape = at.createTransformedShape(originalShape);
         
@@ -69,7 +71,7 @@ public class ShapeObjectRectangle extends ShapeObject{
         if(transformedShape == null)
             return;
         
-        g.setPaint(GUISettings.objectColor);  
+        g.setPaint(color);  
         
         g.fill(transformedShape);
         if(isSelected)
@@ -118,6 +120,34 @@ public class ShapeObjectRectangle extends ShapeObject{
         int new_y = (int) Math.round(originalShape.y-distance_y);
         originalShape.setLocation(new_x, new_y);
         
+    }
+
+
+
+    @Override
+    public int getX() {
+        return originalShape.x;
+    }
+
+
+
+    @Override
+    public int getY() {
+        return originalShape.y;
+    }
+
+
+
+    @Override
+    public int getWidth() {
+        return originalShape.width;
+    }
+
+
+
+    @Override
+    public int getHeight() {
+        return originalShape.height;
     }
 
 }

@@ -89,12 +89,9 @@ public class ListenerSelection extends MouseInputAdapter implements KeyListener{
             
             Point end = new Point(e.getX(), e.getY());
             
-            if(selectionRect == SELFIRST){
-                controler.getSelectManager().resizeSelectionRect(start, end, true);
-                selectionRect = SELSPAN;
-            }else if(selectionRect == SELSPAN){
-                controler.getSelectManager().resizeSelectionRect(start, end, false);
-            }
+           
+            controler.getSelectManager().resizeSelectionRect(start, end);
+          
             controler.getDrawingPanel().repaint();
         }
     }

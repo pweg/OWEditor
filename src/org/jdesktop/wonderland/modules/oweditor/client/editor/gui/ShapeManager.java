@@ -6,16 +6,25 @@ import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
+import java.util.Collection;
+
+import org.jdesktop.wonderland.modules.oweditor.client.data.DataManagerInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.data.DataObjectInterface;
 
 public class ShapeManager {
-    
+
     ArrayList<ShapeObject> shapes = null;
+    ArrayList<ShapeObject> updateShapes = null;
+    ArrayList<ShapeObjectDraggingRect> movingShapes = null;
     
     private ShapeObjectSelectionRect selectionRectangle = null;
+    private boolean showDraggingShapes = false;
+    private DataManagerInterface dm = null;
     
     public ShapeManager(){
         shapes = new ArrayList<ShapeObject>();
-        initShapes();
+        updateShapes = new ArrayList<ShapeObject>();
+        movingShapes = new ArrayList<ShapeObjectDraggingRect>();
     }
     
     
@@ -27,9 +36,6 @@ public class ShapeManager {
          return shape;
     }
     
-    public void createSelectionRect(int x, int y,  int width, int height){
-        selectionRectangle = new ShapeObjectSelectionRect(x, y,width,height);
-    }
     
     public ArrayList<ShapeObject> getShapes(){
         return shapes;
@@ -43,27 +49,10 @@ public class ShapeManager {
         return null;
     }
     
-    private void initShapes() {  
-        
-        
-        ShapeObjectRectangle rec = new ShapeObjectRectangle (160, 160, 70, 70, 0);
-        shapes.add( rec );  
-        //shapes[1] = new Line2D.Double(w/16, h*15/16, w*15/16, h/16);  
-        shapes.add(new ShapeObjectRectangle (400, 400, 200, 200,1));  
-    }
-    
-    public boolean selectionRectExists(){
-        
-        if(selectionRectangle == null)
-            return false;
-        else
-            return true;
-    }
     
     public void setSelectionRect(int x, int y, int width, int height){
         if (selectionRectangle == null)
-            return;
-        
+            selectionRectangle = new ShapeObjectSelectionRect(x,y,width,height);        
         selectionRectangle.set(x, y, width, height);
     }
     
@@ -108,9 +97,129 @@ public class ShapeManager {
         for(ShapeObject shape : shapes){  
             shape.paintOriginal(g2, at);
         }
+        
+        if(showDraggingShapes){
+            for(ShapeObject shape : movingShapes){  
+                shape.paintOriginal(g2, at);
+            }
+        }
 
         if(selectionRectangle != null)
             selectionRectangle.paintOriginal(g2);
+        
+    }
+    
+    public void translateMovingShapes(ArrayList<ShapeObject> selectedShapes, double distance_x, double distance_y){
+        showDraggingShapes = true;
+        
+        if(movingShapes.isEmpty()){
+            for(ShapeObject shape: selectedShapes){
+                createDraggingShape(shape);
+            }
+        }
+        
+        for(ShapeObject selShape : movingShapes){
+            selShape.setTranslation(distance_x, distance_y);
+        }
+    }
+
+
+
+    private void createDraggingShape(ShapeObject shape) {
+                    
+        int x = shape.getX();
+        int y = shape.getY();
+        int width = shape.getWidth();
+        int height = shape.getHeight();
+        int id = shape.getID();
+        
+        if(shape instanceof ShapeObjectRectangle){
+            ShapeObjectDraggingRect newShape = new ShapeObjectDraggingRect(x,y,width,height, id);
+            movingShapes.add(newShape); 
+        }
+    }
+    
+    /*
+    public void removeDraggingShape(ShapeObject shape){
+        System.out.println("remove");
+        
+        for(ShapeObject s : movingShapes){
+            if(s.getID() == shape.getID())
+                movingShapes.remove(s);
+                break;
+        }
+    }*/
+
+
+
+    public void clearMovingShapes() {
+        movingShapes.clear();
+        showDraggingShapes = false;
+    }
+
+
+    public void saveMovingShapes() {
+        for(ShapeObject shape : movingShapes){
+            updateShapes.add(shape);
+        }
+        
+    }
+
+
+
+    public ArrayList<ShapeObject> getUpdateShapes() {
+        ArrayList<ShapeObject> list = new ArrayList<ShapeObject>();
+        list.addAll(updateShapes);
+        updateShapes.clear();
+        return list;
+    }
+
+
+
+    public void getAdapterUpdate(int id) {
+
+
+        if(dm == null)
+            return;
+
+
+        DataObjectInterface so = dm.getObject(id);
+        
+        ShapeObject shape = null;
+        
+        for(ShapeObject s : shapes){
+            if(s.getID() == id){
+                shape = s;
+                break;
+            }
+        }
+
+        if(shape == null){
+            getCreateUpdate(id);
+            return;
+        }
+        
+        shape.setLocation(so.getX(), so.getY());
+        
+    }
+    
+    public void getCreateUpdate(int id){
+        
+        System.out.println("Blar");
+        
+        DataObjectInterface so = dm.getObject(id);
+        int x = so.getX();
+        int y = so.getY();
+        int width = so.getWidth();
+        int height = so.getHeight();
+   
+        createRectangle( x,  y,  width,  height,  id);
+    }
+
+
+
+    public void setDataManager(DataManagerInterface dm) {
+        this.dm = dm;
         
     }
     

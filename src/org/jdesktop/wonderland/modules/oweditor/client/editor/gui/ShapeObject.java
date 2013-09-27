@@ -29,6 +29,14 @@ public abstract class ShapeObject {
 
     public abstract void setTranslation(double distance_x, double distance_y) ;
     
+    public abstract int getX();
+    
+    public abstract int getY();
+    
+    public abstract int getWidth();
+    
+    public abstract int getHeight();
+    
     
 
 }

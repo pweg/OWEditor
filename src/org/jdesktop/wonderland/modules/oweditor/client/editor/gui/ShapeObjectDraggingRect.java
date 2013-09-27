@@ -8,24 +8,18 @@ import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 
-public class ShapeObjectSelectionRect extends ShapeObject{
+public class ShapeObjectDraggingRect extends ShapeObject{
     
     private Rectangle originalShape = null;
     private Shape transformedShape = null;
     private boolean isSelected = false;
-    private Paint color = GUISettings.selectionRectangleColor;
+    private Paint color = GUISettings.draggingColor;
+    private int id;
     
-    final static BasicStroke dashed = new BasicStroke(
-            1.0f,                      // Width
-            BasicStroke.CAP_SQUARE,    // End cap
-            BasicStroke.JOIN_MITER,    // Join style
-            10.0f,                     // Miter limit
-            new float[] {10.0f,10.0f}, // Dash pattern
-            0.0f);  
-    
-    public ShapeObjectSelectionRect(int x, int y, int width, int height){
+    public ShapeObjectDraggingRect(int x, int y, int width, int height, int id){
         
         originalShape = new Rectangle (x, y, width, height);
+        this.id = id;
         
     }
     
@@ -43,14 +37,13 @@ public class ShapeObjectSelectionRect extends ShapeObject{
 
     @Override
     public int getID() {
-        return 0;
+        return id;
     }
     
 
     @Override
     public void paintOriginal(Graphics2D g) {
         g.setPaint(color); 
-        g.setStroke(dashed); 
 
         g.draw(originalShape);
     }
@@ -58,8 +51,7 @@ public class ShapeObjectSelectionRect extends ShapeObject{
     @Override
     public void paintOriginal(Graphics2D g, AffineTransform at) {
         
-        g.setPaint(color); 
-        g.setStroke(dashed); 
+        g.setPaint(color);  
         
         transformedShape = at.createTransformedShape(originalShape);
                 
@@ -71,9 +63,7 @@ public class ShapeObjectSelectionRect extends ShapeObject{
         if(transformedShape == null)
             return;
         
-        g.setPaint(color); 
-        g.setStroke(dashed); 
-        
+        g.setPaint(color);  
         g.draw(transformedShape);
         
     }

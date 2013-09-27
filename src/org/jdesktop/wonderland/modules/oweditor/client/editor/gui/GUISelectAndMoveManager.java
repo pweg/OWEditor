@@ -6,7 +6,7 @@ import java.awt.Shape;
 import java.util.ArrayList;
 
 public class GUISelectAndMoveManager {
-    
+
     private ArrayList<ShapeObject> selectedShapes = null;
     private GUIControler controler = null;
 
@@ -15,7 +15,8 @@ public class GUISelectAndMoveManager {
     private ListenerSelection selectionListener = null;
     
     public GUISelectAndMoveManager(GUIControler contr){
-        selectedShapes = new ArrayList<ShapeObject>();        
+        selectedShapes = new ArrayList<ShapeObject>();     
+        
         controler = contr;
         
         dragListener = new ListenerDragAndDrop(controler);
@@ -35,16 +36,20 @@ public class GUISelectAndMoveManager {
         
         if(selected){
             selectedShapes.add(shape);
+            //controler.getShapeManager().createDraggingShape(shape);
         }else{
             selectedShapes.remove(shape);
+            //controler.getShapeManager().removeDraggingShape(shape);
         }
     }
     
     public void switchSelection(ShapeObject shape){
         if(shape.isSelected()){
-            selectedShapes.remove(shape);           
+            selectedShapes.remove(shape);   
+            //controler.getShapeManager().removeDraggingShape(shape);
         }else{
             selectedShapes.add(shape);
+            //controler.getShapeManager().createDraggingShape(shape);
         }
         shape.switchSelection();
     }
@@ -54,6 +59,7 @@ public class GUISelectAndMoveManager {
         for(ShapeObject shape : selectedShapes){
             shape.setSelected(false);
         }
+        controler.getShapeManager().clearMovingShapes();
         selectedShapes.clear();
     }
     
@@ -80,28 +86,15 @@ public class GUISelectAndMoveManager {
         
         if(shape instanceof ShapeObjectRectangle){
             Rectangle r = (Rectangle) shape.getShape();
-            /*System.out.println("scale : " + scale);
-            System.out.println("new mouse point: " + x2 + " " + y2);
-            System.out.println("coordinats: " + r.x + " " + r.y);
-            System.out.println("Distance: "+ distance_x + " " + distance_y +"__ " + distance_x/scale + " "+distance_y/scale);
-            System.out.println("New coords: "+ new_x + " " + new_y);
-            System.out.println(r.height + " " + r.width);
-            System.out.println("-------" );
-            */
 
             int distance_x = start.x - x2;
             int distance_y = start.y - y2;
             
             double distance = start.distance(x2, y2);
-            
             distance = distance / scale;
 
-            //int new_x = (int) Math.round(r.x - (distance_x)/scale);
-            //int new_y = (int) Math.round(r.y - ;
             
-            for(ShapeObject selShape : selectedShapes){
-                selShape.setTranslation((distance_x/scale), (distance_y/scale));
-            }
+            controler.getShapeManager().translateMovingShapes(selectedShapes, distance_x/scale, distance_y/scale );
 
             
             
@@ -109,7 +102,7 @@ public class GUISelectAndMoveManager {
         }
     }
 
-    public void resizeSelectionRect(Point start, Point end, boolean createShape) {
+    public void resizeSelectionRect(Point start, Point end) {
 
         int sx = start.x;
         int sy = start.y;
@@ -137,10 +130,7 @@ public class GUISelectAndMoveManager {
             y=sy;
         }
           
-        if(createShape)
-            controler.getShapeManager().createSelectionRect(x, y, width, height);
-        else
-            controler.getShapeManager().setSelectionRect(x,y,width, height);
+        controler.getShapeManager().setSelectionRect(x,y,width, height);
         
         
         
@@ -155,6 +145,7 @@ public class GUISelectAndMoveManager {
         }
         
     }
+
     
 
 }
