@@ -9,5 +9,6 @@ public class GUISettings {
     public static Paint backgroundColor = Color.white;
     public static Paint graggingColor = Color.lightGray;
     public static Paint selectionBorderColor = Color.red;
+    public static Paint selectionRectangleColor = Color.black;
 
 }

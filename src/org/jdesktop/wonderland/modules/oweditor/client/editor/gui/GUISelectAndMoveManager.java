@@ -9,11 +9,25 @@ public class GUISelectAndMoveManager {
     
     private ArrayList<ShapeObject> selectedShapes = null;
     private GUIControler controler = null;
+
+    
+    private ListenerDragAndDrop dragListener = null;
+    private ListenerSelection selectionListener = null;
     
     public GUISelectAndMoveManager(GUIControler contr){
-        selectedShapes = new ArrayList<ShapeObject>();
-        
+        selectedShapes = new ArrayList<ShapeObject>();        
         controler = contr;
+        
+        dragListener = new ListenerDragAndDrop(controler);
+        selectionListener = new ListenerSelection(controler);
+        
+        WindowDrawingPanel drawingPan = controler.getDrawingPanel();
+        
+        drawingPan.addMouseListener(dragListener);
+        drawingPan.addMouseMotionListener(dragListener);
+        drawingPan.addMouseListener(selectionListener);
+        drawingPan.addMouseMotionListener(selectionListener);
+        controler.getFrame().addKeyListener(selectionListener);
     }
     
     public void setSelected(ShapeObject shape, boolean selected){
@@ -49,6 +63,7 @@ public class GUISelectAndMoveManager {
         else
             return true;
     }
+    
     
     
     public void translateShape(int id, int x2, int y2, Point start){
@@ -93,5 +108,53 @@ public class GUISelectAndMoveManager {
             controler.getDrawingPanel().repaint();
         }
     }
+
+    public void resizeSelectionRect(Point start, Point end, boolean createShape) {
+
+        int sx = start.x;
+        int sy = start.y;
+        int ex = end.x;
+        int ey = end.y;
+        
+        int width = 0;
+        int height = 0;
+        int x = 0;
+        int y = 0;
+
+        if(sx > ex){
+            width = sx-ex;
+            x=ex;
+        }else{
+            width = ex-sx;
+            x=sx;
+        }
+        
+        if(sy > ey){
+            height = sy-ey;
+            y=ey;
+        }else{
+            height = ey-sy;
+            y=sy;
+        }
+          
+        if(createShape)
+            controler.getShapeManager().createSelectionRect(x, y, width, height);
+        else
+            controler.getShapeManager().setSelectionRect(x,y,width, height);
+        
+        
+        
+    }
+
+    public void selectionPressReleased() {
+        
+        ArrayList<ShapeObject> list = controler.getShapeManager().getShapesInSelection();
+        
+        for(ShapeObject shape : list){
+            setSelected(shape, true);
+        }
+        
+    }
+    
 
 }

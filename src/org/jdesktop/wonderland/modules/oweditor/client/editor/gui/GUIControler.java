@@ -8,8 +8,6 @@ public class GUIControler implements GUIInterface{
     private WindowDrawingPanel drawingPan = null;
     private JScrollPane mainScrollPanel = null;
     
-    private ListenerDragAndDrop dragListener = null;
-    private ListenerSelection selectionListener = null;
     
     private ShapeManager shapeManager = null;
     private GUISelectAndMoveManager selectManager = null;
@@ -31,12 +29,8 @@ public class GUIControler implements GUIInterface{
         drawingPan = new WindowDrawingPanel(shapeManager);
         selectManager = new GUISelectAndMoveManager(this);
         
-        dragListener = new ListenerDragAndDrop(this);
-        selectionListener = new ListenerSelection(this);
-        drawingPan.addMouseListener(dragListener);
-        drawingPan.addMouseMotionListener(dragListener);
-        drawingPan.addMouseListener(selectionListener);
-        frame.addKeyListener(selectionListener);
+        
+        
         
        
         mainScrollPanel = new JScrollPane(drawingPan);
@@ -49,6 +43,10 @@ public class GUIControler implements GUIInterface{
         frame.setVisible(visibility);
         
         
+    }
+    
+    public WindowFrame getFrame(){
+        return frame;
     }
     
     public ShapeManager getShapeManager(){

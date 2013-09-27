@@ -112,11 +112,7 @@ public class WindowDrawingPanel extends JPanel implements ChangeListener {
         at.scale(scale, scale);  
         g2.setPaint(GUISettings.backgroundColor); 
         
-        ArrayList<ShapeObject> shapes = shapeManager.getShapes();
-        
-        for(ShapeObject shape : shapes){  
-            shape.paintOriginal(g2, at);
-        }
+        shapeManager.drawShapes(g2, at);
         
    } 
    

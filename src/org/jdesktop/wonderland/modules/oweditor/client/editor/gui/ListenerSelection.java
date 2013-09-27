@@ -1,6 +1,7 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.gui;
 
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -8,34 +9,27 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
-public class ListenerSelection implements MouseListener, KeyListener{
+import javax.swing.event.MouseInputAdapter;
+
+public class ListenerSelection extends MouseInputAdapter implements KeyListener{
+    
+    public static final byte NOSELSPAN = 0;
+    public static final byte SELFIRST = 1;
+    public static final byte SELSPAN = 2;
     
     private GUIControler controler = null;
     private boolean shiftPressed = false;
+    private byte selectionRect = NOSELSPAN;
+    
+    private Point start = new Point();
+    
     
     public ListenerSelection(GUIControler contr){
         controler = contr;
     }
 
-    @Override
-    public void mouseClicked(MouseEvent arg0) {
-        // TODO Auto-generated method stub
-        
-    }
 
-    @Override
-    public void mouseEntered(MouseEvent arg0) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public void mouseExited(MouseEvent arg0) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
+   
     public void mousePressed(MouseEvent e) {
         if(shiftPressed){
 
@@ -73,8 +67,14 @@ public class ListenerSelection implements MouseListener, KeyListener{
                         
                     }
                 }
+                
                 if(!isInside){
                     controler.getSelectManager().removeCurSelection();
+                    
+                    start.x = e.getX();
+                    start.y = e.getY();
+                    selectionRect = SELFIRST;
+                    
                     controler.getDrawingPanel().repaint();
                 }
             }
@@ -82,12 +82,38 @@ public class ListenerSelection implements MouseListener, KeyListener{
         
     }
 
-    @Override
+
+    public void mouseDragged(MouseEvent e) {
+        
+        if(selectionRect != NOSELSPAN){
+            
+            Point end = new Point(e.getX(), e.getY());
+            
+            if(selectionRect == SELFIRST){
+                controler.getSelectManager().resizeSelectionRect(start, end, true);
+                selectionRect = SELSPAN;
+            }else if(selectionRect == SELSPAN){
+                controler.getSelectManager().resizeSelectionRect(start, end, false);
+            }
+            controler.getDrawingPanel().repaint();
+        }
+    }
+   
     public void mouseReleased(MouseEvent arg0) {
         
-       
+       if(selectionRect != NOSELSPAN){
+           selectionRect = NOSELSPAN;
+           
+           controler.getSelectManager().selectionPressReleased();
+           
+
+           controler.getShapeManager().removeSelectionRect();
+           controler.getDrawingPanel().repaint();
+           
+       }
 
     }
+    
 
     @Override
     public void keyPressed(KeyEvent e) {
