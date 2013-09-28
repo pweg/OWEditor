@@ -35,8 +35,7 @@ public abstract class ShapeObject {
     
     public abstract int getWidth();
     
-    public abstract int getHeight();
-    
+    public abstract int getHeight();    
     
 
 }

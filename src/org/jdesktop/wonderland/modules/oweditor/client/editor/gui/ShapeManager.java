@@ -211,6 +211,10 @@ public class ShapeManager {
    
         createRectangle( x,  y,  width,  height,  id);
     }
+    
+    public ArrayList<ShapeObjectDraggingRect> getMovingShapes(){
+        return movingShapes;
+    }
 
 
 

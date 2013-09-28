@@ -3,6 +3,7 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.gui;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Shape;
+import java.awt.geom.Area;
 import java.util.ArrayList;
 
 public class GUISelectAndMoveManager {
@@ -13,6 +14,7 @@ public class GUISelectAndMoveManager {
     
     private ListenerDragAndDrop dragListener = null;
     private ListenerSelection selectionListener = null;
+    protected boolean collision = false;
     
     public GUISelectAndMoveManager(GUIControler contr){
         selectedShapes = new ArrayList<ShapeObject>();     
@@ -83,7 +85,6 @@ public class GUISelectAndMoveManager {
             return;
    
 
-        
         if(shape instanceof ShapeObjectRectangle){
             Rectangle r = (Rectangle) shape.getShape();
 
@@ -96,10 +97,50 @@ public class GUISelectAndMoveManager {
             
             controler.getShapeManager().translateMovingShapes(selectedShapes, distance_x/scale, distance_y/scale );
 
+            checkForCollision();
             
             
             controler.getDrawingPanel().repaint();
         }
+    }
+    
+    public void checkForCollision(){
+        
+        ShapeManager sm = controler.getShapeManager();
+        
+        ArrayList<ShapeObject> shapes = sm.getShapes();
+        ArrayList<ShapeObject> shapes2 = new ArrayList<ShapeObject>();
+        ArrayList<ShapeObjectDraggingRect> moving = sm.getMovingShapes();
+        
+        
+        for(ShapeObject shape : shapes){
+            boolean isMoving = false;
+            for(ShapeObjectDraggingRect selected : moving){
+                if(selected.getID() == shape.getID()){
+                    isMoving = true;
+                    break;
+                }
+            }
+            if(!isMoving)
+                shapes2.add(shape);
+        }
+
+        boolean is_collision = false;
+        for(ShapeObject shape : shapes2){
+            for(ShapeObjectDraggingRect selected : moving){
+                Area areaA = new Area(shape.getShape());
+                areaA.intersect(new Area(selected.getShape()));
+                
+                if(!areaA.isEmpty()){
+                    is_collision = true;
+                    selected.setCollision(true);
+                }else{
+                    selected.setCollision(false);
+                }
+            }
+        }
+        collision = is_collision;
+        
     }
 
     public void resizeSelectionRect(Point start, Point end) {

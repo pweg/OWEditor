@@ -15,6 +15,7 @@ public class ShapeObjectDraggingRect extends ShapeObject{
     private boolean isSelected = false;
     private Paint color = GUISettings.draggingColor;
     private int id;
+    private boolean collision = false;
     
     public ShapeObjectDraggingRect(int x, int y, int width, int height, int id){
         
@@ -51,7 +52,10 @@ public class ShapeObjectDraggingRect extends ShapeObject{
     @Override
     public void paintOriginal(Graphics2D g, AffineTransform at) {
         
-        g.setPaint(color);  
+        if(!collision)
+            g.setPaint(color);  
+        else
+            g.setPaint(GUISettings.draggingCollisionColor);
         
         transformedShape = at.createTransformedShape(originalShape);
                 
@@ -111,6 +115,10 @@ public class ShapeObjectDraggingRect extends ShapeObject{
     
     public void set(int x, int y, int width, int height){
         originalShape.setRect(x, y, width, height);
+    }
+    
+    public void setCollision(boolean col){
+        collision = col;
     }
 
 
