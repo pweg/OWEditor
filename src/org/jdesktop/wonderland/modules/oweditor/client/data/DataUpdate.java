@@ -9,17 +9,21 @@ public class DataUpdate implements DataUpdateInterface{
     }
 
     @Override
-    public void updateObject(int id, int x, int y, int z, double rotation,
-            double scale) {
-        dm.updataData(id, x, y, z, rotation, scale);
+    public void updateObject(DataObjectInterface dataObject) {
+        dm.updataData(dataObject);
         
     }
 
     @Override
-    public void createObject(int id, int x, int y, int z, double rotation,
-            double scale, int width, int height) {
-        dm.createNewObject(id, x, y, z, rotation, scale, width, height);
+    public void createObject(DataObjectInterface dataObject) {
+        dm.createNewObject(dataObject);
         
+    }
+
+    @Override
+    public DataObjectInterface createEmptyObject() {
+        
+        return dm.getEmptyDataObject();
     }
 
 }

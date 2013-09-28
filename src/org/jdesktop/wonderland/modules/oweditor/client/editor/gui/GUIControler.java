@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import javax.swing.JScrollPane;
 
+import org.jdesktop.wonderland.modules.oweditor.client.adapter.ClientUpdateInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.data.DataManagerInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.controler.MainControlerGUIInterface;
 
@@ -17,6 +18,8 @@ public class GUIControler implements GUIControlerInterface{
     private ShapeManager sm = null;
     private GUISelectAndMoveManager samm = null;
     private MainControlerGUIInterface mc = null;
+    public ClientUpdateInterface cui = null;
+    public DataManagerInterface dmi = null;
     
     public GUIControler(MainControlerGUIInterface mc){
         this.mc = mc;
@@ -75,7 +78,8 @@ public class GUIControler implements GUIControlerInterface{
        
        for(ShapeObject shape : list){
            
-           mc.setAdapterTranslationUpdate(shape.getID(), shape.getX(), shape.getY());
+           int id = shape.getID();
+           cui.updateTranslation(id, shape.getX(), shape.getY(), dmi.getZ(id));
        }
         
     }
@@ -89,7 +93,15 @@ public class GUIControler implements GUIControlerInterface{
 
     @Override
     public void setDataManager(DataManagerInterface dm) {
+        dmi = dm;
         sm.setDataManager(dm);
+        
+    }
+
+
+    @Override
+    public void setClientUpdateAdapter(ClientUpdateInterface cui) {
+        this.cui = cui;
         
     }
 

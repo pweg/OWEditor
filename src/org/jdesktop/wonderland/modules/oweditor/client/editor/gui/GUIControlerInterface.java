@@ -1,5 +1,6 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.gui;
 
+import org.jdesktop.wonderland.modules.oweditor.client.adapter.ClientUpdateInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.data.DataManagerInterface;
 
 
@@ -12,5 +13,7 @@ public interface GUIControlerInterface {
     public void getAdapterUpdate(int id);
     
     public void setDataManager(DataManagerInterface dm);
+    
+    public void setClientUpdateAdapter (ClientUpdateInterface cui);
 
 }

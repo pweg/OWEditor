@@ -9,28 +9,28 @@ public class DataObject implements DataObjectInterface{
     private int id = 0;
     private int width = 0;
     private int height = 0;
+    private String name = "";
     
-    DataObject(int id, int x, int y, int z, double rotation, double scale, int width, int height){
+    DataObject(){
+        coords = new Vector3D(0,0,0);
+    }
+    
+    DataObject(int id, int x, int y, int z, double rotation, double scale, int width, int height,
+            String name){
         this.id = id;
         coords = new Vector3D(x,y,z);
         this.rotation = rotation;
         this.scale = scale;
         this.width = width;
         this.height = height;
+        this.name = name;
     }
     
+    @Override
     public void setCoordinates(int x, int y, int z){
         coords.x = x;
         coords.y = y;
         coords.z = z;
-    }
-    
-    public void setRotation (double rotation){
-        this.rotation = rotation;
-    }
-    
-    public void setScale(double scale){
-        this.scale = scale;
     }
     
     public Vector3D getCoordinates(){
@@ -70,6 +70,60 @@ public class DataObject implements DataObjectInterface{
     @Override
     public int getZ() {
         return coords.z;
+    }
+
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public void setX(int x) {
+        coords.x = x;
+        
+    }
+
+    @Override
+    public void setY(int y) {
+        coords.y = y;
+        
+    }
+
+    @Override
+    public void setZ(int z) {
+        coords.z = z;
+        
+    }
+
+    @Override
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    @Override
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
+    @Override
+    public void setID(int id) {
+        this.id = id;
+    }
+
+    @Override
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public void setRotation(double rotation) {
+        this.rotation = rotation;
+        
+    }
+
+    @Override
+    public void setScale(double scale) {
+        this.scale = scale;
     }
 
 }

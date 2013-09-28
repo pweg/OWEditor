@@ -178,10 +178,8 @@ public class ShapeManager {
 
     public void getAdapterUpdate(int id) {
 
-
         if(dm == null)
             return;
-
 
         DataObjectInterface so = dm.getObject(id);
         
@@ -204,8 +202,6 @@ public class ShapeManager {
     }
     
     public void getCreateUpdate(int id){
-        
-        System.out.println("Blar");
         
         DataObjectInterface so = dm.getObject(id);
         int x = so.getX();

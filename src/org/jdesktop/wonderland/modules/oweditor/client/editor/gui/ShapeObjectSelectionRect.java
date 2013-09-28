@@ -20,7 +20,7 @@ public class ShapeObjectSelectionRect extends ShapeObject{
             BasicStroke.CAP_SQUARE,    // End cap
             BasicStroke.JOIN_MITER,    // Join style
             10.0f,                     // Miter limit
-            new float[] {10.0f,10.0f}, // Dash pattern
+            new float[] {5.0f,5.0f}, // Dash pattern
             0.0f);  
     
     public ShapeObjectSelectionRect(int x, int y, int width, int height){

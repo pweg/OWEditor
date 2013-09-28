@@ -42,7 +42,7 @@ public class ShapeObjectRectangle extends ShapeObject{
 
     @Override
     public void paintOriginal(Graphics2D g) {
-        g.setPaint(color);  
+        g.setPaint(color); 
 
         g.fill(originalShape);
         

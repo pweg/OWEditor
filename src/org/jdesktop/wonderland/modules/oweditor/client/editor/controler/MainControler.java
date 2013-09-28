@@ -27,22 +27,17 @@ public class MainControler implements MainControlerDataInterface,
         adapter = new AdapterControler();
         data.initialize();
         adapter.initialize();
-        adapter.setDataUpdateInterface(data.getDataUpdateInterface());
-        cui = adapter.getClientUpdateInterface();
+
+        adapter.setDataUpdateInterface(data.getDataUpdateInterface()); 
         gui.setDataManager(data.getDataManagerInterface());
+        gui.setClientUpdateAdapter(adapter.getClientUpdateInterface());
+        data.setGUIControler(gui);
         
         adapter.getCurrentWorld();
 
         gui.setVisibility(true);
         
-    }
-
-    @Override
-    public void setGUIUpdate(int id) {
-        gui.getAdapterUpdate(id);
-        
-    } 
-    
+    }    
     
 
     
@@ -52,12 +47,5 @@ public class MainControler implements MainControlerDataInterface,
         
     }
 
-    @Override
-    public void setAdapterTranslationUpdate(int id, int x, int y) {
-        
-        //do something when Z == -1. Can happen if coordinate is -1;
-        cui.updateTranslation(id, x, y, data.getDataManagerInterface().getZ(id));
-        
-    }
 
 }
