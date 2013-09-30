@@ -39,10 +39,10 @@ public class ListenerDragAndDrop extends MouseInputAdapter{
         dragging = false;
         
         if(!controler.getSelectManager().collision){
-            controler.getShapeManager().saveMovingShapes();
+            controler.getShapeManager().saveDraggingShapes();
             controler.setAdapterUpdate();
         }
-        controler.getShapeManager().clearMovingShapes();
+        controler.getShapeManager().clearDraggingShapes();
         controler.getDrawingPanel().repaint();
     }
  

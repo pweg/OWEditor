@@ -13,7 +13,7 @@ public abstract class ShapeObject {
     
     public abstract int getID();
 
-    public abstract void paintOriginal(Graphics2D g, AffineTransform at);
+    public abstract void paintOriginal(Graphics2D g, AffineTransform at, double scale);
     
     public abstract void paintTransformed(Graphics2D g, AffineTransform at);
 
@@ -35,7 +35,9 @@ public abstract class ShapeObject {
     
     public abstract int getWidth();
     
-    public abstract int getHeight();    
+    public abstract int getHeight();   
+    
+    public abstract String getName();
     
 
 }

@@ -56,7 +56,7 @@ public class ShapeObjectSelectionRect extends ShapeObject{
     }
 
     @Override
-    public void paintOriginal(Graphics2D g, AffineTransform at) {
+    public void paintOriginal(Graphics2D g, AffineTransform at, double scale) {
         
         g.setPaint(color); 
         g.setStroke(dashed); 
@@ -149,6 +149,13 @@ public class ShapeObjectSelectionRect extends ShapeObject{
     @Override
     public int getHeight() {
         return originalShape.height;
+    }
+
+
+
+    @Override
+    public String getName() {
+        return "selectionRectangle";
     }
 
 }

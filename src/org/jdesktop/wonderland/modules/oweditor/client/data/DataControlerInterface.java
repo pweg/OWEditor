@@ -8,7 +8,7 @@ public interface DataControlerInterface {
     
     public DataUpdateInterface getDataUpdateInterface();
     
-    public DataManagerInterface getDataManagerInterface();
+    public DataObjectManagerInterface getDataManagerInterface();
     
     public void setGUIControler(GUIControlerInterface gui);
 

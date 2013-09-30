@@ -1,6 +1,6 @@
 package org.jdesktop.wonderland.modules.oweditor.client.data;
 
-public interface DataManagerInterface {
+public interface DataObjectManagerInterface {
     
     public DataObjectInterface getObject(int id);
     

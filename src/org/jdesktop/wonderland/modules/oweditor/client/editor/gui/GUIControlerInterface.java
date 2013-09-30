@@ -1,7 +1,7 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.gui;
 
 import org.jdesktop.wonderland.modules.oweditor.client.adapter.ClientUpdateInterface;
-import org.jdesktop.wonderland.modules.oweditor.client.data.DataManagerInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.data.DataObjectManagerInterface;
 
 
 public interface GUIControlerInterface {
@@ -10,9 +10,9 @@ public interface GUIControlerInterface {
     
     public void setVisibility(boolean visibility);
 
-    public void getAdapterUpdate(int id);
+    public void getDataUpdate(int id);
     
-    public void setDataManager(DataManagerInterface dm);
+    public void setDataManager(DataObjectManagerInterface dm);
     
     public void setClientUpdateAdapter (ClientUpdateInterface cui);
 

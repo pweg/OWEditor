@@ -2,12 +2,12 @@ package org.jdesktop.wonderland.modules.oweditor.client.data;
 
 import java.util.HashMap;
 
-public class DataManager implements DataManagerInterface{
+public class DataObjectManager implements DataObjectManagerInterface{
     
     private HashMap<Integer, DataObject> data = null;
     private DataControler dc = null;
     
-    DataManager(DataControler d){
+    DataObjectManager(DataControler d){
         dc = d;
         data = new HashMap<Integer, DataObject>();
     }

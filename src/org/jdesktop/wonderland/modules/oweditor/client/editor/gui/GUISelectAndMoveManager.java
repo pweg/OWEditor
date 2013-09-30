@@ -61,7 +61,7 @@ public class GUISelectAndMoveManager {
         for(ShapeObject shape : selectedShapes){
             shape.setSelected(false);
         }
-        controler.getShapeManager().clearMovingShapes();
+        controler.getShapeManager().clearDraggingShapes();
         selectedShapes.clear();
     }
     
@@ -94,54 +94,16 @@ public class GUISelectAndMoveManager {
             double distance = start.distance(x2, y2);
             distance = distance / scale;
 
-            
-            controler.getShapeManager().translateMovingShapes(selectedShapes, distance_x/scale, distance_y/scale );
+            ShapeManager sm = controler.getShapeManager();
+            sm.translateDraggingShapes(selectedShapes, distance_x/scale, distance_y/scale );
 
-            checkForCollision();
+            collision = sm.checkForCollision();
             
             
             controler.getDrawingPanel().repaint();
         }
     }
     
-    public void checkForCollision(){
-        
-        ShapeManager sm = controler.getShapeManager();
-        
-        ArrayList<ShapeObject> shapes = sm.getShapes();
-        ArrayList<ShapeObject> shapes2 = new ArrayList<ShapeObject>();
-        ArrayList<ShapeObjectDraggingRect> moving = sm.getMovingShapes();
-        
-        
-        for(ShapeObject shape : shapes){
-            boolean isMoving = false;
-            for(ShapeObjectDraggingRect selected : moving){
-                if(selected.getID() == shape.getID()){
-                    isMoving = true;
-                    break;
-                }
-            }
-            if(!isMoving)
-                shapes2.add(shape);
-        }
-
-        boolean is_collision = false;
-        for(ShapeObject shape : shapes2){
-            for(ShapeObjectDraggingRect selected : moving){
-                Area areaA = new Area(shape.getShape());
-                areaA.intersect(new Area(selected.getShape()));
-                
-                if(!areaA.isEmpty()){
-                    is_collision = true;
-                    selected.setCollision(true);
-                }else{
-                    selected.setCollision(false);
-                }
-            }
-        }
-        collision = is_collision;
-        
-    }
 
     public void resizeSelectionRect(Point start, Point end) {
 

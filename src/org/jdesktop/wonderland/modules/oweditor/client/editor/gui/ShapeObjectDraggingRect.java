@@ -50,12 +50,9 @@ public class ShapeObjectDraggingRect extends ShapeObject{
     }
 
     @Override
-    public void paintOriginal(Graphics2D g, AffineTransform at) {
+    public void paintOriginal(Graphics2D g, AffineTransform at, double scale) {
         
-        if(!collision)
-            g.setPaint(color);  
-        else
-            g.setPaint(GUISettings.draggingCollisionColor);
+        g.setPaint(color);
         
         transformedShape = at.createTransformedShape(originalShape);
                 
@@ -118,7 +115,11 @@ public class ShapeObjectDraggingRect extends ShapeObject{
     }
     
     public void setCollision(boolean col){
-        collision = col;
+
+        if(!col)
+            color = GUISettings.draggingColor;
+        else
+            color = GUISettings.draggingCollisionColor;
     }
 
 
@@ -147,6 +148,13 @@ public class ShapeObjectDraggingRect extends ShapeObject{
     @Override
     public int getHeight() {
         return originalShape.height;
+    }
+
+
+
+    @Override
+    public String getName() {
+        return "DraggingShape"+id;
     }
 
 }

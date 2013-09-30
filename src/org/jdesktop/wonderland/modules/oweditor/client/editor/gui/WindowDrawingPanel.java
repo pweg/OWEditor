@@ -48,7 +48,7 @@ public class WindowDrawingPanel extends JPanel implements ChangeListener {
                   RenderingHints.VALUE_TEXT_ANTIALIAS_ON);  
         hints.put(RenderingHints.KEY_FRACTIONALMETRICS,  
                   RenderingHints.VALUE_FRACTIONALMETRICS_ON); 
-        
+
         size = new Dimension(10,10);  
         setBackground(new Color(255,255,255)); 
         pan = new ListenerPan(this);
@@ -112,7 +112,7 @@ public class WindowDrawingPanel extends JPanel implements ChangeListener {
         at.scale(scale, scale);  
         g2.setPaint(GUISettings.backgroundColor); 
         
-        shapeManager.drawShapes(g2, at);
+        shapeManager.drawShapes(g2, at, scale);
         
    } 
    

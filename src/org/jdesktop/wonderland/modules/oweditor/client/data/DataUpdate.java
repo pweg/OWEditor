@@ -2,9 +2,9 @@ package org.jdesktop.wonderland.modules.oweditor.client.data;
 
 public class DataUpdate implements DataUpdateInterface{
     
-    private DataManager dm = null;
+    private DataObjectManager dm = null;
 
-    public DataUpdate(DataManager dm) {
+    public DataUpdate(DataObjectManager dm) {
         this.dm = dm;
     }
 

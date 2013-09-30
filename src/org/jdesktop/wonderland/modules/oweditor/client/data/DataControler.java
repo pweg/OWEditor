@@ -6,7 +6,7 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.GUIControlerIn
 public class DataControler implements DataControlerInterface {
     
     private DataUpdate updater = null;
-    private DataManager dm = null;
+    private DataObjectManager dm = null;
     private MainControlerDataInterface mc = null;
     private GUIControlerInterface gci = null;
     
@@ -16,13 +16,13 @@ public class DataControler implements DataControlerInterface {
     
     @Override
     public void initialize() {
-        dm = new DataManager(this);
+        dm = new DataObjectManager(this);
         updater = new DataUpdate(dm);
         
     }
 
     public void setGUIUpdate(int id) {
-       gci.getAdapterUpdate(id);
+       gci.getDataUpdate(id);
         
     }
 
@@ -32,7 +32,7 @@ public class DataControler implements DataControlerInterface {
     }
 
     @Override
-    public DataManagerInterface getDataManagerInterface() {
+    public DataObjectManagerInterface getDataManagerInterface() {
         return dm;
     }
 
