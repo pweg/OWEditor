@@ -1,4 +1,4 @@
-package org.jdesktop.wonderland.modules.oweditor.client.data;
+package org.jdesktop.wonderland.modules.oweditor.client.editor.data;
 
 public interface DataUpdateInterface {
     

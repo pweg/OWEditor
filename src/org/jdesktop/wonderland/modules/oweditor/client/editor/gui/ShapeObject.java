@@ -11,7 +11,7 @@ public abstract class ShapeObject {
     
     public abstract Shape getShape();
     
-    public abstract int getID();
+    public abstract long getID();
 
     public abstract void paintOriginal(Graphics2D g, AffineTransform at, double scale);
     

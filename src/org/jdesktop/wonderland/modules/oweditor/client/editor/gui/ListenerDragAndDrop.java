@@ -13,7 +13,7 @@ public class ListenerDragAndDrop extends MouseInputAdapter{
     private GUIControler controler;
     private Point start = new Point();
     private boolean dragging = false;
-    private int curShape = -1;
+    private long curShape = -1;
  
     public ListenerDragAndDrop(GUIControler contr) {
         controler = contr;

@@ -4,9 +4,9 @@ import java.util.ArrayList;
 
 import javax.swing.JScrollPane;
 
-import org.jdesktop.wonderland.modules.oweditor.client.adapter.ClientUpdateInterface;
-import org.jdesktop.wonderland.modules.oweditor.client.data.DataObjectManagerInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.dummyadapter.ClientUpdateInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.controler.MainControlerGUIInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.data.DataObjectManagerInterface;
 
 public class GUIControler implements GUIControlerInterface{
 
@@ -79,14 +79,14 @@ public class GUIControler implements GUIControlerInterface{
        
        for(ShapeObject shape : list){
            
-           int id = shape.getID();
+           long id = shape.getID();
            cui.updateTranslation(id, shape.getX(), shape.getY(), dmi.getZ(id));
        }
         
     }
 
     @Override
-    public void getDataUpdate(int id) {
+    public void getDataUpdate(long id) {
         sm.getDataUpdate(id);
         drawingPan.repaint();
         

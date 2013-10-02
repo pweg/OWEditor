@@ -42,7 +42,7 @@ public class ShapeObjectSelectionRect extends ShapeObject{
     }
 
     @Override
-    public int getID() {
+    public long getID() {
         return 0;
     }
     

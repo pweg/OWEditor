@@ -9,8 +9,8 @@ import java.awt.geom.Area;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.jdesktop.wonderland.modules.oweditor.client.data.DataObjectManagerInterface;
-import org.jdesktop.wonderland.modules.oweditor.client.data.DataObjectInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.data.DataObjectInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.data.DataObjectManagerInterface;
 
 public class ShapeManager {
 
@@ -37,7 +37,7 @@ public class ShapeManager {
      * @param height: the height of the rectangle.
      * @param id: the id for the rectangle, which has to be the same id as in the virtual world.
      */
-    public ShapeObject createRectangle(int x, int y, int width, int height, int id, String name){
+    public ShapeObject createRectangle(int x, int y, int width, int height, long id, String name){
          ShapeObject shape = new ShapeObjectRectangle(x,y,width, height, id, name);
          
          shapes.add(shape);
@@ -56,7 +56,7 @@ public class ShapeManager {
      * @param id: the shape id.
      * @return ShapeObject, or null if id is not found.
      */
-    public ShapeObject getShape(int id){
+    public ShapeObject getShape(long id){
         for(ShapeObject shape : shapes){
             if(shape.getID() == id)
                 return shape;
@@ -185,7 +185,7 @@ public class ShapeManager {
         int y = shape.getY();
         int width = shape.getWidth();
         int height = shape.getHeight();
-        int id = shape.getID();
+        long id = shape.getID();
         
         if(shape instanceof ShapeObjectRectangle){
             ShapeObjectDraggingRect newShape = new ShapeObjectDraggingRect(x,y,width,height, id);
@@ -239,7 +239,7 @@ public class ShapeManager {
      * Gets an update for a shape from the data package for the given id.
      * @param id which needs to be updated.
      */
-    public void getDataUpdate(int id) {
+    public void getDataUpdate(long id) {
 
         if(dm == null)
             return;
@@ -268,7 +268,7 @@ public class ShapeManager {
      * Creates a new shape from the data package.
      * @param id which needs to be created.
      */
-    public void getCreateUpdate(int id){
+    public void getCreateUpdate(long id){
         
         DataObjectInterface so = dm.getObject(id);
         int x = so.getX();

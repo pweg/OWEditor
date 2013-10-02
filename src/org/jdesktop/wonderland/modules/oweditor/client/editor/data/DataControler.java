@@ -1,4 +1,4 @@
-package org.jdesktop.wonderland.modules.oweditor.client.data;
+package org.jdesktop.wonderland.modules.oweditor.client.editor.data;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.controler.MainControlerDataInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.GUIControlerInterface;
@@ -21,7 +21,7 @@ public class DataControler implements DataControlerInterface {
         
     }
 
-    public void setGUIUpdate(int id) {
+    public void setGUIUpdate(long id) {
        gci.getDataUpdate(id);
         
     }

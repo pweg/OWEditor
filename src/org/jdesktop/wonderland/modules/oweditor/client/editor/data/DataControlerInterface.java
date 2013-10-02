@@ -1,4 +1,4 @@
-package org.jdesktop.wonderland.modules.oweditor.client.data;
+package org.jdesktop.wonderland.modules.oweditor.client.editor.data;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.GUIControlerInterface;
 

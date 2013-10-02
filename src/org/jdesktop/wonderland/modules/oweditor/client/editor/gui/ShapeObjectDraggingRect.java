@@ -14,10 +14,10 @@ public class ShapeObjectDraggingRect extends ShapeObject{
     private Shape transformedShape = null;
     private boolean isSelected = false;
     private Paint color = GUISettings.draggingColor;
-    private int id;
+    private long id;
     private boolean collision = false;
     
-    public ShapeObjectDraggingRect(int x, int y, int width, int height, int id){
+    public ShapeObjectDraggingRect(int x, int y, int width, int height, long id){
         
         originalShape = new Rectangle (x, y, width, height);
         this.id = id;
@@ -37,7 +37,7 @@ public class ShapeObjectDraggingRect extends ShapeObject{
     }
 
     @Override
-    public int getID() {
+    public long getID() {
         return id;
     }
     

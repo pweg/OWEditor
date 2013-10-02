@@ -9,7 +9,7 @@ public class ClientUpdateAdapter implements ClientUpdateInterface{
     }
 
     @Override
-    public void updateTranslation(int id, int x, int y, int z) {
+    public void updateTranslation(long id, int x, int y, int z) {
         mc.getSUA().serverChangeEvent(id, x, y, 0, 0, 1, "");
         
     }

@@ -1,6 +1,6 @@
 package org.jdesktop.wonderland.modules.oweditor.client.adapter;
 
-import org.jdesktop.wonderland.modules.oweditor.client.data.DataUpdateInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.data.DataUpdateInterface;
 
 public class AdapterControler implements AdapterControlerInterface{
     

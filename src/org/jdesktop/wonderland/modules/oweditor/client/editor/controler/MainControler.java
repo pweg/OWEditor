@@ -1,16 +1,17 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.controler;
 
-import org.jdesktop.wonderland.modules.oweditor.client.adapter.AdapterControler;
-import org.jdesktop.wonderland.modules.oweditor.client.adapter.AdapterControlerInterface;
-import org.jdesktop.wonderland.modules.oweditor.client.adapter.ClientUpdateInterface;
-import org.jdesktop.wonderland.modules.oweditor.client.data.DataControler;
-import org.jdesktop.wonderland.modules.oweditor.client.data.DataControlerInterface;
+import javax.swing.JFrame;
+import org.jdesktop.wonderland.modules.oweditor.client.dummyadapter.AdapterControler;
+import org.jdesktop.wonderland.modules.oweditor.client.dummyadapter.AdapterControlerInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.dummyadapter.ClientUpdateInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.data.DataControler;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.data.DataControlerInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.GUIControler;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.GUIControlerInterface;
 
 
 public class MainControler implements MainControlerDataInterface, 
-                MainControlerGUIInterface{
+                MainControlerGUIInterface, MainControlerAdapterInterface{
     
     private GUIControlerInterface gui = null;
     private AdapterControlerInterface adapter = null;
@@ -34,17 +35,19 @@ public class MainControler implements MainControlerDataInterface,
         data.setGUIControler(gui);
         
         adapter.getCurrentWorld();
-
-        gui.setVisibility(true);
         
     }    
     
 
     
-    public static void main(String[] args) {  
+    /*public static void main(String[] args) {  
         MainControler app = new MainControler();  
         
         
+    }*/
+
+    public void setVisible(boolean visibility) {
+        gui.setVisibility(visibility);
     }
 
 

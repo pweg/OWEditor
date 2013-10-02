@@ -74,7 +74,7 @@ public class GUISelectAndMoveManager {
     
     
     
-    public void translateShape(int id, int x2, int y2, Point start){
+    public void translateShape(long id, int x2, int y2, Point start){
         if(id == -1)
             return;
         

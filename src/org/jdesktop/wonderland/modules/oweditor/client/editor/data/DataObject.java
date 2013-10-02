@@ -1,4 +1,4 @@
-package org.jdesktop.wonderland.modules.oweditor.client.data;
+package org.jdesktop.wonderland.modules.oweditor.client.editor.data;
 
 
 public class DataObject implements DataObjectInterface{
@@ -6,7 +6,7 @@ public class DataObject implements DataObjectInterface{
     private Vector3D coords = null;
     private double rotation = 0;
     private double scale = 0;
-    private int id = 0;
+    private long id = 0;
     private int width = 0;
     private int height = 0;
     private String name = "";
@@ -15,7 +15,7 @@ public class DataObject implements DataObjectInterface{
         coords = new Vector3D(0,0,0);
     }
     
-    DataObject(int id, int x, int y, int z, double rotation, double scale, int width, int height,
+    DataObject(long id, int x, int y, int z, double rotation, double scale, int width, int height,
             String name){
         this.id = id;
         coords = new Vector3D(x,y,z);
@@ -45,7 +45,7 @@ public class DataObject implements DataObjectInterface{
         return scale;
     }
     
-    public int getID(){
+    public long getID(){
         return id;
     }
     
@@ -106,7 +106,7 @@ public class DataObject implements DataObjectInterface{
     }
 
     @Override
-    public void setID(int id) {
+    public void setID(long id) {
         this.id = id;
     }
 

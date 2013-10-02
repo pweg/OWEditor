@@ -1,22 +1,22 @@
-package org.jdesktop.wonderland.modules.oweditor.client.data;
+package org.jdesktop.wonderland.modules.oweditor.client.editor.data;
 
 import java.util.HashMap;
 
 public class DataObjectManager implements DataObjectManagerInterface{
     
-    private HashMap<Integer, DataObject> data = null;
+    private HashMap<Long, DataObject> data = null;
     private DataControler dc = null;
     
     DataObjectManager(DataControler d){
         dc = d;
-        data = new HashMap<Integer, DataObject>();
+        data = new HashMap<Long, DataObject>();
     }
     
     
     public void createNewObject(DataObjectInterface dataObject){
         
         //DataObject d = new DataObject(id,  x,  y,  z,  rotation,  scale, width, height);
-        int id = dataObject.getID();
+        long id = dataObject.getID();
         
         if(dataObject instanceof DataObject){
             data.put(id, (DataObject) dataObject);
@@ -28,7 +28,7 @@ public class DataObjectManager implements DataObjectManagerInterface{
     
     public void updataData(DataObjectInterface dataObject){
         
-        int id = dataObject.getID();
+        long id = dataObject.getID();
         
         if(!data.containsKey(id))
             return;
@@ -50,12 +50,12 @@ public class DataObjectManager implements DataObjectManagerInterface{
     }
     
     @Override
-    public DataObjectInterface getObject(int id){
+    public DataObjectInterface getObject(long id){
         return data.get(id);
     }
 
     @Override
-    public int getZ(int id) {
+    public int getZ(long id) {
         DataObject object = data.get(id);
         
         if(object == null)

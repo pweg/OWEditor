@@ -18,7 +18,7 @@ public class ShapeObjectRectangle extends ShapeObject{
     
     private Rectangle originalShape = null;
     private Shape transformedShape = null;
-    private int id = -1;
+    private long id = -1;
     private boolean isSelected = false;
     private Paint color = GUISettings.objectColor;
     private Paint nameColor = GUISettings.objectNameColor;
@@ -29,7 +29,7 @@ public class ShapeObjectRectangle extends ShapeObject{
     private int nameBoundsX = 5;
     private int nameBoundsAbove = 20;
     
-    public ShapeObjectRectangle(int x, int y, int width, int height, int id, String name){
+    public ShapeObjectRectangle(int x, int y, int width, int height, long id, String name){
         
         originalShape = new Rectangle (x, y, width, height);
         this.name = name;
@@ -50,7 +50,7 @@ public class ShapeObjectRectangle extends ShapeObject{
     }
 
     @Override
-    public int getID() {
+    public long getID() {
         return id;
     }
     
@@ -120,7 +120,8 @@ public class ShapeObjectRectangle extends ShapeObject{
             if(cut <= 1)
                 cut = 3;
             
-            name = name.substring(0,cut)+"...";
+            if(cut < name.length())
+            	name = name.substring(0,cut)+"...";
         }
         
         nameWrapp = true;

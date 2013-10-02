@@ -1,7 +1,7 @@
 package org.jdesktop.wonderland.modules.oweditor.client.adapter;
 
-import org.jdesktop.wonderland.modules.oweditor.client.data.DataObjectInterface;
-import org.jdesktop.wonderland.modules.oweditor.client.data.DataUpdateInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.data.DataObjectInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.data.DataUpdateInterface;
 
 public class ServerUpdateAdapter {
     
@@ -12,7 +12,7 @@ public class ServerUpdateAdapter {
         mc = m;
     }
     
-    public void serverChangeEvent(int id, int x, int y, int z, int rotation, int scale,
+    public void serverChangeEvent(long id, int x, int y, int z, int rotation, int scale,
             String name){
         if(di == null){
             System.out.println("DataInterface is not in the adapter");
@@ -35,7 +35,7 @@ public class ServerUpdateAdapter {
         
     }
     
-    public void createObject(int id, int x, int y, int z, 
+    public void createObject(long id, int x, int y, int z, 
             double rotation, double scale, int width, int height,
             String name){
         

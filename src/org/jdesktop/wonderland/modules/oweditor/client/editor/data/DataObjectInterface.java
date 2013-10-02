@@ -1,4 +1,4 @@
-package org.jdesktop.wonderland.modules.oweditor.client.data;
+package org.jdesktop.wonderland.modules.oweditor.client.editor.data;
 
 public interface DataObjectInterface {
 
@@ -9,7 +9,7 @@ public interface DataObjectInterface {
     public double getScale();
     public int getWidth();
     public int getHeight();
-    public int getID();
+    public long getID();
     public String getName();
     
     public void setX(int x);
@@ -19,7 +19,7 @@ public interface DataObjectInterface {
     public void setScale(double scale);
     public void setWidth(int width);
     public void setHeight(int height);
-    public void setID(int id);
+    public void setID(long id);
     public void setName(String name);
     public void setCoordinates(int x, int y, int z);
     
