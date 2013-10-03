@@ -45,6 +45,7 @@ public class GUIControler implements GUIControlerInterface{
         samm = new GUISelectAndMoveManager(this);
        
         mainScrollPanel = new JScrollPane(drawingPan);
+        //drawingPan.setScroll(mainScrollPanel);
         frame.getContentPane().add(mainScrollPanel);
         
     }

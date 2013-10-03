@@ -15,8 +15,8 @@ public class WindowFrame extends JFrame {
         //f.getContentPane().add(app.getControl(), "Last");  
         setSize(GUISettings.frameWidth, GUISettings.frameHeight);  
         setLocation(GUISettings.framePositionX, GUISettings.framePositionY);  
-        setVisible(false); 
         setTitle(GUISettings.frameTitle);
+        setVisible(false); 
     }
 
     
