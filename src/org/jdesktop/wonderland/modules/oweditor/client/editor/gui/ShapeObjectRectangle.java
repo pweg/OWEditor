@@ -26,8 +26,8 @@ public class ShapeObjectRectangle extends ShapeObject{
     private boolean nameWrapp = false;
     
     //These variables are used to determine, where the name of the object should be.
-    private int nameBoundsX = 5;
-    private int nameBoundsAbove = 20;
+    private int nameBoundsX = GUISettings.namePositionInX;
+    private int nameBoundsAbove = GUISettings.namePositionInY;
     
     public ShapeObjectRectangle(int x, int y, int width, int height, long id, String name){
         
@@ -109,9 +109,16 @@ public class ShapeObjectRectangle extends ShapeObject{
         
         FontRenderContext context = g.getFontRenderContext();
         
+        Rectangle2D bounds_r = font.getStringBounds(name, context);
         
-        double width = font.getStringBounds(name, context).getWidth();
+        double width = bounds_r.getWidth();
+        double height = bounds_r.getHeight();
         double xBounds = nameBoundsX/scale;
+        
+        if((height+GUISettings.namePositionInYAdd)/scale > r.height){
+        	nameBoundsX = GUISettings.namePositionOutX;
+        	nameBoundsAbove = GUISettings.namePositionOutY;
+        }
         
         double max_width = r.width-2*xBounds;
         if(width > max_width){

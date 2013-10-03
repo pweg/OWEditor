@@ -111,8 +111,10 @@ public class WindowDrawingPanel extends JPanel implements ChangeListener {
         AffineTransform at = AffineTransform.getTranslateInstance(x, y);  
         at.scale(scale, scale);  
         g2.setPaint(GUISettings.backgroundColor); 
-        
+
+        //g2.translate(size.width/2, size.height/2);
         shapeManager.drawShapes(g2, at, scale);
+
         
    } 
    

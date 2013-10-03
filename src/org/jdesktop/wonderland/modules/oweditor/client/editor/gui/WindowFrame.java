@@ -13,10 +13,10 @@ public class WindowFrame extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  
         
         //f.getContentPane().add(app.getControl(), "Last");  
-        setSize(800, 600);  
-        setLocation(200,200);  
-        setVisible(true); 
-        setTitle("Open Wonderland Editor");
+        setSize(GUISettings.frameWidth, GUISettings.frameHeight);  
+        setLocation(GUISettings.framePositionX, GUISettings.framePositionY);  
+        setVisible(false); 
+        setTitle(GUISettings.frameTitle);
     }
 
     
