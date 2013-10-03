@@ -1,5 +1,7 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.data;
 
+import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataObjectInterface;
+
 
 public class DataObject implements DataObjectInterface{
     

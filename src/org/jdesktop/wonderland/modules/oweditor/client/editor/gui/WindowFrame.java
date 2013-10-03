@@ -10,7 +10,7 @@ public class WindowFrame extends JFrame {
     private static final long serialVersionUID = 1L;
 
     public WindowFrame(){
-        setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);  
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  
         
         //f.getContentPane().add(app.getControl(), "Last");  
         setSize(800, 600);  

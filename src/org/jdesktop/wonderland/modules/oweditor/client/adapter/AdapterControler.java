@@ -1,8 +1,10 @@
 package org.jdesktop.wonderland.modules.oweditor.client.adapter;
 
-import org.jdesktop.wonderland.modules.oweditor.client.editor.data.DataUpdateInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.AdapterControlerMainControlerInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.ClientUpdateGUIInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataUpdateAdapterInterface;
 
-public class AdapterControler implements AdapterControlerInterface{
+public class AdapterControler implements AdapterControlerMainControlerInterface{
     
     
     private ClientUpdateAdapter cua = null;
@@ -30,13 +32,13 @@ public class AdapterControler implements AdapterControlerInterface{
     }
 
     @Override
-    public void setDataUpdateInterface(DataUpdateInterface i) {
+    public void setDataUpdateInterface(DataUpdateAdapterInterface i) {
        sua.setDataUpdateInterface(i);
         
     }
 
     @Override
-    public ClientUpdateInterface getClientUpdateInterface() {
+    public ClientUpdateGUIInterface getClientUpdateInterface() {
         return cua;
     }
 

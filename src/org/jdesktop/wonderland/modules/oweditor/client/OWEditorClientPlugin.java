@@ -12,7 +12,7 @@ import org.jdesktop.wonderland.client.jme.JmeClientMain;
 import org.jdesktop.wonderland.client.login.ServerSessionManager;
 import org.jdesktop.wonderland.common.annotation.Plugin;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.controler.MainControler;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.controler.MainControlerAdapterInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.controlerinterfaces.MainControlerAdapterInterface;
 
 
 

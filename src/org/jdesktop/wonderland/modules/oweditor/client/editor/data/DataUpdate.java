@@ -1,6 +1,9 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.data;
 
-public class DataUpdate implements DataUpdateInterface{
+import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataObjectInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataUpdateAdapterInterface;
+
+public class DataUpdate implements DataUpdateAdapterInterface{
     
     private DataObjectManager dm = null;
 

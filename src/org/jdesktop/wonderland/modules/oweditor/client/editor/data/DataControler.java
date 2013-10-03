@@ -1,9 +1,12 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.data;
 
-import org.jdesktop.wonderland.modules.oweditor.client.editor.controler.MainControlerDataInterface;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.GUIControlerInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.controlerinterfaces.MainControlerDataInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataControlerMainControlerInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataObjectManagerGUIInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataUpdateAdapterInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.GUIControlerInterface;
 
-public class DataControler implements DataControlerInterface {
+public class DataControler implements DataControlerMainControlerInterface {
     
     private DataUpdate updater = null;
     private DataObjectManager dm = null;
@@ -27,12 +30,12 @@ public class DataControler implements DataControlerInterface {
     }
 
     @Override
-    public DataUpdateInterface getDataUpdateInterface() {
+    public DataUpdateAdapterInterface getDataUpdateInterface() {
         return updater;
     }
 
     @Override
-    public DataObjectManagerInterface getDataManagerInterface() {
+    public DataObjectManagerGUIInterface getDataManagerInterface() {
         return dm;
     }
 

@@ -2,7 +2,10 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.data;
 
 import java.util.HashMap;
 
-public class DataObjectManager implements DataObjectManagerInterface{
+import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataObjectInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataObjectManagerGUIInterface;
+
+public class DataObjectManager implements DataObjectManagerGUIInterface{
     
     private HashMap<Long, DataObject> data = null;
     private DataControler dc = null;
@@ -64,7 +67,6 @@ public class DataObjectManager implements DataObjectManagerInterface{
         return object.getZ();
     }
 
-    @Override
     public DataObjectInterface getEmptyDataObject() {
         return new DataObject();
     }

@@ -1,12 +1,12 @@
 package org.jdesktop.wonderland.modules.oweditor.client.dummyadapter;
 
-import org.jdesktop.wonderland.modules.oweditor.client.editor.data.DataObjectInterface;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.data.DataUpdateInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataObjectInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataUpdateAdapterInterface;
 
 public class ServerUpdateAdapter {
     
     private AdapterControler mc = null;
-    private DataUpdateInterface di = null;
+    private DataUpdateAdapterInterface di = null;
     
     public ServerUpdateAdapter(AdapterControler m){
         mc = m;
@@ -30,7 +30,7 @@ public class ServerUpdateAdapter {
         
     }
 
-    public void setDataUpdateInterface(DataUpdateInterface i) {
+    public void setDataUpdateInterface(DataUpdateAdapterInterface i) {
         di = i;
         
     }

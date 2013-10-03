@@ -1,6 +1,8 @@
 package org.jdesktop.wonderland.modules.oweditor.client.adapter;
 
-public class ClientUpdateAdapter implements ClientUpdateInterface{
+import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.ClientUpdateGUIInterface;
+
+public class ClientUpdateAdapter implements ClientUpdateGUIInterface{
     
     private AdapterControler mc = null;
     

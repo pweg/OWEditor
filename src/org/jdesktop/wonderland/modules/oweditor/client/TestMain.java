@@ -1,7 +1,7 @@
 package org.jdesktop.wonderland.modules.oweditor.client;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.controler.MainControler;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.controler.MainControlerAdapterInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.controlerinterfaces.MainControlerAdapterInterface;
 
 public class TestMain {
 	

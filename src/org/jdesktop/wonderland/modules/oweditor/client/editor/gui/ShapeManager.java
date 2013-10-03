@@ -9,8 +9,8 @@ import java.awt.geom.Area;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.jdesktop.wonderland.modules.oweditor.client.editor.data.DataObjectInterface;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.data.DataObjectManagerInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataObjectInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataObjectManagerGUIInterface;
 
 public class ShapeManager {
 
@@ -20,7 +20,7 @@ public class ShapeManager {
     
     private ShapeObjectSelectionRect selectionRectangle = null;
     private boolean showDraggingShapes = false;
-    private DataObjectManagerInterface dm = null;
+    private DataObjectManagerGUIInterface dm = null;
     
     public ShapeManager(){
         shapes = new ArrayList<ShapeObject>();
@@ -288,7 +288,7 @@ public class ShapeManager {
      * Sets the DataManager, which is needed for updates.
      * @param dm: The DataManagerInterface.
      */
-    public void setDataManager(DataObjectManagerInterface dm) {
+    public void setDataManager(DataObjectManagerGUIInterface dm) {
         this.dm = dm;
         
     }

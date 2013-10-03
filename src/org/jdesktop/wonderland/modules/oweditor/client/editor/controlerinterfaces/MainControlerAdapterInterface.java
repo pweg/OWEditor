@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package org.jdesktop.wonderland.modules.oweditor.client.editor.controler;
+package org.jdesktop.wonderland.modules.oweditor.client.editor.controlerinterfaces;
 
 import javax.swing.JFrame;
 
