@@ -4,15 +4,14 @@
  * and open the template in the editor.
  */
 
-package org.jdesktop.wonderland.modules.oweditor.client.editor.controlerinterfaces;
+package org.jdesktop.wonderland.modules.oweditor.client.editor.controllerinterfaces;
 
-import javax.swing.JFrame;
 
 /**
  *
  * @author Patrick
  */
-public interface MainControlerAdapterInterface {
+public interface MainControllerAdapterInterface {
     
     public void setVisible(boolean visibility);
     

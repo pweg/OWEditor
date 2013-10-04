@@ -7,11 +7,15 @@ import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Area;
 import java.util.ArrayList;
-import java.util.Collection;
-
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataObjectInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataObjectManagerGUIInterface;
 
+/**
+ * This class is used for creating and managing all shapes.
+ * It stores all shapes.
+ * @author Patrick
+ *
+ */
 public class ShapeManager {
 
     ArrayList<ShapeObject> shapes = null;
@@ -22,15 +26,18 @@ public class ShapeManager {
     private boolean showDraggingShapes = false;
     private DataObjectManagerGUIInterface dm = null;
     
+    /**
+     * Creates a new ShapeManager instance.
+     */
     public ShapeManager(){
         shapes = new ArrayList<ShapeObject>();
         updateShapes = new ArrayList<ShapeObject>();
         movingShapes = new ArrayList<ShapeObjectDraggingRect>();
     }
     
-    
     /**
      * Creates a new Rectangle ShapeObject.
+     * 
      * @param x: the x coordinate.
      * @param y: the y coordinate.
      * @param width: the width of the rectangle.
@@ -53,6 +60,7 @@ public class ShapeManager {
     
     /**
      * Gets a specific shape.
+     * 
      * @param id: the shape id.
      * @return ShapeObject, or null if id is not found.
      */
@@ -67,6 +75,7 @@ public class ShapeManager {
     /**
      * Creates the selection rectangle object, if it is null
      * and sets new coordinates/width&height for it otherwise.
+     * 
      * @param x: x coordinate.
      * @param y: y coordinate.
      * @param width: the width of the rectangle.
@@ -89,6 +98,7 @@ public class ShapeManager {
     
     /**
      * Searches for a shape object, which surrounds a given point.
+     * 
      * @param p: the point in question.
      * @return ShapeObject, if a shape was found, otherwise null. 
      */
@@ -109,6 +119,7 @@ public class ShapeManager {
     /**
      * Searches for shape objects which are enclosed by the 
      * selection rectangle. 
+     * 
      * @return an arraylist with shape objects. If
      * no object is in the selection rectangle, it returns an empty list.
      */
@@ -134,6 +145,7 @@ public class ShapeManager {
      * These shapes are normal shapes, the selection rectangle and
      * shapes, which are moved while pressing and holding the left mouse
      * button.
+     * 
      * @param g2: a Graphics2D class.
      * @param at: an AffineTransform class, used to draw zoomed shapes correctly.
      */
@@ -151,12 +163,12 @@ public class ShapeManager {
 
         if(selectionRectangle != null)
             selectionRectangle.paintOriginal(g2);
-        
     }
     
     /**
      * Translates the dragging shapes(DraggingRectangles), which 
      * are seen, when trying to move objects.
+     * 
      * @param selectedShapes: all shapes which are selected and should be moved.
      * @param distance_x: the x distance between old and new point.
      * @param distance_y: the y distance between old and new point.
@@ -176,7 +188,8 @@ public class ShapeManager {
     }
 
     /**
-     * Creates the dragging shapes for a given shape object
+     * Creates the dragging shapes for a given shape object.
+     * 
      * @param shape: a shape object, which is dragged.
      */
     private void createDraggingShape(ShapeObject shape) {
@@ -192,18 +205,6 @@ public class ShapeManager {
             movingShapes.add(newShape); 
         }
     }
-    
-    /*
-    public void removeDraggingShape(ShapeObject shape){
-        System.out.println("remove");
-        
-        for(ShapeObject s : movingShapes){
-            if(s.getID() == shape.getID())
-                movingShapes.remove(s);
-                break;
-        }
-    }*/
-
 
     /**
      * Removes all dragging shapes.
@@ -221,11 +222,11 @@ public class ShapeManager {
         for(ShapeObject shape : movingShapes){
             updateShapes.add(shape);
         }
-        
     }
     
     /**
      * Returns all shapes, which need to be updated.
+     * 
      * @return ArrayList which contains all shapes for future update.
      */
     public ArrayList<ShapeObject> getUpdateShapes() {
@@ -237,14 +238,18 @@ public class ShapeManager {
 
     /**
      * Gets an update for a shape from the data package for the given id.
+     * 
      * @param id which needs to be updated.
      */
-    public void getDataUpdate(long id) {
+    public void setDataUpdate(long id) {
 
         if(dm == null)
             return;
 
         DataObjectInterface so = dm.getObject(id);
+        
+        if(so == null)
+        	return;
         
         ShapeObject shape = null;
         
@@ -254,18 +259,17 @@ public class ShapeManager {
                 break;
             }
         }
-
         if(shape == null){
             getCreateUpdate(id);
             return;
         }
         
         shape.setLocation(so.getX(), so.getY());
-        
     }
     
     /**
      * Creates a new shape from the data package.
+     * 
      * @param id which needs to be created.
      */
     public void getCreateUpdate(long id){
@@ -286,15 +290,16 @@ public class ShapeManager {
     
     /**
      * Sets the DataManager, which is needed for updates.
+     * 
      * @param dm: The DataManagerInterface.
      */
     public void setDataManager(DataObjectManagerGUIInterface dm) {
         this.dm = dm;
-        
     }
 
     /**
      * Checks for collision when dragging shapes.
+     * 
      * @return returns true, if a collision is detected and false otherwise.
      */
     public boolean checkForCollision() {

@@ -3,6 +3,12 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.gui;
 import java.awt.Color;
 import java.awt.Paint;
 
+/**
+ * A simple class with containing every static value for setting
+ * up the editor.
+ * @author Patrick
+ *
+ */
 public class GUISettings {
 
 	/*
@@ -31,8 +37,6 @@ public class GUISettings {
     public static int namePositionOutX = 0;
     public static int namePositionOutY = -5;
     
-    
-    
     /*
      * Width/Height, position and title of the window frame,
      * which will be shown, when the editor starts.
@@ -50,4 +54,10 @@ public class GUISettings {
      */
     public static int widthDivisor = 2;
     public static int heightDivisor = 2;
+    
+    /*
+     * The zoomSpeed. It will add/remove this amount from the scale
+     * when zoomed with the mouse wheel.
+     */
+    public static double zoomSpeed = 0.1;
 }

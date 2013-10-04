@@ -1,6 +1,5 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.gui;
 
-import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Paint;
@@ -8,11 +7,8 @@ import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.Toolkit;
 import java.awt.font.FontRenderContext;
-import java.awt.font.LineMetrics;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
-
-import javax.swing.JLabel;
 
 public class ShapeObjectRectangle extends ShapeObject{
     
@@ -29,15 +25,22 @@ public class ShapeObjectRectangle extends ShapeObject{
     private int nameBoundsX = GUISettings.namePositionInX;
     private int nameBoundsAbove = GUISettings.namePositionInY;
     
+    /**
+     * Creates a new ObjectRectangle shape instance.
+     * 
+     * @param x: the x coordinate of the shape.
+     * @param y: the y coordinate of the shape.
+     * @param width: the width of the shape.
+     * @param height: the height of the shape.
+     * @param id: the shape id.
+     * @param name: the name of the shape.
+     */
     public ShapeObjectRectangle(int x, int y, int width, int height, long id, String name){
         
         originalShape = new Rectangle (x, y, width, height);
         this.name = name;
         this.id = id;
-        
     }
-    
-    
     
     @Override
     public Shape getTransformedShape() {
@@ -53,18 +56,6 @@ public class ShapeObjectRectangle extends ShapeObject{
     public long getID() {
         return id;
     }
-    
-
-    @Override
-    public void paintOriginal(Graphics2D g) {
-        g.setPaint(color); 
-
-        g.fill(originalShape);
-        
-        if(isSelected)
-            g.setPaint(GUISettings.selectionBorderColor);
-        g.draw(originalShape);
-    }
 
     @Override
     public void paintOriginal(Graphics2D g, AffineTransform at, double scale) {
@@ -74,38 +65,44 @@ public class ShapeObjectRectangle extends ShapeObject{
         transformedShape = at.createTransformedShape(originalShape);
         
         g.fill(at.createTransformedShape(originalShape));
+        
+        //changes color when selected.
         if(isSelected)
             g.setPaint(GUISettings.selectionBorderColor);
         
         g.draw(at.createTransformedShape(originalShape)); 
+        g.setPaint(nameColor); 
         
-                
-        g.setPaint(nameColor);  
+        //changes color when selected.
         if(isSelected)
             g.setPaint(GUISettings.selectionBorderColor);
 
         int screenRes = Toolkit.getDefaultToolkit().getScreenResolution();
         int font_size = (int)Math.round(GUISettings.objectNameSize*scale * screenRes / 72.0);
 
-
         Font font = new Font(GUISettings.objectNameTextType, Font.PLAIN, font_size);
         g.setFont(font);
-        
 
         Rectangle r = transformedShape.getBounds();
         int x = (int) (r.getX() + Math.round(nameBoundsX*scale));
         int y = (int) (r.getY() + Math.round(nameBoundsAbove*scale));
         
         if(!nameWrapp)
-            nameWrapp(g,at,scale, font, r);
-        
+            nameWrapp(g,scale, font, r);
         
         g.drawString(name, x, y);  
-        
     }
     
-    
-    private void nameWrapp(Graphics2D g, AffineTransform at, double scale, Font font, Rectangle r){
+    /**
+     * Wrappes the name, when it is too long to fit into the shape and
+     * also moves it outside, when the shapes height is too small.
+     * 
+     * @param g: Graphics2D
+     * @param scale: The scale of the whole 2d graphic.
+     * @param font: the font of the text.
+     * @param r: the bounds of the transformed shape.
+     */
+    private void nameWrapp(Graphics2D g, double scale, Font font, Rectangle r){
         
         FontRenderContext context = g.getFontRenderContext();
         
@@ -135,92 +132,52 @@ public class ShapeObjectRectangle extends ShapeObject{
     }
 
     @Override
-    public void paintTransformed(Graphics2D g, AffineTransform at) {
-        
-        if(transformedShape == null)
-            return;
-        
-        g.setPaint(color);  
-        
-        g.fill(transformedShape);
-        if(isSelected)
-            g.setPaint(GUISettings.selectionBorderColor);
-        
-        g.draw(transformedShape);
-        
-    }
-
-
-
-    @Override
     public void setSelected(boolean select) {
         isSelected = select;
-        
     }
-
-
 
     @Override
     public boolean isSelected() {
         return isSelected;
     }
 
-
-
     @Override
     public void switchSelection() {
         isSelected = !isSelected;
-        
     }
-
-
 
     @Override
     public void setLocation(int x, int y) {
         originalShape.setLocation(x, y);
-        
     }
-
-
 
     @Override
     public void setTranslation(double distance_x, double distance_y) {
         int new_x = (int) Math.round(originalShape.x-distance_x);
         int new_y = (int) Math.round(originalShape.y-distance_y);
         originalShape.setLocation(new_x, new_y);
-        
     }
-
-
 
     @Override
     public int getX() {
         return originalShape.x;
     }
 
-
-
     @Override
     public int getY() {
         return originalShape.y;
     }
-
-
-
+    
     @Override
     public int getWidth() {
         return originalShape.width;
     }
 
-
-
     @Override
     public int getHeight() {
         return originalShape.height;
     }
-
-
-
+    
     @Override
     public String getName() {
         return name;

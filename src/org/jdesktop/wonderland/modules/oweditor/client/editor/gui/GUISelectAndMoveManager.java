@@ -1,38 +1,46 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.gui;
 
 import java.awt.Point;
-import java.awt.Rectangle;
-import java.awt.Shape;
-import java.awt.geom.Area;
 import java.util.ArrayList;
 
+/**
+ * This class handles the pick up and drag feature for shapes,
+ * as well as their selection.
+ * @author Patrick
+ *
+ */
 public class GUISelectAndMoveManager {
 
     private ArrayList<ShapeObject> selectedShapes = null;
-    private GUIControler controler = null;
-
+    private GUIController gc = null;
     
     private ListenerDragAndDrop dragListener = null;
     private ListenerSelection selectionListener = null;
     protected boolean collision = false;
     
-    public GUISelectAndMoveManager(GUIControler contr){
+    public GUISelectAndMoveManager(GUIController contr){
         selectedShapes = new ArrayList<ShapeObject>();     
         
-        controler = contr;
+        gc = contr;
         
-        dragListener = new ListenerDragAndDrop(controler);
-        selectionListener = new ListenerSelection(controler);
+        dragListener = new ListenerDragAndDrop(gc);
+        selectionListener = new ListenerSelection(gc);
         
-        WindowDrawingPanel drawingPan = controler.drawingPan;
+        WindowDrawingPanel drawingPan = gc.drawingPan;
         
         drawingPan.addMouseListener(dragListener);
         drawingPan.addMouseMotionListener(dragListener);
         drawingPan.addMouseListener(selectionListener);
         drawingPan.addMouseMotionListener(selectionListener);
-        controler.frame.addKeyListener(selectionListener);
+        gc.frame.addKeyListener(selectionListener);
     }
     
+    /**
+     * Adds/removes one specific shape to/from the selection.
+     * 
+     * @param shape: the shape in question.
+     * @param selected: true, if selected, false if otherwise.
+     */
     public void setSelected(ShapeObject shape, boolean selected){
         shape.setSelected(selected);
         
@@ -45,6 +53,12 @@ public class GUISelectAndMoveManager {
         }
     }
     
+    /**
+     * Switches the selection of a shape. When a shape was
+     * selected it will be unselected and vice versa.
+     * 
+     * @param shape: the shape in question.
+     */
     public void switchSelection(ShapeObject shape){
         if(shape.isSelected()){
             selectedShapes.remove(shape);   
@@ -56,55 +70,48 @@ public class GUISelectAndMoveManager {
         shape.switchSelection();
     }
     
+    /**
+     * Removes all shapes from the current selection.
+     */
     public void removeCurSelection(){
         
         for(ShapeObject shape : selectedShapes){
             shape.setSelected(false);
         }
-        controler.sm.clearDraggingShapes();
+        gc.sm.clearDraggingShapes();
         selectedShapes.clear();
     }
     
-    public boolean isSomethingSelected(){
-        if(selectedShapes.isEmpty())
-            return false;
-        else
-            return true;
+    /**
+     * Moves the dragging shapes, which are shown, when shapes are dragged. 
+     * 
+     * @param x2: the new x value, where the shape is being dragged.
+     * @param y2: the new y value, where the shape is being dragged.
+     * @param start: the startpoint from where the shape has been dragged.
+     */
+    public void translateShape(int x2, int y2, Point start){
+        
+        double scale = gc.drawingPan.getScale();
+        int distance_x = start.x - x2;
+        int distance_y = start.y - y2;
+            
+        double distance = start.distance(x2, y2);
+        distance = distance / scale;
+
+        ShapeManager sm = gc.sm;
+        sm.translateDraggingShapes(selectedShapes, distance_x/scale, distance_y/scale );
+        collision = sm.checkForCollision();
+          
+        gc.drawingPan.repaint();
+        
     }
     
-    
-    
-    public void translateShape(long id, int x2, int y2, Point start){
-        if(id == -1)
-            return;
-        
-        ShapeObject shape = controler.sm.getShape(id);
-        double scale = controler.drawingPan.getScale();
-        
-        if(shape == null)
-            return;
-   
-
-        if(shape instanceof ShapeObjectRectangle){
-            Rectangle r = (Rectangle) shape.getShape();
-
-            int distance_x = start.x - x2;
-            int distance_y = start.y - y2;
-            
-            double distance = start.distance(x2, y2);
-            distance = distance / scale;
-
-            ShapeManager sm = controler.sm;
-            sm.translateDraggingShapes(selectedShapes, distance_x/scale, distance_y/scale );
-
-            collision = sm.checkForCollision();
-            
-            
-            controler.drawingPan.repaint();
-        }
-    }
-    
-
+    /**
+     * Resizes the selection rectangle.
+     * 
+     * @param start: the start position of the rectangle
+     * @param end: the end position of the rectangle
+     */
     public void resizeSelectionRect(Point start, Point end) {
 
         int sx = start.x;
@@ -132,23 +139,21 @@ public class GUISelectAndMoveManager {
             height = ey-sy;
             y=sy;
         }
-          
-        controler.sm.setSelectionRect(x,y,width, height);
-        
-        
+        gc.sm.setSelectionRect(x,y,width, height);
         
     }
 
+    /**
+     * Searches for shapes which are in the selection rectangle and
+     * adds them to the selection.
+     */
     public void selectionPressReleased() {
         
-        ArrayList<ShapeObject> list = controler.sm.getShapesInSelection();
+        ArrayList<ShapeObject> list = gc.sm.getShapesInSelection();
         
         for(ShapeObject shape : list){
             setSelected(shape, true);
         }
-        
     }
-
-    
 
 }

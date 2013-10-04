@@ -4,9 +4,9 @@ import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.ClientU
 
 public class ClientUpdateAdapter implements ClientUpdateGUIInterface{
     
-    private AdapterControler mc = null;
+    private AdapterController mc = null;
     
-    public ClientUpdateAdapter(AdapterControler m){
+    public ClientUpdateAdapter(AdapterController m){
         mc = m;
     }
 

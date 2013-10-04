@@ -1,13 +1,13 @@
 package org.jdesktop.wonderland.modules.oweditor.client;
 
-import org.jdesktop.wonderland.modules.oweditor.client.editor.controler.MainControler;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.controlerinterfaces.MainControlerAdapterInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.controller.MainController;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.controllerinterfaces.MainControllerAdapterInterface;
 
 public class TestMain {
 	
 	
 	public static void main(String[] args) {
-		MainControlerAdapterInterface main = new MainControler();
+		MainControllerAdapterInterface main = new MainController();
 		main.setVisible(true);
 	}
 }

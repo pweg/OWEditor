@@ -5,10 +5,10 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.Dat
 
 public class ServerUpdateAdapter {
     
-    private AdapterControler mc = null;
+    private AdapterController mc = null;
     private DataUpdateAdapterInterface di = null;
     
-    public ServerUpdateAdapter(AdapterControler m){
+    public ServerUpdateAdapter(AdapterController m){
         mc = m;
     }
     

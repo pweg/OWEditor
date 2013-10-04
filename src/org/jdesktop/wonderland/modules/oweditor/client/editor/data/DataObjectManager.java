@@ -8,9 +8,9 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.Dat
 public class DataObjectManager implements DataObjectManagerGUIInterface{
     
     private HashMap<Long, DataObject> data = null;
-    private DataControler dc = null;
+    private DataController dc = null;
     
-    DataObjectManager(DataControler d){
+    DataObjectManager(DataController d){
         dc = d;
         data = new HashMap<Long, DataObject>();
     }

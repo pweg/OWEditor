@@ -1,21 +1,21 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.data;
 
-import org.jdesktop.wonderland.modules.oweditor.client.editor.controlerinterfaces.MainControlerDataInterface;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataControlerMainControlerInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.controllerinterfaces.MainControllerDataInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataControllerMainControllerInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataObjectManagerGUIInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataUpdateAdapterInterface;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.GUIControlerInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.GUIControllerInterface;
 
-public class DataControler implements DataControlerMainControlerInterface {
+public class DataController implements DataControllerMainControllerInterface {
     
     protected DataUpdate updater = null;
     protected DataObjectManager dm = null;
     protected EnvironmentManager em = null;
     
-    private MainControlerDataInterface mc = null;
-    private GUIControlerInterface gci = null;
+    private MainControllerDataInterface mc = null;
+    private GUIControllerInterface gci = null;
     
-    public DataControler(MainControlerDataInterface mc){
+    public DataController(MainControllerDataInterface mc){
         this.mc = mc;
     }
     
@@ -28,7 +28,7 @@ public class DataControler implements DataControlerMainControlerInterface {
     }
 
     public void setGUIUpdate(long id) {
-       gci.getDataUpdate(id);
+       gci.setDataUpdate(id);
         
     }
 
@@ -43,7 +43,7 @@ public class DataControler implements DataControlerMainControlerInterface {
     }
 
     @Override
-    public void setGUIControler(GUIControlerInterface gui) {
+    public void setGUIControler(GUIControllerInterface gui) {
         gci = gui;
     }
 

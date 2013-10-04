@@ -1,35 +1,52 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.gui;
 
 import java.awt.Point;
-import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
 import javax.swing.event.MouseInputAdapter;
 
+/**
+ * This is a mouse/key listener used for selecting and unselecting shapes.
+ * It is also used for the selection rectangle.
+ * @author Patrick
+ *
+ */
 public class ListenerSelection extends MouseInputAdapter implements KeyListener{
     
+	/*
+	 * NOSELSPAN = There is no selection rectangle.
+	 * SELFIRST = The selection rectangle is initialized and has a 
+	 * 			  starting point.
+	 * SELSPAN = The selection rectangle is created.
+	 */
     public static final byte NOSELSPAN = 0;
     public static final byte SELFIRST = 1;
     public static final byte SELSPAN = 2;
     
-    private GUIControler controler = null;
+    private GUIController controler = null;
     private boolean shiftPressed = false;
     private byte selectionRect = NOSELSPAN;
     
     private Point start = new Point();
     
     
-    public ListenerSelection(GUIControler contr){
+    public ListenerSelection(GUIController contr){
         controler = contr;
     }
 
 
-   
+   /**
+    * When mouse button 1 is pressed, it looks for shapes the mouse is
+    * currently over and switches their selection, if one was found. If
+    * no shape was found, the whole selection will be unselected and the 
+    * first part for the selection rectangle will be created.
+    * If the SHIFT key was pressed, it will simply add/remove a shape to
+    * the current selection.
+    */
     public void mousePressed(MouseEvent e) {
         if(shiftPressed){
 
@@ -41,8 +58,9 @@ public class ListenerSelection extends MouseInputAdapter implements KeyListener{
                     Shape shape = shape_obj.getTransformedShape();
                     
                     if(shape.contains(p)) {
-                        controler.getSelectManager().switchSelection(shape_obj);
+                        controler.samm.switchSelection(shape_obj);
                         controler.drawingPan.repaint();
+                        break;
                     }
                 }
             }
@@ -60,16 +78,15 @@ public class ListenerSelection extends MouseInputAdapter implements KeyListener{
                     if(shape.contains(p)) {
                          isInside = true;
                          if(!shape_obj.isSelected()){
-                             controler.getSelectManager().removeCurSelection();
-                             controler.getSelectManager().setSelected(shape_obj, true);
+                             controler.samm.removeCurSelection();
+                             controler.samm.setSelected(shape_obj, true);
                              controler.drawingPan.repaint();
                          }
-                        
                     }
                 }
                 
                 if(!isInside){
-                    controler.getSelectManager().removeCurSelection();
+                    controler.samm.removeCurSelection();
                     
                     start.x = e.getX();
                     start.y = e.getY();
@@ -79,36 +96,37 @@ public class ListenerSelection extends MouseInputAdapter implements KeyListener{
                 }
             }
         }
-        
     }
 
-
+    /**
+     * This is used, when the selection rectangle was at least
+     * initialized and will create a selection rectangle.
+     */
     public void mouseDragged(MouseEvent e) {
         
         if(selectionRect != NOSELSPAN){
-            
             Point end = new Point(e.getX(), e.getY());
-            
            
-            controler.getSelectManager().resizeSelectionRect(start, end);
-          
+            controler.samm.resizeSelectionRect(start, end);
             controler.drawingPan.repaint();
         }
     }
    
+    /**
+     * This is only used when the selection rectangle was at least
+     * initialized and will create a selection of shapes which are
+     * in the selection rectangle.
+     */
     public void mouseReleased(MouseEvent arg0) {
         
        if(selectionRect != NOSELSPAN){
            selectionRect = NOSELSPAN;
            
-           controler.getSelectManager().selectionPressReleased();
+           controler.samm.selectionPressReleased();
            
-
            controler.sm.removeSelectionRect();
            controler.drawingPan.repaint();
-           
        }
-
     }
     
 
@@ -117,7 +135,6 @@ public class ListenerSelection extends MouseInputAdapter implements KeyListener{
         if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
             shiftPressed = true;
         }
-        
     }
 
     @Override
@@ -125,7 +142,6 @@ public class ListenerSelection extends MouseInputAdapter implements KeyListener{
         if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
             shiftPressed = false;
         }
-        
     }
 
     @Override

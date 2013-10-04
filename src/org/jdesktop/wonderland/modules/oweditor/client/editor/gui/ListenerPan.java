@@ -6,7 +6,11 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
-
+/**
+ * This is a simple mouse listener for panning the drawing panel.
+ * @author Patrick
+ *
+ */
 class ListenerPan implements MouseListener,MouseMotionListener {  
     
     private Rectangle visiRect = null;  
@@ -15,16 +19,9 @@ class ListenerPan implements MouseListener,MouseMotionListener {
     private WindowDrawingPanel pan = null;
     private boolean drag = false;
       
-    public ListenerPan(WindowDrawingPanel z) {  
-        pan = z;
+    public ListenerPan(WindowDrawingPanel drawingPan) {  
+        pan = drawingPan;
     }  
-      
-    /*public void paintComponent(Graphics g) { 
-        if(drag){
-            g.clearRect(0, 0, pan.getWidth(),pan.getHeight());  
-            g.drawRect(20,20,100,100); 
-        }
-    } */ 
       
     public void mouseDragged(MouseEvent e) {  
         if(drag){
@@ -45,7 +42,6 @@ class ListenerPan implements MouseListener,MouseMotionListener {
             pressed = e.getPoint();  
             visiRect = pan.getVisibleRect();
             drag = true;
-            
         }
     }  
       

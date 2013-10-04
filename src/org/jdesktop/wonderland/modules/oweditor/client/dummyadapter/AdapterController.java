@@ -1,17 +1,15 @@
-package org.jdesktop.wonderland.modules.oweditor.client.adapter;
+package org.jdesktop.wonderland.modules.oweditor.client.dummyadapter;
 
-import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.AdapterControlerMainControlerInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.AdapterControllerMainControllerInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.ClientUpdateGUIInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataUpdateAdapterInterface;
 
-public class AdapterControler implements AdapterControlerMainControlerInterface{
+public class AdapterController implements AdapterControllerMainControllerInterface{
     
     
     private ClientUpdateAdapter cua = null;
     private ServerUpdateAdapter sua = null;
-    private boolean isRunning = false;
-    
-    public AdapterControler(){
+    public AdapterController(){
         
     }
 
@@ -47,8 +45,6 @@ public class AdapterControler implements AdapterControlerMainControlerInterface{
 
         AdapterWorldBuilder builder = new AdapterWorldBuilder(sua);
         builder.build();
-        
-        isRunning = true;
         
     }
 

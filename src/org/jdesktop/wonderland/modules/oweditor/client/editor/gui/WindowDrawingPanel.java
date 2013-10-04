@@ -10,27 +10,25 @@ import java.awt.RenderingHints;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.awt.geom.AffineTransform;
-import java.util.ArrayList;
 
 import javax.swing.JPanel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 /**
- * 
+ * A class which is used for drawing. It implements the main surface for the
+ * 2D shape objects and calls the shapeManager on repaint.
  */
 public class WindowDrawingPanel extends JPanel implements ChangeListener {  
 
     private static final long serialVersionUID = 1L;
     private RenderingHints hints;  
+    
     private Dimension size;
-    private double scale = 1.0; 
-    private ListenerPan pan = null;
+    private double scale = 1.0;
     
-    private ShapeManager shapeManager = null;
-    private GUIControler gc = null;
-    
-    private Point centerPoint = new Point();
+    private ListenerPan pan = null;    
+    private GUIController gc = null;
     
     /*
      * These two translation integers are used to 
@@ -45,11 +43,14 @@ public class WindowDrawingPanel extends JPanel implements ChangeListener {
    // public static final int CANVAS_HEIGHT = 140;
     //public static final Color CANVAS_BG_COLOR = Color.CYAN;
        
-    public WindowDrawingPanel(ShapeManager shapeMan, GUIControler gc) {
+    /**
+     * Creates a new instance of the drawingPanel
+     * 
+     * @param gc: A GUIControler instance.
+     */
+    public WindowDrawingPanel(GUIController gc) {
         
-        shapeManager = shapeMan;
         this.gc = gc;
-        
         
         hints = new RenderingHints(null);  
         hints.put(RenderingHints.KEY_ANTIALIASING,  
@@ -66,20 +67,27 @@ public class WindowDrawingPanel extends JPanel implements ChangeListener {
         this.addMouseMotionListener(pan);
         this. addMouseWheelListener( new MouseWheelListener( )
         {
+        	/**
+        	 * MouseListener for zooming.
+        	 */
             @Override
             public void mouseWheelMoved( MouseWheelEvent e )
             {
             	double curScale = scale;
-                changeScale(0.1 * -(double)e.getWheelRotation());
+                changeScale(GUISettings.zoomSpeed * -(double)e.getWheelRotation());
                 
                 changeViewPort(curScale);
-               
             }
         });
-        
     } 
     
-    synchronized private void changeScale(double toAdd){
+    /**
+     * Changes the scale of the 2D graphics.
+     * 
+     * @param toAdd: The amount which should be added/removed from
+     * the scale value.
+     */
+    private void changeScale(double toAdd){
     	scale += toAdd;
         scale = Math.max(0.0001, scale);
 
@@ -87,6 +95,12 @@ public class WindowDrawingPanel extends JPanel implements ChangeListener {
         revalidate(); 
     }
     
+    /**
+     * Changes the viewport, when zoomed with the mouse wheel.
+     * 
+     * @param curScale: The old scale value, before the new one
+     * was set.
+     */
     private void changeViewPort(double curScale){
     	Rectangle r = getVisibleRect();
         
@@ -96,20 +110,12 @@ public class WindowDrawingPanel extends JPanel implements ChangeListener {
         double add_x = (r.width/curScale-r.width/scale)/2; 
         double add_y = (r.height/curScale-r.height/scale)/2; 
         
-        System.out.println("scale  " +scale + " prev "+ curScale);
-        System.out.println("curr_x  " +r.x + " " + r.y);
-        System.out.println("xy " +v_x + " " + v_y);
-        System.out.println("toadd " +add_x + " " + add_y);
-        System.out.println("widthheight " +r.width + " " + r.height);
-        System.out.println("center " +r.getCenterX() + " " + r.getCenterY());
 
         int new_x = (int) Math.round(v_x+ add_x);
         int new_y = (int) Math.round(v_y+ add_y);
 
         Point p = new Point(new_x, new_y);
-        System.out.println("new_x " +new_x + " " + new_y);
-
-        System.out.println("----------");
+        
         gc.mainScrollPanel.getViewport().setView(gc.mainScrollPanel.getViewport().getView());
     	gc.mainScrollPanel.getViewport().setViewPosition(p);
     }
@@ -131,42 +137,76 @@ public class WindowDrawingPanel extends JPanel implements ChangeListener {
         g2.setRenderingHints(hints);  
         
         AffineTransform at = new AffineTransform();
-        at.translate(translationX, translationY); //.getTranslateInstance(v_w, v_h);  
-        //AffineTransform at = new AffineTransform();
+        at.translate(translationX, translationY); 
         at.scale(scale, scale);  
         g2.setPaint(GUISettings.backgroundColor); 
         
-        shapeManager.drawShapes(g2, at, scale);
+        gc.sm.drawShapes(g2, at, scale);
         
-   } 
+    } 
     
+    /**
+     * Sets a new width for the drawing panel.
+     * 
+     * @param width: the new width.
+     */
     public void setNewWidth(int width){
-    	size.width = (int)( (width + gc.getFrameWidth()/GUISettings.widthDivisor));
+    	size.width = (int)( (width + gc.frame.getWidth()/GUISettings.widthDivisor));
+    	if(size.width < gc.frame.getWidth())
+    		size.width = gc.frame.getWidth();
+    	
         revalidate();  
     }
     
+    /**
+     * Sets a new height for the drawing panel.
+     * 
+     * @param height: the new height.
+     */
     public void setNewHeight(int height){
-    	size.height = (int)( (height + gc.getFrameHeight()/GUISettings.heightDivisor));
+		size.height = (int)( (height + gc.frame.getHeight()/GUISettings.heightDivisor));
+    	if(size.height < gc.frame.getHeight())
+    		size.height = gc.frame.getHeight();
+    	
         revalidate();  
     }
    
+    /**
+     * Returns the preferred size of the drawing panel.
+     */
     public Dimension getPreferredSize() {  
         int w = (int)(scale*size.width);  
         int h = (int)(scale*size.height);  
         return new Dimension(w, h);  
     } 
     
+    /**
+     * Returns the current scale.
+     * 
+     * @return: The scale.
+     */
     public double getScale(){
         return scale;
     }
     
-
+    /**
+     * Sets a new translation value for x, which is
+     * used for centering the objects.
+     * 
+     * @param x: the new x value.
+     */
     public void setNewMinX(int x){
-    	translationX = (-x)+ gc.getFrameWidth()/(GUISettings.widthDivisor*2);
+    	translationX = (-x)+ gc.frame.getWidth()/(GUISettings.widthDivisor*2);
     }
     
+    /**
+     * Sets a new translation value for y, which is
+     * used for centering the objects.
+     * 
+     * @param y: the new y value.
+     */
     public void setNewMinY(int y){
-    	translationY = (-y)+ gc.getFrameHeight()/(GUISettings.heightDivisor*2);
+    	translationY = (-y)+ gc.frame.getHeight()/(GUISettings.heightDivisor*2);
     }
 
 

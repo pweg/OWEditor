@@ -7,9 +7,9 @@ public class EnvironmentManager {
 	private int minX = Integer.MAX_VALUE;
 	private int minY = Integer.MAX_VALUE;
 	
-	private DataControler dc = null;
+	private DataController dc = null;
 	
-	public EnvironmentManager(DataControler dc){
+	public EnvironmentManager(DataController dc){
 		this.dc = dc;
 	}
 	

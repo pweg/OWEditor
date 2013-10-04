@@ -1,6 +1,5 @@
 package org.jdesktop.wonderland.modules.oweditor.client.dummyadapter;
 
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.ShapeObjectRectangle;
 
 public class AdapterWorldBuilder {
     
