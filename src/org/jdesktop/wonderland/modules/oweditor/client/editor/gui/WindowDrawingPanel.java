@@ -16,32 +16,39 @@ import javax.swing.JPanel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-
+/**
+ * 
+ */
 public class WindowDrawingPanel extends JPanel implements ChangeListener {  
-    /**
-     * 
-     */
+
     private static final long serialVersionUID = 1L;
     private RenderingHints hints;  
-    //private Shape[] shapes;  
     private Dimension size;
-    //private ArrayList<ShapeObject> shapes;
     private double scale = 1.0; 
-    private double oldScale = 1.0;
     private ListenerPan pan = null;
     
     private ShapeManager shapeManager = null;
-    private boolean firstDraw = true;
+    private GUIControler gc = null;
+    
     private Point centerPoint = new Point();
-    private Point mousePoint = new Point();
+    
+    /*
+     * These two translation integers are used to 
+     * center the image. For example, when negative 
+     * coordinates are used, it will move the image to the 
+     * center in order to see whats beyond the origin.
+     */
+    private int translationX = 0;
+    private int translationY = 0;
     
    // public static final int CANVAS_WIDTH = 400;
    // public static final int CANVAS_HEIGHT = 140;
     //public static final Color CANVAS_BG_COLOR = Color.CYAN;
        
-    public WindowDrawingPanel(ShapeManager shapeMan) {
+    public WindowDrawingPanel(ShapeManager shapeMan, GUIControler gc) {
         
         shapeManager = shapeMan;
+        this.gc = gc;
         
         
         hints = new RenderingHints(null);  
@@ -51,7 +58,6 @@ public class WindowDrawingPanel extends JPanel implements ChangeListener {
                   RenderingHints.VALUE_TEXT_ANTIALIAS_ON);  
         hints.put(RenderingHints.KEY_FRACTIONALMETRICS,  
                   RenderingHints.VALUE_FRACTIONALMETRICS_ON); 
-        mousePoint = centerPoint;
 
         size = new Dimension(10,10);  
         setBackground(new Color(255,255,255)); 
@@ -63,25 +69,52 @@ public class WindowDrawingPanel extends JPanel implements ChangeListener {
             @Override
             public void mouseWheelMoved( MouseWheelEvent e )
             {
-            	mousePoint = e.getPoint();
+            	double curScale = scale;
                 changeScale(0.1 * -(double)e.getWheelRotation());
+                
+                changeViewPort(curScale);
+               
             }
         });
         
     } 
     
     synchronized private void changeScale(double toAdd){
-        
-    	oldScale= scale;
     	scale += toAdd;
         scale = Math.max(0.0001, scale);
 
         repaint();  
         revalidate(); 
     }
+    
+    private void changeViewPort(double curScale){
+    	Rectangle r = getVisibleRect();
+        
+        double v_x = r.x/(curScale)*scale;
+        double v_y = r.y/(curScale)*scale;
+        
+        double add_x = (r.width/curScale-r.width/scale)/2; 
+        double add_y = (r.height/curScale-r.height/scale)/2; 
+        
+        System.out.println("scale  " +scale + " prev "+ curScale);
+        System.out.println("curr_x  " +r.x + " " + r.y);
+        System.out.println("xy " +v_x + " " + v_y);
+        System.out.println("toadd " +add_x + " " + add_y);
+        System.out.println("widthheight " +r.width + " " + r.height);
+        System.out.println("center " +r.getCenterX() + " " + r.getCenterY());
+
+        int new_x = (int) Math.round(v_x+ add_x);
+        int new_y = (int) Math.round(v_y+ add_y);
+
+        Point p = new Point(new_x, new_y);
+        System.out.println("new_x " +new_x + " " + new_y);
+
+        System.out.println("----------");
+        gc.mainScrollPanel.getViewport().setView(gc.mainScrollPanel.getViewport().getView());
+    	gc.mainScrollPanel.getViewport().setViewPosition(p);
+    }
    
     public void stateChanged(ChangeEvent e) {   
-        //scale = value/100.0;  
         repaint();  
         revalidate();  
     }  
@@ -96,27 +129,9 @@ public class WindowDrawingPanel extends JPanel implements ChangeListener {
         super.paintComponent(g); 
         Graphics2D g2 = (Graphics2D)g;  
         g2.setRenderingHints(hints);  
-
         
-        if(firstDraw){
-            size.width = getWidth();    
-            size.height = getHeight();
-            firstDraw = false;
-        }
-
-        Rectangle r = getVisibleRect();
-       
-        double v_w = r.width/scale/2;
-        double v_h = r.height/scale/2;
-        //if(shapes.size() == 0) initShapes(); 
-        
-        // Keep shapes centered on panel.  
-        double x = getWidth() / 2; 
-        double y = getHeight() / 2; 
-        System.out.println(v_w);
-        
-        
-        AffineTransform at = AffineTransform.getTranslateInstance(v_w, v_h);  
+        AffineTransform at = new AffineTransform();
+        at.translate(translationX, translationY); //.getTranslateInstance(v_w, v_h);  
         //AffineTransform at = new AffineTransform();
         at.scale(scale, scale);  
         g2.setPaint(GUISettings.backgroundColor); 
@@ -124,6 +139,16 @@ public class WindowDrawingPanel extends JPanel implements ChangeListener {
         shapeManager.drawShapes(g2, at, scale);
         
    } 
+    
+    public void setNewWidth(int width){
+    	size.width = (int)( (width + gc.getFrameWidth()/GUISettings.widthDivisor));
+        revalidate();  
+    }
+    
+    public void setNewHeight(int height){
+    	size.height = (int)( (height + gc.getFrameHeight()/GUISettings.heightDivisor));
+        revalidate();  
+    }
    
     public Dimension getPreferredSize() {  
         int w = (int)(scale*size.width);  
@@ -135,12 +160,13 @@ public class WindowDrawingPanel extends JPanel implements ChangeListener {
         return scale;
     }
     
-    public double getTranslationX(){
-        return (getWidth() - scale*size.width)/2;  
+
+    public void setNewMinX(int x){
+    	translationX = (-x)+ gc.getFrameWidth()/(GUISettings.widthDivisor*2);
     }
     
-    public double getTranslationY(){
-        return (getHeight() - scale*size.height)/2;  
+    public void setNewMinY(int y){
+    	translationY = (-y)+ gc.getFrameHeight()/(GUISettings.heightDivisor*2);
     }
 
 

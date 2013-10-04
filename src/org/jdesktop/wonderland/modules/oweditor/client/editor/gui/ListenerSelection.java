@@ -35,14 +35,14 @@ public class ListenerSelection extends MouseInputAdapter implements KeyListener{
 
             Point p = e.getPoint();
             if(e.getButton() ==  MouseEvent.BUTTON1){
-                ArrayList<ShapeObject> shapes = controler.getShapeManager().getShapes();
+                ArrayList<ShapeObject> shapes = controler.sm.getShapes();
                 
                 for(ShapeObject shape_obj : shapes){
                     Shape shape = shape_obj.getTransformedShape();
                     
                     if(shape.contains(p)) {
                         controler.getSelectManager().switchSelection(shape_obj);
-                        controler.getDrawingPanel().repaint();
+                        controler.drawingPan.repaint();
                     }
                 }
             }
@@ -50,7 +50,7 @@ public class ListenerSelection extends MouseInputAdapter implements KeyListener{
         else{
             if(e.getButton() ==  MouseEvent.BUTTON1){
                 Point p = e.getPoint();
-                ArrayList<ShapeObject> shapes = controler.getShapeManager().getShapes();
+                ArrayList<ShapeObject> shapes = controler.sm.getShapes();
                 
                 boolean isInside = false;
                 for(ShapeObject shape_obj : shapes){
@@ -62,7 +62,7 @@ public class ListenerSelection extends MouseInputAdapter implements KeyListener{
                          if(!shape_obj.isSelected()){
                              controler.getSelectManager().removeCurSelection();
                              controler.getSelectManager().setSelected(shape_obj, true);
-                             controler.getDrawingPanel().repaint();
+                             controler.drawingPan.repaint();
                          }
                         
                     }
@@ -75,7 +75,7 @@ public class ListenerSelection extends MouseInputAdapter implements KeyListener{
                     start.y = e.getY();
                     selectionRect = SELFIRST;
                     
-                    controler.getDrawingPanel().repaint();
+                    controler.drawingPan.repaint();
                 }
             }
         }
@@ -92,7 +92,7 @@ public class ListenerSelection extends MouseInputAdapter implements KeyListener{
            
             controler.getSelectManager().resizeSelectionRect(start, end);
           
-            controler.getDrawingPanel().repaint();
+            controler.drawingPan.repaint();
         }
     }
    
@@ -104,8 +104,8 @@ public class ListenerSelection extends MouseInputAdapter implements KeyListener{
            controler.getSelectManager().selectionPressReleased();
            
 
-           controler.getShapeManager().removeSelectionRect();
-           controler.getDrawingPanel().repaint();
+           controler.sm.removeSelectionRect();
+           controler.drawingPan.repaint();
            
        }
 

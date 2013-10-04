@@ -24,13 +24,13 @@ public class GUISelectAndMoveManager {
         dragListener = new ListenerDragAndDrop(controler);
         selectionListener = new ListenerSelection(controler);
         
-        WindowDrawingPanel drawingPan = controler.getDrawingPanel();
+        WindowDrawingPanel drawingPan = controler.drawingPan;
         
         drawingPan.addMouseListener(dragListener);
         drawingPan.addMouseMotionListener(dragListener);
         drawingPan.addMouseListener(selectionListener);
         drawingPan.addMouseMotionListener(selectionListener);
-        controler.getFrame().addKeyListener(selectionListener);
+        controler.frame.addKeyListener(selectionListener);
     }
     
     public void setSelected(ShapeObject shape, boolean selected){
@@ -61,7 +61,7 @@ public class GUISelectAndMoveManager {
         for(ShapeObject shape : selectedShapes){
             shape.setSelected(false);
         }
-        controler.getShapeManager().clearDraggingShapes();
+        controler.sm.clearDraggingShapes();
         selectedShapes.clear();
     }
     
@@ -78,8 +78,8 @@ public class GUISelectAndMoveManager {
         if(id == -1)
             return;
         
-        ShapeObject shape = controler.getShapeManager().getShape(id);
-        double scale = controler.getDrawingPanel().getScale();
+        ShapeObject shape = controler.sm.getShape(id);
+        double scale = controler.drawingPan.getScale();
         
         if(shape == null)
             return;
@@ -94,13 +94,13 @@ public class GUISelectAndMoveManager {
             double distance = start.distance(x2, y2);
             distance = distance / scale;
 
-            ShapeManager sm = controler.getShapeManager();
+            ShapeManager sm = controler.sm;
             sm.translateDraggingShapes(selectedShapes, distance_x/scale, distance_y/scale );
 
             collision = sm.checkForCollision();
             
             
-            controler.getDrawingPanel().repaint();
+            controler.drawingPan.repaint();
         }
     }
     
@@ -133,7 +133,7 @@ public class GUISelectAndMoveManager {
             y=sy;
         }
           
-        controler.getShapeManager().setSelectionRect(x,y,width, height);
+        controler.sm.setSelectionRect(x,y,width, height);
         
         
         
@@ -141,7 +141,7 @@ public class GUISelectAndMoveManager {
 
     public void selectionPressReleased() {
         
-        ArrayList<ShapeObject> list = controler.getShapeManager().getShapesInSelection();
+        ArrayList<ShapeObject> list = controler.sm.getShapesInSelection();
         
         for(ShapeObject shape : list){
             setSelected(shape, true);

@@ -18,6 +18,12 @@ public interface GUIControlerInterface {
     
     public void setClientUpdateAdapter (ClientUpdateGUIInterface clientUpdateInterface);
     
-    public JFrame getFrame();
+    public void setWidth(int width);
+    
+    public void setHeight(int height);  
+    
+    public void setMinX(int x);
+    
+    public void setMinY(int y);
 
 }

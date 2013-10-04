@@ -11,16 +11,15 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.GUIC
 
 public class GUIControler implements GUIControlerInterface{
 
-    private WindowFrame frame = null;
-    private WindowDrawingPanel drawingPan = null;
-    private JScrollPane mainScrollPanel = null;
+	protected WindowFrame frame = null;
+	protected WindowDrawingPanel drawingPan = null;
+	protected JScrollPane mainScrollPanel = null;
+    protected ShapeManager sm = null;
     
-    
-    private ShapeManager sm = null;
     private GUISelectAndMoveManager samm = null;
     private MainControlerGUIInterface mc = null;
-    public ClientUpdateGUIInterface cui = null;
-    public DataObjectManagerGUIInterface dmi = null;
+    private ClientUpdateGUIInterface cui = null;
+    private DataObjectManagerGUIInterface dmi = null;
     
     public GUIControler(MainControlerGUIInterface mc){
         this.mc = mc;
@@ -40,11 +39,12 @@ public class GUIControler implements GUIControlerInterface{
     private void initiallize(){
 
         sm = new ShapeManager();
-        drawingPan = new WindowDrawingPanel(sm);
+        drawingPan = new WindowDrawingPanel(sm, this);
         //drawingPan.setOpaque(true);
         samm = new GUISelectAndMoveManager(this);
        
         mainScrollPanel = new JScrollPane(drawingPan);
+        mainScrollPanel.setWheelScrollingEnabled(false);
         //drawingPan.setScroll(mainScrollPanel);
         frame.getContentPane().add(mainScrollPanel);
         
@@ -55,19 +55,6 @@ public class GUIControler implements GUIControlerInterface{
         frame.setVisible(visibility);
         
         
-    }
-    
-    
-    public WindowFrame getFrame(){
-        return frame;
-    }
-    
-    public ShapeManager getShapeManager(){
-        return sm;
-    }
-    
-    public WindowDrawingPanel getDrawingPanel(){
-        return drawingPan;
     }
     
     public GUISelectAndMoveManager getSelectManager(){
@@ -107,6 +94,37 @@ public class GUIControler implements GUIControlerInterface{
         this.cui = cui;
         
     }
+
+
+	@Override
+	public void setWidth(int width) {
+		drawingPan.setNewWidth(width);
+	}
+
+
+	@Override
+	public void setHeight(int height) {
+		drawingPan.setNewHeight(height);
+	}
+	
+	public int getFrameHeight(){
+		return frame.getHeight();
+	}
+	public int getFrameWidth(){
+		return frame.getWidth();
+	}
+
+
+	@Override
+	public void setMinX(int x) {
+		drawingPan.setNewMinX(x);
+	}
+
+
+	@Override
+	public void setMinY(int y) {
+		drawingPan.setNewMinY(y);
+	}
 
     
 

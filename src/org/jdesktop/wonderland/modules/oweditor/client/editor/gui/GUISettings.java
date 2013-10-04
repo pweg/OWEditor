@@ -42,4 +42,12 @@ public class GUISettings {
     public static int framePositionX = 200;
     public static int framePositionY = 200;
     public static String frameTitle = "Open Wonderland Editor" ;
+    
+    /*
+     * These are two values, which are used to add a empty space
+     * around the existing shapes. They are used to divide the
+     * frame size;
+     */
+    public static int widthDivisor = 2;
+    public static int heightDivisor = 2;
 }

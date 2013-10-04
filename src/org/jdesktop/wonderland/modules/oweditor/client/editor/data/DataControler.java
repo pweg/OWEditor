@@ -8,8 +8,10 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.GUIC
 
 public class DataControler implements DataControlerMainControlerInterface {
     
-    private DataUpdate updater = null;
-    private DataObjectManager dm = null;
+    protected DataUpdate updater = null;
+    protected DataObjectManager dm = null;
+    protected EnvironmentManager em = null;
+    
     private MainControlerDataInterface mc = null;
     private GUIControlerInterface gci = null;
     
@@ -19,6 +21,7 @@ public class DataControler implements DataControlerMainControlerInterface {
     
     @Override
     public void initialize() {
+    	em = new EnvironmentManager(this);
         dm = new DataObjectManager(this);
         updater = new DataUpdate(dm);
         
@@ -42,6 +45,21 @@ public class DataControler implements DataControlerMainControlerInterface {
     @Override
     public void setGUIControler(GUIControlerInterface gui) {
         gci = gui;
+    }
+
+    public void setNewWidth(int width){
+    	gci.setWidth(width);
+    }
+    
+    public void setNewHeight(int height){
+    	gci.setHeight(height);
+    }
+    public void setNewMinX(int x){
+    	gci.setMinX(x);
+    }
+    
+    public void setNewMinY(int y){
+    	gci.setMinY(y);
     }
 
 

@@ -21,6 +21,9 @@ public class DataObjectManager implements DataObjectManagerGUIInterface{
         //DataObject d = new DataObject(id,  x,  y,  z,  rotation,  scale, width, height);
         long id = dataObject.getID();
         
+        dc.em.setX(dataObject.getX(), dataObject.getWidth());
+        dc.em.setY(dataObject.getY(), dataObject.getHeight());
+        
         if(dataObject instanceof DataObject){
             data.put(id, (DataObject) dataObject);
             
@@ -44,6 +47,12 @@ public class DataObjectManager implements DataObjectManagerGUIInterface{
         String name = dataObject.getName();
         
         DataObject d = data.get(id);
+        
+        if(d.getX() != x)
+        	 dc.em.setX(x, d.getWidth());
+        if(d.getX() != y)
+       	 	dc.em.setY(y, d.getHeight());
+        
         d.setCoordinates(x, y, z);
         d.setRotation(rotation);
         d.setScale(scale);

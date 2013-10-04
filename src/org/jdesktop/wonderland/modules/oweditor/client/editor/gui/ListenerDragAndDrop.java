@@ -23,8 +23,10 @@ public class ListenerDragAndDrop extends MouseInputAdapter{
     public void mousePressed(MouseEvent e) {
         if(e.getButton() ==  MouseEvent.BUTTON1){
             Point p = e.getPoint();
+            System.out.println("POINT: " +p.x + " "+ p.y);
+            System.out.println("------ " );
             
-            ShapeObject shape = controler.getShapeManager().getShapeSuroundingPoint(p);
+            ShapeObject shape = controler.sm.getShapeSuroundingPoint(p);
             
             if(shape != null){
                 curShape = shape.getID();
@@ -39,11 +41,11 @@ public class ListenerDragAndDrop extends MouseInputAdapter{
         dragging = false;
         
         if(!controler.getSelectManager().collision){
-            controler.getShapeManager().saveDraggingShapes();
+            controler.sm.saveDraggingShapes();
             controler.setAdapterUpdate();
         }
-        controler.getShapeManager().clearDraggingShapes();
-        controler.getDrawingPanel().repaint();
+        controler.sm.clearDraggingShapes();
+        controler.drawingPan.repaint();
     }
  
     public void mouseDragged(MouseEvent e) {
