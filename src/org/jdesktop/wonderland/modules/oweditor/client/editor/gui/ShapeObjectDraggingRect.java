@@ -144,4 +144,8 @@ public class ShapeObjectDraggingRect extends ShapeObject{
         return "DraggingShape"+id;
     }
 
+	@Override
+	public void setName(String name) {
+	}
+
 }

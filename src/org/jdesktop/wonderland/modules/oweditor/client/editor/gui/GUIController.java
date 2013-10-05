@@ -7,6 +7,7 @@ import javax.swing.JScrollPane;
 import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.ClientUpdateGUIInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.controllerinterfaces.MainControllerGUIInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataObjectManagerGUIInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.DataObjectManagerObserverInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.GUIControllerInterface;
 
 /**
@@ -23,6 +24,7 @@ public class GUIController implements GUIControllerInterface{
 	protected JScrollPane mainScrollPanel = null;
     protected ShapeManager sm = null;
     protected GUISelectAndMoveManager samm = null;
+    protected DataObjectManagerObserver domo = null;
     
     private MainControllerGUIInterface mc = null;
     private ClientUpdateGUIInterface cui = null;
@@ -47,6 +49,7 @@ public class GUIController implements GUIControllerInterface{
         sm = new ShapeManager();
         drawingPan = new WindowDrawingPanel(this);
         samm = new GUISelectAndMoveManager(this);
+        domo = new DataObjectManagerObserver(this);
        
         mainScrollPanel = new JScrollPane(drawingPan);
         mainScrollPanel.setWheelScrollingEnabled(false);
@@ -71,13 +74,6 @@ public class GUIController implements GUIControllerInterface{
            long id = shape.getID();
            cui.updateTranslation(id, shape.getX(), shape.getY(), dmi.getZ(id));
        }
-    }
-
-    @Override
-    public void setDataUpdate(long id) {
-        sm.setDataUpdate(id);
-        drawingPan.repaint();
-        
     }
 
     @Override
@@ -109,6 +105,11 @@ public class GUIController implements GUIControllerInterface{
 	@Override
 	public void setMinY(int y) {
 		drawingPan.setNewMinY(y);
+	}
+
+	@Override
+	public DataObjectManagerObserverInterface getDataObjectObserver() {
+		return domo;
 	}
 
     

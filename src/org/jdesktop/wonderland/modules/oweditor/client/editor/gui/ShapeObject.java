@@ -83,6 +83,13 @@ public abstract class ShapeObject {
     public abstract void setTranslation(double distance_x, double distance_y) ;
     
     /**
+     * Sets a new name for the shape.
+     * 
+     * @param name the new name
+     */
+    public abstract void setName(String name);
+    
+    /**
      * Returns the current x coordinate.
      * 
      * @return x coordinate integer.

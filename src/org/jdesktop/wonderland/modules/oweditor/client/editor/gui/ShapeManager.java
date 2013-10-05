@@ -244,17 +244,13 @@ public class ShapeManager {
      * 
      * @param id which needs to be updated.
      */
-    public void setDataUpdate(long id) {
-
-        if(dm == null)
-            return;
-
-        DataObjectInterface so = dm.getObject(id);
+    public void setDataUpdate(DataObjectInterface dataObject) {
         
-        if(so == null)
+        if(dataObject == null)
         	return;
         
         ShapeObject shape = null;
+        long id = dataObject.getID();
         
         for(ShapeObject s : shapes){
             if(s.getID() == id){
@@ -263,11 +259,11 @@ public class ShapeManager {
             }
         }
         if(shape == null){
-            getCreateUpdate(id);
+            getCreateUpdate(dataObject);
             return;
         }
-        
-        shape.setLocation(so.getX(), so.getY());
+        shape.setName(dataObject.getName());
+        shape.setLocation(dataObject.getX(), dataObject.getY());
     }
     
     /**
@@ -275,14 +271,14 @@ public class ShapeManager {
      * 
      * @param id which needs to be created.
      */
-    public void getCreateUpdate(long id){
+    public void getCreateUpdate(DataObjectInterface dataObject){
         
-        DataObjectInterface so = dm.getObject(id);
-        int x = so.getX();
-        int y = so.getY();
-        int width = so.getWidth();
-        int height = so.getHeight();
-        String name = so.getName();
+    	long id = dataObject.getID();
+        int x = dataObject.getX();
+        int y = dataObject.getY();
+        int width = dataObject.getWidth();
+        int height = dataObject.getHeight();
+        String name = dataObject.getName();
         
         if(name.length() > 20){
             name = name.substring(0, 18)+ "...";

@@ -1,5 +1,6 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces;
 
+import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.DataObjectManagerObserverInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.GUIControllerInterface;
 
 /**
@@ -36,5 +37,7 @@ public interface DataControllerMainControllerInterface {
      * @param gui the interface in question.
      */
     public void setGUIControler(GUIControllerInterface gui);
+    
+    public void registerDataObjectObserver(DataObjectManagerObserverInterface domo);
 
 }

@@ -44,6 +44,7 @@ public class MainController implements MainControllerDataInterface,
         gui.setDataManager(data.getDataManagerInterface());
         gui.setClientUpdateAdapter(adapter.getClientUpdateInterface());
         data.setGUIControler(gui);
+        data.registerDataObjectObserver(gui.getDataObjectObserver());
         
         adapter.getCurrentWorld();
     }

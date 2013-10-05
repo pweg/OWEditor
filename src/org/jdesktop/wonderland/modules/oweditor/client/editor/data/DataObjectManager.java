@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataObjectInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataObjectManagerGUIInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.DataObjectManagerObserverInterface;
 
 /**
  * Stores, manages and creates data objects. 
@@ -14,6 +15,7 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.Dat
 public class DataObjectManager implements DataObjectManagerGUIInterface{
 
     private DataController dc = null;
+    private DataObjectManagerObserverInterface domo = null;
     
     private HashMap<Long, DataObject> data = null;
     
@@ -41,7 +43,7 @@ public class DataObjectManager implements DataObjectManagerGUIInterface{
         if(dataObject instanceof DataObject){
             data.put(id, (DataObject) dataObject);
             
-            dc.setGUIUpdate(id);
+            domo.notify(dataObject);
         }
     }
     
@@ -61,27 +63,29 @@ public class DataObjectManager implements DataObjectManagerGUIInterface{
         
         if(!data.containsKey(id))
         	createNewObject(dataObject);
-        
-        int x = dataObject.getX();
-        int y = dataObject.getY();
-        int z = dataObject.getZ();
-        double rotation = dataObject.getRotation();
-        double scale = dataObject.getScale();
-        String name = dataObject.getName();
-        
-        DataObject d = data.get(id);
-        
-        if(d.getX() != x)
-        	 dc.em.setX(x, d.getWidth());
-        if(d.getX() != y)
-       	 	dc.em.setY(y, d.getHeight());
-        
-        d.setCoordinates(x, y, z);
-        d.setRotation(rotation);
-        d.setScale(scale);
-        d.setName(name);
-
-        dc.setGUIUpdate(id);
+        else{
+	        
+	        int x = dataObject.getX();
+	        int y = dataObject.getY();
+	        int z = dataObject.getZ();
+	        double rotation = dataObject.getRotation();
+	        double scale = dataObject.getScale();
+	        String name = dataObject.getName();
+	        
+	        DataObject d = data.get(id);
+	        
+	        if(d.getX() != x)
+	        	 dc.em.setX(x, d.getWidth());
+	        if(d.getX() != y)
+	       	 	dc.em.setY(y, d.getHeight());
+	        
+	        d.setCoordinates(x, y, z);
+	        d.setRotation(rotation);
+	        d.setScale(scale);
+	        d.setName(name);
+	
+	        domo.notify(d);
+        }
     }
     
     @Override
@@ -106,6 +110,16 @@ public class DataObjectManager implements DataObjectManagerGUIInterface{
      */
     public DataObjectInterface getEmptyDataObject() {
         return new DataObject();
+    }
+    
+    /**
+     * Registers an observer for the data manager.
+     * 
+     * @param domo the observer instance.
+     */
+    public void registerDataObjectObserver(
+			DataObjectManagerObserverInterface domo) {
+    	this.domo = domo;
     }
 
 }

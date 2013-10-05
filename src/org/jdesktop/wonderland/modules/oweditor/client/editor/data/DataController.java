@@ -4,6 +4,7 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.controllerinterfac
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataControllerMainControllerInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataObjectManagerGUIInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataUpdateAdapterInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.DataObjectManagerObserverInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.GUIControllerInterface;
 
 /**
@@ -31,11 +32,6 @@ public class DataController implements DataControllerMainControllerInterface {
     	em = new EnvironmentManager(this);
         dm = new DataObjectManager(this);
         du = new DataUpdate(dm);
-        
-    }
-
-    public void setGUIUpdate(long id) {
-       gci.setDataUpdate(id);
         
     }
 
@@ -68,6 +64,13 @@ public class DataController implements DataControllerMainControllerInterface {
     public void setNewMinY(int y){
     	gci.setMinY(y);
     }
+
+	@Override
+	public void registerDataObjectObserver(
+			DataObjectManagerObserverInterface domo) {
+		dm.registerDataObjectObserver(domo);
+		
+	}
 
 
 }

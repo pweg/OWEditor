@@ -132,4 +132,8 @@ public class ShapeObjectSelectionRect extends ShapeObject{
         return "selectionRectangle";
     }
 
+	@Override
+	public void setName(String name) {
+	}
+
 }
