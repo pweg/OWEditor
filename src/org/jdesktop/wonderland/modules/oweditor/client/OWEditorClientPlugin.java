@@ -15,7 +15,12 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.controller.MainCon
 import org.jdesktop.wonderland.modules.oweditor.client.editor.controllerinterfaces.MainControllerAdapterInterface;
 
 
-
+/**
+ * Plugin for the menu entrance for Open Wonderland.
+ * 
+ * @author Patrick
+ *
+ */
 @Plugin
 public class OWEditorClientPlugin extends BaseClientPlugin {
     

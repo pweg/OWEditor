@@ -4,13 +4,21 @@ import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.Adapter
 import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.ClientUpdateGUIInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataUpdateAdapterInterface;
 
+/**
+ * Adapter controller class, which is used to initialize the whole adapter.
+ * @author Patrick
+ *
+ */
 public class AdapterController implements AdapterControllerMainControllerInterface{
     
     
-    private ClientUpdateAdapter cua = null;
-    private ServerUpdateAdapter sua = null;
+    protected ClientUpdateAdapter cua = null;
+    protected ServerUpdateAdapter sua = null;
     private boolean isRunning = false;
     
+    /**
+     * Creates a new adapter controller instance.
+     */
     public AdapterController(){
         
     }

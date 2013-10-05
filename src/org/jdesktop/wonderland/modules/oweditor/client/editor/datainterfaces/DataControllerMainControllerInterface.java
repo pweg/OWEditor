@@ -33,7 +33,7 @@ public interface DataControllerMainControllerInterface {
      * Sets a guiController interface, which is used for communication
      * to the gui package.
      * 
-     * @param gui: the interface in question.
+     * @param gui the interface in question.
      */
     public void setGUIControler(GUIControllerInterface gui);
 

@@ -6,9 +6,16 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.Dat
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataUpdateAdapterInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.GUIControllerInterface;
 
+/**
+ * This is the main data controller class, which is used to 
+ * initialize the whole data package.
+ * 
+ * @author Patrick
+ *
+ */
 public class DataController implements DataControllerMainControllerInterface {
     
-    protected DataUpdate updater = null;
+    protected DataUpdate du = null;
     protected DataObjectManager dm = null;
     protected EnvironmentManager em = null;
     
@@ -23,7 +30,7 @@ public class DataController implements DataControllerMainControllerInterface {
     public void initialize() {
     	em = new EnvironmentManager(this);
         dm = new DataObjectManager(this);
-        updater = new DataUpdate(dm);
+        du = new DataUpdate(dm);
         
     }
 
@@ -34,7 +41,7 @@ public class DataController implements DataControllerMainControllerInterface {
 
     @Override
     public DataUpdateAdapterInterface getDataUpdateInterface() {
-        return updater;
+        return du;
     }
 
     @Override

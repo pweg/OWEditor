@@ -6,6 +6,7 @@ import java.awt.Paint;
 /**
  * A simple class with containing every static value for setting
  * up the editor.
+ * 
  * @author Patrick
  *
  */

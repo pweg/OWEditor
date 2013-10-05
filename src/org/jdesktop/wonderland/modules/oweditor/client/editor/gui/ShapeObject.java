@@ -7,6 +7,7 @@ import java.awt.geom.AffineTransform;
 /**
  * An abstract shape object, which will be saved in the 
  * shape manager.
+ * 
  * @author Patrick
  *
  */
@@ -37,16 +38,16 @@ public abstract class ShapeObject {
     /**
      * Transforms and then paints the original shape.
      * 
-     * @param g: Graphics2D.
-     * @param at: the affine transformation, used for transforming the shape.
-     * @param scale: the scale, which is needed to resize and wrapp the text size.
+     * @param g Graphics2D.
+     * @param at the affine transformation, used for transforming the shape.
+     * @param scale the scale, which is needed to resize and wrapp the text size.
      */
     public abstract void paintOriginal(Graphics2D g, AffineTransform at, double scale);
 
     /**
      * Sets the selection of a shape.
      * 
-     * @param select: if true, the shape will have an outline in a different color
+     * @param select if true, the shape will have an outline in a different color
      * which is set in the GUISettings, in order to show that the shape is selected.
      * if false, the shape will be drawn with is normal border outline.
      */
@@ -55,7 +56,7 @@ public abstract class ShapeObject {
     /**
      * Returns, if the shape is selected.
      * 
-     * @return, true when the shape is selected, false otherwise.
+     * @return true when the shape is selected, false otherwise.
      */
     public abstract boolean isSelected();
     
@@ -68,16 +69,16 @@ public abstract class ShapeObject {
     /**
      * Sets the location of the shape.
      * 
-     * @param x: the x coordinate.
-     * @param y: the y coordinate.
+     * @param x the x coordinate.
+     * @param y the y coordinate.
      */
     public abstract void setLocation(int x, int y);
 
     /**
      * Sets a new location for the shape.
      * 
-     * @param distance_x: the distance the shape will move in the x coordinates.
-     * @param distance_y: the distance the shape will move in the y coordinates.
+     * @param distance_x the distance the shape will move in the x coordinates.
+     * @param distance_y the distance the shape will move in the y coordinates.
      */
     public abstract void setTranslation(double distance_x, double distance_y) ;
     

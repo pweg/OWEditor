@@ -14,6 +14,7 @@ import java.awt.geom.AffineTransform;
  * selected shapes.
  * 
  * This shape only draws the shape outline and does not fill it.
+ * 
  * @author Patrick
  *
  */
@@ -28,11 +29,11 @@ public class ShapeObjectDraggingRect extends ShapeObject{
     /**
      * Creates a new dragginRect shape object.
      * 
-     * @param x: the x coordinate of the shape.
-     * @param y: the y coordinate of the shape.
-     * @param width: the width of the shape.
-     * @param height: the height of the shape.
-     * @param id: the id of the shape. Usually this is the id of the shape which
+     * @param x the x coordinate of the shape.
+     * @param y the y coordinate of the shape.
+     * @param width the width of the shape.
+     * @param height the height of the shape.
+     * @param id the id of the shape. Usually this is the id of the shape which
      * 			  is copied.
      */
     public ShapeObjectDraggingRect(int x, int y, int width, int height, long id){
@@ -94,10 +95,10 @@ public class ShapeObjectDraggingRect extends ShapeObject{
     /**
      * Sets up a new rectangle
      * 
-     * @param x: the new x coordinate.
-     * @param y: the new y coordinate.
-     * @param width: the new width.
-     * @param height: the new height.
+     * @param x the new x coordinate.
+     * @param y the new y coordinate.
+     * @param width the new width.
+     * @param height the new height.
      */
     public void set(int x, int y, int width, int height){
         originalShape.setRect(x, y, width, height);
@@ -107,7 +108,7 @@ public class ShapeObjectDraggingRect extends ShapeObject{
      * Changes color of the shape, when collision is
      * detected or not.
      * 
-     * @param col: true, when collision is detected,
+     * @param col true, when collision is detected,
      * 		false otherwise.
      */
     public void setCollision(boolean col){

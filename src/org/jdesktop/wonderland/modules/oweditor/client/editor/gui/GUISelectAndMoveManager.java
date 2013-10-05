@@ -38,8 +38,8 @@ public class GUISelectAndMoveManager {
     /**
      * Adds/removes one specific shape to/from the selection.
      * 
-     * @param shape: the shape in question.
-     * @param selected: true, if selected, false if otherwise.
+     * @param shape the shape in question.
+     * @param selected true, if selected, false if otherwise.
      */
     public void setSelected(ShapeObject shape, boolean selected){
         shape.setSelected(selected);
@@ -57,7 +57,7 @@ public class GUISelectAndMoveManager {
      * Switches the selection of a shape. When a shape was
      * selected it will be unselected and vice versa.
      * 
-     * @param shape: the shape in question.
+     * @param shape the shape in question.
      */
     public void switchSelection(ShapeObject shape){
         if(shape.isSelected()){
@@ -85,17 +85,17 @@ public class GUISelectAndMoveManager {
     /**
      * Moves the dragging shapes, which are shown, when shapes are dragged. 
      * 
-     * @param x2: the new x value, where the shape is being dragged.
-     * @param y2: the new y value, where the shape is being dragged.
-     * @param start: the startpoint from where the shape has been dragged.
+     * @param x the new x value, where the shape is being dragged.
+     * @param y the new y value, where the shape is being dragged.
+     * @param start the start point from where the shape has been dragged.
      */
-    public void translateShape(int x2, int y2, Point start){
+    public void translateShape(int x, int y, Point start){
         
         double scale = gc.drawingPan.getScale();
-        int distance_x = start.x - x2;
-        int distance_y = start.y - y2;
+        int distance_x = start.x - x;
+        int distance_y = start.y - y;
             
-        double distance = start.distance(x2, y2);
+        double distance = start.distance(x, y);
         distance = distance / scale;
 
         ShapeManager sm = gc.sm;
@@ -109,8 +109,8 @@ public class GUISelectAndMoveManager {
     /**
      * Resizes the selection rectangle.
      * 
-     * @param start: the start position of the rectangle
-     * @param end: the end position of the rectangle
+     * @param start the start position of the rectangle
+     * @param end the end position of the rectangle
      */
     public void resizeSelectionRect(Point start, Point end) {
 

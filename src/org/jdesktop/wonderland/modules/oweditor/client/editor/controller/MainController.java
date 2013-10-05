@@ -10,7 +10,14 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.Dat
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.GUIController;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.GUIControllerInterface;
 
-
+/**
+ * The main controller class is only used to set up the remaining packages
+ * and to exchange interfaces between them.
+ * Furthermore it is used to set the frame visibile.
+ * 
+ * @author Patrick
+ *
+ */
 public class MainController implements MainControllerDataInterface, 
                 MainControllerGUIInterface, MainControllerAdapterInterface{
     
@@ -18,6 +25,10 @@ public class MainController implements MainControllerDataInterface,
     private AdapterControllerMainControllerInterface adapter = null;
     private DataControllerMainControllerInterface data = null;
     
+    /**
+     * Creates a new instance of the main controller and
+     * sets up every other package.
+     */
     public MainController(){
         
         gui = new GUIController(this);
@@ -35,20 +46,11 @@ public class MainController implements MainControllerDataInterface,
         data.setGUIControler(gui);
         
         adapter.getCurrentWorld();
-        
-    }    
-    
-
-    
-    /*public static void main(String[] args) {  
-        MainControler app = new MainControler();  
-        
-        
-    }*/
-
-    public void setVisible(boolean visibility) {
-        gui.setVisibility(visibility);
     }
 
+	@Override
+	public void setVisible(boolean visibility) {
+		gui.setVisibility(visibility);
+	}    
 
 }

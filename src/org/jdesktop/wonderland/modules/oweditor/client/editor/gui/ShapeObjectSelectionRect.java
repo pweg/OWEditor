@@ -30,10 +30,10 @@ public class ShapeObjectSelectionRect extends ShapeObject{
     /**
      * Creates a new instance of the selection rectangle shape class.
      * 
-     * @param x: the x coordinate.
-     * @param y: the y coordinate.
-     * @param width: the width.
-     * @param height: the height.
+     * @param x the x coordinate.
+     * @param y the y coordinate.
+     * @param width the width.
+     * @param height the height.
      */
     public ShapeObjectSelectionRect(int x, int y, int width, int height){
         
@@ -58,7 +58,7 @@ public class ShapeObjectSelectionRect extends ShapeObject{
     /**
      * Paints the original shape without transformation.
      * 
-     * @param g: Graphics2D
+     * @param g Graphics2D
      */
     public void paintOriginal(Graphics2D g) {
         g.setPaint(color); 

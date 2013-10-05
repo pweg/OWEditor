@@ -8,6 +8,7 @@ import java.awt.event.MouseMotionListener;
 
 /**
  * This is a simple mouse listener for panning the drawing panel.
+ * 
  * @author Patrick
  *
  */

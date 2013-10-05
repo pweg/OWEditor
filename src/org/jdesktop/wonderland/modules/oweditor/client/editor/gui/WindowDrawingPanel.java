@@ -46,7 +46,7 @@ public class WindowDrawingPanel extends JPanel implements ChangeListener {
     /**
      * Creates a new instance of the drawingPanel
      * 
-     * @param gc: A GUIControler instance.
+     * @param gc A GUIControler instance.
      */
     public WindowDrawingPanel(GUIController gc) {
         
@@ -84,7 +84,7 @@ public class WindowDrawingPanel extends JPanel implements ChangeListener {
     /**
      * Changes the scale of the 2D graphics.
      * 
-     * @param toAdd: The amount which should be added/removed from
+     * @param toAdd The amount which should be added/removed from
      * the scale value.
      */
     private void changeScale(double toAdd){
@@ -98,7 +98,7 @@ public class WindowDrawingPanel extends JPanel implements ChangeListener {
     /**
      * Changes the viewport, when zoomed with the mouse wheel.
      * 
-     * @param curScale: The old scale value, before the new one
+     * @param curScale The old scale value, before the new one
      * was set.
      */
     private void changeViewPort(double curScale){
@@ -148,7 +148,7 @@ public class WindowDrawingPanel extends JPanel implements ChangeListener {
     /**
      * Sets a new width for the drawing panel.
      * 
-     * @param width: the new width.
+     * @param width the new width.
      */
     public void setNewWidth(int width){
     	size.width = (int)( (width + gc.frame.getWidth()/GUISettings.widthDivisor));
@@ -161,7 +161,7 @@ public class WindowDrawingPanel extends JPanel implements ChangeListener {
     /**
      * Sets a new height for the drawing panel.
      * 
-     * @param height: the new height.
+     * @param height the new height.
      */
     public void setNewHeight(int height){
 		size.height = (int)( (height + gc.frame.getHeight()/GUISettings.heightDivisor));
@@ -183,7 +183,7 @@ public class WindowDrawingPanel extends JPanel implements ChangeListener {
     /**
      * Returns the current scale.
      * 
-     * @return: The scale.
+     * @return The scale.
      */
     public double getScale(){
         return scale;
@@ -193,7 +193,7 @@ public class WindowDrawingPanel extends JPanel implements ChangeListener {
      * Sets a new translation value for x, which is
      * used for centering the objects.
      * 
-     * @param x: the new x value.
+     * @param x the new x value.
      */
     public void setNewMinX(int x){
     	translationX = (-x)+ gc.frame.getWidth()/(GUISettings.widthDivisor*2);
@@ -203,7 +203,7 @@ public class WindowDrawingPanel extends JPanel implements ChangeListener {
      * Sets a new translation value for y, which is
      * used for centering the objects.
      * 
-     * @param y: the new y value.
+     * @param y the new y value.
      */
     public void setNewMinY(int y){
     	translationY = (-y)+ gc.frame.getHeight()/(GUISettings.heightDivisor*2);

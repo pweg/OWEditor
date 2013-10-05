@@ -12,7 +12,7 @@ public interface DataUpdateAdapterInterface {
 	 * Updates a data object with the data stored in the given
 	 * object.
 	 * 
-	 * @param data: the dataObject which holds all data necessary
+	 * @param data the dataObject which holds all data necessary
 	 * for updating the data object.
 	 */
     public void updateObject(DataObjectInterface data);
@@ -20,7 +20,7 @@ public interface DataUpdateAdapterInterface {
     /**
      * Creates a new data object with the given data object.
      * 
-     * @param data: the data object which needs to be stored 
+     * @param data the data object which needs to be stored 
      * in the data manager.
      */
     public void createObject(DataObjectInterface data);
@@ -30,7 +30,7 @@ public interface DataUpdateAdapterInterface {
      * to fill with data and then transmitted via updateObject or
      * createObject to the data manager.
      * 
-     * @return: an empty data object, which has only dummy values.
+     * @return an empty data object, which has only dummy values.
      */
     public DataObjectInterface createEmptyObject();
 

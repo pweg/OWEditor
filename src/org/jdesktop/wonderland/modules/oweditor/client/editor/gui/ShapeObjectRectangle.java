@@ -10,6 +10,12 @@ import java.awt.font.FontRenderContext;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
 
+/**
+ * A class for standard rectangles. 
+ * 
+ * @author Patrick
+ *
+ */
 public class ShapeObjectRectangle extends ShapeObject{
     
     private Rectangle originalShape = null;
@@ -28,12 +34,12 @@ public class ShapeObjectRectangle extends ShapeObject{
     /**
      * Creates a new ObjectRectangle shape instance.
      * 
-     * @param x: the x coordinate of the shape.
-     * @param y: the y coordinate of the shape.
-     * @param width: the width of the shape.
-     * @param height: the height of the shape.
-     * @param id: the shape id.
-     * @param name: the name of the shape.
+     * @param x the x coordinate of the shape.
+     * @param y the y coordinate of the shape.
+     * @param width the width of the shape.
+     * @param height the height of the shape.
+     * @param id the shape id.
+     * @param name the name of the shape.
      */
     public ShapeObjectRectangle(int x, int y, int width, int height, long id, String name){
         
@@ -97,10 +103,10 @@ public class ShapeObjectRectangle extends ShapeObject{
      * Wrappes the name, when it is too long to fit into the shape and
      * also moves it outside, when the shapes height is too small.
      * 
-     * @param g: Graphics2D
-     * @param scale: The scale of the whole 2d graphic.
-     * @param font: the font of the text.
-     * @param r: the bounds of the transformed shape.
+     * @param g Graphics2D
+     * @param scale The scale of the whole 2d graphic.
+     * @param font the font of the text.
+     * @param r the bounds of the transformed shape.
      */
     private void nameWrapp(Graphics2D g, double scale, Font font, Rectangle r){
         

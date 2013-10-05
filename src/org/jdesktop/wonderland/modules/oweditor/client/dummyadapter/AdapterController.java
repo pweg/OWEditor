@@ -4,11 +4,17 @@ import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.Adapter
 import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.ClientUpdateGUIInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataUpdateAdapterInterface;
 
+/**
+ * The adapter controller class, which initiallizes the adapter.
+ * @author Patrick
+ *
+ */
 public class AdapterController implements AdapterControllerMainControllerInterface{
     
     
-    private ClientUpdateAdapter cua = null;
-    private ServerUpdateAdapter sua = null;
+    protected ClientUpdateAdapter cua = null;
+    protected ServerUpdateAdapter sua = null;
+    
     public AdapterController(){
         
     }
@@ -19,14 +25,6 @@ public class AdapterController implements AdapterControllerMainControllerInterfa
         sua = new ServerUpdateAdapter(this);
         
         
-    }
-    
-    public ClientUpdateAdapter getCUA(){
-        return cua;
-    }
-    
-    public ServerUpdateAdapter getSUA(){
-        return sua;
     }
 
     @Override
@@ -43,7 +41,7 @@ public class AdapterController implements AdapterControllerMainControllerInterfa
     @Override
     public void getCurrentWorld() {
 
-        AdapterWorldBuilder builder = new AdapterWorldBuilder(sua);
+        WorldBuilder builder = new WorldBuilder(sua);
         builder.build();
         
     }

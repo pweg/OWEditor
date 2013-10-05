@@ -12,6 +12,7 @@ import javax.swing.event.MouseInputAdapter;
 /**
  * This is a mouse/key listener used for selecting and unselecting shapes.
  * It is also used for the selection rectangle.
+ * 
  * @author Patrick
  *
  */

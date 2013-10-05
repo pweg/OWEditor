@@ -5,20 +5,34 @@ import java.util.HashMap;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataObjectInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataObjectManagerGUIInterface;
 
+/**
+ * Stores, manages and creates data objects. 
+ * 
+ * @author Patrick
+ *
+ */
 public class DataObjectManager implements DataObjectManagerGUIInterface{
-    
-    private HashMap<Long, DataObject> data = null;
+
     private DataController dc = null;
     
+    private HashMap<Long, DataObject> data = null;
+    
+    /**
+     * Creates a new instance of the data manager.
+     * 
+     * @param d a dataController instance.
+     */
     DataObjectManager(DataController d){
         dc = d;
         data = new HashMap<Long, DataObject>();
     }
     
-    
+    /**
+     * Stores the data object given in the parameters.
+     * 
+     * @param dataObject the data object to store.
+     */
     public void createNewObject(DataObjectInterface dataObject){
-        
-        //DataObject d = new DataObject(id,  x,  y,  z,  rotation,  scale, width, height);
         long id = dataObject.getID();
         
         dc.em.setX(dataObject.getX(), dataObject.getWidth());
@@ -29,15 +43,24 @@ public class DataObjectManager implements DataObjectManagerGUIInterface{
             
             dc.setGUIUpdate(id);
         }
-        
     }
     
+    /**
+     * Updates the data from the given dataObject, but 
+     * does not store this object. Instead it searches for
+     * the id and changes the objects data which is found.
+     * If the id is not found, createNewObject is called with 
+     * the dataObject.
+     * 
+     * @param dataObject the dataObject which should contain
+     * 		all data.
+     */
     public void updataData(DataObjectInterface dataObject){
         
         long id = dataObject.getID();
         
         if(!data.containsKey(id))
-            return;
+        	createNewObject(dataObject);
         
         int x = dataObject.getX();
         int y = dataObject.getY();
@@ -76,14 +99,13 @@ public class DataObjectManager implements DataObjectManagerGUIInterface{
         return object.getZ();
     }
 
+    /**
+     * Returns an empty data object.
+     * 
+     * @return an empty data object.
+     */
     public DataObjectInterface getEmptyDataObject() {
         return new DataObject();
     }
-
-    
-    
-    
-    
-    
 
 }

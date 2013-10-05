@@ -8,11 +8,20 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.controllerinterfa
 
 
 /**
+ * This is only used for the EditorClientPlugin, which is in the client
+ * package. This interface allows the client plugin to control the
+ * visibility of the gui component.
  *
  * @author Patrick
  */
 public interface MainControllerAdapterInterface {
     
+	/**
+     * Sets the visibility of the gui component.
+     * 
+     * @param visibility true, if the gui should be seen,
+     * 		false otherwise.
+     */
     public void setVisible(boolean visibility);
     
 }

@@ -2,7 +2,12 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.data;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataObjectInterface;
 
-
+/**
+ * This class houses all necessary data of an virtual world item.
+ * 
+ * @author Patrick
+ *
+ */
 public class DataObject implements DataObjectInterface{
     
     private Vector3D coords = null;
@@ -13,10 +18,27 @@ public class DataObject implements DataObjectInterface{
     private int height = 0;
     private String name = "";
     
+    /**
+     * Creates an empty object instance.
+     */
     DataObject(){
         coords = new Vector3D(0,0,0);
     }
     
+    /**
+     * Creates an object instance with the data given in the 
+     * parameters.
+     * 
+     * @param id the object id.
+     * @param x the object x coordinate.
+     * @param y the object y coordinate.
+     * @param z the object z coordinate.
+     * @param rotation the objects rotation.
+     * @param scale the objects scale.
+     * @param width the objects width.
+     * @param height the objects height.
+     * @param name the objects name.
+     */
     DataObject(long id, int x, int y, int z, double rotation, double scale, int width, int height,
             String name){
         this.id = id;
@@ -35,26 +57,36 @@ public class DataObject implements DataObjectInterface{
         coords.z = z;
     }
     
+    /**
+     * Returns the coordinates of the object.
+     * 
+     * @return a 3D vector with the coordinates.
+     */
     public Vector3D getCoordinates(){
         return coords;
     }
     
+    @Override
     public double  getRotation(){
         return rotation;
     }
     
+    @Override
     public double getScale(){
         return scale;
     }
     
+    @Override
     public long getID(){
         return id;
     }
     
+    @Override
     public int getWidth(){
         return width;
     }
     
+    @Override
     public int getHeight(){
         return height;
     }

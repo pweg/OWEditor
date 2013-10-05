@@ -68,72 +68,72 @@ public interface DataObjectInterface {
     /**
      * Sets the x coordinate of the object.
      * 
-     * @param x: the x coordinate.
+     * @param x the x coordinate.
      */
     public void setX(int x);
     
     /**
      * Sets the y coordinate of the object.
      * 
-     * @param y: the y coordinate.
+     * @param y the y coordinate.
      */
     public void setY(int y);
     
     /**
      * Sets the z coordinate of the object.
      * 
-     * @param z: the z coordinate.
+     * @param z the z coordinate.
      */
     public void setZ(int z);
     
     /**
      * Sets the rotation of the object.
      * 
-     * @param rotation: the rotation.
+     * @param rotation the rotation.
      */
     public void setRotation(double rotation);
     
     /**
      * Sets the scale of the object.
      * 
-     * @param scale: the scale.
+     * @param scale the scale.
      */
     public void setScale(double scale);
     
     /**
      * Sets the width of the object.
      * 
-     * @param width: the width.
+     * @param width the width.
      */
     public void setWidth(int width);
     
     /**
      * Sets the height of the object.
      * 
-     * @param height: the height.
+     * @param height the height.
      */
     public void setHeight(int height);
     
     /**
      * Sets the id of the object.
      * 
-     * @param id: the id.
+     * @param id the id.
      */
     public void setID(long id);
     
     /**
      * Sets the name of the object.
      * 
-     * @param name: the name.
+     * @param name the name.
      */
     public void setName(String name);
     
     /**
      * Sets the coordinates of the object.
      * 
-     * @param x: the x coordinate.
-     * @param y: the y coordinate.
-     * @param z: the z coordinate.
+     * @param x the x coordinate.
+     * @param y the y coordinate.
+     * @param z the z coordinate.
      */
     public void setCoordinates(int x, int y, int z);
     

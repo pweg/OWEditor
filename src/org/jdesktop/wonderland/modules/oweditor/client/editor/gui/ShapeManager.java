@@ -13,18 +13,21 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.Dat
 /**
  * This class is used for creating and managing all shapes.
  * It stores all shapes.
+ * 
  * @author Patrick
  *
  */
 public class ShapeManager {
+	
 
-    ArrayList<ShapeObject> shapes = null;
-    ArrayList<ShapeObject> updateShapes = null;
-    ArrayList<ShapeObjectDraggingRect> movingShapes = null;
+    private DataObjectManagerGUIInterface dm = null;
+
+    private ArrayList<ShapeObject> shapes = null;
+    private ArrayList<ShapeObject> updateShapes = null;
+    private ArrayList<ShapeObjectDraggingRect> movingShapes = null;
     
     private ShapeObjectSelectionRect selectionRectangle = null;
     private boolean showDraggingShapes = false;
-    private DataObjectManagerGUIInterface dm = null;
     
     /**
      * Creates a new ShapeManager instance.
@@ -38,11 +41,11 @@ public class ShapeManager {
     /**
      * Creates a new Rectangle ShapeObject.
      * 
-     * @param x: the x coordinate.
-     * @param y: the y coordinate.
-     * @param width: the width of the rectangle.
-     * @param height: the height of the rectangle.
-     * @param id: the id for the rectangle, which has to be the same id as in the virtual world.
+     * @param x the x coordinate.
+     * @param y the y coordinate.
+     * @param width the width of the rectangle.
+     * @param height the height of the rectangle.
+     * @param id the id for the rectangle, which has to be the same id as in the virtual world.
      */
     public ShapeObject createRectangle(int x, int y, int width, int height, long id, String name){
          ShapeObject shape = new ShapeObjectRectangle(x,y,width, height, id, name);
@@ -61,7 +64,7 @@ public class ShapeManager {
     /**
      * Gets a specific shape.
      * 
-     * @param id: the shape id.
+     * @param id the shape id.
      * @return ShapeObject, or null if id is not found.
      */
     public ShapeObject getShape(long id){
@@ -76,10 +79,10 @@ public class ShapeManager {
      * Creates the selection rectangle object, if it is null
      * and sets new coordinates/width&height for it otherwise.
      * 
-     * @param x: x coordinate.
-     * @param y: y coordinate.
-     * @param width: the width of the rectangle.
-     * @param height: the height of the rectangle.
+     * @param x x coordinate.
+     * @param y y coordinate.
+     * @param width the width of the rectangle.
+     * @param height the height of the rectangle.
      */
     public void setSelectionRect(int x, int y, int width, int height){
         if (selectionRectangle == null)
@@ -99,7 +102,7 @@ public class ShapeManager {
     /**
      * Searches for a shape object, which surrounds a given point.
      * 
-     * @param p: the point in question.
+     * @param p the point in question.
      * @return ShapeObject, if a shape was found, otherwise null. 
      */
     public ShapeObject getShapeSuroundingPoint(Point p){
@@ -146,8 +149,8 @@ public class ShapeManager {
      * shapes, which are moved while pressing and holding the left mouse
      * button.
      * 
-     * @param g2: a Graphics2D class.
-     * @param at: an AffineTransform class, used to draw zoomed shapes correctly.
+     * @param g2 a Graphics2D class.
+     * @param at an AffineTransform class, used to draw zoomed shapes correctly.
      */
     public void drawShapes(Graphics2D g2, AffineTransform at, double scale){
                 
@@ -169,9 +172,9 @@ public class ShapeManager {
      * Translates the dragging shapes(DraggingRectangles), which 
      * are seen, when trying to move objects.
      * 
-     * @param selectedShapes: all shapes which are selected and should be moved.
-     * @param distance_x: the x distance between old and new point.
-     * @param distance_y: the y distance between old and new point.
+     * @param selectedShapes all shapes which are selected and should be moved.
+     * @param distance_x the x distance between old and new point.
+     * @param distance_y the y distance between old and new point.
      */
     public void translateDraggingShapes(ArrayList<ShapeObject> selectedShapes, double distance_x, double distance_y){
         showDraggingShapes = true;
@@ -190,7 +193,7 @@ public class ShapeManager {
     /**
      * Creates the dragging shapes for a given shape object.
      * 
-     * @param shape: a shape object, which is dragged.
+     * @param shape a shape object, which is dragged.
      */
     private void createDraggingShape(ShapeObject shape) {
                     
@@ -291,7 +294,7 @@ public class ShapeManager {
     /**
      * Sets the DataManager, which is needed for updates.
      * 
-     * @param dm: The DataManagerInterface.
+     * @param dm The DataManagerInterface.
      */
     public void setDataManager(DataObjectManagerGUIInterface dm) {
         this.dm = dm;

@@ -2,17 +2,29 @@ package org.jdesktop.wonderland.modules.oweditor.client.dummyadapter;
 
 import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.ClientUpdateGUIInterface;
 
+/**
+ * This class is used to make updates the client makes in
+ * the GUI and forwards it to the server. 
+ * 
+ * @author Patrick
+ *
+ */
 public class ClientUpdateAdapter implements ClientUpdateGUIInterface{
     
-    private AdapterController mc = null;
+    private AdapterController ac = null;
     
-    public ClientUpdateAdapter(AdapterController m){
-        mc = m;
+    /**
+     * Creates a new clientUpdate instance.
+     * 
+     * @param ac a adpater controller instance.
+     */
+    public ClientUpdateAdapter(AdapterController ac){
+        this.ac = ac;
     }
 
     @Override
     public void updateTranslation(long id, int x, int y, int z) {
-        mc.getSUA().serverChangeEvent(id, x, y, 0, 0, 1, "");
+        ac.sua.serverChangeEvent(id, x, y, 0, 0, 1, "");
         
     }
 
