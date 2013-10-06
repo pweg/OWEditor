@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataObjectInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataObjectManagerGUIInterface;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.DataObjectManagerObserverInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.DataObjectObserverInterface;
 
 /**
  * Stores, manages and creates data objects. 
@@ -15,7 +15,7 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.Data
 public class DataObjectManager implements DataObjectManagerGUIInterface{
 
     private DataController dc = null;
-    private DataObjectManagerObserverInterface domo = null;
+    private DataObjectObserverInterface domo = null;
     
     private HashMap<Long, DataObject> data = null;
     
@@ -114,11 +114,11 @@ public class DataObjectManager implements DataObjectManagerGUIInterface{
     
     /**
      * Registers an observer for the data manager.
+     * Note: There can only be one observer registered at a time.
      * 
      * @param domo the observer instance.
      */
-    public void registerDataObjectObserver(
-			DataObjectManagerObserverInterface domo) {
+    public void registerObserver(DataObjectObserverInterface domo) {
     	this.domo = domo;
     }
 

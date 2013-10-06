@@ -1,11 +1,10 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.data;
 
-import org.jdesktop.wonderland.modules.oweditor.client.editor.controllerinterfaces.MainControllerDataInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataControllerMainControllerInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataObjectManagerGUIInterface;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataUpdateAdapterInterface;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.DataObjectManagerObserverInterface;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.GUIControllerInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.AdapterObserverInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.DataObjectObserverInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.EnvironmentObserverInterface;
 
 /**
  * This is the main data controller class, which is used to 
@@ -16,27 +15,23 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.GUIC
  */
 public class DataController implements DataControllerMainControllerInterface {
     
-    protected DataUpdate du = null;
+    protected AdapterObserver du = null;
     protected DataObjectManager dm = null;
     protected EnvironmentManager em = null;
     
-    private MainControllerDataInterface mc = null;
-    private GUIControllerInterface gci = null;
-    
-    public DataController(MainControllerDataInterface mc){
-        this.mc = mc;
+    public DataController(){
     }
     
     @Override
     public void initialize() {
-    	em = new EnvironmentManager(this);
+    	em = new EnvironmentManager();
         dm = new DataObjectManager(this);
-        du = new DataUpdate(dm);
+        du = new AdapterObserver(dm);
         
     }
 
     @Override
-    public DataUpdateAdapterInterface getDataUpdateInterface() {
+    public AdapterObserverInterface getDataUpdateInterface() {
         return du;
     }
 
@@ -45,31 +40,16 @@ public class DataController implements DataControllerMainControllerInterface {
         return dm;
     }
 
-    @Override
-    public void setGUIControler(GUIControllerInterface gui) {
-        gci = gui;
-    }
-
-    public void setNewWidth(int width){
-    	gci.setWidth(width);
-    }
-    
-    public void setNewHeight(int height){
-    	gci.setHeight(height);
-    }
-    public void setNewMinX(int x){
-    	gci.setMinX(x);
-    }
-    
-    public void setNewMinY(int y){
-    	gci.setMinY(y);
-    }
-
 	@Override
 	public void registerDataObjectObserver(
-			DataObjectManagerObserverInterface domo) {
-		dm.registerDataObjectObserver(domo);
+			DataObjectObserverInterface domo) {
+		dm.registerObserver(domo);
 		
+	}
+
+	@Override
+	public void registerEnvironmentObserver(EnvironmentObserverInterface en) {
+		em.registerObserver(en);
 	}
 
 

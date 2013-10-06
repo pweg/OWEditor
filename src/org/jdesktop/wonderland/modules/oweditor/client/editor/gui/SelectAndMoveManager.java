@@ -9,7 +9,7 @@ import java.util.ArrayList;
  * @author Patrick
  *
  */
-public class GUISelectAndMoveManager {
+public class SelectAndMoveManager {
 
     private ArrayList<ShapeObject> selectedShapes = null;
     private GUIController gc = null;
@@ -18,7 +18,7 @@ public class GUISelectAndMoveManager {
     private ListenerSelection selectionListener = null;
     protected boolean collision = false;
     
-    public GUISelectAndMoveManager(GUIController contr){
+    public SelectAndMoveManager(GUIController contr){
         selectedShapes = new ArrayList<ShapeObject>();     
         
         gc = contr;

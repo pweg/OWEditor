@@ -1,7 +1,7 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.data;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataObjectInterface;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataUpdateAdapterInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.AdapterObserverInterface;
 
 /**
  * This class is used to forward data updates from the adapter package.
@@ -9,7 +9,7 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.Dat
  * @author Patrick
  *
  */
-public class DataUpdate implements DataUpdateAdapterInterface{
+public class AdapterObserver implements AdapterObserverInterface{
     
     private DataObjectManager dm = null;
 
@@ -19,23 +19,23 @@ public class DataUpdate implements DataUpdateAdapterInterface{
      * @param dm a dataObjectManager instance, which is called,
      * when updates are made.
      */
-    public DataUpdate(DataObjectManager dm) {
+    public AdapterObserver(DataObjectManager dm) {
         this.dm = dm;
-    }
-
-    @Override
-    public void updateObject(DataObjectInterface dataObject) {
-        dm.updataData(dataObject);
-    }
-
-    @Override
-    public void createObject(DataObjectInterface dataObject) {
-        dm.createNewObject(dataObject);
     }
 
     @Override
     public DataObjectInterface createEmptyObject() {
         return dm.getEmptyDataObject();
     }
+
+	@Override
+	public void notifyObjectChange(DataObjectInterface dataObject) {
+		dm.updataData(dataObject);
+	}
+
+	@Override
+	public void notifyObjectCreation(DataObjectInterface dataObject) {
+		dm.createNewObject(dataObject);
+	}
 
 }

@@ -1,14 +1,14 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.gui;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataObjectInterface;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.DataObjectManagerObserverInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.DataObjectObserverInterface;
 
-public class DataObjectManagerObserver implements 
-								DataObjectManagerObserverInterface{
+public class DataObjectObserver implements 
+								DataObjectObserverInterface{
 
 	private GUIController gc = null;
 	
-	public DataObjectManagerObserver(GUIController gc){
+	public DataObjectObserver(GUIController gc){
 		this.gc = gc;
 	}
 	

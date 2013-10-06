@@ -13,7 +13,7 @@ import java.awt.geom.AffineTransform;
  * @author Patrick
  *
  */
-public class ShapeObjectSelectionRect extends ShapeObject{
+public class ShapeObjectSelectionRect extends SimpleShapeObject{
     
     private Rectangle originalShape = null;
     private Shape transformedShape = null;
@@ -39,21 +39,12 @@ public class ShapeObjectSelectionRect extends ShapeObject{
         
         originalShape = new Rectangle (x, y, width, height);
     }
-    
-    @Override
-    public Shape getTransformedShape() {
-        return transformedShape;
-    }
 
     @Override
     public Rectangle getShape() {
         return originalShape;
     }
 
-    @Override
-    public long getID() {
-        return 0;
-    }
     
     /**
      * Paints the original shape without transformation.
@@ -76,19 +67,6 @@ public class ShapeObjectSelectionRect extends ShapeObject{
         transformedShape = at.createTransformedShape(originalShape);
                 
         g.draw(at.createTransformedShape(originalShape)); 
-    }
-
-    @Override
-    public void setSelected(boolean select) {
-    }
-
-    @Override
-    public boolean isSelected() {
-        return false;
-    }
-
-    @Override
-    public void switchSelection() { 
     }
 
     @Override
@@ -127,13 +105,9 @@ public class ShapeObjectSelectionRect extends ShapeObject{
         return originalShape.height;
     }
 
-    @Override
-    public String getName() {
-        return "selectionRectangle";
-    }
-
 	@Override
-	public void setName(String name) {
+	public Shape getTransformedShape() {
+		return transformedShape;
 	}
 
 }

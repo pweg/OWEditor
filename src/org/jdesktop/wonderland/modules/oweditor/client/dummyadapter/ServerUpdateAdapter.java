@@ -1,7 +1,7 @@
 package org.jdesktop.wonderland.modules.oweditor.client.dummyadapter;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataObjectInterface;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataUpdateAdapterInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.AdapterObserverInterface;
 
 /**
  * This class is used for updating the data package, when
@@ -13,7 +13,7 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.Dat
 public class ServerUpdateAdapter {
     
     private AdapterController ac = null;
-    private DataUpdateAdapterInterface dui = null;
+    private AdapterObserverInterface dui = null;
     
     /**
      * Creates a new serverUpdate instance.
@@ -31,19 +31,24 @@ public class ServerUpdateAdapter {
      * here will be discarded afterwards.
      * 
      * @param id the object id.
-     * @param x the x coordinate of the object.
-     * @param y the y coordinate of the object.
-     * @param z the z coordinate of the object.
-     * @param rotation the rotation of the object.
-     * @param scale the scale of the object.
-     * @param name the name of the object.
      */
-    public void serverChangeEvent(long id, int x, int y, int z, int rotation, int scale,
-            String name){
+    public void serverChangeEvent(long id){
         if(dui == null){
             System.out.println("DataInterface is not in the adapter");
             return;
         }
+        
+        ServerObject so = ac.ses.getObject(id);
+        
+        if(so == null)
+        	return;
+        
+        int x = so.x;
+        int y = so.y;
+        int z = so.z;
+        double rotation = so.rotation;
+        double scale = so.scale;
+        String name = so.name;
         
         DataObjectInterface object = dui.createEmptyObject();
         object.setID(id);
@@ -52,7 +57,7 @@ public class ServerUpdateAdapter {
         object.setScale(scale);
         object.setName(name);
         
-        dui.updateObject(object);
+        dui.notifyObjectChange(object);
         
     }
 
@@ -62,7 +67,7 @@ public class ServerUpdateAdapter {
      * 
      * @param dui a dataUpdate instance.
      */
-    public void setDataUpdateInterface(DataUpdateAdapterInterface dui) {
+    public void setDataUpdateInterface(AdapterObserverInterface dui) {
         this.dui = dui;
         
     }
@@ -82,7 +87,7 @@ public class ServerUpdateAdapter {
      * @param height the height of the object.
      * @param name the name of the object.
      */
-    public void createObject(int id, int x, int y, int z, 
+    public void createObject(long id, int x, int y, int z, 
             double rotation, double scale, int width, int height,
             String name){
         
@@ -98,7 +103,7 @@ public class ServerUpdateAdapter {
         if(name != "")
             object.setName(name);
 
-        dui.createObject(object);
+        dui.notifyObjectCreation(object);
     }
 
 }

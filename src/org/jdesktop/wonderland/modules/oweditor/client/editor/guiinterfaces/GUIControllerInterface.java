@@ -1,6 +1,6 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces;
 
-import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.ClientUpdateGUIInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.GUIObserverInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataObjectManagerGUIInterface;
 
 
@@ -21,58 +21,34 @@ public interface GUIControllerInterface {
     public void setVisibility(boolean visibility);
 
     /**
-     * Returns a DataObjectManagerObserver instance.
+     * Returns a DataObjectObserver instance.
      * 
      * @return a dataObjectObserverInterface.
      */
-    public DataObjectManagerObserverInterface getDataObjectObserver();
+    public DataObjectObserverInterface getDataObjectObserver();
+    
+    /**
+     * Returns a EnvironmentObserver instance.
+     * 
+     * @return a environmentObserverInterface.
+     */
+    public EnvironmentObserverInterface getEnvironmentObserver();
     
     /**
      * Sets a DataObjectManager instance.
      * 
      * @param dm the instance.
      */
-    public void setDataManager(DataObjectManagerGUIInterface dm);
+    public void registerDataManager(DataObjectManagerGUIInterface dm);
     
     /**
-     * Sets a ClientUpdateAdapter instance.
+     * Sets an observer from the adapter package to listen for 
+     * changes made in the gui.
      * 
      * @param clientUpdateInterface the instance.
      */
-    public void setClientUpdateAdapter (ClientUpdateGUIInterface clientUpdateInterface);
+    public void registerGUIObserver (GUIObserverInterface clientUpdateInterface);
     
-    /**
-     * Sets a new width for the drawing panel.
-     * This is used for making the panel always get larger
-     * when objects are out of the current size.
-     * 
-     * @param width the new width.
-     */
-    public void setWidth(int width);
     
-    /**
-     * Sets a new height for the drawing panel.
-     * This is used for making the panel always get larger
-     * when objects are out of the current size.
-     * 
-     * @param height the new height.
-     */
-    public void setHeight(int height);  
-    
-    /**
-     * Sets a new minimal x coordinate, which is used
-     * for centering all objects.
-     * 
-     * @param x the new value.
-     */
-    public void setMinX(int x);
-   
-    /**
-     * Sets a new minimal y coordinate, which is used
-     * for centering all objects.
-     * 
-     * @param y the new value.
-     */
-    public void setMinY(int y);
 
 }

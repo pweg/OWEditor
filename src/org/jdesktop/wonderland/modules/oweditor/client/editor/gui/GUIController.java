@@ -4,10 +4,10 @@ import java.util.ArrayList;
 
 import javax.swing.JScrollPane;
 
-import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.ClientUpdateGUIInterface;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.controllerinterfaces.MainControllerGUIInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.GUIObserverInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataObjectManagerGUIInterface;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.DataObjectManagerObserverInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.DataObjectObserverInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.EnvironmentObserverInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.GUIControllerInterface;
 
 /**
@@ -23,15 +23,14 @@ public class GUIController implements GUIControllerInterface{
 	protected WindowDrawingPanel drawingPan = null;
 	protected JScrollPane mainScrollPanel = null;
     protected ShapeManager sm = null;
-    protected GUISelectAndMoveManager samm = null;
-    protected DataObjectManagerObserver domo = null;
+    protected SelectAndMoveManager samm = null;
+    protected DataObjectObserver domo = null;
+    protected EnvironmentObserver eo = null;
     
-    private MainControllerGUIInterface mc = null;
-    private ClientUpdateGUIInterface cui = null;
+    private GUIObserverInterface cui = null;
     private DataObjectManagerGUIInterface dmi = null;
     
-    public GUIController(MainControllerGUIInterface mc){
-        this.mc = mc;
+    public GUIController(){
     }
     
     @Override
@@ -48,8 +47,9 @@ public class GUIController implements GUIControllerInterface{
     private void initiallize(){
         sm = new ShapeManager();
         drawingPan = new WindowDrawingPanel(this);
-        samm = new GUISelectAndMoveManager(this);
-        domo = new DataObjectManagerObserver(this);
+        samm = new SelectAndMoveManager(this);
+        domo = new DataObjectObserver(this);
+        eo = new EnvironmentObserver(this);
        
         mainScrollPanel = new JScrollPane(drawingPan);
         mainScrollPanel.setWheelScrollingEnabled(false);
@@ -72,44 +72,30 @@ public class GUIController implements GUIControllerInterface{
        for(ShapeObject shape : list){
            
            long id = shape.getID();
-           cui.updateTranslation(id, shape.getX(), shape.getY(), dmi.getZ(id));
+           cui.notifyTranslation(id, shape.getX(), shape.getY(), dmi.getZ(id));
        }
     }
 
     @Override
-    public void setDataManager(DataObjectManagerGUIInterface dm) {
+    public void registerDataManager(DataObjectManagerGUIInterface dm) {
         dmi = dm;
-        sm.setDataManager(dm);
     }
 
     @Override
-    public void setClientUpdateAdapter(ClientUpdateGUIInterface cui) {
+    public void registerGUIObserver(GUIObserverInterface cui) {
         this.cui = cui;
     }
 
-	@Override
-	public void setWidth(int width) {
-		drawingPan.setNewWidth(width);
-	}
-
-	@Override
-	public void setHeight(int height) {
-		drawingPan.setNewHeight(height);
-	}
 	
-	@Override
-	public void setMinX(int x) {
-		drawingPan.setNewMinX(x);
-	}
 
 	@Override
-	public void setMinY(int y) {
-		drawingPan.setNewMinY(y);
-	}
-
-	@Override
-	public DataObjectManagerObserverInterface getDataObjectObserver() {
+	public DataObjectObserverInterface getDataObjectObserver() {
 		return domo;
+	}
+
+	@Override
+	public EnvironmentObserverInterface getEnvironmentObserver() {
+		return eo;
 	}
 
     

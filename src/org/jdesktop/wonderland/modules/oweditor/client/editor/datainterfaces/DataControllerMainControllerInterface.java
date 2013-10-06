@@ -1,7 +1,7 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces;
 
-import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.DataObjectManagerObserverInterface;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.GUIControllerInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.DataObjectObserverInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.EnvironmentObserverInterface;
 
 /**
  * An interface used between the data and the controller package.
@@ -21,7 +21,7 @@ public interface DataControllerMainControllerInterface {
      * 
      * @return a DataUpdateInterface.
      */
-    public DataUpdateAdapterInterface getDataUpdateInterface();
+    public AdapterObserverInterface getDataUpdateInterface();
     
     /**
      * Returns a dataObjectManager instance, which is used for the GUI
@@ -29,15 +29,22 @@ public interface DataControllerMainControllerInterface {
      * @return a DataManagerInterface.
      */
     public DataObjectManagerGUIInterface getDataManagerInterface();
+        
+    /**
+     * Registers an observer for the data object manager, which informs
+     * the gui on object creation and object changes.
+     * 
+     * @param domo the observer, which observes the data manager.
+     */
+    public void registerDataObjectObserver(DataObjectObserverInterface domo);
     
     /**
-     * Sets a guiController interface, which is used for communication
-     * to the gui package.
+     * Registers an observer for the environment manager, which informs 
+     * the gui on environmental changes, such as new widths/heights and
+     * offsets.
      * 
-     * @param gui the interface in question.
+     * @param en the observer, which observes the environment manager.
      */
-    public void setGUIControler(GUIControllerInterface gui);
-    
-    public void registerDataObjectObserver(DataObjectManagerObserverInterface domo);
+    public void registerEnvironmentObserver(EnvironmentObserverInterface en);
 
 }

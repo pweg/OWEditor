@@ -7,8 +7,8 @@ import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Area;
 import java.util.ArrayList;
+
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataObjectInterface;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataObjectManagerGUIInterface;
 
 /**
  * This class is used for creating and managing all shapes.
@@ -19,12 +19,9 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.Dat
  */
 public class ShapeManager {
 	
-
-    private DataObjectManagerGUIInterface dm = null;
-
     private ArrayList<ShapeObject> shapes = null;
     private ArrayList<ShapeObject> updateShapes = null;
-    private ArrayList<ShapeObjectDraggingRect> movingShapes = null;
+    private ArrayList<ShapeObject> movingShapes = null;
     
     private ShapeObjectSelectionRect selectionRectangle = null;
     private boolean showDraggingShapes = false;
@@ -35,7 +32,7 @@ public class ShapeManager {
     public ShapeManager(){
         shapes = new ArrayList<ShapeObject>();
         updateShapes = new ArrayList<ShapeObject>();
-        movingShapes = new ArrayList<ShapeObjectDraggingRect>();
+        movingShapes = new ArrayList<ShapeObject>();
     }
     
     /**
@@ -286,15 +283,6 @@ public class ShapeManager {
    
         createRectangle( x,  y,  width,  height,  id, name);
     }
-    
-    /**
-     * Sets the DataManager, which is needed for updates.
-     * 
-     * @param dm The DataManagerInterface.
-     */
-    public void setDataManager(DataObjectManagerGUIInterface dm) {
-        this.dm = dm;
-    }
 
     /**
      * Checks for collision when dragging shapes.
@@ -308,7 +296,7 @@ public class ShapeManager {
         
         for(ShapeObject shape : shapes){
             boolean isMoving = false;
-            for(ShapeObjectDraggingRect selected : movingShapes){
+            for(ShapeObject selected : movingShapes){
                 if(selected.getID() == shape.getID()){
                     isMoving = true;
                     break;
@@ -320,17 +308,20 @@ public class ShapeManager {
         }
 
         boolean is_collision = false;
-        for(ShapeObjectDraggingRect selected : movingShapes){
+        for(ShapeObject selected : movingShapes){
             for(ShapeObject shape : shapes2){
                 Area areaA = new Area(shape.getShape());
                 areaA.intersect(new Area(selected.getShape()));
-                
-                if(!areaA.isEmpty()){
-                    is_collision = true;
-                    selected.setCollision(true);
-                    break;
-                }else{
-                    selected.setCollision(false);
+
+                if(selected instanceof ShapeObjectDraggingRect){
+                	ShapeObjectDraggingRect r = (ShapeObjectDraggingRect) selected;
+	                if(!areaA.isEmpty()){
+	                    is_collision = true;
+	                    r.setCollision(true);
+	                    break;
+	                }else{
+	                    r.setCollision(false);
+	                }
                 }
             }
         }

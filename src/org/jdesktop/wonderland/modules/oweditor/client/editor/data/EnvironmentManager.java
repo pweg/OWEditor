@@ -1,5 +1,7 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.data;
 
+import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.EnvironmentObserverInterface;
+
 /**
  * This class manages the environment of the virtual world.
  * It resizes the worlds bounds for instance.
@@ -9,20 +11,19 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.data;
  */
 public class EnvironmentManager {
 	
+	private EnvironmentObserverInterface en = null;
+	
 	private int maxX = 0;
 	private int maxY = 0;
 	private int minX = Integer.MAX_VALUE;
 	private int minY = Integer.MAX_VALUE;
-	
-	private DataController dc = null;
-	
+		
 	/**
 	 * Creates a new EnvironmentManager instance.
 	 * 
 	 * @param dc a dataController instance.
 	 */
-	public EnvironmentManager(DataController dc){
-		this.dc = dc;
+	public EnvironmentManager(){
 	}
 	
 	/**
@@ -41,12 +42,15 @@ public class EnvironmentManager {
 		 */
 		if(x + width> maxX){
 			maxX = x+ width;
-			dc.setNewWidth(getMaxWidth());
+			if(en != null)
+				en.notifyWidthChange(getMaxWidth());
 		}
 		else if(x < minX){
 			minX = x;
-			dc.setNewWidth(getMaxWidth());
-			dc.setNewMinX(x);
+			if(en != null){
+				en.notifyWidthChange(getMaxWidth());
+				en.notifyMinXChange(x);
+			}
 		}
 	}
 	
@@ -63,12 +67,15 @@ public class EnvironmentManager {
 	public void setY(int y, int heigth){
 		if(y + heigth> maxY){
 			maxY = y + heigth;
-			dc.setNewHeight(getMaxHeight());
+			if(en != null)
+				en.notifyHeightChange(getMaxHeight());
 		}
 		else if(y < minY){
 			minY = y;
-			dc.setNewHeight(getMaxHeight());
-			dc.setNewMinY(y);
+			if(en != null){
+				en.notifyHeightChange(getMaxHeight());
+				en.notifyMinYChange(y);
+			}
 		}
 	}
 	
@@ -88,6 +95,17 @@ public class EnvironmentManager {
 	 */
 	public int getMaxHeight(){
 		return maxY - minY;
+	}
+
+	/**
+	 * Registers a gui observer, which notifies the gui on 
+	 * environmental changes. Note: There can be only one 
+	 * observer registered at a time.
+	 * 
+	 * @param en the observer.
+	 */
+	public void registerObserver(EnvironmentObserverInterface en) {
+		this.en = en;
 	}
 	
 

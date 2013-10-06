@@ -3,7 +3,7 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataObjectInterface;
 
 /**
- * This interface is used as an observer for the dataObjectManager.
+ * This interface is used as an semi observer for the dataObjectManager.
  * Note that there should only be one observer, because only one 
  * gui needs to be updated. Creating one observer for each data object
  * does seem a little bit too costly.
@@ -11,7 +11,7 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.Dat
  * @author Patrick
  *
  */
-public interface DataObjectManagerObserverInterface {
+public interface DataObjectObserverInterface {
 
 	/**
 	 * Notifies, that an object has changed.

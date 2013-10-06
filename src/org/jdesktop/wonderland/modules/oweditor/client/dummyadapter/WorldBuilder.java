@@ -1,5 +1,7 @@
 package org.jdesktop.wonderland.modules.oweditor.client.dummyadapter;
 
+import java.util.ArrayList;
+
 
 /**
  * Gets every object on the server and sends the data from the object
@@ -12,14 +14,16 @@ package org.jdesktop.wonderland.modules.oweditor.client.dummyadapter;
 public class WorldBuilder {
     
     private ServerUpdateAdapter sua = null;
+    private AdapterController ac = null;
     
     /**
      * Creates a new WorldBuilder instance.
      * 
      * @param sua: a serverUpdate instance.
      */
-    public WorldBuilder(ServerUpdateAdapter sua){
+    public WorldBuilder( AdapterController ac, ServerUpdateAdapter sua){
         this.sua = sua;
+        this.ac = ac;
     }
     
     /**
@@ -34,10 +38,20 @@ public class WorldBuilder {
      */
     private void initShapes() {  
 
-        sua.createObject(0, 160, 160, 0, 0, 1, 70, 70, "Chair");
-        sua.createObject(2, 260, 260, 0, 0, 1, 80, 80, "ChairofTestinghugelength");
-        sua.createObject(1, 400, 400, 0, 0, 1, 200, 200, "Desk");
-        sua.createObject(3, 0, 0, 0, 0, 1, 10, 10, "Tiny");
-        sua.createObject(4, 100, 100, 0, 0, 1, 150, 25, "TinyVeryLong");
+    	ArrayList<ServerObject> objects = ac.ses.getObjects();
+    	
+    	for(ServerObject object : objects){
+    		
+    		long id = object.id;
+    		int x = object.x;
+    		int y = object.y;
+    		int z = object.z;
+    		double rotation = object.rotation;
+    		double scale = object.scale;
+    		int width = object.width;
+    		int height = object.height;
+    		String name = object.name;
+    		sua.createObject(id, x, y, z, rotation, scale, width, height, name);
+    	}
     }
 }

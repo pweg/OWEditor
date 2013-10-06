@@ -6,24 +6,24 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces;
  * @author Patrick
  *
  */
-public interface DataUpdateAdapterInterface {
+public interface AdapterObserverInterface {
     
 	/**
 	 * Updates a data object with the data stored in the given
 	 * object.
 	 * 
-	 * @param data the dataObject which holds all data necessary
+	 * @param dataObject the dataObject which holds all data necessary
 	 * for updating the data object.
 	 */
-    public void updateObject(DataObjectInterface data);
+    public void notifyObjectChange(DataObjectInterface dataObject);
     
     /**
      * Creates a new data object with the given data object.
      * 
-     * @param data the data object which needs to be stored 
+     * @param dataObject the data object which needs to be stored 
      * in the data manager.
      */
-    public void createObject(DataObjectInterface data);
+    public void notifyObjectCreation(DataObjectInterface dataObject);
     
     /**
      * Creates an empty data object interface, which can be used

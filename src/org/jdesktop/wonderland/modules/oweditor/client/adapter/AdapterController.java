@@ -1,8 +1,8 @@
 package org.jdesktop.wonderland.modules.oweditor.client.adapter;
 
 import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.AdapterControllerMainControllerInterface;
-import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.ClientUpdateGUIInterface;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataUpdateAdapterInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.GUIObserverInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.AdapterObserverInterface;
 
 /**
  * Adapter controller class, which is used to initialize the whole adapter.
@@ -40,13 +40,13 @@ public class AdapterController implements AdapterControllerMainControllerInterfa
     }
 
     @Override
-    public void setDataUpdateInterface(DataUpdateAdapterInterface i) {
+    public void setDataUpdateInterface(AdapterObserverInterface i) {
        sua.setDataUpdateInterface(i);
         
     }
 
     @Override
-    public ClientUpdateGUIInterface getClientUpdateInterface() {
+    public GUIObserverInterface getClientUpdateInterface() {
         return cua;
     }
 

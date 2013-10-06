@@ -1,6 +1,6 @@
 package org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces;
 
-import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataUpdateAdapterInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.AdapterObserverInterface;
 
 /**
  * This interface is used between the adapter package and the 
@@ -29,7 +29,7 @@ public interface AdapterControllerMainControllerInterface {
      * 
      * @param dua a dataUpdate interface.
      */
-    public void setDataUpdateInterface(DataUpdateAdapterInterface dua);
+    public void registerDataUpdateInterface(AdapterObserverInterface dua);
     
     /**
      * Returns the clientUpdateInterface, which is needed for the 
@@ -37,7 +37,7 @@ public interface AdapterControllerMainControllerInterface {
      * 
      * @return a client update instance.
      */
-    public ClientUpdateGUIInterface getClientUpdateInterface();
+    public GUIObserverInterface getClientUpdateInterface();
     
 
 }

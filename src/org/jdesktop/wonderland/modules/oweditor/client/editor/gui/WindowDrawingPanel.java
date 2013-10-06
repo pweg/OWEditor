@@ -18,6 +18,9 @@ import javax.swing.event.ChangeListener;
 /**
  * A class which is used for drawing. It implements the main surface for the
  * 2D shape objects and calls the shapeManager on repaint.
+ * 
+ * @author Patrick
+ *
  */
 public class WindowDrawingPanel extends JPanel implements ChangeListener {  
 
@@ -88,7 +91,16 @@ public class WindowDrawingPanel extends JPanel implements ChangeListener {
      * the scale value.
      */
     private void changeScale(double toAdd){
-    	scale += toAdd;
+    	
+    	Rectangle r = getVisibleRect();
+    	if(size.width < r.width/(scale) &&
+    			size.height < r.height/(scale) &&
+    			toAdd < 0)
+    		return;
+    		
+
+        scale += toAdd;
+    	
         scale = Math.max(0.0001, scale);
 
         repaint();  

@@ -116,14 +116,15 @@ public class ShapeObjectRectangle extends ShapeObject{
         
         double width = bounds_r.getWidth();
         double height = bounds_r.getHeight();
-        double xBounds = nameBoundsX/scale;
+        double xBounds = nameBoundsX*scale;
         
-        if((height+GUISettings.namePositionInYAdd)/scale > r.height){
+        if(height+(GUISettings.namePositionInYAdd*scale) > r.height){
         	nameBoundsX = GUISettings.namePositionOutX;
         	nameBoundsAbove = GUISettings.namePositionOutY;
         }
         
         double max_width = r.width-2*xBounds;
+        
         if(width > max_width){
             double percent = max_width/width*100;
             int cut = (int) Math.round(name.length()*percent/100)-3;
@@ -133,7 +134,6 @@ public class ShapeObjectRectangle extends ShapeObject{
             if(cut < name.length())
             	name = name.substring(0,cut)+"...";
         }
-        
         nameWrapp = true;
     }
 
@@ -156,6 +156,12 @@ public class ShapeObjectRectangle extends ShapeObject{
     public void setLocation(int x, int y) {
         originalShape.setLocation(x, y);
     }
+
+	@Override
+	public void setName(String name) {
+		nameWrapp = false;
+		this.name = name;
+	}
 
     @Override
     public void setTranslation(double distance_x, double distance_y) {
@@ -188,10 +194,5 @@ public class ShapeObjectRectangle extends ShapeObject{
     public String getName() {
         return name;
     }
-
-	@Override
-	public void setName(String name) {
-		this.name = name;
-	}
 
 }

@@ -7,7 +7,7 @@ package org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces;
  * @author Patrick
  *
  */
-public interface ClientUpdateGUIInterface {
+public interface GUIObserverInterface {
     
 	/**
 	 * Makes a translation update for an object. When only 
@@ -19,6 +19,6 @@ public interface ClientUpdateGUIInterface {
 	 * @param y the y coordinate, the object is moved to.
 	 * @param z the z coordinate, the object is moved to.
 	 */
-    public void updateTranslation(long id, int x, int y, int z);
+    public void notifyTranslation(long id, int x, int y, int z);
 
 }

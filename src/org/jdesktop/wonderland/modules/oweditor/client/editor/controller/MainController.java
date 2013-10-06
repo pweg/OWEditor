@@ -31,20 +31,20 @@ public class MainController implements MainControllerDataInterface,
      */
     public MainController(){
         
-        gui = new GUIController(this);
+        gui = new GUIController();
         gui.createFrame();
         gui.setVisibility(false);
         
-        data = new DataController(this);
+        data = new DataController();
         adapter = new AdapterController();
         data.initialize();
         adapter.initialize();
 
-        adapter.setDataUpdateInterface(data.getDataUpdateInterface()); 
-        gui.setDataManager(data.getDataManagerInterface());
-        gui.setClientUpdateAdapter(adapter.getClientUpdateInterface());
-        data.setGUIControler(gui);
+        adapter.registerDataUpdateInterface(data.getDataUpdateInterface()); 
+        gui.registerDataManager(data.getDataManagerInterface());
+        gui.registerGUIObserver(adapter.getClientUpdateInterface());
         data.registerDataObjectObserver(gui.getDataObjectObserver());
+        data.registerEnvironmentObserver(gui.getEnvironmentObserver());
         
         adapter.getCurrentWorld();
     }
