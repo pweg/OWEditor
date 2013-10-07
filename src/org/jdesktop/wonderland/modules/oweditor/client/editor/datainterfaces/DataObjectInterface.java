@@ -74,6 +74,9 @@ public interface DataObjectInterface {
     
     /**
      * Sets the y coordinate of the object.
+     * Please remember that the y coordinate is used for the
+     * 2d representation in the editor, so make sure this
+     * coordinate is not the height value.
      * 
      * @param y the y coordinate.
      */
@@ -81,6 +84,8 @@ public interface DataObjectInterface {
     
     /**
      * Sets the z coordinate of the object.
+     * Please remember, this coordinate is used as
+     * the height coordinate.
      * 
      * @param z the z coordinate.
      */

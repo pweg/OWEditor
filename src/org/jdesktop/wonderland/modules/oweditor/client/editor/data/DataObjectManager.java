@@ -47,6 +47,16 @@ public class DataObjectManager implements DataObjectManagerGUIInterface{
         }
     }
     
+    public void updateTranslation(long id, int x, int y, int z){
+        DataObject d = data.get(id);
+        
+        if(d == null)
+            return;
+        
+        d.setCoordinates(x, y, z);
+        domo.notify(d);
+    }
+    
     /**
      * Updates the data from the given dataObject, but 
      * does not store this object. Instead it searches for

@@ -28,14 +28,18 @@ public class AdapterObserver implements AdapterObserverInterface{
         return dm.getEmptyDataObject();
     }
 
-	@Override
-	public void notifyObjectChange(DataObjectInterface dataObject) {
-		dm.updataData(dataObject);
-	}
+    @Override
+    public void notifyObjectChange(DataObjectInterface dataObject) {
+        dm.updataData(dataObject);
+    }
 
-	@Override
-	public void notifyObjectCreation(DataObjectInterface dataObject) {
-		dm.createNewObject(dataObject);
-	}
+    @Override
+    public void notifyObjectCreation(DataObjectInterface dataObject) {
+        dm.createNewObject(dataObject);
+    }
+
+    public void notifyTranslation(long id, int x, int y, int z) {
+        dm.updateTranslation(id, x, y, z);
+    }
 
 }

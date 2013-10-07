@@ -28,7 +28,7 @@ public class ListenerSelection extends MouseInputAdapter implements KeyListener{
     public static final byte SELFIRST = 1;
     public static final byte SELSPAN = 2;
     
-    private GUIController controler = null;
+    private GUIController controller = null;
     private boolean shiftPressed = false;
     private byte selectionRect = NOSELSPAN;
     
@@ -36,7 +36,7 @@ public class ListenerSelection extends MouseInputAdapter implements KeyListener{
     
     
     public ListenerSelection(GUIController contr){
-        controler = contr;
+        controller = contr;
     }
 
 
@@ -53,14 +53,14 @@ public class ListenerSelection extends MouseInputAdapter implements KeyListener{
 
             Point p = e.getPoint();
             if(e.getButton() ==  MouseEvent.BUTTON1){
-                ArrayList<ShapeObject> shapes = controler.sm.getShapes();
+                ArrayList<ShapeObject> shapes = controller.sm.getShapes();
                 
                 for(ShapeObject shape_obj : shapes){
                     Shape shape = shape_obj.getTransformedShape();
                     
                     if(shape.contains(p)) {
-                        controler.samm.switchSelection(shape_obj);
-                        controler.drawingPan.repaint();
+                        controller.samm.switchSelection(shape_obj);
+                        controller.drawingPan.repaint();
                         break;
                     }
                 }
@@ -69,7 +69,7 @@ public class ListenerSelection extends MouseInputAdapter implements KeyListener{
         else{
             if(e.getButton() ==  MouseEvent.BUTTON1){
                 Point p = e.getPoint();
-                ArrayList<ShapeObject> shapes = controler.sm.getShapes();
+                ArrayList<ShapeObject> shapes = controller.sm.getShapes();
                 
                 boolean isInside = false;
                 for(ShapeObject shape_obj : shapes){
@@ -79,21 +79,21 @@ public class ListenerSelection extends MouseInputAdapter implements KeyListener{
                     if(shape.contains(p)) {
                          isInside = true;
                          if(!shape_obj.isSelected()){
-                             controler.samm.removeCurSelection();
-                             controler.samm.setSelected(shape_obj, true);
-                             controler.drawingPan.repaint();
+                             controller.samm.removeCurSelection();
+                             controller.samm.setSelected(shape_obj, true);
+                             controller.drawingPan.repaint();
                          }
                     }
                 }
                 
                 if(!isInside){
-                    controler.samm.removeCurSelection();
+                    controller.samm.removeCurSelection();
                     
                     start.x = e.getX();
                     start.y = e.getY();
                     selectionRect = SELFIRST;
                     
-                    controler.drawingPan.repaint();
+                    controller.drawingPan.repaint();
                 }
             }
         }
@@ -108,8 +108,8 @@ public class ListenerSelection extends MouseInputAdapter implements KeyListener{
         if(selectionRect != NOSELSPAN){
             Point end = new Point(e.getX(), e.getY());
            
-            controler.samm.resizeSelectionRect(start, end);
-            controler.drawingPan.repaint();
+            controller.samm.resizeSelectionRect(start, end);
+            controller.drawingPan.repaint();
         }
     }
    
@@ -123,10 +123,10 @@ public class ListenerSelection extends MouseInputAdapter implements KeyListener{
        if(selectionRect != NOSELSPAN){
            selectionRect = NOSELSPAN;
            
-           controler.samm.selectionPressReleased();
+           controller.samm.selectionPressReleased();
            
-           controler.sm.removeSelectionRect();
-           controler.drawingPan.repaint();
+           controller.sm.removeSelectionRect();
+           controller.drawingPan.repaint();
        }
     }
     

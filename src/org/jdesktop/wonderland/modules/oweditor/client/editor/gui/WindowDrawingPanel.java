@@ -49,7 +49,7 @@ public class WindowDrawingPanel extends JPanel implements ChangeListener {
     /**
      * Creates a new instance of the drawingPanel
      * 
-     * @param gc A GUIControler instance.
+     * @param gc A GUIController instance.
      */
     public WindowDrawingPanel(GUIController gc) {
         

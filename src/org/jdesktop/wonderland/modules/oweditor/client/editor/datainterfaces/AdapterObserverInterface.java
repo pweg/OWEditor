@@ -25,6 +25,8 @@ public interface AdapterObserverInterface {
      */
     public void notifyObjectCreation(DataObjectInterface dataObject);
     
+    public void notifyTranslation(long id, int x, int y, int z);
+    
     /**
      * Creates an empty data object interface, which can be used
      * to fill with data and then transmitted via updateObject or

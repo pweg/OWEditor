@@ -14,12 +14,12 @@ import javax.swing.event.MouseInputAdapter;
  */
 public class ListenerDragAndDrop extends MouseInputAdapter{
 
-    private GUIController controler;
+    private GUIController controller;
     private Point start = new Point();
     private boolean dragging = false;
  
     public ListenerDragAndDrop(GUIController contr) {
-        controler = contr;
+        controller = contr;
     }
     
     /**
@@ -29,7 +29,7 @@ public class ListenerDragAndDrop extends MouseInputAdapter{
         if(e.getButton() ==  MouseEvent.BUTTON1){
             Point p = e.getPoint();
             
-            ShapeObject shape = controler.sm.getShapeSuroundingPoint(p);
+            ShapeObject shape = controller.sm.getShapeSuroundingPoint(p);
             
             if(shape != null){
                 start.x = p.x;
@@ -47,17 +47,17 @@ public class ListenerDragAndDrop extends MouseInputAdapter{
     public void mouseReleased(MouseEvent e) {
         dragging = false;
         
-        if(!controler.samm.collision){
-            controler.sm.saveDraggingShapes();
-            controler.setAdapterUpdate();
+        if(!controller.samm.collision){
+            controller.sm.saveDraggingShapes();
+            controller.setAdapterUpdate();
         }
-        controler.sm.clearDraggingShapes();
-        controler.drawingPan.repaint();
+        controller.sm.clearDraggingShapes();
+        controller.drawingPan.repaint();
     }
  
     public void mouseDragged(MouseEvent e) {
         if(dragging) {
-            controler.samm.translateShape(e.getX(), e.getY(), start);
+            controller.samm.translateShape(e.getX(), e.getY(), start);
             start.x = e.getX();
             start.y = e.getY();
         }
