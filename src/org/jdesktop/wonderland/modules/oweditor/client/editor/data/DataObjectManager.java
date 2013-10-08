@@ -42,7 +42,6 @@ public class DataObjectManager implements DataObjectManagerGUIInterface{
         
         if(dataObject instanceof DataObject){
             data.put(id, (DataObject) dataObject);
-            
             domo.notify(dataObject);
         }
     }

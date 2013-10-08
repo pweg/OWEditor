@@ -25,7 +25,6 @@ import org.jdesktop.wonderland.common.cell.CellTransform;
 public class GUIObserver implements GUIObserverInterface{
     
     private AdapterController ac = null;
-    private int initialScale = AdapterSettings.initalScale;
     
     /**
      * Creates a new clientUpdate instance.
@@ -38,10 +37,6 @@ public class GUIObserver implements GUIObserverInterface{
 
     @Override
     public void notifyTranslation(long id, int x, int y, int z) {
-        
-        float server_x = x;
-        float server_y = z;
-        float server_z = y;
         
         WonderlandSession session = LoginManager.getPrimary().getPrimarySession();
         
@@ -56,37 +51,13 @@ public class GUIObserver implements GUIObserverInterface{
         if(cell == null)
             return;
         
-        BoundingVolume bounds = cell.getWorldBounds();
-        
-        if(bounds instanceof BoundingBox){
-            BoundingBox box = (BoundingBox) bounds;
-            float xExtent = box.xExtent;
-            float yExtent = box.zExtent;
-            float zExtent = box.yExtent;
-            server_x = (server_x/initialScale+xExtent);
-            server_y = (server_y/initialScale+yExtent);
-            server_z = (server_z/initialScale+zExtent);
-            
-        }else if(bounds instanceof BoundingSphere){
-            BoundingSphere sphere = (BoundingSphere) bounds;
-            float radius = sphere.radius;
-            server_x = (server_x/initialScale+radius);
-            server_y = (server_y/initialScale+radius);
-            server_z = (server_z/initialScale+radius);
-        }
-        
-        Vector3f translation = new Vector3f(server_x, server_y, server_z);
+        Vector3f translation = ac.ct.transformCoordinatesBack(cell, x, y, z);
         MovableComponent movableComponent = cell.getComponent(MovableComponent.class);
 
-        
         if (movableComponent != null) {
             CellTransform cellTransform = cell.getLocalTransform();
             cellTransform.setTranslation(translation);
             movableComponent.localMoveRequest(cellTransform);
         }
-        
     }
-    
-    
-
 }

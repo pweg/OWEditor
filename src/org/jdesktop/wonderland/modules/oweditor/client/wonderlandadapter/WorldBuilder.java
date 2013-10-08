@@ -27,8 +27,10 @@ public class WorldBuilder {
     
     private ServerUpdateAdapter sua = null;
     private AdapterController ac = null;
+    
     private ArrayList<Cell> cells = null;
-    private final int initialScale = AdapterSettings.initalScale;
+        private static final Logger LOGGER =
+            Logger.getLogger(WorldBuilder.class.getName());
     
     /**
      * Creates a new WorldBuilder instance.
@@ -79,47 +81,7 @@ public class WorldBuilder {
     }
     
     private void createDataObject(Cell cell){
-        
-        CellTransform transform = cell.getLocalTransform();
-        Vector3f transl = transform.getTranslation(null);
-        
-        float x1 = (int) Math.round(transl.x);
-        float y1 = (int) Math.round(transl.y);
-        float z1 = (int) Math.round(transl.z);
-        long id = Long.valueOf(cell.getCellID().toString());
-        int height = 0;
-        int width = 0;
-        String name = cell.getName();
-        float rotation = 0;//transform.getRotation(null);
-        float scale = transform.getScaling();
-        
-        int x = 0;
-        int y = 0;
-        int z = 0;
-        
-        BoundingVolume bounds = cell.getWorldBounds();
-        
-        if(bounds instanceof BoundingBox){
-            BoundingBox box = (BoundingBox) bounds;
-            float xExtent = box.xExtent;
-            float yExtent = box.zExtent;
-            float zExtent = box.yExtent;
-            width = (int) Math.round(xExtent*2*initialScale);
-            height = (int) Math.round(yExtent*2*initialScale);
-            x = (int) Math.round((x1-xExtent)*initialScale);
-            y = (int) Math.round((y1-yExtent)*initialScale);
-            z = (int) Math.round((z1-zExtent)*initialScale);
-            
-        }else if(bounds instanceof BoundingSphere){
-            BoundingSphere sphere = (BoundingSphere) bounds;
-            float radius = sphere.radius;
-            width = (int) Math.round(radius*2*initialScale);
-            height = (int) Math.round(radius*2*initialScale);
-            x = (int) Math.round((x1-radius)*initialScale);
-            y = (int) Math.round((y1-radius)*initialScale);
-            z = (int) Math.round((z1-radius)*initialScale);
-        }
-        
-        sua.createObject(id, x, y, z, rotation, scale, width, height, name);
+                
+        sua.createObject(cell);
     }
 }

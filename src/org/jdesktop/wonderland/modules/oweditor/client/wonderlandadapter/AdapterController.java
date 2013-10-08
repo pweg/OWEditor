@@ -13,6 +13,7 @@ public class AdapterController implements AdapterControllerMainControllerInterfa
     
     
     protected GUIObserver cua = null;
+    protected CoordinateTranslator ct = null;
     protected ServerUpdateAdapter sua = null;
     protected TransformListener tl = null;
     
@@ -25,6 +26,7 @@ public class AdapterController implements AdapterControllerMainControllerInterfa
         cua = new GUIObserver(this);
         sua = new ServerUpdateAdapter(this);
         tl = new TransformListener(sua);
+        ct = new CoordinateTranslator();
     }
 
     @Override

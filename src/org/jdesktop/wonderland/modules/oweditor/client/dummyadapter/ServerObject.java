@@ -8,19 +8,19 @@ package org.jdesktop.wonderland.modules.oweditor.client.dummyadapter;
  */
 public class ServerObject {
 	
-	protected int x = 0;
-	protected int y = 0;
-	protected int z = 0;
+	protected float x = 0;
+	protected float y = 0;
+	protected float z = 0;
 	protected double rotation = 0;
 	protected double scale = 0;
-	protected int width = 0;
-	protected int height = 0;
+	protected float width = 0;
+	protected float height = 0;
 	
 	protected long id = 0;
 	protected String name = "";
 	
-	ServerObject(int id, int x, int y, int z, double rotation, 
-			double scale, int width, int height, String name){
+	ServerObject(int id, float x, float y, float z, double rotation, 
+			double scale, float width, float height, String name){
 		this.x = x;
 		this.y = y;
 		this.z = z;

@@ -1,6 +1,7 @@
 package org.jdesktop.wonderland.modules.oweditor.client.dummyadapter;
 
 import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.GUIObserverInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter.AdapterSettings;
 
 /**
  * This class is used to make updates the client makes in
@@ -12,6 +13,7 @@ import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.GUIObse
 public class GUIObserver implements GUIObserverInterface{
     
     private AdapterController ac = null;
+    private int initialScale = AdapterSettings.initalScale;
     
     /**
      * Creates a new clientUpdate instance.
@@ -28,14 +30,13 @@ public class GUIObserver implements GUIObserverInterface{
         ServerObject object = ac.ses.getObject(id);
         if(object == null)
         	return;
-        
-        object.x = x;
-        object.y = y;
-        object.z = z;
-        
+
+        System.out.println("Observer "+id + " " +x +" " + y +" " + z);
+        object.x = (float)x/initialScale;
+        object.y = (float)y/initialScale;
+        object.z = (float)z/initialScale;        
         
         ac.sua.serverChangeEvent(id);
-        
     }
 
 }

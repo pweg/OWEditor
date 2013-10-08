@@ -2,6 +2,7 @@ package org.jdesktop.wonderland.modules.oweditor.client.dummyadapter;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataObjectInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.AdapterObserverInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter.AdapterSettings;
 
 /**
  * This class is used for updating the data package, when
@@ -14,6 +15,7 @@ public class ServerUpdateAdapter {
     
     private AdapterController ac = null;
     private AdapterObserverInterface dui = null;
+    private int startScale = AdapterSettings.initalScale;
     
     /**
      * Creates a new serverUpdate instance.
@@ -43,9 +45,9 @@ public class ServerUpdateAdapter {
         if(so == null)
         	return;
         
-        int x = so.x;
-        int y = so.y;
-        int z = so.z;
+        int x = (int)Math.round(so.x*startScale);
+        int y = (int)Math.round(so.y*startScale);
+        int z = (int)Math.round(so.z*startScale);
         double rotation = so.rotation;
         double scale = so.scale;
         String name = so.name;
@@ -58,7 +60,6 @@ public class ServerUpdateAdapter {
         object.setName(name);
         
         dui.notifyObjectChange(object);
-        
     }
 
     /**
@@ -69,7 +70,6 @@ public class ServerUpdateAdapter {
      */
     public void setDataUpdateInterface(AdapterObserverInterface dui) {
         this.dui = dui;
-        
     }
     
     /**

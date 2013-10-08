@@ -65,7 +65,6 @@ public class ShapeObjectRectangle extends ShapeObject{
 
     @Override
     public void paintOriginal(Graphics2D g, AffineTransform at, double scale) {
-
         g.setPaint(color);  
         
         transformedShape = at.createTransformedShape(originalShape);

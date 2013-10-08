@@ -3,7 +3,11 @@ package org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter;
 import com.jme.math.Vector3f;
 import java.util.logging.Logger;
 import org.jdesktop.wonderland.client.cell.Cell;
+import org.jdesktop.wonderland.client.cell.MovableComponent;
 import org.jdesktop.wonderland.common.cell.CellTransform;
+import org.jdesktop.wonderland.common.cell.messages.CellServerComponentMessage;
+import org.jdesktop.wonderland.common.messages.ErrorMessage;
+import org.jdesktop.wonderland.common.messages.ResponseMessage;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataObjectInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.AdapterObserverInterface;
 
@@ -44,39 +48,15 @@ public class ServerUpdateAdapter {
             return;
         }
         
-        CellTransform cellTransform = cell.getLocalTransform();
-        Vector3f translation = cellTransform.getTranslation(null);
+        Vector3fInfo vector = ac.ct.transformCoordinates(cell);
         
-        int x = (int) translation.x*startScale;
-        int y = (int) translation.z*startScale;
-        int z = (int) translation.y*startScale;
+        int x = (int) vector.x;
+        int y = (int) vector.y;
+        int z = (int) vector.z;
         
         long id = Long.valueOf(cell.getCellID().toString());
         
-        dui.notifyTranslation(id , x, y, z);
-        
-        
-        /*ServerObject so = ac.ses.getObject(id);
-        
-        if(so == null)
-        	return;
-        
-        int x = so.x;
-        int y = so.y;
-        int z = so.z;
-        double rotation = so.rotation;
-        double scale = so.scale;
-        String name = so.name;
-        
-        DataObjectInterface object = dui.createEmptyObject();
-        object.setID(id);
-        object.setCoordinates(x, y, z);
-        object.setRotation(rotation);
-        object.setScale(scale);
-        object.setName(name);
-        
-        dui.notifyObjectChange(object);*/
-        
+        dui.notifyTranslation(id , x, y, z);       
     }
     
     /**
@@ -132,32 +112,44 @@ public class ServerUpdateAdapter {
      * data. The difference to the serverChangeEvent is that the 
      * data object created here will be stored in the data manager.
      * 
-     * @param id the object id.
-     * @param x the x coordinate of the object.
-     * @param y the y coordinate of the object.
-     * @param z the z coordinate of the object.
-     * @param rotation the rotation of the object.
-     * @param scale the scale of the object.
-     * @param width the width of the object.
-     * @param height the height of the object.
-     * @param name the name of the object.
+     * @param cell the cell to create
      */
-    public void createObject(long id, int x, int y, int z, 
-            double rotation, double scale, int width, int height,
-            String name){
+    public void createObject(Cell cell){
         
         if(dui == null)
             return;
         
+        
+        CellTransform transform = cell.getLocalTransform();
+        
+        long id = Long.valueOf(cell.getCellID().toString());
+        String name = cell.getName();
+        float rotation = 0;//transform.getRotation(null);
+        float scale = transform.getScaling();
+        Vector3fInfo vector = ac.ct.transformCoordinates(cell);
+        
+        int x = (int) vector.x;
+        int y = (int) vector.y;
+        int z = (int) vector.z;
+        int height = (int) vector.height;
+        int width = (int) vector.width;
+        
+        MovableComponent movableComponent = cell.getComponent(MovableComponent.class);
+        if (movableComponent == null) {
+            String className = "org.jdesktop.wonderland.server.cell." +
+                    "MovableComponentMO";
+            CellServerComponentMessage cscm = 
+                    CellServerComponentMessage.newAddMessage(
+                    cell.getCellID(), className);
+            ResponseMessage response = cell.sendCellMessageAndWait(cscm);
+            if (response instanceof ErrorMessage) {
+            }
+        }
+        
         DataObjectInterface object = dui.createEmptyObject();
         object.setID(id);
          
-        /*
-         * Note: OW uses y value for height, not for 2d coordinates,
-         * but editor uses z for height.
-         */
-        
-        object.setCoordinates(x, z, y);
+        object.setCoordinates(x, y, z);
         object.setRotation(rotation);
         object.setScale(scale);
         object.setWidth(width);
