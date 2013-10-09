@@ -160,8 +160,11 @@ public class ServerUpdateAdapter {
         if(!name.equals(""))
             object.setName(name);
         
-        if(cell instanceof AvatarCell)
+        if(cell instanceof AvatarCell){
+        	object.setWidth(AdapterSettings.avatarSizeX);
+            object.setHeight(AdapterSettings.avatarSizeY);
             object.setIsAvatar(true);
+        }
 
         dui.notifyObjectCreation(object);
     }

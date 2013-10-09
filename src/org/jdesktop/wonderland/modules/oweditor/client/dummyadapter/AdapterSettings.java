@@ -13,5 +13,8 @@ package org.jdesktop.wonderland.modules.oweditor.client.dummyadapter;
 public class AdapterSettings {
     
     public static int initalScale = 50;
+
+    public static int avatarSizeX = 25;
+    public static int avatarSizeY = 25;
     
 }

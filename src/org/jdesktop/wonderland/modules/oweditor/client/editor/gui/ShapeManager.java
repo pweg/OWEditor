@@ -57,8 +57,8 @@ public class ShapeManager {
          return shape;
     }
     
-    public SimpleShapeObject createAvatar(int x, int y, int radius, long id){
-    	ShapeObject shape = new ShapeObjectAvatar(id, x,y,radius);
+    public SimpleShapeObject createAvatar(int x, int y, int width, int height, long id){
+    	ShapeObject shape = new ShapeObjectAvatar(id, x,y,width, height);
     	
     	avatarShapes.add(shape);
     	return shape;
@@ -166,12 +166,10 @@ public class ShapeManager {
                 
     	for(ShapeObject shape : avatarShapes){
     		shape.paintOriginal(g2, at, scale);
-                LOGGER.warning("shape " + shape.getName());
     	}
     	
         for(ShapeObject shape : shapes){  
             shape.paintOriginal(g2, at, scale);
-                LOGGER.warning("shape " + shape.getName());
         }
         
         if(showDraggingShapes){
@@ -278,7 +276,9 @@ public class ShapeManager {
             if(shape == null){
                 int x = dataObject.getX();
                 int y = dataObject.getY();
-        	createAvatar(x, y, GUISettings.avatarSize, id);
+                int width = dataObject.getWidth();
+                int height = dataObject.getHeight();
+        	createAvatar(x, y, width, height, id);
                 return;
             }
         }else{
@@ -315,7 +315,7 @@ public class ShapeManager {
             name = name.substring(0, 18)+ "...";
         }
         if(dataObject.isAvatar())
-        	createAvatar(x, y, GUISettings.avatarSize, id);
+        	createAvatar(x, y, width, height, id);
         else
         	createRectangle( x,  y,  width,  height,  id, name);
     }

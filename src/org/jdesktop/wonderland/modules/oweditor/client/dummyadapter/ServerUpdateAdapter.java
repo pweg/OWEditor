@@ -97,10 +97,18 @@ public class ServerUpdateAdapter {
         object.setCoordinates(x, z, y);
         object.setRotation(rotation);
         object.setScale(scale);
-        object.setWidth(width);
-        object.setHeight(height);
         object.setName(name);
         object.setIsAvatar(sObject.isAvatar);
+        
+        if(sObject.isAvatar){
+            object.setWidth(AdapterSettings.avatarSizeX);
+            object.setHeight(AdapterSettings.avatarSizeY);
+        }else{
+            object.setWidth(width);
+            object.setHeight(height);
+        }
+        
+        
         
         if(name != "")
             object.setName(name);

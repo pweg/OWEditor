@@ -25,7 +25,6 @@ public class GUISettings {
     public static Paint selectionRectangleColor = Color.lightGray;
     
     public static Paint avatarColor = Color.LIGHT_GRAY;
-    public static int avatarSize = 25;
     
     /*
      * Size and type of object name, shown in the drawing panel, as well

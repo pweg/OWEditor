@@ -29,8 +29,7 @@ public class WindowDrawingPanel extends JPanel implements ChangeListener {
     
     private Dimension size;
     private double scale = 1.0;
-    
-    private ListenerPan pan = null;    
+      
     private GUIController gc = null;
     
     /*
@@ -65,23 +64,6 @@ public class WindowDrawingPanel extends JPanel implements ChangeListener {
 
         size = new Dimension(10,10);  
         setBackground(new Color(255,255,255)); 
-        pan = new ListenerPan(this);
-        this.addMouseListener(pan);
-        this.addMouseMotionListener(pan);
-        this. addMouseWheelListener( new MouseWheelListener( )
-        {
-        	/**
-        	 * MouseListener for zooming.
-        	 */
-            @Override
-            public void mouseWheelMoved( MouseWheelEvent e )
-            {
-            	double curScale = scale;
-            	
-                changeScale(GUISettings.zoomSpeed * -(double)e.getWheelRotation());
-                changeViewPort(curScale);
-            }
-        });
     } 
     
     /**
@@ -90,17 +72,16 @@ public class WindowDrawingPanel extends JPanel implements ChangeListener {
      * @param toAdd The amount which should be added/removed from
      * the scale value.
      */
-    private void changeScale(double toAdd){
+    public void changeScale(double toAdd){
     	
     	Rectangle r = getVisibleRect();
     	if(size.width < r.width/(scale) &&
     			size.height < r.height/(scale) &&
     			toAdd < 0)
     		return;
-    		
-        scale += toAdd;
-    	
-        scale = Math.max(0.0001, scale);
+    
+    	scale += toAdd;
+        scale = Math.max(0.01, scale);
 
         repaint();  
         revalidate(); 
@@ -112,7 +93,7 @@ public class WindowDrawingPanel extends JPanel implements ChangeListener {
      * @param curScale The old scale value, before the new one
      * was set.
      */
-    private void changeViewPort(double curScale){
+    public void changeViewPort(double curScale){
     	Rectangle r = getVisibleRect();
     	
         double v_x = r.x/(curScale)*scale;
@@ -124,6 +105,11 @@ public class WindowDrawingPanel extends JPanel implements ChangeListener {
 
         int new_x = (int) Math.round(v_x+ add_x);
         int new_y = (int) Math.round(v_y+ add_y);
+        
+        if(new_x < 0)
+            new_x = 0;
+        if(new_y < 0)
+            new_y = 0;
 
         Point p = new Point(new_x, new_y);
         

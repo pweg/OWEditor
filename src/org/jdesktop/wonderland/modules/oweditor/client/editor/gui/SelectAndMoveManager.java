@@ -14,8 +14,7 @@ public class SelectAndMoveManager {
     private ArrayList<ShapeObject> selectedShapes = null;
     private GUIController gc = null;
     
-    private ListenerDragAndDrop dragListener = null;
-    private ListenerSelection selectionListener = null;
+    private MouseAndKeyListener mkListener = null;
     protected boolean collision = false;
     
     public SelectAndMoveManager(GUIController contr){
@@ -23,16 +22,13 @@ public class SelectAndMoveManager {
         
         gc = contr;
         
-        dragListener = new ListenerDragAndDrop(gc);
-        selectionListener = new ListenerSelection(gc);
+        mkListener = new MouseAndKeyListener(gc);
         
         WindowDrawingPanel drawingPan = gc.drawingPan;
-        
-        drawingPan.addMouseListener(dragListener);
-        drawingPan.addMouseMotionListener(dragListener);
-        drawingPan.addMouseListener(selectionListener);
-        drawingPan.addMouseMotionListener(selectionListener);
-        gc.frame.addKeyListener(selectionListener);
+        drawingPan.addMouseListener(mkListener);
+        drawingPan.addMouseMotionListener(mkListener);
+        drawingPan.addMouseWheelListener(mkListener);
+        gc.frame.addKeyListener(mkListener);
     }
     
     /**

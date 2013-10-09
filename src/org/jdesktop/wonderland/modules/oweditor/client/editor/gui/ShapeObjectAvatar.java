@@ -14,8 +14,8 @@ public class ShapeObjectAvatar extends ShapeObject{
     private Paint color = GUISettings.avatarColor;
     private String name = "";
     
-    ShapeObjectAvatar(long id, int x, int y, int radius){
-    	originalShape = new Ellipse2D.Double(x, y, radius, radius);
+    ShapeObjectAvatar(long id, int x, int y, int width, int height){
+    	originalShape = new Ellipse2D.Double(x, y, width, height);
         this.id = id;
     }
 
@@ -75,17 +75,16 @@ public class ShapeObjectAvatar extends ShapeObject{
 
     @Override
     public void setSelected(boolean select) {
-        throw new UnsupportedOperationException("Not supported yet. setselected."); //To change body of generated methods, choose Tools | Templates.
+    
     }
 
     @Override
     public boolean isSelected() {
-        throw new UnsupportedOperationException("Not supported yet.isSelected"); //To change body of generated methods, choose Tools | Templates.
+    	return false;
     }
 
     @Override
     public void switchSelection() {
-        throw new UnsupportedOperationException("Not supported yet.switchSelection"); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
