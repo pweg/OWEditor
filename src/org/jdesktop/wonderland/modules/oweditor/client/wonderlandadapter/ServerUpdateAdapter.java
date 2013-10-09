@@ -4,6 +4,7 @@ import com.jme.math.Vector3f;
 import java.util.logging.Logger;
 import org.jdesktop.wonderland.client.cell.Cell;
 import org.jdesktop.wonderland.client.cell.MovableComponent;
+import org.jdesktop.wonderland.client.cell.view.AvatarCell;
 import org.jdesktop.wonderland.common.cell.CellTransform;
 import org.jdesktop.wonderland.common.cell.messages.CellServerComponentMessage;
 import org.jdesktop.wonderland.common.messages.ErrorMessage;
@@ -158,6 +159,9 @@ public class ServerUpdateAdapter {
         
         if(!name.equals(""))
             object.setName(name);
+        
+        if(cell instanceof AvatarCell)
+            object.setIsAvatar(true);
 
         dui.notifyObjectCreation(object);
     }

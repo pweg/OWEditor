@@ -7,8 +7,10 @@ import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Area;
 import java.util.ArrayList;
+import java.util.logging.Logger;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataObjectInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter.WorldBuilder;
 
 /**
  * This class is used for creating and managing all shapes.
@@ -22,10 +24,12 @@ public class ShapeManager {
     private ArrayList<ShapeObject> shapes = null;
     private ArrayList<ShapeObject> updateShapes = null;
     private ArrayList<ShapeObject> movingShapes = null;
-    private ArrayList<SimpleShapeObject> avatarShapes = null;
+    private ArrayList<ShapeObject> avatarShapes = null;
     
     private ShapeObjectSelectionRect selectionRectangle = null;
     private boolean showDraggingShapes = false;
+    private static final Logger LOGGER =
+            Logger.getLogger(WorldBuilder.class.getName());
     
     /**
      * Creates a new ShapeManager instance.
@@ -34,7 +38,7 @@ public class ShapeManager {
         shapes = new ArrayList<ShapeObject>();
         updateShapes = new ArrayList<ShapeObject>();
         movingShapes = new ArrayList<ShapeObject>();
-        avatarShapes = new ArrayList<SimpleShapeObject>();
+        avatarShapes = new ArrayList<ShapeObject>();
     }
     
     /**
@@ -53,8 +57,8 @@ public class ShapeManager {
          return shape;
     }
     
-    public SimpleShapeObject createAvatar(int x, int y, int radius){
-    	SimpleShapeObject shape = new ShapeObjectAvatar(x,y,radius);
+    public SimpleShapeObject createAvatar(int x, int y, int radius, long id){
+    	ShapeObject shape = new ShapeObjectAvatar(id, x,y,radius);
     	
     	avatarShapes.add(shape);
     	return shape;
@@ -160,12 +164,14 @@ public class ShapeManager {
      */
     public void drawShapes(Graphics2D g2, AffineTransform at, double scale){
                 
-    	for(SimpleShapeObject shape : avatarShapes){
+    	for(ShapeObject shape : avatarShapes){
     		shape.paintOriginal(g2, at, scale);
+                LOGGER.warning("shape " + shape.getName());
     	}
     	
         for(ShapeObject shape : shapes){  
             shape.paintOriginal(g2, at, scale);
+                LOGGER.warning("shape " + shape.getName());
         }
         
         if(showDraggingShapes){
@@ -252,7 +258,7 @@ public class ShapeManager {
     /**
      * Gets an update for a shape from the data package for the given id.
      * 
-     * @param id which needs to be updated.
+     * @param dataObject which is the updated object.
      */
     public void setDataUpdate(DataObjectInterface dataObject) {
         
@@ -262,15 +268,30 @@ public class ShapeManager {
         ShapeObject shape = null;
         long id = dataObject.getID();
         
-        for(ShapeObject s : shapes){
-            if(s.getID() == id){
-                shape = s;
-                break;
+        if(dataObject.isAvatar()){
+            for(ShapeObject s : avatarShapes){
+                 if(s.getID() == id){
+                    shape = s;
+                    break;
+                }
             }
-        }
-        if(shape == null){
-            getCreateUpdate(dataObject);
-            return;
+            if(shape == null){
+                int x = dataObject.getX();
+                int y = dataObject.getY();
+        	createAvatar(x, y, GUISettings.avatarSize, id);
+                return;
+            }
+        }else{
+            for(ShapeObject s : shapes){
+                if(s.getID() == id){
+                    shape = s;
+                    break;
+                }
+            }
+            if(shape == null){
+                getCreateUpdate(dataObject);
+                return;
+            }
         }
         shape.setName(dataObject.getName());
         shape.setLocation(dataObject.getX(), dataObject.getY());
@@ -279,7 +300,7 @@ public class ShapeManager {
     /**
      * Creates a new shape from the data package.
      * 
-     * @param id which needs to be created.
+     * @param dataObject which needs to be created.
      */
     public void getCreateUpdate(DataObjectInterface dataObject){
         
@@ -294,7 +315,7 @@ public class ShapeManager {
             name = name.substring(0, 18)+ "...";
         }
         if(dataObject.isAvatar())
-        	createAvatar(x, y, GUISettings.avatarSize);
+        	createAvatar(x, y, GUISettings.avatarSize, id);
         else
         	createRectangle( x,  y,  width,  height,  id, name);
     }

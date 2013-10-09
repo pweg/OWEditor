@@ -6,26 +6,28 @@ import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
 
-public class ShapeObjectAvatar extends SimpleShapeObject{
+public class ShapeObjectAvatar extends ShapeObject{
 	
-	
-	private Ellipse2D originalShape = null;
+    private long id = 0;
+    private Ellipse2D originalShape = null;
     private Shape transformedShape = null;
     private Paint color = GUISettings.avatarColor;
+    private String name = "";
     
-    ShapeObjectAvatar(int x, int y, int radius){
+    ShapeObjectAvatar(long id, int x, int y, int radius){
     	originalShape = new Ellipse2D.Double(x, y, radius, radius);
+        this.id = id;
     }
 
-	@Override
-	public Shape getTransformedShape() {
-		return transformedShape;
-	}
+    @Override
+    public Shape getTransformedShape() {
+        return transformedShape;
+    }
 
-	@Override
-	public Shape getShape() {
-		return originalShape;
-	}
+    @Override
+    public Shape getShape() {
+        return originalShape;
+    }
 
 	@Override
 	public void paintOriginal(Graphics2D g, AffineTransform at, double scale) {
@@ -65,5 +67,35 @@ public class ShapeObjectAvatar extends SimpleShapeObject{
 	public int getHeight() {
 		return (int)originalShape.getHeight();
 	}
+
+    @Override
+    public long getID() {
+        return id;
+    }
+
+    @Override
+    public void setSelected(boolean select) {
+        throw new UnsupportedOperationException("Not supported yet. setselected."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean isSelected() {
+        throw new UnsupportedOperationException("Not supported yet.isSelected"); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void switchSelection() {
+        throw new UnsupportedOperationException("Not supported yet.switchSelection"); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public String getName() {
+        return name;
+    }
 
 }

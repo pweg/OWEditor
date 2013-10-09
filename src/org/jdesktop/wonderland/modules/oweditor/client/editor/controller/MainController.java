@@ -1,7 +1,7 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.controller;
 
 import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.AdapterControllerMainControllerInterface;
-import org.jdesktop.wonderland.modules.oweditor.client.dummyadapter.AdapterController;
+import org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter.AdapterController;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.controllerinterfaces.MainControllerAdapterInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.controllerinterfaces.MainControllerDataInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.controllerinterfaces.MainControllerGUIInterface;
