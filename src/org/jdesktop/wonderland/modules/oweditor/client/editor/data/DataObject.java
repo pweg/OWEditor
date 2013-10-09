@@ -17,6 +17,7 @@ public class DataObject implements DataObjectInterface{
     private int width = 0;
     private int height = 0;
     private String name = "";
+    private boolean isAvatar = false;
     
     /**
      * Creates an empty object instance.
@@ -159,5 +160,15 @@ public class DataObject implements DataObjectInterface{
     public void setScale(double scale) {
         this.scale = scale;
     }
+
+	@Override
+	public void setIsAvatar(boolean isAvatar) {
+		this.isAvatar = isAvatar;
+	}
+
+	@Override
+	public boolean isAvatar() {
+		return isAvatar;
+	}
 
 }

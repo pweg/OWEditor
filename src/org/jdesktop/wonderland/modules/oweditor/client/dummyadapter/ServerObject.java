@@ -18,6 +18,7 @@ public class ServerObject {
 	
 	protected long id = 0;
 	protected String name = "";
+	protected boolean isAvatar = false;
 	
 	ServerObject(int id, float x, float y, float z, double rotation, 
 			double scale, float width, float height, String name){

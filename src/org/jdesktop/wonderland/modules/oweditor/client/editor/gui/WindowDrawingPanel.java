@@ -77,8 +77,8 @@ public class WindowDrawingPanel extends JPanel implements ChangeListener {
             public void mouseWheelMoved( MouseWheelEvent e )
             {
             	double curScale = scale;
+            	
                 changeScale(GUISettings.zoomSpeed * -(double)e.getWheelRotation());
-                
                 changeViewPort(curScale);
             }
         });
@@ -98,7 +98,6 @@ public class WindowDrawingPanel extends JPanel implements ChangeListener {
     			toAdd < 0)
     		return;
     		
-
         scale += toAdd;
     	
         scale = Math.max(0.0001, scale);
@@ -115,7 +114,7 @@ public class WindowDrawingPanel extends JPanel implements ChangeListener {
      */
     private void changeViewPort(double curScale){
     	Rectangle r = getVisibleRect();
-        
+    	
         double v_x = r.x/(curScale)*scale;
         double v_y = r.y/(curScale)*scale;
         
@@ -149,12 +148,11 @@ public class WindowDrawingPanel extends JPanel implements ChangeListener {
         g2.setRenderingHints(hints);  
         
         AffineTransform at = new AffineTransform();
-        at.translate(translationX, translationY); 
+        at.translate(translationX*scale, translationY*scale); 
         at.scale(scale, scale);  
         g2.setPaint(GUISettings.backgroundColor); 
         
         gc.sm.drawShapes(g2, at, scale);
-        
     } 
     
     /**

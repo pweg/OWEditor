@@ -142,5 +142,22 @@ public interface DataObjectInterface {
      */
     public void setCoordinates(int x, int y, int z);
     
+    /**
+     * Sets the paramater, wheather the object is 
+     * an avatar.
+     * 
+     * @param isAvatar true, if the object is an avatar, 
+     * false otherwise
+     */
+    public void setIsAvatar(boolean isAvatar);
+    
+    /**
+     * Returns weather the object is an avatar or not.
+     * 
+     * @return true, if the object is an avatar, false
+     * otherwise.
+     */
+    public boolean isAvatar();
+    
 
 }

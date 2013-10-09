@@ -10,6 +10,7 @@ import com.jme.bounding.BoundingBox;
 import com.jme.bounding.BoundingSphere;
 import com.jme.bounding.BoundingVolume;
 import com.jme.math.Vector3f;
+import java.util.logging.Logger;
 import org.jdesktop.wonderland.client.cell.Cell;
 import org.jdesktop.wonderland.common.cell.CellTransform;
 
@@ -19,7 +20,10 @@ import org.jdesktop.wonderland.common.cell.CellTransform;
  * @author Patrick
  */
 public class CoordinateTranslator {
+    
     private final int initialScale = AdapterSettings.initalScale;
+    private static final Logger LOGGER =
+            Logger.getLogger(WorldBuilder.class.getName());
     
     /**
      * Transforms the coordinates of a cell into coordinates, the editor
@@ -53,20 +57,22 @@ public class CoordinateTranslator {
             float xExtent = box.xExtent;
             float yExtent = box.yExtent;
             float zExtent = box.zExtent;
-            vector.width = (int) Math.round(xExtent*4*initialScale);
-            vector.height = (int) Math.round(yExtent*4*initialScale);
-            vector.x = (int) Math.round((x-2*xExtent)*initialScale);
-            vector.z = (int) Math.round((y-2*yExtent)*initialScale);
-            vector.y = (int) Math.round((z-2*zExtent)*initialScale);
+            vector.width = (int) Math.round(xExtent*2*initialScale);
+            vector.height = (int) Math.round(zExtent*2*initialScale);
+            LOGGER.warning("Box " + xExtent + " " + zExtent);
+            vector.x = (int) Math.round((x-xExtent)*initialScale);
+            vector.z = (int) Math.round((y-yExtent)*initialScale);
+            vector.y = (int) Math.round((z-zExtent)*initialScale);
             
         }else if(bounds instanceof BoundingSphere){
             BoundingSphere sphere = (BoundingSphere) bounds;
             float radius = sphere.radius;
-            vector.width = (int) Math.round(radius*4*initialScale);
-            vector.height = (int) Math.round(radius*4*initialScale);
-            vector.x = (int) Math.round((x-2*radius)*initialScale);
-            vector.z = (int) Math.round((y-2*radius)*initialScale);
-            vector.y = (int) Math.round((z-2*radius)*initialScale);
+            vector.width = (int) Math.round(radius*2*initialScale);
+            vector.height = (int) Math.round(radius*2*initialScale);
+            LOGGER.warning("sphere " + radius);
+            vector.x = (int) Math.round((x-radius)*initialScale);
+            vector.z = (int) Math.round((y-radius)*initialScale);
+            vector.y = (int) Math.round((z-radius)*initialScale);
         }
         return vector;
     }
@@ -85,16 +91,16 @@ public class CoordinateTranslator {
             float xExtent = box.xExtent;
             float yExtent = box.zExtent;
             float zExtent = box.yExtent;
-            vector.x = (float)(x/initialScale+2*xExtent);
-            vector.z = (float)(y/initialScale+2*yExtent);
-            vector.y = (float)(z/initialScale+2*zExtent);
+            vector.x = (float)(x/initialScale+xExtent);
+            vector.z = (float)(y/initialScale+yExtent);
+            vector.y = (float)(z/initialScale+zExtent);
             
         }else if(bounds instanceof BoundingSphere){
             BoundingSphere sphere = (BoundingSphere) bounds;
             float radius = sphere.radius;
-            vector.x = (float)(x/initialScale+2*radius);
-            vector.z = (float)(y/initialScale+2*radius);
-            vector.y = (float)(z/initialScale+2*radius);
+            vector.x = (float)(x/initialScale+radius);
+            vector.z = (float)(y/initialScale+radius);
+            vector.y = (float)(z/initialScale+radius);
         }
         return vector;
     }

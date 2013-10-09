@@ -77,28 +77,30 @@ public class ServerUpdateAdapter {
      * data. The difference to the serverChangeEvent is that the 
      * data object created here will be stored in the data manager.
      * 
-     * @param id the object id.
-     * @param x the x coordinate of the object.
-     * @param y the y coordinate of the object.
-     * @param z the z coordinate of the object.
-     * @param rotation the rotation of the object.
-     * @param scale the scale of the object.
-     * @param width the width of the object.
-     * @param height the height of the object.
-     * @param name the name of the object.
-     */
-    public void createObject(long id, int x, int y, int z, 
-            double rotation, double scale, int width, int height,
-            String name){
+     * @param sObject the instance of an server object
+     */    
+    public void createObject(ServerObject sObject){
+    	
+    	long id = sObject.id;
+		int x = (int) Math.round(sObject.x*startScale);
+		int y = (int) Math.round(sObject.y*startScale);
+		int z = (int) Math.round(sObject.z*startScale);    		
+		double rotation = sObject.rotation;
+		double scale = sObject.scale;
+		int width = (int) Math.round(sObject.width*startScale);
+		int height = (int) Math.round(sObject.height*startScale);
+		
+		String name = sObject.name;
         
         DataObjectInterface object = dui.createEmptyObject();
         object.setID(id);
-        object.setCoordinates(x, y, z);
+        object.setCoordinates(x, z, y);
         object.setRotation(rotation);
         object.setScale(scale);
         object.setWidth(width);
         object.setHeight(height);
         object.setName(name);
+        object.setIsAvatar(sObject.isAvatar);
         
         if(name != "")
             object.setName(name);

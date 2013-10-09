@@ -22,6 +22,7 @@ public class ShapeManager {
     private ArrayList<ShapeObject> shapes = null;
     private ArrayList<ShapeObject> updateShapes = null;
     private ArrayList<ShapeObject> movingShapes = null;
+    private ArrayList<SimpleShapeObject> avatarShapes = null;
     
     private ShapeObjectSelectionRect selectionRectangle = null;
     private boolean showDraggingShapes = false;
@@ -33,6 +34,7 @@ public class ShapeManager {
         shapes = new ArrayList<ShapeObject>();
         updateShapes = new ArrayList<ShapeObject>();
         movingShapes = new ArrayList<ShapeObject>();
+        avatarShapes = new ArrayList<SimpleShapeObject>();
     }
     
     /**
@@ -49,6 +51,13 @@ public class ShapeManager {
          
          shapes.add(shape);
          return shape;
+    }
+    
+    public SimpleShapeObject createAvatar(int x, int y, int radius){
+    	SimpleShapeObject shape = new ShapeObjectAvatar(x,y,radius);
+    	
+    	avatarShapes.add(shape);
+    	return shape;
     }
     
     /**
@@ -151,6 +160,10 @@ public class ShapeManager {
      */
     public void drawShapes(Graphics2D g2, AffineTransform at, double scale){
                 
+    	for(SimpleShapeObject shape : avatarShapes){
+    		shape.paintOriginal(g2, at, scale);
+    	}
+    	
         for(ShapeObject shape : shapes){  
             shape.paintOriginal(g2, at, scale);
         }
@@ -280,8 +293,10 @@ public class ShapeManager {
         if(name.length() > 20){
             name = name.substring(0, 18)+ "...";
         }
-   
-        createRectangle( x,  y,  width,  height,  id, name);
+        if(dataObject.isAvatar())
+        	createAvatar(x, y, GUISettings.avatarSize);
+        else
+        	createRectangle( x,  y,  width,  height,  id, name);
     }
 
     /**

@@ -31,7 +31,6 @@ public class GUIObserver implements GUIObserverInterface{
         if(object == null)
         	return;
 
-        System.out.println("Observer "+id + " " +x +" " + y +" " + z);
         object.x = (float)x/initialScale;
         object.y = (float)y/initialScale;
         object.z = (float)z/initialScale;        

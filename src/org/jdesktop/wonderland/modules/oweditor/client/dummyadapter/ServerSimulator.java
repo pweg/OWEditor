@@ -43,21 +43,21 @@ public class ServerSimulator {
 		
 
 		createObject(0, (float)0.0, (float)1.0000589, (float)3.4142137, 0, 0, 
-				(float)1.00, (float)1.00, "Block1");
+				(float)1.00, (float)1.00, "Block1", false);
 		createObject(1, (float)0.0, (float)1.0000589, (float)3.4142137, 0, 0, 
-				(float)1.00, (float)1.00, "5");
+				(float)1.00, (float)1.00, "5", false);
 		createObject(2, (float)-8.178859, (float)0.060006, (float)-5.4412746, 0, 0, 
-				(float)1.00, (float)1.00, "Virtuelles Telefon");
+				(float)1.00, (float)1.00, "Virtuelles Telefon", false);
 		createObject(3, (float)-4.331105, (float)1.4452857, (float)-12.422435, 0, 0, 
-				(float)1.00, (float)1.00, "12");
+				(float)1.00, (float)1.00, "12", true);
 		createObject(4, (float)-7.0, (float)-1.0, (float)-10.0, 0, 0, 
-				(float)1.00, (float)1.00, "Audiorekorder");
+				(float)1.00, (float)1.00, "Audiorekorder", false);
 		createObject(5, (float)-20, (float)0.0, (float)2.0, 0, 0, 
-				(float)1.80, (float)1.80, "Block 3");
+				(float)1.80, (float)1.80, "Block 3", false);
 		createObject(6, (float)0.0, (float)0.0, (float)0.0, 0, 0, 
-				(float)1.00, (float)1.00, "nothing");
+				(float)1.00, (float)1.00, "nothing", false);
 		createObject(7, (float)2.9455893, (float)1.000591, (float)1.7263716, 0, 0, 
-				(float)1.00, (float)1.00, "Block2");
+				(float)1.00, (float)1.00, "Block2", false);
 		
 		/*
 		createObject(0, 160, 160, 0, 0, 1, 70, 70, "Chair");
@@ -68,9 +68,12 @@ public class ServerSimulator {
 	}
 
 	public void createObject(int id, float x, float y, float z, double rotation, 
-			double scale, float width, float height, String name){
+			double scale, float width, float height, String name,
+			boolean isAvatar){
 		ServerObject o = new ServerObject(id, x, y, z, rotation, 
 				scale, width, height, name);
+		
+		o.isAvatar = isAvatar;
 		objects.add(o);
 	}
 	

@@ -40,18 +40,21 @@ public class EnvironmentManager {
 		/*
 		 * need to implement, when object is deleted, to find new size, or just stay that way?
 		 */
+		
+		boolean change = false;
 		if(x + width> maxX){
 			maxX = x+ width;
-			if(en != null)
-				en.notifyWidthChange(getMaxWidth());
+			change = true;
 		}
-		else if(x < minX){
+		if(x < minX){
 			minX = x;
+			change = true;
 			if(en != null){
-				en.notifyWidthChange(getMaxWidth());
 				en.notifyMinXChange(x);
 			}
 		}
+		if(change && en != null)
+			en.notifyWidthChange(getMaxWidth());
 	}
 	
 	/**
@@ -64,19 +67,23 @@ public class EnvironmentManager {
 	 * @param y the y coordinate.
 	 * @param height the height of the object.
 	 */
-	public void setY(int y, int heigth){
-		if(y + heigth> maxY){
-			maxY = y + heigth;
-			if(en != null)
-				en.notifyHeightChange(getMaxHeight());
+	public void setY(int y, int height){
+		
+		boolean change = false;
+		
+		if(y + height> maxY){
+			maxY = y + height;
+			change = true;
 		}
-		else if(y < minY){
+		if(y < minY){
 			minY = y;
+			change = true;
 			if(en != null){
-				en.notifyHeightChange(getMaxHeight());
 				en.notifyMinYChange(y);
 			}
 		}
+		if(change && en != null)
+			en.notifyHeightChange(getMaxHeight());
 	}
 	
 	/**
