@@ -40,10 +40,10 @@ public class WorldBuilder {
      */
     private void initShapes() {  
 
-    	ArrayList<ServerObject> objects = ac.ses.getObjects();
-    	
-    	for(ServerObject object : objects){
-    		sua.createObject(object);
-    	}
+        ArrayList<ServerObject> objects = ac.ses.getObjects();
+        
+        for(ServerObject object : objects){
+            sua.createObject(object);
+        }
     }
 }

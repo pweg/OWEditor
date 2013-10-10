@@ -1,5 +1,6 @@
 package org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter;
 
+import org.jdesktop.wonderland.client.cell.CellManager;
 import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.AdapterControllerMainControllerInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.GUIObserverInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.AdapterObserverInterface;
@@ -16,6 +17,7 @@ public class AdapterController implements AdapterControllerMainControllerInterfa
     protected CoordinateTranslator ct = null;
     protected ServerUpdateAdapter sua = null;
     protected TransformListener tl = null;
+    protected CellStatusListener csl = null;
     
     public AdapterController(){
         
@@ -23,10 +25,12 @@ public class AdapterController implements AdapterControllerMainControllerInterfa
 
     @Override
     public void initialize() {
+        ct = new CoordinateTranslator();
         cua = new GUIObserver(this);
         sua = new ServerUpdateAdapter(this);
         tl = new TransformListener(sua);
-        ct = new CoordinateTranslator();
+        csl = new CellStatusListener(sua);
+        CellManager.getCellManager().addCellStatusChangeListener(csl);
     }
 
     @Override

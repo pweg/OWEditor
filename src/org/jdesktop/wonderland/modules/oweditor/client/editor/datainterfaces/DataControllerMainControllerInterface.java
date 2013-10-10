@@ -10,9 +10,9 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.Envi
  */
 public interface DataControllerMainControllerInterface {
     
-	/**
-	 * Initializes the data controller.
-	 */
+    /**
+     * Initializes the data controller.
+     */
     public void initialize();
     
     /**

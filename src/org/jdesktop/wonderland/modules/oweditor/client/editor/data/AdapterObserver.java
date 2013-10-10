@@ -42,4 +42,9 @@ public class AdapterObserver implements AdapterObserverInterface{
         dm.updateTranslation(id, x, y, z);
     }
 
+    @Override
+    public void notifyRemoval(long id) {
+        dm.removeObject(id);
+    }
+
 }

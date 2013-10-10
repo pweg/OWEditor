@@ -49,9 +49,9 @@ public class MainController implements MainControllerDataInterface,
         adapter.getCurrentWorld();
     }
 
-	@Override
-	public void setVisible(boolean visibility) {
-		gui.setVisibility(visibility);
-	}    
+    @Override
+    public void setVisible(boolean visibility) {
+        gui.setVisibility(visibility);
+    }    
 
 }

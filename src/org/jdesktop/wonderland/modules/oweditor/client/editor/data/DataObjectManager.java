@@ -46,12 +46,22 @@ public class DataObjectManager implements DataObjectManagerGUIInterface{
         }
     }
     
+    public void removeObject(long id){
+        data.remove(id);
+        domo.notifyRemoval(id);
+    }
+    
     public void updateTranslation(long id, int x, int y, int z){
         DataObject d = data.get(id);
         
         if(d == null)
             return;
         
+       if(d.getX() != x)
+           dc.em.setX(x, d.getWidth());
+       if(d.getX() != y)
+           dc.em.setY(y, d.getHeight());
+            
         d.setCoordinates(x, y, z);
         domo.notify(d);
     }
@@ -64,36 +74,36 @@ public class DataObjectManager implements DataObjectManagerGUIInterface{
      * the dataObject.
      * 
      * @param dataObject the dataObject which should contain
-     * 		all data.
+     *         all data.
      */
     public void updataData(DataObjectInterface dataObject){
         
         long id = dataObject.getID();
         
         if(!data.containsKey(id))
-        	createNewObject(dataObject);
+            createNewObject(dataObject);
         else{
-	        
-	        int x = dataObject.getX();
-	        int y = dataObject.getY();
-	        int z = dataObject.getZ();
-	        double rotation = dataObject.getRotation();
-	        double scale = dataObject.getScale();
-	        String name = dataObject.getName();
-	        
-	        DataObject d = data.get(id);
-	        
-	        if(d.getX() != x)
-	        	 dc.em.setX(x, d.getWidth());
-	        if(d.getX() != y)
-	       	 	dc.em.setY(y, d.getHeight());
-	        
-	        d.setCoordinates(x, y, z);
-	        d.setRotation(rotation);
-	        d.setScale(scale);
-	        d.setName(name);
-	
-	        domo.notify(d);
+            
+            int x = dataObject.getX();
+            int y = dataObject.getY();
+            int z = dataObject.getZ();
+            double rotation = dataObject.getRotation();
+            double scale = dataObject.getScale();
+            String name = dataObject.getName();
+            
+            DataObject d = data.get(id);
+            
+            if(d.getX() != x)
+                 dc.em.setX(x, d.getWidth());
+            if(d.getX() != y)
+                dc.em.setY(y, d.getHeight());
+            
+            d.setCoordinates(x, y, z);
+            d.setRotation(rotation);
+            d.setScale(scale);
+            d.setName(name);
+    
+            domo.notify(d);
         }
     }
     
@@ -128,7 +138,7 @@ public class DataObjectManager implements DataObjectManagerGUIInterface{
      * @param domo the observer instance.
      */
     public void registerObserver(DataObjectObserverInterface domo) {
-    	this.domo = domo;
+        this.domo = domo;
     }
 
 }

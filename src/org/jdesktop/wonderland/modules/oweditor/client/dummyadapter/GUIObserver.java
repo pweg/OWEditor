@@ -29,13 +29,18 @@ public class GUIObserver implements GUIObserverInterface{
 
         ServerObject object = ac.ses.getObject(id);
         if(object == null)
-        	return;
+            return;
 
         object.x = (float)x/initialScale;
         object.y = (float)y/initialScale;
         object.z = (float)z/initialScale;        
         
-        ac.sua.serverChangeEvent(id);
+        ac.sua.serverTranslationChangeEvent(id);
+    }
+
+    @Override
+    public void notifyRemoval(long id) {
+        ac.sua.serverRemovalEvent(id);
     }
 
 }

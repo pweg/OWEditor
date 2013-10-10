@@ -16,11 +16,11 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.controllerinterfa
  */
 public interface MainControllerAdapterInterface {
     
-	/**
+    /**
      * Sets the visibility of the gui component.
      * 
      * @param visibility true, if the gui should be seen,
-     * 		false otherwise.
+     *         false otherwise.
      */
     public void setVisible(boolean visibility);
     

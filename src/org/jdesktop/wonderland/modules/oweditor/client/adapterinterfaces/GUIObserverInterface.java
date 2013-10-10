@@ -9,16 +9,18 @@ package org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces;
  */
 public interface GUIObserverInterface {
     
-	/**
-	 * Makes a translation update for an object. When only 
-	 * one coordinate changes, all other coordinates have to be
-	 * set as well.
-	 * 
-	 * @param id the object id.
-	 * @param x the x coordinate, the object is moved to.
-	 * @param y the y coordinate, the object is moved to.
-	 * @param z the z coordinate, the object is moved to.
-	 */
+    /**
+     * Makes a translation update for an object. When only 
+     * one coordinate changes, all other coordinates have to be
+     * set as well.
+     * 
+     * @param id the object id.
+     * @param x the x coordinate, the object is moved to.
+     * @param y the y coordinate, the object is moved to.
+     * @param z the z coordinate, the object is moved to.
+     */
     public void notifyTranslation(long id, int x, int y, int z);
+    
+    public void notifyRemoval(long id);
 
 }

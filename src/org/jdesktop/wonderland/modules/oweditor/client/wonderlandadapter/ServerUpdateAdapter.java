@@ -48,8 +48,15 @@ public class ServerUpdateAdapter {
             System.out.println("DataInterface is not in the adapter");
             return;
         }
+        Vector3fInfo vector = null;
         
-        Vector3fInfo vector = ac.ct.transformCoordinates(cell);
+         if(cell instanceof AvatarCell){
+            float avatar_size = AdapterSettings.avatarSizeY/2;
+            Vector3f size = new Vector3f(avatar_size, avatar_size, avatar_size);
+            vector = ac.ct.transformCoordinatesSpecificSize(cell, size);
+        }else{
+            vector = ac.ct.transformCoordinates(cell);
+        }
         
         int x = (int) vector.x;
         int y = (int) vector.y;
@@ -57,7 +64,7 @@ public class ServerUpdateAdapter {
         
         long id = Long.valueOf(cell.getCellID().toString());
         
-        dui.notifyTranslation(id , x, y, z);       
+        dui.notifyTranslation(id , x, y, z);   
     }
     
     /**
@@ -77,7 +84,7 @@ public class ServerUpdateAdapter {
         /*ServerObject so = ac.ses.getObject(id);
         
         if(so == null)
-        	return;
+            return;
         
         int x = so.x;
         int y = so.y;
@@ -105,7 +112,12 @@ public class ServerUpdateAdapter {
      */
     public void setDataUpdateInterface(AdapterObserverInterface dui) {
         this.dui = dui;
+    }
+    
+    public void serverRemovalEvent(Cell cell){
+        long id = idTranslator(cell);
         
+        dui.notifyRemoval(id);
     }
     
     /**
@@ -117,23 +129,18 @@ public class ServerUpdateAdapter {
      */
     public void createObject(Cell cell){
         
+        cell.addTransformChangeListener(ac.tl);
+        
         if(dui == null)
             return;
         
         
         CellTransform transform = cell.getLocalTransform();
         
-        long id = Long.valueOf(cell.getCellID().toString());
+        long id = idTranslator(cell);
         String name = cell.getName();
         float rotation = 0;//transform.getRotation(null);
         float scale = transform.getScaling();
-        Vector3fInfo vector = ac.ct.transformCoordinates(cell);
-        
-        int x = (int) vector.x;
-        int y = (int) vector.y;
-        int z = (int) vector.z;
-        int height = (int) vector.height;
-        int width = (int) vector.width;
         
         MovableComponent movableComponent = cell.getComponent(MovableComponent.class);
         if (movableComponent == null) {
@@ -148,8 +155,25 @@ public class ServerUpdateAdapter {
         }
         
         DataObjectInterface object = dui.createEmptyObject();
+        
+        Vector3fInfo vector = null;
+        
+        if(cell instanceof AvatarCell){
+            float avatar_size = AdapterSettings.avatarSizeY/2;
+            Vector3f size = new Vector3f(avatar_size, avatar_size, avatar_size);
+            vector = ac.ct.transformCoordinatesSpecificSize(cell, size);
+            object.setIsAvatar(true);
+        }else{
+            vector = ac.ct.transformCoordinates(cell);
+        }
+        int x = (int) vector.x;
+        int y = (int) vector.y;
+        int z = (int) vector.z;
+        int height = (int) vector.height;
+        int width = (int) vector.width;
+        
+        
         object.setID(id);
-         
         object.setCoordinates(x, y, z);
         object.setRotation(rotation);
         object.setScale(scale);
@@ -157,16 +181,16 @@ public class ServerUpdateAdapter {
         object.setHeight(height);
         object.setName(name);
         
+        
         if(!name.equals(""))
             object.setName(name);
         
-        if(cell instanceof AvatarCell){
-        	object.setWidth(AdapterSettings.avatarSizeX);
-            object.setHeight(AdapterSettings.avatarSizeY);
-            object.setIsAvatar(true);
-        }
 
         dui.notifyObjectCreation(object);
+    }
+    
+    private long idTranslator(Cell cell){
+        return Long.valueOf(cell.getCellID().toString());
     }
 
 }

@@ -145,10 +145,18 @@ public class SelectAndMoveManager {
      */
     public void selectionPressReleased() {
         
-        ArrayList<ShapeObject> list = gc.sm.getShapesInSelection();
+        ArrayList<ShapeObject> list = gc.sm.getShapesInSelectionRect();
         
         for(ShapeObject shape : list){
             setSelected(shape, true);
+        }
+    }
+    
+    public void deletePressed(){
+        ArrayList<ShapeObject> list = gc.sm.getSelectedShapes();
+        
+        for(ShapeObject shape : list){
+            gc.setObjectRemoval(shape.getID());
         }
     }
 

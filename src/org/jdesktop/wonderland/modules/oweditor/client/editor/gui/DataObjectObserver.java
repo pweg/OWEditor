@@ -7,20 +7,27 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.Data
 import org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter.ServerUpdateAdapter;
 
 public class DataObjectObserver implements 
-								DataObjectObserverInterface{
+                                DataObjectObserverInterface{
 
         private static final Logger LOGGER =
             Logger.getLogger(DataObjectObserver.class.getName());
-	private GUIController gc = null;
-	
-	public DataObjectObserver(GUIController gc){
-		this.gc = gc;
-	}
-	
-	@Override
-	public void notify(DataObjectInterface dataObject) {
-            gc.sm.setDataUpdate(dataObject);
-            gc.drawingPan.repaint();
-	}
+    private GUIController gc = null;
+    
+    public DataObjectObserver(GUIController gc){
+        this.gc = gc;
+    }
+    
+    @Override
+    public void notify(DataObjectInterface dataObject) {
+        gc.sm.setDataUpdate(dataObject);
+        gc.drawingPan.repaint();
+    }
+
+    @Override
+    public void notifyRemoval(long id) {
+        gc.sm.removeShape(id);
+        gc.drawingPan.repaint();
+        
+    }
 
 }

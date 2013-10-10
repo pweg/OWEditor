@@ -31,7 +31,7 @@ public class CoordinateTranslator {
      * are in the center of wonderland cells to the left top of the cell, because
      * the editor uses this sort of coordinates for shapes.
      * 
-     * @param cell: The cell of which the coordinates should be transformed.
+     * @param cell The cell of which the coordinates should be transformed.
      * @return a Vector3fInfo instance, which holds additionaly to x,y,z 
      * coordinates a width and height value as well.
      */
@@ -59,21 +59,65 @@ public class CoordinateTranslator {
             float zExtent = box.zExtent;
             vector.width = (int) Math.round(xExtent*2*initialScale);
             vector.height = (int) Math.round(zExtent*2*initialScale);
-            LOGGER.warning("Box " + xExtent + " " + zExtent);
             vector.x = (int) Math.round((x-xExtent)*initialScale);
             vector.z = (int) Math.round((y-yExtent)*initialScale);
             vector.y = (int) Math.round((z-zExtent)*initialScale);
+            //LOGGER.warning("Box " + cell.getName() + " "+ xExtent + " " + zExtent + " " + x + " " +z + "\n"
+            //+ vector.x + " " + vector.y);
             
         }else if(bounds instanceof BoundingSphere){
             BoundingSphere sphere = (BoundingSphere) bounds;
             float radius = sphere.radius;
             vector.width = (int) Math.round(radius*2*initialScale);
             vector.height = (int) Math.round(radius*2*initialScale);
-            LOGGER.warning("sphere " + radius);
             vector.x = (int) Math.round((x-radius)*initialScale);
             vector.z = (int) Math.round((y-radius)*initialScale);
             vector.y = (int) Math.round((z-radius)*initialScale);
+            //LOGGER.warning("sphere "+ cell.getName() + " " + radius+ " " + x + " " +z + "\n"
+            //+ vector.x + " " + vector.y);
         }
+        return vector;
+    }
+    
+    /**
+     * Transforms the coordinates of a cell into coordinates, the editor
+     * will understand for a given object size. 
+     * That being said, it calculates the coordinates, which
+     * are in the center of wonderland cells to the left top of the cell, because
+     * the editor uses this sort of coordinates for shapes.
+     * 
+     * @param cell The cell of which the coordinates should be transformed.
+     * @param size The whole sizes of the object in x, y and z direction.
+     * @return a Vector3fInfo instance, which holds additionaly to x,y,z 
+     * coordinates a width and height value as well.
+     */
+    public Vector3fInfo transformCoordinatesSpecificSize(Cell cell, Vector3f size){
+        
+        Vector3fInfo vector = new Vector3fInfo();
+        
+        CellTransform transform = cell.getLocalTransform();
+        Vector3f transl = transform.getTranslation(null);
+                
+        float x = transl.x;
+        float y = transl.y;
+        float z = transl.z;
+        
+        
+         /*
+         * Note: OW uses y value for height, not for 2d coordinates,
+         * but editor uses z for height.
+         */
+        float xExtent = size.x;
+        float yExtent = size.y;
+        float zExtent = size.z;
+        vector.width = (int) Math.round(xExtent*2*initialScale);
+        vector.height = (int) Math.round(zExtent*2*initialScale);
+        vector.x = (int) Math.round((x-xExtent)*initialScale);
+        vector.z = (int) Math.round((y-yExtent)*initialScale);
+        vector.y = (int) Math.round((z-zExtent)*initialScale);
+        //LOGGER.warning("Box " + cell.getName() + " "+ xExtent + " " + zExtent + " " + x + " " +z + "\n"
+        //+ vector.x + " " + vector.y);
+            
         return vector;
     }
     

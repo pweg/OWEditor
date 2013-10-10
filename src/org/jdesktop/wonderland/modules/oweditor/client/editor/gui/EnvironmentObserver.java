@@ -4,31 +4,31 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.Envi
 
 public class EnvironmentObserver implements EnvironmentObserverInterface{
 
-	private GUIController gc = null;
-			
-	EnvironmentObserver(GUIController gc){
-		this.gc = gc;
-	}
-	
-	@Override
-	public void notifyWidthChange(int width) {
-		gc.drawingPan.setNewWidth(width);
-	}
+    private GUIController gc = null;
+            
+    EnvironmentObserver(GUIController gc){
+        this.gc = gc;
+    }
+    
+    @Override
+    public void notifyWidthChange(int width) {
+        gc.drawingPan.setNewWidth(width);
+    }
 
-	@Override
-	public void notifyHeightChange(int height) {
-		gc.drawingPan.setNewHeight(height);
-	}
+    @Override
+    public void notifyHeightChange(int height) {
+        gc.drawingPan.setNewHeight(height);
+    }
 
-	@Override
-	public void notifyMinXChange(int x) {
-		gc.drawingPan.setNewMinX(x);
-	}
+    @Override
+    public void notifyMinXChange(int x) {
+        gc.drawingPan.setNewMinX(x);
+    }
 
-	@Override
-	public void notifyMinYChange(int y) {
-		gc.drawingPan.setNewMinY(y);
-	}
-	
+    @Override
+    public void notifyMinYChange(int y) {
+        gc.drawingPan.setNewMinY(y);
+    }
+    
 
 }

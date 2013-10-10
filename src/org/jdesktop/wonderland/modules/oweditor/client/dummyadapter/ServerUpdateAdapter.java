@@ -2,7 +2,7 @@ package org.jdesktop.wonderland.modules.oweditor.client.dummyadapter;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataObjectInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.AdapterObserverInterface;
-import org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter.AdapterSettings;
+import org.jdesktop.wonderland.modules.oweditor.client.dummyadapter.AdapterSettings;
 
 /**
  * This class is used for updating the data package, when
@@ -34,7 +34,7 @@ public class ServerUpdateAdapter {
      * 
      * @param id the object id.
      */
-    public void serverChangeEvent(long id){
+    public void serverTranslationChangeEvent(long id){
         if(dui == null){
             System.out.println("DataInterface is not in the adapter");
             return;
@@ -43,7 +43,7 @@ public class ServerUpdateAdapter {
         ServerObject so = ac.ses.getObject(id);
         
         if(so == null)
-        	return;
+            return;
         
         int x = (int)Math.round(so.x*startScale);
         int y = (int)Math.round(so.y*startScale);
@@ -60,6 +60,10 @@ public class ServerUpdateAdapter {
         object.setName(name);
         
         dui.notifyObjectChange(object);
+    }
+    
+    public void serverRemovalEvent(long id){
+        dui.notifyRemoval(id);
     }
 
     /**
@@ -80,17 +84,17 @@ public class ServerUpdateAdapter {
      * @param sObject the instance of an server object
      */    
     public void createObject(ServerObject sObject){
-    	
-    	long id = sObject.id;
-		int x = (int) Math.round(sObject.x*startScale);
-		int y = (int) Math.round(sObject.y*startScale);
-		int z = (int) Math.round(sObject.z*startScale);    		
-		double rotation = sObject.rotation;
-		double scale = sObject.scale;
-		int width = (int) Math.round(sObject.width*startScale);
-		int height = (int) Math.round(sObject.height*startScale);
-		
-		String name = sObject.name;
+        
+        long id = sObject.id;
+        int x = (int) Math.round(sObject.x*startScale);
+        int y = (int) Math.round(sObject.y*startScale);
+        int z = (int) Math.round(sObject.z*startScale);            
+        double rotation = sObject.rotation;
+        double scale = sObject.scale;
+        int width = (int) Math.round(sObject.width*startScale);
+        int height = (int) Math.round(sObject.height*startScale);
+        
+        String name = sObject.name;
         
         DataObjectInterface object = dui.createEmptyObject();
         object.setID(id);

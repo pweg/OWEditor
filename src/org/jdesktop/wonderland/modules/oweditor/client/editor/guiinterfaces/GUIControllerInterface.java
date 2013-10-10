@@ -5,7 +5,7 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.Dat
 
 
 public interface GUIControllerInterface {
-	
+    
     /**
      * Creates the main frame, which houses
      * the whole editor.

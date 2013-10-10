@@ -5,18 +5,18 @@ import java.awt.Shape;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
-public class mDragAndDropStrategy implements MouseStrategy{
+public class mlDragAndDropStrategy implements MouseStrategy{
 
     private GUIController controller;
     private Point start = new Point();
     private boolean dragging = false;
     
-    public mDragAndDropStrategy(GUIController contr){
-    	controller = contr;
+    public mlDragAndDropStrategy(GUIController contr){
+        controller = contr;
     }
     
-	@Override
-	public void mousePressed(MouseEvent e) {
+    @Override
+    public void mousePressed(MouseEvent e) {
         Point p = e.getPoint();
 
         ArrayList<ShapeObject> shapes = controller.sm.getShapes();
@@ -42,27 +42,27 @@ public class mDragAndDropStrategy implements MouseStrategy{
             start.y = p.y;
             dragging = true;
         }
-	}
+    }
 
-	@Override
-	public void mouseReleased(MouseEvent e) {
-		dragging = false;
+    @Override
+    public void mouseReleased(MouseEvent e) {
+        dragging = false;
         
         if(!controller.samm.collision){
             controller.sm.saveDraggingShapes();
-            controller.setAdapterUpdate();
+            controller.setTranslationUpdate();
         }
         controller.sm.clearDraggingShapes();
         controller.drawingPan.repaint();
-	}
+    }
 
-	@Override
-	public void mouseDragged(MouseEvent e) {
-		if(dragging) {
+    @Override
+    public void mouseDragged(MouseEvent e) {
+        if(dragging) {
             controller.samm.translateShape(e.getX(), e.getY(), start);
             start.x = e.getX();
             start.y = e.getY();
         }
-	}
+    }
 
 }

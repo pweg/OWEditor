@@ -34,7 +34,7 @@ public class ShapeObjectDraggingRect extends ShapeObject{
      * @param width the width of the shape.
      * @param height the height of the shape.
      * @param id the id of the shape. Usually this is the id of the shape which
-     * 			  is copied.
+     *               is copied.
      */
     public ShapeObjectDraggingRect(int x, int y, int width, int height, long id){
         originalShape = new Rectangle (x, y, width, height);
@@ -109,7 +109,7 @@ public class ShapeObjectDraggingRect extends ShapeObject{
      * detected or not.
      * 
      * @param col true, when collision is detected,
-     * 		false otherwise.
+     *         false otherwise.
      */
     public void setCollision(boolean col){
 
@@ -144,8 +144,8 @@ public class ShapeObjectDraggingRect extends ShapeObject{
         return "DraggingShape"+id;
     }
 
-	@Override
-	public void setName(String name) {
-	}
+    @Override
+    public void setName(String name) {
+    }
 
 }

@@ -8,12 +8,12 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces;
  */
 public interface DataObjectManagerGUIInterface {
     
-	/**
-	 * Returns a data object for the given id.
-	 * 
-	 * @param id the id of the object.
-	 * @return a data object, when the id is stored, otherwise null.
-	 */
+    /**
+     * Returns a data object for the given id.
+     * 
+     * @param id the id of the object.
+     * @return a data object, when the id is stored, otherwise null.
+     */
     public DataObjectInterface getObject(long id);
     
     /**

@@ -9,6 +9,7 @@ import org.jdesktop.wonderland.client.ClientContext;
 import org.jdesktop.wonderland.client.cell.Cell;
 import org.jdesktop.wonderland.client.cell.CellCache;
 import org.jdesktop.wonderland.client.cell.MovableComponent;
+import org.jdesktop.wonderland.client.cell.utils.CellUtils;
 import org.jdesktop.wonderland.client.comms.WonderlandSession;
 import org.jdesktop.wonderland.client.login.LoginManager;
 import org.jdesktop.wonderland.common.cell.CellID;
@@ -59,5 +60,19 @@ public class GUIObserver implements GUIObserverInterface{
             cellTransform.setTranslation(translation);
             movableComponent.localMoveRequest(cellTransform);
         }
+    }
+
+    public void notifyRemoval(long id) {
+        WonderlandSession session = LoginManager.getPrimary().getPrimarySession();
+        
+        CellCache cache = ClientContext.getCellCache(session);
+        if (cache == null) {
+            //LOGGER.warning("Unable to find Cell cache for session " + session);
+            return;
+        }
+        
+        CellID cellid = new CellID(id);
+        Cell cell = cache.getCell(cellid);
+        CellUtils.deleteCell(cell);
     }
 }

@@ -13,10 +13,12 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.Dat
  */
 public interface DataObjectObserverInterface {
 
-	/**
-	 * Notifies, that an object has changed.
-	 * 
-	 * @param dataObject the object which has been changed.
-	 */
-	public void notify(DataObjectInterface dataObject);
+    /**
+     * Notifies, that an object has changed.
+     * 
+     * @param dataObject the object which has been changed.
+     */
+    public void notify(DataObjectInterface dataObject);
+    
+    public void notifyRemoval(long id);
 }

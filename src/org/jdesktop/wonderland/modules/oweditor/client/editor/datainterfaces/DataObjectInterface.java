@@ -2,67 +2,67 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces;
 
 public interface DataObjectInterface {
 
-	/**
-	 * Returns the x coordinate of the object.
-	 * 
-	 * @return the x coordinate.
-	 */
+    /**
+     * Returns the x coordinate of the object.
+     * 
+     * @return the x coordinate.
+     */
     public int getX();
     
-	/**
-	 * Returns the y coordinate of the object.
-	 * 
-	 * @return the y coordinate.
-	 */
+    /**
+     * Returns the y coordinate of the object.
+     * 
+     * @return the y coordinate.
+     */
     public int getY();
     
-	/**
-	 * Returns the z coordinate of the object.
-	 * 
-	 * @return the z coordinate.
-	 */
+    /**
+     * Returns the z coordinate of the object.
+     * 
+     * @return the z coordinate.
+     */
     public int getZ();
     
-	/**
-	 * Returns the rotation of the object.
-	 * 
-	 * @return the rotation.
-	 */
+    /**
+     * Returns the rotation of the object.
+     * 
+     * @return the rotation.
+     */
     public double getRotation();
     
-	/**
-	 * Returns the scale of the object.
-	 * 
-	 * @return the scale.
-	 */
+    /**
+     * Returns the scale of the object.
+     * 
+     * @return the scale.
+     */
     public double getScale();
     
     /**
-	 * Returns the width of the object.
-	 * 
-	 * @return the width.
-	 */
+     * Returns the width of the object.
+     * 
+     * @return the width.
+     */
     public int getWidth();
     
     /**
-	 * Returns the height of the object.
-	 * 
-	 * @return the height.
-	 */
+     * Returns the height of the object.
+     * 
+     * @return the height.
+     */
     public int getHeight();
     
     /**
-	 * Returns the id of the object.
-	 * 
-	 * @return the id.
-	 */
+     * Returns the id of the object.
+     * 
+     * @return the id.
+     */
     public long getID();
     
     /**
-	 * Returns the name of the object.
-	 * 
-	 * @return the name.
-	 */
+     * Returns the name of the object.
+     * 
+     * @return the name.
+     */
     public String getName();
     
     /**

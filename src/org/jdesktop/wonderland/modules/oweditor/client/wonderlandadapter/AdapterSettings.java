@@ -14,7 +14,7 @@ public class AdapterSettings {
     
     public static int initalScale = 50;
 
-    public static int avatarSizeX = 25;
-    public static int avatarSizeY = 25;
+    public static float avatarSizeX = 0.5f;
+    public static float avatarSizeY = 0.5f;
     
 }

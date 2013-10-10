@@ -19,16 +19,17 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.GUIC
  */
 public class GUIController implements GUIControllerInterface{
 
-	protected WindowFrame frame = null;
-	protected WindowDrawingPanel drawingPan = null;
-	protected JScrollPane mainScrollPanel = null;
+    protected WindowFrame frame = null;
+    protected WindowDrawingPanel drawingPan = null;
+    protected JScrollPane mainScrollPanel = null;
     protected ShapeManager sm = null;
     protected SelectAndMoveManager samm = null;
     protected DataObjectObserver domo = null;
     protected EnvironmentObserver eo = null;
     
-    private GUIObserverInterface cui = null;
+    
     private DataObjectManagerGUIInterface dmi = null;
+    private AdapterCommunication ac = null;
     
     public GUIController(){
     }
@@ -50,6 +51,7 @@ public class GUIController implements GUIControllerInterface{
         samm = new SelectAndMoveManager(this);
         domo = new DataObjectObserver(this);
         eo = new EnvironmentObserver(this);
+        ac = new AdapterCommunication();
        
         mainScrollPanel = new JScrollPane(drawingPan);
         mainScrollPanel.setWheelScrollingEnabled(false);
@@ -60,21 +62,7 @@ public class GUIController implements GUIControllerInterface{
     public void setVisibility(boolean visibility) {
         frame.setVisible(visibility);        
     }
-    
-    /**
-     * Sets an update for the adapter
-     */
-    public void setAdapterUpdate() {
-       ArrayList<ShapeObject> list = sm.getUpdateShapes();
-       if(list.isEmpty())
-           return;
-       
-       for(ShapeObject shape : list){
-           
-           long id = shape.getID();
-           cui.notifyTranslation(id, shape.getX(), shape.getY(), dmi.getZ(id));
-       }
-    }
+
 
     @Override
     public void registerDataManager(DataObjectManagerGUIInterface dm) {
@@ -83,21 +71,37 @@ public class GUIController implements GUIControllerInterface{
 
     @Override
     public void registerGUIObserver(GUIObserverInterface cui) {
-        this.cui = cui;
+        ac.registerObserver(cui);
     }
 
-	
+    
 
-	@Override
-	public DataObjectObserverInterface getDataObjectObserver() {
-		return domo;
-	}
+    @Override
+    public DataObjectObserverInterface getDataObjectObserver() {
+        return domo;
+    }
 
-	@Override
-	public EnvironmentObserverInterface getEnvironmentObserver() {
-		return eo;
-	}
-
+    @Override
+    public EnvironmentObserverInterface getEnvironmentObserver() {
+        return eo;
+    }
+    
+    public void setTranslationUpdate(){
+        ArrayList<ShapeObject> list = sm.getUpdateShapes();
+        
+        if(list.isEmpty())
+            return;
+        
+        for(ShapeObject shape : list){
+            
+            long id = shape.getID();
+            ac.setTranslationUpdate(id, shape.getX(), shape.getY(), dmi.getZ(id));
+        }
+    }
+    
+    public void setObjectRemoval(long id){
+        ac.setObjectRemoval(id);
+    }
     
 
 }

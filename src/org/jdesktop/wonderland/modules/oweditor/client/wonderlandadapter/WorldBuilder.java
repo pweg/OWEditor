@@ -64,7 +64,6 @@ public class WorldBuilder {
         
         for(Cell cell : cells){
             createDataObject(cell);
-            cell.addTransformChangeListener(ac.tl);
         }
     }
     

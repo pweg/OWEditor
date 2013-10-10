@@ -12,9 +12,9 @@ import java.awt.Paint;
  */
 public class GUISettings {
 
-	/*
-	 * Colors for shapes, background, selection rectangle and so one.
-	 */
+    /*
+     * Colors for shapes, background, selection rectangle and so one.
+     */
     public static Paint backgroundColor = Color.white;
     public static Paint draggingColor = Color.lightGray;
     public static Paint draggingCollisionColor = Color.red;

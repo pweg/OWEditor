@@ -73,14 +73,14 @@ public class WindowDrawingPanel extends JPanel implements ChangeListener {
      * the scale value.
      */
     public void changeScale(double toAdd){
-    	
-    	Rectangle r = getVisibleRect();
-    	if(size.width < r.width/(scale) &&
-    			size.height < r.height/(scale) &&
-    			toAdd < 0)
-    		return;
+        
+        Rectangle r = getVisibleRect();
+        if(size.width < r.width/(scale) &&
+                size.height < r.height/(scale) &&
+                toAdd < 0)
+            return;
     
-    	scale += toAdd;
+        scale += toAdd;
         scale = Math.max(0.01, scale);
 
         repaint();  
@@ -94,8 +94,8 @@ public class WindowDrawingPanel extends JPanel implements ChangeListener {
      * was set.
      */
     public void changeViewPort(double curScale){
-    	Rectangle r = getVisibleRect();
-    	
+        Rectangle r = getVisibleRect();
+        
         double v_x = r.x/(curScale)*scale;
         double v_y = r.y/(curScale)*scale;
         
@@ -114,7 +114,7 @@ public class WindowDrawingPanel extends JPanel implements ChangeListener {
         Point p = new Point(new_x, new_y);
         
         gc.mainScrollPanel.getViewport().setView(gc.mainScrollPanel.getViewport().getView());
-    	gc.mainScrollPanel.getViewport().setViewPosition(p);
+        gc.mainScrollPanel.getViewport().setViewPosition(p);
     }
    
     public void stateChanged(ChangeEvent e) {   
@@ -147,10 +147,10 @@ public class WindowDrawingPanel extends JPanel implements ChangeListener {
      * @param width the new width.
      */
     public void setNewWidth(int width){
-    	size.width = (int)( (width + gc.frame.getWidth()/GUISettings.widthDivisor));
-    	if(size.width < gc.frame.getWidth())
-    		size.width = gc.frame.getWidth();
-    	
+        size.width = (int)( (width + gc.frame.getWidth()/GUISettings.widthDivisor));
+        if(size.width < gc.frame.getWidth())
+            size.width = gc.frame.getWidth();
+        
         revalidate();  
     }
     
@@ -160,10 +160,10 @@ public class WindowDrawingPanel extends JPanel implements ChangeListener {
      * @param height the new height.
      */
     public void setNewHeight(int height){
-		size.height = (int)( (height + gc.frame.getHeight()/GUISettings.heightDivisor));
-    	if(size.height < gc.frame.getHeight())
-    		size.height = gc.frame.getHeight();
-    	
+        size.height = (int)( (height + gc.frame.getHeight()/GUISettings.heightDivisor));
+        if(size.height < gc.frame.getHeight())
+            size.height = gc.frame.getHeight();
+        
         revalidate();  
     }
    
@@ -192,7 +192,7 @@ public class WindowDrawingPanel extends JPanel implements ChangeListener {
      * @param x the new x value.
      */
     public void setNewMinX(int x){
-    	translationX = (-x)+ gc.frame.getWidth()/(GUISettings.widthDivisor*2);
+        translationX = (-x)+ gc.frame.getWidth()/(GUISettings.widthDivisor*2);
     }
     
     /**
@@ -202,7 +202,7 @@ public class WindowDrawingPanel extends JPanel implements ChangeListener {
      * @param y the new y value.
      */
     public void setNewMinY(int y){
-    	translationY = (-y)+ gc.frame.getHeight()/(GUISettings.heightDivisor*2);
+        translationY = (-y)+ gc.frame.getHeight()/(GUISettings.heightDivisor*2);
     }
 
 

@@ -10,20 +10,20 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.controllerinterfac
  *
  */
 public class TestMain {
-	
-	/*
-	 * usefull patterns which probably can be implemented:
-	 * 
-	 *  observer
-	 *  mediator
-	 *  command
-	 *  bridge
-	 *  proxy
-	 * 
-	 */
-	
-	public static void main(String[] args) {
-		MainControllerAdapterInterface main = new MainController();
-		main.setVisible(true);
-	}
+    
+    /*
+     * usefull patterns which probably can be implemented:
+     * 
+     *  observer
+     *  mediator
+     *  command
+     *  bridge
+     *  proxy
+     * 
+     */
+    
+    public static void main(String[] args) {
+        MainControllerAdapterInterface main = new MainController();
+        main.setVisible(true);
+    }
 }

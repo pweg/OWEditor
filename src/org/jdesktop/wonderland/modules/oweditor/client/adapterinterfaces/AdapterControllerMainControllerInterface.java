@@ -12,9 +12,9 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.Ada
  */
 public interface AdapterControllerMainControllerInterface {
     
-	/**
-	 * Initializes the whole adapter.
-	 */
+    /**
+     * Initializes the whole adapter.
+     */
     public void initialize();
     
     /**

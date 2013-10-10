@@ -7,7 +7,7 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
 
 public class ShapeObjectAvatar extends ShapeObject{
-	
+    
     private long id = 0;
     private Ellipse2D originalShape = null;
     private Shape transformedShape = null;
@@ -15,7 +15,7 @@ public class ShapeObjectAvatar extends ShapeObject{
     private String name = "";
     
     ShapeObjectAvatar(long id, int x, int y, int width, int height){
-    	originalShape = new Ellipse2D.Double(x, y, width, height);
+        originalShape = new Ellipse2D.Double(x, y, width, height);
         this.id = id;
     }
 
@@ -29,44 +29,44 @@ public class ShapeObjectAvatar extends ShapeObject{
         return originalShape;
     }
 
-	@Override
-	public void paintOriginal(Graphics2D g, AffineTransform at, double scale) {
-		g.setPaint(color);  
+    @Override
+    public void paintOriginal(Graphics2D g, AffineTransform at, double scale) {
+        g.setPaint(color);  
         
         transformedShape = at.createTransformedShape(originalShape);
         
         g.fill(at.createTransformedShape(originalShape));
-	}
+    }
 
-	@Override
-	public void setLocation(int x, int y) {
-		originalShape.setFrame(x, y, originalShape.getWidth(), originalShape.getHeight());
-	}
+    @Override
+    public void setLocation(int x, int y) {
+        originalShape.setFrame(x, y, originalShape.getWidth(), originalShape.getHeight());
+    }
 
-	@Override
-	public void setTranslation(double distance_x, double distance_y) {
-		
-	}
+    @Override
+    public void setTranslation(double distance_x, double distance_y) {
+        
+    }
 
-	@Override
-	public int getX() {
-		return (int)originalShape.getX();
-	}
+    @Override
+    public int getX() {
+        return (int)originalShape.getX();
+    }
 
-	@Override
-	public int getY() {
-		return (int)originalShape.getY();
-	}
+    @Override
+    public int getY() {
+        return (int)originalShape.getY();
+    }
 
-	@Override
-	public int getWidth() {
-		return (int)originalShape.getWidth();
-	}
+    @Override
+    public int getWidth() {
+        return (int)originalShape.getWidth();
+    }
 
-	@Override
-	public int getHeight() {
-		return (int)originalShape.getHeight();
-	}
+    @Override
+    public int getHeight() {
+        return (int)originalShape.getHeight();
+    }
 
     @Override
     public long getID() {
@@ -80,7 +80,7 @@ public class ShapeObjectAvatar extends ShapeObject{
 
     @Override
     public boolean isSelected() {
-    	return false;
+        return false;
     }
 
     @Override

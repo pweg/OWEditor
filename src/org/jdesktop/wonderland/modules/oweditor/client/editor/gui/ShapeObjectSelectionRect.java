@@ -105,9 +105,9 @@ public class ShapeObjectSelectionRect extends SimpleShapeObject{
         return originalShape.height;
     }
 
-	@Override
-	public Shape getTransformedShape() {
-		return transformedShape;
-	}
+    @Override
+    public Shape getTransformedShape() {
+        return transformedShape;
+    }
 
 }

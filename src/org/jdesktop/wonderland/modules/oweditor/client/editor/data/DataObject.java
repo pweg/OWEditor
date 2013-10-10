@@ -161,14 +161,14 @@ public class DataObject implements DataObjectInterface{
         this.scale = scale;
     }
 
-	@Override
-	public void setIsAvatar(boolean isAvatar) {
-		this.isAvatar = isAvatar;
-	}
+    @Override
+    public void setIsAvatar(boolean isAvatar) {
+        this.isAvatar = isAvatar;
+    }
 
-	@Override
-	public boolean isAvatar() {
-		return isAvatar;
-	}
+    @Override
+    public boolean isAvatar() {
+        return isAvatar;
+    }
 
 }

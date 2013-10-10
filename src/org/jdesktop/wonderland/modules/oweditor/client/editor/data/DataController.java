@@ -24,7 +24,7 @@ public class DataController implements DataControllerMainControllerInterface {
     
     @Override
     public void initialize() {
-    	em = new EnvironmentManager();
+        em = new EnvironmentManager();
         dm = new DataObjectManager(this);
         du = new AdapterObserver(dm);
         
@@ -40,17 +40,17 @@ public class DataController implements DataControllerMainControllerInterface {
         return dm;
     }
 
-	@Override
-	public void registerDataObjectObserver(
-			DataObjectObserverInterface domo) {
-		dm.registerObserver(domo);
-		
-	}
+    @Override
+    public void registerDataObjectObserver(
+            DataObjectObserverInterface domo) {
+        dm.registerObserver(domo);
+        
+    }
 
-	@Override
-	public void registerEnvironmentObserver(EnvironmentObserverInterface en) {
-		em.registerObserver(en);
-	}
+    @Override
+    public void registerEnvironmentObserver(EnvironmentObserverInterface en) {
+        em.registerObserver(en);
+    }
 
 
 }

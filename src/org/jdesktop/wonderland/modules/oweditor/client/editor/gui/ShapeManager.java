@@ -20,7 +20,7 @@ import org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter.WorldBu
  *
  */
 public class ShapeManager {
-	
+    
     private ArrayList<ShapeObject> shapes = null;
     private ArrayList<ShapeObject> updateShapes = null;
     private ArrayList<ShapeObject> movingShapes = null;
@@ -58,10 +58,10 @@ public class ShapeManager {
     }
     
     public SimpleShapeObject createAvatar(int x, int y, int width, int height, long id){
-    	ShapeObject shape = new ShapeObjectAvatar(id, x,y,width, height);
-    	
-    	avatarShapes.add(shape);
-    	return shape;
+        ShapeObject shape = new ShapeObjectAvatar(id, x,y,width, height);
+        
+        avatarShapes.add(shape);
+        return shape;
     }
     
     /**
@@ -136,7 +136,7 @@ public class ShapeManager {
      * @return an arraylist with shape objects. If
      * no object is in the selection rectangle, it returns an empty list.
      */
-    public ArrayList<ShapeObject> getShapesInSelection(){
+    public ArrayList<ShapeObject> getShapesInSelectionRect(){
         ArrayList<ShapeObject> list = new ArrayList<ShapeObject>();
         
         if(selectionRectangle == null)
@@ -164,10 +164,10 @@ public class ShapeManager {
      */
     public void drawShapes(Graphics2D g2, AffineTransform at, double scale){
                 
-    	for(ShapeObject shape : avatarShapes){
-    		shape.paintOriginal(g2, at, scale);
-    	}
-    	
+        for(ShapeObject shape : avatarShapes){
+            shape.paintOriginal(g2, at, scale);
+        }
+        
         for(ShapeObject shape : shapes){  
             shape.paintOriginal(g2, at, scale);
         }
@@ -252,6 +252,21 @@ public class ShapeManager {
         updateShapes.clear();
         return list;
     }
+    
+    /**
+     * Removes a shape.
+     * 
+     * @param id the id of the shape which should be removed.
+     */
+    public void removeShape(long id){
+        
+        for(ShapeObject s : shapes){
+            if(s.getID() == id){
+                shapes.remove(s);
+                break;
+            }
+        }
+    }
 
     /**
      * Gets an update for a shape from the data package for the given id.
@@ -261,7 +276,7 @@ public class ShapeManager {
     public void setDataUpdate(DataObjectInterface dataObject) {
         
         if(dataObject == null)
-        	return;
+            return;
         
         ShapeObject shape = null;
         long id = dataObject.getID();
@@ -278,7 +293,7 @@ public class ShapeManager {
                 int y = dataObject.getY();
                 int width = dataObject.getWidth();
                 int height = dataObject.getHeight();
-        	createAvatar(x, y, width, height, id);
+            createAvatar(x, y, width, height, id);
                 return;
             }
         }else{
@@ -304,7 +319,7 @@ public class ShapeManager {
      */
     public void getCreateUpdate(DataObjectInterface dataObject){
         
-    	long id = dataObject.getID();
+        long id = dataObject.getID();
         int x = dataObject.getX();
         int y = dataObject.getY();
         int width = dataObject.getWidth();
@@ -315,9 +330,9 @@ public class ShapeManager {
             name = name.substring(0, 18)+ "...";
         }
         if(dataObject.isAvatar())
-        	createAvatar(x, y, width, height, id);
+            createAvatar(x, y, width, height, id);
         else
-        	createRectangle( x,  y,  width,  height,  id, name);
+            createRectangle( x,  y,  width,  height,  id, name);
     }
 
     /**
@@ -350,18 +365,28 @@ public class ShapeManager {
                 areaA.intersect(new Area(selected.getShape()));
 
                 if(selected instanceof ShapeObjectDraggingRect){
-                	ShapeObjectDraggingRect r = (ShapeObjectDraggingRect) selected;
-	                if(!areaA.isEmpty()){
-	                    is_collision = true;
-	                    r.setCollision(true);
-	                    break;
-	                }else{
-	                    r.setCollision(false);
-	                }
+                    ShapeObjectDraggingRect r = (ShapeObjectDraggingRect) selected;
+                    if(!areaA.isEmpty()){
+                        is_collision = true;
+                        r.setCollision(true);
+                        break;
+                    }else{
+                        r.setCollision(false);
+                    }
                 }
             }
         }
         return is_collision;
+    }
+    
+    public ArrayList<ShapeObject> getSelectedShapes(){
+        ArrayList<ShapeObject> list = new ArrayList<ShapeObject>();
+        
+        for(ShapeObject s : shapes){
+            if(s.isSelected())
+                list.add(s);
+        }
+        return list;
     }
     
 }

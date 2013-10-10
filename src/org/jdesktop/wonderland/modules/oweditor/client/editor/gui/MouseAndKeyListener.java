@@ -14,17 +14,17 @@ import javax.swing.event.MouseInputAdapter;
 public class MouseAndKeyListener extends MouseInputAdapter implements KeyListener,
                                     MouseWheelListener{
 
-	private MouseStrategy strategy = null;
+    private MouseStrategy strategy = null;
     private boolean shiftPressed = false;
     private GUIController gc = null;
     
     MouseAndKeyListener(GUIController gc){
-    	this.gc = gc;
+        this.gc = gc;
     }
     
     public void mousePressed(MouseEvent e) {
-    	if(shiftPressed){
-    		if(e.getButton() ==  MouseEvent.BUTTON1){
+        if(shiftPressed){
+            if(e.getButton() ==  MouseEvent.BUTTON1){
 
                 Point p = e.getPoint();
                 ArrayList<ShapeObject> shapes = gc.sm.getShapes();
@@ -43,27 +43,27 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
                  * shift and selection rectangle to add/remove from 
                  * selection.
                  */
-    			
-    		}
-    	}else{
-    		 if(e.getButton() ==  MouseEvent.BUTTON1){
+                
+            }
+        }else{
+             if(e.getButton() ==  MouseEvent.BUTTON1){
                  Point p = e.getPoint();
-    	            
-    	         ShapeObject shape = gc.sm.getShapeSuroundingPoint(p);
-    	            
-    	         if(shape != null){
-    	             strategy = new mDragAndDropStrategy(gc);
-    	             strategy.mousePressed(e);
-    	         }else{
-    	             strategy = new mSelectionStrategy(gc);
+                    
+                 ShapeObject shape = gc.sm.getShapeSuroundingPoint(p);
+                    
+                 if(shape != null){
+                     strategy = new mlDragAndDropStrategy(gc);
                      strategy.mousePressed(e);
-    	         }
-    		 }
-    		 else if (e.getButton() ==  MouseEvent.BUTTON2 || e.getButton() ==  MouseEvent.BUTTON3){
-    			 strategy = new mPanStrategy(gc.drawingPan);
+                 }else{
+                     strategy = new mlSelectionStrategy(gc);
+                     strategy.mousePressed(e);
+                 }
+             }
+             else if (e.getButton() ==  MouseEvent.BUTTON2 || e.getButton() ==  MouseEvent.BUTTON3){
+                 strategy = new mlPanStrategy(gc.drawingPan);
                  strategy.mousePressed(e);
-    		 }
-    	}
+             }
+        }
     }
     
     @Override
@@ -93,33 +93,35 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
     public void mouseDragged(MouseEvent e) {
         if(strategy == null)
             return;
-    	strategy.mouseDragged(e);
+        strategy.mouseDragged(e);
     }
     
     public void mouseReleased(MouseEvent e){
         if(strategy == null)
             return;
-    	strategy.mouseReleased(e);
+        strategy.mouseReleased(e);
     }
     
-	@Override
-	public void keyTyped(KeyEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public void keyTyped(KeyEvent e) {
+        // TODO Auto-generated method stub
+        
+    }
 
-	@Override
-	public void keyPressed(KeyEvent e) {
-		if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
+    @Override
+    public void keyPressed(KeyEvent e) {
+        if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
             shiftPressed = true;
         }
-	}
+    }
 
-	@Override
-	public void keyReleased(KeyEvent e) {
-		 if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
-	            shiftPressed = false;
-	        }
-	}
+    @Override
+    public void keyReleased(KeyEvent e) {
+        if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
+                shiftPressed = false;
+        }else if( e.getKeyCode() == KeyEvent.VK_DELETE){
+            gc.samm.deletePressed();
+        }
+    }
 
 }
