@@ -5,11 +5,12 @@ import java.util.ArrayList;
 
 /**
  * This class handles the pick up and drag feature for shapes,
- * as well as their selection.
+ * as well as their selection and forwards changes for key presses
+ * to the ShapeManager.
  * @author Patrick
  *
  */
-public class SelectAndMoveManager {
+public class MouseAndKeyManager {
 
     private ArrayList<ShapeObject> selectedShapes = null;
     private GUIController gc = null;
@@ -17,7 +18,7 @@ public class SelectAndMoveManager {
     private MouseAndKeyListener mkListener = null;
     protected boolean collision = false;
     
-    public SelectAndMoveManager(GUIController contr){
+    public MouseAndKeyManager(GUIController contr){
         selectedShapes = new ArrayList<ShapeObject>();     
         
         gc = contr;
@@ -143,7 +144,7 @@ public class SelectAndMoveManager {
      * Searches for shapes which are in the selection rectangle and
      * adds them to the selection.
      */
-    public void selectionPressReleased() {
+    public void selectionRectReleased() {
         
         ArrayList<ShapeObject> list = gc.sm.getShapesInSelectionRect();
         
@@ -152,6 +153,21 @@ public class SelectAndMoveManager {
         }
     }
     
+    /**
+     * Searches for shapes which are in the selection rectangle and 
+     * switches their selection.
+     */
+    public void selectionRectShiftReleased(){
+        ArrayList<ShapeObject> list = gc.sm.getShapesInSelectionRect();
+
+        for(ShapeObject shape : list){
+            switchSelection(shape);
+        }
+    }
+    
+    /**
+     * Deletes all shapes, which are in the current selection.
+     */
     public void deletePressed(){
         ArrayList<ShapeObject> list = gc.sm.getSelectedShapes();
         

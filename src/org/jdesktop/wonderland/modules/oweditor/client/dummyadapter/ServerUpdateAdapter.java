@@ -48,20 +48,15 @@ public class ServerUpdateAdapter {
         int x = (int)Math.round(so.x*startScale);
         int y = (int)Math.round(so.y*startScale);
         int z = (int)Math.round(so.z*startScale);
-        double rotation = so.rotation;
-        double scale = so.scale;
-        String name = so.name;
         
-        DataObjectInterface object = dui.createEmptyObject();
-        object.setID(id);
-        object.setCoordinates(x, y, z);
-        object.setRotation(rotation);
-        object.setScale(scale);
-        object.setName(name);
-        
-        dui.notifyObjectChange(object);
+        dui.notifyTranslation(id, x, y, z);
     }
     
+    /**
+     * This is called, when an object on the server was removed.
+     * 
+     * @param id the id of the removed object.
+     */
     public void serverRemovalEvent(long id){
         dui.notifyRemoval(id);
     }
@@ -111,8 +106,6 @@ public class ServerUpdateAdapter {
             object.setWidth(width);
             object.setHeight(height);
         }
-        
-        
         
         if(name != "")
             object.setName(name);

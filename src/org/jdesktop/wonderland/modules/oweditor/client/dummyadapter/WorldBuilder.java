@@ -2,8 +2,6 @@ package org.jdesktop.wonderland.modules.oweditor.client.dummyadapter;
 
 import java.util.ArrayList;
 
-import org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter.AdapterSettings;
-
 
 /**
  * Gets every object on the server and sends the data from the object

@@ -1,16 +1,20 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.gui;
 
 import java.awt.Point;
-import java.awt.Shape;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
-import java.util.ArrayList;
 
 import javax.swing.event.MouseInputAdapter;
 
+/**
+ * This class is used to catch mouse and key events.
+ * 
+ * @author Patrick
+ *
+ */
 public class MouseAndKeyListener extends MouseInputAdapter implements KeyListener,
                                     MouseWheelListener{
 
@@ -25,25 +29,17 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
     public void mousePressed(MouseEvent e) {
         if(shiftPressed){
             if(e.getButton() ==  MouseEvent.BUTTON1){
-
+                
                 Point p = e.getPoint();
-                ArrayList<ShapeObject> shapes = gc.sm.getShapes();
+                ShapeObject shape = gc.sm.getShapeSuroundingPoint(p);
                 
-                for(ShapeObject shape_obj : shapes){
-                    Shape shape = shape_obj.getTransformedShape();
-                    
-                    if(shape.contains(p)) {
-                        gc.samm.switchSelection(shape_obj);
-                        gc.drawingPan.repaint();
-                        break;
-                    }
-                }
-                /*
-                 * Add a selection rectangle strategy here, for using 
-                 * shift and selection rectangle to add/remove from 
-                 * selection.
-                 */
-                
+                if(shape != null){
+                    gc.samm.switchSelection(shape);
+                    gc.drawingPan.repaint();
+                }else{
+                    strategy = new mlSelectionRectShiftStrategy(gc);
+                    strategy.mousePressed(e);
+                }                
             }
         }else{
              if(e.getButton() ==  MouseEvent.BUTTON1){
@@ -55,7 +51,7 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
                      strategy = new mlDragAndDropStrategy(gc);
                      strategy.mousePressed(e);
                  }else{
-                     strategy = new mlSelectionStrategy(gc);
+                     strategy = new mlSelectionRectStrategy(gc);
                      strategy.mousePressed(e);
                  }
              }

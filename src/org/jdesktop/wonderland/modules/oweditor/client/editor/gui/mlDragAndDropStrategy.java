@@ -5,6 +5,14 @@ import java.awt.Shape;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
+/**
+ * This mouse listener strategy is used for dragging
+ * objects and creates the dragging shapes in the 
+ * ShapeManager.
+ * 
+ * @author Patrick
+ *
+ */
 public class mlDragAndDropStrategy implements MouseStrategy{
 
     private GUIController controller;

@@ -6,7 +6,13 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.JPanel;
 
-
+/**
+ * This mouse listener strategy is used for 
+ * panning.
+ * 
+ * @author Patrick
+ *
+ */
 public class mlPanStrategy implements MouseStrategy{
 
     private Rectangle visiRect = null;  

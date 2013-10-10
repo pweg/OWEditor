@@ -23,7 +23,7 @@ public class GUIController implements GUIControllerInterface{
     protected WindowDrawingPanel drawingPan = null;
     protected JScrollPane mainScrollPanel = null;
     protected ShapeManager sm = null;
-    protected SelectAndMoveManager samm = null;
+    protected MouseAndKeyManager samm = null;
     protected DataObjectObserver domo = null;
     protected EnvironmentObserver eo = null;
     
@@ -48,7 +48,7 @@ public class GUIController implements GUIControllerInterface{
     private void initiallize(){
         sm = new ShapeManager();
         drawingPan = new WindowDrawingPanel(this);
-        samm = new SelectAndMoveManager(this);
+        samm = new MouseAndKeyManager(this);
         domo = new DataObjectObserver(this);
         eo = new EnvironmentObserver(this);
         ac = new AdapterCommunication();

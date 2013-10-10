@@ -1,24 +1,23 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.gui;
 
 import java.awt.Point;
-import java.awt.Shape;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
 
-
-public class mlSelectionStrategy implements MouseStrategy{
-    
-
-    private static final byte NOSELSPAN = 0;
-    private static final byte SELFIRST = 1;
-    private static final byte SELSPAN = 2;
-    
+/**
+ * This mouse listener strategy is used, when a selection rectangle
+ * should be created and NO other key is pressed.
+ * 
+ * @author Patrick
+ *
+ */
+public class mlSelectionRectStrategy implements MouseStrategy{
+        
     private GUIController controller = null;
-    private byte selectionRect = NOSELSPAN;
+    private boolean selectionRect = false;
     
     private Point start = new Point();
     
-    mlSelectionStrategy(GUIController contr){
+    mlSelectionRectStrategy(GUIController contr){
         controller = contr;
     }
 
@@ -29,7 +28,7 @@ public class mlSelectionStrategy implements MouseStrategy{
             
         start.x = e.getX();
         start.y = e.getY();
-        selectionRect = SELFIRST;
+        selectionRect = true;
             
         controller.drawingPan.repaint();
         
@@ -37,10 +36,10 @@ public class mlSelectionStrategy implements MouseStrategy{
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        if(selectionRect != NOSELSPAN){
-               selectionRect = NOSELSPAN;
+        if(selectionRect != false){
+               selectionRect = false;
                
-               controller.samm.selectionPressReleased();
+               controller.samm.selectionRectReleased();
                
                controller.sm.removeSelectionRect();
                controller.drawingPan.repaint();
@@ -49,7 +48,7 @@ public class mlSelectionStrategy implements MouseStrategy{
 
     @Override
     public void mouseDragged(MouseEvent e) {
-         if(selectionRect != NOSELSPAN){
+         if(selectionRect != false){
                 Point end = new Point(e.getX(), e.getY());
                
                 controller.samm.resizeSelectionRect(start, end);
