@@ -21,13 +21,16 @@ import org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter.WorldBu
  */
 public class ShapeManager {
     
+    private ShapeFactory factory = null;
+    
     private ArrayList<ShapeObject> shapes = null;
     private ArrayList<ShapeObject> updateShapes = null;
-    private ArrayList<ShapeObject> movingShapes = null;
+    private ArrayList<ShapeObject> draggingShapes = null;
     private ArrayList<ShapeObject> avatarShapes = null;
     
     private ShapeObjectSelectionRect selectionRectangle = null;
     private boolean showDraggingShapes = false;
+    
     private static final Logger LOGGER =
             Logger.getLogger(WorldBuilder.class.getName());
     
@@ -35,33 +38,12 @@ public class ShapeManager {
      * Creates a new ShapeManager instance.
      */
     public ShapeManager(){
+        factory = new ShapeFactory();
+        
         shapes = new ArrayList<ShapeObject>();
         updateShapes = new ArrayList<ShapeObject>();
-        movingShapes = new ArrayList<ShapeObject>();
+        draggingShapes = new ArrayList<ShapeObject>();
         avatarShapes = new ArrayList<ShapeObject>();
-    }
-    
-    /**
-     * Creates a new Rectangle ShapeObject.
-     * 
-     * @param x the x coordinate.
-     * @param y the y coordinate.
-     * @param width the width of the rectangle.
-     * @param height the height of the rectangle.
-     * @param id the id for the rectangle, which has to be the same id as in the virtual world.
-     */
-    public ShapeObject createRectangle(int x, int y, int width, int height, long id, String name){
-         ShapeObject shape = new ShapeObjectRectangle(x,y,width, height, id, name);
-         
-         shapes.add(shape);
-         return shape;
-    }
-    
-    public SimpleShapeObject createAvatar(int x, int y, int width, int height, long id){
-        ShapeObject shape = new ShapeObjectAvatar(id, x,y,width, height);
-        
-        avatarShapes.add(shape);
-        return shape;
     }
     
     /**
@@ -173,7 +155,7 @@ public class ShapeManager {
         }
         
         if(showDraggingShapes){
-            for(ShapeObject shape : movingShapes){  
+            for(ShapeObject shape : draggingShapes){  
                 shape.paintOriginal(g2, at, scale);
             }
         }
@@ -193,13 +175,13 @@ public class ShapeManager {
     public void translateDraggingShapes(ArrayList<ShapeObject> selectedShapes, double distance_x, double distance_y){
         showDraggingShapes = true;
         
-        if(movingShapes.isEmpty()){
+        if(draggingShapes.isEmpty()){
             for(ShapeObject shape: selectedShapes){
                 createDraggingShape(shape);
             }
         }
         
-        for(ShapeObject selShape : movingShapes){
+        for(ShapeObject selShape : draggingShapes){
             selShape.setTranslation(distance_x, distance_y);
         }
     }
@@ -216,10 +198,16 @@ public class ShapeManager {
         int width = shape.getWidth();
         int height = shape.getHeight();
         long id = shape.getID();
+        String name = shape.getName();
         
         if(shape instanceof ShapeObjectRectangle){
-            ShapeObjectDraggingRect newShape = new ShapeObjectDraggingRect(x,y,width,height, id);
-            movingShapes.add(newShape); 
+            ShapeObject newShape = factory.createShapeObject(ShapeFactory.DRAGGINGRECTANGLE, x,y,
+                    width,height, id, name);
+            draggingShapes.add(newShape); 
+        }else if(shape instanceof ShapeObjectEllipse){
+            ShapeObject newShape = factory.createShapeObject(ShapeFactory.DRAGGINGRELLIPSE, x,y,
+                    width,height, id, name);
+            draggingShapes.add(newShape); 
         }
     }
 
@@ -227,7 +215,7 @@ public class ShapeManager {
      * Removes all dragging shapes.
      */
     public void clearDraggingShapes() {
-        movingShapes.clear();
+        draggingShapes.clear();
         showDraggingShapes = false;
     }
 
@@ -236,7 +224,7 @@ public class ShapeManager {
      * This is done, if the moving was successful.
      */
     public void saveDraggingShapes() {
-        for(ShapeObject shape : movingShapes){
+        for(ShapeObject shape : draggingShapes){
             updateShapes.add(shape);
         }
     }
@@ -281,7 +269,7 @@ public class ShapeManager {
         ShapeObject shape = null;
         long id = dataObject.getID();
         
-        if(dataObject.isAvatar()){
+        if(dataObject.getType() == DataObjectInterface.AVATAR){
             for(ShapeObject s : avatarShapes){
                  if(s.getID() == id){
                     shape = s;
@@ -293,7 +281,12 @@ public class ShapeManager {
                 int y = dataObject.getY();
                 int width = dataObject.getWidth();
                 int height = dataObject.getHeight();
-            createAvatar(x, y, width, height, id);
+                
+                String name = dataObject.getName();
+                ShapeObject s = factory.createShapeObject(ShapeFactory.AVATAR, 
+                        x, y, width, height, id, name);
+                avatarShapes.add(s);
+                
                 return;
             }
         }else{
@@ -329,10 +322,15 @@ public class ShapeManager {
         if(name.length() > 20){
             name = name.substring(0, 18)+ "...";
         }
-        if(dataObject.isAvatar())
-            createAvatar(x, y, width, height, id);
-        else
-            createRectangle( x,  y,  width,  height,  id, name);
+        if(dataObject.getType() == DataObjectInterface.AVATAR){
+            ShapeObject shape = factory.createShapeObject(ShapeFactory.AVATAR, 
+                    x, y, width, height, id, name);
+            avatarShapes.add(shape);
+        }else{
+            ShapeObject shape = factory.createShapeObject(ShapeFactory.RECTANGLE, 
+                    x, y, width, height, id, name);
+            shapes.add(shape);
+        }
     }
 
     /**
@@ -347,7 +345,7 @@ public class ShapeManager {
         
         for(ShapeObject shape : shapes){
             boolean isMoving = false;
-            for(ShapeObject selected : movingShapes){
+            for(ShapeObject selected : draggingShapes){
                 if(selected.getID() == shape.getID()){
                     isMoving = true;
                     break;
@@ -359,7 +357,7 @@ public class ShapeManager {
         }
 
         boolean is_collision = false;
-        for(ShapeObject selected : movingShapes){
+        for(ShapeObject selected : draggingShapes){
             for(ShapeObject shape : shapes2){
                 Area areaA = new Area(shape.getShape());
                 areaA.intersect(new Area(selected.getShape()));

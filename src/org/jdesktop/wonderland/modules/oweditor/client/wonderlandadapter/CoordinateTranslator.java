@@ -37,46 +37,27 @@ public class CoordinateTranslator {
      */
     public Vector3fInfo transformCoordinates(Cell cell){
         
-        Vector3fInfo vector = new Vector3fInfo();
-        
-        CellTransform transform = cell.getLocalTransform();
-        Vector3f transl = transform.getTranslation(null);
-        
-        float x = transl.x;
-        float y = transl.y;
-        float z = transl.z;
-        
         BoundingVolume bounds = cell.getWorldBounds();
         
-         /*
-         * Note: OW uses y value for height, not for 2d coordinates,
-         * but editor uses z for height.
-         */
         if(bounds instanceof BoundingBox){
             BoundingBox box = (BoundingBox) bounds;
             float xExtent = box.xExtent;
             float yExtent = box.yExtent;
             float zExtent = box.zExtent;
-            vector.width = (int) Math.round(xExtent*2*initialScale);
-            vector.height = (int) Math.round(zExtent*2*initialScale);
-            vector.x = (int) Math.round((x-xExtent)*initialScale);
-            vector.z = (int) Math.round((y-yExtent)*initialScale);
-            vector.y = (int) Math.round((z-zExtent)*initialScale);
+            Vector3f vector = new Vector3f(xExtent, yExtent, zExtent);
+            return transformCoordinatesSpecificSize(cell, vector);
             //LOGGER.warning("Box " + cell.getName() + " "+ xExtent + " " + zExtent + " " + x + " " +z + "\n"
             //+ vector.x + " " + vector.y);
             
         }else if(bounds instanceof BoundingSphere){
             BoundingSphere sphere = (BoundingSphere) bounds;
             float radius = sphere.radius;
-            vector.width = (int) Math.round(radius*2*initialScale);
-            vector.height = (int) Math.round(radius*2*initialScale);
-            vector.x = (int) Math.round((x-radius)*initialScale);
-            vector.z = (int) Math.round((y-radius)*initialScale);
-            vector.y = (int) Math.round((z-radius)*initialScale);
+            Vector3f vector = new Vector3f(radius, radius, radius);
+            return transformCoordinatesSpecificSize(cell, vector);
             //LOGGER.warning("sphere "+ cell.getName() + " " + radius+ " " + x + " " +z + "\n"
             //+ vector.x + " " + vector.y);
         }
-        return vector;
+        return null;
     }
     
     /**
@@ -101,7 +82,6 @@ public class CoordinateTranslator {
         float x = transl.x;
         float y = transl.y;
         float z = transl.z;
-        
         
          /*
          * Note: OW uses y value for height, not for 2d coordinates,

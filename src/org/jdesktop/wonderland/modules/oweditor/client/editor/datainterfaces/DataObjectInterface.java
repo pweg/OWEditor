@@ -1,6 +1,10 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces;
 
 public interface DataObjectInterface {
+    
+    public static final byte AVATAR = 0;
+    public static final byte RECTANGLE = 1;
+    public static final byte CIRCLE  = 2;
 
     /**
      * Returns the x coordinate of the object.
@@ -149,7 +153,7 @@ public interface DataObjectInterface {
      * @param isAvatar true, if the object is an avatar, 
      * false otherwise
      */
-    public void setIsAvatar(boolean isAvatar);
+    public void setType(byte type);
     
     /**
      * Returns weather the object is an avatar or not.
@@ -157,7 +161,7 @@ public interface DataObjectInterface {
      * @return true, if the object is an avatar, false
      * otherwise.
      */
-    public boolean isAvatar();
+    public byte getType();
     
 
 }

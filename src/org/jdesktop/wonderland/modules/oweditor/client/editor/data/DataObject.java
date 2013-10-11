@@ -17,7 +17,7 @@ public class DataObject implements DataObjectInterface{
     private int width = 0;
     private int height = 0;
     private String name = "";
-    private boolean isAvatar = false;
+    private byte type = this.RECTANGLE;
     
     /**
      * Creates an empty object instance.
@@ -162,13 +162,13 @@ public class DataObject implements DataObjectInterface{
     }
 
     @Override
-    public void setIsAvatar(boolean isAvatar) {
-        this.isAvatar = isAvatar;
+    public void setType(byte type) {
+        this.type = type;
     }
 
     @Override
-    public boolean isAvatar() {
-        return isAvatar;
+    public byte getType() {
+        return type;
     }
 
 }

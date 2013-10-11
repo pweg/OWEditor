@@ -162,7 +162,7 @@ public class ServerUpdateAdapter {
             float avatar_size = AdapterSettings.avatarSizeY/2;
             Vector3f size = new Vector3f(avatar_size, avatar_size, avatar_size);
             vector = ac.ct.transformCoordinatesSpecificSize(cell, size);
-            object.setIsAvatar(true);
+            object.setType(DataObjectInterface.AVATAR);
         }else{
             vector = ac.ct.transformCoordinates(cell);
         }
