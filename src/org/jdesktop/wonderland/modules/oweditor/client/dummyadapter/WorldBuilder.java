@@ -14,14 +14,14 @@ import java.util.ArrayList;
 public class WorldBuilder {
     
     private ServerUpdateAdapter sua = null;
-    private AdapterController ac = null;
+    private DummyAdapterController ac = null;
     
     /**
      * Creates a new WorldBuilder instance.
      * 
      * @param sua: a serverUpdate instance.
      */
-    public WorldBuilder( AdapterController ac, ServerUpdateAdapter sua){
+    public WorldBuilder( DummyAdapterController ac, ServerUpdateAdapter sua){
         this.sua = sua;
         this.ac = ac;
     }

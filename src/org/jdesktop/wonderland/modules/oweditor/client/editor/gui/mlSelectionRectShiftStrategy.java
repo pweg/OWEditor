@@ -1,7 +1,6 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.gui;
 
 import java.awt.Point;
-import java.awt.event.MouseEvent;
 
 /**
  * This mouse event strategy is used, when a selection rectangle
@@ -10,7 +9,7 @@ import java.awt.event.MouseEvent;
  * @author Patrick
  *
  */
-public class mlSelectionRectShiftStrategy implements MouseStrategy{
+public class mlSelectionRectShiftStrategy implements mlMouseStrategy{
         
     private GUIController controller = null;
     private boolean selectionRect = false;
@@ -22,10 +21,9 @@ public class mlSelectionRectShiftStrategy implements MouseStrategy{
     }
 
     @Override
-    public void mousePressed(MouseEvent e) {
+    public void mousePressed(Point p) {
             
-        start.x = e.getX();
-        start.y = e.getY();
+        start = p;
         selectionRect = true;
             
         controller.drawingPan.repaint();
@@ -33,7 +31,7 @@ public class mlSelectionRectShiftStrategy implements MouseStrategy{
     }
 
     @Override
-    public void mouseReleased(MouseEvent e) {
+    public void mouseReleased(Point p) {
         if(selectionRect != false){
                selectionRect = false;
                
@@ -45,13 +43,19 @@ public class mlSelectionRectShiftStrategy implements MouseStrategy{
     }
 
     @Override
-    public void mouseDragged(MouseEvent e) {
+    public void mouseDragged(Point p) {
          if(selectionRect != false){
-                Point end = new Point(e.getX(), e.getY());
+                Point end = p;
                
                 controller.samm.resizeSelectionRect(start, end);
                 controller.drawingPan.repaint();
             }
+    }
+
+    @Override
+    public void mouseMoved(Point p) {
+        // TODO Auto-generated method stub
+        
     }
 
 }

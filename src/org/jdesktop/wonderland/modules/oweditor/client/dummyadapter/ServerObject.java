@@ -20,7 +20,7 @@ public class ServerObject {
     protected String name = "";
     protected boolean isAvatar = false;
     
-    ServerObject(int id, float x, float y, float z, double rotation, 
+    ServerObject(long id, float x, float y, float z, double rotation, 
             double scale, float width, float height, String name){
         this.x = x;
         this.y = y;
@@ -31,6 +31,11 @@ public class ServerObject {
         this.name = name;    
         this.height = height;
         this.width = width;
+    }
+    
+    public ServerObject clone(){
+        return new ServerObject(this.id, this.x,this.y,this.z, this.rotation, 
+                this.scale, this.width, this.height, this.name);
     }
     
 

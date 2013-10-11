@@ -9,14 +9,14 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.Ada
  * @author Patrick
  *
  */
-public class AdapterController implements AdapterControllerMainControllerInterface{
+public class DummyAdapterController implements AdapterControllerMainControllerInterface{
     
     
     protected GUIObserver cua = null;
     protected ServerUpdateAdapter sua = null;
     protected ServerSimulator ses = null;
     
-    public AdapterController(){
+    public DummyAdapterController(){
         
     }
 

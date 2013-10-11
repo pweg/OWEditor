@@ -1,5 +1,8 @@
 package org.jdesktop.wonderland.modules.oweditor.client.dummyadapter;
 
+import java.util.HashMap;
+import java.util.Vector;
+
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataObjectInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.AdapterObserverInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.dummyadapter.AdapterSettings;
@@ -13,17 +16,21 @@ import org.jdesktop.wonderland.modules.oweditor.client.dummyadapter.AdapterSetti
  */
 public class ServerUpdateAdapter {
     
-    private AdapterController ac = null;
+    private DummyAdapterController ac = null;
     private AdapterObserverInterface dui = null;
     private int startScale = AdapterSettings.initalScale;
+    
+    private HashMap<String, Vector3D> copyTranslation = null;
     
     /**
      * Creates a new serverUpdate instance.
      * 
      * @param ac: the adapter controller instance.
      */
-    public ServerUpdateAdapter(AdapterController ac){
+    public ServerUpdateAdapter(DummyAdapterController ac){
         this.ac = ac;
+        
+        copyTranslation = new HashMap<String, Vector3D>();
     }
     
     /**
@@ -112,6 +119,25 @@ public class ServerUpdateAdapter {
             object.setName(name);
 
         dui.notifyObjectCreation(object);
+    }
+
+    public void copyTranslation(String name, float x, float y , float z) {
+        Vector3D v = new Vector3D(x,y,z);
+        
+        copyTranslation.put(name, v);
+        
+    }
+
+    public void serverCopyEvent(ServerObject object) {
+        String name = object.name;
+        if(copyTranslation.containsKey(name)){
+            Vector3D v = copyTranslation.get(name);
+            
+            object.x = v.x;
+            object.y = v.y;
+            object.z = v.z;
+        }
+        createObject(object);
     }
 
 }

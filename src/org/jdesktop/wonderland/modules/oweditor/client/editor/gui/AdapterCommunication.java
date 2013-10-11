@@ -48,4 +48,8 @@ public class AdapterCommunication {
     public void setTranslationUpdate(long id, int x, int y, int z) {
         goi.notifyTranslation(id, x, y, z);
     }
+
+    public void setCopyUpdate(long id, int x, int y, int z) {
+        goi.notifyCopy(id, x, y, z);
+    }
 }

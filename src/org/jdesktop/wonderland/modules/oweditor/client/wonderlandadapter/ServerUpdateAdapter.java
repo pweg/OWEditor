@@ -22,7 +22,7 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.Ada
 public class ServerUpdateAdapter {
     
     private int startScale = AdapterSettings.initalScale;
-    private AdapterController ac = null;
+    private WonderlandAdapterController ac = null;
     private AdapterObserverInterface dui = null;
 
     
@@ -31,7 +31,7 @@ public class ServerUpdateAdapter {
      * 
      * @param ac: the adapter controller instance.
      */
-    public ServerUpdateAdapter(AdapterController ac){
+    public ServerUpdateAdapter(WonderlandAdapterController ac){
         this.ac = ac;
     }
     

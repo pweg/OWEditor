@@ -95,7 +95,7 @@ public class ShapeObjectEllipse extends ShapeObject{
         if(!nameWrapp)
             nameWrapp(g,scale, font, r);
         
-        g.drawString(name, x, y);  
+        //g.drawString(name, x, y);  
     }
     
     /**

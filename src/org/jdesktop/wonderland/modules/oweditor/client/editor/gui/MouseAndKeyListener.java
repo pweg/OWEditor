@@ -18,17 +18,23 @@ import javax.swing.event.MouseInputAdapter;
 public class MouseAndKeyListener extends MouseInputAdapter implements KeyListener,
                                     MouseWheelListener{
 
-    private MouseStrategy strategy = null;
+    private mlMouseStrategy strategy = null;
     private boolean shiftPressed = false;
+    private boolean lockLeftMousePressed = false;
+    
     private GUIController gc = null;
+    
+    private double scale = 0.0;
+    private Point copyPoint = null;
     
     MouseAndKeyListener(GUIController gc){
         this.gc = gc;
     }
     
     public void mousePressed(MouseEvent e) {
+        
         if(shiftPressed){
-            if(e.getButton() ==  MouseEvent.BUTTON1){
+            if(e.getButton() ==  MouseEvent.BUTTON1 && !lockLeftMousePressed){
                 
                 Point p = e.getPoint();
                 ShapeObject shape = gc.sm.getShapeSuroundingPoint(p);
@@ -38,26 +44,28 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
                     gc.drawingPan.repaint();
                 }else{
                     strategy = new mlSelectionRectShiftStrategy(gc);
-                    strategy.mousePressed(e);
+                    strategy.mousePressed(e.getPoint());
                 }                
             }
         }else{
-             if(e.getButton() ==  MouseEvent.BUTTON1){
+             if(e.getButton() ==  MouseEvent.BUTTON1 && !lockLeftMousePressed){
                  Point p = e.getPoint();
                     
                  ShapeObject shape = gc.sm.getShapeSuroundingPoint(p);
                     
                  if(shape != null){
                      strategy = new mlDragAndDropStrategy(gc);
-                     strategy.mousePressed(e);
+                     strategy.mousePressed(e.getPoint());
                  }else{
                      strategy = new mlSelectionRectStrategy(gc);
-                     strategy.mousePressed(e);
+                     strategy.mousePressed(e.getPoint());
                  }
+             }else if(lockLeftMousePressed){
+                 strategy.mousePressed(e.getPoint());
              }
              else if (e.getButton() ==  MouseEvent.BUTTON2 || e.getButton() ==  MouseEvent.BUTTON3){
                  strategy = new mlPanStrategy(gc.drawingPan);
-                 strategy.mousePressed(e);
+                 strategy.mousePressed(e.getPoint());
              }
         }
     }
@@ -89,13 +97,19 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
     public void mouseDragged(MouseEvent e) {
         if(strategy == null)
             return;
-        strategy.mouseDragged(e);
+        strategy.mouseDragged(e.getPoint());
+    }
+    
+    public void mouseMoved(MouseEvent e){
+        if(strategy == null)
+            return;
+        strategy.mouseMoved(e.getPoint());
     }
     
     public void mouseReleased(MouseEvent e){
         if(strategy == null)
             return;
-        strategy.mouseReleased(e);
+        strategy.mouseReleased(e.getPoint());
     }
     
     @Override
@@ -116,8 +130,39 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
         if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
                 shiftPressed = false;
         }else if( e.getKeyCode() == KeyEvent.VK_DELETE){
-            gc.samm.deletePressed();
+            gc.samm.deleteCurrentSelection();
+        }else if(e.isControlDown()){
+            if(e.getKeyCode() == KeyEvent.VK_C){
+                gc.samm.copyCurrentSelection();
+                
+                copyPoint = gc.drawingPan.getMousePosition();
+                scale = gc.drawingPan.getScale();
+                
+                copyPoint.x = (int) Math.round(copyPoint.x / scale);
+                copyPoint.y = (int) Math.round(copyPoint.y / scale);
+            }else if(e.getKeyCode() == KeyEvent.VK_V){
+                if(copyPoint == null)
+                    return;
+                
+                strategy = new mlCopyStrategy(gc, this);
+                scale = gc.drawingPan.getScale();
+                
+                int x = (int) Math.round(copyPoint.x * scale);
+                int y = (int) Math.round(copyPoint.y * scale);
+                Point p = new Point(x,y);
+                
+                strategy.mousePressed(p);
+                strategy.mouseMoved(gc.drawingPan.getMousePosition());
+                lockLeftMousePressed = true;
+                
+            }else if(e.getKeyCode() == KeyEvent.VK_X){
+                
+            }
         }
+    }
+    
+    public void releaseLockLeftMouse(){
+        lockLeftMousePressed = false;
     }
 
 }

@@ -1,7 +1,7 @@
 package org.jdesktop.wonderland.modules.oweditor.client;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.controller.MainController;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.controllerinterfaces.MainControllerAdapterInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.controllerinterfaces.MainControllerPluginInterface;
 
 /**
  * Starts the testing without OW.
@@ -23,7 +23,8 @@ public class TestMain {
      */
     
     public static void main(String[] args) {
-        MainControllerAdapterInterface main = new MainController();
+        MainControllerPluginInterface main = new MainController();
+        main.initialize(MainControllerPluginInterface.DUMMYADAPTER);
         main.setVisible(true);
     }
 }

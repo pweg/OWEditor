@@ -22,5 +22,7 @@ public interface GUIObserverInterface {
     public void notifyTranslation(long id, int x, int y, int z);
     
     public void notifyRemoval(long id);
+    
+    public void notifyCopy(long id, int x, int y, int z);
 
 }

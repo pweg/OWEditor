@@ -38,7 +38,7 @@ public class ShapeFactory {
             case RECTANGLE:
                 return new ShapeObjectRectangle(x,y,width, height, id, name);
             case CIRCLE:
-                return null;
+                return new ShapeObjectEllipse(x,y,width,height, id, name);
             case DRAGGINGRECTANGLE:
                 return new ShapeObjectDraggingRect(x,y,width,height, id);
             default:

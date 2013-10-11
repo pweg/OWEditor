@@ -25,14 +25,14 @@ import org.jdesktop.wonderland.common.cell.CellTransform;
  */
 public class GUIObserver implements GUIObserverInterface{
     
-    private AdapterController ac = null;
+    private WonderlandAdapterController ac = null;
     
     /**
      * Creates a new clientUpdate instance.
      * 
      * @param ac a adpater controller instance.
      */
-    public GUIObserver(AdapterController ac){
+    public GUIObserver(WonderlandAdapterController ac){
         this.ac = ac;
     }
 

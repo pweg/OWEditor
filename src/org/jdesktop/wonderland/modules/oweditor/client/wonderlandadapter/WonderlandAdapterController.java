@@ -10,7 +10,7 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.Ada
  * @author Patrick
  *
  */
-public class AdapterController implements AdapterControllerMainControllerInterface{
+public class WonderlandAdapterController implements AdapterControllerMainControllerInterface{
     
     
     protected GUIObserver cua = null;
@@ -19,7 +19,7 @@ public class AdapterController implements AdapterControllerMainControllerInterfa
     protected TransformListener tl = null;
     protected CellStatusListener csl = null;
     
-    public AdapterController(){
+    public WonderlandAdapterController(){
         
     }
 

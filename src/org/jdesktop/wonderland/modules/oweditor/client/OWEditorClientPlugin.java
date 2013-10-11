@@ -12,7 +12,7 @@ import org.jdesktop.wonderland.client.jme.JmeClientMain;
 import org.jdesktop.wonderland.client.login.ServerSessionManager;
 import org.jdesktop.wonderland.common.annotation.Plugin;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.controller.MainController;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.controllerinterfaces.MainControllerAdapterInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.controllerinterfaces.MainControllerPluginInterface;
 
 
 /**
@@ -25,7 +25,7 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.controllerinterfac
 public class OWEditorClientPlugin extends BaseClientPlugin {
     
     private JMenuItem myMenuItem = null;
-    private MainControllerAdapterInterface main = null;
+    private MainControllerPluginInterface main = null;
     
     @Override
     public void initialize(ServerSessionManager loginInfo) {
@@ -34,8 +34,10 @@ public class OWEditorClientPlugin extends BaseClientPlugin {
         myMenuItem = new JMenuItem("OW-Editor");
         myMenuItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                if(main == null)
+                if(main == null){
                     main = new MainController();
+                    main.initialize(MainControllerPluginInterface.WONDERLAND);
+                }
                 main.setVisible(true);
                
             }

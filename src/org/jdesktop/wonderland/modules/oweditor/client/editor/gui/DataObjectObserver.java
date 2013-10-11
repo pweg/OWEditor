@@ -29,7 +29,7 @@ public class DataObjectObserver implements
     
     @Override
     public void notify(DataObjectInterface dataObject) {
-        gc.sm.setDataUpdate(dataObject);
+        gc.sm.getDataUpdate(dataObject);
         gc.drawingPan.repaint();
     }
 

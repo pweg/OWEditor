@@ -12,7 +12,7 @@ import org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter.Adapter
  */
 public class GUIObserver implements GUIObserverInterface{
     
-    private AdapterController ac = null;
+    private DummyAdapterController ac = null;
     private int initialScale = AdapterSettings.initalScale;
     
     /**
@@ -20,7 +20,7 @@ public class GUIObserver implements GUIObserverInterface{
      * 
      * @param ac a adpater controller instance.
      */
-    public GUIObserver(AdapterController ac){
+    public GUIObserver(DummyAdapterController ac){
         this.ac = ac;
     }
 
@@ -41,6 +41,20 @@ public class GUIObserver implements GUIObserverInterface{
     @Override
     public void notifyRemoval(long id) {
         ac.sua.serverRemovalEvent(id);
+    }
+
+    @Override
+    public void notifyCopy(long id, int x, int y, int z) {
+        
+        ServerObject o = ac.ses.getObject(id);
+        if(o == null)
+            return;
+        String name = "Copy_Of_"+o.name;
+        
+        ac.sua.copyTranslation(name, (float)x/initialScale, (float)y/initialScale, (float)z/initialScale);
+        
+        ServerObject clone = ac.ses.copyObject(id, name);
+        ac.sua.serverCopyEvent(clone);
     }
 
 }

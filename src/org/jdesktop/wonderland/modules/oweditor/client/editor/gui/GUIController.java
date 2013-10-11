@@ -23,7 +23,7 @@ public class GUIController implements GUIControllerInterface{
     protected WindowDrawingPanel drawingPan = null;
     protected JScrollPane mainScrollPanel = null;
     protected ShapeManager sm = null;
-    protected MouseAndKeyManager samm = null;
+    protected SelectionManager samm = null;
     protected DataObjectObserver domo = null;
     protected EnvironmentObserver eo = null;
     
@@ -48,7 +48,7 @@ public class GUIController implements GUIControllerInterface{
     private void initiallize(){
         sm = new ShapeManager();
         drawingPan = new WindowDrawingPanel(this);
-        samm = new MouseAndKeyManager(this);
+        samm = new SelectionManager(this);
         domo = new DataObjectObserver(this);
         eo = new EnvironmentObserver(this);
         ac = new AdapterCommunication();
@@ -93,9 +93,17 @@ public class GUIController implements GUIControllerInterface{
             return;
         
         for(ShapeObject shape : list){
-            
             long id = shape.getID();
             ac.setTranslationUpdate(id, shape.getX(), shape.getY(), dmi.getZ(id));
+        }
+    }
+    
+    public void setCopyUpdate(){
+        ArrayList<ShapeObject> list = sm.getCopyShapes();
+        
+        for(ShapeObject shape : list){
+            long id = shape.getID();
+            ac.setCopyUpdate(id, shape.getX(), shape.getY(), dmi.getZ(id));
         }
     }
     

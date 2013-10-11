@@ -14,14 +14,20 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.controllerinterfa
  *
  * @author Patrick
  */
-public interface MainControllerAdapterInterface {
+public interface MainControllerPluginInterface {
+    
+    public static final byte DUMMYADAPTER = 0;
+    public static final byte WONDERLAND = 1;
+    
+    public void initialize(byte adaptertype);
+
     
     /**
      * Sets the visibility of the gui component.
      * 
      * @param visibility true, if the gui should be seen,
      *         false otherwise.
-     */
+     */    
     public void setVisible(boolean visibility);
     
 }

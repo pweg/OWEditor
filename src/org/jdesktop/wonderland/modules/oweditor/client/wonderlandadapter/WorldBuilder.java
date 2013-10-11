@@ -26,7 +26,7 @@ import org.jdesktop.wonderland.common.cell.CellTransform;
 public class WorldBuilder {
     
     private ServerUpdateAdapter sua = null;
-    private AdapterController ac = null;
+    private WonderlandAdapterController ac = null;
     
     private ArrayList<Cell> cells = null;
         private static final Logger LOGGER =
@@ -38,7 +38,7 @@ public class WorldBuilder {
      * @param ac a adapterController instance.
      * @param sua a serverUpdate instance.
      */
-    public WorldBuilder( AdapterController ac, ServerUpdateAdapter sua){
+    public WorldBuilder( WonderlandAdapterController ac, ServerUpdateAdapter sua){
         this.sua = sua;
         this.ac = ac;
         cells = new ArrayList<Cell>();

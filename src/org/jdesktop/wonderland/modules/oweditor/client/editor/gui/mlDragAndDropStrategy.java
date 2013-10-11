@@ -2,7 +2,6 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.gui;
 
 import java.awt.Point;
 import java.awt.Shape;
-import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 /**
@@ -13,7 +12,7 @@ import java.util.ArrayList;
  * @author Patrick
  *
  */
-public class mlDragAndDropStrategy implements MouseStrategy{
+public class mlDragAndDropStrategy implements mlMouseStrategy{
 
     private GUIController controller;
     private Point start = new Point();
@@ -23,9 +22,12 @@ public class mlDragAndDropStrategy implements MouseStrategy{
         controller = contr;
     }
     
+    /**
+     * Selects a shape, if the mouse pointer is in one
+     * and activates dragging.
+     */
     @Override
-    public void mousePressed(MouseEvent e) {
-        Point p = e.getPoint();
+    public void mousePressed(Point p) {
 
         ArrayList<ShapeObject> shapes = controller.sm.getShapes();
         
@@ -42,10 +44,7 @@ public class mlDragAndDropStrategy implements MouseStrategy{
             }
         }
         
-        
-        ShapeObject shape = controller.sm.getShapeSuroundingPoint(p);
-        
-        if(shape != null){
+        if(controller.sm.isMouseInObject(p)){
             start.x = p.x;
             start.y = p.y;
             dragging = true;
@@ -53,7 +52,7 @@ public class mlDragAndDropStrategy implements MouseStrategy{
     }
 
     @Override
-    public void mouseReleased(MouseEvent e) {
+    public void mouseReleased(Point p) {
         dragging = false;
         
         if(!controller.samm.collision){
@@ -65,12 +64,19 @@ public class mlDragAndDropStrategy implements MouseStrategy{
     }
 
     @Override
-    public void mouseDragged(MouseEvent e) {
+    public void mouseDragged(Point p) {
         if(dragging) {
-            controller.samm.translateShape(e.getX(), e.getY(), start);
-            start.x = e.getX();
-            start.y = e.getY();
+            
+            controller.samm.translateShape(p.x, p.y, start, new sDraggingNormalStrategy(controller.sm));
+            start.x = p.x;
+            start.y = p.y;
         }
+    }
+
+    @Override
+    public void mouseMoved(Point p) {
+        // TODO Auto-generated method stub
+        
     }
 
 }

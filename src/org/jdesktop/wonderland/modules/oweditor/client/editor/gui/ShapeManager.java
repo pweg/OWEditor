@@ -24,15 +24,20 @@ public class ShapeManager {
     private ShapeFactory factory = null;
     
     private ArrayList<ShapeObject> shapes = null;
-    private ArrayList<ShapeObject> updateShapes = null;
     private ArrayList<ShapeObject> draggingShapes = null;
     private ArrayList<ShapeObject> avatarShapes = null;
+    
+    //These are shapes for updates.
+    private ArrayList<ShapeObject> copyShapes = null;
+    private ArrayList<ShapeObject> updateShapes = null;
     
     private ShapeObjectSelectionRect selectionRectangle = null;
     private boolean showDraggingShapes = false;
     
     private static final Logger LOGGER =
             Logger.getLogger(WorldBuilder.class.getName());
+    
+    private sDraggingShapeStrategy strategy = null;
     
     /**
      * Creates a new ShapeManager instance.
@@ -44,6 +49,7 @@ public class ShapeManager {
         updateShapes = new ArrayList<ShapeObject>();
         draggingShapes = new ArrayList<ShapeObject>();
         avatarShapes = new ArrayList<ShapeObject>();
+        copyShapes = new ArrayList<ShapeObject>();
     }
     
     /**
@@ -107,8 +113,21 @@ public class ShapeManager {
                 return shape_obj;
             }
         }
-        return null;
-        
+        return null; 
+    }
+    
+
+    public boolean isMouseInObject(Point p){
+
+        for(ShapeObject shape_obj : shapes){
+            
+            Shape shape = shape_obj.getTransformedShape();
+            
+            if(shape.contains(p)) {
+                return true;
+            }
+        }
+        return false;
     }
     
     /**
@@ -172,17 +191,28 @@ public class ShapeManager {
      * @param distance_x the x distance between old and new point.
      * @param distance_y the y distance between old and new point.
      */
-    public void translateDraggingShapes(ArrayList<ShapeObject> selectedShapes, double distance_x, double distance_y){
+    public void translateDraggingShapes( double distance_x, double distance_y){
         showDraggingShapes = true;
-        
-        if(draggingShapes.isEmpty()){
-            for(ShapeObject shape: selectedShapes){
-                createDraggingShape(shape);
-            }
-        }
         
         for(ShapeObject selShape : draggingShapes){
             selShape.setTranslation(distance_x, distance_y);
+        }
+    }
+    
+    public void createDraggingShapes(ArrayList<ShapeObject> selectedShapes){
+        strategy.createDraggingShapes(selectedShapes);
+    }
+    
+    public boolean isDraggingShapesEmpty(){
+        
+        if(draggingShapes.size() > 0)
+            return false;
+        return true;
+    }
+    
+    public void copyToDraggingShapes(){
+        for(ShapeObject shape : copyShapes){
+            createDraggingShape(shape);
         }
     }
 
@@ -191,7 +221,7 @@ public class ShapeManager {
      * 
      * @param shape a shape object, which is dragged.
      */
-    private void createDraggingShape(ShapeObject shape) {
+    protected void createDraggingShape(ShapeObject shape) {
                     
         int x = shape.getX();
         int y = shape.getY();
@@ -230,6 +260,18 @@ public class ShapeManager {
     }
     
     /**
+     * Saves the current selected shapes for further
+     * insertion.
+     */
+    public void copyShapes(ArrayList<ShapeObject> toCopy){
+        copyShapes.clear();
+        
+        for(ShapeObject shape : toCopy){
+            copyShapes.add(shape);
+        }
+    }
+    
+    /**
      * Returns all shapes, which need to be updated.
      * 
      * @return ArrayList which contains all shapes for future update.
@@ -261,7 +303,7 @@ public class ShapeManager {
      * 
      * @param dataObject which is the updated object.
      */
-    public void setDataUpdate(DataObjectInterface dataObject) {
+    public void getDataUpdate(DataObjectInterface dataObject) {
         
         if(dataObject == null)
             return;
@@ -276,19 +318,6 @@ public class ShapeManager {
                     break;
                 }
             }
-            if(shape == null){
-                int x = dataObject.getX();
-                int y = dataObject.getY();
-                int width = dataObject.getWidth();
-                int height = dataObject.getHeight();
-                
-                String name = dataObject.getName();
-                ShapeObject s = factory.createShapeObject(ShapeFactory.AVATAR, 
-                        x, y, width, height, id, name);
-                avatarShapes.add(s);
-                
-                return;
-            }
         }else{
             for(ShapeObject s : shapes){
                 if(s.getID() == id){
@@ -296,11 +325,13 @@ public class ShapeManager {
                     break;
                 }
             }
-            if(shape == null){
-                getCreateUpdate(dataObject);
-                return;
-            }
         }
+        
+        if(shape == null){
+            getCreateUpdate(dataObject);
+            return;
+        }
+        
         shape.setName(dataObject.getName());
         shape.setLocation(dataObject.getX(), dataObject.getY());
     }
@@ -339,52 +370,18 @@ public class ShapeManager {
      * @return returns true, if a collision is detected and false otherwise.
      */
     public boolean checkForCollision() {
+        if(strategy == null)
+            return true;
         
-        ArrayList<ShapeObject> shapes2 = new ArrayList<ShapeObject>();
-        
-        
-        for(ShapeObject shape : shapes){
-            boolean isMoving = false;
-            for(ShapeObject selected : draggingShapes){
-                if(selected.getID() == shape.getID()){
-                    isMoving = true;
-                    break;
-                }
-            }
-            if(!isMoving){
-                shapes2.add(shape);
-            }
-        }
-
-        boolean is_collision = false;
-        for(ShapeObject selected : draggingShapes){
-            for(ShapeObject shape : shapes2){
-                Area areaA = new Area(shape.getShape());
-                areaA.intersect(new Area(selected.getShape()));
-
-                if(selected instanceof ShapeObjectDraggingRect){
-                    ShapeObjectDraggingRect r = (ShapeObjectDraggingRect) selected;
-                    if(!areaA.isEmpty()){
-                        is_collision = true;
-                        r.setCollision(true);
-                        break;
-                    }else{
-                        r.setCollision(false);
-                    }
-                }
-            }
-        }
-        return is_collision;
+        return strategy.checkForCollision(shapes, draggingShapes);
     }
     
-    public ArrayList<ShapeObject> getSelectedShapes(){
-        ArrayList<ShapeObject> list = new ArrayList<ShapeObject>();
-        
-        for(ShapeObject s : shapes){
-            if(s.isSelected())
-                list.add(s);
-        }
-        return list;
+    public void setStrategy(sDraggingShapeStrategy strategy){
+        this.strategy = strategy;
+    }
+
+    public ArrayList<ShapeObject> getCopyShapes() {
+        return copyShapes;
     }
     
 }

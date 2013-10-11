@@ -10,7 +10,7 @@ import java.util.ArrayList;
  * @author Patrick
  *
  */
-public class MouseAndKeyManager {
+public class SelectionManager {
 
     private ArrayList<ShapeObject> selectedShapes = null;
     private GUIController gc = null;
@@ -18,7 +18,7 @@ public class MouseAndKeyManager {
     private MouseAndKeyListener mkListener = null;
     protected boolean collision = false;
     
-    public MouseAndKeyManager(GUIController contr){
+    public SelectionManager(GUIController contr){
         selectedShapes = new ArrayList<ShapeObject>();     
         
         gc = contr;
@@ -86,7 +86,7 @@ public class MouseAndKeyManager {
      * @param y the new y value, where the shape is being dragged.
      * @param start the start point from where the shape has been dragged.
      */
-    public void translateShape(int x, int y, Point start){
+    public void translateShape(int x, int y, Point start, sDraggingShapeStrategy strategy){
         
         double scale = gc.drawingPan.getScale();
         int distance_x = start.x - x;
@@ -96,7 +96,9 @@ public class MouseAndKeyManager {
         distance = distance / scale;
 
         ShapeManager sm = gc.sm;
-        sm.translateDraggingShapes(selectedShapes, distance_x/scale, distance_y/scale );
+        sm.setStrategy(strategy);
+        sm.createDraggingShapes(selectedShapes);
+        sm.translateDraggingShapes( distance_x/scale, distance_y/scale );
         collision = sm.checkForCollision();
           
         gc.drawingPan.repaint();
@@ -165,13 +167,15 @@ public class MouseAndKeyManager {
         }
     }
     
+    public void copyCurrentSelection(){
+        gc.sm.copyShapes(selectedShapes);
+    }
+        
     /**
      * Deletes all shapes, which are in the current selection.
      */
-    public void deletePressed(){
-        ArrayList<ShapeObject> list = gc.sm.getSelectedShapes();
-        
-        for(ShapeObject shape : list){
+    public void deleteCurrentSelection(){        
+        for(ShapeObject shape : selectedShapes){
             gc.setObjectRemoval(shape.getID());
         }
     }

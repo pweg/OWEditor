@@ -1,14 +1,15 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.controller;
 
 import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.AdapterControllerMainControllerInterface;
-import org.jdesktop.wonderland.modules.oweditor.client.dummyadapter.AdapterController;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.controllerinterfaces.MainControllerAdapterInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.dummyadapter.DummyAdapterController;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.controllerinterfaces.MainControllerPluginInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.controllerinterfaces.MainControllerDataInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.controllerinterfaces.MainControllerGUIInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.data.DataController;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataControllerMainControllerInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.GUIController;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.GUIControllerInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter.WonderlandAdapterController;
 
 /**
  * The main controller class is only used to set up the remaining packages
@@ -19,7 +20,7 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.GUIC
  *
  */
 public class MainController implements MainControllerDataInterface, 
-                MainControllerGUIInterface, MainControllerAdapterInterface{
+                MainControllerGUIInterface, MainControllerPluginInterface{
     
     private GUIControllerInterface gui = null;
     private AdapterControllerMainControllerInterface adapter = null;
@@ -30,28 +31,45 @@ public class MainController implements MainControllerDataInterface,
      * sets up every other package.
      */
     public MainController(){
+    }
+
+    @Override
+    public void setVisible(boolean visibility) {
+        gui.setVisibility(visibility);
+    }
+
+    @Override
+    public void initialize(byte adaptertype) {
         
         gui = new GUIController();
         gui.createFrame();
         gui.setVisibility(false);
         
         data = new DataController();
-        adapter = new AdapterController();
+        
+        switch(adaptertype){
+            case 0: 
+                adapter = new DummyAdapterController();
+                break;
+            case 1: 
+                adapter = new WonderlandAdapterController();
+                break;
+            default:
+                throw new IllegalArgumentException(
+                        "Unknown type");
+        }
+        
         data.initialize();
         adapter.initialize();
 
-        adapter.registerDataUpdateInterface(data.getDataUpdateInterface()); 
         gui.registerDataManager(data.getDataManagerInterface());
         gui.registerGUIObserver(adapter.getClientUpdateInterface());
         data.registerDataObjectObserver(gui.getDataObjectObserver());
         data.registerEnvironmentObserver(gui.getEnvironmentObserver());
         
+        adapter.registerDataUpdateInterface(data.getDataUpdateInterface());         
         adapter.getCurrentWorld();
-    }
-
-    @Override
-    public void setVisible(boolean visibility) {
-        gui.setVisibility(visibility);
+    
     }    
 
 }
