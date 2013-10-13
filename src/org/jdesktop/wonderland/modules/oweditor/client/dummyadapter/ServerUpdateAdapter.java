@@ -1,8 +1,6 @@
 package org.jdesktop.wonderland.modules.oweditor.client.dummyadapter;
 
 import java.util.HashMap;
-import java.util.Vector;
-
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataObjectInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.AdapterObserverInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.dummyadapter.AdapterSettings;
@@ -100,7 +98,7 @@ public class ServerUpdateAdapter {
         
         DataObjectInterface object = dui.createEmptyObject();
         object.setID(id);
-        object.setCoordinates(x, z, y);
+        object.setCoordinates(x, y, z);
         object.setRotation(rotation);
         object.setScale(scale);
         object.setName(name);

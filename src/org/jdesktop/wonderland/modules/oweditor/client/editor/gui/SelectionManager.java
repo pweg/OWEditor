@@ -168,7 +168,7 @@ public class SelectionManager {
     }
     
     public void copyCurrentSelection(){
-        gc.sm.copyShapes(selectedShapes);
+        gc.scm.copyShapes(selectedShapes);
     }
         
     /**
@@ -178,6 +178,36 @@ public class SelectionManager {
         for(ShapeObject shape : selectedShapes){
             gc.setObjectRemoval(shape.getID());
         }
+    }
+    
+    public Point getSelectionCenter(){
+        
+        int min_x = Integer.MAX_VALUE;
+        int max_x = Integer.MIN_VALUE;
+        int min_y = Integer.MAX_VALUE;
+        int max_y = Integer.MIN_VALUE;
+        
+        for(ShapeObject shape : selectedShapes){
+            int s_x = (int) Math.round(shape.getX()+shape.getWidth()/2);
+            int s_y = (int) Math.round(shape.getY()+shape.getHeight()/2);
+
+            if(s_x > max_x)
+                max_x = s_x;
+            if(s_x < min_x)
+                min_x = s_x;
+            if(s_y > max_y)
+                max_y = s_y;
+            if(s_y < min_y)
+                min_y = s_y;
+        }
+        int x = (int) Math.round(min_x + (max_x-min_x)/2);
+        int y = (int) Math.round(min_y + (max_y-min_y)/2);
+        
+        return new Point(x,y);
+    }
+    
+    public int countSelected(){
+        return selectedShapes.size();
     }
 
 }

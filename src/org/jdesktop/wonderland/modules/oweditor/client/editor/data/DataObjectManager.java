@@ -1,6 +1,6 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.data;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataObjectInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataObjectManagerGUIInterface;
@@ -17,7 +17,7 @@ public class DataObjectManager implements DataObjectManagerGUIInterface{
     private DataController dc = null;
     private DataObjectObserverInterface domo = null;
     
-    private HashMap<Long, DataObject> data = null;
+    private LinkedHashMap<Long, DataObject> data = null;
     
     /**
      * Creates a new instance of the data manager.
@@ -26,7 +26,7 @@ public class DataObjectManager implements DataObjectManagerGUIInterface{
      */
     DataObjectManager(DataController d){
         dc = d;
-        data = new HashMap<Long, DataObject>();
+        data = new LinkedHashMap<Long, DataObject>();
     }
     
     /**

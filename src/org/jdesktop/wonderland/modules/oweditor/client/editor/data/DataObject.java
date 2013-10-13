@@ -17,7 +17,7 @@ public class DataObject implements DataObjectInterface{
     private int width = 0;
     private int height = 0;
     private String name = "";
-    private byte type = this.RECTANGLE;
+    private byte type = DataObjectInterface.RECTANGLE;
     
     /**
      * Creates an empty object instance.

@@ -133,13 +133,26 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
             gc.samm.deleteCurrentSelection();
         }else if(e.isControlDown()){
             if(e.getKeyCode() == KeyEvent.VK_C){
-                gc.samm.copyCurrentSelection();
+                SelectionManager samm = gc.samm;
                 
-                copyPoint = gc.drawingPan.getMousePosition();
-                scale = gc.drawingPan.getScale();
+                if(samm.countSelected() <= 0)
+                    return;
                 
-                copyPoint.x = (int) Math.round(copyPoint.x / scale);
-                copyPoint.y = (int) Math.round(copyPoint.y / scale);
+                samm.copyCurrentSelection();
+                
+                copyPoint = samm.getSelectionCenter();
+                copyPoint.x += gc.drawingPan.getTranslationX();
+                copyPoint.y += gc.drawingPan.getTranslationY();
+                
+                //This can be used, if you want the copies to appear
+                //approximated to the mouse position, when the copy
+                //button was hit.
+                /*
+                 * copyPoint = gc.drawingPan.getMousePosition();
+                 * double scale = gc.drawingPan.getScale();
+                 * copyPoint.x = (int) Math.round(copyPoint.x / scale);
+                 * copyPoint.y = (int) Math.round(copyPoint.y / scale);
+                */
             }else if(e.getKeyCode() == KeyEvent.VK_V){
                 if(copyPoint == null)
                     return;

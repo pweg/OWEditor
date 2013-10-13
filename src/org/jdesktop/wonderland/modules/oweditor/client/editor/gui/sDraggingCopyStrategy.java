@@ -6,9 +6,11 @@ import java.util.ArrayList;
 public class sDraggingCopyStrategy implements sDraggingShapeStrategy {
     
     private ShapeManager sm = null;
+    private ShapeCopyManager scm = null;
     
-    public sDraggingCopyStrategy(ShapeManager sm){
+    public sDraggingCopyStrategy(ShapeManager sm, ShapeCopyManager scm){
         this.sm = sm;
+        this.scm = scm;
     }
 
     @Override
@@ -39,7 +41,7 @@ public class sDraggingCopyStrategy implements sDraggingShapeStrategy {
     @Override
     public void createDraggingShapes(ArrayList<ShapeObject> draggingShapes) {
         if(sm.isDraggingShapesEmpty()){
-            sm.copyToDraggingShapes();
+            sm.copyToDraggingShapes(scm.getCopyShapes());
         }
         
     }

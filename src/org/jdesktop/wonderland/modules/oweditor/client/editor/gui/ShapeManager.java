@@ -28,7 +28,6 @@ public class ShapeManager {
     private ArrayList<ShapeObject> avatarShapes = null;
     
     //These are shapes for updates.
-    private ArrayList<ShapeObject> copyShapes = null;
     private ArrayList<ShapeObject> updateShapes = null;
     
     private ShapeObjectSelectionRect selectionRectangle = null;
@@ -49,7 +48,6 @@ public class ShapeManager {
         updateShapes = new ArrayList<ShapeObject>();
         draggingShapes = new ArrayList<ShapeObject>();
         avatarShapes = new ArrayList<ShapeObject>();
-        copyShapes = new ArrayList<ShapeObject>();
     }
     
     /**
@@ -210,7 +208,7 @@ public class ShapeManager {
         return true;
     }
     
-    public void copyToDraggingShapes(){
+    public void copyToDraggingShapes(ArrayList<ShapeObject> copyShapes){
         for(ShapeObject shape : copyShapes){
             createDraggingShape(shape);
         }
@@ -259,17 +257,10 @@ public class ShapeManager {
         }
     }
     
-    /**
-     * Saves the current selected shapes for further
-     * insertion.
-     */
-    public void copyShapes(ArrayList<ShapeObject> toCopy){
-        copyShapes.clear();
-        
-        for(ShapeObject shape : toCopy){
-            copyShapes.add(shape);
-        }
+    public ArrayList<ShapeObject> getDraggingShapes(){
+        return draggingShapes;
     }
+    
     
     /**
      * Returns all shapes, which need to be updated.
@@ -378,10 +369,6 @@ public class ShapeManager {
     
     public void setStrategy(sDraggingShapeStrategy strategy){
         this.strategy = strategy;
-    }
-
-    public ArrayList<ShapeObject> getCopyShapes() {
-        return copyShapes;
     }
     
 }

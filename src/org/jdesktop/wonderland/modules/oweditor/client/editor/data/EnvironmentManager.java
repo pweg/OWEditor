@@ -13,8 +13,8 @@ public class EnvironmentManager {
     
     private EnvironmentObserverInterface en = null;
     
-    private int maxX = 0;
-    private int maxY = 0;
+    private int maxX = Integer.MIN_VALUE;
+    private int maxY = Integer.MIN_VALUE;
     private int minX = Integer.MAX_VALUE;
     private int minY = Integer.MAX_VALUE;
         

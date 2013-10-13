@@ -202,6 +202,14 @@ public class WindowDrawingPanel extends JPanel implements ChangeListener {
     public void setNewMinY(int y){
         translationY = (-y)+ gc.frame.getHeight()/(GUISettings.heightDivisor*2);
     }
+    
+    public int getTranslationX(){
+        return translationX;
+    }
+    
+    public int getTranslationY(){
+        return translationY;
+    }
 
 
     

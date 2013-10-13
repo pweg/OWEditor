@@ -26,6 +26,7 @@ public class GUIController implements GUIControllerInterface{
     protected SelectionManager samm = null;
     protected DataObjectObserver domo = null;
     protected EnvironmentObserver eo = null;
+    protected ShapeCopyManager scm = null;
     
     
     private DataObjectManagerGUIInterface dmi = null;
@@ -52,6 +53,7 @@ public class GUIController implements GUIControllerInterface{
         domo = new DataObjectObserver(this);
         eo = new EnvironmentObserver(this);
         ac = new AdapterCommunication();
+        scm = new ShapeCopyManager(sm);
        
         mainScrollPanel = new JScrollPane(drawingPan);
         mainScrollPanel.setWheelScrollingEnabled(false);
@@ -99,7 +101,7 @@ public class GUIController implements GUIControllerInterface{
     }
     
     public void setCopyUpdate(){
-        ArrayList<ShapeObject> list = sm.getCopyShapes();
+        ArrayList<ShapeObject> list = scm.getTranslatedShapes();
         
         for(ShapeObject shape : list){
             long id = shape.getID();

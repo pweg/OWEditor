@@ -29,6 +29,7 @@ public class mlCopyStrategy implements mlMouseStrategy{
             dragging = false;
             
             if(!controller.samm.collision){
+                controller.scm.setTranslatedShapes(controller.sm.getDraggingShapes());
                 controller.setCopyUpdate();
             }
             listener.releaseLockLeftMouse();
@@ -47,7 +48,8 @@ public class mlCopyStrategy implements mlMouseStrategy{
     @Override
     public void mouseMoved(Point p) {
         if(dragging) {
-            controller.samm.translateShape(p.x,p.y, start, new sDraggingCopyStrategy(controller.sm));
+            controller.samm.translateShape(p.x,p.y, start, 
+                    new sDraggingCopyStrategy(controller.sm, controller.scm));
             start.x = p.x;
             start.y = p.y;
         }
