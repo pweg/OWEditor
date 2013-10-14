@@ -89,8 +89,8 @@ public class ShapeObjectEllipse extends ShapeObject{
         g.setFont(font);
 
         Rectangle r = transformedShape.getBounds();
-        int x = (int) (r.getX() + Math.round(nameBoundsX*scale));
-        int y = (int) (r.getY() + Math.round(nameBoundsAbove*scale));
+        //int x = (int) (r.getX() + Math.round(nameBoundsX*scale));
+        //int y = (int) (r.getY() + Math.round(nameBoundsAbove*scale));
         
         if(!nameWrapp)
             nameWrapp(g,scale, font, r);

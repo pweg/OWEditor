@@ -14,8 +14,8 @@ public class DataObject implements DataObjectInterface{
     private double rotation = 0;
     private double scale = 0;
     private long id = 0;
-    private int width = 0;
-    private int height = 0;
+    private float width = 0;
+    private float height = 0;
     private String name = "";
     private byte type = DataObjectInterface.RECTANGLE;
     
@@ -52,7 +52,7 @@ public class DataObject implements DataObjectInterface{
     }
     
     @Override
-    public void setCoordinates(int x, int y, int z){
+    public void setCoordinates(float x, float y, float z){
         coords.x = x;
         coords.y = y;
         coords.z = z;
@@ -83,27 +83,27 @@ public class DataObject implements DataObjectInterface{
     }
     
     @Override
-    public int getWidth(){
+    public float getWidthf(){
         return width;
     }
     
     @Override
-    public int getHeight(){
+    public float getHeightf(){
         return height;
     }
 
     @Override
-    public int getX() {
+    public float getXf() {
         return coords.x;
     }
 
     @Override
-    public int getY() {
+    public float getYf() {
         return coords.y;
     }
 
     @Override
-    public int getZ() {
+    public float getZf() {
         return coords.z;
     }
 
@@ -113,30 +113,30 @@ public class DataObject implements DataObjectInterface{
     }
 
     @Override
-    public void setX(int x) {
+    public void setX(float x) {
         coords.x = x;
         
     }
 
     @Override
-    public void setY(int y) {
+    public void setY(float y) {
         coords.y = y;
         
     }
 
     @Override
-    public void setZ(int z) {
+    public void setZ(float z) {
         coords.z = z;
         
     }
 
     @Override
-    public void setWidth(int width) {
+    public void setWidth(float width) {
         this.width = width;
     }
 
     @Override
-    public void setHeight(int height) {
+    public void setHeight(float height) {
         this.height = height;
     }
 
@@ -169,6 +169,26 @@ public class DataObject implements DataObjectInterface{
     @Override
     public byte getType() {
         return type;
+    }
+
+    @Override
+    public int getX() {
+        return (int) Math.round(coords.x);
+    }
+
+    @Override
+    public int getY() {
+        return (int) Math.round(coords.y);
+    }
+
+    @Override
+    public int getWidth() {
+        return (int) Math.round(width);
+    }
+
+    @Override
+    public int getHeight() {
+        return (int) Math.round(height);
     }
 
 }

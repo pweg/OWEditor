@@ -38,7 +38,7 @@ public class AdapterObserver implements AdapterObserverInterface{
         dm.createNewObject(dataObject);
     }
 
-    public void notifyTranslation(long id, int x, int y, int z) {
+    public void notifyTranslation(long id, float x, float y, float z) {
         dm.updateTranslation(id, x, y, z);
     }
 

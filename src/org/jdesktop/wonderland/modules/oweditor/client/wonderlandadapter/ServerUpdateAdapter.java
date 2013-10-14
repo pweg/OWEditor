@@ -1,7 +1,5 @@
 package org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter;
 
-import com.jme.math.Vector3f;
-import java.util.logging.Logger;
 import org.jdesktop.wonderland.client.cell.Cell;
 import org.jdesktop.wonderland.client.cell.MovableComponent;
 import org.jdesktop.wonderland.client.cell.view.AvatarCell;
@@ -21,7 +19,6 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.Ada
  */
 public class ServerUpdateAdapter {
     
-    private int startScale = AdapterSettings.initalScale;
     private WonderlandAdapterController ac = null;
     private AdapterObserverInterface dui = null;
 
@@ -44,25 +41,19 @@ public class ServerUpdateAdapter {
      * @param cell the cell.
      */
     public void serverTransformEvent(Cell cell){
+        
         if(dui == null){
             System.out.println("DataInterface is not in the adapter");
             return;
         }
-        Vector3fInfo vector = null;
         
-         if(cell instanceof AvatarCell){
-            float avatar_size = AdapterSettings.avatarSizeY/2;
-            Vector3f size = new Vector3f(avatar_size, avatar_size, avatar_size);
-            vector = ac.ct.transformCoordinatesSpecificSize(cell, size);
-        }else{
-            vector = ac.ct.transformCoordinates(cell);
-        }
+        Vector3fInfo vector = CellReader.createCellInfo(cell);
         
-        int x = (int) vector.x;
-        int y = (int) vector.y;
-        int z = (int) vector.z;
+        float x =  vector.x;
+        float y =  vector.y;
+        float z =  vector.z;
         
-        long id = Long.valueOf(cell.getCellID().toString());
+        long id = idTranslator(cell);
         
         dui.notifyTranslation(id , x, y, z);   
     }
@@ -76,6 +67,7 @@ public class ServerUpdateAdapter {
      * @param id the object id.
      */
     public void serverChangeEvent(long id){
+        
         if(dui == null){
             System.out.println("DataInterface is not in the adapter");
             return;
@@ -155,22 +147,14 @@ public class ServerUpdateAdapter {
         }
         
         DataObjectInterface object = dui.createEmptyObject();
+        Vector3fInfo vector = CellReader.createCellInfo(cell);
         
-        Vector3fInfo vector = null;
+        float x = (int) vector.x;
+        float y = (int) vector.y;
+        float z = (int) vector.z;
         
-        if(cell instanceof AvatarCell){
-            float avatar_size = AdapterSettings.avatarSizeY/2;
-            Vector3f size = new Vector3f(avatar_size, avatar_size, avatar_size);
-            vector = ac.ct.transformCoordinatesSpecificSize(cell, size);
-            object.setType(DataObjectInterface.AVATAR);
-        }else{
-            vector = ac.ct.transformCoordinates(cell);
-        }
-        int x = (int) vector.x;
-        int y = (int) vector.y;
-        int z = (int) vector.z;
-        int height = (int) vector.height;
-        int width = (int) vector.width;
+        float height = vector.height;
+        float width = vector.width;
         
         
         object.setID(id);
@@ -181,11 +165,13 @@ public class ServerUpdateAdapter {
         object.setHeight(height);
         object.setName(name);
         
+        if(cell instanceof AvatarCell){
+            object.setType(DataObjectInterface.AVATAR);
+            object.setWidth(AdapterSettings.avatarSizeX);
+            object.setHeight(AdapterSettings.avatarSizeY);
+        }
         
-        if(!name.equals(""))
-            object.setName(name);
-        
-
+        object.setName(name);
         dui.notifyObjectCreation(object);
     }
     

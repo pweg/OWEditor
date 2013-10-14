@@ -53,7 +53,7 @@ public class GUIController implements GUIControllerInterface{
         domo = new DataObjectObserver(this);
         eo = new EnvironmentObserver(this);
         ac = new AdapterCommunication();
-        scm = new ShapeCopyManager(sm);
+        scm = new ShapeCopyManager();
        
         mainScrollPanel = new JScrollPane(drawingPan);
         mainScrollPanel.setWheelScrollingEnabled(false);
@@ -96,7 +96,7 @@ public class GUIController implements GUIControllerInterface{
         
         for(ShapeObject shape : list){
             long id = shape.getID();
-            ac.setTranslationUpdate(id, shape.getX(), shape.getY(), dmi.getZ(id));
+            ac.setTranslationUpdate(id, shape.getX(), shape.getY());
         }
     }
     
@@ -105,7 +105,7 @@ public class GUIController implements GUIControllerInterface{
         
         for(ShapeObject shape : list){
             long id = shape.getID();
-            ac.setCopyUpdate(id, shape.getX(), shape.getY(), dmi.getZ(id));
+            ac.setCopyUpdate(id, shape.getX(), shape.getY());
         }
     }
     

@@ -19,10 +19,10 @@ public interface GUIObserverInterface {
      * @param y the y coordinate, the object is moved to.
      * @param z the z coordinate, the object is moved to.
      */
-    public void notifyTranslation(long id, int x, int y, int z);
+    public void notifyTranslation(long id, int x, int y);
     
     public void notifyRemoval(long id);
     
-    public void notifyCopy(long id, int x, int y, int z);
+    public void notifyCopy(long id, int x, int y);
 
 }

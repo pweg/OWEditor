@@ -4,7 +4,6 @@
  */
 package org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter;
 
-import java.util.ArrayList;
 import org.jdesktop.wonderland.client.cell.Cell;
 import org.jdesktop.wonderland.client.cell.TransformChangeListener;
 

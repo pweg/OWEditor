@@ -1,10 +1,6 @@
 package org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter;
 
-import com.jme.bounding.BoundingBox;
-import com.jme.bounding.BoundingSphere;
-import com.jme.bounding.BoundingVolume;
 import com.jme.math.Vector3f;
-import java.util.Collection;
 import org.jdesktop.wonderland.client.ClientContext;
 import org.jdesktop.wonderland.client.cell.Cell;
 import org.jdesktop.wonderland.client.cell.CellCache;
@@ -37,7 +33,7 @@ public class GUIObserver implements GUIObserverInterface{
     }
 
     @Override
-    public void notifyTranslation(long id, int x, int y, int z) {
+    public void notifyTranslation(long id, int x, int y) {
         
         WonderlandSession session = LoginManager.getPrimary().getPrimarySession();
         
@@ -52,7 +48,12 @@ public class GUIObserver implements GUIObserverInterface{
         if(cell == null)
             return;
         
-        Vector3f translation = ac.ct.transformCoordinatesBack(cell, x, y, z);
+        CellTransform transform = cell.getLocalTransform();
+        Vector3f transl = transform.getTranslation(null);
+                
+        float z = transl.z;
+        
+        Vector3f translation = ac.ct.transformCoordinatesBack(cell, (float)x, (float)y, z);
         MovableComponent movableComponent = cell.getComponent(MovableComponent.class);
 
         if (movableComponent != null) {
@@ -74,5 +75,9 @@ public class GUIObserver implements GUIObserverInterface{
         CellID cellid = new CellID(id);
         Cell cell = cache.getCell(cellid);
         CellUtils.deleteCell(cell);
+    }
+
+    public void notifyCopy(long id, int x, int y) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

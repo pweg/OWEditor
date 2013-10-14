@@ -2,7 +2,6 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.gui;
 
 import java.awt.Graphics2D;
 import java.awt.Paint;
-import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;

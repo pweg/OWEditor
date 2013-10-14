@@ -1,6 +1,7 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces;
 
-import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataObjectInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.TranslatedObjectInterface;
+
 
 /**
  * This interface is used as an semi observer for the dataObjectManager.
@@ -18,7 +19,11 @@ public interface DataObjectObserverInterface {
      * 
      * @param dataObject the object which has been changed.
      */
-    public void notify(DataObjectInterface dataObject);
+    public void notifyCreation(TranslatedObjectInterface dataObject);
+    
+    public void notifyTranslation(long id, int x, int y);
     
     public void notifyRemoval(long id);
+
+    public void notifyChange(long id, int x, int y, String name);
 }

@@ -64,8 +64,10 @@ public class MainController implements MainControllerDataInterface,
 
         gui.registerDataManager(data.getDataManagerInterface());
         gui.registerGUIObserver(adapter.getClientUpdateInterface());
+        
         data.registerDataObjectObserver(gui.getDataObjectObserver());
         data.registerEnvironmentObserver(gui.getEnvironmentObserver());
+        data.registerCoordinateTranslator(adapter.getCoordinateTranslator());
         
         adapter.registerDataUpdateInterface(data.getDataUpdateInterface());         
         adapter.getCurrentWorld();

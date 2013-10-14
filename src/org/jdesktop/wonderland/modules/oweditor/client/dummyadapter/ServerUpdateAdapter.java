@@ -3,7 +3,6 @@ package org.jdesktop.wonderland.modules.oweditor.client.dummyadapter;
 import java.util.HashMap;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataObjectInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.AdapterObserverInterface;
-import org.jdesktop.wonderland.modules.oweditor.client.dummyadapter.AdapterSettings;
 
 /**
  * This class is used for updating the data package, when
@@ -16,7 +15,6 @@ public class ServerUpdateAdapter {
     
     private DummyAdapterController ac = null;
     private AdapterObserverInterface dui = null;
-    private int startScale = AdapterSettings.initalScale;
     
     private HashMap<String, Vector3D> copyTranslation = null;
     
@@ -50,11 +48,7 @@ public class ServerUpdateAdapter {
         if(so == null)
             return;
         
-        int x = (int)Math.round(so.x*startScale);
-        int y = (int)Math.round(so.y*startScale);
-        int z = (int)Math.round(so.z*startScale);
-        
-        dui.notifyTranslation(id, x, y, z);
+        dui.notifyTranslation(id, so.x, so.y, so.z);
     }
     
     /**
@@ -85,36 +79,28 @@ public class ServerUpdateAdapter {
      */    
     public void createObject(ServerObject sObject){
         
-        long id = sObject.id;
-        int x = (int) Math.round(sObject.x*startScale);
-        int y = (int) Math.round(sObject.y*startScale);
-        int z = (int) Math.round(sObject.z*startScale);            
+        long id = sObject.id;            
         double rotation = sObject.rotation;
         double scale = sObject.scale;
-        int width = (int) Math.round(sObject.width*startScale);
-        int height = (int) Math.round(sObject.height*startScale);
         
         String name = sObject.name;
         
         DataObjectInterface object = dui.createEmptyObject();
         object.setID(id);
-        object.setCoordinates(x, y, z);
+        object.setCoordinates(sObject.x, sObject.y, sObject.z);
         object.setRotation(rotation);
         object.setScale(scale);
         object.setName(name);
-        if(sObject.isAvatar)
-            object.setType(DataObjectInterface.AVATAR);
-        
         if(sObject.isAvatar){
+            object.setType(DataObjectInterface.AVATAR);
             object.setWidth(AdapterSettings.avatarSizeX);
             object.setHeight(AdapterSettings.avatarSizeY);
         }else{
-            object.setWidth(width);
-            object.setHeight(height);
+            object.setWidth(sObject.width);
+            object.setHeight(sObject.height);
         }
         
-        if(name != "")
-            object.setName(name);
+        object.setName(name);
 
         dui.notifyObjectCreation(object);
     }

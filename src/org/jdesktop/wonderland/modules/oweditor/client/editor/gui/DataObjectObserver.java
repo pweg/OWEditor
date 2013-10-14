@@ -1,7 +1,8 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.gui;
 
 import java.util.logging.Logger;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataObjectInterface;
+
+import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.TranslatedObjectInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.DataObjectObserverInterface;
 
 /**
@@ -28,7 +29,7 @@ public class DataObjectObserver implements
     }
     
     @Override
-    public void notify(DataObjectInterface dataObject) {
+    public void notifyCreation(TranslatedObjectInterface dataObject) {
         gc.sm.getDataUpdate(dataObject);
         gc.drawingPan.repaint();
     }
@@ -38,6 +39,18 @@ public class DataObjectObserver implements
         gc.sm.removeShape(id);
         gc.drawingPan.repaint();
         
+    }
+
+    @Override
+    public void notifyTranslation(long id, int x, int y) {
+        gc.sm.translateShape(id, x, y);
+        gc.drawingPan.repaint();
+    }
+
+    @Override
+    public void notifyChange(long id, int x, int y, String name) {
+        gc.sm.changeShape(id, x, y, name);
+        gc.drawingPan.repaint();        
     }
 
 }

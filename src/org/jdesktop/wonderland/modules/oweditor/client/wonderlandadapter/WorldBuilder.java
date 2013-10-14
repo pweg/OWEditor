@@ -1,9 +1,5 @@
 package org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter;
 
-import com.jme.bounding.BoundingBox;
-import com.jme.bounding.BoundingSphere;
-import com.jme.bounding.BoundingVolume;
-import com.jme.math.Vector3f;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.logging.Logger;
@@ -12,11 +8,10 @@ import org.jdesktop.wonderland.client.cell.Cell;
 import org.jdesktop.wonderland.client.cell.CellCache;
 import org.jdesktop.wonderland.client.comms.WonderlandSession;
 import org.jdesktop.wonderland.client.login.LoginManager;
-import org.jdesktop.wonderland.common.cell.CellTransform;
 
 
 /**
- * Gets every object on the server and sends the data from the object
+ * Gets every object currently on the server and sends the data from the object
  * to the ServerUpdateAdapter. This is used to build the world, when
  * it is not empty.
  * 

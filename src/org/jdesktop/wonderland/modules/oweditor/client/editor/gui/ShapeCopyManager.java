@@ -6,10 +6,8 @@ public class ShapeCopyManager {
 
     private ArrayList<ShapeObject> copyShapes = null;
     private ArrayList<ShapeObject> translatedCopyShapes;
-    private ShapeManager sm = null;
     
-    public ShapeCopyManager(ShapeManager sm){
-        this.sm = sm;
+    public ShapeCopyManager(){
 
         copyShapes = new ArrayList<ShapeObject>();
         translatedCopyShapes = new ArrayList<ShapeObject>();

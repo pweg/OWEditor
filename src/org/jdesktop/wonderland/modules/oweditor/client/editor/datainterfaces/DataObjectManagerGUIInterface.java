@@ -22,6 +22,6 @@ public interface DataObjectManagerGUIInterface {
      * @param id the id of the object.
      * @return the z coordinate of the object.
      */
-    public int getZ(long id);
+    public float getZ(long id);
     
 }

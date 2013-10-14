@@ -1,7 +1,6 @@
 package org.jdesktop.wonderland.modules.oweditor.client.dummyadapter;
 
 import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.GUIObserverInterface;
-import org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter.AdapterSettings;
 
 /**
  * This class is used to make updates the client makes in
@@ -13,7 +12,6 @@ import org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter.Adapter
 public class GUIObserver implements GUIObserverInterface{
     
     private DummyAdapterController ac = null;
-    private int initialScale = AdapterSettings.initalScale;
     
     /**
      * Creates a new clientUpdate instance.
@@ -25,15 +23,16 @@ public class GUIObserver implements GUIObserverInterface{
     }
 
     @Override
-    public void notifyTranslation(long id, int x, int y, int z) {
+    public void notifyTranslation(long id, int x, int y) {
 
         ServerObject object = ac.ses.getObject(id);
         if(object == null)
             return;
 
-        object.x = (float)x/initialScale;
-        object.y = (float)y/initialScale;
-        object.z = (float)z/initialScale;        
+        Vector3D p = ac.ct.transformCoordinatesBack(x, y, 0, 0);
+        
+        object.x = p.x;
+        object.y = p.y;      
         
         ac.sua.serverTranslationChangeEvent(id);
     }
@@ -44,14 +43,16 @@ public class GUIObserver implements GUIObserverInterface{
     }
 
     @Override
-    public void notifyCopy(long id, int x, int y, int z) {
+    public void notifyCopy(long id, int x, int y) {
         
         ServerObject o = ac.ses.getObject(id);
         if(o == null)
             return;
         String name = "Copy_Of_"+o.name;
         
-        ac.sua.copyTranslation(name, (float)x/initialScale, (float)y/initialScale, (float)z/initialScale);
+        Vector3D p = ac.ct.transformCoordinatesBack(x, y, 0, 0);
+        
+        ac.sua.copyTranslation(name, p.x, p.y, 0);
         
         ServerObject clone = ac.ses.copyObject(id, name);
         ac.sua.serverCopyEvent(clone);

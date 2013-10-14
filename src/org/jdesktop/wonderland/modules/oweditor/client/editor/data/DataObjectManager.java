@@ -1,7 +1,9 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.data;
 
+import java.awt.Point;
 import java.util.LinkedHashMap;
 
+import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.CoordinateTranslatorInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataObjectInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataObjectManagerGUIInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.DataObjectObserverInterface;
@@ -16,6 +18,7 @@ public class DataObjectManager implements DataObjectManagerGUIInterface{
 
     private DataController dc = null;
     private DataObjectObserverInterface domo = null;
+    private CoordinateTranslatorInterface ct = null;
     
     private LinkedHashMap<Long, DataObject> data = null;
     
@@ -37,12 +40,28 @@ public class DataObjectManager implements DataObjectManagerGUIInterface{
     public void createNewObject(DataObjectInterface dataObject){
         long id = dataObject.getID();
         
-        dc.em.setX(dataObject.getX(), dataObject.getWidth());
-        dc.em.setY(dataObject.getY(), dataObject.getHeight());
         
         if(dataObject instanceof DataObject){
             data.put(id, (DataObject) dataObject);
-            domo.notify(dataObject);
+            
+            float x = dataObject.getXf();
+            float y = dataObject.getYf();
+            float widthf = dataObject.getWidthf();
+            float heightf = dataObject.getHeightf();
+            
+            Point p = ct.transformCoordinates(x, y, widthf, heightf);
+            int width = ct.transformWidth(widthf);
+            int height = ct.transformHeight(heightf);
+            
+
+            dc.em.setX(p.x, width);
+            dc.em.setY(p.y, height);
+            
+            TranslatedObject t = new TranslatedObject(id, p.x, p.y, width, height,
+                    dataObject.getScale(), dataObject.getRotation(), dataObject.getName(),
+                    dataObject.getType());
+            
+            domo.notifyCreation(t);
         }
     }
     
@@ -51,19 +70,22 @@ public class DataObjectManager implements DataObjectManagerGUIInterface{
         domo.notifyRemoval(id);
     }
     
-    public void updateTranslation(long id, int x, int y, int z){
+    public void updateTranslation(long id, float x, float y, float z){
         DataObject d = data.get(id);
         
         if(d == null)
             return;
         
+       Point p = ct.transformCoordinates(x, y, d.getWidthf(), d.getHeightf());
+        
        if(d.getX() != x)
-           dc.em.setX(x, d.getWidth());
+           dc.em.setX(p.x, ct.transformWidth(d.getWidthf()));
        if(d.getX() != y)
-           dc.em.setY(y, d.getHeight());
+           dc.em.setY(p.y, ct.transformHeight(d.getHeightf()));
             
         d.setCoordinates(x, y, z);
-        domo.notify(d);
+        
+        domo.notifyTranslation(id, p.x, p.y);
     }
     
     /**
@@ -84,26 +106,28 @@ public class DataObjectManager implements DataObjectManagerGUIInterface{
             createNewObject(dataObject);
         else{
             
-            int x = dataObject.getX();
-            int y = dataObject.getY();
-            int z = dataObject.getZ();
+            float x = dataObject.getXf();
+            float y = dataObject.getYf();
+            float z = dataObject.getZf();
             double rotation = dataObject.getRotation();
             double scale = dataObject.getScale();
             String name = dataObject.getName();
             
             DataObject d = data.get(id);
+
+            Point p = ct.transformCoordinates(x, y, d.getWidthf(), d.getHeightf());
             
             if(d.getX() != x)
-                 dc.em.setX(x, d.getWidth());
+                dc.em.setX(p.x, ct.transformWidth(d.getWidthf()));
             if(d.getX() != y)
-                dc.em.setY(y, d.getHeight());
+                dc.em.setY(p.y, ct.transformHeight(d.getHeightf()));
             
             d.setCoordinates(x, y, z);
             d.setRotation(rotation);
             d.setScale(scale);
             d.setName(name);
     
-            domo.notify(d);
+            domo.notifyChange(id, p.x, p.y, name);
         }
     }
     
@@ -113,13 +137,13 @@ public class DataObjectManager implements DataObjectManagerGUIInterface{
     }
 
     @Override
-    public int getZ(long id) {
+    public float getZ(long id) {
         DataObject object = data.get(id);
         
         if(object == null)
             return -1;
         
-        return object.getZ();
+        return object.getZf();
     }
 
     /**
@@ -139,6 +163,10 @@ public class DataObjectManager implements DataObjectManagerGUIInterface{
      */
     public void registerObserver(DataObjectObserverInterface domo) {
         this.domo = domo;
+    }
+    
+    public void registerCoordinateTranslator(CoordinateTranslatorInterface ct){
+        this.ct = ct;
     }
 
 }

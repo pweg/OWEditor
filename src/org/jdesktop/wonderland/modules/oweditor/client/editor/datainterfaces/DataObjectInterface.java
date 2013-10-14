@@ -1,59 +1,41 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces;
 
-public interface DataObjectInterface {
-    
-    public static final byte AVATAR = 0;
-    public static final byte RECTANGLE = 1;
-    public static final byte CIRCLE  = 2;
+public interface DataObjectInterface extends TranslatedObjectInterface{
 
     /**
      * Returns the x coordinate of the object.
      * 
      * @return the x coordinate.
      */
-    public int getX();
+    public float getXf();
     
     /**
      * Returns the y coordinate of the object.
      * 
      * @return the y coordinate.
      */
-    public int getY();
+    public float getYf();
     
     /**
      * Returns the z coordinate of the object.
      * 
      * @return the z coordinate.
      */
-    public int getZ();
-    
-    /**
-     * Returns the rotation of the object.
-     * 
-     * @return the rotation.
-     */
-    public double getRotation();
-    
-    /**
-     * Returns the scale of the object.
-     * 
-     * @return the scale.
-     */
-    public double getScale();
+    public float getZf();
     
     /**
      * Returns the width of the object.
      * 
      * @return the width.
      */
-    public int getWidth();
+    public float getWidthf();
     
     /**
      * Returns the height of the object.
      * 
      * @return the height.
      */
-    public int getHeight();
+    public float getHeightf();
     
     /**
      * Returns the id of the object.
@@ -74,7 +56,7 @@ public interface DataObjectInterface {
      * 
      * @param x the x coordinate.
      */
-    public void setX(int x);
+    public void setX(float x);
     
     /**
      * Sets the y coordinate of the object.
@@ -84,7 +66,7 @@ public interface DataObjectInterface {
      * 
      * @param y the y coordinate.
      */
-    public void setY(int y);
+    public void setY(float y);
     
     /**
      * Sets the z coordinate of the object.
@@ -93,7 +75,7 @@ public interface DataObjectInterface {
      * 
      * @param z the z coordinate.
      */
-    public void setZ(int z);
+    public void setZ(float z);
     
     /**
      * Sets the rotation of the object.
@@ -114,14 +96,14 @@ public interface DataObjectInterface {
      * 
      * @param width the width.
      */
-    public void setWidth(int width);
+    public void setWidth(float width);
     
     /**
      * Sets the height of the object.
      * 
      * @param height the height.
      */
-    public void setHeight(int height);
+    public void setHeight(float height);
     
     /**
      * Sets the id of the object.
@@ -144,7 +126,7 @@ public interface DataObjectInterface {
      * @param y the y coordinate.
      * @param z the z coordinate.
      */
-    public void setCoordinates(int x, int y, int z);
+    public void setCoordinates(float x, float y, float z);
     
     /**
      * Sets the paramater, wheather the object is 
@@ -154,14 +136,6 @@ public interface DataObjectInterface {
      * false otherwise
      */
     public void setType(byte type);
-    
-    /**
-     * Returns weather the object is an avatar or not.
-     * 
-     * @return true, if the object is an avatar, false
-     * otherwise.
-     */
-    public byte getType();
     
 
 }

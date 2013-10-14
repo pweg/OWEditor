@@ -1,5 +1,6 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.data;
 
+import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.CoordinateTranslatorInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataControllerMainControllerInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataObjectManagerGUIInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.AdapterObserverInterface;
@@ -50,6 +51,11 @@ public class DataController implements DataControllerMainControllerInterface {
     @Override
     public void registerEnvironmentObserver(EnvironmentObserverInterface en) {
         em.registerObserver(en);
+    }
+
+    @Override
+    public void registerCoordinateTranslator(CoordinateTranslatorInterface ct) {
+        dm.registerCoordinateTranslator(ct);        
     }
 
 

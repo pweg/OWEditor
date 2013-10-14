@@ -25,7 +25,7 @@ public interface AdapterObserverInterface {
      */
     public void notifyObjectCreation(DataObjectInterface dataObject);
     
-    public void notifyTranslation(long id, int x, int y, int z);
+    public void notifyTranslation(long id, float x, float y, float z);
     
     public void notifyRemoval(long id);
     

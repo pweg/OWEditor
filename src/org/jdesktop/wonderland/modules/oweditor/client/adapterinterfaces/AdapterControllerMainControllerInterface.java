@@ -39,5 +39,7 @@ public interface AdapterControllerMainControllerInterface {
      */
     public GUIObserverInterface getClientUpdateInterface();
     
+    public CoordinateTranslatorInterface getCoordinateTranslator();
+    
 
 }

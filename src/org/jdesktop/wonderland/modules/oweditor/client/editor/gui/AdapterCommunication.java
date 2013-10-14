@@ -45,11 +45,11 @@ public class AdapterCommunication {
     * @param y the new y coordinate.
     * @param z the new z coordinate.
     */
-    public void setTranslationUpdate(long id, int x, int y, int z) {
-        goi.notifyTranslation(id, x, y, z);
+    public void setTranslationUpdate(long id, int x, int y) {
+        goi.notifyTranslation(id, x, y);
     }
 
-    public void setCopyUpdate(long id, int x, int y, int z) {
-        goi.notifyCopy(id, x, y, z);
+    public void setCopyUpdate(long id, int x, int y) {
+        goi.notifyCopy(id, x, y);
     }
 }

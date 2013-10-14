@@ -5,10 +5,10 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
-import java.awt.geom.Area;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
+import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.TranslatedObjectInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataObjectInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter.WorldBuilder;
 
@@ -58,13 +58,43 @@ public class ShapeManager {
     }
     
     /**
-     * Gets a specific shape.
+     * Gets a specific shape from every shape pool.
      * 
      * @param id the shape id.
      * @return ShapeObject, or null if id is not found.
      */
     public ShapeObject getShape(long id){
+        ShapeObject s = null;
+        
+        s = getNormalShape(id);
+        if(s == null)
+            s = getAvatarShape(id);
+        
+        return s;
+    }
+    
+    /**
+     * Gets a specific shape from the normal shape pool.
+     * 
+     * @param id the shape id.
+     * @return ShapeObject, or null if id is not found.
+     */
+    public ShapeObject getNormalShape(long id){
         for(ShapeObject shape : shapes){
+            if(shape.getID() == id)
+                return shape;
+        }
+        return null;
+    }
+    
+    /**
+     * Gets a specific avatar shape from the avatar shape pool.
+     * 
+     * @param id the shape id.
+     * @return ShapeObject, or null if id is not found.
+     */
+    private ShapeObject getAvatarShape(long id){
+        for(ShapeObject shape : avatarShapes){
             if(shape.getID() == id)
                 return shape;
         }
@@ -294,7 +324,7 @@ public class ShapeManager {
      * 
      * @param dataObject which is the updated object.
      */
-    public void getDataUpdate(DataObjectInterface dataObject) {
+    public void getDataUpdate(TranslatedObjectInterface dataObject) {
         
         if(dataObject == null)
             return;
@@ -303,19 +333,9 @@ public class ShapeManager {
         long id = dataObject.getID();
         
         if(dataObject.getType() == DataObjectInterface.AVATAR){
-            for(ShapeObject s : avatarShapes){
-                 if(s.getID() == id){
-                    shape = s;
-                    break;
-                }
-            }
+            shape = getAvatarShape(id);
         }else{
-            for(ShapeObject s : shapes){
-                if(s.getID() == id){
-                    shape = s;
-                    break;
-                }
-            }
+            shape = getNormalShape(id);
         }
         
         if(shape == null){
@@ -327,12 +347,25 @@ public class ShapeManager {
         shape.setLocation(dataObject.getX(), dataObject.getY());
     }
     
+    public void translateShape(long id, int x, int y){
+        ShapeObject shape = getShape(id);
+        
+        shape.setLocation(x, y);
+    }
+    
+    public void changeShape(long id, int x, int y, String name){
+        ShapeObject shape = getShape(id);
+        
+        shape.setName(name);
+        shape.setLocation(x, y);
+    }
+    
     /**
      * Creates a new shape from the data package.
      * 
      * @param dataObject which needs to be created.
      */
-    public void getCreateUpdate(DataObjectInterface dataObject){
+    public void getCreateUpdate(TranslatedObjectInterface dataObject){
         
         long id = dataObject.getID();
         int x = dataObject.getX();
