@@ -17,7 +17,6 @@ public interface GUIObserverInterface {
      * @param id the object id.
      * @param x the x coordinate, the object is moved to.
      * @param y the y coordinate, the object is moved to.
-     * @param z the z coordinate, the object is moved to.
      */
     public void notifyTranslation(long id, int x, int y);
     

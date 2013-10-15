@@ -61,6 +61,12 @@ public class ServerSimulator {
                 (float)1.00, (float)2.00, "nothing", false);
         createObject(7, (float)2.9455893, (float)1.7263716,(float)1.000591,  0, 0, 
                 (float)3.00, (float)3.00, "Block2", false);
+        createObject(7, (float)2.9455893, (float)1.7263716,(float)1.000591,  0, 0, 
+                (float)3.00, (float)3.00, "Block2", false);
+
+        createObject(8, (float)-2.9455893, (float)0.7263716,(float)1.000591,  0, 0, 
+                (float)0.50, (float)2.00, "Block2", false);
+        
         
         /*
         createObject(0, 160, 160, 0, 0, 1, 70, 70, "Chair");

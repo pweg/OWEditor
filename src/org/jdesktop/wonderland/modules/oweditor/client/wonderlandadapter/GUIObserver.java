@@ -1,16 +1,27 @@
 package org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter;
 
 import com.jme.math.Vector3f;
+import java.awt.Point;
+import java.text.MessageFormat;
+import java.util.LinkedHashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.jdesktop.wonderland.client.ClientContext;
 import org.jdesktop.wonderland.client.cell.Cell;
 import org.jdesktop.wonderland.client.cell.CellCache;
+import org.jdesktop.wonderland.client.cell.CellEditChannelConnection;
 import org.jdesktop.wonderland.client.cell.MovableComponent;
 import org.jdesktop.wonderland.client.cell.utils.CellUtils;
 import org.jdesktop.wonderland.client.comms.WonderlandSession;
 import org.jdesktop.wonderland.client.login.LoginManager;
+import org.jdesktop.wonderland.common.cell.CellEditConnectionType;
 import org.jdesktop.wonderland.common.cell.CellID;
 import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.GUIObserverInterface;
 import org.jdesktop.wonderland.common.cell.CellTransform;
+import org.jdesktop.wonderland.common.cell.messages.CellDuplicateMessage;
+import org.jdesktop.wonderland.common.cell.messages.CellServerComponentMessage;
+import org.jdesktop.wonderland.common.messages.ErrorMessage;
+import org.jdesktop.wonderland.common.messages.ResponseMessage;
 
 /**
  * This class is used to make updates the client makes in
@@ -23,6 +34,13 @@ public class GUIObserver implements GUIObserverInterface{
     
     private WonderlandAdapterController ac = null;
     
+    private static final Logger LOGGER =
+            Logger.getLogger(GUIObserver.class.getName());
+    
+    private LinkedHashMap<String, Integer> copies = null;
+    
+    private int maxTries = 20;
+    
     /**
      * Creates a new clientUpdate instance.
      * 
@@ -30,23 +48,28 @@ public class GUIObserver implements GUIObserverInterface{
      */
     public GUIObserver(WonderlandAdapterController ac){
         this.ac = ac;
+        copies = new LinkedHashMap<String, Integer>();
     }
 
     @Override
-    public void notifyTranslation(long id, int x, int y) {
+    public void notifyTranslation(long id, int x, int y ){
+        translate(id,x,y);
+    }
+    
+    protected boolean translate(long id, int x, int y) {
         
         WonderlandSession session = LoginManager.getPrimary().getPrimarySession();
         
         CellCache cache = ClientContext.getCellCache(session);
         if (cache == null) {
-            //LOGGER.warning("Unable to find Cell cache for session " + session);
-            return;
+            LOGGER.warning("Unable to find Cell cache for session " + session);
+            return false;
         }
         CellID cellid = new CellID(id);
         Cell cell = cache.getCell(cellid);
         
         if(cell == null)
-            return;
+            return false;
         
         CellTransform transform = cell.getLocalTransform();
         Vector3f transl = transform.getTranslation(null);
@@ -60,6 +83,9 @@ public class GUIObserver implements GUIObserverInterface{
             CellTransform cellTransform = cell.getLocalTransform();
             cellTransform.setTranslation(translation);
             movableComponent.localMoveRequest(cellTransform);
+            return true;
+        }else{
+            return false;
         }
     }
 
@@ -68,7 +94,7 @@ public class GUIObserver implements GUIObserverInterface{
         
         CellCache cache = ClientContext.getCellCache(session);
         if (cache == null) {
-            //LOGGER.warning("Unable to find Cell cache for session " + session);
+            LOGGER.warning("Unable to find Cell cache for session " + session);
             return;
         }
         
@@ -78,6 +104,44 @@ public class GUIObserver implements GUIObserverInterface{
     }
 
     public void notifyCopy(long id, int x, int y) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+          
+        WonderlandSession session = LoginManager.getPrimary().getPrimarySession();
+        
+        CellCache cache = ClientContext.getCellCache(session);
+        if (cache == null) {
+            LOGGER.warning("Unable to find Cell cache for session " + session);
+            return;
+        }
+        
+        try{
+            CellID cellid = new CellID(id);
+            Cell cell = cache.getCell(cellid);
+            String name = cell.getName();
+            String count = "1";
+            
+            if(copies.containsKey(name)){
+                int copy_count = copies.get(name)+1;
+                count = String.valueOf(copy_count);
+                copies.put(name, (copy_count));
+            }else{
+                copies.put(name, 1);
+            }
+            
+            name = "Copy_Of_"+ name+"_"+count+"ID"+session.getID()+"_"+id;
+            
+            ac.sua.putCopyTranslation(name, new Point(x,y));
+            
+            String message = MessageFormat.format(name, cell.getName());
+
+              // If we want to delete, send a message to the server as such
+           
+            CellEditChannelConnection connection = 
+                    (CellEditChannelConnection) session.getConnection(
+                    CellEditConnectionType.CLIENT_TYPE);
+            CellDuplicateMessage msg =
+                    new CellDuplicateMessage(cell.getCellID(), message);
+            connection.send(msg);
+        }catch(Exception ex){
+        }
     }
 }

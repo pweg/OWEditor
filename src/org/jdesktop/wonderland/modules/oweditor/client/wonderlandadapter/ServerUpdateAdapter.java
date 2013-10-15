@@ -1,6 +1,11 @@
 package org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter;
 
+import java.awt.Point;
+import java.util.LinkedHashMap;
+import java.util.logging.Logger;
 import org.jdesktop.wonderland.client.cell.Cell;
+import org.jdesktop.wonderland.client.cell.CellComponent;
+import org.jdesktop.wonderland.client.cell.ComponentChangeListener;
 import org.jdesktop.wonderland.client.cell.MovableComponent;
 import org.jdesktop.wonderland.client.cell.view.AvatarCell;
 import org.jdesktop.wonderland.common.cell.CellTransform;
@@ -21,6 +26,12 @@ public class ServerUpdateAdapter {
     
     private WonderlandAdapterController ac = null;
     private AdapterObserverInterface dui = null;
+    
+    private LinkedHashMap<String, Point> copyTranslation = null;
+    private ComponentChangeListener componentListener = null;
+    
+    private static final Logger LOGGER =
+            Logger.getLogger(GUIObserver.class.getName());
 
     
     /**
@@ -30,6 +41,18 @@ public class ServerUpdateAdapter {
      */
     public ServerUpdateAdapter(WonderlandAdapterController ac){
         this.ac = ac;
+        copyTranslation = new LinkedHashMap<String, Point>();
+        
+        componentListener = new ComponentChangeListener() {
+            public void componentChanged(Cell cell, 
+                    ComponentChangeListener.ChangeType type, 
+                    CellComponent component) {     
+                if (type == ComponentChangeListener.ChangeType.ADDED && 
+                        component instanceof MovableComponent) {  
+                    movableComponentCreated(cell);  
+                }
+            }
+        };
     }
     
     /**
@@ -47,7 +70,7 @@ public class ServerUpdateAdapter {
             return;
         }
         
-        Vector3fInfo vector = CellReader.createCellInfo(cell);
+        Vector3fInfo vector = CellInfoReader.createCellInfo(cell);
         
         float x =  vector.x;
         float y =  vector.y;
@@ -126,11 +149,11 @@ public class ServerUpdateAdapter {
         if(dui == null)
             return;
         
+        String name = cell.getName();
+        long id = idTranslator(cell);
         
         CellTransform transform = cell.getLocalTransform();
         
-        long id = idTranslator(cell);
-        String name = cell.getName();
         float rotation = 0;//transform.getRotation(null);
         float scale = transform.getScaling();
         
@@ -143,15 +166,35 @@ public class ServerUpdateAdapter {
                     cell.getCellID(), className);
             ResponseMessage response = cell.sendCellMessageAndWait(cscm);
             if (response instanceof ErrorMessage) {
+                LOGGER.warning("ERROR Movable component creation"+response);
+            }
+        }
+        
+        /**
+         * This is used for translating copied cells, after they are created.
+         * This is not the best solution, because Wonderland does not create
+         * the possibility to copy cells to a specific location.
+         */
+        if(copyTranslation.containsKey(name)){
+            Point p = copyTranslation.get(name);
+            
+            /*
+            * When problems arise, due to the absence of the movable component,
+            * a listener is created, for the purpose of translate the copied cell.
+            */
+            if(!ac.go.translate(id, p.x, p.y)){
+                cell.addComponentChangeListener(componentListener);
+            }else{
+                copyTranslation.remove(name);
             }
         }
         
         DataObjectInterface object = dui.createEmptyObject();
-        Vector3fInfo vector = CellReader.createCellInfo(cell);
+        Vector3fInfo vector = CellInfoReader.createCellInfo(cell);
         
-        float x = (int) vector.x;
-        float y = (int) vector.y;
-        float z = (int) vector.z;
+        float x = vector.x;
+        float y = vector.y;
+        float z = vector.z;
         
         float height = vector.height;
         float width = vector.width;
@@ -173,10 +216,27 @@ public class ServerUpdateAdapter {
         
         object.setName(name);
         dui.notifyObjectCreation(object);
+        
+    }
+    
+    private void movableComponentCreated(Cell cell){
+        
+        String name = cell.getName();
+        long id = idTranslator(cell);
+        
+        if(copyTranslation.containsKey(name)){
+            Point p = copyTranslation.get(name);
+            ac.go.notifyTranslation(id, p.x, p.y);
+            copyTranslation.remove(name);
+        }
     }
     
     private long idTranslator(Cell cell){
         return Long.valueOf(cell.getCellID().toString());
+    }
+    
+    public void putCopyTranslation(String name, Point point){
+        copyTranslation.put(name, point);
     }
 
 }

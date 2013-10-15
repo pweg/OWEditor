@@ -27,7 +27,7 @@ public class GUIObserver implements GUIObserverInterface{
 
         ServerObject object = ac.ses.getObject(id);
         if(object == null)
-            return;
+            return ;
 
         Vector3D p = ac.ct.transformCoordinatesBack(x, y, 0, 0);
         

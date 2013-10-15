@@ -14,7 +14,7 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.Ada
 public class WonderlandAdapterController implements AdapterControllerMainControllerInterface{
     
     
-    protected GUIObserver cua = null;
+    protected GUIObserver go = null;
     protected CoordinateTranslator ct = null;
     protected ServerUpdateAdapter sua = null;
     protected TransformListener tl = null;
@@ -27,7 +27,7 @@ public class WonderlandAdapterController implements AdapterControllerMainControl
     @Override
     public void initialize() {
         ct = new CoordinateTranslator();
-        cua = new GUIObserver(this);
+        go = new GUIObserver(this);
         sua = new ServerUpdateAdapter(this);
         tl = new TransformListener(sua);
         csl = new CellStatusListener(sua);
@@ -42,7 +42,7 @@ public class WonderlandAdapterController implements AdapterControllerMainControl
 
     @Override
     public GUIObserverInterface getClientUpdateInterface() {
-        return cua;
+        return go;
     }
 
     @Override

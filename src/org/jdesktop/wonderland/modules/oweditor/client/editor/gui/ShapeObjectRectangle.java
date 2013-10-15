@@ -127,8 +127,11 @@ public class ShapeObjectRectangle extends ShapeObject{
         if(width > max_width){
             double percent = max_width/width*100;
             int cut = (int) Math.round(name.length()*percent/100)-3;
-            if(cut <= 1)
+            if(cut <= 1){
                 cut = 3;
+                nameBoundsX = GUISettings.namePositionOutX;
+                nameBoundsAbove = GUISettings.namePositionOutY;
+            }
             
             if(cut < name.length())
                 name = name.substring(0,cut)+"...";
