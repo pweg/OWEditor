@@ -31,7 +31,7 @@ public class GUISettings {
      * as the position in the shape and out of it, if the shape is too
      * small.
      */
-    public static int objectNameSize = 12;
+    public static int objectNameSize = 10;
     public static String objectNameTextType = "Verdana";
     
     public static int namePositionInYAdd = 8;

@@ -190,7 +190,9 @@ public class WindowDrawingPanel extends JPanel implements ChangeListener {
      * @param x the new x value.
      */
     public void setNewMinX(int x){
+        int curTrans = translationX;
         translationX = (-x)+ gc.frame.getWidth()/(GUISettings.widthDivisor*2);
+        setViewportSizeChange(translationX-curTrans, 0);
     }
     
     /**
@@ -200,7 +202,29 @@ public class WindowDrawingPanel extends JPanel implements ChangeListener {
      * @param y the new y value.
      */
     public void setNewMinY(int y){
+        int curTrans = translationY;
         translationY = (-y)+ gc.frame.getHeight()/(GUISettings.heightDivisor*2);
+        setViewportSizeChange(0, translationY-curTrans);
+    }
+    
+    private void setViewportSizeChange(int x, int y){
+        Rectangle r = getVisibleRect();
+        
+        System.out.println("rx " + r.x + " " +r.y);
+        
+        if(y == 0){
+            Point p = new Point(r.x+x, r.y);            
+            gc.mainScrollPanel.getViewport().setView(gc.mainScrollPanel.getViewport().getView());
+            gc.mainScrollPanel.getViewport().setViewPosition(p);
+            
+        }else if(x == 0){
+            Point p = new Point(r.x, r.y+y);
+            gc.mainScrollPanel.getViewport().setView(gc.mainScrollPanel.getViewport().getView());
+            gc.mainScrollPanel.getViewport().setViewPosition(p);
+            
+        }
+
+        
     }
     
     public int getTranslationX(){
