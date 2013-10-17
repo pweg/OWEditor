@@ -30,12 +30,18 @@ public class ShapeObjectAvatar extends ShapeObject{
     }
 
     @Override
-    public void paintOriginal(Graphics2D g, AffineTransform at, double scale) {
+    public void paintOriginal(Graphics2D g, AffineTransform at) {
         g.setPaint(color);  
         
         transformedShape = at.createTransformedShape(originalShape);
         
         g.fill(at.createTransformedShape(originalShape));
+    }
+    
+    @Override
+    public void paintName(Graphics2D g, AffineTransform at, double scale) {
+        // TODO Auto-generated method stub
+        
     }
 
     @Override
@@ -95,6 +101,15 @@ public class ShapeObjectAvatar extends ShapeObject{
     @Override
     public String getName() {
         return name;
+    }
+
+    @Override
+    public void setRotation(double rotation) {
+    }
+
+    @Override
+    public double getRotation() {
+        return 0;
     }
 
 }

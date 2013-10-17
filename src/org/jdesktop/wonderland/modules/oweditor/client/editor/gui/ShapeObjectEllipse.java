@@ -26,6 +26,7 @@ public class ShapeObjectEllipse extends ShapeObject{
     private Paint nameColor = GUISettings.objectNameColor;
     private String name = "";
     private boolean nameWrapp = false;
+    private double rotation = 0;
     
     //These variables are used to determine, where the name of the object should be.
     private int nameBoundsX = GUISettings.namePositionInX;
@@ -41,11 +42,13 @@ public class ShapeObjectEllipse extends ShapeObject{
      * @param id the shape id.
      * @param name the name of the shape.
      */
-    public ShapeObjectEllipse(int x, int y, int width, int height, long id, String name){
+    public ShapeObjectEllipse(int x, int y, int width, int height, long id, String name,
+            double rotation){
         
         originalShape = new Rectangle (x, y, width, height);
         this.name = name;
         this.id = id;
+        this.rotation = rotation;
     }
     
     @Override
@@ -64,7 +67,7 @@ public class ShapeObjectEllipse extends ShapeObject{
     }
 
     @Override
-    public void paintOriginal(Graphics2D g, AffineTransform at, double scale) {
+    public void paintOriginal(Graphics2D g, AffineTransform at) {
         g.setPaint(color);  
         
         transformedShape = at.createTransformedShape(originalShape);
@@ -76,8 +79,13 @@ public class ShapeObjectEllipse extends ShapeObject{
             g.setPaint(GUISettings.selectionBorderColor);
         
         g.draw(at.createTransformedShape(originalShape)); 
+    }
+
+    @Override
+    public void paintName(Graphics2D g, AffineTransform at, double scale) {
+
+
         g.setPaint(nameColor); 
-        
         //changes color when selected.
         if(isSelected)
             g.setPaint(GUISettings.selectionBorderColor);
@@ -85,12 +93,13 @@ public class ShapeObjectEllipse extends ShapeObject{
         int screenRes = Toolkit.getDefaultToolkit().getScreenResolution();
         int font_size = (int)Math.round(GUISettings.objectNameSize*scale * screenRes / 72.0);
 
-        Font font = new Font(GUISettings.objectNameTextType, Font.PLAIN, font_size);
-        g.setFont(font);
 
         Rectangle r = transformedShape.getBounds();
         //int x = (int) (r.getX() + Math.round(nameBoundsX*scale));
         //int y = (int) (r.getY() + Math.round(nameBoundsAbove*scale));
+        
+        Font font = new Font(GUISettings.objectNameTextType, Font.PLAIN, font_size);
+        g.setFont(font);
         
         if(!nameWrapp)
             nameWrapp(g,scale, font, r);
@@ -192,6 +201,16 @@ public class ShapeObjectEllipse extends ShapeObject{
     @Override
     public String getName() {
         return name;
+    }
+
+    @Override
+    public void setRotation(double rotation) {
+        this.rotation = rotation;
+    }
+
+    @Override
+    public double getRotation() {
+        return rotation;
     }
 
 }

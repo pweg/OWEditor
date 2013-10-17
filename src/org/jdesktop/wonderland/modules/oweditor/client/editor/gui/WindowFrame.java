@@ -15,8 +15,9 @@ public class WindowFrame extends JFrame {
     /**
      * Creates a new Window frame instance and sets it up.
      */
-    public WindowFrame(){
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  
+    public WindowFrame(GUIController gc){
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        
         
         //f.getContentPane().add(app.getControl(), "Last");  
         setSize(GUISettings.frameWidth, GUISettings.frameHeight);  

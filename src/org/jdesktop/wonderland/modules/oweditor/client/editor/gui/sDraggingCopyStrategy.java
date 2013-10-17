@@ -7,10 +7,13 @@ public class sDraggingCopyStrategy implements sDraggingShapeStrategy {
     
     private ShapeManager sm = null;
     private ShapeCopyManager scm = null;
+    private ShapeTranslationManager stm = null;
     
-    public sDraggingCopyStrategy(ShapeManager sm, ShapeCopyManager scm){
+    public sDraggingCopyStrategy(ShapeManager sm, ShapeCopyManager scm,
+            ShapeTranslationManager stm){
         this.sm = sm;
         this.scm = scm;
+        this.stm = stm;
     }
 
     @Override
@@ -20,8 +23,8 @@ public class sDraggingCopyStrategy implements sDraggingShapeStrategy {
         boolean is_collision = false;
         for(ShapeObject selected : draggingShapes){
             for(ShapeObject shape : shapes){
-                Area areaA = new Area(shape.getShape());
-                areaA.intersect(new Area(selected.getShape()));
+                Area areaA = new Area(shape.getTransformedShape());
+                areaA.intersect(new Area(selected.getTransformedShape()));
 
                 if(selected instanceof ShapeObjectDraggingRect){
                     ShapeObjectDraggingRect r = (ShapeObjectDraggingRect) selected;
@@ -40,8 +43,8 @@ public class sDraggingCopyStrategy implements sDraggingShapeStrategy {
 
     @Override
     public void createDraggingShapes(ArrayList<ShapeObject> draggingShapes) {
-        if(sm.isDraggingShapesEmpty()){
-            sm.copyToDraggingShapes(scm.getCopyShapes());
+        if(stm.isDraggingShapesEmpty()){
+            stm.setDraggingShapes(sm.builtDraggingShapes(scm.getCopyShapes()));
         }
         
     }

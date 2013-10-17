@@ -1,5 +1,8 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.gui;
 
+import java.awt.Graphics2D;
+import java.awt.geom.AffineTransform;
+
 /**
  * An abstract shape object, which will be saved in the 
  * shape manager.
@@ -44,6 +47,8 @@ public abstract class ShapeObject extends SimpleShapeObject{
      * @param name the new name
      */
     public abstract void setName(String name);
+    
+    public abstract void paintName(Graphics2D g, AffineTransform at, double scale);
         
     /**
      * Returns the shapes name.
@@ -51,6 +56,10 @@ public abstract class ShapeObject extends SimpleShapeObject{
      * @return the name of the shape.
      */
     public abstract String getName();
+    
+    public abstract void setRotation(double rotation);
+    
+    public abstract double getRotation();
     
 
 }

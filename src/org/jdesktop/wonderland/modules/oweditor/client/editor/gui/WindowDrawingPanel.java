@@ -210,8 +210,6 @@ public class WindowDrawingPanel extends JPanel implements ChangeListener {
     private void setViewportSizeChange(int x, int y){
         Rectangle r = getVisibleRect();
         
-        System.out.println("rx " + r.x + " " +r.y);
-        
         if(y == 0){
             Point p = new Point(r.x+x, r.y);            
             gc.mainScrollPanel.getViewport().setView(gc.mainScrollPanel.getViewport().getView());

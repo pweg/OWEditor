@@ -37,7 +37,7 @@ public class mlDragAndDropStrategy implements mlMouseStrategy{
             
             if(shape.contains(p)) {
                  if(!shape_obj.isSelected()){
-                     controller.samm.removeCurSelection();
+                     controller.samm.clearCurSelection();
                      controller.samm.setSelected(shape_obj, true);
                      controller.drawingPan.repaint();
                  }
@@ -56,10 +56,10 @@ public class mlDragAndDropStrategy implements mlMouseStrategy{
         dragging = false;
         
         if(!controller.samm.collision){
-            controller.sm.saveDraggingShapes();
+            controller.stm.saveDraggingShapes();
             controller.setTranslationUpdate();
         }
-        controller.sm.clearDraggingShapes();
+        controller.stm.clearDraggingShapes();
         controller.drawingPan.repaint();
     }
 
@@ -67,7 +67,8 @@ public class mlDragAndDropStrategy implements mlMouseStrategy{
     public void mouseDragged(Point p) {
         if(dragging) {
             
-            controller.samm.translateShape(p.x, p.y, start, new sDraggingNormalStrategy(controller.sm));
+            controller.samm.translateShape(p.x, p.y, start, new sDraggingNormalStrategy(controller.sm,
+                    controller.stm));
             start.x = p.x;
             start.y = p.y;
         }

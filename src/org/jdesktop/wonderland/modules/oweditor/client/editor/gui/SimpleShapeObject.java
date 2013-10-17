@@ -33,9 +33,8 @@ public abstract class SimpleShapeObject {
      * 
      * @param g Graphics2D.
      * @param at the affine transformation, used for transforming the shape.
-     * @param scale the scale, which is needed to resize and wrapp the text size.
      */
-    public abstract void paintOriginal(Graphics2D g, AffineTransform at, double scale);
+    public abstract void paintOriginal(Graphics2D g, AffineTransform at);
     
     /**
      * Sets the location of the shape.

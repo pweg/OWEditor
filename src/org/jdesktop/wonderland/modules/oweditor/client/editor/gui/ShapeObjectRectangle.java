@@ -26,6 +26,7 @@ public class ShapeObjectRectangle extends ShapeObject{
     private Paint nameColor = GUISettings.objectNameColor;
     private String name = "";
     private boolean nameWrapp = false;
+    private double rotation = 0;
     
     //These variables are used to determine, where the name of the object should be.
     private int nameBoundsX = GUISettings.namePositionInX;
@@ -41,11 +42,13 @@ public class ShapeObjectRectangle extends ShapeObject{
      * @param id the shape id.
      * @param name the name of the shape.
      */
-    public ShapeObjectRectangle(int x, int y, int width, int height, long id, String name){
+    public ShapeObjectRectangle(int x, int y, int width, int height, long id, String name,
+            double rotation){
         
         originalShape = new Rectangle (x, y, width, height);
         this.name = name;
         this.id = id;
+        this.rotation = rotation;
     }
     
     @Override
@@ -64,18 +67,28 @@ public class ShapeObjectRectangle extends ShapeObject{
     }
 
     @Override
-    public void paintOriginal(Graphics2D g, AffineTransform at, double scale) {
+    public void paintOriginal(Graphics2D g, AffineTransform at) {
         g.setPaint(color);  
         
-        transformedShape = at.createTransformedShape(originalShape);
+        AffineTransform transform = new AffineTransform();
+        transform.rotate(Math.toRadians(rotation), 
+                originalShape.getCenterX(), originalShape.getCenterY());
         
-        g.fill(at.createTransformedShape(originalShape));
+        transformedShape = transform.createTransformedShape(originalShape);
+        
+        transformedShape =  at.createTransformedShape(transformedShape);
+        
+        g.fill(transformedShape);
         
         //changes color when selected.
         if(isSelected)
             g.setPaint(GUISettings.selectionBorderColor);
         
-        g.draw(at.createTransformedShape(originalShape)); 
+        g.draw(transformedShape); 
+    }
+    
+    @Override
+    public void paintName(Graphics2D g, AffineTransform at, double scale) {
         g.setPaint(nameColor); 
         
         //changes color when selected.
@@ -85,17 +98,25 @@ public class ShapeObjectRectangle extends ShapeObject{
         int screenRes = Toolkit.getDefaultToolkit().getScreenResolution();
         int font_size = (int)Math.round(GUISettings.objectNameSize*scale * screenRes / 72.0);
 
-        Font font = new Font(GUISettings.objectNameTextType, Font.PLAIN, font_size);
+        Font font = new Font(GUISettings.objectNameTextType, Font.PLAIN, font_size);        
         g.setFont(font);
 
-        Rectangle r = transformedShape.getBounds();
+        //You have to create a transformed shape without rotation, or
+        //the text will be somewhere else.
+        Shape transformed =  at.createTransformedShape(originalShape);
+        Rectangle r = transformed.getBounds();
         int x = (int) (r.getX() + Math.round(nameBoundsX*scale));
         int y = (int) (r.getY() + Math.round(nameBoundsAbove*scale));
         
         if(!nameWrapp)
             nameWrapp(g,scale, font, r);
-        
+
+        AffineTransform original =  g.getTransform();
+        g.rotate(Math.toRadians(rotation), 
+                r.getCenterX(), 
+                r.getCenterY());
         g.drawString(name, x, y);  
+        g.setTransform(original);
     }
     
     /**
@@ -195,6 +216,16 @@ public class ShapeObjectRectangle extends ShapeObject{
     @Override
     public String getName() {
         return name;
+    }
+
+    @Override
+    public void setRotation(double rotation) {
+        this.rotation = rotation;
+    }
+
+    @Override
+    public double getRotation() {
+        return rotation;
     }
 
 }

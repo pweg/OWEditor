@@ -25,6 +25,7 @@ public class ShapeObjectDraggingEllipse extends ShapeObject{
     private boolean isSelected = false;
     private Paint color = GUISettings.draggingColor;
     private long id;
+    private double rotation = 0;
     
     /**
      * Creates a new dragginRect shape object.
@@ -36,9 +37,11 @@ public class ShapeObjectDraggingEllipse extends ShapeObject{
      * @param id the id of the shape. Usually this is the id of the shape which
      *               is copied.
      */
-    public ShapeObjectDraggingEllipse(int x, int y, int width, int height, long id){
+    public ShapeObjectDraggingEllipse(int x, int y, int width, int height, long id,
+            double rotation){
         originalShape = new Ellipse2D.Double(x, y, width, height);
         this.id = id;
+        this.rotation = rotation;
     }
     
     @Override
@@ -57,11 +60,17 @@ public class ShapeObjectDraggingEllipse extends ShapeObject{
     }
 
     @Override
-    public void paintOriginal(Graphics2D g, AffineTransform at, double scale) {
+    public void paintOriginal(Graphics2D g, AffineTransform at) {
         g.setPaint(color);
         
         transformedShape = at.createTransformedShape(originalShape);
         g.draw(at.createTransformedShape(originalShape)); 
+    }
+
+    @Override
+    public void paintName(Graphics2D g, AffineTransform at, double scale) {
+        // TODO Auto-generated method stub
+        
     }
 
     @Override
@@ -148,4 +157,13 @@ public class ShapeObjectDraggingEllipse extends ShapeObject{
     public void setName(String name) {
     }
 
+    @Override
+    public void setRotation(double rotation) {
+        this.rotation = rotation;
+    }
+
+    @Override
+    public double getRotation() {
+        return rotation;
+    }
 }

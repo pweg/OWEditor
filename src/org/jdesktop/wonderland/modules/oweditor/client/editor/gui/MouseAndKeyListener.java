@@ -63,7 +63,10 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
              }else if(lockLeftMousePressed){
                  strategy.mousePressed(e.getPoint());
              }
-             else if (e.getButton() ==  MouseEvent.BUTTON2 || e.getButton() ==  MouseEvent.BUTTON3){
+             else if (e.getButton() ==  MouseEvent.BUTTON3 && gc.sm.isMouseInObject(e.getPoint())){
+                 strategy = new mlPopupStrategy(gc);
+                 strategy.mousePressed(e.getPoint());
+             }else if (e.getButton() ==  MouseEvent.BUTTON2 || e.getButton() ==  MouseEvent.BUTTON3){
                  strategy = new mlPanStrategy(gc.drawingPan);
                  strategy.mousePressed(e.getPoint());
              }
@@ -82,7 +85,7 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
          * also need some refinements, due to the new scales.
          */
         if(strategy != null){
-            gc.sm.clearDraggingShapes();
+            gc.stm.clearDraggingShapes();
             gc.sm.removeSelectionRect();
             panel.repaint();
         }
@@ -133,12 +136,9 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
             gc.samm.deleteCurrentSelection();
         }else if(e.isControlDown()){
             if(e.getKeyCode() == KeyEvent.VK_C){
-                SelectionManager samm = gc.samm;
+                ShapeSelectionManager samm = gc.samm;
                 
-                if(samm.countSelected() <= 0)
-                    return;
-                
-                samm.copyCurrentSelection();
+                gc.scm.initilaizeCopy();
                 
                 copyPoint = samm.getSelectionCenter();
                 copyPoint.x += gc.drawingPan.getTranslationX();

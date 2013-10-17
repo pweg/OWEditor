@@ -45,13 +45,13 @@ public class ServerSimulator {
         */
         
 
-        createObject(0, (float)0.0, (float)3.4142137,(float)1.0000589, 0, 0, 
+        createObject(0, (float)0.0, (float)3.4142137,(float)1.0000589, 42, 0, 
                 (float)1.00, (float)4.00, "Block1", false);
-        createObject(1, (float)-9.0, (float)3.4142137,(float)1.0000589,  0, 0, 
+        createObject(1, (float)-9.0, (float)3.4142137,(float)1.0000589,  10, 0, 
                 (float)3.00, (float)3.00, "5", false);
-        createObject(2, (float)-8.178859,  (float)-5.4412746, (float)0.060006, 0, 0, 
+        createObject(2, (float)-8.178859,  (float)-5.4412746, (float)0.060006, 90, 0, 
                 (float)2.00, (float)0.20, "Virtuelles Telefon", false);
-        createObject(3, (float)-4.331105,  (float)-12.422435, (float)1.4452857,0, 0, 
+        createObject(3, (float)-4.331105,  (float)-12.422435, (float)1.4452857,180, 0, 
                 (float)1.00, (float)1.00, "12", true);
         createObject(4, (float)-7.0,(float)-10.0, (float)-1.0,  0, 0, 
                 (float)1.00, (float)1.00, "Audiorekorder", false);

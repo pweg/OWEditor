@@ -59,7 +59,7 @@ public class ShapeObjectSelectionRect extends SimpleShapeObject{
     }
 
     @Override
-    public void paintOriginal(Graphics2D g, AffineTransform at, double scale) {
+    public void paintOriginal(Graphics2D g, AffineTransform at) {
         
         g.setPaint(color); 
         g.setStroke(dashed); 

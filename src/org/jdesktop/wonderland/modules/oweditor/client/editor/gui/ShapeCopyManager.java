@@ -6,25 +6,19 @@ public class ShapeCopyManager {
 
     private ArrayList<ShapeObject> copyShapes = null;
     private ArrayList<ShapeObject> translatedCopyShapes;
+    private GUIController gc = null;
     
-    public ShapeCopyManager(){
-
+    public ShapeCopyManager(GUIController gc){
+        this.gc = gc;
         copyShapes = new ArrayList<ShapeObject>();
         translatedCopyShapes = new ArrayList<ShapeObject>();
     }
-    
 
-    
-    /**
-     * Saves the current selected shapes for further
-     * insertion.
-     */
-    public void copyShapes(ArrayList<ShapeObject> toCopy){
+
+
+    public void initilaizeCopy() {
         copyShapes.clear();
-        
-        for(ShapeObject shape : toCopy){
-            copyShapes.add(shape);
-        }
+        copyShapes.addAll(gc.samm.getSelection());
     }
     
     public ArrayList<ShapeObject>getCopyShapes(){
@@ -41,6 +35,7 @@ public class ShapeCopyManager {
         translatedCopyShapes.clear();
         translatedCopyShapes.addAll(shapes);
     }
+
     
     
 

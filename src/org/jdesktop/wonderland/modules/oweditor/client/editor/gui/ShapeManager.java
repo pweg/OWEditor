@@ -24,30 +24,25 @@ public class ShapeManager {
     private ShapeFactory factory = null;
     
     private ArrayList<ShapeObject> shapes = null;
-    private ArrayList<ShapeObject> draggingShapes = null;
     private ArrayList<ShapeObject> avatarShapes = null;
-    
-    //These are shapes for updates.
-    private ArrayList<ShapeObject> updateShapes = null;
-    
+        
     private ShapeObjectSelectionRect selectionRectangle = null;
     private boolean showDraggingShapes = false;
+    private GUIController gc = null;
     
     private static final Logger LOGGER =
             Logger.getLogger(WorldBuilder.class.getName());
     
-    private sDraggingShapeStrategy strategy = null;
     
     /**
      * Creates a new ShapeManager instance.
      */
-    public ShapeManager(){
+    public ShapeManager(GUIController gc){
         factory = new ShapeFactory();
         
         shapes = new ArrayList<ShapeObject>();
-        updateShapes = new ArrayList<ShapeObject>();
-        draggingShapes = new ArrayList<ShapeObject>();
         avatarShapes = new ArrayList<ShapeObject>();
+        this.gc = gc;
     }
     
     /**
@@ -194,115 +189,40 @@ public class ShapeManager {
     public void drawShapes(Graphics2D g2, AffineTransform at, double scale){
                 
         for(ShapeObject shape : avatarShapes){
-            shape.paintOriginal(g2, at, scale);
+            shape.paintOriginal(g2, at);
+        }
+        
+        ArrayList<ShapeObject> selected = new ArrayList<ShapeObject>();
+        
+        for(ShapeObject shape : shapes){  
+            if(shape.isSelected())
+                selected.add(shape);
+            else
+                shape.paintOriginal(g2, at);
+        }
+        
+        for(ShapeObject shape : selected){
+            shape.paintOriginal(g2, at);
         }
         
         for(ShapeObject shape : shapes){  
-            shape.paintOriginal(g2, at, scale);
+            shape.paintName(g2, at, scale);
         }
         
-        if(showDraggingShapes){
-            for(ShapeObject shape : draggingShapes){  
-                shape.paintOriginal(g2, at, scale);
-            }
+        for(ShapeObject shape : gc.stm.getDraggingShapes()){  
+            shape.paintOriginal(g2, at);
+            
         }
 
         if(selectionRectangle != null)
             selectionRectangle.paintOriginal(g2);
     }
     
-    /**
-     * Translates the dragging shapes(DraggingRectangles), which 
-     * are seen, when trying to move objects.
-     * 
-     * @param selectedShapes all shapes which are selected and should be moved.
-     * @param distance_x the x distance between old and new point.
-     * @param distance_y the y distance between old and new point.
-     */
-    public void translateDraggingShapes( double distance_x, double distance_y){
-        showDraggingShapes = true;
-        
-        for(ShapeObject selShape : draggingShapes){
-            selShape.setTranslation(distance_x, distance_y);
-        }
-    }
-    
-    public void createDraggingShapes(ArrayList<ShapeObject> selectedShapes){
-        strategy.createDraggingShapes(selectedShapes);
-    }
-    
-    public boolean isDraggingShapesEmpty(){
-        
-        if(draggingShapes.size() > 0)
-            return false;
-        return true;
-    }
-    
-    public void copyToDraggingShapes(ArrayList<ShapeObject> copyShapes){
-        for(ShapeObject shape : copyShapes){
-            createDraggingShape(shape);
-        }
-    }
-
-    /**
-     * Creates the dragging shapes for a given shape object.
-     * 
-     * @param shape a shape object, which is dragged.
-     */
-    protected void createDraggingShape(ShapeObject shape) {
-                    
-        int x = shape.getX();
-        int y = shape.getY();
-        int width = shape.getWidth();
-        int height = shape.getHeight();
-        long id = shape.getID();
-        String name = shape.getName();
-        
-        if(shape instanceof ShapeObjectRectangle){
-            ShapeObject newShape = factory.createShapeObject(ShapeFactory.DRAGGINGRECTANGLE, x,y,
-                    width,height, id, name);
-            draggingShapes.add(newShape); 
-        }else if(shape instanceof ShapeObjectEllipse){
-            ShapeObject newShape = factory.createShapeObject(ShapeFactory.DRAGGINGRELLIPSE, x,y,
-                    width,height, id, name);
-            draggingShapes.add(newShape); 
-        }
-    }
-
-    /**
-     * Removes all dragging shapes.
-     */
-    public void clearDraggingShapes() {
-        draggingShapes.clear();
-        showDraggingShapes = false;
-    }
-
-    /**
-     * Saves all dragging shapes for future update.
-     * This is done, if the moving was successful.
-     */
-    public void saveDraggingShapes() {
-        for(ShapeObject shape : draggingShapes){
-            updateShapes.add(shape);
-        }
-    }
-    
-    public ArrayList<ShapeObject> getDraggingShapes(){
-        return draggingShapes;
+    public ShapeFactory getFactory(){
+        return factory;
     }
     
     
-    /**
-     * Returns all shapes, which need to be updated.
-     * 
-     * @return ArrayList which contains all shapes for future update.
-     */
-    public ArrayList<ShapeObject> getUpdateShapes() {
-        ArrayList<ShapeObject> list = new ArrayList<ShapeObject>();
-        list.addAll(updateShapes);
-        updateShapes.clear();
-        return list;
-    }
     
     /**
      * Removes a shape.
@@ -345,6 +265,7 @@ public class ShapeManager {
         
         shape.setName(dataObject.getName());
         shape.setLocation(dataObject.getX(), dataObject.getY());
+        shape.setRotation(dataObject.getRotation());
     }
     
     public void translateShape(long id, int x, int y){
@@ -373,35 +294,61 @@ public class ShapeManager {
         int width = dataObject.getWidth();
         int height = dataObject.getHeight();
         String name = dataObject.getName();
+        double rotation = dataObject.getRotation();
         
         if(name.length() > 20){
             name = name.substring(0, 18)+ "...";
         }
         if(dataObject.getType() == DataObjectInterface.AVATAR){
             ShapeObject shape = factory.createShapeObject(ShapeFactory.AVATAR, 
-                    x, y, width, height, id, name);
+                    x, y, width, height, id, name, rotation);
             avatarShapes.add(shape);
         }else{
             ShapeObject shape = factory.createShapeObject(ShapeFactory.RECTANGLE, 
-                    x, y, width, height, id, name);
+                    x, y, width, height, id, name, rotation);
             shapes.add(shape);
         }
     }
+    
+
+
 
     /**
-     * Checks for collision when dragging shapes.
+     * Creates the dragging shapes for a given shape object.
      * 
-     * @return returns true, if a collision is detected and false otherwise.
+     * @param shape a shape object, which is dragged.
      */
-    public boolean checkForCollision() {
-        if(strategy == null)
-            return true;
+    public ShapeObject builtDraggingShape(ShapeObject shape) {
+                    
+        int x = shape.getX();
+        int y = shape.getY();
+        int width = shape.getWidth();
+        int height = shape.getHeight();
+        long id = shape.getID();
+        String name = shape.getName();
+        double rotation = shape.getRotation();
         
-        return strategy.checkForCollision(shapes, draggingShapes);
+        ShapeFactory factory = gc.sm.getFactory();
+        
+        ShapeObject newShape = null;
+        
+        if(shape instanceof ShapeObjectRectangle){
+            newShape = factory.createShapeObject(ShapeFactory.DRAGGINGRECTANGLE, x,y,
+                    width,height, id, name, rotation);
+        }else if(shape instanceof ShapeObjectEllipse){
+            newShape = factory.createShapeObject(ShapeFactory.DRAGGINGRELLIPSE, x,y,
+                    width,height, id, name, rotation);
+        }
+        return newShape;
     }
     
-    public void setStrategy(sDraggingShapeStrategy strategy){
-        this.strategy = strategy;
+    public ArrayList<ShapeObject> builtDraggingShapes(ArrayList<ShapeObject> shapes){
+        ArrayList<ShapeObject> list = new ArrayList<ShapeObject>();
+        
+        for(ShapeObject shape : shapes){
+            list.add(builtDraggingShape(shape));
+        }
+        return list;
     }
     
 }

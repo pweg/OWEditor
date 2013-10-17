@@ -23,12 +23,14 @@ public class GUIController implements GUIControllerInterface{
     protected WindowDrawingPanel drawingPan = null;
     protected JScrollPane mainScrollPanel = null;
     protected ShapeManager sm = null;
-    protected SelectionManager samm = null;
+    protected ShapeSelectionManager samm = null;
     protected DataObjectObserver domo = null;
     protected EnvironmentObserver eo = null;
     protected ShapeCopyManager scm = null;
+    protected ShapeRotationManager srm = null;
+    protected ShapeTranslationManager stm = null;
     
-    
+    protected WindowPopupMenu popupMenu = null;
     private DataObjectManagerGUIInterface dmi = null;
     private AdapterCommunication ac = null;
     
@@ -38,7 +40,7 @@ public class GUIController implements GUIControllerInterface{
     @Override
     public void createFrame() {
         if(frame == null){
-            frame = new WindowFrame();
+            frame = new WindowFrame(this);
             initiallize();
         }
     }
@@ -47,17 +49,20 @@ public class GUIController implements GUIControllerInterface{
      * Initializes all GUI components.
      */
     private void initiallize(){
-        sm = new ShapeManager();
+        sm = new ShapeManager(this);
         drawingPan = new WindowDrawingPanel(this);
-        samm = new SelectionManager(this);
+        samm = new ShapeSelectionManager(this);
         domo = new DataObjectObserver(this);
         eo = new EnvironmentObserver(this);
         ac = new AdapterCommunication();
-        scm = new ShapeCopyManager();
-       
+        scm = new ShapeCopyManager(this);
+        srm = new ShapeRotationManager(this);
+        stm = new ShapeTranslationManager(this);
+
         mainScrollPanel = new JScrollPane(drawingPan);
         mainScrollPanel.setWheelScrollingEnabled(false);
         frame.getContentPane().add(mainScrollPanel);
+        popupMenu = new WindowPopupMenu(this);     
     }
 
     @Override
@@ -89,7 +94,7 @@ public class GUIController implements GUIControllerInterface{
     }
     
     public void setTranslationUpdate(){
-        ArrayList<ShapeObject> list = sm.getUpdateShapes();
+        ArrayList<ShapeObject> list = stm.getUpdateShapes();
         
         if(list.isEmpty())
             return;

@@ -23,7 +23,7 @@ public class mlSelectionRectStrategy implements mlMouseStrategy{
     @Override
     public void mousePressed(Point p) {
         
-        controller.samm.removeCurSelection();
+        controller.samm.clearCurSelection();
             
         start = p;
         selectionRect = true;

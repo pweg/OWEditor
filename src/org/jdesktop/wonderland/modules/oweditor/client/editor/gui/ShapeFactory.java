@@ -30,17 +30,17 @@ public class ShapeFactory {
      * @param id the id for the rectangle, which has to be the same id as in the virtual world.
      */
     public ShapeObject createShapeObject(int type, int x, int y, int width, int height, 
-            long id, String name){
+            long id, String name, double rotation){
         
         switch(type){
             case AVATAR:
                 return new ShapeObjectAvatar(id, x,y,width, height);
             case RECTANGLE:
-                return new ShapeObjectRectangle(x,y,width, height, id, name);
+                return new ShapeObjectRectangle(x,y,width, height, id, name, rotation);
             case CIRCLE:
-                return new ShapeObjectEllipse(x,y,width,height, id, name);
+                return new ShapeObjectEllipse(x,y,width,height, id, name, rotation);
             case DRAGGINGRECTANGLE:
-                return new ShapeObjectDraggingRect(x,y,width,height, id);
+                return new ShapeObjectDraggingRect(x,y,width,height, id, rotation);
             default:
                 throw new IllegalArgumentException(
                     "Unknown type");

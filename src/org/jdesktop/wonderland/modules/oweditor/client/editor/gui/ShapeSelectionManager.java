@@ -10,7 +10,7 @@ import java.util.ArrayList;
  * @author Patrick
  *
  */
-public class SelectionManager {
+public class ShapeSelectionManager {
 
     private ArrayList<ShapeObject> selectedShapes = null;
     private GUIController gc = null;
@@ -18,7 +18,7 @@ public class SelectionManager {
     private MouseAndKeyListener mkListener = null;
     protected boolean collision = false;
     
-    public SelectionManager(GUIController contr){
+    public ShapeSelectionManager(GUIController contr){
         selectedShapes = new ArrayList<ShapeObject>();     
         
         gc = contr;
@@ -39,6 +39,9 @@ public class SelectionManager {
      * @param selected true, if selected, false if otherwise.
      */
     public void setSelected(ShapeObject shape, boolean selected){
+        if(shape == null)
+            return;
+        
         shape.setSelected(selected);
         
         if(selected){
@@ -70,12 +73,12 @@ public class SelectionManager {
     /**
      * Removes all shapes from the current selection.
      */
-    public void removeCurSelection(){
+    public void clearCurSelection(){
         
         for(ShapeObject shape : selectedShapes){
             shape.setSelected(false);
         }
-        gc.sm.clearDraggingShapes();
+        gc.stm.clearDraggingShapes();
         selectedShapes.clear();
     }
     
@@ -95,14 +98,24 @@ public class SelectionManager {
         double distance = start.distance(x, y);
         distance = distance / scale;
 
-        ShapeManager sm = gc.sm;
-        sm.setStrategy(strategy);
-        sm.createDraggingShapes(selectedShapes);
-        sm.translateDraggingShapes( distance_x/scale, distance_y/scale );
-        collision = sm.checkForCollision();
+        ShapeTranslationManager stm = gc.stm;
+        stm.setStrategy(strategy);
+        stm.createDraggingShapes(selectedShapes);
+        stm.translateDraggingShapes( distance_x/scale, distance_y/scale );
+        collision = stm.checkForCollision();
           
         gc.drawingPan.repaint();
         
+    }
+    
+    public boolean isCurrentlySelected(ShapeObject shape){
+        long id = shape.getID();
+        
+        for(ShapeObject s : selectedShapes){
+            if(id == s.getID())
+                return true;
+        }
+        return false;
     }
     
     /**
@@ -167,8 +180,8 @@ public class SelectionManager {
         }
     }
     
-    public void copyCurrentSelection(){
-        gc.scm.copyShapes(selectedShapes);
+    public ArrayList<ShapeObject> getSelection(){
+        return selectedShapes;
     }
         
     /**

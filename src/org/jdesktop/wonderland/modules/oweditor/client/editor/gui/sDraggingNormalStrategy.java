@@ -6,9 +6,11 @@ import java.util.ArrayList;
 public class sDraggingNormalStrategy implements sDraggingShapeStrategy {
     
     private ShapeManager sm = null;
+    private ShapeTranslationManager stm = null;
     
-    public sDraggingNormalStrategy(ShapeManager sm){
+    public sDraggingNormalStrategy(ShapeManager sm, ShapeTranslationManager stm){
         this.sm = sm;
+        this.stm = stm;
     }
 
     @Override
@@ -34,8 +36,8 @@ public class sDraggingNormalStrategy implements sDraggingShapeStrategy {
         boolean is_collision = false;
         for(ShapeObject selected : draggingShapes){
             for(ShapeObject shape : shapes2){
-                Area areaA = new Area(shape.getShape());
-                areaA.intersect(new Area(selected.getShape()));
+                Area areaA = new Area(shape.getTransformedShape());
+                areaA.intersect(new Area(selected.getTransformedShape()));
 
                 if(selected instanceof ShapeObjectDraggingRect){
                     ShapeObjectDraggingRect r = (ShapeObjectDraggingRect) selected;
@@ -54,10 +56,11 @@ public class sDraggingNormalStrategy implements sDraggingShapeStrategy {
 
     @Override
     public void createDraggingShapes(ArrayList<ShapeObject> selectedShapes) {
-        if(sm.isDraggingShapesEmpty()){
-            for(ShapeObject shape: selectedShapes){
-                sm.createDraggingShape(shape);
-            }
+        
+        //stm.createDraggingShapes(selectedShapes);
+        
+        if(stm.isDraggingShapesEmpty()){
+            stm.setDraggingShapes(sm.builtDraggingShapes(selectedShapes));            
         }
         
     }
