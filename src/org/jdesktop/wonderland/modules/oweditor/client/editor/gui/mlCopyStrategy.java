@@ -2,6 +2,8 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.gui;
 
 import java.awt.Point;
 
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.shape.sCollisionAllStrategy;
+
 public class mlCopyStrategy implements mlMouseStrategy{
 
     public GUIController controller = null;
@@ -22,18 +24,19 @@ public class mlCopyStrategy implements mlMouseStrategy{
             start.x = p.x;
             start.y = p.y;
 
-            controller.samm.clearCurSelection();
+            controller.esmi.clearCurSelection();
+            controller.esmi.createCopyShapes();
             
             dragging = true;
         }else{
             dragging = false;
             
-            if(!controller.samm.collision){
-                controller.scm.setTranslatedShapes(controller.stm.getDraggingShapes());
+            if(!controller.esmi.checkCollision()){
+                controller.esmi.setTranslatedShapes();
                 controller.setCopyUpdate();
             }
             listener.releaseLockLeftMouse();
-            controller.stm.clearDraggingShapes();
+            controller.esmi.clearDraggingShapes();
             controller.drawingPan.repaint();
         }
         
@@ -48,9 +51,7 @@ public class mlCopyStrategy implements mlMouseStrategy{
     @Override
     public void mouseMoved(Point p) {
         if(dragging) {
-            controller.samm.translateShape(p.x,p.y, start, 
-                    new sDraggingCopyStrategy(controller.sm, controller.scm,
-                            controller.stm));
+            controller.esmi.translateShapeCopy(p.x,p.y, start);
             start.x = p.x;
             start.y = p.y;
         }

@@ -136,7 +136,7 @@ public class WindowDrawingPanel extends JPanel implements ChangeListener {
         at.scale(scale, scale);  
         g2.setPaint(GUISettings.backgroundColor); 
         
-        gc.sm.drawShapes(g2, at, scale);
+        gc.esmi.drawShapes(g2, at, scale);
     } 
     
     /**

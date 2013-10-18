@@ -41,7 +41,7 @@ public class WindowPopupMenu extends JPopupMenu{
                 KeyEvent.VK_R, ActionEvent.CTRL_MASK));
         rotateItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                gc.srm.initializeRotation();
+                //gc.esmi.initializeRotation();
               }
             });
         

@@ -4,6 +4,9 @@ import java.awt.Point;
 import java.awt.Shape;
 import java.util.ArrayList;
 
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.shape.ShapeObject;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.shape.sCollisionNotSelectedStrategy;
+
 /**
  * This mouse listener strategy is used for dragging
  * objects and creates the dragging shapes in the 
@@ -29,7 +32,7 @@ public class mlDragAndDropStrategy implements mlMouseStrategy{
     @Override
     public void mousePressed(Point p) {
 
-        ArrayList<ShapeObject> shapes = controller.sm.getShapes();
+        ArrayList<ShapeObject> shapes = controller.esmi.getAllShapes();
         
         for(ShapeObject shape_obj : shapes){
             
@@ -37,14 +40,15 @@ public class mlDragAndDropStrategy implements mlMouseStrategy{
             
             if(shape.contains(p)) {
                  if(!shape_obj.isSelected()){
-                     controller.samm.clearCurSelection();
-                     controller.samm.setSelected(shape_obj, true);
-                     controller.drawingPan.repaint();
+                     controller.esmi.clearCurSelection();
+                     controller.esmi.setSelected(shape_obj, true);
                  }
+                 controller.esmi.createDraggingShapes();
+                 controller.drawingPan.repaint();
             }
         }
         
-        if(controller.sm.isMouseInObject(p)){
+        if(controller.esmi.isMouseInObject(p)){
             start.x = p.x;
             start.y = p.y;
             dragging = true;
@@ -55,11 +59,11 @@ public class mlDragAndDropStrategy implements mlMouseStrategy{
     public void mouseReleased(Point p) {
         dragging = false;
         
-        if(!controller.samm.collision){
-            controller.stm.saveDraggingShapes();
+        if(!controller.esmi.checkCollision()){
+            controller.esmi.saveDraggingShapes();
             controller.setTranslationUpdate();
         }
-        controller.stm.clearDraggingShapes();
+        controller.esmi.clearDraggingShapes();
         controller.drawingPan.repaint();
     }
 
@@ -67,8 +71,7 @@ public class mlDragAndDropStrategy implements mlMouseStrategy{
     public void mouseDragged(Point p) {
         if(dragging) {
             
-            controller.samm.translateShape(p.x, p.y, start, new sDraggingNormalStrategy(controller.sm,
-                    controller.stm));
+            controller.esmi.translateShapeNormal(p.x, p.y, start);
             start.x = p.x;
             start.y = p.y;
         }

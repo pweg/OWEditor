@@ -9,6 +9,9 @@ import java.awt.event.MouseWheelListener;
 
 import javax.swing.event.MouseInputAdapter;
 
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.shape.ShapeObject;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.shape.ShapeSelectionManager;
+
 /**
  * This class is used to catch mouse and key events.
  * 
@@ -37,10 +40,10 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
             if(e.getButton() ==  MouseEvent.BUTTON1 && !lockLeftMousePressed){
                 
                 Point p = e.getPoint();
-                ShapeObject shape = gc.sm.getShapeSuroundingPoint(p);
+                ShapeObject shape = gc.esmi.getShapeSuroundingPoint(p);
                 
                 if(shape != null){
-                    gc.samm.switchSelection(shape);
+                    gc.esmi.switchSelection(shape);
                     gc.drawingPan.repaint();
                 }else{
                     strategy = new mlSelectionRectShiftStrategy(gc);
@@ -51,7 +54,7 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
              if(e.getButton() ==  MouseEvent.BUTTON1 && !lockLeftMousePressed){
                  Point p = e.getPoint();
                     
-                 ShapeObject shape = gc.sm.getShapeSuroundingPoint(p);
+                 ShapeObject shape = gc.esmi.getShapeSuroundingPoint(p);
                     
                  if(shape != null){
                      strategy = new mlDragAndDropStrategy(gc);
@@ -63,7 +66,7 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
              }else if(lockLeftMousePressed){
                  strategy.mousePressed(e.getPoint());
              }
-             else if (e.getButton() ==  MouseEvent.BUTTON3 && gc.sm.isMouseInObject(e.getPoint())){
+             else if (e.getButton() ==  MouseEvent.BUTTON3 && gc.esmi.isMouseInObject(e.getPoint())){
                  strategy = new mlPopupStrategy(gc);
                  strategy.mousePressed(e.getPoint());
              }else if (e.getButton() ==  MouseEvent.BUTTON2 || e.getButton() ==  MouseEvent.BUTTON3){
@@ -85,8 +88,8 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
          * also need some refinements, due to the new scales.
          */
         if(strategy != null){
-            gc.stm.clearDraggingShapes();
-            gc.sm.removeSelectionRect();
+            gc.esmi.clearDraggingShapes();
+            gc.esmi.removeSelectionRect();
             panel.repaint();
         }
         strategy = null;
@@ -133,14 +136,13 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
         if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
                 shiftPressed = false;
         }else if( e.getKeyCode() == KeyEvent.VK_DELETE){
-            gc.samm.deleteCurrentSelection();
+            gc.esmi.deleteCurrentSelection();
         }else if(e.isControlDown()){
             if(e.getKeyCode() == KeyEvent.VK_C){
-                ShapeSelectionManager samm = gc.samm;
                 
-                gc.scm.initilaizeCopy();
+                gc.esmi.initilaizeCopy();
                 
-                copyPoint = samm.getSelectionCenter();
+                copyPoint = gc.esmi.getSelectionCenter();
                 copyPoint.x += gc.drawingPan.getTranslationX();
                 copyPoint.y += gc.drawingPan.getTranslationY();
                 
@@ -163,7 +165,7 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
                 int x = (int) Math.round(copyPoint.x * scale);
                 int y = (int) Math.round(copyPoint.y * scale);
                 Point p = new Point(x,y);
-                
+
                 strategy.mousePressed(p);
                 strategy.mouseMoved(gc.drawingPan.getMousePosition());
                 lockLeftMousePressed = true;

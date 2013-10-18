@@ -16,7 +16,8 @@ public class TestMain {
      * 
      *  observer
      *  mediator
-     *  command
+     *  command: for gui and undo
+     *  visitor: for gui shape/copy/translate manager etc.
      *  bridge
      *  proxy
      * 

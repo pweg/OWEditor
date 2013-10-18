@@ -2,6 +2,8 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.gui;
 
 import java.awt.Point;
 
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.shape.ShapeObject;
+
 public class mlPopupStrategy implements mlMouseStrategy{
     
     private GUIController contr;
@@ -12,11 +14,11 @@ public class mlPopupStrategy implements mlMouseStrategy{
 
     @Override
     public void mousePressed(Point p) {
-        ShapeObject shape = contr.sm.getShapeSuroundingPoint(p);
+        ShapeObject shape = contr.esmi.getShapeSuroundingPoint(p);
         
-        if(!contr.samm.isCurrentlySelected(shape)){
-            contr.samm.clearCurSelection();
-            contr.samm.setSelected(shape, true);
+        if(!contr.esmi.isCurrentlySelected(shape)){
+            contr.esmi.clearCurSelection();
+            contr.esmi.setSelected(shape, true);
         }
 
         contr.drawingPan.repaint();

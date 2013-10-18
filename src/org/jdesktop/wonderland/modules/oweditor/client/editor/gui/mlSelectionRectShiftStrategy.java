@@ -35,9 +35,9 @@ public class mlSelectionRectShiftStrategy implements mlMouseStrategy{
         if(selectionRect != false){
                selectionRect = false;
                
-               controller.samm.selectionRectShiftReleased();
+               controller.esmi.selectionRectShiftReleased();
                
-               controller.sm.removeSelectionRect();
+               controller.esmi.removeSelectionRect();
                controller.drawingPan.repaint();
            }
     }
@@ -47,7 +47,7 @@ public class mlSelectionRectShiftStrategy implements mlMouseStrategy{
          if(selectionRect != false){
                 Point end = p;
                
-                controller.samm.resizeSelectionRect(start, end);
+                controller.esmi.resizeSelectionRect(start, end);
                 controller.drawingPan.repaint();
             }
     }
