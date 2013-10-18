@@ -3,10 +3,6 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.shape;
 import java.awt.Point;
 import java.util.ArrayList;
 
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.GUIController;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.MouseAndKeyListener;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.WindowDrawingPanel;
-
 /**
  * This class handles the pick up and drag feature for shapes,
  * as well as their selection and forwards changes for key presses
@@ -155,18 +151,6 @@ public class ShapeSelectionManager {
         
         ArrayList<ShapeObject> list = smi.getShapesInSelectionRect();
         
-        for(ShapeObject shape : list){
-            setSelected(shape, true);
-        }
-    }
-    
-    /**
-     * Searches for shapes which are in the selection rectangle and 
-     * switches their selection.
-     */
-    public void selectionRectShiftReleased(){
-        ArrayList<ShapeObject> list = smi.getShapesInSelectionRect();
-
         for(ShapeObject shape : list){
             switchSelection(shape);
         }

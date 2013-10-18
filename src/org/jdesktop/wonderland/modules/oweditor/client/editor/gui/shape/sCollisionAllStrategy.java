@@ -5,12 +5,9 @@ import java.util.ArrayList;
 
 
 public class sCollisionAllStrategy implements sCollisionStrategy {
-    
-    private InternalShapeMediatorInterface smi = null;
-    
+        
 
-    public sCollisionAllStrategy(InternalShapeMediatorInterface smi) {
-        this.smi = smi;
+    public sCollisionAllStrategy() {
     }
 
     @Override

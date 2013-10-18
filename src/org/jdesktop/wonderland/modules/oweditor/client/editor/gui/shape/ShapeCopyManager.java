@@ -2,8 +2,6 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.shape;
 
 import java.util.ArrayList;
 
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.GUIController;
-
 public class ShapeCopyManager {
 
     private ArrayList<ShapeObject> copyShapes = null;
@@ -30,15 +28,6 @@ public class ShapeCopyManager {
     public ArrayList<ShapeObject>getTranslatedShapes(){
         return translatedCopyShapes;
     }
-
-
-
-    public void setTranslatedShapes(ArrayList<ShapeObject> shapes) {
-        translatedCopyShapes.clear();
-        translatedCopyShapes.addAll(shapes);
-    }
-
-    
-    
+  
 
 }

@@ -30,7 +30,7 @@ public class DataObjectObserver implements
     
     @Override
     public void notifyCreation(TranslatedObjectInterface dataObject) {
-        gc.esmi.getDataUpdate(dataObject);
+        gc.esmi.createShape(dataObject);
         gc.drawingPan.repaint();
     }
 
@@ -43,13 +43,13 @@ public class DataObjectObserver implements
 
     @Override
     public void notifyTranslation(long id, int x, int y) {
-        gc.esmi.translateShape(id, x, y);
+        gc.esmi.updateShapeCoordinates(id, x, y);
         gc.drawingPan.repaint();
     }
 
     @Override
     public void notifyChange(long id, int x, int y, String name) {
-        gc.esmi.changeShape(id, x, y, name);
+        gc.esmi.updateShape(id, x, y, name);
         gc.drawingPan.repaint();        
     }
 

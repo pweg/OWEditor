@@ -2,8 +2,6 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.shape;
 
 import java.util.ArrayList;
 
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.GUIController;
-
 public class ShapeRotationManager {
     
     private InternalShapeMediatorInterface smi = null;

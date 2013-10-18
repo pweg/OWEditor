@@ -8,14 +8,7 @@ import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.GUIObse
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataObjectManagerGUIInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.shape.ExternalShapeFacade;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.shape.ExternalShapeFacadeInterface;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.shape.ShapeCopyManager;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.shape.ShapeManager;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.shape.InternalShapeMediator;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.shape.InternalShapeMediatorInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.shape.ShapeObject;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.shape.ShapeRotationManager;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.shape.ShapeSelectionManager;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.shape.ShapeTranslationManager;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.DataObjectObserverInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.EnvironmentObserverInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.GUIControllerInterface;
@@ -110,8 +103,7 @@ public class GUIController implements GUIControllerInterface{
         return eo;
     }
     
-    public void setTranslationUpdate(){
-        ArrayList<ShapeObject> list = esmi.getUpdateShapes();
+    public void setTranslationUpdate(ArrayList<ShapeObject> list){
         
         if(list.isEmpty())
             return;
@@ -122,8 +114,7 @@ public class GUIController implements GUIControllerInterface{
         }
     }
     
-    public void setCopyUpdate(){
-        ArrayList<ShapeObject> list = esmi.getTranslatedShapes();
+    public void setCopyUpdate(ArrayList<ShapeObject> list){
         
         for(ShapeObject shape : list){
             long id = shape.getID();

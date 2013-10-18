@@ -3,7 +3,6 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.shape;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.geom.AffineTransform;
-import java.util.ArrayList;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.TranslatedObjectInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.GUIController;
@@ -37,7 +36,7 @@ public class ExternalShapeFacade implements ExternalShapeFacadeInterface{
     }
 
     @Override
-    public void getDataUpdate(TranslatedObjectInterface dataObject) {
+    public void createShape(TranslatedObjectInterface dataObject) {
         sm.getDataUpdate(dataObject);
     }
 
@@ -47,12 +46,12 @@ public class ExternalShapeFacade implements ExternalShapeFacadeInterface{
     }
 
     @Override
-    public void translateShape(long id, int x, int y) {
+    public void updateShapeCoordinates(long id, int x, int y) {
         sm.translateShape(id, x, y);
     }
 
     @Override
-    public void changeShape(long id, int x, int y, String name) {
+    public void updateShape(long id, int x, int y, String name) {
         sm.changeShape(id, x, y, name);
     }
 
@@ -62,34 +61,19 @@ public class ExternalShapeFacade implements ExternalShapeFacadeInterface{
     }
 
     @Override
-    public boolean checkCollision() {
-        return stm.checkForCollision();
-    }
-
-    @Override
-    public void clearDraggingShapes() {
+    public void clean() {
         stm.clearDraggingShapes();
+        sm.removeSelectionRect();
     }
-
-    @Override
-    public void saveDraggingShapes() {
-        stm.saveDraggingShapes();
-    }
-
     
     @Override
-    public void translateShapeNormal(int x, int y, Point start){
+    public void translation(int x, int y, Point start){
         ssm.translateShape(x, y, start, new sCollisionNotSelectedStrategy(smi));
     }
 
     @Override
-    public void translateShapeCopy(int x, int y, Point start) {
-        ssm.translateShape(x,y,start, new sCollisionAllStrategy(smi));
-    }
-
-    @Override
-    public void setSelected(ShapeObject shape, boolean selected) {
-       ssm.setSelected(shape, selected);
+    public void copyTranslate(int x, int y, Point start) {
+        ssm.translateShape(x,y,start, new sCollisionAllStrategy());
     }
 
     @Override
@@ -98,53 +82,30 @@ public class ExternalShapeFacade implements ExternalShapeFacadeInterface{
     }
 
     @Override
-    public ArrayList<ShapeObject> getDraggingShapes() {
-        return stm.getDraggingShapes();
-    }
-
-    @Override
-    public void setTranslatedShapes() {
-        scm.setTranslatedShapes(getDraggingShapes());
-    }
-
-    @Override
     public ShapeObject getShapeSuroundingPoint(Point p) {
         return sm.getShapeSuroundingPoint(p);
     }
 
     @Override
-    public ArrayList<ShapeObject> getAllShapes() {
-        return smi.getAllShapes();
+    public void selectionUpdate(Point start, Point end) {
+        ssm.resizeSelectionRect(start, end);
     }
-
+    
     @Override
-    public boolean isCurrentlySelected(ShapeObject shape) {
-        return ssm.isCurrentlySelected(shape);
-    }
-
-    @Override
-    public void selectionRectShiftReleased() {
-        ssm.selectionRectShiftReleased();
-    }
-
-    @Override
-    public void removeSelectionRect() {
+    public void selectionReleased(){
+        ssm.selectionRectReleased();         
         sm.removeSelectionRect();
     }
 
     @Override
-    public void resizeSelectionRect(Point start, Point end) {
-        ssm.resizeSelectionRect(start, end);
-    }
-
-    @Override
-    public void selectionRectReleased() {
-        ssm.selectionRectReleased();
-    }
-
-    @Override
-    public void switchSelection(ShapeObject shape) {
+    public boolean selectionSwitch(Point p) {
+        ShapeObject shape = sm.getShapeSuroundingPoint(p);
+        
+        if(shape == null)
+            return false;
+        
         ssm.switchSelection(shape);
+        return true;
     }
 
     @Override
@@ -153,12 +114,8 @@ public class ExternalShapeFacade implements ExternalShapeFacadeInterface{
     }
 
     @Override
-    public void initilaizeCopy() {
+    public Point copyInitialize() {
         scm.initilaizeCopy();
-    }
-
-    @Override
-    public Point getSelectionCenter() {
         return ssm.getSelectionCenter();
     }
 
@@ -167,24 +124,56 @@ public class ExternalShapeFacade implements ExternalShapeFacadeInterface{
         sm.drawShapes(g2, at, scale);
     }
 
-    @Override
-    public ArrayList<ShapeObject> getUpdateShapes() {
-        return stm.getUpdateShapes();
-    }
-
-    @Override
-    public ArrayList<ShapeObject> getTranslatedShapes() {
-        return scm.getTranslatedShapes();
-    }
-
-    @Override
-    public void createDraggingShapes() {
-        stm.createDraggingShapes(ssm.getSelection());
-    }
 
     @Override
     public void createCopyShapes() {
         stm.createDraggingShapes(scm.getCopyShapes());
+    }
+
+    @Override
+    public void copySave() {
+        if(!stm.checkForCollision()){
+            gc.setCopyUpdate(stm.getDraggingShapes());
+        }
+        stm.clearDraggingShapes();
+    }
+
+    @Override
+    public void translationSave() {
+
+        if(!stm.checkForCollision()){
+            gc.setTranslationUpdate(stm.getDraggingShapes());
+        }
+        stm.clearDraggingShapes();
+    }
+
+    @Override
+    public void translationInitialization(Point p) {
+        
+        ShapeObject shape = sm.getShapeSuroundingPoint(p);
+        
+        if(shape == null)
+            return;
+        
+        /* When the shape is not selected, all other selected
+        * all other selections will be removed.
+        */
+        if(!shape.isSelected()){
+            ssm.clearCurSelection();
+            ssm.setSelected(shape, true);
+        }
+        stm.createDraggingShapes(ssm.getSelection());
+    }
+
+    @Override
+    public void popupInitialize(Point p) {
+            
+        ShapeObject shape = sm.getShapeSuroundingPoint(p);
+        
+        if(!ssm.isCurrentlySelected(shape)){
+            ssm.clearCurSelection();
+            ssm.setSelected(shape, true);
+        }
     }
 
 }

@@ -36,10 +36,8 @@ public class mlSelectionRectStrategy implements mlMouseStrategy{
     public void mouseReleased(Point p) {
         if(selectionRect != false){
                selectionRect = false;
-               
-               controller.esmi.selectionRectReleased();
-               
-               controller.esmi.removeSelectionRect();
+
+               controller.esmi.selectionReleased();
                controller.drawingPan.repaint();
            }
     }
@@ -49,7 +47,7 @@ public class mlSelectionRectStrategy implements mlMouseStrategy{
          if(selectionRect != false){
                 Point end = p;
                
-                controller.esmi.resizeSelectionRect(start, end);
+                controller.esmi.selectionUpdate(start, end);
                 controller.drawingPan.repaint();
             }
     }

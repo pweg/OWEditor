@@ -8,9 +8,8 @@ import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
-import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.TranslatedObjectInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataObjectInterface;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.GUIController;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.TranslatedObjectInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter.WorldBuilder;
 
 /**
@@ -28,8 +27,6 @@ public class ShapeManager {
     private ArrayList<ShapeObject> avatarShapes = null;
         
     private ShapeObjectSelectionRect selectionRectangle = null;
-    private boolean showDraggingShapes = false;
-    private ShapeTranslationManager stm = null;
     
     private static final Logger LOGGER =
             Logger.getLogger(WorldBuilder.class.getName());
