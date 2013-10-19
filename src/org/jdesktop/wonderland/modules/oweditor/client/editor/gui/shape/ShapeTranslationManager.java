@@ -1,23 +1,56 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.shape;
 
+import java.awt.Point;
 import java.util.ArrayList;
 
 public class ShapeTranslationManager {
 
-    private ArrayList<ShapeObject> draggingShapes = null;
-
     //These are shapes for updates.
-    private ArrayList<ShapeObject> updateShapes = null;
     private sCollisionStrategy strategy = null;
     private InternalShapeMediatorInterface smi = null;
-    
+
     public ShapeTranslationManager(InternalShapeMediatorInterface smi){
         
         this.smi = smi;
-        updateShapes = new ArrayList<ShapeObject>();
-        draggingShapes = new ArrayList<ShapeObject>();
     }
-    
+
+    /**
+     * Translates a shape with the id to the specified
+     * coordinates. This is called, when an update
+     * comes from the data package
+     * 
+     * @param id the id of the shape to translate.
+     * @param x the new x coordinate.
+     * @param y the new y coordinate.
+     */
+    public void translateShape(long id, int x, int y){
+        ShapeObject shape = smi.getShape(id);
+        shape.setLocation(x, y);
+    }
+
+    /**
+     * Moves the dragging shapes, which are shown, when shapes are dragged. 
+     * 
+     * @param x the new x value, where the shape is being dragged.
+     * @param y the new y value, where the shape is being dragged.
+     * @param start the start point from where the shape has been dragged.
+     */
+    public void translateShape(int x, int y, Point start, sCollisionStrategy strategy){
+        
+        this.strategy = strategy;
+        double scale = smi.getScale();
+        int distance_x = start.x - x;
+        int distance_y = start.y - y;
+            
+        double distance = start.distance(x, y);
+        distance = distance / scale;
+
+        translateDraggingShapes(distance_x/scale, distance_y/scale);
+        checkForCollision();
+          
+        smi.repaint();
+        
+    }
 
     /**
      * Translates the dragging shapes(DraggingRectangles), which 
@@ -27,58 +60,16 @@ public class ShapeTranslationManager {
      * @param distance_x the x distance between old and new point.
      * @param distance_y the y distance between old and new point.
      */
-    public void translateDraggingShapes( double distance_x, double distance_y){
+    public void translateDraggingShapes(double distance_x, double distance_y){
         
-        for(ShapeObject selShape : draggingShapes){
+        for(ShapeObject selShape : smi.getDraggingShapes()){
             selShape.setTranslation(distance_x, distance_y);
         }
     }
-        
-    public boolean isDraggingShapesEmpty(){
-        
-        if(draggingShapes.size() > 0)
-            return false;
-        return true;
-    }
-
-    /**
-     * Removes all dragging shapes.
-     */
-    public void clearDraggingShapes() {
-        draggingShapes.clear();
-    }
-
-    /**
-     * Saves all dragging shapes for future update.
-     * This is done, if the moving was successful.
-     */
-    public void saveDraggingShapes() {
-        updateShapes.addAll(draggingShapes);
-        draggingShapes.clear();
-    }
-    
-    public ArrayList<ShapeObject> getDraggingShapes(){
-        return draggingShapes;
-    }
-    
-    /**
-     * Returns all shapes, which need to be updated.
-     * 
-     * @return ArrayList which contains all shapes for future update.
-     */
-    public ArrayList<ShapeObject> getUpdateShapes() {
-        ArrayList<ShapeObject> list = new ArrayList<ShapeObject>();
-        list.addAll(updateShapes);
-        updateShapes.clear();
-        return list;
-    }
-
     
     public void setStrategy(sCollisionStrategy strategy){
         this.strategy = strategy;
     }
-    
-    
 
     /**
      * Checks for collision when dragging shapes.
@@ -89,18 +80,12 @@ public class ShapeTranslationManager {
         if(strategy == null)
             return true;
         
-        return strategy.checkForCollision(smi.getAllShapes(), draggingShapes);
+        return strategy.checkForCollision(smi.getAllShapes(), smi.getDraggingShapes());
     }
 
     public void createDraggingShapes(ArrayList<ShapeObject> shapes){
         smi.createDraggingShapes(shapes);
     }
 
-
-    public void setDraggingShapes(ArrayList<ShapeObject> shapes) {
-        draggingShapes.clear();
-        draggingShapes.addAll(shapes);
-        
-    }
 
 }

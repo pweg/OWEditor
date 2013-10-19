@@ -24,6 +24,14 @@ public class GUISettings {
     public static Paint selectionBorderColor = Color.red;
     public static Paint selectionRectangleColor = Color.lightGray;
     
+    /*
+     * This color is used for the border surrounding the selected
+     * objects, when rotating and scaling.
+     */
+    public static Paint surroundingBorderColor = Color.lightGray;
+    public static int surroundingBorderMargin = 10;
+    public static int surroundingBorderTinyShapeSize = 10;
+    
     public static Paint avatarColor = Color.LIGHT_GRAY;
     
     /*

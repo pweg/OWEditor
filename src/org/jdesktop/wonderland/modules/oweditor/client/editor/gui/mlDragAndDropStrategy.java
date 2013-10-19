@@ -41,7 +41,7 @@ public class mlDragAndDropStrategy implements mlMouseStrategy{
     public void mouseReleased(Point p) {
         dragging = false;
         
-        controller.esmi.translationSave();
+        controller.esmi.translationSetUpdate();
         controller.drawingPan.repaint();
     }
 

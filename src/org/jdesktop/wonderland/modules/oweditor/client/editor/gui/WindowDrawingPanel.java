@@ -100,7 +100,6 @@ public class WindowDrawingPanel extends JPanel implements ChangeListener {
         double add_x = (r.width/curScale-r.width/scale)/2; 
         double add_y = (r.height/curScale-r.height/scale)/2; 
         
-
         int new_x = (int) Math.round(v_x+ add_x);
         int new_y = (int) Math.round(v_y+ add_y);
         
@@ -130,7 +129,7 @@ public class WindowDrawingPanel extends JPanel implements ChangeListener {
         super.paintComponent(g); 
         Graphics2D g2 = (Graphics2D)g;  
         g2.setRenderingHints(hints);  
-        
+
         AffineTransform at = new AffineTransform();
         at.translate(translationX*scale, translationY*scale); 
         at.scale(scale, scale);  

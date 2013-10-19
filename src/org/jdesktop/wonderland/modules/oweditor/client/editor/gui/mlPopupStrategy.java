@@ -13,7 +13,9 @@ public class mlPopupStrategy implements mlMouseStrategy{
     @Override
     public void mousePressed(Point p) {
         
-        contr.esmi.popupInitialize(p);
+        contr.popupMenu.setItemsEnabled(contr.esmi.popupInitialize(p),
+                contr.esmi.copyShapesExist());
+            
 
         contr.drawingPan.repaint();
         contr.popupMenu.show(contr.drawingPan, p.x, p.y);

@@ -78,7 +78,19 @@ public abstract class SimpleShapeObject {
      * 
      * @return height integer.
      */
-    public abstract int getHeight();   
+    public abstract int getHeight();
+
+    /**
+     * Sets the dimensions and the position of the shape.
+     * 
+     * @param x the x coordinate.
+     * @param y the y coordinate.
+     * @param width the width.
+     * @param height the height.
+     */
+    public abstract void set(int x, int y, int width, int height);
+    
+    public abstract void setRotation(double rotation);
     
 
 }

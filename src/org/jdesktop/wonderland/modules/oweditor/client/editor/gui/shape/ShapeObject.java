@@ -57,8 +57,6 @@ public abstract class ShapeObject extends SimpleShapeObject{
      */
     public abstract String getName();
     
-    public abstract void setRotation(double rotation);
-    
     public abstract double getRotation();
     
 

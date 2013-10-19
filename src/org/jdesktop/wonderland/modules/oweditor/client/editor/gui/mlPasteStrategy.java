@@ -2,14 +2,14 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.gui;
 
 import java.awt.Point;
 
-public class mlCopyStrategy implements mlMouseStrategy{
+public class mlPasteStrategy implements mlMouseStrategy{
 
     public GUIController controller = null;
     public MouseAndKeyListener listener = null;
     private Point start = new Point();
     private boolean dragging = false;
     
-    public mlCopyStrategy(GUIController contr, MouseAndKeyListener listener){
+    public mlPasteStrategy(GUIController contr, MouseAndKeyListener listener){
         this.controller = contr;
         this.listener = listener;
     }
@@ -23,13 +23,13 @@ public class mlCopyStrategy implements mlMouseStrategy{
             start.y = p.y;
 
             controller.esmi.clearCurSelection();
-            controller.esmi.createCopyShapes();
+            controller.esmi.pasteInitialize();
             
             dragging = true;
         }else{
             dragging = false;
             
-            controller.esmi.copySave();
+            controller.esmi.pasteInsertShapes();
             
             listener.releaseLockLeftMouse();
             controller.drawingPan.repaint();
@@ -46,7 +46,7 @@ public class mlCopyStrategy implements mlMouseStrategy{
     @Override
     public void mouseMoved(Point p) {
         if(dragging) {
-            controller.esmi.copyTranslate(p.x,p.y, start);
+            controller.esmi.pasteTranslate(p.x,p.y, start);
             start.x = p.x;
             start.y = p.y;
         }

@@ -32,9 +32,7 @@ public interface ExternalShapeFacadeInterface {
 
     public void translation(int x, int y, Point start);
 
-    public void translationSave();
-
-    public void createCopyShapes();
+    public void translationSetUpdate();
 
     /**
      * 
@@ -42,17 +40,42 @@ public interface ExternalShapeFacadeInterface {
      */
     public Point copyInitialize();
     
-    public void copyTranslate(int x, int y, Point start);
+    /**
+     * Looks for copy shape, whether there were shapes
+     * copied or not.
+     * 
+     * @return true, when there are copied shapes,
+     * false otherwise
+     */
+    public boolean copyShapesExist();
+
+    public void pasteInitialize();
     
-    public void copySave();
+    public void pasteTranslate(int x, int y, Point start);
+    
+    public void pasteInsertShapes();
 
     public void translationInitialization(Point p);
 
-    public void popupInitialize(Point p);
+    /**
+     * Initializes the selection for the 
+     * popup menu.
+     * 
+     * @param p the mouse point, where the popup menu
+     * is going to get drawn.
+     * 
+     * @return true, if there is are shapes selected,
+     * false otherwise. This is used for menu items to
+     * be enabled/disabled.
+     * 
+     */
+    public boolean popupInitialize(Point p);
 
     public void selectionReleased();
 
     public void clean();
+
+    public void rotationInitialize();
 
 
 }

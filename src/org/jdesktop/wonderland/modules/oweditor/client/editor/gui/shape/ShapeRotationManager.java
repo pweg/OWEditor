@@ -1,5 +1,7 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.shape;
 
+import java.awt.Point;
+import java.awt.Rectangle;
 import java.util.ArrayList;
 
 public class ShapeRotationManager {
@@ -8,12 +10,13 @@ public class ShapeRotationManager {
     private ArrayList<ShapeObject> rotatingShapes = null;
     
     public ShapeRotationManager(InternalShapeMediatorInterface smi){
+        rotatingShapes = new ArrayList<ShapeObject>();
         this.smi = smi;
     }
     
     public void initializeRotation(){
         rotatingShapes.clear();
-        smi.getSelectedShapes();
+        rotatingShapes.addAll(smi.getSelectedShapes());
 
     }
 

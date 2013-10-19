@@ -2,6 +2,7 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.shape;
 
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.TranslatedObjectInterface;
@@ -28,8 +29,6 @@ public class ExternalShapeFacade implements ExternalShapeFacadeInterface{
         srm = new ShapeRotationManager(smi);
         scm = new ShapeCopyManager(smi);
         
-        smi.registerCopyManager(scm);
-        smi.registerRotationManager(srm);
         smi.registerSelectionManager(ssm);
         smi.registerShapeManager(sm);
         smi.registerTranslationManager(stm);
@@ -37,7 +36,7 @@ public class ExternalShapeFacade implements ExternalShapeFacadeInterface{
 
     @Override
     public void createShape(TranslatedObjectInterface dataObject) {
-        sm.getDataUpdate(dataObject);
+        sm.setDataUpdate(dataObject);
     }
 
     @Override
@@ -47,7 +46,7 @@ public class ExternalShapeFacade implements ExternalShapeFacadeInterface{
 
     @Override
     public void updateShapeCoordinates(long id, int x, int y) {
-        sm.translateShape(id, x, y);
+        stm.translateShape(id, x, y);
     }
 
     @Override
@@ -62,23 +61,24 @@ public class ExternalShapeFacade implements ExternalShapeFacadeInterface{
 
     @Override
     public void clean() {
-        stm.clearDraggingShapes();
+        sm.clearDraggingShapes();
         sm.removeSelectionRect();
+        sm.removeBorder();
     }
     
     @Override
     public void translation(int x, int y, Point start){
-        ssm.translateShape(x, y, start, new sCollisionNotSelectedStrategy(smi));
-    }
-
-    @Override
-    public void copyTranslate(int x, int y, Point start) {
-        ssm.translateShape(x,y,start, new sCollisionAllStrategy());
+        stm.translateShape(x, y, start, new sCollisionNotSelectedStrategy(smi));
     }
 
     @Override
     public boolean isMouseInObject(Point point) {
-        return sm.isMouseInObject(point);
+        ShapeObject shape = sm.getShapeSuroundingPoint(point);
+        
+        if(shape == null)
+            return false;
+        else
+            return true;
     }
 
     @Override
@@ -126,25 +126,30 @@ public class ExternalShapeFacade implements ExternalShapeFacadeInterface{
 
 
     @Override
-    public void createCopyShapes() {
+    public void pasteInitialize() {
         stm.createDraggingShapes(scm.getCopyShapes());
     }
 
     @Override
-    public void copySave() {
-        if(!stm.checkForCollision()){
-            gc.setCopyUpdate(stm.getDraggingShapes());
-        }
-        stm.clearDraggingShapes();
+    public void pasteTranslate(int x, int y, Point start) {
+        stm.translateShape(x,y,start, new sCollisionAllStrategy());
     }
 
     @Override
-    public void translationSave() {
+    public void pasteInsertShapes() {
+        if(!stm.checkForCollision()){
+            gc.setCopyUpdate(sm.getDraggingShapes());
+        }
+        sm.clearDraggingShapes();
+    }
+
+    @Override
+    public void translationSetUpdate() {
 
         if(!stm.checkForCollision()){
-            gc.setTranslationUpdate(stm.getDraggingShapes());
+            gc.setTranslationUpdate(sm.getDraggingShapes());
         }
-        stm.clearDraggingShapes();
+        sm.clearDraggingShapes();
     }
 
     @Override
@@ -166,14 +171,36 @@ public class ExternalShapeFacade implements ExternalShapeFacadeInterface{
     }
 
     @Override
-    public void popupInitialize(Point p) {
+    public boolean popupInitialize(Point p) {
             
         ShapeObject shape = sm.getShapeSuroundingPoint(p);
+        
+        if(shape == null){
+            if(ssm.getSelection().size() == 0)
+                return false;
+            else
+                return true;
+        }
         
         if(!ssm.isCurrentlySelected(shape)){
             ssm.clearCurSelection();
             ssm.setSelected(shape, true);
         }
+        return true;
+    }
+
+    @Override
+    public boolean copyShapesExist() {
+        if(scm.getCopyShapes().size() == 0)
+            return false;
+        return true;
+    }
+
+    @Override
+    public void rotationInitialize() {
+        sm.createShapeBorder(gc.getDrawingPan().getScale(), 
+                ssm.getSelectionCoords(), ssm.getSelection());
+        srm.initializeRotation();
     }
 
 }

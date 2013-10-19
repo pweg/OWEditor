@@ -114,4 +114,9 @@ public class ShapeObjectAvatar extends ShapeObject{
         return 0;
     }
 
+    @Override
+    public void set(int x, int y, int width, int height) {
+        originalShape.setFrame(x, y, width, height);
+    }
+
 }

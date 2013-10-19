@@ -13,8 +13,10 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.Tra
 import org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter.WorldBuilder;
 
 /**
- * This class is used for creating and managing all shapes.
- * It stores all shapes.
+ * This class is used for creating and managing all shapes that 
+ * are later painted.
+ * It stores all shapes, like shape objects, avatar shapes,
+ * the selection rectangle and dragging shapes.
  * 
  * @author Patrick
  *
@@ -25,8 +27,10 @@ public class ShapeManager {
     
     private ArrayList<ShapeObject> shapes = null;
     private ArrayList<ShapeObject> avatarShapes = null;
+    private ArrayList<ShapeObject> draggingShapes = null;
         
     private ShapeObjectSelectionRect selectionRectangle = null;
+    private ShapeBorder border = null;
     
     private static final Logger LOGGER =
             Logger.getLogger(WorldBuilder.class.getName());
@@ -41,6 +45,8 @@ public class ShapeManager {
         
         shapes = new ArrayList<ShapeObject>();
         avatarShapes = new ArrayList<ShapeObject>();
+        draggingShapes = new ArrayList<ShapeObject>();
+        
         this.smi = smi;
     }
     
@@ -58,57 +64,31 @@ public class ShapeManager {
      * @return ShapeObject, or null if id is not found.
      */
     public ShapeObject getShape(long id){
-        ShapeObject s = null;
         
-        s = getNormalShape(id);
-        if(s == null)
-            s = getAvatarShape(id);
-        
-        return s;
-    }
-    
-    /**
-     * Gets a specific shape from the normal shape pool.
-     * 
-     * @param id the shape id.
-     * @return ShapeObject, or null if id is not found.
-     */
-    public ShapeObject getNormalShape(long id){
         for(ShapeObject shape : shapes){
             if(shape.getID() == id)
                 return shape;
         }
-        return null;
-    }
-    
-    /**
-     * Gets a specific avatar shape from the avatar shape pool.
-     * 
-     * @param id the shape id.
-     * @return ShapeObject, or null if id is not found.
-     */
-    private ShapeObject getAvatarShape(long id){
+        
         for(ShapeObject shape : avatarShapes){
             if(shape.getID() == id)
                 return shape;
         }
+        
         return null;
     }
     
     /**
-     * Creates the selection rectangle object, if it is null
-     * and sets new coordinates/width&height for it otherwise.
+     * Creates the selection rectangle object if it is null,
+     * or sets new coordinates/width/height for it otherwise.
      * 
      * @param x x coordinate.
      * @param y y coordinate.
      * @param width the width of the rectangle.
      * @param height the height of the rectangle.
      */
-    public void setSelectionRect(int x, int y, int width, int height){
-        if (selectionRectangle == null)
-            selectionRectangle = new ShapeObjectSelectionRect(x,y,width,height); 
-        else
-            selectionRectangle.set(x, y, width, height);
+    public void createSelectionRect(int x, int y, int width, int height){
+        selectionRectangle = new ShapeObjectSelectionRect(x,y,width,height); 
     }
     
     /**
@@ -136,44 +116,6 @@ public class ShapeManager {
             }
         }
         return null; 
-    }
-    
-
-    public boolean isMouseInObject(Point p){
-
-        for(ShapeObject shape_obj : shapes){
-            
-            Shape shape = shape_obj.getTransformedShape();
-            
-            if(shape.contains(p)) {
-                return true;
-            }
-        }
-        return false;
-    }
-    
-    /**
-     * Searches for shape objects which are enclosed by the 
-     * selection rectangle. 
-     * 
-     * @return an arraylist with shape objects. If
-     * no object is in the selection rectangle, it returns an empty list.
-     */
-    public ArrayList<ShapeObject> getShapesInSelectionRect(){
-        ArrayList<ShapeObject> list = new ArrayList<ShapeObject>();
-        
-        if(selectionRectangle == null)
-            return list;
-        
-        for(ShapeObject shape : shapes){
-            Rectangle bounds = shape.getTransformedShape().getBounds();
-            
-            if(selectionRectangle.getShape().contains(bounds)){
-                list.add(shape);
-            }
-            
-        }
-        return list;
     }
     
     /**
@@ -208,20 +150,22 @@ public class ShapeManager {
             shape.paintName(g2, at, scale);
         }
         
-        for(ShapeObject shape : smi.getDraggingShapes()){  
+        
+        for(ShapeObject shape : draggingShapes){  
             shape.paintOriginal(g2, at);
             
+        }
+        
+        if(border != null){
+            AffineTransform transform = new AffineTransform();
+            transform.scale(scale, scale);  
+            
+            border.paintOriginal(g2, transform);
         }
 
         if(selectionRectangle != null)
             selectionRectangle.paintOriginal(g2);
     }
-    
-    public ShapeFactory getFactory(){
-        return factory;
-    }
-    
-    
     
     /**
      * Removes a shape.
@@ -239,38 +183,28 @@ public class ShapeManager {
     }
 
     /**
-     * Gets an update for a shape from the data package for the given id.
+     * Gets an update for a shape from the data package for the given data 
+     * object.
      * 
      * @param dataObject which is the updated object.
      */
-    public void getDataUpdate(TranslatedObjectInterface dataObject) {
+    public void setDataUpdate(TranslatedObjectInterface dataObject) {
         
         if(dataObject == null)
             return;
         
-        ShapeObject shape = null;
         long id = dataObject.getID();
         
-        if(dataObject.getType() == DataObjectInterface.AVATAR){
-            shape = getAvatarShape(id);
-        }else{
-            shape = getNormalShape(id);
-        }
+        ShapeObject shape = getShape(id);
         
         if(shape == null){
-            getCreateUpdate(dataObject);
+            createShape(dataObject);
             return;
         }
         
         shape.setName(dataObject.getName());
         shape.setLocation(dataObject.getX(), dataObject.getY());
         shape.setRotation(dataObject.getRotation());
-    }
-    
-    public void translateShape(long id, int x, int y){
-        ShapeObject shape = getShape(id);
-        
-        shape.setLocation(x, y);
     }
     
     public void changeShape(long id, int x, int y, String name){
@@ -285,7 +219,7 @@ public class ShapeManager {
      * 
      * @param dataObject which needs to be created.
      */
-    public void getCreateUpdate(TranslatedObjectInterface dataObject){
+    private void createShape(TranslatedObjectInterface dataObject){
         
         long id = dataObject.getID();
         int x = dataObject.getX();
@@ -309,15 +243,12 @@ public class ShapeManager {
         }
     }
     
-
-
-
     /**
-     * Creates the dragging shapes for a given shape object.
+     * Creates a dragging shapes for a given shape object.
      * 
      * @param shape a shape object, which is dragged.
      */
-    public ShapeObject builtDraggingShape(ShapeObject shape) {
+    private ShapeObject createDraggingShape(ShapeObject shape) {
                     
         int x = shape.getX();
         int y = shape.getY();
@@ -339,13 +270,80 @@ public class ShapeManager {
         return newShape;
     }
     
-    public ArrayList<ShapeObject> builtDraggingShapes(ArrayList<ShapeObject> shapes){
-        ArrayList<ShapeObject> list = new ArrayList<ShapeObject>();
+    /**
+     * Creates multiple dragging shapes from a given list of 
+     * shapes.
+     * 
+     * @param shapes an arraylist which holds all shapes from 
+     * which the dragging shapes will be built
+     * @return an arraylist of draggingshapes, which werer built
+     */
+    public void createDraggingShapes(ArrayList<ShapeObject> shapes){
+        draggingShapes.clear();
         
         for(ShapeObject shape : shapes){
-            list.add(builtDraggingShape(shape));
+            draggingShapes.add(createDraggingShape(shape));
         }
-        return list;
+    }
+    
+    public ArrayList<ShapeObject> getDraggingShapes(){
+        return draggingShapes;
+    }
+
+    /**
+     * Removes all dragging shapes.
+     */
+    public void clearDraggingShapes() {
+        draggingShapes.clear();
+    }
+    
+    public SimpleShapeObject getSelectionRectangle(){
+        return selectionRectangle;
+    }
+    
+    public void removeBorder(){
+        border = null;
+    }
+    
+    public void createShapeBorder(double scale, Point coordinates, 
+            ArrayList<ShapeObject> shapes){
+
+        int min_x = Integer.MAX_VALUE;
+        int max_x = Integer.MIN_VALUE;
+        int min_y = Integer.MAX_VALUE;
+        int max_y = Integer.MIN_VALUE;
+                
+        /*
+         * Gets the width and heihgt of the selection
+         */
+        for(ShapeObject shape : shapes){
+            Rectangle r = shape.getTransformedShape().getBounds();
+            
+            int x = (int) Math.round(r.x/scale);
+            int y = (int) Math.round(r.y/scale);
+            int width = (int) Math.round(r.width/scale);
+            int height = (int) Math.round(r.height/scale);
+
+            if(min_x > x)
+                min_x = x;
+            if(max_x < x+width)
+                max_x = x+width;
+            if(min_y > y)
+                min_y = y;
+            if(max_y < y+height)
+                max_y = y+height;
+        }
+        
+        int width = max_x-min_x;
+        int height = max_y-min_y;
+
+        int x = (int) Math.round(coordinates.x/scale);
+        int y = (int) Math.round(coordinates.y/scale);
+        border = new ShapeBorder(x, y, width, height);
+    }
+    
+    public byte isInBorderShapes(Point p){
+        return border.checkShapes(p);
     }
     
 }

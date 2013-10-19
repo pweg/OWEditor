@@ -67,8 +67,7 @@ public class ShapeObjectSelectionRect extends SimpleShapeObject{
         g.setStroke(dashed); 
         
         transformedShape = at.createTransformedShape(originalShape);
-                
-        g.draw(at.createTransformedShape(originalShape)); 
+        g.draw(transformedShape); 
     }
 
     @Override
@@ -110,6 +109,11 @@ public class ShapeObjectSelectionRect extends SimpleShapeObject{
     @Override
     public Shape getTransformedShape() {
         return transformedShape;
+    }
+
+    @Override
+    public void setRotation(double rotation) {
+        
     }
 
 }

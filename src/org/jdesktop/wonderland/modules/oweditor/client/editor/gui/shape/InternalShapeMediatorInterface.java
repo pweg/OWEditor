@@ -6,8 +6,6 @@ public interface InternalShapeMediatorInterface {
     
     public void registerShapeManager(ShapeManager sm);
     public void registerTranslationManager(ShapeTranslationManager stm);
-    public void registerCopyManager (ShapeCopyManager scm);
-    public void registerRotationManager(ShapeRotationManager srm);
     public void registerSelectionManager(ShapeSelectionManager ssm);
     
     public ArrayList<ShapeObject> getAllShapes();
@@ -18,15 +16,14 @@ public interface InternalShapeMediatorInterface {
 
     public double getScale();
 
-    public boolean checkForCollision(sCollisionStrategy strategy);
-
     public void translateDraggingShapes(double distance_x, double distance_y);
 
     public void createDraggingShapes(ArrayList<ShapeObject> selectedShapes);
     
     public void repaint();
+    
 
-    public void setSelectionRect(int x, int y, int width, int height);
+    public void createSelectionRect(int x, int y, int width, int height);
 
     public ArrayList<ShapeObject> getShapesInSelectionRect();
 
@@ -39,4 +36,8 @@ public interface InternalShapeMediatorInterface {
     public void clearCurSelection();
     
     public ArrayList<ShapeObject> getDraggingShapes();
+    
+    public SimpleShapeObject getSelectionRectangle();
+    
+    public ShapeObject getShape(long id);
 }

@@ -24,6 +24,7 @@ public class WindowPopupMenu extends JPopupMenu{
     
     private void initializeComponents(){
         copyItem = new JMenuItem("copy");
+        pasteItem = new JMenuItem("paste");
         rotateItem = new JMenuItem("rotate");
         propertiesItem = new JMenuItem("properties");
         
@@ -36,23 +37,55 @@ public class WindowPopupMenu extends JPopupMenu{
               }
             });
         
-
+        copyItem.setAccelerator(KeyStroke.getKeyStroke(
+                KeyEvent.VK_C, ActionEvent.CTRL_MASK));
+        copyItem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                gc.mkListener.copyShapes();
+              }
+            });
+        
+        pasteItem.setAccelerator(KeyStroke.getKeyStroke(
+                KeyEvent.VK_V, ActionEvent.CTRL_MASK));
+        pasteItem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                gc.mkListener.pasteShapes();
+              }
+            });
+        
         rotateItem.setAccelerator(KeyStroke.getKeyStroke(
                 KeyEvent.VK_R, ActionEvent.CTRL_MASK));
         rotateItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                //gc.esmi.initializeRotation();
+                gc.mkListener.rotateShapes();
               }
             });
         
         
         add(copyItem);
+        add(pasteItem);
         add(rotateItem);
         addSeparator();
         add(propertiesItem);
     }
     
+    public void setItemsEnabled(boolean shapesSelected, boolean copyShapesExist){
+        
+        if(shapesSelected){
+            copyItem.setEnabled(true);  
+            rotateItem.setEnabled(true);
+        }else{
+            copyItem.setEnabled(false);
+            rotateItem.setEnabled(false);
+        }
+        if(copyShapesExist)
+            pasteItem.setEnabled(true);
+        else
+            pasteItem.setEnabled(false);
+    }
+    
     private JMenuItem copyItem;
+    private JMenuItem pasteItem;
     private JMenuItem rotateItem;
     private JMenuItem propertiesItem;
 

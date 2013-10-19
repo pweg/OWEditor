@@ -1,6 +1,7 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.shape;
 
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.util.ArrayList;
 
 /**
@@ -14,8 +15,6 @@ public class ShapeSelectionManager {
 
     private ArrayList<ShapeObject> selectedShapes = null;
     private InternalShapeMediatorInterface smi = null;
-    
-    public boolean collision = false;
     
     public ShapeSelectionManager(InternalShapeMediatorInterface smi){
         selectedShapes = new ArrayList<ShapeObject>();     
@@ -37,10 +36,8 @@ public class ShapeSelectionManager {
         
         if(selected){
             selectedShapes.add(shape);
-            //controler.getShapeManager().createDraggingShape(shape);
         }else{
             selectedShapes.remove(shape);
-            //controler.getShapeManager().removeDraggingShape(shape);
         }
     }
     
@@ -53,10 +50,8 @@ public class ShapeSelectionManager {
     public void switchSelection(ShapeObject shape){
         if(shape.isSelected()){
             selectedShapes.remove(shape);   
-            //controler.getShapeManager().removeDraggingShape(shape);
         }else{
             selectedShapes.add(shape);
-            //controler.getShapeManager().createDraggingShape(shape);
         }
         shape.switchSelection();
     }
@@ -72,30 +67,7 @@ public class ShapeSelectionManager {
         smi.clearDraggingShapes();
         selectedShapes.clear();
     }
-    
-    /**
-     * Moves the dragging shapes, which are shown, when shapes are dragged. 
-     * 
-     * @param x the new x value, where the shape is being dragged.
-     * @param y the new y value, where the shape is being dragged.
-     * @param start the start point from where the shape has been dragged.
-     */
-    public void translateShape(int x, int y, Point start, sCollisionStrategy strategy){
         
-        double scale = smi.getScale();
-        int distance_x = start.x - x;
-        int distance_y = start.y - y;
-            
-        double distance = start.distance(x, y);
-        distance = distance / scale;
-
-        smi.translateDraggingShapes(distance_x/scale, distance_y/scale);
-        collision = smi.checkForCollision(strategy);
-          
-        smi.repaint();
-        
-    }
-    
     public boolean isCurrentlySelected(ShapeObject shape){
         long id = shape.getID();
         
@@ -139,7 +111,14 @@ public class ShapeSelectionManager {
             height = ey-sy;
             y=sy;
         }
-        smi.setSelectionRect(x,y,width, height);
+        SimpleShapeObject r = smi.getSelectionRectangle();
+        
+        if (r == null)
+            smi.createSelectionRect(x,y,width,height); 
+        else
+            r.set(x, y, width, height);
+        
+        //smi.setSelectionRect(x,y,width, height);
         
     }
 
@@ -156,6 +135,13 @@ public class ShapeSelectionManager {
         }
     }
     
+    /**
+     * Returns all selected shapes.
+     * 
+     * @return all shapes that are currently selected.
+     * An empty list is returned, when no shape is 
+     * selected.
+     */
     public ArrayList<ShapeObject> getSelection(){
         return selectedShapes;
     }
@@ -169,6 +155,13 @@ public class ShapeSelectionManager {
         }
     }
     
+    /**
+     * Returns the center point of the
+     * current selected shapes.
+     * 
+     * @return a point, which is at the
+     * center of all currently selected objects.
+     */
     public Point getSelectionCenter(){
         
         int min_x = Integer.MAX_VALUE;
@@ -194,9 +187,48 @@ public class ShapeSelectionManager {
         
         return new Point(x,y);
     }
+
+    public Point getSelectionCoords(){
+        
+        int min_x = Integer.MAX_VALUE;
+        int min_y = Integer.MAX_VALUE;
+        
+        for(ShapeObject shape : selectedShapes){
+            int s_x = shape.getTransformedShape().getBounds().x;
+            int s_y = shape.getTransformedShape().getBounds().y;
+
+            if(s_x < min_x)
+                min_x = s_x;
+            if(s_y < min_y)
+                min_y = s_y;
+        }
+        
+        return new Point(min_x,min_y);
+    }
+
     
-    public int countSelected(){
-        return selectedShapes.size();
+    /**
+     * Searches for shape objects which are enclosed by the 
+     * selection rectangle. 
+     * 
+     * @return an arraylist with shape objects. If
+     * no object is in the selection rectangle, it returns an empty list.
+     */
+    public ArrayList<ShapeObject> getShapesInSelectionRect(){
+        ArrayList<ShapeObject> list = new ArrayList<ShapeObject>();
+        
+        
+        if(smi.getSelectionRectangle() == null)
+            return list;
+        
+        for(ShapeObject shape : smi.getAllShapes()){
+            Rectangle bounds = shape.getTransformedShape().getBounds();
+            
+            if(smi.getSelectionRectangle().getShape().contains(bounds)){
+                list.add(shape);
+            }
+        }
+        return list;
     }
 
 }

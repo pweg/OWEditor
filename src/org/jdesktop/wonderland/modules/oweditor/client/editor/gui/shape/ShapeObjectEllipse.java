@@ -215,4 +215,9 @@ public class ShapeObjectEllipse extends ShapeObject{
         return rotation;
     }
 
+    @Override
+    public void set(int x, int y, int width, int height) {
+        originalShape.setFrame(x, y, width, height);
+    }
+
 }

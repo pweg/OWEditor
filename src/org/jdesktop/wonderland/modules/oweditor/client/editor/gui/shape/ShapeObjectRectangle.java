@@ -230,4 +230,11 @@ public class ShapeObjectRectangle extends ShapeObject{
         return rotation;
     }
 
+    @Override
+    public void set(int x, int y, int width, int height) {
+        originalShape.setLocation(x, y);
+        originalShape.setSize(width, height);
+        
+    }
+
 }

@@ -45,6 +45,7 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
                 gc.drawingPan.repaint();               
             }
         }else{
+             //dragging shapes/selection
              if(e.getButton() ==  MouseEvent.BUTTON1 && !lockLeftMousePressed){
                  Point p = e.getPoint();
                     
@@ -55,25 +56,33 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
                      strategy = new mlSelectionRectStrategy(gc);
                      strategy.mousePressed(e.getPoint());
                  }
-             }else if(lockLeftMousePressed){
+             }
+             //paste insertion
+             else if(lockLeftMousePressed && e.getButton() ==  MouseEvent.BUTTON1 ){
                  strategy.mousePressed(e.getPoint());
              }
-             else if (e.getButton() ==  MouseEvent.BUTTON3 && gc.esmi.isMouseInObject(e.getPoint())){
-                 strategy = new mlPopupStrategy(gc);
-                 strategy.mousePressed(e.getPoint());
-             }else if (e.getButton() ==  MouseEvent.BUTTON2 || e.getButton() ==  MouseEvent.BUTTON3){
+             //Panning
+             else if (e.getButton() ==  MouseEvent.BUTTON2 || e.getButton() ==  MouseEvent.BUTTON3){
                  gc.esmi.clean();
                  strategy = new mlPanStrategy(gc.drawingPan);
                  strategy.mousePressed(e.getPoint());
+             }else{
+                 clear();
+                 
              }
         }
     }
+    public void mouseClicked(MouseEvent e) {
+        if (e.getButton() ==  MouseEvent.BUTTON3 ){
+            strategy = new mlPopupStrategy(gc);
+            strategy.mousePressed(e.getPoint());
+        }
+     }
     
     @Override
     public void mouseWheelMoved( MouseWheelEvent e )
     {
 
-        WindowDrawingPanel panel = gc.drawingPan;
         
         /*
          * When removing this, it should be possible to drag selected
@@ -81,10 +90,10 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
          * also need some refinements, due to the new scales.
          */
         if(strategy != null){
-            gc.esmi.clean();
-            panel.repaint();
+            clear();
         }
-        strategy = null;
+        
+        WindowDrawingPanel panel = gc.drawingPan;
         
         double curScale = panel.getScale();
         
@@ -129,13 +138,11 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
                 shiftPressed = false;
         }else if( e.getKeyCode() == KeyEvent.VK_DELETE){
             gc.esmi.deleteCurrentSelection();
+        }else if(e.getKeyCode() == KeyEvent.VK_ESCAPE){
+            clear();
         }else if(e.isControlDown()){
             if(e.getKeyCode() == KeyEvent.VK_C){
-                                
-                copyPoint = gc.esmi.copyInitialize();
-                copyPoint.x += gc.drawingPan.getTranslationX();
-                copyPoint.y += gc.drawingPan.getTranslationY();
-                
+                copyShapes();
                 //This can be used, if you want the copies to appear
                 //approximated to the mouse position, when the copy
                 //button was hit.
@@ -146,28 +153,50 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
                  * copyPoint.y = (int) Math.round(copyPoint.y / scale);
                 */
             }else if(e.getKeyCode() == KeyEvent.VK_V){
-                if(copyPoint == null)
-                    return;
-                
-                strategy = new mlCopyStrategy(gc, this);
-                scale = gc.drawingPan.getScale();
-                
-                int x = (int) Math.round(copyPoint.x * scale);
-                int y = (int) Math.round(copyPoint.y * scale);
-                Point p = new Point(x,y);
-
-                strategy.mousePressed(p);
-                strategy.mouseMoved(gc.drawingPan.getMousePosition());
-                lockLeftMousePressed = true;
-                
+                pasteShapes(); 
             }else if(e.getKeyCode() == KeyEvent.VK_X){
                 
             }
         }
     }
     
+    private void clear(){
+        gc.esmi.clean();
+        gc.drawingPan.repaint();
+        releaseLockLeftMouse();
+        strategy = null;
+    }
+    
+    public void copyShapes(){
+        copyPoint = gc.esmi.copyInitialize();
+        copyPoint.x += gc.drawingPan.getTranslationX();
+        copyPoint.y += gc.drawingPan.getTranslationY();
+        
+    }
+    
+    public void pasteShapes(){
+        if(copyPoint == null)
+            return;
+        
+        strategy = new mlPasteStrategy(gc, this);
+        scale = gc.drawingPan.getScale();
+        
+        int x = (int) Math.round(copyPoint.x * scale);
+        int y = (int) Math.round(copyPoint.y * scale);
+        Point p = new Point(x,y);
+
+        strategy.mousePressed(p);
+        strategy.mouseMoved(gc.drawingPan.getMousePosition());
+        lockLeftMousePressed = true;
+    }
+    
     public void releaseLockLeftMouse(){
         lockLeftMousePressed = false;
+    }
+
+    public void rotateShapes() {
+        gc.esmi.rotationInitialize();
+        gc.drawingPan.repaint();
     }
 
 }

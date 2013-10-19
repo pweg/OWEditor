@@ -33,7 +33,7 @@ public class GUIController implements GUIControllerInterface{
     private DataObjectManagerGUIInterface dmi = null;
     private AdapterCommunication ac = null;
 
-    private MouseAndKeyListener mkListener = null;
+    protected MouseAndKeyListener mkListener = null;
     
     public GUIController(){
     }

@@ -7,8 +7,6 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.GUIController;
 public class InternalShapeMediator implements InternalShapeMediatorInterface{
     
     private ShapeManager sm = null;
-    private ShapeCopyManager scm = null;
-    private ShapeRotationManager srm = null;
     private ShapeSelectionManager ssm = null;
     private ShapeTranslationManager stm = null;
     private GUIController gc = null;
@@ -25,16 +23,6 @@ public class InternalShapeMediator implements InternalShapeMediatorInterface{
     @Override
     public void registerTranslationManager(ShapeTranslationManager stm) {
         this.stm = stm;
-    }
-
-    @Override
-    public void registerCopyManager(ShapeCopyManager scm) {
-        this.scm = scm; 
-    }
-
-    @Override
-    public void registerRotationManager(ShapeRotationManager srm) {
-        this.srm = srm;
     }
 
     @Override
@@ -55,19 +43,12 @@ public class InternalShapeMediator implements InternalShapeMediatorInterface{
 
     @Override
     public void clearDraggingShapes() {
-        stm.clearDraggingShapes();
+        sm.clearDraggingShapes();
     }
 
     @Override
     public double getScale() {
         return gc.getDrawingPan().getScale();
-    }
-
-
-    @Override
-    public boolean checkForCollision(sCollisionStrategy strategy) {
-        stm.setStrategy(strategy);
-        return stm.checkForCollision();
     }
 
     @Override
@@ -77,7 +58,7 @@ public class InternalShapeMediator implements InternalShapeMediatorInterface{
 
     @Override
     public void createDraggingShapes(ArrayList<ShapeObject> selectedShapes) {
-        stm.setDraggingShapes(sm.builtDraggingShapes(selectedShapes));
+        sm.createDraggingShapes(selectedShapes);
     }
 
     @Override
@@ -86,13 +67,13 @@ public class InternalShapeMediator implements InternalShapeMediatorInterface{
     }
 
     @Override
-    public void setSelectionRect(int x, int y, int width, int height) {
-        sm.setSelectionRect(x, y, width, height);
+    public void createSelectionRect(int x, int y, int width, int height) {
+        sm.createSelectionRect(x, y, width, height);
     }
 
     @Override
     public ArrayList<ShapeObject> getShapesInSelectionRect() {
-        return sm.getShapesInSelectionRect();
+        return ssm.getShapesInSelectionRect();
     }
 
     @Override
@@ -107,7 +88,17 @@ public class InternalShapeMediator implements InternalShapeMediatorInterface{
 
     @Override
     public ArrayList<ShapeObject> getDraggingShapes() {
-        return stm.getDraggingShapes();
+        return sm.getDraggingShapes();
+    }
+
+    @Override
+    public SimpleShapeObject getSelectionRectangle() {
+        return sm.getSelectionRectangle();
+    }
+
+    @Override
+    public ShapeObject getShape(long id) {
+        return sm.getShape(id);
     }
 
 }
