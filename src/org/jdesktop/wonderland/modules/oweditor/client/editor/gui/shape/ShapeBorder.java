@@ -18,7 +18,10 @@ public class ShapeBorder extends SimpleShapeObject{
 
     private Rectangle originalShape = null;
     private Rectangle rotationCenter = null;
+    
     private Shape transformedShape = null;
+    private Shape transformedCenter = null;
+    
     private Paint color = GUISettings.surroundingBorderColor;
     
     private int tinySize = GUISettings.surroundingBorderTinyShapeSize;
@@ -28,11 +31,14 @@ public class ShapeBorder extends SimpleShapeObject{
     private double  rotation = 0;
     
     ArrayList<Rectangle> tinyShapes = null;
+    ArrayList<Shape> transformedTinyShapes = null;
     
     public ShapeBorder(int x, int y, int width, int height){
         tinySizeHalf = (int) Math.round(tinySize/2);
-        
+
         tinyShapes = new ArrayList<Rectangle>();
+        transformedTinyShapes = new ArrayList<Shape>();
+        
         x = x-margin;
         y = y-margin;
         originalShape = new Rectangle (x, y, width+2*margin, height+2*margin);
@@ -66,15 +72,26 @@ public class ShapeBorder extends SimpleShapeObject{
     @Override
     public void paintOriginal(Graphics2D g, AffineTransform at) {
         
-        g.setPaint(color);         
-        transformedShape = at.createTransformedShape(originalShape);
+        g.setPaint(color);  
+        
+        transformedCenter = at.createTransformedShape(rotationCenter);
+        
+        AffineTransform transform = new AffineTransform();
+        transform.rotate(Math.toRadians(rotation), 
+                rotationCenter.getBounds().getCenterX(), 
+                rotationCenter.getBounds().getCenterY());
+        transformedShape = transform.createTransformedShape(originalShape);
+        
+        transformedShape = at.createTransformedShape(transformedShape);
         g.draw(transformedShape); 
         
         for(Rectangle r : tinyShapes){
-            g.draw(at.createTransformedShape(r));
+            Shape transformedRect = at.createTransformedShape(r);
+            g.draw(transformedRect);
+            transformedTinyShapes.add(transformedRect);
         }
-        
-        g.draw(at.createTransformedShape(rotationCenter));
+        System.out.println("bla "+rotation);
+        g.draw(transformedCenter); 
         
     }
 
@@ -123,13 +140,23 @@ public class ShapeBorder extends SimpleShapeObject{
 
     public byte checkShapes(Point p) {
         
-        if(rotationCenter.contains(p))
+        if(transformedCenter.contains(p)){
             return ShapeBorder.INROTATIONCENTER;
-        for(Rectangle r : tinyShapes)
-            if(r.contains(p))
+        }
+        for(Shape r : transformedTinyShapes)
+            if(r.contains(p)){
                 return ShapeBorder.INEDGES;
+            }
         
         return ShapeBorder.INNOTHING;
+    }
+    
+    public Point getCenter(){
+        int x = (int) Math.round(transformedCenter.getBounds().getCenterX());
+        int y = (int) Math.round(transformedCenter.getBounds().getCenterY());
+        
+        Point p = new Point(x,y);
+        return p;
     }
 
 }

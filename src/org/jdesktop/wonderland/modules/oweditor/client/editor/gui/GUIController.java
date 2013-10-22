@@ -126,5 +126,14 @@ public class GUIController implements GUIControllerInterface{
         ac.setObjectRemoval(id);
     }
     
+    public void setRotationStrategy(){
+        mkListener.setRotationStrategy();
+    }
+    
+    public void setRotationCenterStrategy(){
+        mkListener.setRotationCenterStrategy();
+        
+    }
+    
 
 }

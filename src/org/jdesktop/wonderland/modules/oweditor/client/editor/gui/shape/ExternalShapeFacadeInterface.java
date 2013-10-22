@@ -73,9 +73,15 @@ public interface ExternalShapeFacadeInterface {
 
     public void selectionReleased();
 
-    public void clean();
+    public void cleanAll();
+    
+    public void cleanHelpingShapes();
 
     public void rotationInitialize();
+    
+    public void isMouseInBorder(Point p);
+    
+    public void rotate(Point p);
 
 
 }

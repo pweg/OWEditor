@@ -346,4 +346,8 @@ public class ShapeManager {
         return border.checkShapes(p);
     }
     
+    public ShapeBorder getShapeBorder(){
+        return border;
+    }
+    
 }

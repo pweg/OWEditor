@@ -20,4 +20,24 @@ public class ShapeRotationManager {
 
     }
 
+    public void rotate(Point p){
+        ShapeBorder border = smi.getShapeBorder();
+        
+        Point rot_center = border.getCenter();
+        
+        int x = rot_center.x;
+        int y = rot_center.y;
+        
+        double rotation = 0f;
+
+        int deltaX = p.x - x;
+        int deltaY = p.y - y;
+
+        rotation = -Math.atan2(deltaX, deltaY);
+        rotation = Math.toDegrees(rotation) + 180;
+        
+        System.out.println(rotation);
+        border.setRotation(rotation);
+    }
+
 }

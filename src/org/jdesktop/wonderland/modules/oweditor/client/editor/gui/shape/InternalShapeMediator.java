@@ -101,4 +101,11 @@ public class InternalShapeMediator implements InternalShapeMediatorInterface{
         return sm.getShape(id);
     }
 
+    @Override
+    public ShapeBorder getShapeBorder() {
+        return sm.getShapeBorder();
+    }
+    
+    
+
 }

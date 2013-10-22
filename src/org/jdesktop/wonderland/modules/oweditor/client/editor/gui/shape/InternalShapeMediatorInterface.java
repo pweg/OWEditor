@@ -40,4 +40,6 @@ public interface InternalShapeMediatorInterface {
     public SimpleShapeObject getSelectionRectangle();
     
     public ShapeObject getShape(long id);
+    
+    public ShapeBorder getShapeBorder();
 }

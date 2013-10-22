@@ -8,10 +8,15 @@ public class mlPasteStrategy implements mlMouseStrategy{
     public MouseAndKeyListener listener = null;
     private Point start = new Point();
     private boolean dragging = false;
+    private Point copyPoint = null;
     
     public mlPasteStrategy(GUIController contr, MouseAndKeyListener listener){
         this.controller = contr;
         this.listener = listener;
+        
+        copyPoint = controller.esmi.copyInitialize();
+        copyPoint.x += contr.drawingPan.getTranslationX();
+        copyPoint.y += contr.drawingPan.getTranslationY();
     }
     
     
@@ -19,8 +24,16 @@ public class mlPasteStrategy implements mlMouseStrategy{
     public void mousePressed(Point p) {
         if(!dragging){
             
-            start.x = p.x;
-            start.y = p.y;
+            if(copyPoint == null)
+                return;
+            
+            double scale = controller.drawingPan.getScale();
+            
+            int x = (int) Math.round(copyPoint.x * scale);
+            int y = (int) Math.round(copyPoint.y * scale);
+            
+            start.x = x;
+            start.y = y;
 
             controller.esmi.clearCurSelection();
             controller.esmi.pasteInitialize();
@@ -31,10 +44,9 @@ public class mlPasteStrategy implements mlMouseStrategy{
             
             controller.esmi.pasteInsertShapes();
             
-            listener.releaseLockLeftMouse();
+            listener.releaseCopyMouseLock();
             controller.drawingPan.repaint();
         }
-        
     }
 
     @Override
@@ -50,6 +62,10 @@ public class mlPasteStrategy implements mlMouseStrategy{
             start.x = p.x;
             start.y = p.y;
         }
+    }
+    
+    public void reset(){
+        dragging = false;
     }
 
 

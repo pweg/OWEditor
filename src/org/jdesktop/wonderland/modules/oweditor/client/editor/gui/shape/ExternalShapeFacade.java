@@ -2,7 +2,6 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.shape;
 
 import java.awt.Graphics2D;
 import java.awt.Point;
-import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.TranslatedObjectInterface;
@@ -60,7 +59,13 @@ public class ExternalShapeFacade implements ExternalShapeFacadeInterface{
     }
 
     @Override
-    public void clean() {
+    public void cleanHelpingShapes() {
+        sm.clearDraggingShapes();
+        sm.removeSelectionRect();
+    }
+
+    @Override
+    public void cleanAll() {
         sm.clearDraggingShapes();
         sm.removeSelectionRect();
         sm.removeBorder();
@@ -201,6 +206,22 @@ public class ExternalShapeFacade implements ExternalShapeFacadeInterface{
         sm.createShapeBorder(gc.getDrawingPan().getScale(), 
                 ssm.getSelectionCoords(), ssm.getSelection());
         srm.initializeRotation();
+    }
+
+    @Override
+    public void isMouseInBorder(Point p) {
+        byte value = sm.isInBorderShapes(p);
+        
+        if(value == ShapeBorder.INEDGES){
+            gc.setRotationStrategy();
+        }else if (value == ShapeBorder.INROTATIONCENTER){
+            gc.setRotationCenterStrategy();
+        }
+    }
+
+    @Override
+    public void rotate(Point p) {
+        srm.rotate(p);
     }
 
 }
