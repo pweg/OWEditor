@@ -237,4 +237,11 @@ public class ShapeObjectRectangle extends ShapeObject{
         
     }
 
+    @Override
+    public ShapeObject clone() {
+        ShapeObject shape = new ShapeObjectRectangle(originalShape.x, originalShape.y, 
+                originalShape.width, originalShape.height, id, name, rotation);
+        return shape;
+    }
+
 }

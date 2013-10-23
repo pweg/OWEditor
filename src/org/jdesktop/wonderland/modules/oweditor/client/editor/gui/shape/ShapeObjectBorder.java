@@ -10,7 +10,10 @@ import java.util.ArrayList;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.GUISettings;
 
-public class ShapeBorder extends SimpleShapeObject{
+public class ShapeObjectBorder extends SimpleShapeObject{
+    
+    public static final byte MODENOCENTER   = 0;
+    public static final byte MODECENTER     = 1;
     
     public static final byte INNOTHING           = 0;
     public static final byte INROTATIONCENTER    = 1;
@@ -22,26 +25,33 @@ public class ShapeBorder extends SimpleShapeObject{
     private Shape transformedShape = null;
     private Shape transformedCenter = null;
     
+    ArrayList<Rectangle> tinyShapes = null;
+    ArrayList<Shape> transformedTinyShapes = null;
+    ArrayList<Double> angles = null;
+    private Shape currentClicked = null;
+    
     private Paint color = GUISettings.surroundingBorderColor;
     
     private int tinySize = GUISettings.surroundingBorderTinyShapeSize;
     private int margin = GUISettings.surroundingBorderMargin;
     private int tinySizeHalf = 0;
+    private byte mode = 0;
+
+    private Rectangle test = null;
     
     private double  rotation = 0;
     
-    ArrayList<Rectangle> tinyShapes = null;
-    ArrayList<Shape> transformedTinyShapes = null;
-    
-    public ShapeBorder(int x, int y, int width, int height){
+    public ShapeObjectBorder(int x, int y, int width, int height, byte mode){
         tinySizeHalf = (int) Math.round(tinySize/2);
 
         tinyShapes = new ArrayList<Rectangle>();
         transformedTinyShapes = new ArrayList<Shape>();
-        
+
         x = x-margin;
         y = y-margin;
         originalShape = new Rectangle (x, y, width+2*margin, height+2*margin);
+        test = new Rectangle(x+width/2, y + height/2, tinySize, tinySize);
+        
         
         tinyShapes.add(new Rectangle(x-tinySizeHalf,y-tinySizeHalf,tinySize,tinySize));
         tinyShapes.add(new Rectangle(x+width+margin+tinySizeHalf,y-tinySizeHalf,
@@ -56,7 +66,12 @@ public class ShapeBorder extends SimpleShapeObject{
         
         rotationCenter = new Rectangle(center_x+tinySizeHalf,
                 center_y+tinySizeHalf,tinySize,tinySize);
+        calculateAngles();
         
+    }
+    
+    private void calculateAngles(){
+        angles = new ArrayList<Double>();
     }
     
     @Override
@@ -85,13 +100,22 @@ public class ShapeBorder extends SimpleShapeObject{
         transformedShape = at.createTransformedShape(transformedShape);
         g.draw(transformedShape); 
         
+        transformedTinyShapes.clear();
+        
         for(Rectangle r : tinyShapes){
-            Shape transformedRect = at.createTransformedShape(r);
+            Shape transformedRect = transform.createTransformedShape(r);
+            transformedRect = at.createTransformedShape(transformedRect);
             g.draw(transformedRect);
             transformedTinyShapes.add(transformedRect);
         }
-        System.out.println("bla "+rotation);
-        g.draw(transformedCenter); 
+
+        if(mode != ShapeObjectBorder.MODECENTER){
+            g.draw(transformedCenter); 
+        }
+        
+        Shape testt = transform.createTransformedShape(test);
+        testt = at.createTransformedShape(testt);
+        g.draw(testt); 
         
     }
 
@@ -141,14 +165,18 @@ public class ShapeBorder extends SimpleShapeObject{
     public byte checkShapes(Point p) {
         
         if(transformedCenter.contains(p)){
-            return ShapeBorder.INROTATIONCENTER;
+            return ShapeObjectBorder.INROTATIONCENTER;
         }
-        for(Shape r : transformedTinyShapes)
+        int i = 0;
+        for(Shape r : transformedTinyShapes){
             if(r.contains(p)){
-                return ShapeBorder.INEDGES;
+                currentClicked = tinyShapes.get(i);
+                return ShapeObjectBorder.INEDGES;
             }
+            i++;
+        }
         
-        return ShapeBorder.INNOTHING;
+        return ShapeObjectBorder.INNOTHING;
     }
     
     public Point getCenter(){
@@ -157,6 +185,16 @@ public class ShapeBorder extends SimpleShapeObject{
         
         Point p = new Point(x,y);
         return p;
+    }
+    
+    public Point getOriginalCenter(){
+        return new Point (rotationCenter.x, rotationCenter.y);
+    }
+    
+    public Point getEdge(){
+        int x = currentClicked.getBounds().x;
+        int y = currentClicked.getBounds().y;
+        return new Point(x, y);
     }
 
 }

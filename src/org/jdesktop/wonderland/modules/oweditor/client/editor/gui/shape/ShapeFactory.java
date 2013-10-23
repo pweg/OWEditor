@@ -15,8 +15,10 @@ public class ShapeFactory {
     public static final int DRAGGINGRECTANGLE = 11;
     public static final int DRAGGINGRELLIPSE = 12;
     
-    public ShapeFactory(){
-        
+    public InternalShapeMediatorInterface smi = null;
+    
+    public ShapeFactory(InternalShapeMediatorInterface smi){
+        this.smi = smi;
     }
 
     /**
@@ -40,7 +42,8 @@ public class ShapeFactory {
             case CIRCLE:
                 return new ShapeObjectEllipse(x,y,width,height, id, name, rotation);
             case DRAGGINGRECTANGLE:
-                return new ShapeObjectDraggingRect(x,y,width,height, id, rotation);
+                return new ShapeObjectDraggingRect(x,y,width,height, id, rotation,
+                        smi.getScale());
             default:
                 throw new IllegalArgumentException(
                     "Unknown type");

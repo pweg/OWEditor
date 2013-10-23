@@ -24,10 +24,12 @@ public class ShapeObjectDraggingRect extends ShapeObject{
     
     private Rectangle originalShape = null;
     private Shape transformedShape = null;
+    private Shape scaledShape = null;
     private boolean isSelected = false;
     private Paint color = GUISettings.draggingColor;
-    private long id;
-    private double rotation;
+    private long id = 0;
+    private double rotation = 0;
+    private double scale = 0;
     
     /**
      * Creates a new dragginRect shape object.
@@ -39,10 +41,16 @@ public class ShapeObjectDraggingRect extends ShapeObject{
      * @param id the id of the shape. Usually this is the id of the shape which
      *               is copied.
      */
-    public ShapeObjectDraggingRect(int x, int y, int width, int height, long id, double rotation){
+    public ShapeObjectDraggingRect(int x, int y, int width, int height, long id, double rotation,
+            double scale){
         originalShape = new Rectangle (x, y, width, height);
         this.id = id;
         this.rotation = rotation;
+        this.scale = scale;
+        
+        AffineTransform transform = new AffineTransform();
+        transform.scale(scale, scale);
+        scaledShape = transform.createTransformedShape(originalShape);
         
         rotateShape();    
     }
@@ -75,8 +83,9 @@ public class ShapeObjectDraggingRect extends ShapeObject{
         AffineTransform transform = new AffineTransform();
         
         transform.rotate(Math.toRadians(rotation), 
-                originalShape.getCenterX(), originalShape.getCenterY());
-        transformedShape = transform.createTransformedShape(originalShape);  
+                scaledShape.getBounds().getCenterX(), 
+                scaledShape.getBounds().getCenterY());
+        transformedShape = transform.createTransformedShape(scaledShape);  
         
     }
 
@@ -107,10 +116,11 @@ public class ShapeObjectDraggingRect extends ShapeObject{
     }
 
     @Override
-    public void setTranslation(double distance_x, double distance_y) {
-        int new_x = (int) Math.round(originalShape.x-distance_x);
-        int new_y = (int) Math.round(originalShape.y-distance_y);
-        originalShape.setLocation(new_x, new_y);
+    public void setTranslation(double distance_x, double distance_y) {        
+        AffineTransform transform = new AffineTransform();
+        transform.translate(distance_x, distance_y);
+        scaledShape = transform.createTransformedShape(scaledShape);
+        
         
     }
     
@@ -122,6 +132,7 @@ public class ShapeObjectDraggingRect extends ShapeObject{
      * @param width the new width.
      * @param height the new height.
      */
+    @Override
     public void set(int x, int y, int width, int height){
         originalShape.setRect(x, y, width, height);
     }
@@ -143,12 +154,12 @@ public class ShapeObjectDraggingRect extends ShapeObject{
 
     @Override
     public int getX() {
-        return originalShape.x;
+        return (int) Math.round(scaledShape.getBounds().x/scale);
     }
 
     @Override
     public int getY() {
-        return originalShape.y;
+        return (int) Math.round(scaledShape.getBounds().y/scale);
     }
 
     @Override
@@ -178,6 +189,12 @@ public class ShapeObjectDraggingRect extends ShapeObject{
     @Override
     public double getRotation() {
         return rotation;
+    }
+
+    @Override
+    public ShapeObject clone() {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }

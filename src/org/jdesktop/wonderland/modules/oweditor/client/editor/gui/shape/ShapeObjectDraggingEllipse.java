@@ -168,4 +168,10 @@ public class ShapeObjectDraggingEllipse extends ShapeObject{
     public double getRotation() {
         return rotation;
     }
+
+    @Override
+    public ShapeObject clone() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }

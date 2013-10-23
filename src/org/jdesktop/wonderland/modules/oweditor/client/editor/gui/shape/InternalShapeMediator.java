@@ -7,8 +7,8 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.GUIController;
 public class InternalShapeMediator implements InternalShapeMediatorInterface{
     
     private ShapeManager sm = null;
-    private ShapeSelectionManager ssm = null;
-    private ShapeTranslationManager stm = null;
+    private SelectionManager ssm = null;
+    private TranslationManager stm = null;
     private GUIController gc = null;
     
     public InternalShapeMediator(GUIController gc) {
@@ -21,12 +21,12 @@ public class InternalShapeMediator implements InternalShapeMediatorInterface{
     }
 
     @Override
-    public void registerTranslationManager(ShapeTranslationManager stm) {
+    public void registerTranslationManager(TranslationManager stm) {
         this.stm = stm;
     }
 
     @Override
-    public void registerSelectionManager(ShapeSelectionManager ssm) {
+    public void registerSelectionManager(SelectionManager ssm) {
         this.ssm = ssm;
     }
 
@@ -102,7 +102,7 @@ public class InternalShapeMediator implements InternalShapeMediatorInterface{
     }
 
     @Override
-    public ShapeBorder getShapeBorder() {
+    public ShapeObjectBorder getShapeBorder() {
         return sm.getShapeBorder();
     }
     

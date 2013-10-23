@@ -220,4 +220,10 @@ public class ShapeObjectEllipse extends ShapeObject{
         originalShape.setFrame(x, y, width, height);
     }
 
+    @Override
+    public ShapeObject clone() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
 }

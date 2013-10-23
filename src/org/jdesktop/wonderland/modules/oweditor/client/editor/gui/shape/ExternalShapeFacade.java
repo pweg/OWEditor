@@ -13,20 +13,20 @@ public class ExternalShapeFacade implements ExternalShapeFacadeInterface{
     private InternalShapeMediatorInterface smi = null;
 
     private ShapeManager sm = null;
-    private ShapeCopyManager scm = null;
-    private ShapeRotationManager srm = null;
-    private ShapeSelectionManager ssm = null;
-    private ShapeTranslationManager stm = null;
+    private CopyManager scm = null;
+    private RotationManager srm = null;
+    private SelectionManager ssm = null;
+    private TranslationManager stm = null;
 
     public ExternalShapeFacade(GUIController gc){
         this.gc  = gc;
         this.smi = new InternalShapeMediator(gc);
 
         sm = new ShapeManager(smi);
-        stm = new ShapeTranslationManager(smi);
-        ssm = new ShapeSelectionManager(smi);
-        srm = new ShapeRotationManager(smi);
-        scm = new ShapeCopyManager(smi);
+        stm = new TranslationManager(smi);
+        ssm = new SelectionManager(smi);
+        srm = new RotationManager(smi);
+        scm = new CopyManager(smi);
         
         smi.registerSelectionManager(ssm);
         smi.registerShapeManager(sm);
@@ -212,9 +212,9 @@ public class ExternalShapeFacade implements ExternalShapeFacadeInterface{
     public void isMouseInBorder(Point p) {
         byte value = sm.isInBorderShapes(p);
         
-        if(value == ShapeBorder.INEDGES){
+        if(value == ShapeObjectBorder.INEDGES){
             gc.setRotationStrategy();
-        }else if (value == ShapeBorder.INROTATIONCENTER){
+        }else if (value == ShapeObjectBorder.INROTATIONCENTER){
             gc.setRotationCenterStrategy();
         }
     }

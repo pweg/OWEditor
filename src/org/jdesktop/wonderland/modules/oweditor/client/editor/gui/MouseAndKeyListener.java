@@ -19,6 +19,8 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
                                     MouseWheelListener{
 
     private mlMouseStrategy strategy = null;
+    private mlPasteStrategy pasteStrategy = null;
+    
     private boolean shiftPressed = false;
     
     private boolean copy = false;
@@ -26,7 +28,6 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
     
     private GUIController gc = null;
     
-    private double scale = 0.0;
     private Point currentPoint = null;
     
     MouseAndKeyListener(GUIController gc){
@@ -105,10 +106,7 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
          * objects further when zooming in and out, but it will 
          * also need some refinements, due to the new scales.
          */
-        if(strategy != null){
-            clear();
-        }
-        
+        clear();        
         WindowDrawingPanel panel = gc.drawingPan;
         
         double curScale = panel.getScale();
@@ -133,6 +131,7 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
         if(strategy == null)
             return;
         strategy.mouseReleased(e.getPoint());
+        strategy = null;
     }
     
     @Override
@@ -180,7 +179,6 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
         rotation = false;
         copy = false;
         gc.esmi.cleanAll();
-        gc.drawingPan.repaint();
         releaseCopyMouseLock();
         if(strategy instanceof mlSelectionRectStrategy ||
                 strategy instanceof mlSelectionRectShiftStrategy)
@@ -188,16 +186,21 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
         else if(strategy instanceof mlPasteStrategy){
             ((mlPasteStrategy)strategy).reset();
         }
+        gc.drawingPan.repaint();
     }
     
     public void copyShapes(){
-        strategy = new mlPasteStrategy(gc, this);
+        pasteStrategy = new mlPasteStrategy(gc, this);
+        strategy = pasteStrategy;
     }
     
     public void pasteShapes(){
         
-        if(strategy == null)
-            return; 
+        if(strategy == null && pasteStrategy != null)
+            strategy = pasteStrategy;
+        else if (strategy == null)
+            return;
+        
         strategy.mousePressed(null);
         strategy.mouseMoved(gc.drawingPan.getMousePosition());
         copy = true;

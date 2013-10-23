@@ -3,13 +3,13 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.shape;
 import java.awt.Point;
 import java.util.ArrayList;
 
-public class ShapeTranslationManager {
+public class TranslationManager {
 
     //These are shapes for updates.
     private sCollisionStrategy strategy = null;
     private InternalShapeMediatorInterface smi = null;
 
-    public ShapeTranslationManager(InternalShapeMediatorInterface smi){
+    public TranslationManager(InternalShapeMediatorInterface smi){
         
         this.smi = smi;
     }
@@ -45,7 +45,7 @@ public class ShapeTranslationManager {
         double distance = start.distance(x, y);
         distance = distance / scale;
 
-        translateDraggingShapes(distance_x/scale, distance_y/scale);
+        translateDraggingShapes(distance_x*(-1), distance_y*(-1));
         checkForCollision();
           
         smi.repaint();

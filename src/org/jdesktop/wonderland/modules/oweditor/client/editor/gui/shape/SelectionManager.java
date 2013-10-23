@@ -11,12 +11,12 @@ import java.util.ArrayList;
  * @author Patrick
  *
  */
-public class ShapeSelectionManager {
+public class SelectionManager {
 
     private ArrayList<ShapeObject> selectedShapes = null;
     private InternalShapeMediatorInterface smi = null;
     
-    public ShapeSelectionManager(InternalShapeMediatorInterface smi){
+    public SelectionManager(InternalShapeMediatorInterface smi){
         selectedShapes = new ArrayList<ShapeObject>();     
         
         this.smi = smi;

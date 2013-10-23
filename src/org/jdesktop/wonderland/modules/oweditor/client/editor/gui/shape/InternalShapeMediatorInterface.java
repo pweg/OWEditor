@@ -5,8 +5,8 @@ import java.util.ArrayList;
 public interface InternalShapeMediatorInterface {
     
     public void registerShapeManager(ShapeManager sm);
-    public void registerTranslationManager(ShapeTranslationManager stm);
-    public void registerSelectionManager(ShapeSelectionManager ssm);
+    public void registerTranslationManager(TranslationManager stm);
+    public void registerSelectionManager(SelectionManager ssm);
     
     public ArrayList<ShapeObject> getAllShapes();
     
@@ -41,5 +41,5 @@ public interface InternalShapeMediatorInterface {
     
     public ShapeObject getShape(long id);
     
-    public ShapeBorder getShapeBorder();
+    public ShapeObjectBorder getShapeBorder();
 }

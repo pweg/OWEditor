@@ -30,7 +30,7 @@ public class ShapeManager {
     private ArrayList<ShapeObject> draggingShapes = null;
         
     private ShapeObjectSelectionRect selectionRectangle = null;
-    private ShapeBorder border = null;
+    private ShapeObjectBorder border = null;
     
     private static final Logger LOGGER =
             Logger.getLogger(WorldBuilder.class.getName());
@@ -41,7 +41,7 @@ public class ShapeManager {
      * Creates a new ShapeManager instance.
      */
     public ShapeManager(InternalShapeMediatorInterface smi){
-        factory = new ShapeFactory();
+        factory = new ShapeFactory(smi);
         
         shapes = new ArrayList<ShapeObject>();
         avatarShapes = new ArrayList<ShapeObject>();
@@ -150,14 +150,16 @@ public class ShapeManager {
             shape.paintName(g2, at, scale);
         }
         
+        AffineTransform transform = new AffineTransform();
+        transform.translate(at.getTranslateX(), at.getTranslateY());
         
         for(ShapeObject shape : draggingShapes){  
-            shape.paintOriginal(g2, at);
+            shape.paintOriginal(g2, transform);
             
         }
         
         if(border != null){
-            AffineTransform transform = new AffineTransform();
+            transform = new AffineTransform();
             transform.scale(scale, scale);  
             
             border.paintOriginal(g2, transform);
@@ -339,14 +341,14 @@ public class ShapeManager {
 
         int x = (int) Math.round(coordinates.x/scale);
         int y = (int) Math.round(coordinates.y/scale);
-        border = new ShapeBorder(x, y, width, height);
+        border = new ShapeObjectBorder(x, y, width, height, ShapeObjectBorder.MODECENTER);
     }
     
     public byte isInBorderShapes(Point p){
         return border.checkShapes(p);
     }
     
-    public ShapeBorder getShapeBorder(){
+    public ShapeObjectBorder getShapeBorder(){
         return border;
     }
     
