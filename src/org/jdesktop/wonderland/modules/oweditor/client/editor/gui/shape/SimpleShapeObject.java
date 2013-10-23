@@ -49,7 +49,6 @@ public abstract class SimpleShapeObject {
      * 
      * @param distance_x the distance the shape will move in the x coordinates.
      * @param distance_y the distance the shape will move in the y coordinates.
-     * @param scale 
      */
     public abstract void setTranslation(double distance_x, double distance_y) ;
     

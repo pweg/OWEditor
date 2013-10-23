@@ -41,7 +41,10 @@ public class ShapeTranslationManager {
         double scale = smi.getScale();
         int distance_x = start.x - x;
         int distance_y = start.y - y;
-        
+            
+        double distance = start.distance(x, y);
+        distance = distance / scale;
+
         translateDraggingShapes(distance_x/scale, distance_y/scale);
         checkForCollision();
           
@@ -58,7 +61,7 @@ public class ShapeTranslationManager {
      * @param distance_y the y distance between old and new point.
      */
     public void translateDraggingShapes(double distance_x, double distance_y){
-
+        
         for(ShapeObject selShape : smi.getDraggingShapes()){
             selShape.setTranslation(distance_x, distance_y);
         }
