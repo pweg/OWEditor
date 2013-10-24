@@ -107,9 +107,6 @@ public class ShapeObjectDraggingRect extends ShapeDraggingObject{
                 scaledShape.getBounds().getCenterX(), 
                 scaledShape.getBounds().getCenterY());
         transformedShape = transform.createTransformedShape(scaledShape);  
-
-        
-        
     }
 
     @Override
@@ -201,6 +198,21 @@ public class ShapeObjectDraggingRect extends ShapeDraggingObject{
     @Override
     public void setState(stateDraggingShape state) {
         this.state = state;
+    }
+
+    @Override
+    public void setRotationCenterUpdate(int x, int y) {
+        if(rotationPoint == null)
+            return;
+        
+        AffineTransform transform = new AffineTransform();
+        transform.rotate(Math.toRadians(rotation), 
+                rotationPoint.x-x, rotationPoint.y-y);
+        System.out.println(rotationPoint.x +" " +scaledShape.getBounds().x);
+        
+        scaledShape = transform.createTransformedShape(scaledShape);
+        rotation = 0;
+        
     }
 
 }

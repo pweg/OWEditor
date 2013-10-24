@@ -19,13 +19,13 @@ public class ShapeObjectBorder extends SimpleShapeObject{
     public static final byte INROTATIONCENTER    = 1;
     public static final byte INEDGES             = 2;
 
-    private Rectangle originalShape = null;
+    private Shape originalShape = null;
     private Rectangle rotationCenter = null;
     
     private Shape transformedShape = null;
     private Shape transformedCenter = null;
     
-    ArrayList<Rectangle> tinyShapes = null;
+    ArrayList<Shape> tinyShapes = null;
     ArrayList<Shape> transformedTinyShapes = null;
     ArrayList<Double> angles = null;
     private Shape currentClicked = null;
@@ -42,7 +42,7 @@ public class ShapeObjectBorder extends SimpleShapeObject{
     public ShapeObjectBorder(int x, int y, int width, int height, byte mode){
         tinySizeHalf = (int) Math.round(tinySize/2);
 
-        tinyShapes = new ArrayList<Rectangle>();
+        tinyShapes = new ArrayList<Shape>();
         transformedTinyShapes = new ArrayList<Shape>();
 
         x = x-margin;
@@ -99,7 +99,7 @@ public class ShapeObjectBorder extends SimpleShapeObject{
         
         transformedTinyShapes.clear();
         
-        for(Rectangle r : tinyShapes){
+        for(Shape r : tinyShapes){
             Shape transformedRect = transform.createTransformedShape(r);
             transformedRect = at.createTransformedShape(transformedRect);
             g.draw(transformedRect);
@@ -126,22 +126,22 @@ public class ShapeObjectBorder extends SimpleShapeObject{
 
     @Override
     public int getX() {
-        return originalShape.x;
+        return originalShape.getBounds().x;
     }
 
     @Override
     public int getY() {
-        return originalShape.y;
+        return originalShape.getBounds().y;
     }
 
     @Override
     public int getWidth() {
-        return originalShape.width;
+        return originalShape.getBounds().width;
     }
 
     @Override
     public int getHeight() {
-        return originalShape.height;
+        return originalShape.getBounds().height;
     }
 
     @Override
@@ -190,7 +190,23 @@ public class ShapeObjectBorder extends SimpleShapeObject{
         return new Point(x, y);
     }
 
-    public void setRotationCenterUpdate() {
+    public void setRotationCenterUpdate() {        
+        
+        AffineTransform transform = new AffineTransform();
+        transform.rotate(Math.toRadians(rotation), 
+                rotationCenter.getBounds().getCenterX(), 
+                rotationCenter.getBounds().getCenterY());
+        originalShape = transform.createTransformedShape(originalShape);
+        
+        ArrayList<Shape> list = new ArrayList<Shape>();
+        list.addAll(tinyShapes);
+        tinyShapes.clear();
+        for (Shape shape : list){
+            shape = transform.createTransformedShape(shape);
+            tinyShapes.add(shape);
+        }
+        rotation = 0;
+        
     }
 
 }

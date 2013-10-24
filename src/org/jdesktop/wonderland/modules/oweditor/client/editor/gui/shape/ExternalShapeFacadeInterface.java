@@ -91,5 +91,7 @@ public interface ExternalShapeFacadeInterface {
 
     public void rotationCenterTranslate(Point start, Point end);
 
+    public void rotationSetUpdate();
+
 
 }

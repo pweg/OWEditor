@@ -249,11 +249,26 @@ public class ExternalShapeFacade implements ExternalShapeFacadeInterface{
     @Override
     public void rotationCenterSetUpdate() {
         srm.setRotationCenterUpdate(sm.getShapeBorder());
+        int x = gc.getDrawingPan().getTranslationX();
+        int y = gc.getDrawingPan().getTranslationY();
+        for(ShapeDraggingObject shape : sm.getDraggingShapes()){
+            shape.setRotationCenterUpdate(x,y);
+        }
     }
 
     @Override
     public void rotationCenterTranslate(Point start, Point end) {
         srm.setRotationCenter(sm.getShapeBorder(), start, end);
+    }
+
+    @Override
+    public void rotationSetUpdate() {
+        sm.getShapeBorder().setRotationCenterUpdate();
+        int x = gc.getDrawingPan().getTranslationX();
+        int y = gc.getDrawingPan().getTranslationY();
+        for(ShapeDraggingObject shape : sm.getDraggingShapes()){
+            shape.setRotationCenterUpdate(x,y);
+        }
     }
 
 }
