@@ -35,7 +35,7 @@ public interface InternalShapeMediatorInterface {
 
     public void clearCurSelection();
     
-    public ArrayList<ShapeObject> getDraggingShapes();
+    public ArrayList<ShapeDraggingObject> getDraggingShapes();
     
     public SimpleShapeObject getSelectionRectangle();
     

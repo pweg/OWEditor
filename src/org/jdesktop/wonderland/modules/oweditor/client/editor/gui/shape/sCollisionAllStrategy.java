@@ -12,10 +12,10 @@ public class sCollisionAllStrategy implements sCollisionStrategy {
 
     @Override
     public boolean checkForCollision(ArrayList<ShapeObject> shapes,
-            ArrayList<ShapeObject> draggingShapes) {
+            ArrayList<ShapeDraggingObject> draggingShapes) {
 
         boolean is_collision = false;
-        for(ShapeObject selected : draggingShapes){
+        for(ShapeDraggingObject selected : draggingShapes){
             for(ShapeObject shape : shapes){
                 Area areaA = new Area(shape.getTransformedShape());
                 areaA.intersect(new Area(selected.getTransformedShape()));

@@ -38,4 +38,7 @@ public interface AdapterObserverInterface {
      */
     public DataObjectInterface createEmptyObject();
 
+    public void notifyRotation(long id, float x, float y, float z,
+            double rotation);
+
 }

@@ -27,7 +27,7 @@ public class ShapeManager {
     
     private ArrayList<ShapeObject> shapes = null;
     private ArrayList<ShapeObject> avatarShapes = null;
-    private ArrayList<ShapeObject> draggingShapes = null;
+    private ArrayList<ShapeDraggingObject> draggingShapes = null;
         
     private ShapeObjectSelectionRect selectionRectangle = null;
     private ShapeObjectBorder border = null;
@@ -45,7 +45,7 @@ public class ShapeManager {
         
         shapes = new ArrayList<ShapeObject>();
         avatarShapes = new ArrayList<ShapeObject>();
-        draggingShapes = new ArrayList<ShapeObject>();
+        draggingShapes = new ArrayList<ShapeDraggingObject>();
         
         this.smi = smi;
     }
@@ -153,7 +153,7 @@ public class ShapeManager {
         AffineTransform transform = new AffineTransform();
         transform.translate(at.getTranslateX(), at.getTranslateY());
         
-        for(ShapeObject shape : draggingShapes){  
+        for(ShapeDraggingObject shape : draggingShapes){  
             shape.paintOriginal(g2, transform);
             
         }
@@ -250,7 +250,7 @@ public class ShapeManager {
      * 
      * @param shape a shape object, which is dragged.
      */
-    private ShapeObject createDraggingShape(ShapeObject shape) {
+    private ShapeDraggingObject createDraggingShape(ShapeObject shape) {
                     
         int x = shape.getX();
         int y = shape.getY();
@@ -260,13 +260,13 @@ public class ShapeManager {
         String name = shape.getName();
         double rotation = shape.getRotation();
              
-        ShapeObject newShape = null;
+        ShapeDraggingObject newShape = null;
         
         if(shape instanceof ShapeObjectRectangle){
-            newShape = factory.createShapeObject(ShapeFactory.DRAGGINGRECTANGLE, x,y,
+            newShape = factory.createDraggingShapeObject(ShapeFactory.RECTANGLE, x,y,
                     width,height, id, name, rotation);
         }else if(shape instanceof ShapeObjectEllipse){
-            newShape = factory.createShapeObject(ShapeFactory.DRAGGINGRELLIPSE, x,y,
+            newShape = factory.createDraggingShapeObject(ShapeFactory.CIRCLE, x,y,
                     width,height, id, name, rotation);
         }
         return newShape;
@@ -288,7 +288,7 @@ public class ShapeManager {
         }
     }
     
-    public ArrayList<ShapeObject> getDraggingShapes(){
+    public ArrayList<ShapeDraggingObject> getDraggingShapes(){
         return draggingShapes;
     }
 

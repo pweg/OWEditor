@@ -8,7 +8,7 @@ import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.GUIObse
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataObjectManagerGUIInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.shape.ExternalShapeFacade;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.shape.ExternalShapeFacadeInterface;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.shape.ShapeObject;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.shape.ShapeDraggingObject;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.DataObjectObserverInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.EnvironmentObserverInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.GUIControllerInterface;
@@ -103,20 +103,20 @@ public class GUIController implements GUIControllerInterface{
         return eo;
     }
     
-    public void setTranslationUpdate(ArrayList<ShapeObject> list){
+    public void setTranslationUpdate(ArrayList<ShapeDraggingObject> list){
         
         if(list.isEmpty())
             return;
         
-        for(ShapeObject shape : list){
+        for(ShapeDraggingObject shape : list){
             long id = shape.getID();
             ac.setTranslationUpdate(id, shape.getX(), shape.getY());
         }
     }
     
-    public void setCopyUpdate(ArrayList<ShapeObject> list){
+    public void setCopyUpdate(ArrayList<ShapeDraggingObject> list){
         
-        for(ShapeObject shape : list){
+        for(ShapeDraggingObject shape : list){
             long id = shape.getID();
             ac.setCopyUpdate(id, shape.getX(), shape.getY());
         }
@@ -133,6 +133,15 @@ public class GUIController implements GUIControllerInterface{
     public void setRotationCenterStrategy(){
         mkListener.setRotationCenterStrategy();
         
+    }
+
+    public void setRotationUpdate(ArrayList<ShapeDraggingObject> list) {
+
+        for(ShapeDraggingObject shape : list){
+            long id = shape.getID();
+            ac.setRotationUpdate(id, shape.getX(), shape.getY(),
+                    shape.getRotation());
+        }
     }
     
 

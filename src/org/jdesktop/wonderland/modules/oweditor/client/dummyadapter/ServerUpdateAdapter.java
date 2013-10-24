@@ -124,4 +124,18 @@ public class ServerUpdateAdapter {
         createObject(object);
     }
 
+    public void serverRotationEvent(long id) {
+        if(dui == null){
+            System.out.println("DataInterface is not in the adapter");
+            return;
+        }
+        
+        ServerObject so = ac.ses.getObject(id);
+        
+        if(so == null)
+            return;
+        
+        dui.notifyRotation(id, so.x, so.y, so.z, so.rotation);
+    }
+
 }

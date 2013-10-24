@@ -203,8 +203,10 @@ public class ExternalShapeFacade implements ExternalShapeFacadeInterface{
 
     @Override
     public void rotationInitialize() {
+        sm.createDraggingShapes(ssm.getSelection());
         sm.createShapeBorder(gc.getDrawingPan().getScale(), 
                 ssm.getSelectionCoords(), ssm.getSelection());
+
         srm.initializeRotation();
     }
 
@@ -222,6 +224,23 @@ public class ExternalShapeFacade implements ExternalShapeFacadeInterface{
     @Override
     public void rotate(Point p) {
         srm.rotate(p);
+        stm.setStrategy(new sCollisionNotSelectedStrategy(smi));
+        stm.checkForCollision();
+    }
+
+    @Override
+    public void rotateSetUpdate() {
+        gc.setRotationUpdate(srm.getRotatedShapes());
+    }
+
+    @Override
+    public void updateShapeRotation(long id, int x, int y, double rotation) {
+        if(!stm.checkForCollision()){
+            stm.translateShape(id, x, y);
+            srm.setRotation(id, rotation);
+        }
+        cleanAll();
+        
     }
 
 }

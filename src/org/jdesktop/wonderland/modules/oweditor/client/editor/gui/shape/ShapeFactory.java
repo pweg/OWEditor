@@ -12,8 +12,8 @@ public class ShapeFactory {
     public static final int AVATAR = 0;
     public static final int RECTANGLE = 1;
     public static final int CIRCLE = 2;
-    public static final int DRAGGINGRECTANGLE = 11;
-    public static final int DRAGGINGRELLIPSE = 12;
+    //public static final int DRAGGINGRECTANGLE = 11;
+   // public static final int DRAGGINGRELLIPSE = 12;
     
     public InternalShapeMediatorInterface smi = null;
     
@@ -41,12 +41,22 @@ public class ShapeFactory {
                 return new ShapeObjectRectangle(x,y,width, height, id, name, rotation);
             case CIRCLE:
                 return new ShapeObjectEllipse(x,y,width,height, id, name, rotation);
-            case DRAGGINGRECTANGLE:
+            
+            default:
+                throw new IllegalArgumentException(
+                    "Unknown type");
+        }
+    }
+    
+    public ShapeDraggingObject createDraggingShapeObject(int type, int x, int y, int width, int height, 
+            long id, String name, double rotation){
+        switch(type){
+            case RECTANGLE:
                 return new ShapeObjectDraggingRect(x,y,width,height, id, rotation,
                         smi.getScale());
             default:
                 throw new IllegalArgumentException(
-                    "Unknown type");
+                    "Unknown type");  
         }
     }
 

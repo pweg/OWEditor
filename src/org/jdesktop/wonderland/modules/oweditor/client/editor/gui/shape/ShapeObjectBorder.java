@@ -157,7 +157,7 @@ public class ShapeObjectBorder extends SimpleShapeObject{
         
     }
 
-    @Override
+
     public void setRotation(double rotation) {
         this.rotation = rotation;
     }

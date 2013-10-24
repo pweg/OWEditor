@@ -111,9 +111,4 @@ public class ShapeObjectSelectionRect extends SimpleShapeObject{
         return transformedShape;
     }
 
-    @Override
-    public void setRotation(double rotation) {
-        
-    }
-
 }

@@ -11,12 +11,14 @@ import javax.swing.JPanel;
  * @author Patrick
  *
  */
-public class mlRotationStrategy implements mlMouseStrategy{
+public class mlRotationTranslateCenterStrategy implements mlMouseStrategy{
 
     private GUIController controller = null;
+    private Point startingPoint = null;
     
-    public mlRotationStrategy(GUIController contr){
+    public mlRotationTranslateCenterStrategy(GUIController contr, Point startingPoint){
         this.controller = contr;
+        this.startingPoint = startingPoint;
     }
     
     @Override

@@ -2,6 +2,7 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.shape;
 
 import java.awt.Graphics2D;
 import java.awt.Paint;
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
@@ -20,15 +21,16 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.GUISettings;
  * @author Patrick
  *
  */
-public class ShapeObjectDraggingRect extends ShapeObject{
+public class ShapeObjectDraggingRect extends ShapeDraggingObject{
     
     private Rectangle originalShape = null;
     private Shape transformedShape = null;
     private Shape scaledShape = null;
-    private boolean isSelected = false;
     private Paint color = GUISettings.draggingColor;
     private long id = 0;
     private double rotation = 0;
+    private Point rotationPoint = null;
+    private double initialRotation = 0;
     private double scale = 0;
     
     /**
@@ -45,7 +47,7 @@ public class ShapeObjectDraggingRect extends ShapeObject{
             double scale){
         originalShape = new Rectangle (x, y, width, height);
         this.id = id;
-        this.rotation = rotation;
+        this.initialRotation = rotation;
         this.scale = scale;
         
         AffineTransform transform = new AffineTransform();
@@ -76,25 +78,35 @@ public class ShapeObjectDraggingRect extends ShapeObject{
         
         rotateShape();
         transformedShape = at.createTransformedShape(transformedShape);
+
+        //This is the rotation, when using the rotate opperation.
+        if(rotationPoint != null){
+            AffineTransform transform = new AffineTransform();
+            
+            transform.rotate(Math.toRadians(rotation), 
+                    rotationPoint.getX(), 
+                    rotationPoint.getY());
+            transformedShape = transform.createTransformedShape(transformedShape);
+        }
+        
         g.draw(transformedShape); 
     }
     
     private void rotateShape(){
+        //This is the initial rotation, wheather the object was rotated
+        //before.
         AffineTransform transform = new AffineTransform();
         
-        transform.rotate(Math.toRadians(rotation), 
+        transform.rotate(Math.toRadians(initialRotation), 
                 scaledShape.getBounds().getCenterX(), 
                 scaledShape.getBounds().getCenterY());
         transformedShape = transform.createTransformedShape(scaledShape);  
+
+        
         
     }
 
-    @Override
-    public void paintName(Graphics2D g, AffineTransform at, double scale) {
-        // TODO Auto-generated method stub
-        
-    }
-
+    /*
     @Override
     public void setSelected(boolean select) {
         isSelected = select;
@@ -108,7 +120,7 @@ public class ShapeObjectDraggingRect extends ShapeObject{
     @Override
     public void switchSelection() {
         isSelected = !isSelected;
-    }
+    }*/
     
     @Override
     public void setLocation(int x, int y) {
@@ -172,29 +184,21 @@ public class ShapeObjectDraggingRect extends ShapeObject{
         return originalShape.height;
     }
 
+    /*
     @Override
     public String getName() {
         return "DraggingShape"+id;
-    }
+    }*/
 
     @Override
-    public void setName(String name) {
-    }
-
-    @Override
-    public void setRotation(double rotation) {
+    public void setRotation(double rotation, Point p) {
         this.rotation = rotation;
+        rotationPoint = p;
     }
 
     @Override
     public double getRotation() {
-        return rotation;
-    }
-
-    @Override
-    public ShapeObject clone() {
-        // TODO Auto-generated method stub
-        return null;
+        return initialRotation+rotation;
     }
 
 }

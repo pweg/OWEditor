@@ -14,14 +14,14 @@ public class sCollisionNotSelectedStrategy implements sCollisionStrategy {
 
     @Override
     public boolean checkForCollision(ArrayList<ShapeObject> shapes,
-            ArrayList<ShapeObject> draggingShapes) {
+            ArrayList<ShapeDraggingObject> draggingShapes) {
 
         ArrayList<ShapeObject> shapes2 = new ArrayList<ShapeObject>();
         
         //Get every shape that is not moving at the moment.
         for(ShapeObject shape : smi.getAllShapes()){
             boolean isMoving = false;
-            for(ShapeObject selected : draggingShapes){
+            for(ShapeDraggingObject selected : draggingShapes){
                 if(selected.getID() == shape.getID()){
                     isMoving = true;
                     break;
@@ -33,7 +33,7 @@ public class sCollisionNotSelectedStrategy implements sCollisionStrategy {
         }
 
         boolean is_collision = false;
-        for(ShapeObject selected : draggingShapes){
+        for(ShapeDraggingObject selected : draggingShapes){
             for(ShapeObject shape : shapes2){
                 Area areaA = new Area(shape.getTransformedShape());
                 areaA.intersect(new Area(selected.getTransformedShape()));

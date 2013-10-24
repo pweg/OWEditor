@@ -90,7 +90,5 @@ public abstract class SimpleShapeObject {
      */
     public abstract void set(int x, int y, int width, int height);
     
-    public abstract void setRotation(double rotation);
-    
 
 }

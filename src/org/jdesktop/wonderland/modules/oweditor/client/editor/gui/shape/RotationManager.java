@@ -6,16 +6,16 @@ import java.util.ArrayList;
 public class RotationManager {
     
     private InternalShapeMediatorInterface smi = null;
-    private ArrayList<ShapeObject> rotatingShapes = null;
+    private ArrayList<ShapeDraggingObject> rotatingShapes = null;
     
     public RotationManager(InternalShapeMediatorInterface smi){
-        rotatingShapes = new ArrayList<ShapeObject>();
+        rotatingShapes = new ArrayList<ShapeDraggingObject>();
         this.smi = smi;
     }
     
     public void initializeRotation(){
         rotatingShapes.clear();
-        rotatingShapes.addAll(smi.getSelectedShapes());
+        rotatingShapes.addAll(smi.getDraggingShapes());
 
     }
 
@@ -30,6 +30,11 @@ public class RotationManager {
         double edge_rotation = getAngle(border.getOriginalCenter(), edge);
         
         border.setRotation(rotation-edge_rotation);
+        
+        for(ShapeDraggingObject shape : rotatingShapes){
+            shape.setRotation(rotation-edge_rotation, rot_center);
+        }
+        
     }
     
     private double getAngle(Point center, Point p){
@@ -44,6 +49,15 @@ public class RotationManager {
         rotation = Math.toDegrees(rotation)+180;
         
         return rotation;
+    }
+    
+    public ArrayList<ShapeDraggingObject> getRotatedShapes(){
+        return rotatingShapes;
+    }
+
+    public void setRotation(long id, double rotation) {
+        ShapeObject shape = smi.getShape(id);
+        shape.setRotation(rotation);
     }
 
 }

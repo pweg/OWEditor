@@ -47,4 +47,10 @@ public class AdapterObserver implements AdapterObserverInterface{
         dm.removeObject(id);
     }
 
+    @Override
+    public void notifyRotation(long id, float x, float y, float z,
+            double rotation) {
+        dm.updateRotation(id, x, y, z, rotation);
+    }
+
 }

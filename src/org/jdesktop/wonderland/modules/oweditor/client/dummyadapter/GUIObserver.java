@@ -58,4 +58,20 @@ public class GUIObserver implements GUIObserverInterface{
         ac.sua.serverCopyEvent(clone);
     }
 
+    @Override
+    public void notifyRotation(long id, int x, int y, double rotation) {
+        ServerObject object = ac.ses.getObject(id);
+        
+        if(object == null)
+            return ;
+
+        Vector3D p = ac.ct.transformCoordinatesBack(x, y, 0, 0);
+        
+        object.x = p.x;
+        object.y = p.y;      
+        object.rotation = rotation;
+        
+        ac.sua.serverRotationEvent(id);
+    }
+
 }

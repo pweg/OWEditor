@@ -169,4 +169,25 @@ public class DataObjectManager implements DataObjectManagerGUIInterface{
         this.ct = ct;
     }
 
+    public void updateRotation(long id, float x, float y, float z,
+            double rotation) {
+        
+        DataObject d = data.get(id);
+        
+        if(d == null)
+            return;
+        
+       Point p = ct.transformCoordinates(x, y, d.getWidthf(), d.getHeightf());
+        
+       if(d.getX() != x)
+           dc.em.setX(p.x, ct.transformWidth(d.getWidthf()));
+       if(d.getX() != y)
+           dc.em.setY(p.y, ct.transformHeight(d.getHeightf()));
+            
+        d.setCoordinates(x, y, z);
+        d.setRotation(rotation);
+        
+        domo.notifyRotation(id, p.x, p.y, rotation);
+    }
+
 }

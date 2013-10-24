@@ -82,6 +82,10 @@ public interface ExternalShapeFacadeInterface {
     public void isMouseInBorder(Point p);
     
     public void rotate(Point p);
+    
+    public void rotateSetUpdate();
+
+    public void updateShapeRotation(long id, int x, int y, double rotation);
 
 
 }

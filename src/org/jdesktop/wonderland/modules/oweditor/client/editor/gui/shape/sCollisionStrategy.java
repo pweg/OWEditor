@@ -6,5 +6,5 @@ import java.util.ArrayList;
 public interface sCollisionStrategy {
     
     public boolean checkForCollision(ArrayList<ShapeObject> shapes,
-            ArrayList<ShapeObject> draggingShapes);
+            ArrayList<ShapeDraggingObject> draggingShapes);
 }

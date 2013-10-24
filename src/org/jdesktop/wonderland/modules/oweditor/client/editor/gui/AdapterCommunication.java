@@ -52,4 +52,8 @@ public class AdapterCommunication {
     public void setCopyUpdate(long id, int x, int y) {
         goi.notifyCopy(id, x, y);
     }
+
+    public void setRotationUpdate(long id, int x, int y, double rotation) {
+        goi.notifyRotation(id, x, y, rotation);
+    }
 }

@@ -87,7 +87,7 @@ public class InternalShapeMediator implements InternalShapeMediatorInterface{
     }
 
     @Override
-    public ArrayList<ShapeObject> getDraggingShapes() {
+    public ArrayList<ShapeDraggingObject> getDraggingShapes() {
         return sm.getDraggingShapes();
     }
 

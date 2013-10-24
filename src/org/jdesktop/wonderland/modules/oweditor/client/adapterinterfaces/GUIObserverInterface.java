@@ -24,4 +24,6 @@ public interface GUIObserverInterface {
     
     public void notifyCopy(long id, int x, int y);
 
+    public void notifyRotation(long id, int x, int y, double rotation);
+
 }

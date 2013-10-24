@@ -26,4 +26,6 @@ public interface DataObjectObserverInterface {
     public void notifyRemoval(long id);
 
     public void notifyChange(long id, int x, int y, String name);
+
+    public void notifyRotation(long id, int x, int y, double rotation);
 }

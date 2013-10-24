@@ -61,5 +61,7 @@ public abstract class ShapeObject extends SimpleShapeObject{
     
     public abstract ShapeObject clone();
     
+    public abstract void setRotation(double rotation);
+    
 
 }
