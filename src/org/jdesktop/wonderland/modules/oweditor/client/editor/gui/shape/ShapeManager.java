@@ -352,4 +352,10 @@ public class ShapeManager {
         return border;
     }
     
+    public void setShapeStates(stateDraggingShape state){
+        for(ShapeDraggingObject shape : draggingShapes){
+            shape.setState(state);
+        }
+    }
+    
 }

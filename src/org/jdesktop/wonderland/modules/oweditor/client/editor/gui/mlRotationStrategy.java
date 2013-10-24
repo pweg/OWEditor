@@ -1,8 +1,6 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.gui;
 
 import java.awt.Point;
-import java.awt.Rectangle;
-import javax.swing.JPanel;
 
 /**
  * This mouse listener strategy is used for 

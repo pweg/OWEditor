@@ -38,12 +38,8 @@ public class TranslationManager {
     public void translateShape(int x, int y, Point start, sCollisionStrategy strategy){
         
         this.strategy = strategy;
-        double scale = smi.getScale();
         int distance_x = start.x - x;
         int distance_y = start.y - y;
-            
-        double distance = start.distance(x, y);
-        distance = distance / scale;
 
         translateDraggingShapes(distance_x*(-1), distance_y*(-1));
         checkForCollision();

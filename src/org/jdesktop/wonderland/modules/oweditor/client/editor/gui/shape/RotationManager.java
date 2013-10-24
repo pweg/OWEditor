@@ -60,4 +60,17 @@ public class RotationManager {
         shape.setRotation(rotation);
     }
 
+    public void setRotationCenter(ShapeObjectBorder border, Point start, Point end) {
+        int distance_x = start.x - end.x;
+        int distance_y = start.y - end.y;
+        
+        border.setTranslation(distance_x, distance_y);
+        
+        //border.setLocation(x, y);
+    }
+
+    public void setRotationCenterUpdate(ShapeObjectBorder border) {
+        border.setRotationCenterUpdate();
+    }
+
 }

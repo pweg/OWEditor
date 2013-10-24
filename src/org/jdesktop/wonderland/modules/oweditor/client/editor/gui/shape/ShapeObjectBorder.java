@@ -36,8 +36,6 @@ public class ShapeObjectBorder extends SimpleShapeObject{
     private int margin = GUISettings.surroundingBorderMargin;
     private int tinySizeHalf = 0;
     private byte mode = 0;
-
-    private Rectangle test = null;
     
     private double  rotation = 0;
     
@@ -50,7 +48,6 @@ public class ShapeObjectBorder extends SimpleShapeObject{
         x = x-margin;
         y = y-margin;
         originalShape = new Rectangle (x, y, width+2*margin, height+2*margin);
-        test = new Rectangle(x+width/2, y + height/2, tinySize, tinySize);
         
         
         tinyShapes.add(new Rectangle(x-tinySizeHalf,y-tinySizeHalf,tinySize,tinySize));
@@ -65,7 +62,7 @@ public class ShapeObjectBorder extends SimpleShapeObject{
         int center_y = (int) Math.round(y+(height/2));
         
         rotationCenter = new Rectangle(center_x+tinySizeHalf,
-                center_y+tinySizeHalf,tinySize,tinySize);
+                center_y+tinySizeHalf,tinySize,tinySize);       
         calculateAngles();
         
     }
@@ -112,10 +109,6 @@ public class ShapeObjectBorder extends SimpleShapeObject{
         if(mode != ShapeObjectBorder.MODECENTER){
             g.draw(transformedCenter); 
         }
-        
-        Shape testt = transform.createTransformedShape(test);
-        testt = at.createTransformedShape(testt);
-        g.draw(testt); 
         
     }
 
@@ -195,6 +188,9 @@ public class ShapeObjectBorder extends SimpleShapeObject{
         int x = currentClicked.getBounds().x;
         int y = currentClicked.getBounds().y;
         return new Point(x, y);
+    }
+
+    public void setRotationCenterUpdate() {
     }
 
 }

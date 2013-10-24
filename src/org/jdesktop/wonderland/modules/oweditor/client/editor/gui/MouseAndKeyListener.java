@@ -28,8 +28,6 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
     
     private GUIController gc = null;
     
-    private Point currentPoint = null;
-    
     MouseAndKeyListener(GUIController gc){
         this.gc = gc;
     }
@@ -69,13 +67,10 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
                  //rotation
                  else if(rotation && !copy){
                      Point p = e.getPoint();
-                     currentPoint = p;
                      
-                     if(strategy == null){
-                         gc.esmi.isMouseInBorder(p);
-                     }else{
+                     gc.esmi.isMouseInBorder(p);
+                     if(strategy != null)
                          strategy.mousePressed(p);
-                     }
                  }
              }
              //Panning
@@ -235,7 +230,7 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
     }
     
     public void setRotationCenterStrategy(){
-        
+        strategy = new mlRotationCenterStrategy(gc);
     }
 
 }

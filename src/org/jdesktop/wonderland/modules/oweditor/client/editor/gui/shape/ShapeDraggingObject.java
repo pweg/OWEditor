@@ -10,4 +10,6 @@ public abstract class ShapeDraggingObject extends SimpleShapeObject{
     public abstract void setRotation(double rotation, Point p);
     
     public abstract double getRotation();
+    
+    public abstract void setState(stateDraggingShape state);
 }

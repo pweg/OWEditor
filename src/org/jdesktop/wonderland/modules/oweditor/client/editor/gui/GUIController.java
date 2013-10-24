@@ -137,9 +137,14 @@ public class GUIController implements GUIControllerInterface{
 
     public void setRotationUpdate(ArrayList<ShapeDraggingObject> list) {
 
+        int minus_x = drawingPan.getTranslationX();
+        int minus_y = drawingPan.getTranslationY();
+
         for(ShapeDraggingObject shape : list){
             long id = shape.getID();
-            ac.setRotationUpdate(id, shape.getX(), shape.getY(),
+            
+            ac.setRotationUpdate(id, shape.getX()-minus_x, 
+                    shape.getY()-minus_y,
                     shape.getRotation());
         }
     }

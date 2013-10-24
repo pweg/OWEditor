@@ -33,6 +33,8 @@ public class ShapeObjectDraggingRect extends ShapeDraggingObject{
     private double initialRotation = 0;
     private double scale = 0;
     
+    private stateDraggingShape state = null;
+    
     /**
      * Creates a new dragginRect shape object.
      * 
@@ -54,7 +56,7 @@ public class ShapeObjectDraggingRect extends ShapeDraggingObject{
         transform.scale(scale, scale);
         scaledShape = transform.createTransformedShape(originalShape);
         
-        rotateShape();    
+        //rotateInitialShape();    
     }
     
     @Override
@@ -63,8 +65,8 @@ public class ShapeObjectDraggingRect extends ShapeDraggingObject{
     }
 
     @Override
-    public Rectangle getShape() {
-        return originalShape;
+    public Shape getShape() {
+        return scaledShape;
     }
 
     @Override
@@ -74,9 +76,13 @@ public class ShapeObjectDraggingRect extends ShapeDraggingObject{
 
     @Override
     public void paintOriginal(Graphics2D g, AffineTransform at) {
+        
+        //Be advised, the following order of this section should not
+        //be disturbed. Otherwise the objects will be all over the place.
         g.setPaint(color);
         
-        rotateShape();
+        rotateInitialShape();
+        
         transformedShape = at.createTransformedShape(transformedShape);
 
         //This is the rotation, when using the rotate opperation.
@@ -92,8 +98,8 @@ public class ShapeObjectDraggingRect extends ShapeDraggingObject{
         g.draw(transformedShape); 
     }
     
-    private void rotateShape(){
-        //This is the initial rotation, wheather the object was rotated
+    private void rotateInitialShape(){
+        //This is the initial rotation, whether the object was rotated
         //before.
         AffineTransform transform = new AffineTransform();
         
@@ -106,22 +112,6 @@ public class ShapeObjectDraggingRect extends ShapeDraggingObject{
         
     }
 
-    /*
-    @Override
-    public void setSelected(boolean select) {
-        isSelected = select;
-    }
-
-    @Override
-    public boolean isSelected() {
-        return isSelected;
-    }
-
-    @Override
-    public void switchSelection() {
-        isSelected = !isSelected;
-    }*/
-    
     @Override
     public void setLocation(int x, int y) {
         originalShape.setLocation(x, y);
@@ -132,8 +122,6 @@ public class ShapeObjectDraggingRect extends ShapeDraggingObject{
         AffineTransform transform = new AffineTransform();
         transform.translate(distance_x, distance_y);
         scaledShape = transform.createTransformedShape(scaledShape);
-        
-        
     }
     
     /**
@@ -166,12 +154,21 @@ public class ShapeObjectDraggingRect extends ShapeDraggingObject{
 
     @Override
     public int getX() {
-        return (int) Math.round(scaledShape.getBounds().x/scale);
+        if(state == null){
+            throw new NullPointerException(
+                    "Dragging shape state is null!");
+        }
+
+        return state.getX(this, scale);
     }
 
     @Override
     public int getY() {
-        return (int) Math.round(scaledShape.getBounds().y/scale);
+        if(state == null){
+            throw new NullPointerException(
+                    "Dragging shape state is null!");
+        }
+        return state.getY(this, scale);
     }
 
     @Override
@@ -199,6 +196,11 @@ public class ShapeObjectDraggingRect extends ShapeDraggingObject{
     @Override
     public double getRotation() {
         return initialRotation+rotation;
+    }
+
+    @Override
+    public void setState(stateDraggingShape state) {
+        this.state = state;
     }
 
 }

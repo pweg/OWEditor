@@ -133,6 +133,7 @@ public class ExternalShapeFacade implements ExternalShapeFacadeInterface{
     @Override
     public void pasteInitialize() {
         stm.createDraggingShapes(scm.getCopyShapes());
+        sm.setShapeStates(new stateDraggingShapeTranslation());
     }
 
     @Override
@@ -173,6 +174,7 @@ public class ExternalShapeFacade implements ExternalShapeFacadeInterface{
             ssm.setSelected(shape, true);
         }
         stm.createDraggingShapes(ssm.getSelection());
+        sm.setShapeStates(new stateDraggingShapeTranslation());
     }
 
     @Override
@@ -204,6 +206,7 @@ public class ExternalShapeFacade implements ExternalShapeFacadeInterface{
     @Override
     public void rotationInitialize() {
         sm.createDraggingShapes(ssm.getSelection());
+        sm.setShapeStates(new stateDraggingShapeRotation());
         sm.createShapeBorder(gc.getDrawingPan().getScale(), 
                 ssm.getSelectionCoords(), ssm.getSelection());
 
@@ -241,6 +244,16 @@ public class ExternalShapeFacade implements ExternalShapeFacadeInterface{
         }
         cleanAll();
         
+    }
+
+    @Override
+    public void rotationCenterSetUpdate() {
+        srm.setRotationCenterUpdate(sm.getShapeBorder());
+    }
+
+    @Override
+    public void rotationCenterTranslate(Point start, Point end) {
+        srm.setRotationCenter(sm.getShapeBorder(), start, end);
     }
 
 }
