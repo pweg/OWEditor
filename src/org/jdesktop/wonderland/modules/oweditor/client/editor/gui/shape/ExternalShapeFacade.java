@@ -237,12 +237,10 @@ public class ExternalShapeFacade implements ExternalShapeFacadeInterface{
     }
 
     @Override
-    public void updateShapeRotation(long id, int x, int y, double rotation) {
-        if(!stm.checkForCollision()){
-            stm.translateShape(id, x, y);
-            srm.setRotation(id, rotation);
-        }
-        cleanAll();
+    public void updateShapeRotation(long id, double rotation) {
+      
+        srm.setRotation(id, rotation);
+        //cleanAll();
         
     }
 

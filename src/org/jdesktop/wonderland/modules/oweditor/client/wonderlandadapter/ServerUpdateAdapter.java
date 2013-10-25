@@ -1,5 +1,7 @@
 package org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter;
 
+import com.jme.math.Quaternion;
+import com.jme.math.Vector3f;
 import java.awt.Point;
 import java.util.LinkedHashMap;
 import java.util.logging.Logger;
@@ -66,7 +68,7 @@ public class ServerUpdateAdapter {
     public void serverTransformEvent(Cell cell){
         
         if(dui == null){
-            System.out.println("DataInterface is not in the adapter");
+            LOGGER.warning("DataInterface is not in the adapter");
             return;
         }
         
@@ -78,44 +80,17 @@ public class ServerUpdateAdapter {
         
         long id = idTranslator(cell);
         
-        dui.notifyTranslation(id , x, y, z);   
-    }
-    
-    /**
-     * This method should be called, when an object was changed
-     * on the server. It gets a new data object from the data package
-     * and fills it with the data it receives. The data object created 
-     * here will be discarded afterwards.
-     * 
-     * @param id the object id.
-     */
-    public void serverChangeEvent(long id){
+        dui.notifyTranslation(id , x, y, z); 
         
-        if(dui == null){
-            System.out.println("DataInterface is not in the adapter");
-            return;
-        }
+        CellTransform cellTransform = cell.getLocalTransform();
+        Quaternion rotation = cellTransform.getRotation(null);
+        float[] angles = rotation.toAngles(new float[3]);
+        float rotationX = (float) Math.toDegrees(angles[0]);
+        float rotationY = (float) Math.toDegrees(angles[1]);
+        float rotationZ = (float) Math.toDegrees(angles[2]);
         
-        /*ServerObject so = ac.ses.getObject(id);
+        dui.notifyRotation(id, rotationX, rotationY, rotationZ);
         
-        if(so == null)
-            return;
-        
-        int x = so.x;
-        int y = so.y;
-        int z = so.z;
-        double rotation = so.rotation;
-        double scale = so.scale;
-        String name = so.name;
-        
-        DataObjectInterface object = dui.createEmptyObject();
-        object.setID(id);
-        object.setCoordinates(x, y, z);
-        object.setRotation(rotation);
-        object.setScale(scale);
-        object.setName(name);
-        
-        dui.notifyObjectChange(object);*/
         
     }
 
@@ -154,7 +129,13 @@ public class ServerUpdateAdapter {
         
         CellTransform transform = cell.getLocalTransform();
         
-        float rotation = 0;//transform.getRotation(null);
+        Quaternion rotation = transform.getRotation(null);
+        float[] angles = rotation.toAngles(new float[3]);
+        
+        float rotationX = (float) Math.toDegrees(angles[0]);
+        float rotationY = (float) Math.toDegrees(angles[1]);
+        float rotationZ = (float) Math.toDegrees(angles[2]);
+        
         float scale = transform.getScaling();
         
         MovableComponent movableComponent = cell.getComponent(MovableComponent.class);
@@ -202,7 +183,9 @@ public class ServerUpdateAdapter {
         
         object.setID(id);
         object.setCoordinates(x, y, z);
-        object.setRotation(rotation);
+        object.setRotationX(rotationX);
+        object.setRotationY(rotationY);
+        object.setRotationZ(rotationZ);
         object.setScale(scale);
         object.setWidth(width);
         object.setHeight(height);

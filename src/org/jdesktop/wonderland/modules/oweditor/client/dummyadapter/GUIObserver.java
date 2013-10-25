@@ -64,13 +64,10 @@ public class GUIObserver implements GUIObserverInterface{
         
         if(object == null)
             return ;
-
-        Vector3D p = ac.ct.transformCoordinatesBack(x, y, 0, 0);
+   
+        object.rotationX = rotation;
         
-        object.x = p.x;
-        object.y = p.y;      
-        object.rotation = rotation;
-        
+        notifyTranslation(id, x,y);
         ac.sua.serverRotationEvent(id);
     }
 

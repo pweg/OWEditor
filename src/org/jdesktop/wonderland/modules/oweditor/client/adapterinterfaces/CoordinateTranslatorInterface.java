@@ -1,6 +1,7 @@
 package org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces;
 
 import java.awt.Point;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataObjectInterface;
 
 public interface CoordinateTranslatorInterface {
     
@@ -11,5 +12,7 @@ public interface CoordinateTranslatorInterface {
     public int transformHeight(float height);
     
     public double getScale();
+    
+    public double getRotation(DataObjectInterface object);
 
 }

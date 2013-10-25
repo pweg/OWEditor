@@ -52,6 +52,28 @@ public interface DataObjectInterface extends TranslatedObjectInterface{
     public String getName();
     
     /**
+     * Returns the x rotation of the object.
+     * 
+     * @return the rotation value. 
+     */
+    public double getRotationX();
+    
+    
+    /**
+     * Returns the y rotation of the object.
+     * 
+     * @return the rotation value. 
+     */
+    public double getRotationY();
+    
+    /**
+     * Returns the z rotation of the object.
+     * 
+     * @return the rotation value. 
+     */
+    public double getRotationZ();  
+    
+    /**
      * Sets the x coordinate of the object.
      * 
      * @param x the x coordinate.
@@ -78,11 +100,25 @@ public interface DataObjectInterface extends TranslatedObjectInterface{
     public void setZ(float z);
     
     /**
-     * Sets the rotation of the object.
+     * Sets the x rotation of the object.
      * 
      * @param rotation the rotation.
      */
-    public void setRotation(double rotation);
+    public void setRotationX(double rotation);
+    
+    /**
+     * Sets the y rotation of the object.
+     * 
+     * @param rotation the rotation.
+     */
+    public void setRotationY(double rotation);
+    
+    /**
+     * Sets the z rotation of the object.
+     * 
+     * @param rotation the rotation.
+     */
+    public void setRotationZ(double rotation);
     
     /**
      * Sets the scale of the object.
@@ -132,8 +168,7 @@ public interface DataObjectInterface extends TranslatedObjectInterface{
      * Sets the paramater, wheather the object is 
      * an avatar.
      * 
-     * @param isAvatar true, if the object is an avatar, 
-     * false otherwise
+     * @param type the type of the object
      */
     public void setType(byte type);
     

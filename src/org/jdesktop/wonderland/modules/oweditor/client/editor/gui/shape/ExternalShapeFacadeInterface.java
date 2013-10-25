@@ -85,7 +85,7 @@ public interface ExternalShapeFacadeInterface {
     
     public void rotateSetUpdate();
 
-    public void updateShapeRotation(long id, int x, int y, double rotation);
+    public void updateShapeRotation(long id, double rotation);
 
     public void rotationCenterSetUpdate();
 

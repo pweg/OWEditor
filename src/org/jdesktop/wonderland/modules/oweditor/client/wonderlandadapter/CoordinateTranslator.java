@@ -9,11 +9,14 @@ package org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter;
 import com.jme.bounding.BoundingBox;
 import com.jme.bounding.BoundingSphere;
 import com.jme.bounding.BoundingVolume;
+import com.jme.math.Quaternion;
 import com.jme.math.Vector3f;
 import java.awt.Point;
 import java.util.logging.Logger;
 import org.jdesktop.wonderland.client.cell.Cell;
+import org.jdesktop.wonderland.common.cell.CellTransform;
 import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.CoordinateTranslatorInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataObjectInterface;
 
 /**
  * This class is used to transform coorinates from the server
@@ -105,7 +108,7 @@ public class CoordinateTranslator implements CoordinateTranslatorInterface{
     public Vector3f transformCoordinatesBack(Cell cell, float x, float y, float z){
         
         Vector3f vector = new Vector3f();
-        BoundingVolume bounds = cell.getWorldBounds();
+        BoundingVolume bounds = cell.getLocalBounds();
         
          /*
          * Note: OW uses y value for height, not for 2d coordinates,
@@ -147,6 +150,26 @@ public class CoordinateTranslator implements CoordinateTranslatorInterface{
 
     public double getScale() {
         return scale;
+    }
+
+    public double getRotation(DataObjectInterface object) {
+        return -object.getRotationY();
+    }
+    
+    public Quaternion setRotation(Cell cell, double rotation){
+        LOGGER.warning("xxxxxxxxxxx " + rotation);
+        
+        CellTransform transform = cell.getLocalTransform();
+        
+        Quaternion current_rot = transform.getRotation(null);
+        float[] angles = current_rot.toAngles(new float[3]);
+        
+        float rotationX = angles[0];
+        float rotationZ = angles[2];
+        float rotationY = (float) Math.toRadians(-rotation);
+        LOGGER.warning("xxxxxxxxxxx " + rotation + "  " +rotationY + " "  + rotationY);
+        
+        return new Quaternion(new float[] { rotationX, rotationY, rotationZ });
     }
     
 }

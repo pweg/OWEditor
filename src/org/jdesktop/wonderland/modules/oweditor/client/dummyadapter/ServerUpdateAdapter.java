@@ -30,28 +30,6 @@ public class ServerUpdateAdapter {
     }
     
     /**
-     * This method should be called, when an object was changed
-     * on the server. It gets a new data object from the data package
-     * and fills it with the data it receives. The data object created 
-     * here will be discarded afterwards.
-     * 
-     * @param id the object id.
-     */
-    public void serverTranslationChangeEvent(long id){
-        if(dui == null){
-            System.out.println("DataInterface is not in the adapter");
-            return;
-        }
-        
-        ServerObject so = ac.ses.getObject(id);
-        
-        if(so == null)
-            return;
-        
-        dui.notifyTranslation(id, so.x, so.y, so.z);
-    }
-    
-    /**
      * This is called, when an object on the server was removed.
      * 
      * @param id the id of the removed object.
@@ -80,7 +58,6 @@ public class ServerUpdateAdapter {
     public void createObject(ServerObject sObject){
         
         long id = sObject.id;            
-        double rotation = sObject.rotation;
         double scale = sObject.scale;
         
         String name = sObject.name;
@@ -88,7 +65,9 @@ public class ServerUpdateAdapter {
         DataObjectInterface object = dui.createEmptyObject();
         object.setID(id);
         object.setCoordinates(sObject.x, sObject.y, sObject.z);
-        object.setRotation(rotation);
+        object.setRotationX(sObject.rotationX);
+        object.setRotationY(sObject.rotationY);
+        object.setRotationZ(sObject.rotationZ);
         object.setScale(scale);
         object.setName(name);
         if(sObject.isAvatar){
@@ -103,6 +82,28 @@ public class ServerUpdateAdapter {
         object.setName(name);
 
         dui.notifyObjectCreation(object);
+    }
+    
+    /**
+     * This method should be called, when an object was changed
+     * on the server. It gets a new data object from the data package
+     * and fills it with the data it receives. The data object created 
+     * here will be discarded afterwards.
+     * 
+     * @param id the object id.
+     */
+    public void serverTranslationChangeEvent(long id){
+        if(dui == null){
+            System.out.println("DataInterface is not in the adapter");
+            return;
+        }
+        
+        ServerObject so = ac.ses.getObject(id);
+        
+        if(so == null)
+            return;
+        
+        dui.notifyTranslation(id, so.x, so.y, so.z);
     }
 
     public void copyTranslation(String name, float x, float y , float z) {
@@ -135,7 +136,7 @@ public class ServerUpdateAdapter {
         if(so == null)
             return;
         
-        dui.notifyRotation(id, so.x, so.y, so.z, so.rotation);
+        dui.notifyRotation(id, so.rotationX, so.rotationY ,so.rotationZ);
     }
 
 }

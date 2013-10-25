@@ -11,7 +11,9 @@ public class ServerObject {
     protected float x = 0;
     protected float y = 0;
     protected float z = 0;
-    protected double rotation = 0;
+    protected double rotationX = 0;
+    protected double rotationY = 0;
+    protected double rotationZ = 0;
     protected double scale = 0;
     protected float width = 0;
     protected float height = 0;
@@ -25,7 +27,7 @@ public class ServerObject {
         this.x = x;
         this.y = y;
         this.z = z;
-        this.rotation = rotation;
+        this.rotationX = rotation;
         this.scale = scale;
         this.id = id;
         this.name = name;    
@@ -34,7 +36,7 @@ public class ServerObject {
     }
     
     public ServerObject clone(){
-        return new ServerObject(this.id, this.x,this.y,this.z, this.rotation, 
+        return new ServerObject(this.id, this.x,this.y,this.z, this.rotationX, 
                 this.scale, this.width, this.height, this.name);
     }
     

@@ -54,8 +54,8 @@ public class DataObjectObserver implements
     }
 
     @Override
-    public void notifyRotation(long id, int x, int y, double rotation) {
-        gc.esmi.updateShapeRotation(id, x, y, rotation);
+    public void notifyRotation(long id, double rotation) {
+        gc.esmi.updateShapeRotation(id, rotation);
         gc.drawingPan.repaint();
     }
 

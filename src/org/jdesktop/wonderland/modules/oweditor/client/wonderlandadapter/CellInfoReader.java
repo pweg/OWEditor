@@ -21,7 +21,7 @@ public class CellInfoReader {
     
     public static Vector3fInfo createCellInfo(Cell cell){
         
-        BoundingVolume bounds = cell.getWorldBounds();
+        BoundingVolume bounds = cell.getLocalBounds();
         Vector3fInfo v = new Vector3fInfo();
         
         if(bounds instanceof BoundingBox){

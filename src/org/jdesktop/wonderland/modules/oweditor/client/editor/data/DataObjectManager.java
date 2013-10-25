@@ -58,7 +58,7 @@ public class DataObjectManager implements DataObjectManagerGUIInterface{
             dc.em.setY(p.y, height);
             
             TranslatedObject t = new TranslatedObject(id, p.x, p.y, width, height,
-                    dataObject.getScale(), dataObject.getRotation(), dataObject.getName(),
+                    dataObject.getScale(), ct.getRotation(dataObject), dataObject.getName(),
                     dataObject.getType());
             
             domo.notifyCreation(t);
@@ -109,7 +109,9 @@ public class DataObjectManager implements DataObjectManagerGUIInterface{
             float x = dataObject.getXf();
             float y = dataObject.getYf();
             float z = dataObject.getZf();
-            double rotation = dataObject.getRotation();
+            double rotation_x = dataObject.getRotationX();
+            double rotation_y = dataObject.getRotationY();
+            double rotation_z = dataObject.getRotationZ();
             double scale = dataObject.getScale();
             String name = dataObject.getName();
             
@@ -123,7 +125,9 @@ public class DataObjectManager implements DataObjectManagerGUIInterface{
                 dc.em.setY(p.y, ct.transformHeight(d.getHeightf()));
             
             d.setCoordinates(x, y, z);
-            d.setRotation(rotation);
+            d.setRotationX(rotation_x);
+            d.setRotationY(rotation_y);
+            d.setRotationZ(rotation_z);
             d.setScale(scale);
             d.setName(name);
     
@@ -169,25 +173,22 @@ public class DataObjectManager implements DataObjectManagerGUIInterface{
         this.ct = ct;
     }
 
-    public void updateRotation(long id, float x, float y, float z,
-            double rotation) {
+    public void updateRotation(long id, double rotationX, 
+            double rotationY, double rotationZ) {
         
         DataObject d = data.get(id);
         
         if(d == null)
             return;
-        
-       Point p = ct.transformCoordinates(x, y, d.getWidthf(), d.getHeightf());
-        
-       if(d.getX() != x)
-           dc.em.setX(p.x, ct.transformWidth(d.getWidthf()));
-       if(d.getX() != y)
-           dc.em.setY(p.y, ct.transformHeight(d.getHeightf()));
             
-        d.setCoordinates(x, y, z);
-        d.setRotation(rotation);
-        
-        domo.notifyRotation(id, p.x, p.y, rotation);
+        double rotation = ct.getRotation(d);
+        d.setRotationX(rotationX);
+        d.setRotationY(rotationY);
+        d.setRotationZ(rotationZ);
+        double rotation_new = ct.getRotation(d);
+       
+        if(rotation != rotation_new)
+            domo.notifyRotation(id, rotation_new);
     }
 
 }

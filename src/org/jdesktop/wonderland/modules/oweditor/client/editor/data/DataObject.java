@@ -11,7 +11,9 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.Dat
 public class DataObject implements DataObjectInterface{
     
     private Vector3D coords = null;
-    private double rotation = 0;
+    private double rotationX = 0;
+    private double rotationY = 0;
+    private double rotationZ = 0;
     private double scale = 0;
     private long id = 0;
     private float width = 0;
@@ -40,11 +42,14 @@ public class DataObject implements DataObjectInterface{
      * @param height the objects height.
      * @param name the objects name.
      */
-    DataObject(long id, int x, int y, int z, double rotation, double scale, int width, int height,
-            String name){
+    DataObject(long id, int x, int y, int z, double rotationX, 
+            double rotationY, double rotationZ, double scale, int width, 
+            int height, String name){
         this.id = id;
         coords = new Vector3D(x,y,z);
-        this.rotation = rotation;
+        this.rotationX = rotationX;
+        this.rotationY = rotationY;
+        this.rotationZ = rotationZ;
         this.scale = scale;
         this.width = width;
         this.height = height;
@@ -65,11 +70,6 @@ public class DataObject implements DataObjectInterface{
      */
     public Vector3D getCoordinates(){
         return coords;
-    }
-    
-    @Override
-    public double  getRotation(){
-        return rotation;
     }
     
     @Override
@@ -151,12 +151,6 @@ public class DataObject implements DataObjectInterface{
     }
 
     @Override
-    public void setRotation(double rotation) {
-        this.rotation = rotation;
-        
-    }
-
-    @Override
     public void setScale(double scale) {
         this.scale = scale;
     }
@@ -189,6 +183,40 @@ public class DataObject implements DataObjectInterface{
     @Override
     public int getHeight() {
         return (int) Math.round(height);
+    }
+        
+    @Override
+    public double getRotationX() {
+        return rotationX;
+    }
+        
+    @Override
+    public double getRotationY() {
+        return rotationY;
+    }
+        
+    @Override
+    public double getRotationZ() {
+        return rotationZ;
+    }
+    
+    @Override
+    public void setRotationX(double rotation){
+        rotationX = rotation;
+    }
+    
+    @Override
+    public void setRotationY(double rotation){
+        rotationY = rotation;
+    }
+    
+    @Override
+    public void setRotationZ(double rotation){
+        rotationZ = rotation;
+    }
+
+    public double getRotation() {
+        return rotationX;
     }
 
 }
