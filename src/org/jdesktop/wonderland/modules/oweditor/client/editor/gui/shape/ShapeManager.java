@@ -32,6 +32,8 @@ public class ShapeManager {
     private ShapeObjectSelectionRect selectionRectangle = null;
     private ShapeObjectBorder border = null;
     
+    private AffineTransform at = null;
+    
     private static final Logger LOGGER =
             Logger.getLogger(WorldBuilder.class.getName());
     private InternalShapeMediatorInterface smi = null;
@@ -128,6 +130,8 @@ public class ShapeManager {
      * @param at an AffineTransform class, used to draw zoomed shapes correctly.
      */
     public void drawShapes(Graphics2D g2, AffineTransform at, double scale){
+        
+        this.at = at;
                 
         for(ShapeObject shape : avatarShapes){
             shape.paintOriginal(g2, at);
@@ -264,10 +268,10 @@ public class ShapeManager {
         
         if(shape instanceof ShapeObjectRectangle){
             newShape = factory.createDraggingShapeObject(ShapeFactory.RECTANGLE, x,y,
-                    width,height, id, name, rotation);
+                    width,height, id, name, rotation, at);
         }else if(shape instanceof ShapeObjectEllipse){
             newShape = factory.createDraggingShapeObject(ShapeFactory.CIRCLE, x,y,
-                    width,height, id, name, rotation);
+                    width,height, id, name, rotation, at);
         }
         return newShape;
     }
@@ -341,7 +345,8 @@ public class ShapeManager {
 
         int x = (int) Math.round(coordinates.x/scale);
         int y = (int) Math.round(coordinates.y/scale);
-        border = new ShapeObjectBorder(x, y, width, height, ShapeObjectBorder.MODECENTER);
+        border = new ShapeObjectBorder(x, y, width, height, at,
+                ShapeObjectBorder.MODECENTER);
     }
     
     public byte isInBorderShapes(Point p){

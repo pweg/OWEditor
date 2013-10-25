@@ -20,18 +20,14 @@ public class sCollisionAllStrategy implements sCollisionStrategy {
                 Area areaA = new Area(shape.getTransformedShape());
                 areaA.intersect(new Area(selected.getTransformedShape()));
 
-                if(selected instanceof ShapeObjectDraggingRect){
-                    ShapeObjectDraggingRect r = (ShapeObjectDraggingRect) selected;
-                    if(!areaA.isEmpty()){
-                        is_collision = true;
-                        r.setCollision(true);
-                        break;
-                    }else{
-                        r.setCollision(false);
-                    }
+                if(!areaA.isEmpty()){
+                    is_collision = true;
+                    break;
                 }
+                
             }
-        }
+            selected.setCollision(is_collision);
+            }
         return is_collision;
     }
 

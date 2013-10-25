@@ -23,15 +23,19 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.GUISettings;
  */
 public class ShapeObjectDraggingRect extends ShapeDraggingObject{
     
-    private Rectangle originalShape = null;
+    private Shape originalShape = null;
     private Shape transformedShape = null;
-    private Shape scaledShape = null;
     private Paint color = GUISettings.draggingColor;
     private long id = 0;
     private double rotation = 0;
+    private double lastRotation = 0;
     private Point rotationPoint = null;
     private double initialRotation = 0;
-    private double scale = 0;
+    
+    private int initialWidth = 0;
+    private int initialHeight = 0;
+    
+    private AffineTransform at = null;
     
     private stateDraggingShape state = null;
     
@@ -46,17 +50,19 @@ public class ShapeObjectDraggingRect extends ShapeDraggingObject{
      *               is copied.
      */
     public ShapeObjectDraggingRect(int x, int y, int width, int height, long id, double rotation,
-            double scale){
+            AffineTransform at){
         originalShape = new Rectangle (x, y, width, height);
         this.id = id;
         this.initialRotation = rotation;
-        this.scale = scale;
+        this.at = at;
+        initialWidth = width;
+        initialHeight = height;
         
-        AffineTransform transform = new AffineTransform();
-        transform.scale(scale, scale);
-        scaledShape = transform.createTransformedShape(originalShape);
+        originalShape = at.createTransformedShape(originalShape);
         
-        //rotateInitialShape();    
+        //This is needed for copy shapes, in order to check for
+        //collisions correctly.
+        rotateInitialShape();    
     }
     
     @Override
@@ -66,7 +72,7 @@ public class ShapeObjectDraggingRect extends ShapeDraggingObject{
 
     @Override
     public Shape getShape() {
-        return scaledShape;
+        return originalShape;
     }
 
     @Override
@@ -83,7 +89,7 @@ public class ShapeObjectDraggingRect extends ShapeDraggingObject{
         
         rotateInitialShape();
         
-        transformedShape = at.createTransformedShape(transformedShape);
+        //transformedShape = at.createTransformedShape(transformedShape);
 
         //This is the rotation, when using the rotate opperation.
         if(rotationPoint != null){
@@ -104,21 +110,21 @@ public class ShapeObjectDraggingRect extends ShapeDraggingObject{
         AffineTransform transform = new AffineTransform();
         
         transform.rotate(Math.toRadians(initialRotation), 
-                scaledShape.getBounds().getCenterX(), 
-                scaledShape.getBounds().getCenterY());
-        transformedShape = transform.createTransformedShape(scaledShape);  
+                originalShape.getBounds().getCenterX(), 
+                originalShape.getBounds().getCenterY());
+        transformedShape = transform.createTransformedShape(originalShape);  
     }
 
     @Override
     public void setLocation(int x, int y) {
-        originalShape.setLocation(x, y);
+        originalShape.getBounds().setLocation(x, y);
     }
 
     @Override
     public void setTranslation(double distance_x, double distance_y) {        
         AffineTransform transform = new AffineTransform();
         transform.translate(distance_x, distance_y);
-        scaledShape = transform.createTransformedShape(scaledShape);
+        originalShape = transform.createTransformedShape(originalShape);
     }
     
     /**
@@ -131,7 +137,7 @@ public class ShapeObjectDraggingRect extends ShapeDraggingObject{
      */
     @Override
     public void set(int x, int y, int width, int height){
-        originalShape.setRect(x, y, width, height);
+
     }
     
     /**
@@ -141,8 +147,8 @@ public class ShapeObjectDraggingRect extends ShapeDraggingObject{
      * @param col true, when collision is detected,
      *         false otherwise.
      */
+    @Override
     public void setCollision(boolean col){
-
         if(!col)
             color = GUISettings.draggingColor;
         else
@@ -156,7 +162,7 @@ public class ShapeObjectDraggingRect extends ShapeDraggingObject{
                     "Dragging shape state is null!");
         }
 
-        return state.getX(this, scale);
+        return state.getX(this, at);
     }
 
     @Override
@@ -165,17 +171,17 @@ public class ShapeObjectDraggingRect extends ShapeDraggingObject{
             throw new NullPointerException(
                     "Dragging shape state is null!");
         }
-        return state.getY(this, scale);
+        return state.getY(this, at);
     }
 
     @Override
     public int getWidth() {
-        return originalShape.width;
+        return initialWidth;
     }
 
     @Override
     public int getHeight() {
-        return originalShape.height;
+        return initialHeight;
     }
 
     /*
@@ -192,7 +198,7 @@ public class ShapeObjectDraggingRect extends ShapeDraggingObject{
 
     @Override
     public double getRotation() {
-        return initialRotation+rotation;
+        return initialRotation+lastRotation;
     }
 
     @Override
@@ -201,16 +207,16 @@ public class ShapeObjectDraggingRect extends ShapeDraggingObject{
     }
 
     @Override
-    public void setRotationCenterUpdate(int x, int y) {
+    public void setRotationCenterUpdate() {
         if(rotationPoint == null)
             return;
         
         AffineTransform transform = new AffineTransform();
         transform.rotate(Math.toRadians(rotation), 
-                rotationPoint.x-x, rotationPoint.y-y);
-        System.out.println(rotationPoint.x +" " +scaledShape.getBounds().x);
+                rotationPoint.x, rotationPoint.y);
         
-        scaledShape = transform.createTransformedShape(scaledShape);
+        originalShape = transform.createTransformedShape(originalShape);
+        lastRotation += rotation;
         rotation = 0;
         
     }

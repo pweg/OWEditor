@@ -1,5 +1,7 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.shape;
 
+import java.awt.geom.AffineTransform;
+
 /**
  * A factory, which is used to create different kinds of
  * shapes.
@@ -49,11 +51,11 @@ public class ShapeFactory {
     }
     
     public ShapeDraggingObject createDraggingShapeObject(int type, int x, int y, int width, int height, 
-            long id, String name, double rotation){
+            long id, String name, double rotation, AffineTransform at){
         switch(type){
             case RECTANGLE:
                 return new ShapeObjectDraggingRect(x,y,width,height, id, rotation,
-                        smi.getScale());
+                        at);
             default:
                 throw new IllegalArgumentException(
                     "Unknown type");  

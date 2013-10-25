@@ -199,14 +199,15 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
     
     public void pasteShapes(){
         
-        if(strategy == null && pasteStrategy != null)
-            strategy = pasteStrategy;
-        else if (strategy == null)
+        strategy = pasteStrategy;
+        
+        if (strategy == null)
             return;
         
         strategy.mousePressed(null);
         strategy.mouseMoved(gc.drawingPan.getMousePosition());
         copy = true;
+        gc.drawingPan.repaint();
     }
     
     public void releaseCopyMouseLock(){

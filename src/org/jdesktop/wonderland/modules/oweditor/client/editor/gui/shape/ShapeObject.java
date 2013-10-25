@@ -63,5 +63,16 @@ public abstract class ShapeObject extends SimpleShapeObject{
     
     public abstract void setRotation(double rotation);
     
+    /**
+     * Sets the dimensions and the position of the shape.
+     * 
+     * @param x the x coordinate.
+     * @param y the y coordinate.
+     * @param width the width.
+     * @param height the height.
+     */
+    public abstract void set(int x, int y, int width, int height);
+    
+    
 
 }

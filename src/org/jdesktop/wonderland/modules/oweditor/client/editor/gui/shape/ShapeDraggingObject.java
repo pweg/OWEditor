@@ -13,5 +13,7 @@ public abstract class ShapeDraggingObject extends SimpleShapeObject{
     
     public abstract void setState(stateDraggingShape state);
     
-    public abstract void setRotationCenterUpdate(int x, int y);
+    public abstract void setRotationCenterUpdate();
+    
+    public abstract void setCollision(boolean col);
 }

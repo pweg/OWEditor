@@ -16,7 +16,6 @@ public class mlPopupStrategy implements mlMouseStrategy{
         contr.popupMenu.setItemsEnabled(contr.esmi.popupInitialize(p),
                 contr.esmi.copyShapesExist());
             
-
         contr.drawingPan.repaint();
         contr.popupMenu.show(contr.drawingPan, p.x, p.y);
     }
