@@ -29,8 +29,8 @@ public class GUISettings {
      * objects, when rotating and scaling.
      */
     public static Paint surroundingBorderColor = Color.lightGray;
-    public static int surroundingBorderMargin = 10;
-    public static int surroundingBorderTinyShapeSize = 10;
+    public static int surroundingBorderMargin = 12;
+    public static int surroundingBorderTinyShapeSize = 12;
     
     public static Paint avatarColor = Color.LIGHT_GRAY;
     

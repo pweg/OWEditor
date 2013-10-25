@@ -132,11 +132,7 @@ public class ShapeManager {
     public void drawShapes(Graphics2D g2, AffineTransform at, double scale){
         
         this.at = at;
-                
-        for(ShapeObject shape : avatarShapes){
-            shape.paintOriginal(g2, at);
-        }
-        
+                      
         ArrayList<ShapeObject> selected = new ArrayList<ShapeObject>();
         
         for(ShapeObject shape : shapes){  
@@ -150,23 +146,21 @@ public class ShapeManager {
             shape.paintOriginal(g2, at);
         }
         
+        for(ShapeObject shape : avatarShapes){
+            shape.paintOriginal(g2, at);
+        }
+        
         for(ShapeObject shape : shapes){  
             shape.paintName(g2, at, scale);
         }
-        
-        AffineTransform transform = new AffineTransform();
-        transform.translate(at.getTranslateX(), at.getTranslateY());
-        
+                
         for(ShapeDraggingObject shape : draggingShapes){  
-            shape.paintOriginal(g2, transform);
+            shape.paintOriginal(g2, at);
             
         }
         
-        if(border != null){
-            transform = new AffineTransform();
-            transform.scale(scale, scale);  
-            
-            border.paintOriginal(g2, transform);
+        if(border != null){            
+            border.paintOriginal(g2, at);
         }
 
         if(selectionRectangle != null)

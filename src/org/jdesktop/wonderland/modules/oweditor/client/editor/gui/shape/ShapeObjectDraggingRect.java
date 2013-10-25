@@ -125,6 +125,7 @@ public class ShapeObjectDraggingRect extends ShapeDraggingObject{
         AffineTransform transform = new AffineTransform();
         transform.translate(distance_x, distance_y);
         originalShape = transform.createTransformedShape(originalShape);
+        rotateInitialShape();
     }
     
     /**
