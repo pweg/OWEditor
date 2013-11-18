@@ -1,6 +1,8 @@
-package org.jdesktop.wonderland.modules.oweditor.client.editor.gui;
+package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.frame;
 
 import javax.swing.JFrame;
+
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.GUISettings;
 
 /**
  * This is the main window of the editor.
@@ -8,17 +10,18 @@ import javax.swing.JFrame;
  * @author Patrick
  *
  */
-public class WindowFrame extends JFrame {
+public class MainFrame extends JFrame {
 
     private static final long serialVersionUID = 1L;
+
+  
 
     /**
      * Creates a new Window frame instance and sets it up.
      */
-    public WindowFrame(GUIController gc){
+    public MainFrame(){
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        
-        
+                
         //f.getContentPane().add(app.getControl(), "Last");  
         setSize(GUISettings.frameWidth, GUISettings.frameHeight);  
         setLocation(GUISettings.framePositionX, GUISettings.framePositionY);  

@@ -42,19 +42,19 @@ public class mlRotationCenterStrategy implements mlMouseStrategy{
     public void mouseReleased(Point p) {
         dragging = false;
         
-        controller.esmi.rotationCenterSetUpdate();
-        controller.drawingPan.repaint();
+        controller.esfi.rotationCenterSetUpdate();
+        controller.effi.repaint();
     }
 
     @Override
     public void mouseDragged(Point p) {
         if(dragging) {
             
-            controller.esmi.rotationCenterTranslate(start, p);
+            controller.esfi.rotationCenterTranslate(start, p);
             start.x = p.x;
             start.y = p.y;
         }
-        controller.drawingPan.repaint();
+        controller.effi.repaint();
     }
 
     @Override

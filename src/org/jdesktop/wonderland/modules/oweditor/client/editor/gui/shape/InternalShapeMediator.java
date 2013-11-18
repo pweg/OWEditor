@@ -3,6 +3,7 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.shape;
 import java.util.ArrayList;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.GUIController;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.frame.ExternalFrameToShapeInterface;
 
 public class InternalShapeMediator implements InternalShapeMediatorInterface{
     
@@ -10,6 +11,7 @@ public class InternalShapeMediator implements InternalShapeMediatorInterface{
     private SelectionManager ssm = null;
     private TranslationManager stm = null;
     private GUIController gc = null;
+    private ExternalFrameToShapeInterface frame = null;
     
     public InternalShapeMediator(GUIController gc) {
         this.gc = gc;
@@ -48,7 +50,7 @@ public class InternalShapeMediator implements InternalShapeMediatorInterface{
 
     @Override
     public double getScale() {
-        return gc.getDrawingPan().getScale();
+        return frame.getScale();
     }
 
     @Override
@@ -63,7 +65,7 @@ public class InternalShapeMediator implements InternalShapeMediatorInterface{
 
     @Override
     public void repaint() {
-        gc.getDrawingPan().repaint();
+        frame.repaint();
     }
 
     @Override
@@ -104,6 +106,12 @@ public class InternalShapeMediator implements InternalShapeMediatorInterface{
     @Override
     public ShapeObjectBorder getShapeBorder() {
         return sm.getShapeBorder();
+    }
+
+    @Override
+    public void registerFrameInterface(
+            ExternalFrameToShapeInterface frameInterface) {
+        this.frame = frameInterface;
     }
     
     

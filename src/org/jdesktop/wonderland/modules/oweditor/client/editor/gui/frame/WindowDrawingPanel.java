@@ -1,4 +1,4 @@
-package org.jdesktop.wonderland.modules.oweditor.client.editor.gui;
+package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.frame;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -12,6 +12,8 @@ import java.awt.geom.AffineTransform;
 import javax.swing.JPanel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.GUISettings;
 
 /**
  * A class which is used for drawing. It implements the main surface for the
@@ -28,7 +30,7 @@ public class WindowDrawingPanel extends JPanel implements ChangeListener {
     private Dimension size;
     private double scale = 1.0;
       
-    private GUIController gc = null;
+    private FrameController fc = null;
     
     /*
      * These two translation integers are used to 
@@ -48,9 +50,9 @@ public class WindowDrawingPanel extends JPanel implements ChangeListener {
      * 
      * @param gc A GUIController instance.
      */
-    public WindowDrawingPanel(GUIController gc) {
+    public WindowDrawingPanel(FrameController fc) {
         
-        this.gc = gc;
+        this.fc = fc;
         
         hints = new RenderingHints(null);  
         hints.put(RenderingHints.KEY_ANTIALIASING,  
@@ -90,6 +92,7 @@ public class WindowDrawingPanel extends JPanel implements ChangeListener {
      * 
      * @param curScale The old scale value, before the new one
      * was set.
+     * @NonNull String scrollPanel;
      */
     public void changeViewPort(double curScale){
         Rectangle r = getVisibleRect();
@@ -110,8 +113,8 @@ public class WindowDrawingPanel extends JPanel implements ChangeListener {
 
         Point p = new Point(new_x, new_y);
         
-        gc.mainScrollPanel.getViewport().setView(gc.mainScrollPanel.getViewport().getView());
-        gc.mainScrollPanel.getViewport().setViewPosition(p);
+        fc.mainScrollPanel.getViewport().setView(fc.mainScrollPanel.getViewport().getView());
+        fc.mainScrollPanel.getViewport().setViewPosition(p);
     }
    
     public void stateChanged(ChangeEvent e) {   
@@ -135,7 +138,7 @@ public class WindowDrawingPanel extends JPanel implements ChangeListener {
         at.scale(scale, scale);  
         g2.setPaint(GUISettings.backgroundColor); 
         
-        gc.esmi.drawShapes(g2, at, scale);
+        fc.shapes.drawShapes(g2, at, scale);
     } 
     
     /**
@@ -144,9 +147,9 @@ public class WindowDrawingPanel extends JPanel implements ChangeListener {
      * @param width the new width.
      */
     public void setNewWidth(int width){
-        size.width = (int)( (width + gc.frame.getWidth()/GUISettings.widthDivisor));
-        if(size.width < gc.frame.getWidth())
-            size.width = gc.frame.getWidth();
+        size.width = (int)( (width + fc.frame.getWidth()/GUISettings.widthDivisor));
+        if(size.width < fc.frame.getWidth())
+            size.width = fc.frame.getWidth();
         
         revalidate();  
     }
@@ -157,9 +160,9 @@ public class WindowDrawingPanel extends JPanel implements ChangeListener {
      * @param height the new height.
      */
     public void setNewHeight(int height){
-        size.height = (int)( (height + gc.frame.getHeight()/GUISettings.heightDivisor));
-        if(size.height < gc.frame.getHeight())
-            size.height = gc.frame.getHeight();
+        size.height = (int)( (height + fc.frame.getHeight()/GUISettings.heightDivisor));
+        if(size.height < fc.frame.getHeight())
+            size.height = fc.frame.getHeight();
         
         revalidate();  
     }
@@ -190,7 +193,7 @@ public class WindowDrawingPanel extends JPanel implements ChangeListener {
      */
     public void setNewMinX(int x){
         int curTrans = translationX;
-        translationX = (-x)+ gc.frame.getWidth()/(GUISettings.widthDivisor*2);
+        translationX = (-x)+ fc.frame.getWidth()/(GUISettings.widthDivisor*2);
         setViewportSizeChange(translationX-curTrans, 0);
     }
     
@@ -202,26 +205,27 @@ public class WindowDrawingPanel extends JPanel implements ChangeListener {
      */
     public void setNewMinY(int y){
         int curTrans = translationY;
-        translationY = (-y)+ gc.frame.getHeight()/(GUISettings.heightDivisor*2);
+        translationY = (-y)+ fc.frame.getHeight()/(GUISettings.heightDivisor*2);
         setViewportSizeChange(0, translationY-curTrans);
     }
     
+    /**
+     * @NonNull String scrollPanel;
+     */
     private void setViewportSizeChange(int x, int y){
         Rectangle r = getVisibleRect();
         
         if(y == 0){
-            Point p = new Point(r.x+x, r.y);            
-            gc.mainScrollPanel.getViewport().setView(gc.mainScrollPanel.getViewport().getView());
-            gc.mainScrollPanel.getViewport().setViewPosition(p);
+            Point p = new Point((int)Math.round(r.x+x*scale), r.y);            
+            fc.mainScrollPanel.getViewport().setView(fc.mainScrollPanel.getViewport().getView());
+            fc.mainScrollPanel.getViewport().setViewPosition(p);
             
         }else if(x == 0){
-            Point p = new Point(r.x, r.y+y);
-            gc.mainScrollPanel.getViewport().setView(gc.mainScrollPanel.getViewport().getView());
-            gc.mainScrollPanel.getViewport().setViewPosition(p);
+            Point p = new Point(r.x, (int)Math.round(r.y+y*scale));
+            fc.mainScrollPanel.getViewport().setView(fc.mainScrollPanel.getViewport().getView());
+            fc.mainScrollPanel.getViewport().setViewPosition(p);
             
         }
-
-        
     }
     
     public int getTranslationX(){

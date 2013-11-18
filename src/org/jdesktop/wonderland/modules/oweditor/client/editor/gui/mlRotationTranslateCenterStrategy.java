@@ -12,11 +12,9 @@ import java.awt.Point;
 public class mlRotationTranslateCenterStrategy implements mlMouseStrategy{
 
     private GUIController controller = null;
-    private Point startingPoint = null;
     
     public mlRotationTranslateCenterStrategy(GUIController contr, Point startingPoint){
         this.controller = contr;
-        this.startingPoint = startingPoint;
     }
     
     @Override
@@ -31,8 +29,8 @@ public class mlRotationTranslateCenterStrategy implements mlMouseStrategy{
 
     @Override
     public void mouseDragged(Point p) {
-        controller.esmi.rotate(p);
-        controller.drawingPan.repaint();
+        controller.esfi.rotate(p);
+        controller.effi.repaint();
     }
 
     @Override

@@ -39,11 +39,11 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
                 
                 Point p = e.getPoint();
                 
-                if(!gc.esmi.selectionSwitch(p)){
+                if(!gc.esfi.selectionSwitch(p)){
                     strategy = new mlSelectionRectShiftStrategy(gc);
                     strategy.mousePressed(e.getPoint());
                 } 
-                gc.drawingPan.repaint();               
+                gc.effi.repaint();               
             }
         }else{
              //dragging shapes/selection
@@ -52,7 +52,7 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
              
                      Point p = e.getPoint();
                         
-                     if(gc.esmi.isMouseInObject(p)){
+                     if(gc.esfi.isMouseInObject(p)){
                          strategy = new mlDragAndDropStrategy(gc);
                          strategy.mousePressed(e.getPoint());
                      }else{
@@ -62,13 +62,14 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
                  }
                  //paste/insertion
                  else if(copy && !rotation){
-                     strategy.mousePressed(e.getPoint());
+                     if(strategy != null)
+                         strategy.mousePressed(e.getPoint());
                  }
                  //rotation
                  else if(rotation && !copy){
                      Point p = e.getPoint();
                      
-                     gc.esmi.isMouseInBorder(p);
+                     gc.esfi.isMouseInBorder(p);
                      if(strategy != null)
                          strategy.mousePressed(p);
                  }
@@ -76,8 +77,8 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
              //Panning
              else if (e.getButton() ==  MouseEvent.BUTTON2 || e.getButton() ==  MouseEvent.BUTTON3){
                  if(!rotation)
-                     gc.esmi.cleanHelpingShapes();
-                 strategy = new mlPanStrategy(gc.drawingPan);
+                     gc.esfi.cleanHelpingShapes();
+                 strategy = new mlPanStrategy(gc.effi);
                  strategy.mousePressed(e.getPoint());
              }else{
                  clear();
@@ -103,12 +104,8 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
          * also need some refinements, due to the new scales.
          */
         clear();        
-        WindowDrawingPanel panel = gc.drawingPan;
         
-        double curScale = panel.getScale();
-        
-        panel.changeScale(GUISettings.zoomSpeed * -(double)e.getWheelRotation());
-        panel.changeViewPort(curScale);
+        gc.effi.changeScale(GUISettings.zoomSpeed * -(double)e.getWheelRotation());
     }
     
     public void mouseDragged(MouseEvent e) {
@@ -148,7 +145,7 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
         if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
                 shiftPressed = false;
         }else if( e.getKeyCode() == KeyEvent.VK_DELETE){
-            gc.esmi.deleteCurrentSelection();
+            gc.esfi.deleteCurrentSelection();
         }else if(e.getKeyCode() == KeyEvent.VK_ESCAPE){
             clear();
         }else if(e.isControlDown()){
@@ -171,7 +168,7 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
         }else{
             if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                 if(rotation){
-                    gc.esmi.rotateSetUpdate();
+                    gc.esfi.rotateSetUpdate();
                     clear();
                 }
             }
@@ -181,15 +178,17 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
     private void clear(){
         rotation = false;
         copy = false;
-        gc.esmi.cleanAll();
+        gc.esfi.cleanAll();
         releaseCopyMouseLock();
-        if(strategy instanceof mlSelectionRectStrategy ||
-                strategy instanceof mlSelectionRectShiftStrategy)
-            strategy = null;
-        else if(strategy instanceof mlPasteStrategy){
-            ((mlPasteStrategy)strategy).reset();
+        if(strategy != null){
+            if(strategy instanceof mlSelectionRectStrategy ||
+                    strategy instanceof mlSelectionRectShiftStrategy)
+                strategy = null;
+            else if(strategy instanceof mlPasteStrategy){
+                ((mlPasteStrategy)strategy).reset();
+            }
         }
-        gc.drawingPan.repaint();
+        gc.effi.repaint();
     }
     
     public void copyShapes(){
@@ -205,9 +204,9 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
             return;
         
         strategy.mousePressed(null);
-        strategy.mouseMoved(gc.drawingPan.getMousePosition());
+        strategy.mouseMoved(gc.effi.getMousePosition());
         copy = true;
-        gc.drawingPan.repaint();
+        gc.effi.repaint();
     }
     
     public void releaseCopyMouseLock(){
@@ -216,9 +215,9 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
 
     public void rotateShapes() {
         strategy = null;
-        gc.esmi.rotationInitialize();
+        gc.esfi.rotationInitialize();
         rotation = true;
-        gc.drawingPan.repaint();
+        gc.effi.repaint();
     }
     
     public void removeStrategy(){
@@ -232,6 +231,10 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
     
     public void setRotationCenterStrategy(){
         strategy = new mlRotationCenterStrategy(gc);
+    }
+    
+    public mlPasteStrategy getPasteStrategy(){
+        return pasteStrategy;
     }
 
 }

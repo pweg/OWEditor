@@ -79,9 +79,4 @@ public class TranslationManager {
         return strategy.checkForCollision(smi.getAllShapes(), smi.getDraggingShapes());
     }
 
-    public void createDraggingShapes(ArrayList<ShapeObject> shapes){
-        smi.createDraggingShapes(shapes);
-    }
-
-
 }

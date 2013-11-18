@@ -6,6 +6,7 @@ import java.awt.geom.AffineTransform;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.TranslatedObjectInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.GUIController;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.frame.ExternalFrameToShapeInterface;
 
 public class ExternalShapeFacade implements ExternalShapeFacadeInterface{
     
@@ -17,6 +18,7 @@ public class ExternalShapeFacade implements ExternalShapeFacadeInterface{
     private RotationManager srm = null;
     private SelectionManager ssm = null;
     private TranslationManager stm = null;
+    private ExternalFrameToShapeInterface frame = null;
 
     public ExternalShapeFacade(GUIController gc){
         this.gc  = gc;
@@ -132,7 +134,7 @@ public class ExternalShapeFacade implements ExternalShapeFacadeInterface{
 
     @Override
     public void pasteInitialize() {
-        stm.createDraggingShapes(scm.getCopyShapes());
+        smi.createDraggingShapes(scm.getCopyShapes());
         sm.setShapeStates(new stateDraggingShapeTranslation());
     }
 
@@ -173,7 +175,7 @@ public class ExternalShapeFacade implements ExternalShapeFacadeInterface{
             ssm.clearCurSelection();
             ssm.setSelected(shape, true);
         }
-        stm.createDraggingShapes(ssm.getSelection());
+        smi.createDraggingShapes(ssm.getSelection());
         sm.setShapeStates(new stateDraggingShapeTranslation());
     }
 
@@ -207,7 +209,7 @@ public class ExternalShapeFacade implements ExternalShapeFacadeInterface{
     public void rotationInitialize() {
         sm.createDraggingShapes(ssm.getSelection());
         sm.setShapeStates(new stateDraggingShapeRotation());
-        sm.createShapeBorder(gc.getDrawingPan().getScale(), 
+        sm.createShapeBorder(frame.getScale(), 
                 ssm.getSelectionCoords(), ssm.getSelection());
 
         srm.initializeRotation();
@@ -263,6 +265,13 @@ public class ExternalShapeFacade implements ExternalShapeFacadeInterface{
         for(ShapeDraggingObject shape : sm.getDraggingShapes()){
             shape.setRotationCenterUpdate();
         }
+    }
+
+    @Override
+    public void registerFrameInterface(
+            ExternalFrameToShapeInterface frameInterface) {
+        this.frame = frameInterface;
+        smi.registerFrameInterface(frameInterface);
     }
 
 }

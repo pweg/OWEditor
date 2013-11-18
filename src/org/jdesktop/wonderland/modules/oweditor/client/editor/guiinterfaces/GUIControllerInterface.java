@@ -10,7 +10,7 @@ public interface GUIControllerInterface {
      * Creates the main frame, which houses
      * the whole editor.
      */
-    public void createFrame();
+    public void initializeGUI();
     
     /**
      * Sets the visibility of the main frame.
@@ -18,7 +18,7 @@ public interface GUIControllerInterface {
      * @param visibility: True for showing the frame,
      * false for hiding it.
      */
-    public void setVisibility(boolean visibility);
+    public void setVisible(boolean visibility);
 
     /**
      * Returns a DataObjectObserver instance.

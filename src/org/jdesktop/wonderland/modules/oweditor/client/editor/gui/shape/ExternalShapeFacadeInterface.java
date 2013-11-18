@@ -5,6 +5,7 @@ import java.awt.Point;
 import java.awt.geom.AffineTransform;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.TranslatedObjectInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.frame.ExternalFrameToShapeInterface;
 
 public interface ExternalShapeFacadeInterface {
 
@@ -92,6 +93,9 @@ public interface ExternalShapeFacadeInterface {
     public void rotationCenterTranslate(Point start, Point end);
 
     public void rotationSetUpdate();
+
+    public void registerFrameInterface(
+            ExternalFrameToShapeInterface frameInterface);
 
 
 }

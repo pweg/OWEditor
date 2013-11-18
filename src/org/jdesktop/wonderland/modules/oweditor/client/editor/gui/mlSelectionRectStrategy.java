@@ -23,12 +23,12 @@ public class mlSelectionRectStrategy implements mlMouseStrategy{
     @Override
     public void mousePressed(Point p) {
         
-        controller.esmi.clearCurSelection();
+        controller.esfi.clearCurSelection();
             
         start = p;
         selectionRect = true;
             
-        controller.drawingPan.repaint();
+        controller.effi.repaint();
         
     }
 
@@ -37,8 +37,8 @@ public class mlSelectionRectStrategy implements mlMouseStrategy{
         if(selectionRect != false){
                selectionRect = false;
 
-               controller.esmi.selectionReleased();
-               controller.drawingPan.repaint();
+               controller.esfi.selectionReleased();
+               controller.effi.repaint();
            }
     }
 
@@ -47,8 +47,8 @@ public class mlSelectionRectStrategy implements mlMouseStrategy{
          if(selectionRect != false){
                 Point end = p;
                
-                controller.esmi.selectionUpdate(start, end);
-                controller.drawingPan.repaint();
+                controller.esfi.selectionUpdate(start, end);
+                controller.effi.repaint();
             }
     }
 

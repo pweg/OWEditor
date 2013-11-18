@@ -2,6 +2,8 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.shape;
 
 import java.util.ArrayList;
 
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.frame.ExternalFrameToShapeInterface;
+
 public interface InternalShapeMediatorInterface {
     
     public void registerShapeManager(ShapeManager sm);
@@ -42,4 +44,7 @@ public interface InternalShapeMediatorInterface {
     public ShapeObject getShape(long id);
     
     public ShapeObjectBorder getShapeBorder();
+    
+    public void registerFrameInterface(
+            ExternalFrameToShapeInterface frameInterface);
 }

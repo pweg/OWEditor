@@ -27,29 +27,29 @@ public class mlDragAndDropStrategy implements mlMouseStrategy{
     @Override
     public void mousePressed(Point p) {
         
-        controller.esmi.translationInitialization(p);
+        controller.esfi.translationInitialization(p);
         
-        if(controller.esmi.isMouseInObject(p)){
+        if(controller.esfi.isMouseInObject(p)){
             start.x = p.x;
             start.y = p.y;
             dragging = true;
         }
-        controller.drawingPan.repaint();
+        controller.effi.repaint();
     }
 
     @Override
     public void mouseReleased(Point p) {
         dragging = false;
         
-        controller.esmi.translationSetUpdate();
-        controller.drawingPan.repaint();
+        controller.esfi.translationSetUpdate();
+        controller.effi.repaint();
     }
 
     @Override
     public void mouseDragged(Point p) {
         if(dragging) {
             
-            controller.esmi.translation(p.x, p.y, start);
+            controller.esfi.translation(p.x, p.y, start);
             start.x = p.x;
             start.y = p.y;
         }

@@ -13,11 +13,12 @@ public class mlPopupStrategy implements mlMouseStrategy{
     @Override
     public void mousePressed(Point p) {
         
-        contr.popupMenu.setItemsEnabled(contr.esmi.popupInitialize(p),
-                contr.esmi.copyShapesExist());
+        boolean shapesSelected = contr.esfi.popupInitialize(p);
+        boolean copyShapesExist = contr.esfi.copyShapesExist();
+        
+        contr.effi.showPopupMenu(shapesSelected,copyShapesExist, 
+                p.x, p.y);
             
-        contr.drawingPan.repaint();
-        contr.popupMenu.show(contr.drawingPan, p.x, p.y);
     }
 
     @Override

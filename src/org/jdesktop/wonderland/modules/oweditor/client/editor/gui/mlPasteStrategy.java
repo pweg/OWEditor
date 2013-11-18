@@ -14,9 +14,9 @@ public class mlPasteStrategy implements mlMouseStrategy{
         this.controller = contr;
         this.listener = listener;
         
-        copyPoint = controller.esmi.copyInitialize();
-        copyPoint.x += contr.drawingPan.getTranslationX();
-        copyPoint.y += contr.drawingPan.getTranslationY();
+        copyPoint = controller.esfi.copyInitialize();
+        copyPoint.x += contr.effi.getTranslationX();
+        copyPoint.y += contr.effi.getTranslationY();
     }
     
     
@@ -27,25 +27,26 @@ public class mlPasteStrategy implements mlMouseStrategy{
             if(copyPoint == null)
                 return;
             
-            double scale = controller.drawingPan.getScale();
+            double scale = controller.effi.getScale();
             
             int x = (int) Math.round(copyPoint.x * scale);
             int y = (int) Math.round(copyPoint.y * scale);
+            System.out.println (x + " " + y);
             
             start.x = x;
             start.y = y;
 
-            controller.esmi.clearCurSelection();
-            controller.esmi.pasteInitialize();
+            controller.esfi.clearCurSelection();
+            controller.esfi.pasteInitialize();
             
             dragging = true;
         }else{
             dragging = false;
             
-            controller.esmi.pasteInsertShapes();
+            controller.esfi.pasteInsertShapes();
             
             listener.releaseCopyMouseLock();
-            controller.drawingPan.repaint();
+            controller.effi.repaint();
         }
     }
 
@@ -58,7 +59,7 @@ public class mlPasteStrategy implements mlMouseStrategy{
     @Override
     public void mouseMoved(Point p) {
         if(dragging) {
-            controller.esmi.pasteTranslate(p.x,p.y, start);
+            controller.esfi.pasteTranslate(p.x,p.y, start);
             start.x = p.x;
             start.y = p.y;
         }
@@ -73,6 +74,14 @@ public class mlPasteStrategy implements mlMouseStrategy{
     public void mouseDragged(Point p) {
         // TODO Auto-generated method stub
         
+    }
+    
+    public void notifyMinXChange(int x) {
+        copyPoint.x -= x;
+    }
+
+    public void notifyMinYChange(int y) {
+       copyPoint.y -= y;
     }
 
 }

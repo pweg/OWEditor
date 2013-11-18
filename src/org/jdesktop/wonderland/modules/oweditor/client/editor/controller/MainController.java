@@ -35,15 +35,15 @@ public class MainController implements MainControllerDataInterface,
 
     @Override
     public void setVisible(boolean visibility) {
-        gui.setVisibility(visibility);
+        gui.setVisible(visibility);
     }
 
     @Override
     public void initialize(byte adaptertype) {
         
         gui = new GUIController();
-        gui.createFrame();
-        gui.setVisibility(false);
+        gui.initializeGUI();
+        gui.setVisible(false);
         
         data = new DataController();
         

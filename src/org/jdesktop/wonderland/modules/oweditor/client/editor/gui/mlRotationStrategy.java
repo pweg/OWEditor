@@ -25,13 +25,13 @@ public class mlRotationStrategy implements mlMouseStrategy{
     @Override
     public void mouseReleased(Point p) {
          controller.mkListener.removeStrategy();
-         controller.esmi.rotationSetUpdate();
+         controller.esfi.rotationSetUpdate();
     }
 
     @Override
     public void mouseDragged(Point p) {
-        controller.esmi.rotate(p);
-        controller.drawingPan.repaint();
+        controller.esfi.rotate(p);
+        controller.effi.repaint();
     }
 
     @Override

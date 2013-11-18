@@ -2,10 +2,10 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.gui;
 
 import java.util.ArrayList;
 
-import javax.swing.JScrollPane;
-
 import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.GUIObserverInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataObjectManagerGUIInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.frame.ExternalFrameFacade;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.frame.ExternalFrameFacadeInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.shape.ExternalShapeFacade;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.shape.ExternalShapeFacadeInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.shape.ShapeDraggingObject;
@@ -22,14 +22,11 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.GUIC
  */
 public class GUIController implements GUIControllerInterface{
 
-    protected WindowFrame frame = null;
-    protected WindowDrawingPanel drawingPan = null;
-    protected JScrollPane mainScrollPanel = null;
     protected DataObjectObserver domo = null;
     protected EnvironmentObserver eo = null;
-    protected ExternalShapeFacadeInterface esmi = null;
+    protected ExternalShapeFacadeInterface esfi = null;
+    protected ExternalFrameFacadeInterface effi = null;
     
-    protected WindowPopupMenu popupMenu = null;
     private DataObjectManagerGUIInterface dmi = null;
     private AdapterCommunication ac = null;
 
@@ -37,47 +34,29 @@ public class GUIController implements GUIControllerInterface{
     
     public GUIController(){
     }
-    
-    @Override
-    public void createFrame() {
-        if(frame == null){
-            frame = new WindowFrame(this);
-            initiallize();
-        }
-    }
-    
+
     /**
      * Initializes all GUI components.
      */
-    private void initiallize(){
-
-       
-        drawingPan = new WindowDrawingPanel(this);
+    @Override
+    public void initializeGUI() {
+               
         domo = new DataObjectObserver(this);
         eo = new EnvironmentObserver(this);
         ac = new AdapterCommunication();
-       
+        esfi = new ExternalShapeFacade(this);
+        effi = new ExternalFrameFacade();
         
-        mainScrollPanel = new JScrollPane(drawingPan);
-        mainScrollPanel.setWheelScrollingEnabled(false);
-        frame.getContentPane().add(mainScrollPanel);
-        popupMenu = new WindowPopupMenu(this); 
-        esmi = new ExternalShapeFacade(this);
 
         mkListener = new MouseAndKeyListener(this);
-        drawingPan.addMouseListener(mkListener);
-        drawingPan.addMouseMotionListener(mkListener);
-        drawingPan.addMouseWheelListener(mkListener);
-        frame.addKeyListener(mkListener);
-    }
-    
-    public WindowDrawingPanel getDrawingPan(){
-        return drawingPan;
+        effi.addMouseListenerToDrawingPan(mkListener);
+        effi.registerShapeInterface(esfi);
+        esfi.registerFrameInterface(effi.getShapeInterface());
     }
 
     @Override
-    public void setVisibility(boolean visibility) {
-        frame.setVisible(visibility);        
+    public void setVisible(boolean visibility) {
+        effi.setVisible(visibility);        
     }
 
 
@@ -142,6 +121,10 @@ public class GUIController implements GUIControllerInterface{
             ac.setRotationUpdate(id, shape.getX(), 
                     shape.getY(), shape.getRotation());
         }
+    }
+
+    public double getScale() {
+        return effi.getScale();
     }
     
 

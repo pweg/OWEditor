@@ -1,4 +1,4 @@
-package org.jdesktop.wonderland.modules.oweditor.client.editor.gui;
+package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.frame;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -8,6 +8,8 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.KeyStroke;
 
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.MouseAndKeyListener;
+
 public class WindowPopupMenu extends JPopupMenu{
 
     /**
@@ -15,11 +17,14 @@ public class WindowPopupMenu extends JPopupMenu{
      */
     private static final long serialVersionUID = 1L;
     
-    private GUIController gc = null;
+    private MouseAndKeyListener mkListener = null;
     
-    public WindowPopupMenu(GUIController gc){
-        this.gc = gc;
+    public WindowPopupMenu(){
         initializeComponents();
+    }
+    
+    protected void registerMouseListener(MouseAndKeyListener mkListener){
+        this.mkListener = mkListener;
     }
     
     private void initializeComponents(){
@@ -41,7 +46,7 @@ public class WindowPopupMenu extends JPopupMenu{
                 KeyEvent.VK_C, ActionEvent.CTRL_MASK));
         copyItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                gc.mkListener.copyShapes();
+                mkListener.copyShapes();
               }
             });
         
@@ -49,7 +54,7 @@ public class WindowPopupMenu extends JPopupMenu{
                 KeyEvent.VK_V, ActionEvent.CTRL_MASK));
         pasteItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                gc.mkListener.pasteShapes();
+                mkListener.pasteShapes();
               }
             });
         
@@ -57,7 +62,7 @@ public class WindowPopupMenu extends JPopupMenu{
                 KeyEvent.VK_R, ActionEvent.CTRL_MASK));
         rotateItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                gc.mkListener.rotateShapes();
+                mkListener.rotateShapes();
               }
             });
         

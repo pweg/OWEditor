@@ -2,7 +2,7 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.gui;
 
 import java.awt.Point;
 import java.awt.Rectangle;
-import javax.swing.JPanel;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.frame.ExternalFrameFacadeInterface;
 
 /**
  * This mouse listener strategy is used for 
@@ -14,19 +14,19 @@ import javax.swing.JPanel;
 public class mlPanStrategy implements mlMouseStrategy{
 
     private Rectangle visiRect = null;  
-    private JPanel panel = null;
+    private ExternalFrameFacadeInterface effi = null;
     private Point pressed = null;  
     private Point here = null;  
     private boolean drag = false;
     
-    public mlPanStrategy(JPanel panel){
-        this.panel = panel;
+    public mlPanStrategy(ExternalFrameFacadeInterface effi){
+        this.effi = effi;
     }
     
     @Override
     public void mousePressed(Point p) {
          pressed = p;  
-         visiRect = panel.getVisibleRect();
+         visiRect = effi.getVisibleRect();
          drag = true;
     }
 
@@ -41,7 +41,7 @@ public class mlPanStrategy implements mlMouseStrategy{
             here = p;  
             visiRect.x += (pressed.x - here.x);  
             visiRect.y += (pressed.y - here.y);  
-            panel.scrollRectToVisible(visiRect); 
+            effi.scrollRectToVisible(visiRect); 
         }
     }
 

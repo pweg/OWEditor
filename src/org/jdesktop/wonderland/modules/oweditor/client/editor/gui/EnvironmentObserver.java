@@ -24,22 +24,38 @@ public class EnvironmentObserver implements EnvironmentObserverInterface{
     
     @Override
     public void notifyWidthChange(int width) {
-        gc.drawingPan.setNewWidth(width);
+        gc.effi.setNewWidth(width);
     }
 
     @Override
     public void notifyHeightChange(int height) {
-        gc.drawingPan.setNewHeight(height);
+        gc.effi.setNewHeight(height);
     }
 
     @Override
     public void notifyMinXChange(int x) {
-        gc.drawingPan.setNewMinX(x);
+
+        int translation = gc.effi.getTranslationX();
+        
+        gc.effi.setNewMinX(x);
+        translation -= gc.effi.getTranslationX();
+        
+        mlPasteStrategy strat = gc.mkListener.getPasteStrategy();
+        if(strat != null)
+            strat.notifyMinXChange(translation);
     }
 
     @Override
     public void notifyMinYChange(int y) {
-        gc.drawingPan.setNewMinY(y);
+        
+        int translation = gc.effi.getTranslationY();
+        
+        gc.effi.setNewMinY(y);
+        translation -= gc.effi.getTranslationY();
+        
+        mlPasteStrategy strat = gc.mkListener.getPasteStrategy();
+        if(strat != null)
+            strat.notifyMinYChange(translation);
     }
     
 
