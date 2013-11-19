@@ -5,6 +5,7 @@ import com.jme.math.Vector3f;
 import java.awt.Point;
 import java.text.MessageFormat;
 import java.util.LinkedHashMap;
+import java.util.ResourceBundle;
 import java.util.logging.Logger;
 import org.jdesktop.wonderland.client.ClientContext;
 import org.jdesktop.wonderland.client.cell.Cell;
@@ -29,7 +30,9 @@ import org.jdesktop.wonderland.common.cell.messages.CellDuplicateMessage;
  */
 public class GUIObserver implements GUIObserverInterface{
     
-    private WonderlandAdapterController ac = null;
+    private WonderlandAdapterController ac = null;    
+    private static final ResourceBundle BUNDLE = ResourceBundle.getBundle(
+            "org/jdesktop/wonderland/modules/oweditor/client/resources/Bundle");
     
     private static final Logger LOGGER =
             Logger.getLogger(GUIObserver.class.getName());
@@ -135,7 +138,7 @@ public class GUIObserver implements GUIObserverInterface{
                 copies.put(name, 1);
             }
             
-            name = "Copy_Of_"+ name+"_"+count+"ID"+session.getID()+"_"+id;
+            name = BUNDLE.getString("CopyName")+ name+"_"+count+"ID"+session.getID()+"_"+id;
             
             ac.sua.putCopyTranslation(name, new Point(x,y));
             

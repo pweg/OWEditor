@@ -1,5 +1,7 @@
 package org.jdesktop.wonderland.modules.oweditor.client.dummyadapter;
 
+import java.util.ResourceBundle;
+
 import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.GUIObserverInterface;
 
 /**
@@ -12,6 +14,8 @@ import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.GUIObse
 public class GUIObserver implements GUIObserverInterface{
     
     private DummyAdapterController ac = null;
+    private static final ResourceBundle BUNDLE = ResourceBundle.getBundle(
+            "org/jdesktop/wonderland/modules/oweditor/client/resources/Bundle");
     
     /**
      * Creates a new clientUpdate instance.
@@ -48,7 +52,7 @@ public class GUIObserver implements GUIObserverInterface{
         ServerObject o = ac.ses.getObject(id);
         if(o == null)
             return;
-        String name = "Copy_Of_"+o.name;
+        String name = BUNDLE.getString("CopyName")+o.name;
         
         Vector3D p = ac.ct.transformCoordinatesBack(x, y, 0, 0);
         

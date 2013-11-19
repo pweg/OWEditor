@@ -1,5 +1,7 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.frame;
 
+import java.util.ResourceBundle;
+
 import javax.swing.JFrame;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.GUISettings;
@@ -13,6 +15,9 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.GUISettings;
 public class MainFrame extends JFrame {
 
     private static final long serialVersionUID = 1L;
+    
+    private static final ResourceBundle BUNDLE = ResourceBundle.getBundle(
+            "org/jdesktop/wonderland/modules/oweditor/client/resources/Bundle");
 
   
 
@@ -25,7 +30,7 @@ public class MainFrame extends JFrame {
         //f.getContentPane().add(app.getControl(), "Last");  
         setSize(GUISettings.frameWidth, GUISettings.frameHeight);  
         setLocation(GUISettings.framePositionX, GUISettings.framePositionY);  
-        setTitle(GUISettings.frameTitle);
+        setTitle(BUNDLE.getString("FrameTitle"));
         setVisible(false); 
     }
 

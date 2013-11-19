@@ -56,7 +56,6 @@ public class GUISettings {
     public static int frameHeight = 600;
     public static int framePositionX = 200;
     public static int framePositionY = 200;
-    public static String frameTitle = "Open Wonderland Editor" ;
     
     /*
      * These are two values, which are used to add a empty space
