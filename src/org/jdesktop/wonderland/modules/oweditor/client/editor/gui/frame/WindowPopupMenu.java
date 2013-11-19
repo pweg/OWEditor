@@ -8,7 +8,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.KeyStroke;
 
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.MouseAndKeyListener;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.input.InputToFrameInterface;
 
 public class WindowPopupMenu extends JPopupMenu{
 
@@ -17,14 +17,14 @@ public class WindowPopupMenu extends JPopupMenu{
      */
     private static final long serialVersionUID = 1L;
     
-    private MouseAndKeyListener mkListener = null;
+    private InputToFrameInterface input = null;
     
     public WindowPopupMenu(){
         initializeComponents();
     }
     
-    protected void registerMouseListener(MouseAndKeyListener mkListener){
-        this.mkListener = mkListener;
+    protected void registerInputInterface(InputToFrameInterface input){
+        this.input = input;
     }
     
     private void initializeComponents(){
@@ -46,7 +46,7 @@ public class WindowPopupMenu extends JPopupMenu{
                 KeyEvent.VK_C, ActionEvent.CTRL_MASK));
         copyItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                mkListener.copyShapes();
+                input.copyShapes();
               }
             });
         
@@ -54,7 +54,7 @@ public class WindowPopupMenu extends JPopupMenu{
                 KeyEvent.VK_V, ActionEvent.CTRL_MASK));
         pasteItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                mkListener.pasteShapes();
+                input.pasteShapes();
               }
             });
         
@@ -62,7 +62,7 @@ public class WindowPopupMenu extends JPopupMenu{
                 KeyEvent.VK_R, ActionEvent.CTRL_MASK));
         rotateItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                mkListener.rotateShapes();
+                input.rotateShapes();
               }
             });
         

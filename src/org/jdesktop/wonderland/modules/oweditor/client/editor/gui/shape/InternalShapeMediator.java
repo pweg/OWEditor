@@ -3,7 +3,7 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.shape;
 import java.util.ArrayList;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.GUIController;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.frame.ExternalFrameToShapeInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.frame.FrameToShapeInterface;
 
 public class InternalShapeMediator implements InternalShapeMediatorInterface{
     
@@ -11,7 +11,7 @@ public class InternalShapeMediator implements InternalShapeMediatorInterface{
     private SelectionManager ssm = null;
     private TranslationManager stm = null;
     private GUIController gc = null;
-    private ExternalFrameToShapeInterface frame = null;
+    private FrameToShapeInterface frame = null;
     
     public InternalShapeMediator(GUIController gc) {
         this.gc = gc;
@@ -110,7 +110,7 @@ public class InternalShapeMediator implements InternalShapeMediatorInterface{
 
     @Override
     public void registerFrameInterface(
-            ExternalFrameToShapeInterface frameInterface) {
+            FrameToShapeInterface frameInterface) {
         this.frame = frameInterface;
     }
     

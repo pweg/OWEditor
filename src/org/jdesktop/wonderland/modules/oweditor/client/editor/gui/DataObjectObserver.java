@@ -30,33 +30,33 @@ public class DataObjectObserver implements
     
     @Override
     public void notifyCreation(TranslatedObjectInterface dataObject) {
-        gc.esfi.createShape(dataObject);
-        gc.effi.repaint();
+        gc.shape.createShape(dataObject);
+        gc.frame.repaint();
     }
 
     @Override
     public void notifyRemoval(long id) {
-        gc.esfi.removeShape(id);
-        gc.effi.repaint();
+        gc.shape.removeShape(id);
+        gc.frame.repaint();
         
     }
 
     @Override
     public void notifyTranslation(long id, int x, int y) {
-        gc.esfi.updateShapeCoordinates(id, x, y);
-        gc.effi.repaint();
+        gc.shape.updateShapeCoordinates(id, x, y);
+        gc.frame.repaint();
     }
 
     @Override
     public void notifyChange(long id, int x, int y, String name) {
-        gc.esfi.updateShape(id, x, y, name);
-        gc.effi.repaint();  
+        gc.shape.updateShape(id, x, y, name);
+        gc.frame.repaint();  
     }
 
     @Override
     public void notifyRotation(long id, double rotation) {
-        gc.esfi.updateShapeRotation(id, rotation);
-        gc.effi.repaint();
+        gc.shape.updateShapeRotation(id, rotation);
+        gc.frame.repaint();
     }
 
 }

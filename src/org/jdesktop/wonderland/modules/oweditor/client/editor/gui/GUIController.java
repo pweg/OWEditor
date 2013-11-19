@@ -4,11 +4,13 @@ import java.util.ArrayList;
 
 import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.GUIObserverInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataObjectManagerGUIInterface;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.frame.ExternalFrameFacade;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.frame.ExternalFrameFacadeInterface;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.shape.ExternalShapeFacade;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.shape.ExternalShapeFacadeInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.frame.Frame;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.frame.FrameInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.input.Input;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.input.InputInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.shape.ShapeDraggingObject;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.shape.ExternalShape;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.shape.ExternalShapeInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.DataObjectObserverInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.EnvironmentObserverInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.GUIControllerInterface;
@@ -24,13 +26,12 @@ public class GUIController implements GUIControllerInterface{
 
     protected DataObjectObserver domo = null;
     protected EnvironmentObserver eo = null;
-    protected ExternalShapeFacadeInterface esfi = null;
-    protected ExternalFrameFacadeInterface effi = null;
+    protected ExternalShapeInterface shape = null;
+    protected FrameInterface frame = null;
+    protected InputInterface input = null;
     
     private DataObjectManagerGUIInterface dmi = null;
     private AdapterCommunication ac = null;
-
-    protected MouseAndKeyListener mkListener = null;
     
     public GUIController(){
     }
@@ -44,19 +45,33 @@ public class GUIController implements GUIControllerInterface{
         domo = new DataObjectObserver(this);
         eo = new EnvironmentObserver(this);
         ac = new AdapterCommunication();
-        esfi = new ExternalShapeFacade(this);
-        effi = new ExternalFrameFacade();
         
-
-        mkListener = new MouseAndKeyListener(this);
-        effi.addMouseListenerToDrawingPan(mkListener);
-        effi.registerShapeInterface(esfi);
-        esfi.registerFrameInterface(effi.getShapeInterface());
+        shape = new ExternalShape(this);
+        frame = new Frame();
+        input = new Input();
+        
+        frame.addMouseListener(input.getMouseListener());
+        frame.addKeyListener(input.getKeyListener());
+        frame.addMouseWheelListener(input.getMouseWheelListener());
+        
+        registerInterfaces();
+    }
+    
+    private void registerInterfaces(){
+        
+        frame.registerShapeInterface(shape.getFrameInterface());
+        frame.registerInputInterface(input.getFrameInterface());
+        
+        input.registerShapeInterface(shape.getInputInterface());
+        input.registerFrameInterface(frame.getInputInterface());
+        
+        shape.registerFrameInterface(frame.getShapeInterface());
+        shape.registerInputInterface(input.getShapeInterface());
     }
 
     @Override
     public void setVisible(boolean visibility) {
-        effi.setVisible(visibility);        
+        frame.setVisible(visibility);        
     }
 
 
@@ -104,15 +119,6 @@ public class GUIController implements GUIControllerInterface{
     public void setObjectRemoval(long id){
         ac.setObjectRemoval(id);
     }
-    
-    public void setRotationStrategy(){
-        mkListener.setRotationStrategy();
-    }
-    
-    public void setRotationCenterStrategy(){
-        mkListener.setRotationCenterStrategy();
-        
-    }
 
     public void setRotationUpdate(ArrayList<ShapeDraggingObject> list) {
 
@@ -121,10 +127,6 @@ public class GUIController implements GUIControllerInterface{
             ac.setRotationUpdate(id, shape.getX(), 
                     shape.getY(), shape.getRotation());
         }
-    }
-
-    public double getScale() {
-        return effi.getScale();
     }
     
 
