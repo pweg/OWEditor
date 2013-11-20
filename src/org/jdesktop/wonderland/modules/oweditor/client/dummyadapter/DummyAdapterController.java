@@ -17,6 +17,7 @@ public class DummyAdapterController implements AdapterControllerMainControllerIn
     protected ServerUpdateAdapter sua = null;
     protected ServerSimulator ses = null;
     protected CoordinateTranslator ct = null;
+    protected CopyManager bom = null;
     
     public DummyAdapterController(){
         
@@ -28,6 +29,7 @@ public class DummyAdapterController implements AdapterControllerMainControllerIn
         sua = new ServerUpdateAdapter(this);
         ses = new ServerSimulator();
         ct = new CoordinateTranslator();
+        bom = new CopyManager();
         
         
     }

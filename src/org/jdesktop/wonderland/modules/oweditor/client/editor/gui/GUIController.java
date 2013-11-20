@@ -1,14 +1,11 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.gui;
 
-import java.util.ArrayList;
-
 import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.GUIObserverInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataObjectManagerGUIInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.frame.Frame;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.frame.FrameInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.input.Input;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.input.InputInterface;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.shape.ShapeDraggingObject;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.shape.ExternalShape;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.shape.ExternalShapeInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.DataObjectObserverInterface;
@@ -46,7 +43,7 @@ public class GUIController implements GUIControllerInterface{
         eo = new EnvironmentObserver(this);
         ac = new AdapterCommunication();
         
-        shape = new ExternalShape(this);
+        shape = new ExternalShape(ac);
         frame = new Frame();
         input = new Input();
         
@@ -95,38 +92,6 @@ public class GUIController implements GUIControllerInterface{
     @Override
     public EnvironmentObserverInterface getEnvironmentObserver() {
         return eo;
-    }
-    
-    public void setTranslationUpdate(ArrayList<ShapeDraggingObject> list){
-        
-        if(list.isEmpty())
-            return;
-        
-        for(ShapeDraggingObject shape : list){
-            long id = shape.getID();
-            ac.setTranslationUpdate(id, shape.getX(), shape.getY());
-        }
-    }
-    
-    public void setCopyUpdate(ArrayList<ShapeDraggingObject> list){
-        
-        for(ShapeDraggingObject shape : list){
-            long id = shape.getID();
-            ac.setCopyUpdate(id, shape.getX(), shape.getY());
-        }
-    }
-    
-    public void setObjectRemoval(long id){
-        ac.setObjectRemoval(id);
-    }
-
-    public void setRotationUpdate(ArrayList<ShapeDraggingObject> list) {
-
-        for(ShapeDraggingObject shape : list){
-            long id = shape.getID();
-            ac.setRotationUpdate(id, shape.getX(), 
-                    shape.getY(), shape.getRotation());
-        }
     }
     
 

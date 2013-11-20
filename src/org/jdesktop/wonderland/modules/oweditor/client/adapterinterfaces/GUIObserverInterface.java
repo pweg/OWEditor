@@ -1,5 +1,7 @@
 package org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces;
 
+import java.util.ArrayList;
+
 /**
  * This interface is used between the adapter and the gui,
  * in order to set updates made in the gui.
@@ -22,7 +24,9 @@ public interface GUIObserverInterface {
     
     public void notifyRemoval(long id);
     
-    public void notifyCopy(long id, int x, int y);
+    public void notifyCopy(ArrayList<Long> object_ids);
+    
+    public void notifyPaste(long id, int x, int y);
 
     public void notifyRotation(long id, int x, int y, double rotation);
 

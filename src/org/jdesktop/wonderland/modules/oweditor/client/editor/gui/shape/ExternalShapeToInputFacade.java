@@ -1,8 +1,9 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.shape;
 
 import java.awt.Point;
+import java.util.ArrayList;
 
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.GUIController;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.AdapterCommunicationInterface;
 
 public class ExternalShapeToInputFacade implements ExternalShapeToInputFacadeInterface{
 
@@ -14,11 +15,11 @@ public class ExternalShapeToInputFacade implements ExternalShapeToInputFacadeInt
     
     protected InternalShapeMediatorInterface smi = null;
     
-    private GUIController gc = null;
+    private AdapterCommunicationInterface adapter = null;
     private ShapeController sc = null;
     
-    public ExternalShapeToInputFacade(GUIController gc, ShapeController sc){
-        this.gc = gc;
+    public ExternalShapeToInputFacade(ShapeController sc, AdapterCommunicationInterface adapter){
+        this.adapter = adapter;
         this.sc = sc;
         registerComponents(sc);
     }
@@ -97,6 +98,16 @@ public class ExternalShapeToInputFacade implements ExternalShapeToInputFacadeInt
     @Override
     public Point copyInitialize() {
         scm.initilaizeCopy();
+        
+        ArrayList<Long> ids = new ArrayList<Long>();
+        
+        ArrayList<ShapeObject> copy = scm.getCopyShapes();
+        
+        for(ShapeObject shape : copy){
+            ids.add(shape.getID());
+        }
+        
+        adapter.setCopyUpdate(ids);
         return ssm.getSelectionCenter();
     }
 
@@ -115,7 +126,11 @@ public class ExternalShapeToInputFacade implements ExternalShapeToInputFacadeInt
     @Override
     public void pasteInsertShapes() {
         if(!stm.checkForCollision()){
-            gc.setCopyUpdate(sm.getDraggingShapes());
+            
+            for(ShapeDraggingObject shape : sm.getDraggingShapes()){
+                long id = shape.getID();
+                adapter.setPasteUpdate(id, shape.getX(), shape.getY());
+            }
         }
         sm.clearDraggingShapes();
     }
@@ -124,7 +139,11 @@ public class ExternalShapeToInputFacade implements ExternalShapeToInputFacadeInt
     public void translationSetUpdate() {
 
         if(!stm.checkForCollision()){
-            gc.setTranslationUpdate(sm.getDraggingShapes());
+            
+            for(ShapeDraggingObject shape : sm.getDraggingShapes()){
+                long id = shape.getID();
+                adapter.setTranslationUpdate(id, shape.getX(), shape.getY());
+            }
         }
         sm.clearDraggingShapes();
     }
@@ -205,7 +224,12 @@ public class ExternalShapeToInputFacade implements ExternalShapeToInputFacadeInt
 
     @Override
     public void rotateSetUpdate() {
-        gc.setRotationUpdate(srm.getRotatedShapes());
+        
+        for(ShapeDraggingObject shape : srm.getRotatedShapes()){
+            long id = shape.getID();
+            adapter.setRotationUpdate(id, shape.getX(), 
+                    shape.getY(), shape.getRotation());
+        }
     }
     @Override
     public void rotationCenterSetUpdate() {

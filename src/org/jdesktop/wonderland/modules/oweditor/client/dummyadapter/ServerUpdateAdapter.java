@@ -16,7 +16,6 @@ public class ServerUpdateAdapter {
     private DummyAdapterController ac = null;
     private AdapterObserverInterface dui = null;
     
-    private HashMap<String, Vector3D> copyTranslation = null;
     
     /**
      * Creates a new serverUpdate instance.
@@ -25,8 +24,6 @@ public class ServerUpdateAdapter {
      */
     public ServerUpdateAdapter(DummyAdapterController ac){
         this.ac = ac;
-        
-        copyTranslation = new HashMap<String, Vector3D>();
     }
     
     /**
@@ -47,7 +44,7 @@ public class ServerUpdateAdapter {
     public void setDataUpdateInterface(AdapterObserverInterface dui) {
         this.dui = dui;
     }
-    
+
     /**
      * Gets a new data object from the data package and fills it with
      * data. The difference to the serverChangeEvent is that the 
@@ -58,7 +55,7 @@ public class ServerUpdateAdapter {
     public void createObject(ServerObject sObject){
         
         long id = sObject.id;            
-        double scale = sObject.scale;
+        double scale = sObject.scaleX;
         
         String name = sObject.name;
         
@@ -106,21 +103,23 @@ public class ServerUpdateAdapter {
         dui.notifyTranslation(id, so.x, so.y, so.z);
     }
 
-    public void copyTranslation(String name, float x, float y , float z) {
-        Vector3D v = new Vector3D(x,y,z);
-        
-        copyTranslation.put(name, v);
-        
-    }
-
     public void serverCopyEvent(ServerObject object) {
         String name = object.name;
-        if(copyTranslation.containsKey(name)){
-            Vector3D v = copyTranslation.get(name);
-            
-            object.x = v.x;
-            object.y = v.y;
-            object.z = v.z;
+        CopyManager cm = ac.bom;
+        if(cm.translationContainsKey(name)){
+            BackupObject backup = cm.getObject(name);
+
+            object.x = backup.getTranslationX();
+            object.y = backup.getTranslationY();
+            object.z = backup.getTranslationZ();
+
+            object.scaleX = backup.getScaleX();
+            object.scaleY = backup.getScaleY();
+            object.scaleZ = backup.getScaleZ();
+
+            object.rotationX = backup.getRotationX();
+            object.rotationY = backup.getRotationY();
+            object.rotationZ = backup.getRotationZ();
         }
         createObject(object);
     }

@@ -1,5 +1,6 @@
 package org.jdesktop.wonderland.modules.oweditor.client.dummyadapter;
 
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.GUIObserverInterface;
@@ -47,7 +48,22 @@ public class GUIObserver implements GUIObserverInterface{
     }
 
     @Override
-    public void notifyCopy(long id, int x, int y) {
+    public void notifyCopy(ArrayList<Long> object_ids) {
+        
+        /*
+         * This can lead to problems, when the server is not fast enough, when
+         * paste is made in the gui and directly afterwards a copy.
+         */
+        ac.bom.clearBackup();
+        
+        for(long id : object_ids){
+            ServerObject object = ac.ses.getObject(id);
+            ac.bom.addObject(object);
+        }
+    }
+
+    @Override
+    public void notifyPaste(long id, int x, int y) {
         
         ServerObject o = ac.ses.getObject(id);
         if(o == null)
@@ -56,7 +72,7 @@ public class GUIObserver implements GUIObserverInterface{
         
         Vector3D p = ac.ct.transformCoordinatesBack(x, y, 0, 0);
         
-        ac.sua.copyTranslation(name, p.x, p.y, 0);
+        ac.bom.addTranslation(id, name, p.x, p.y, 0);
         
         ServerObject clone = ac.ses.copyObject(id, name);
         ac.sua.serverCopyEvent(clone);

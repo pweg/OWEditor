@@ -3,7 +3,7 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.shape;
 import java.awt.Point;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.TranslatedObjectInterface;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.GUIController;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.AdapterCommunicationInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.frame.FrameToShapeInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.input.InputToShapeInterface;
 
@@ -16,8 +16,8 @@ public class ExternalShape implements ExternalShapeInterface{
     
     private ShapeController sc = null;
 
-    public ExternalShape(GUIController gc){
-        this.sc = new ShapeController(this, gc);
+    public ExternalShape(AdapterCommunicationInterface adapter){
+        this.sc = new ShapeController(this, adapter);
         registerCompontens();
     }
     
