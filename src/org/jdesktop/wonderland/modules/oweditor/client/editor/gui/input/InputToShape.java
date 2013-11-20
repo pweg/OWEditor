@@ -8,14 +8,4 @@ public class InputToShape implements InputToShapeInterface{
         this.ic = ic;
     }
 
-    @Override
-    public void setRotationStrategy() {
-        ic.setRotationStrategy();        
-    }
-
-    @Override
-    public void setRotationCenterStrategy() {
-        ic.setRotationCenterStrategy();
-    }
-
 }

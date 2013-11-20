@@ -8,19 +8,11 @@ public class InputToFrame implements InputToFrameInterface{
         this.ic = ic;
     }
 
-
     @Override
-    public void setRotationStrategy(){
-        ic.setRotationStrategy();
+    public void cutShapes() {
+        ic.mkListener.cutShapes();
     }
     
-    @Override
-    public void setRotationCenterStrategy(){
-        ic.setRotationCenterStrategy();
-        
-    }
-
-
     @Override
     public void copyShapes() {
         ic.mkListener.copyShapes();

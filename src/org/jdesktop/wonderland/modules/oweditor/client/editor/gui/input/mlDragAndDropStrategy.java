@@ -27,7 +27,7 @@ public class mlDragAndDropStrategy implements mlMouseStrategy{
     @Override
     public void mousePressed(Point p) {
         
-        controller.shape.translationInitialization(p);
+        controller.shape.translateIntialize(p);
         
         if(controller.shape.isMouseInObject(p)){
             start.x = p.x;
@@ -41,7 +41,7 @@ public class mlDragAndDropStrategy implements mlMouseStrategy{
     public void mouseReleased(Point p) {
         dragging = false;
         
-        controller.shape.translationSetUpdate();
+        controller.shape.translateFinished();
         controller.frame.repaint();
     }
 
@@ -49,7 +49,7 @@ public class mlDragAndDropStrategy implements mlMouseStrategy{
     public void mouseDragged(Point p) {
         if(dragging) {
             
-            controller.shape.translation(p.x, p.y, start);
+            controller.shape.translate(p.x, p.y, start);
             start.x = p.x;
             start.y = p.y;
         }

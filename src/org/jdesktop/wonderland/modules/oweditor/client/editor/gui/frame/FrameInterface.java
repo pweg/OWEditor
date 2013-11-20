@@ -11,34 +11,43 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.shape.External
 public interface FrameInterface {
     
     /**
-     * Adds a mouse and key listener to the drawing panel
+     * Adds a mouse to the drawing panel
      * 
      * @param mouseInputAdapter the listener
      */
     public void addMouseListener(MouseInputAdapter mouseInputAdapter);
     
     /**
-     * Adds
-     * @param keyListener
+     * Adds a key listener to the frame.
+     * 
+     * @param keyListener the listener
      */
     public void addKeyListener(KeyListener keyListener);
     
-    public void addMouseWheelListener(MouseWheelListener mouseWheelListener);
-    
     /**
-     * returns the drawing panel, which contains the 2d graphics, like shapes etc..
+     * Adds a mouse wheel listener to the drawing panel
      * 
-     * @return the drawing panel
+     * @param mouseWheelListener the listener
      */
-    public WindowDrawingPanel getDrawingPan();
+    public void addMouseWheelListener(MouseWheelListener mouseWheelListener);
 
     /**
-     * registers the external shape facade to the frame controller.
+     * Registers the shape interface to the frame controller.
      * 
      * @param esmi the shape facade.
      */
     public void registerShapeInterface(ExternalShapeToFrameInterface shape);
     
+    /**
+     * Registers the input interface to the frame controller.
+     * 
+     * @param esmi the shape facade.
+     */
+    public void registerInputInterface(InputToFrameInterface input);
+    
+    public FrameToShapeInterface getShapeInterface();
+    
+    public FrameToInputInterface getInputInterface();
     /**
      * This repaints ONLY the drawing panel, nothing else.
      */
@@ -46,8 +55,24 @@ public interface FrameInterface {
     
     public void setVisible(boolean visibility);
     
+    /**
+     * Returns the translation value in x direction.
+     * This translation value is used to move the whole 2d graph away
+     * from the minus coordinates, to fit in the 0,0 coordinates of the shapes,
+     * which do not allow for minus coordinates.
+     * 
+     * @return the value of the graph translation.
+     */
     public int getTranslationX();
     
+    /**
+     * Returns the translation value in y direction.
+     * This translation value is used to move the whole 2d graph away
+     * from the minus coordinates, to fit in the 0,0 coordinates of the shapes,
+     * which do not allow for minus coordinates.
+     * 
+     * @return the value of the graph translation.
+     */
     public int getTranslationY();
 
     public void setNewWidth(int width);
@@ -57,12 +82,7 @@ public interface FrameInterface {
     public void setNewMinX(int x);
 
     public void setNewMinY(int y);
-    
-    public FrameToShapeInterface getShapeInterface();
-    
-    public FrameToInputInterface getInputInterface();
 
-    public void registerInputInterface(InputToFrameInterface input);
     
 
 }

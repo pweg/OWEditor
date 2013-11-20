@@ -47,11 +47,6 @@ public class Frame implements FrameInterface{
     public void addMouseWheelListener(MouseWheelListener mouseWheelListener){
         drawingPan.addMouseWheelListener(mouseWheelListener);
     }
-    
-    @Override
-    public WindowDrawingPanel getDrawingPan(){
-        return drawingPan;
-    }
 
     @Override
     public void registerShapeInterface(ExternalShapeToFrameInterface shape) {

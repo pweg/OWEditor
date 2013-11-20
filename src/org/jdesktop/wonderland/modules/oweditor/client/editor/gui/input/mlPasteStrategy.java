@@ -42,7 +42,7 @@ public class mlPasteStrategy implements mlMouseStrategy{
         }else{
             dragging = false;
             
-            controller.shape.pasteInsertShapes();
+            controller.shape.pasteFinished();
             
             listener.releaseCopyMouseLock();
             controller.frame.repaint();

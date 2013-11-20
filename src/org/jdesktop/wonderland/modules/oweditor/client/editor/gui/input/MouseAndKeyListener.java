@@ -71,7 +71,11 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
                  else if(rotation && !copy){
                      Point p = e.getPoint();
                      
-                     ic.shape.isMouseInBorder(p);
+                     if(ic.shape.isMouseInBorder(p))
+                         setRotationStrategy();
+                     else if (ic.shape.isMouseInBorderCenter(p)){
+                         setRotationCenterStrategy();
+                     }
                      if(strategy != null)
                          strategy.mousePressed(p);
                  }
@@ -98,8 +102,6 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
     @Override
     public void mouseWheelMoved( MouseWheelEvent e )
     {
-
-        
         /*
          * When removing this, it should be possible to drag selected
          * objects further when zooming in and out, but it will 
@@ -165,12 +167,12 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
             }else if(e.getKeyCode() == KeyEvent.VK_V && !copy){
                 pasteShapes(); 
             }else if(e.getKeyCode() == KeyEvent.VK_X && !copy){
-                
+                cutShapes();
             }
         }else{
             if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                 if(rotation){
-                    ic.shape.rotateSetUpdate();
+                    ic.shape.rotateFinished();
                     clear();
                 }
             }
@@ -191,6 +193,11 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
             }
         }
         ic.frame.repaint();
+    }
+    
+    public void cutShapes(){
+        copyShapes();
+        ic.shape.deleteCurrentSelection();
     }
     
     public void copyShapes(){

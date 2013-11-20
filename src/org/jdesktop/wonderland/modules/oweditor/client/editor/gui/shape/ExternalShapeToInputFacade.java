@@ -32,69 +32,43 @@ public class ExternalShapeToInputFacade implements ExternalShapeToInputFacadeInt
         ssm = sc.ssm;
         smi = sc.smi;
     }
-    
-    
-    @Override
-    public void clearCurSelection() {
-        ssm.clearCurSelection();
-    }
 
     @Override
-    public void cleanHelpingShapes() {
-        sm.clearDraggingShapes();
-        sm.removeSelectionRect();
-    }
-
-    @Override
-    public void cleanAll() {
-        sm.clearDraggingShapes();
-        sm.removeSelectionRect();
-        sm.removeBorder();
-    }
-    
-    @Override
-    public void translation(int x, int y, Point start){
-        stm.translateShape(x, y, start, new sCollisionNotSelectedStrategy(smi));
-    }
-
-    @Override
-    public boolean isMouseInObject(Point point) {
-        ShapeObject shape = sm.getShapeSuroundingPoint(point);
+    public void translateIntialize(Point p) {
         
-        if(shape == null)
-            return false;
-        else
-            return true;
-    }
-    
-
-    @Override
-    public void selectionUpdate(Point start, Point end) {
-        ssm.resizeSelectionRect(start, end);
-    }
-    
-    @Override
-    public void selectionReleased(){
-        ssm.selectionRectReleased();         
-        sm.removeSelectionRect();
-    }
-
-    @Override
-    public boolean selectionSwitch(Point p) {
         ShapeObject shape = sm.getShapeSuroundingPoint(p);
         
         if(shape == null)
-            return false;
+            return;
         
-        ssm.switchSelection(shape);
-        return true;
+        /* When the shape is not selected, 
+        *  all other selections will be removed.
+        */
+        if(!shape.isSelected()){
+            ssm.clearCurSelection();
+            ssm.setSelected(shape, true);
+        }
+        smi.createDraggingShapes(ssm.getSelection());
+        sm.setShapeStates(new stateDraggingShapeTranslation());
     }
-
+    
     @Override
-    public void deleteCurrentSelection() {
-        ssm.deleteCurrentSelection();
+    public void translate(int x, int y, Point start){
+        stm.translateShape(x, y, start, new sCollisionNotSelectedStrategy(smi));
     }
+    
+    @Override
+    public void translateFinished() {
 
+        if(!stm.checkForCollision()){
+            
+            for(ShapeDraggingObject shape : sm.getDraggingShapes()){
+                long id = shape.getID();
+                adapter.setTranslationUpdate(id, shape.getX(), shape.getY());
+            }
+        }
+        sm.clearDraggingShapes();
+    }
     @Override
     public Point copyInitialize() {
         scm.initilaizeCopy();
@@ -111,6 +85,12 @@ public class ExternalShapeToInputFacade implements ExternalShapeToInputFacadeInt
         return ssm.getSelectionCenter();
     }
 
+    @Override
+    public boolean copyShapesExist() {
+        if(scm.getCopyShapes().size() == 0)
+            return false;
+        return true;
+    }
 
     @Override
     public void pasteInitialize() {
@@ -124,7 +104,7 @@ public class ExternalShapeToInputFacade implements ExternalShapeToInputFacadeInt
     }
 
     @Override
-    public void pasteInsertShapes() {
+    public void pasteFinished() {
         if(!stm.checkForCollision()){
             
             for(ShapeDraggingObject shape : sm.getDraggingShapes()){
@@ -135,36 +115,53 @@ public class ExternalShapeToInputFacade implements ExternalShapeToInputFacadeInt
         sm.clearDraggingShapes();
     }
 
-    @Override
-    public void translationSetUpdate() {
 
-        if(!stm.checkForCollision()){
-            
-            for(ShapeDraggingObject shape : sm.getDraggingShapes()){
-                long id = shape.getID();
-                adapter.setTranslationUpdate(id, shape.getX(), shape.getY());
-            }
-        }
-        sm.clearDraggingShapes();
+    @Override
+    public void rotationInitialize() {
+        sm.createDraggingShapes(ssm.getSelection());
+        sm.setShapeStates(new stateDraggingShapeRotation());
+        
+        sm.createShapeBorder(sc.frame.getScale(), 
+                ssm.getSelectionCoords(), ssm.getSelection());
+
+        srm.initializeRotation();
+    }
+    @Override
+    public void rotate(Point p) {
+        srm.rotate(p);
+        stm.setStrategy(new sCollisionNotSelectedStrategy(smi));
+        stm.checkForCollision();
     }
 
     @Override
-    public void translationInitialization(Point p) {
+    public void rotateFinished() {
         
-        ShapeObject shape = sm.getShapeSuroundingPoint(p);
-        
-        if(shape == null)
-            return;
-        
-        /* When the shape is not selected, all other selected
-        * all other selections will be removed.
-        */
-        if(!shape.isSelected()){
-            ssm.clearCurSelection();
-            ssm.setSelected(shape, true);
+        for(ShapeDraggingObject shape : srm.getRotatedShapes()){
+            long id = shape.getID();
+            adapter.setRotationUpdate(id, shape.getX(), 
+                    shape.getY(), shape.getRotation());
         }
-        smi.createDraggingShapes(ssm.getSelection());
-        sm.setShapeStates(new stateDraggingShapeTranslation());
+    }
+    
+    @Override
+    public void rotationCenterUpdate() {
+        srm.setRotationCenterUpdate(sm.getShapeBorder());
+        for(ShapeDraggingObject shape : sm.getDraggingShapes()){
+            shape.setRotationCenterUpdate();
+        }
+    }
+
+    @Override
+    public void rotationCenterTranslate(Point start, Point end) {
+        srm.setRotationCenter(sm.getShapeBorder(), start, end);
+    }
+
+    @Override
+    public void rotationUpdate() {
+        sm.getShapeBorder().setRotationCenterUpdate();
+        for(ShapeDraggingObject shape : sm.getDraggingShapes()){
+            shape.setRotationCenterUpdate();
+        }
     }
 
     @Override
@@ -187,69 +184,77 @@ public class ExternalShapeToInputFacade implements ExternalShapeToInputFacadeInt
     }
 
     @Override
-    public boolean copyShapesExist() {
-        if(scm.getCopyShapes().size() == 0)
+    public void cleanAll() {
+        cleanHelpingShapes();
+        sm.removeBorder();
+    }
+
+    @Override
+    public void cleanHelpingShapes() {
+        sm.clearDraggingShapes();
+        sm.removeSelectionRect();
+    }
+    
+    @Override
+    public void clearCurSelection() {
+        ssm.clearCurSelection();
+    }
+
+    @Override
+    public void deleteCurrentSelection() {
+        ssm.deleteCurrentSelection();
+    }
+
+    @Override
+    public boolean selectionSwitch(Point p) {
+        ShapeObject shape = sm.getShapeSuroundingPoint(p);
+        
+        if(shape == null)
             return false;
+        
+        ssm.switchSelection(shape);
         return true;
     }
 
     @Override
-    public void rotationInitialize() {
-        sm.createDraggingShapes(ssm.getSelection());
-        sm.setShapeStates(new stateDraggingShapeRotation());
-        
-        sm.createShapeBorder(sc.frame.getScale(), 
-                ssm.getSelectionCoords(), ssm.getSelection());
-
-        srm.initializeRotation();
+    public void selectionRectUpdate(Point start, Point end) {
+        ssm.resizeSelectionRect(start, end);
+    }
+    
+    @Override
+    public void selectionRectFinished(){
+        ssm.selectionRectReleased();         
+        sm.removeSelectionRect();
     }
 
     @Override
-    public void isMouseInBorder(Point p) {
+    public boolean isMouseInObject(Point point) {
+        ShapeObject shape = sm.getShapeSuroundingPoint(point);
+        
+        if(shape == null)
+            return false;
+        else
+            return true;
+    }
+
+    @Override
+    public boolean isMouseInBorder(Point p) {
         byte value = sm.isInBorderShapes(p);
         
         if(value == ShapeObjectBorder.INEDGES){
-            sc.input.setRotationStrategy();
-        }else if (value == ShapeObjectBorder.INROTATIONCENTER){
-            sc.input.setRotationCenterStrategy();
+            return true;
         }
+        return false;
     }
-
+    
     @Override
-    public void rotate(Point p) {
-        srm.rotate(p);
-        stm.setStrategy(new sCollisionNotSelectedStrategy(smi));
-        stm.checkForCollision();
-    }
-
-    @Override
-    public void rotateSetUpdate() {
+    public boolean isMouseInBorderCenter(Point p){
+        byte value = sm.isInBorderShapes(p);
         
-        for(ShapeDraggingObject shape : srm.getRotatedShapes()){
-            long id = shape.getID();
-            adapter.setRotationUpdate(id, shape.getX(), 
-                    shape.getY(), shape.getRotation());
+        if (value == ShapeObjectBorder.INROTATIONCENTER){
+            return true;
         }
-    }
-    @Override
-    public void rotationCenterSetUpdate() {
-        srm.setRotationCenterUpdate(sm.getShapeBorder());
-        for(ShapeDraggingObject shape : sm.getDraggingShapes()){
-            shape.setRotationCenterUpdate();
-        }
-    }
-
-    @Override
-    public void rotationCenterTranslate(Point start, Point end) {
-        srm.setRotationCenter(sm.getShapeBorder(), start, end);
-    }
-
-    @Override
-    public void rotationSetUpdate() {
-        sm.getShapeBorder().setRotationCenterUpdate();
-        for(ShapeDraggingObject shape : sm.getDraggingShapes()){
-            shape.setRotationCenterUpdate();
-        }
+        return false;
     }
 
 

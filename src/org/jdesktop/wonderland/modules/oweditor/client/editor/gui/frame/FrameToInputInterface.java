@@ -6,9 +6,25 @@ import java.awt.Rectangle;
 public interface FrameToInputInterface {
     
     public void repaint();
-
+    
+    /**
+     * Returns the translation value in x direction.
+     * This translation value is used to move the whole 2d graph away
+     * from the minus coordinates, to fit in the 0,0 coordinates of the shapes,
+     * which do not allow for minus coordinates.
+     * 
+     * @return the value of the graph translation.
+     */
     public int getTranslationX();
-
+    
+    /**
+     * Returns the translation value in y direction.
+     * This translation value is used to move the whole 2d graph away
+     * from the minus coordinates, to fit in the 0,0 coordinates of the shapes,
+     * which do not allow for minus coordinates.
+     * 
+     * @return the value of the graph translation.
+     */
     public int getTranslationY();
     
     /**

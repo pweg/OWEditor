@@ -1,7 +1,5 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.shape;
 
-import java.awt.Point;
-
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.TranslatedObjectInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.AdapterCommunicationInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.frame.FrameToShapeInterface;
@@ -46,12 +44,6 @@ public class ExternalShape implements ExternalShapeInterface{
     @Override
     public void updateShape(long id, int x, int y, String name) {
         sm.changeShape(id, x, y, name);
-    }
-
-    
-    @Override
-    public ShapeObject getShapeSuroundingPoint(Point p) {
-        return sm.getShapeSuroundingPoint(p);
     }
 
 

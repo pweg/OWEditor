@@ -33,6 +33,7 @@ public class WindowPopupMenu extends JPopupMenu{
     
     private void initializeComponents(){
         copyItem = new JMenuItem(BUNDLE.getString("MenuCopy"));
+        cutItem = new JMenuItem(BUNDLE.getString("MenuCut"));
         pasteItem = new JMenuItem(BUNDLE.getString("MenuPaste"));
         rotateItem = new JMenuItem(BUNDLE.getString("MenuRotate"));
         propertiesItem = new JMenuItem(BUNDLE.getString("MenuProperties"));
@@ -43,6 +44,14 @@ public class WindowPopupMenu extends JPopupMenu{
         propertiesItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Properties");
+              }
+            });
+        
+        cutItem.setAccelerator(KeyStroke.getKeyStroke(
+                KeyEvent.VK_X, ActionEvent.CTRL_MASK));
+        cutItem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                input.cutShapes();
               }
             });
         
@@ -70,7 +79,8 @@ public class WindowPopupMenu extends JPopupMenu{
               }
             });
         
-        
+
+        add(cutItem);
         add(copyItem);
         add(pasteItem);
         add(rotateItem);
@@ -81,9 +91,11 @@ public class WindowPopupMenu extends JPopupMenu{
     public void setItemsEnabled(boolean shapesSelected, boolean copyShapesExist){
         
         if(shapesSelected){
+            cutItem.setEnabled(true);
             copyItem.setEnabled(true);  
             rotateItem.setEnabled(true);
         }else{
+            cutItem.setEnabled(false);
             copyItem.setEnabled(false);
             rotateItem.setEnabled(false);
         }
@@ -92,7 +104,8 @@ public class WindowPopupMenu extends JPopupMenu{
         else
             pasteItem.setEnabled(false);
     }
-    
+
+    private JMenuItem cutItem;
     private JMenuItem copyItem;
     private JMenuItem pasteItem;
     private JMenuItem rotateItem;

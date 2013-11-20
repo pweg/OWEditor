@@ -35,7 +35,7 @@ public class mlSelectionRectShiftStrategy implements mlMouseStrategy{
         if(selectionRect != false){
                selectionRect = false;
                
-               controller.shape.selectionReleased();
+               controller.shape.selectionRectFinished();
                controller.frame.repaint();
            }
     }
@@ -45,7 +45,7 @@ public class mlSelectionRectShiftStrategy implements mlMouseStrategy{
          if(selectionRect != false){
                 Point end = p;
                
-                controller.shape.selectionUpdate(start, end);
+                controller.shape.selectionRectUpdate(start, end);
                 controller.frame.repaint();
             }
     }

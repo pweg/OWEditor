@@ -153,6 +153,7 @@ public class SelectionManager {
         for(ShapeObject shape : selectedShapes){
             smi.setObjectRemoval(shape.getID());
         }
+        smi.clearCurSelection();
     }
     
     /**
