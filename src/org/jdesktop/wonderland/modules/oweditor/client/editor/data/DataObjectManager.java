@@ -27,7 +27,7 @@ public class DataObjectManager implements DataObjectManagerGUIInterface{
      * 
      * @param d a dataController instance.
      */
-    DataObjectManager(DataController d){
+    public DataObjectManager(DataController d){
         dc = d;
         data = new LinkedHashMap<Long, DataObject>();
     }

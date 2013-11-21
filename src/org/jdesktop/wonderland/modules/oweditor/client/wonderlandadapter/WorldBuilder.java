@@ -3,11 +3,8 @@ package org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.logging.Logger;
-import org.jdesktop.wonderland.client.ClientContext;
 import org.jdesktop.wonderland.client.cell.Cell;
 import org.jdesktop.wonderland.client.cell.CellCache;
-import org.jdesktop.wonderland.client.comms.WonderlandSession;
-import org.jdesktop.wonderland.client.login.LoginManager;
 
 
 /**
@@ -44,11 +41,10 @@ public class WorldBuilder {
      */
     public void build(){
         
-        WonderlandSession session = LoginManager.getPrimary().getPrimarySession();
+        CellCache cache = ac.sm.getCellCache();
         
-        CellCache cache = ClientContext.getCellCache(session);
         if (cache == null) {
-            //LOGGER.warning("Unable to find Cell cache for session " + session);
+            LOGGER.warning("Unable to find Cell cache for session " + ac.sm.getSession());
             return;
         }
         

@@ -14,6 +14,8 @@ public class BackupObject {
     private double scaleY = 0;
     private double scaleZ = 0;
     
+    private boolean toDelete = false;
+    
     private ServerObject object = null;
     
     public BackupObject(ServerObject object, double rotationX, double rotationY,
@@ -74,6 +76,14 @@ public class BackupObject {
     
     public double getScaleZ(){
         return scaleZ;
+    }
+    
+    public void setDeletion(boolean delete){
+        toDelete = delete;
+    }
+    
+    public boolean isForDeletion(){
+        return toDelete;
     }
 
 }

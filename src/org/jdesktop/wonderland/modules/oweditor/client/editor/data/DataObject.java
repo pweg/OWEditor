@@ -24,7 +24,7 @@ public class DataObject implements DataObjectInterface{
     /**
      * Creates an empty object instance.
      */
-    DataObject(){
+    public DataObject(){
         coords = new Vector3D(0,0,0);
     }
     
@@ -42,7 +42,7 @@ public class DataObject implements DataObjectInterface{
      * @param height the objects height.
      * @param name the objects name.
      */
-    DataObject(long id, int x, int y, int z, double rotationX, 
+    public DataObject(long id, int x, int y, int z, double rotationX, 
             double rotationY, double rotationZ, double scale, int width, 
             int height, String name){
         this.id = id;

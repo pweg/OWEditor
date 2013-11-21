@@ -3,7 +3,6 @@ package org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter;
 import com.jme.math.Quaternion;
 import com.jme.math.Vector3f;
 import java.awt.Point;
-import java.util.LinkedHashMap;
 import java.util.logging.Logger;
 import org.jdesktop.wonderland.client.cell.Cell;
 import org.jdesktop.wonderland.client.cell.CellComponent;
@@ -29,7 +28,6 @@ public class ServerUpdateAdapter {
     private WonderlandAdapterController ac = null;
     private AdapterObserverInterface dui = null;
     
-    private LinkedHashMap<String, Point> copyTranslation = null;
     private ComponentChangeListener componentListener = null;
     
     private static final Logger LOGGER =
@@ -43,7 +41,6 @@ public class ServerUpdateAdapter {
      */
     public ServerUpdateAdapter(WonderlandAdapterController ac){
         this.ac = ac;
-        copyTranslation = new LinkedHashMap<String, Point>();
         
         componentListener = new ComponentChangeListener() {
             public void componentChanged(Cell cell, 
@@ -72,26 +69,17 @@ public class ServerUpdateAdapter {
             return;
         }
         
-        Vector3fInfo vector = CellInfoReader.createCellInfo(cell);
+        Vector3fInfo vector = CellInfoReader.getCellInfo(cell);
+        Vector3f rotation = CellInfoReader.getRotation(cell);    
         
         float x =  vector.x;
         float y =  vector.y;
         float z =  vector.z;
         
-        long id = idTranslator(cell);
+        long id = CellInfoReader.getID(cell);
         
         dui.notifyTranslation(id , x, y, z); 
-        
-        CellTransform cellTransform = cell.getLocalTransform();
-        Quaternion rotation = cellTransform.getRotation(null);
-        float[] angles = rotation.toAngles(new float[3]);
-        float rotationX = (float) Math.toDegrees(angles[0]);
-        float rotationY = (float) Math.toDegrees(angles[1]);
-        float rotationZ = (float) Math.toDegrees(angles[2]);
-        
-        dui.notifyRotation(id, rotationX, rotationY, rotationZ);
-        
-        
+        dui.notifyRotation(id, rotation.x, rotation.y, rotation.z);        
     }
 
     /**
@@ -105,7 +93,7 @@ public class ServerUpdateAdapter {
     }
     
     public void serverRemovalEvent(Cell cell){
-        long id = idTranslator(cell);
+        long id = CellInfoReader.getID(cell);
         
         dui.notifyRemoval(id);
     }
@@ -125,18 +113,7 @@ public class ServerUpdateAdapter {
             return;
         
         String name = cell.getName();
-        long id = idTranslator(cell);
-        
-        CellTransform transform = cell.getLocalTransform();
-        
-        Quaternion rotation = transform.getRotation(null);
-        float[] angles = rotation.toAngles(new float[3]);
-        
-        float rotationX = (float) Math.toDegrees(angles[0]);
-        float rotationY = (float) Math.toDegrees(angles[1]);
-        float rotationZ = (float) Math.toDegrees(angles[2]);
-        
-        float scale = transform.getScaling();
+        long id = CellInfoReader.getID(cell);
         
         MovableComponent movableComponent = cell.getComponent(MovableComponent.class);
         if (movableComponent == null) {
@@ -149,29 +126,40 @@ public class ServerUpdateAdapter {
             if (response instanceof ErrorMessage) {
                 LOGGER.warning("ERROR Movable component creation"+response);
             }
-        }
+        }        
         
         /**
          * This is used for translating copied cells, after they are created.
          * This is not the best solution, because Wonderland does not create
          * the possibility to copy cells to a specific location.
          */
-        if(copyTranslation.containsKey(name)){
-            Point p = copyTranslation.get(name);
+        if(ac.bm.translationContainsKey(name)){
             
+            Point p = ac.bm.getTranslation(name);
             /*
             * When problems arise, due to the absence of the movable component,
-            * a listener is created, for the purpose of translate the copied cell.
+            * a listener is created, for the purpose to translate the copied cell.
             */
             if(!ac.go.translate(id, p.x, p.y)){
                 cell.addComponentChangeListener(componentListener);
             }else{
-                copyTranslation.remove(name);
+                BackupObject backup = ac.bm.getCell(name);
+                
+                //rotation = backup.getRotation();
+                //scale = backup.getScale();
+                ac.go.rotation(id, backup.getRotation());
+                ac.bm.removeTranslation(name);
             }
+            
+            
         }
         
+        Vector3fInfo vector = CellInfoReader.getCellInfo(cell);
+        Vector3f rotation = CellInfoReader.getRotation(cell);
+        float scale = CellInfoReader.getScale(cell);
+        
         DataObjectInterface object = dui.createEmptyObject();
-        Vector3fInfo vector = CellInfoReader.createCellInfo(cell);
+        
         
         float x = vector.x;
         float y = vector.y;
@@ -183,9 +171,9 @@ public class ServerUpdateAdapter {
         
         object.setID(id);
         object.setCoordinates(x, y, z);
-        object.setRotationX(rotationX);
-        object.setRotationY(rotationY);
-        object.setRotationZ(rotationZ);
+        object.setRotationX(rotation.x);
+        object.setRotationY(rotation.y);
+        object.setRotationZ(rotation.z);
         object.setScale(scale);
         object.setWidth(width);
         object.setHeight(height);
@@ -205,21 +193,17 @@ public class ServerUpdateAdapter {
     private void movableComponentCreated(Cell cell){
         
         String name = cell.getName();
-        long id = idTranslator(cell);
+        long id = CellInfoReader.getID(cell);
         
-        if(copyTranslation.containsKey(name)){
-            Point p = copyTranslation.get(name);
-            ac.go.notifyTranslation(id, p.x, p.y);
-            copyTranslation.remove(name);
+        if(ac.bm.translationContainsKey(name)){
+            Point p = ac.bm.getTranslation(name);
+            ac.go.translate(id, p.x, p.y);
+            
+            BackupObject backup = ac.bm.getCell(name);
+            ac.go.rotation(id, backup.getRotation());
+            
+            ac.bm.removeTranslation(name);
         }
-    }
-    
-    private long idTranslator(Cell cell){
-        return Long.valueOf(cell.getCellID().toString());
-    }
-    
-    public void putCopyTranslation(String name, Point point){
-        copyTranslation.put(name, point);
     }
 
 }

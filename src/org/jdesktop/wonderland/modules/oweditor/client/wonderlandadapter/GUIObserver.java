@@ -4,6 +4,7 @@ import com.jme.math.Quaternion;
 import com.jme.math.Vector3f;
 import java.awt.Point;
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
@@ -63,6 +64,41 @@ public class GUIObserver implements GUIObserverInterface{
     
     protected boolean translate(long id, int x, int y) {
         
+        CellCache cache = ac.sm.getCellCache();
+        
+        if (cache == null) {
+            LOGGER.warning("Unable to find Cell cache for session " + ac.sm.getSession());
+            return false;
+        }
+        CellID cellid = new CellID(id);
+        Cell cell = cache.getCell(cellid);
+        
+        if(cell == null)
+            return false;
+        
+        /*
+        CellTransform transform = cell.getLocalTransform();
+        Vector3f transl = transform.getTranslation(null);
+        float z = transl.z;
+        */
+        
+        float z = CellInfoReader.getCellInfo(cell).y;
+        
+        Vector3f translation = ac.ct.transformCoordinatesBack(cell, (float)x, (float)y, z);
+        MovableComponent movableComponent = cell.getComponent(MovableComponent.class);
+
+        if (movableComponent != null) {
+            CellTransform cellTransform = cell.getLocalTransform();
+            cellTransform.setTranslation(translation);
+            movableComponent.localMoveRequest(cellTransform);
+            return true;
+        }else{
+            return false;
+        }
+    }
+    
+    protected boolean translate(long id, float x, float y, float z) {
+        
         WonderlandSession session = LoginManager.getPrimary().getPrimarySession();
         
         CellCache cache = ClientContext.getCellCache(session);
@@ -76,12 +112,7 @@ public class GUIObserver implements GUIObserverInterface{
         if(cell == null)
             return false;
         
-        CellTransform transform = cell.getLocalTransform();
-        Vector3f transl = transform.getTranslation(null);
-                
-        float z = transl.z;
-        
-        Vector3f translation = ac.ct.transformCoordinatesBack(cell, (float)x, (float)y, z);
+        Vector3f translation = ac.ct.transformCoordinatesBack(cell, x, y, z);
         MovableComponent movableComponent = cell.getComponent(MovableComponent.class);
 
         if (movableComponent != null) {
@@ -110,11 +141,33 @@ public class GUIObserver implements GUIObserverInterface{
         CellUtils.deleteCell(cell);
     }
 
-    public void notifyCopy(long id, int x, int y) {
-          
-        WonderlandSession session = LoginManager.getPrimary().getPrimarySession();
+    @Override
+    public void notifyCopy(ArrayList<Long> object_ids) {
         
-        CellCache cache = ClientContext.getCellCache(session);
+        /*
+         * This can lead to problems, when the server is not fast enough, when
+         * paste is made in the gui and directly afterwards a copy.
+         */
+        ac.bm.clearBackup();
+        
+        for(long id : object_ids){
+            CellCache cache = ac.sm.getCellCache();
+            
+            if (cache == null) {
+                LOGGER.warning("Unable to find Cell cache for session " + ac.sm.getSession());
+                return;
+            }
+            CellID cellid = new CellID(id);
+            Cell cell = cache.getCell(cellid);
+            ac.bm.addObject(cell);
+        }
+    }
+
+    public void notifyPaste(long id, int x, int y) {
+          
+        WonderlandSession session = ac.sm.getSession();
+        CellCache cache = ac.sm.getCellCache();
+        
         if (cache == null) {
             LOGGER.warning("Unable to find Cell cache for session " + session);
             return;
@@ -140,7 +193,7 @@ public class GUIObserver implements GUIObserverInterface{
             
             name = BUNDLE.getString("CopyName")+ name+"_"+count+"ID"+session.getID()+"_"+id;
             
-            ac.sua.putCopyTranslation(name, new Point(x,y));
+            ac.bm.addTranslation(id, name, x, y);
             
             String message = MessageFormat.format(name, cell.getName());
 
@@ -159,11 +212,9 @@ public class GUIObserver implements GUIObserverInterface{
     public void notifyRotation(long id, int x, int y, double rotation) {
         translate(id, x, y);
         
-        WonderlandSession session = LoginManager.getPrimary().getPrimarySession();
-        
-        CellCache cache = ClientContext.getCellCache(session);
+        CellCache cache = ac.sm.getCellCache();
         if (cache == null) {
-            LOGGER.warning("Unable to find Cell cache for session " + session);
+            LOGGER.warning("Unable to find Cell cache for session " + ac.sm.getSession());
             return;
         }
         CellID cellid = new CellID(id);
@@ -180,6 +231,32 @@ public class GUIObserver implements GUIObserverInterface{
             cellTransform.setRotation(newRotation);
             movableComponent.localMoveRequest(cellTransform);
         }
+    }
+    
+
+    public void rotation(long id, Vector3f rotation) {
         
+        CellCache cache = ac.sm.getCellCache();
+        if (cache == null) {
+            LOGGER.warning("Unable to find Cell cache for session " + ac.sm.getSession());
+            return;
+        }
+        CellID cellid = new CellID(id);
+        Cell cell = cache.getCell(cellid);
+        LOGGER.warning("rotation1");
+        if(cell == null)
+            return;
+        LOGGER.warning("rotation2");
+        
+        MovableComponent movableComponent = cell.getComponent(MovableComponent.class);
+        
+        Quaternion newRotation = ac.ct.setStandardRotation(cell, rotation);
+        if (movableComponent != null) {
+            
+            LOGGER.warning("rotation3");
+            CellTransform cellTransform = cell.getLocalTransform();
+            cellTransform.setRotation(newRotation);
+            movableComponent.localMoveRequest(cellTransform);
+        }
     }
 }

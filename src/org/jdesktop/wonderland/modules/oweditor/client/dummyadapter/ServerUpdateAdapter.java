@@ -1,8 +1,7 @@
 package org.jdesktop.wonderland.modules.oweditor.client.dummyadapter;
 
-import java.util.HashMap;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataObjectInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.AdapterObserverInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataObjectInterface;
 
 /**
  * This class is used for updating the data package, when
@@ -105,7 +104,7 @@ public class ServerUpdateAdapter {
 
     public void serverCopyEvent(ServerObject object) {
         String name = object.name;
-        CopyManager cm = ac.bom;
+        BackupManager cm = ac.bom;
         if(cm.translationContainsKey(name)){
             BackupObject backup = cm.getObject(name);
 

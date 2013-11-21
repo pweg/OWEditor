@@ -19,6 +19,8 @@ public class WonderlandAdapterController implements AdapterControllerMainControl
     protected ServerUpdateAdapter sua = null;
     protected TransformListener tl = null;
     protected CellStatusListener csl = null;
+    protected BackupManager bm = null;
+    protected SessionManager sm = null;
     
     public WonderlandAdapterController(){
         
@@ -31,6 +33,8 @@ public class WonderlandAdapterController implements AdapterControllerMainControl
         sua = new ServerUpdateAdapter(this);
         tl = new TransformListener(sua);
         csl = new CellStatusListener(sua);
+        bm = new BackupManager();
+        sm = new SessionManager();
         CellManager.getCellManager().addCellStatusChangeListener(csl);
     }
 

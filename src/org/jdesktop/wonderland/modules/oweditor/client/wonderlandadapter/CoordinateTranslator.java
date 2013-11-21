@@ -105,6 +105,14 @@ public class CoordinateTranslator implements CoordinateTranslatorInterface{
         return vector;
     }*/
     
+    /**
+     * 
+     * @param cell
+     * @param x
+     * @param y
+     * @param z
+     * @return 
+     */
     public Vector3f transformCoordinatesBack(Cell cell, float x, float y, float z){
         
         Vector3f vector = new Vector3f();
@@ -157,7 +165,6 @@ public class CoordinateTranslator implements CoordinateTranslatorInterface{
     }
     
     public Quaternion setRotation(Cell cell, double rotation){
-        LOGGER.warning("xxxxxxxxxxx " + rotation);
         
         CellTransform transform = cell.getLocalTransform();
         
@@ -167,7 +174,24 @@ public class CoordinateTranslator implements CoordinateTranslatorInterface{
         float rotationX = angles[0];
         float rotationZ = angles[2];
         float rotationY = (float) Math.toRadians(-rotation);
-        LOGGER.warning("xxxxxxxxxxx " + rotation + "  " +rotationY + " "  + rotationY);
+        
+        return new Quaternion(new float[] { rotationX, rotationY, rotationZ });
+    }
+    
+    /**
+     * This is used, when the adapter internal classes have to make a
+     * rotation. This is needed, because otherwise, the values would
+     * be wrong.
+     * 
+     * @param cell The cell to rotate
+     * @param rotation The rotation vector.
+     * @return Returns a quaternion containing the rotation.
+     */
+    protected Quaternion setStandardRotation(Cell cell, Vector3f rotation){
+        
+        float rotationX = (float) Math.toRadians(rotation.x);
+        float rotationZ = (float) Math.toRadians(rotation.z);
+        float rotationY = (float) Math.toRadians(rotation.y);
         
         return new Quaternion(new float[] { rotationX, rotationY, rotationZ });
     }
