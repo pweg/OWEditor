@@ -14,9 +14,9 @@ import org.jdesktop.wonderland.common.cell.CellStatus;
  */
 public class CellStatusListener implements CellStatusChangeListener{
     
-    private ServerUpdateAdapter sua = null;    
+    private UpdateManager sua = null;    
     
-    public CellStatusListener(ServerUpdateAdapter sua){
+    public CellStatusListener(UpdateManager sua){
        this.sua = sua;
     }
 

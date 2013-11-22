@@ -9,7 +9,7 @@ import org.jdesktop.wonderland.client.cell.CellCache;
 
 /**
  * Gets every object currently on the server and sends the data from the object
- * to the ServerUpdateAdapter. This is used to build the world, when
+ * to the UpdateManager. This is used to build the world, when
  * it is not empty.
  * 
  * @author Patrick
@@ -17,8 +17,8 @@ import org.jdesktop.wonderland.client.cell.CellCache;
  */
 public class WorldBuilder {
     
-    private ServerUpdateAdapter sua = null;
-    private WonderlandAdapterController ac = null;
+    private UpdateManager sua = null;
+    private AdapterController ac = null;
     
     private ArrayList<Cell> cells = null;
         private static final Logger LOGGER =
@@ -30,7 +30,7 @@ public class WorldBuilder {
      * @param ac a adapterController instance.
      * @param sua a serverUpdate instance.
      */
-    public WorldBuilder( WonderlandAdapterController ac, ServerUpdateAdapter sua){
+    public WorldBuilder( AdapterController ac, UpdateManager sua){
         this.sua = sua;
         this.ac = ac;
         cells = new ArrayList<Cell>();

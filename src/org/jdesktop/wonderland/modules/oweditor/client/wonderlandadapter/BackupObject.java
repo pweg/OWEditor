@@ -21,7 +21,7 @@ public class BackupObject {
         this.scale = scale;
     }
     
-    public Cell getObject(){
+    public Cell getCell(){
         return cell;
     }
     

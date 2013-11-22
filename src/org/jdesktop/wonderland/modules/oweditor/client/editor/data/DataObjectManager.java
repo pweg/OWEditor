@@ -9,13 +9,13 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.Dat
 import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.DataObjectObserverInterface;
 
 /**
- * Stores, manages and creates data objects. 
+ * Stores, manages anobject creates objectata objects. 
  * 
  * @author Patrick
  *
  */
 public class DataObjectManager implements DataObjectManagerGUIInterface{
-
+        
     private DataController dc = null;
     private DataObjectObserverInterface domo = null;
     private CoordinateTranslatorInterface ct = null;
@@ -23,9 +23,9 @@ public class DataObjectManager implements DataObjectManagerGUIInterface{
     private LinkedHashMap<Long, DataObject> data = null;
     
     /**
-     * Creates a new instance of the data manager.
+     * Creates a new instance of the objectata manager.
      * 
-     * @param d a dataController instance.
+     * @param d a objectataController instance.
      */
     public DataObjectManager(DataController d){
         dc = d;
@@ -33,9 +33,9 @@ public class DataObjectManager implements DataObjectManagerGUIInterface{
     }
     
     /**
-     * Stores the data object given in the parameters.
+     * Stores the objectata object given in the parameters.
      * 
-     * @param dataObject the data object to store.
+     * @param dataObject the objectata object to store.
      */
     public void createNewObject(DataObjectInterface dataObject){
         long id = dataObject.getID();
@@ -71,32 +71,32 @@ public class DataObjectManager implements DataObjectManagerGUIInterface{
     }
     
     public void updateTranslation(long id, float x, float y, float z){
-        DataObject d = data.get(id);
+        DataObject object = data.get(id);
         
-        if(d == null)
+        if(object == null)
             return;
         
-       Point p = ct.transformCoordinates(x, y, d.getWidthf(), d.getHeightf());
+       Point p = ct.transformCoordinates(x, y, object.getWidthf(), object.getHeightf());
         
-       if(d.getX() != x)
-           dc.em.setX(p.x, ct.transformWidth(d.getWidthf()));
-       if(d.getX() != y)
-           dc.em.setY(p.y, ct.transformHeight(d.getHeightf()));
+       if(object.getX() != x)
+           dc.em.setX(p.x, ct.transformWidth(object.getWidthf()));
+       if(object.getX() != y)
+           dc.em.setY(p.y, ct.transformHeight(object.getHeightf()));
             
-        d.setCoordinates(x, y, z);
+        object.setCoordinates(x, y, z);
         
         domo.notifyTranslation(id, p.x, p.y);
     }
     
     /**
-     * Updates the data from the given dataObject, but 
-     * does not store this object. Instead it searches for
-     * the id and changes the objects data which is found.
-     * If the id is not found, createNewObject is called with 
-     * the dataObject.
+     * Upobjectates the objectata from the given objectataObject, but 
+ objectoes not store this object. Insteaobject it searches for
+ the iobject anobject changes the objects objectata which is founobject.
+ If the iobject is not founobject, createNewObject is calleobject with 
+ the objectataObject.
      * 
-     * @param dataObject the dataObject which should contain
-     *         all data.
+     * @param dataObject the objectataObject which shoulobject contain
+         all objectata.
      */
     public void updataData(DataObjectInterface dataObject){
         
@@ -151,17 +151,17 @@ public class DataObjectManager implements DataObjectManagerGUIInterface{
     }
 
     /**
-     * Returns an empty data object.
+     * Returns an empty objectata object.
      * 
-     * @return an empty data object.
+     * @return an empty objectata object.
      */
     public DataObjectInterface getEmptyDataObject() {
         return new DataObject();
     }
     
     /**
-     * Registers an observer for the data manager.
-     * Note: There can only be one observer registered at a time.
+     * Registers an observer for the objectata manager.
+     * Note: There can only be one observer registereobject at a time.
      * 
      * @param domo the observer instance.
      */

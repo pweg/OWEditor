@@ -7,9 +7,11 @@
 package org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter;
 
 import org.jdesktop.wonderland.client.ClientContext;
+import org.jdesktop.wonderland.client.cell.Cell;
 import org.jdesktop.wonderland.client.cell.CellCache;
 import org.jdesktop.wonderland.client.comms.WonderlandSession;
 import org.jdesktop.wonderland.client.login.LoginManager;
+import org.jdesktop.wonderland.common.cell.CellID;
 
 /**
  * This class stores the current session and can be used to get
@@ -41,6 +43,11 @@ public class SessionManager {
      */
     public CellCache getCellCache(){
         return ClientContext.getCellCache(session);
+    }
+    
+    public Cell getCell(CellID id){
+        CellCache cache = ClientContext.getCellCache(session);
+        return cache.getCell(id);
     }
     
 }

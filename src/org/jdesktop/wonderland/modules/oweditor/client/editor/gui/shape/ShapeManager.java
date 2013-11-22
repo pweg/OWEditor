@@ -6,6 +6,8 @@ import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.logging.Logger;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataObjectInterface;
@@ -38,9 +40,15 @@ public class ShapeManager {
             Logger.getLogger(WorldBuilder.class.getName());
     private InternalShapeMediatorInterface smi = null;
     
+    private final ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
+    private final Lock readLock = lock.readLock();
+    private final Lock writeLock = lock.writeLock();
+
+    
     
     /**
      * Creates a new ShapeManager instance.
+     * @param smi
      */
     public ShapeManager(InternalShapeMediatorInterface smi){
         factory = new ShapeFactory(smi);
@@ -54,6 +62,8 @@ public class ShapeManager {
     
     /**
      * Returns all created shapes in an ArrayList.
+     * 
+     * @return Arraylist of shapes.
      */
     public ArrayList<ShapeObject> getShapes(){
         return shapes;
@@ -67,17 +77,36 @@ public class ShapeManager {
      */
     public ShapeObject getShape(long id){
         
-        for(ShapeObject shape : shapes){
-            if(shape.getID() == id)
-                return shape;
+        ShapeObject object = null;
+        
+        readLock.lock();
+        try {
+            for(ShapeObject shape : shapes){
+                if(shape.getID() == id){
+                    object = shape;
+                    break;
+                }
+            }
+        } finally {
+            readLock.unlock();
         }
         
-        for(ShapeObject shape : avatarShapes){
-            if(shape.getID() == id)
-                return shape;
+        if(object != null)
+            return object;
+        
+        readLock.lock();
+        try {
+            for(ShapeObject shape : avatarShapes){
+                if(shape.getID() == id){
+                    object = shape;
+                    break;
+                }
+            }
+        } finally {
+            readLock.unlock();
         }
         
-        return null;
+        return object;
     }
     
     /**
@@ -109,15 +138,24 @@ public class ShapeManager {
      */
     public ShapeObject getShapeSuroundingPoint(Point p){
         
-        for(ShapeObject shape_obj : shapes){
-            
-            Shape shape = shape_obj.getTransformedShape();
-            
-            if(shape.contains(p)) {
-                return shape_obj;
+        ShapeObject object = null;
+        
+        readLock.lock();
+        try {
+            for(ShapeObject shape_obj : shapes){
+                
+                Shape shape = shape_obj.getTransformedShape();
+                
+                if(shape.contains(p)) {
+                    object = shape_obj;
+                    break;
+                }
             }
+        } finally {
+            readLock.unlock();
         }
-        return null; 
+        
+        return object; 
     }
     
     /**
@@ -128,32 +166,37 @@ public class ShapeManager {
      * 
      * @param g2 a Graphics2D class.
      * @param at an AffineTransform class, used to draw zoomed shapes correctly.
+     * @param scale the scale
      */
-    public void drawShapes(Graphics2D g2, AffineTransform at, double scale){
+    public void drawShapes(Graphics2D g2, AffineTransform at, double scale) {
         
         this.at = at;
                       
         ArrayList<ShapeObject> selected = new ArrayList<ShapeObject>();
         
-        for(ShapeObject shape : shapes){  
-            if(shape.isSelected())
-                selected.add(shape);
-            else
+        readLock.lock();
+        try {
+            for(ShapeObject shape : shapes){
+                if(shape.isSelected())
+                    selected.add(shape);
+                else
+                    shape.paintOriginal(g2, at);
+            }
+             for(ShapeObject shape : selected){
+            shape.paintOriginal(g2, at);
+            }
+
+            for(ShapeObject shape : avatarShapes){
                 shape.paintOriginal(g2, at);
+            }
+
+            for(ShapeObject shape : shapes){  
+                shape.paintName(g2, at, scale);
+            }
+        } finally {
+            readLock.unlock();
         }
-        
-        for(ShapeObject shape : selected){
-            shape.paintOriginal(g2, at);
-        }
-        
-        for(ShapeObject shape : avatarShapes){
-            shape.paintOriginal(g2, at);
-        }
-        
-        for(ShapeObject shape : shapes){  
-            shape.paintName(g2, at, scale);
-        }
-                
+           
         for(ShapeDraggingObject shape : draggingShapes){  
             shape.paintOriginal(g2, at);
             
@@ -174,11 +217,16 @@ public class ShapeManager {
      */
     public void removeShape(long id){
         
-        for(ShapeObject s : shapes){
-            if(s.getID() == id){
-                shapes.remove(s);
-                break;
+        writeLock.lock();
+        try {
+            for(ShapeObject s : shapes){
+                if(s.getID() == id){
+                    shapes.remove(s);
+                    break;
+                }
             }
+        } finally {
+            writeLock.unlock();
         }
     }
 
@@ -235,11 +283,21 @@ public class ShapeManager {
         if(dataObject.getType() == DataObjectInterface.AVATAR){
             ShapeObject shape = factory.createShapeObject(ShapeFactory.AVATAR, 
                     x, y, width, height, id, name, rotation);
-            avatarShapes.add(shape);
+            writeLock.lock();
+            try {
+                avatarShapes.add(shape);
+            } finally {
+                writeLock.unlock();
+            }
         }else{
             ShapeObject shape = factory.createShapeObject(ShapeFactory.RECTANGLE, 
                     x, y, width, height, id, name, rotation);
-            shapes.add(shape);
+            writeLock.lock();
+            try {
+                shapes.add(shape);
+            } finally {
+                writeLock.unlock();
+            }
         }
     }
     
@@ -276,7 +334,7 @@ public class ShapeManager {
      * 
      * @param shapes an arraylist which holds all shapes from 
      * which the dragging shapes will be built
-     * @return an arraylist of draggingshapes, which werer built
+     * 
      */
     public void createDraggingShapes(ArrayList<ShapeObject> shapes){
         draggingShapes.clear();

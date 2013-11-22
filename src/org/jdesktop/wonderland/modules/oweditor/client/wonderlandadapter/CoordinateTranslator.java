@@ -126,22 +126,25 @@ public class CoordinateTranslator implements CoordinateTranslatorInterface{
             BoundingBox box = (BoundingBox) bounds;
             float xExtent = box.xExtent;
             float yExtent = box.zExtent;
-            float zExtent = box.yExtent;
             vector.x = (float)(x/scale+xExtent);
             vector.z = (float)(y/scale+yExtent);
-            vector.y = (float)(z/scale+zExtent);
+            vector.y = z;
             
         }else if(bounds instanceof BoundingSphere){
             BoundingSphere sphere = (BoundingSphere) bounds;
             float radius = sphere.radius;
             vector.x = (float)(x/scale+radius);
             vector.z = (float)(y/scale+radius);
-            vector.y = (float)(z/scale+radius);
+            vector.y = z;
         }
         return vector;
     }
+    
+    public Vector3f transformVector(Vector3f coords){
+        return new Vector3f(coords.x, coords.z, coords.y);
+    }
 
-    public Point transformCoordinates(float x, float y, float width, float height) {
+    public Point transformCoordinates(float x, float y, float width, float height) {        
         int x_int = (int) Math.round((x-width/2)*scale);
         int y_int = (int) Math.round((y-height/2)*scale);
         

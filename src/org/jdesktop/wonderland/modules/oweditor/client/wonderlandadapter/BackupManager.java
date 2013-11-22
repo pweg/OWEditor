@@ -1,7 +1,6 @@
 package org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter;
 
 import com.jme.math.Vector3f;
-import java.awt.Point;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -9,35 +8,54 @@ import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.jdesktop.wonderland.client.cell.Cell;
+import org.jdesktop.wonderland.client.cell.CellCache;
+import org.jdesktop.wonderland.common.cell.CellID;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.DataObjectObserver;
+
+class MapEntry{
+    public long id = 0;
+    public Vector3f coordinates = null; 
+}
 
 public class BackupManager {    
     private static final Logger LOGGER =
             Logger.getLogger(DataObjectObserver.class.getName());
     
     private HashMap<Long, BackupObject> backup = null;
-    private HashMap<String, Long> stringToID = null;
-    private LinkedHashMap<String, Point> copyTranslation = null;
+    private HashMap<String, MapEntry> copyTranslation = null;
+    private SessionManager sm = null;
     
-    public BackupManager(){
+    public BackupManager(SessionManager sm){
         backup = new LinkedHashMap<Long, BackupObject>();
-        stringToID = new LinkedHashMap<String, Long>();
-        copyTranslation = new LinkedHashMap<String, Point>();
+        copyTranslation = new LinkedHashMap<String, MapEntry>();
+        this.sm = sm;
     }
     
-    public BackupObject getCell(long id){
+    public BackupObject getBackup(long id){
         return backup.get(id);
     }
     
-    public BackupObject getCell(String name) {
-        long id = stringToID.get(name);        
+    public BackupObject getBackup(String name) {
+        long id = copyTranslation.get(name).id;        
         BackupObject object = backup.get(id);
                 
         return object;
     }
     
-    public void addObject(Cell cell){
+    public Cell getCell(long id){
+        return backup.get(id).getCell();
+    }
+    
+    public void addObject(long id){
+        CellCache cache = sm.getCellCache();
+            
+        if (cache == null) {
+            LOGGER.log(Level.WARNING, "Unable to find Cell cache for session {0}", sm.getSession());
+            return;
+        }
+        CellID cellid = new CellID(id);
+        Cell cell = cache.getCell(cellid);
         
         Vector3f rotation = CellInfoReader.getRotation(cell);
         
@@ -46,8 +64,6 @@ public class BackupManager {
         float rotationZ = rotation.z;
 
         float scale = CellInfoReader.getScale(cell);
-        
-        long id = CellInfoReader.getID(cell);
         
         BackupObject bobject = new BackupObject(cell, rotationX, rotationY,
                 rotationZ, scale);
@@ -58,15 +74,15 @@ public class BackupManager {
     public void clearBackup(){
         HashMap<Long, BackupObject> new_map = new LinkedHashMap<Long, BackupObject>();
 
-        if(stringToID.size() > 0){
+        if(copyTranslation.size() > 0){
             
-            LOGGER.log(Level.INFO, stringToID.size() + "backup entry/entries found which " +
-            		"is/are not ready to remove yet. Marking for removal.");
-            Iterator<Entry<String, Long>> it = stringToID.entrySet().iterator();
+            LOGGER.log(Level.INFO, "{0}" + "backup entry/entries found which " +
+            		"is/are not ready to remove yet. Marking for removal.", copyTranslation.size());
+            Iterator<Entry<String, MapEntry>> it = copyTranslation.entrySet().iterator();
         
             while (it.hasNext()) {
-                Entry<String, Long> entry = it.next();
-                long id = entry.getValue();
+                Entry<String, MapEntry> entry = it.next();
+                long id = entry.getValue().id;
                 
                 BackupObject object = backup.get(id);
                 object.setDeletion(true);
@@ -77,23 +93,24 @@ public class BackupManager {
         backup.putAll(new_map);
     }
     
-    public void addTranslation(long id, String name, int x, int y){
-        stringToID.put(name, id);
+    public void addTranslation(long id, String name, Vector3f coordinates){
         
-        copyTranslation.put(name, new Point(x,y));
+        MapEntry entry = new MapEntry();
+        entry.id = id;
+        entry.coordinates = coordinates;
+        copyTranslation.put(name, entry);
     }
     
-    public Point getTranslation(String name){
-        return copyTranslation.get(name);
+    public Vector3f getTranslation(String name){
+        return copyTranslation.get(name).coordinates;
     }
     
     public boolean translationContainsKey(String name){
-        return stringToID.containsKey(name);
+        return copyTranslation.containsKey(name);
     }
     
     public void removeTranslation(String name){
-        Long id = stringToID.get(name);
-        
+        Long id = copyTranslation.get(name).id;
         
         BackupObject object = backup.get(id);
             
@@ -102,7 +119,6 @@ public class BackupManager {
                     "before. Removing now.", id);
             backup.remove(id);
         }
-        stringToID.remove(name);
         copyTranslation.remove(name);
     }
 

@@ -29,7 +29,7 @@ public class CellInfoReader {
      * @return A Vector3fInfo type, which contains a vector with the 
      * coordinates, as well as the height and width of the object.
      */
-    public static Vector3fInfo getCellInfo(Cell cell){
+    public static Vector3fInfo getCoordinates(Cell cell){
         
         BoundingVolume bounds = cell.getLocalBounds();
         Vector3fInfo v = new Vector3fInfo();

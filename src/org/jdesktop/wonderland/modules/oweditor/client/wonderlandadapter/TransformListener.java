@@ -13,9 +13,9 @@ import org.jdesktop.wonderland.client.cell.TransformChangeListener;
  */
 public class TransformListener implements TransformChangeListener{
     
-    private ServerUpdateAdapter sua = null;
+    private UpdateManager sua = null;
     
-    public TransformListener(ServerUpdateAdapter sua){
+    public TransformListener(UpdateManager sua){
        this.sua = sua;
     }
     
