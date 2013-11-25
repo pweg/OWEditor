@@ -16,9 +16,7 @@ public class ServerObject {
     protected double rotationY = 0;
     protected double rotationZ = 0;
 
-    protected double scaleX = 0;
-    protected double scaleY = 0;
-    protected double scaleZ = 0;
+    protected double scale = 0;
     
     protected float width = 0;
     protected float height = 0;
@@ -28,15 +26,12 @@ public class ServerObject {
     protected boolean isAvatar = false;
     
     ServerObject(long id, float x, float y, float z, double rotation, 
-            double scaleX, double scaleY, double scaleZ, 
-            float width, float height, String name){
+            double scale, float width, float height, String name){
         this.x = x;
         this.y = y;
         this.z = z;
         this.rotationX = rotation;
-        this.scaleX = scaleX;
-        this.scaleY = scaleY;
-        this.scaleZ = scaleZ;
+        this.scale = scale;
         this.id = id;
         this.name = name;    
         this.height = height;
@@ -45,8 +40,7 @@ public class ServerObject {
     
     public ServerObject clone(){
         return new ServerObject(this.id, this.x,this.y,this.z, this.rotationX, 
-                this.scaleX, this.scaleY, this.scaleZ, 
-                this.width, this.height, this.name);
+                this.scale, this.width, this.height, this.name);
     }
     
 

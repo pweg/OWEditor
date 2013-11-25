@@ -29,6 +29,7 @@ public class ShapeObjectRectangle extends ShapeObject{
     private String name = "";
     private boolean nameWrapp = false;
     private double rotation = 0;
+    private double scale = 0;
     
     //These variables are used to determine, where the name of the object should be.
     private int nameBoundsX = GUISettings.namePositionInX;
@@ -45,7 +46,7 @@ public class ShapeObjectRectangle extends ShapeObject{
      * @param name the name of the shape.
      */
     public ShapeObjectRectangle(int x, int y, int width, int height, long id, String name,
-            double rotation){
+            double rotation, double scale){
         
         originalShape = new Rectangle (x, y, width, height);
         this.name = name;
@@ -240,8 +241,18 @@ public class ShapeObjectRectangle extends ShapeObject{
     @Override
     public ShapeObject clone() {
         ShapeObject shape = new ShapeObjectRectangle(originalShape.x, originalShape.y, 
-                originalShape.width, originalShape.height, id, name, rotation);
+                originalShape.width, originalShape.height, id, name, rotation, scale);
         return shape;
+    }
+
+    @Override
+    public double getScale() {
+        return scale;
+    }
+
+    @Override
+    public void setScale(double scale) {
+        this.scale = scale;
     }
 
 }

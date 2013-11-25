@@ -23,7 +23,6 @@ public class mlPasteStrategy implements mlMouseStrategy{
     @Override
     public void mousePressed(Point p) {
         if(!dragging){
-            
             if(copyPoint == null)
                 return;
             
@@ -44,14 +43,13 @@ public class mlPasteStrategy implements mlMouseStrategy{
             
             controller.shape.pasteFinished();
             
-            listener.releaseCopyMouseLock();
+            listener.clear();
             controller.frame.repaint();
         }
     }
 
     @Override
     public void mouseReleased(Point p) {
-        // TODO Auto-generated method stub
         
     }
 
@@ -73,6 +71,10 @@ public class mlPasteStrategy implements mlMouseStrategy{
     public void mouseDragged(Point p) {
         // TODO Auto-generated method stub
         
+    }
+    
+    public void setDragging(boolean dragging){
+        this.dragging = dragging;
     }
     
     public void notifyMinXChange(int x) {

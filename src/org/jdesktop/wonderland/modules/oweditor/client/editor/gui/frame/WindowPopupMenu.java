@@ -36,6 +36,7 @@ public class WindowPopupMenu extends JPopupMenu{
         cutItem = new JMenuItem(BUNDLE.getString("MenuCut"));
         pasteItem = new JMenuItem(BUNDLE.getString("MenuPaste"));
         rotateItem = new JMenuItem(BUNDLE.getString("MenuRotate"));
+        scaleItem = new JMenuItem(BUNDLE.getString("MenuScale"));
         propertiesItem = new JMenuItem(BUNDLE.getString("MenuProperties"));
         
         
@@ -70,12 +71,18 @@ public class WindowPopupMenu extends JPopupMenu{
                 input.pasteShapes();
               }
             });
-        
-        rotateItem.setAccelerator(KeyStroke.getKeyStroke(
-                KeyEvent.VK_R, ActionEvent.CTRL_MASK));
+
+        rotateItem.setMnemonic(KeyEvent.VK_R);
         rotateItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 input.rotateShapes();
+              }
+            });
+        
+        scaleItem.setMnemonic(KeyEvent.VK_S);
+        scaleItem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                input.scaleShapes();
               }
             });
         
@@ -84,6 +91,7 @@ public class WindowPopupMenu extends JPopupMenu{
         add(copyItem);
         add(pasteItem);
         add(rotateItem);
+        add(scaleItem);
         addSeparator();
         add(propertiesItem);
     }
@@ -94,10 +102,14 @@ public class WindowPopupMenu extends JPopupMenu{
             cutItem.setEnabled(true);
             copyItem.setEnabled(true);  
             rotateItem.setEnabled(true);
+            scaleItem.setEnabled(true);
+            propertiesItem.setEnabled(true);
         }else{
             cutItem.setEnabled(false);
             copyItem.setEnabled(false);
             rotateItem.setEnabled(false);
+            scaleItem.setEnabled(false);
+            propertiesItem.setEnabled(false);
         }
         if(copyShapesExist)
             pasteItem.setEnabled(true);
@@ -109,6 +121,7 @@ public class WindowPopupMenu extends JPopupMenu{
     private JMenuItem copyItem;
     private JMenuItem pasteItem;
     private JMenuItem rotateItem;
+    private JMenuItem scaleItem;
     private JMenuItem propertiesItem;
 
 }

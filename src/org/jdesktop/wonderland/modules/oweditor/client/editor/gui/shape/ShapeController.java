@@ -11,6 +11,7 @@ public class ShapeController {
     protected RotationManager srm = null;
     protected SelectionManager ssm = null;
     protected TranslationManager stm = null;
+    protected ScaleManager scale = null;
     
     protected InternalShapeMediatorInterface smi = null;
     
@@ -30,6 +31,7 @@ public class ShapeController {
         stm = new TranslationManager(smi);
         ssm = new SelectionManager(smi);
         srm = new RotationManager(smi);
+        scale = new ScaleManager(smi);
         scm = new CopyManager(smi);
         
         smi.registerSelectionManager(ssm);

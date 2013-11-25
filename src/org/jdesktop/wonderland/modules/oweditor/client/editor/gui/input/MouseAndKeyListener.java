@@ -20,13 +20,20 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.GUISettings;
 public class MouseAndKeyListener extends MouseInputAdapter implements KeyListener,
                                     MouseWheelListener{
 
+    private static final byte NOMODE = 0;
+    private static final byte COPY = 1;
+    private static final byte ROTATE = 2;
+    private static final byte SCALE = 3;
+    
     private mlMouseStrategy strategy = null;
     private mlPasteStrategy pasteStrategy = null;
     
     private boolean shiftPressed = false;
     
-    private boolean copy = false;
-    private boolean rotation = false;
+    
+    private byte mode = 0;
+    //private boolean copy = false;
+    //private boolean rotation = false;
     
     private InputController ic = null;
     
@@ -36,8 +43,8 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
     
     public void mousePressed(MouseEvent e) {
         
-        if(shiftPressed && !rotation){
-            if(e.getButton() ==  MouseEvent.BUTTON1 && !copy){
+        if(shiftPressed && mode == NOMODE){
+            if(e.getButton() ==  MouseEvent.BUTTON1){
                 
                 Point p = e.getPoint();
                 
@@ -50,7 +57,7 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
         }else{
              //dragging shapes/selection
              if(e.getButton() ==  MouseEvent.BUTTON1){
-                 if(!copy && !rotation){
+                 if(mode == NOMODE){
              
                      Point p = e.getPoint();
                         
@@ -63,16 +70,28 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
                      }
                  }
                  //paste/insertion
-                 else if(copy && !rotation){
+                 else if(mode == COPY){
                      if(strategy != null)
                          strategy.mousePressed(e.getPoint());
                  }
                  //rotation
-                 else if(rotation && !copy){
+                 else if(mode == ROTATE){
                      Point p = e.getPoint();
                      
                      if(ic.shape.isMouseInBorder(p))
-                         setRotationStrategy();
+                         strategy = new mlRotationStrategy(ic);
+                     else if (ic.shape.isMouseInBorderCenter(p)){
+                         setRotationCenterStrategy();
+                     }
+                     if(strategy != null)
+                         strategy.mousePressed(p);
+                 }
+                 //scale
+                 else if(mode == SCALE){
+                     Point p = e.getPoint();
+                     
+                     if(ic.shape.isMouseInBorder(p))
+                         strategy = new mlScaleStrategy(ic);
                      else if (ic.shape.isMouseInBorderCenter(p)){
                          setRotationCenterStrategy();
                      }
@@ -81,8 +100,8 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
                  }
              }
              //Panning
-             else if (e.getButton() ==  MouseEvent.BUTTON2 || e.getButton() ==  MouseEvent.BUTTON3){
-                 if(!rotation)
+             else if ((e.getButton() ==  MouseEvent.BUTTON2 || e.getButton() ==  MouseEvent.BUTTON3)){
+                 if(mode == NOMODE || mode == COPY)
                      ic.shape.cleanHelpingShapes();
                  strategy = new mlPanStrategy(ic.frame);
                  strategy.mousePressed(e.getPoint());
@@ -93,7 +112,7 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
         }
     }
     public void mouseClicked(MouseEvent e) {
-        if (e.getButton() ==  MouseEvent.BUTTON3 ){
+        if (e.getButton() ==  MouseEvent.BUTTON3 && mode <= COPY){
             strategy = new mlPopupStrategy(ic);
             strategy.mousePressed(e.getPoint());
         }
@@ -164,14 +183,14 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
                  * copyPoint.x = (int) Math.round(copyPoint.x / scale);
                  * copyPoint.y = (int) Math.round(copyPoint.y / scale);
                 */
-            }else if(e.getKeyCode() == KeyEvent.VK_V && !copy){
+            }else if(e.getKeyCode() == KeyEvent.VK_V && mode != COPY){
                 pasteShapes(); 
-            }else if(e.getKeyCode() == KeyEvent.VK_X && !copy){
+            }else if(e.getKeyCode() == KeyEvent.VK_X && mode != COPY){
                 cutShapes();
             }
         }else{
             if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                if(rotation){
+                if(mode == ROTATE){
                     ic.shape.rotateFinished();
                     clear();
                 }
@@ -179,11 +198,9 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
         }
     }
     
-    private void clear(){
-        rotation = false;
-        copy = false;
+    public void clear(){
+        mode = NOMODE;
         ic.shape.cleanAll();
-        releaseCopyMouseLock();
         if(strategy != null){
             if(strategy instanceof mlSelectionRectStrategy ||
                     strategy instanceof mlSelectionRectShiftStrategy)
@@ -207,25 +224,29 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
     
     public void pasteShapes(){
         
-        strategy = pasteStrategy;
-        
-        if (strategy == null)
+        if (pasteStrategy == null)
             return;
+        
+        pasteStrategy.setDragging(false);
+        strategy = pasteStrategy;
         
         strategy.mousePressed(null);
         strategy.mouseMoved(ic.frame.getMousePosition());
-        copy = true;
+        mode = COPY;
         ic.frame.repaint();
-    }
-    
-    public void releaseCopyMouseLock(){
-        copy = false;
     }
 
     public void rotateShapes() {
         strategy = null;
         ic.shape.rotationInitialize();
-        rotation = true;
+        mode = ROTATE;
+        ic.frame.repaint();
+    }
+    
+    public void scaleShapes(){
+        strategy = null;
+        ic.shape.scaleInitialize();
+        mode = SCALE;
         ic.frame.repaint();
     }
     
@@ -233,10 +254,6 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
         strategy = null;
     }
     
-    
-    public void setRotationStrategy(){
-        strategy = new mlRotationStrategy(ic);
-    }
     
     public void setRotationCenterStrategy(){
         strategy = new mlRotationCenterStrategy(ic);

@@ -2,6 +2,7 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.shape;
 
 import java.awt.Graphics2D;
 import java.awt.Paint;
+import java.awt.Point;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
@@ -20,14 +21,14 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.GUISettings;
  * @author Patrick
  *
  */
-public class ShapeObjectDraggingEllipse extends ShapeObject{
+public class ShapeDraggingEllipse extends ShapeDraggingObject{
     
     private Ellipse2D originalShape = null;
     private Shape transformedShape = null;
-    private boolean isSelected = false;
     private Paint color = GUISettings.draggingColor;
     private long id;
     private double rotation = 0;
+    private double scale = 0;
     
     /**
      * Creates a new dragginRect shape object.
@@ -39,7 +40,7 @@ public class ShapeObjectDraggingEllipse extends ShapeObject{
      * @param id the id of the shape. Usually this is the id of the shape which
      *               is copied.
      */
-    public ShapeObjectDraggingEllipse(int x, int y, int width, int height, long id,
+    public ShapeDraggingEllipse(int x, int y, int width, int height, long id,
             double rotation){
         originalShape = new Ellipse2D.Double(x, y, width, height);
         this.id = id;
@@ -69,27 +70,6 @@ public class ShapeObjectDraggingEllipse extends ShapeObject{
         g.draw(at.createTransformedShape(originalShape)); 
     }
 
-    @Override
-    public void paintName(Graphics2D g, AffineTransform at, double scale) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public void setSelected(boolean select) {
-        isSelected = select;
-    }
-
-    @Override
-    public boolean isSelected() {
-        return isSelected;
-    }
-
-    @Override
-    public void switchSelection() {
-        isSelected = !isSelected;
-    }
-    
     @Override
     public void setLocation(int x, int y) {
         originalShape.setFrame(x, y, originalShape.getWidth(), originalShape.getHeight());
@@ -150,19 +130,6 @@ public class ShapeObjectDraggingEllipse extends ShapeObject{
         return (int) originalShape.getBounds2D().getHeight();
     }
 
-    @Override
-    public String getName() {
-        return "DraggingShape"+id;
-    }
-
-    @Override
-    public void setName(String name) {
-    }
-
-    @Override
-    public void setRotation(double rotation) {
-        this.rotation = rotation;
-    }
 
     @Override
     public double getRotation() {
@@ -173,5 +140,34 @@ public class ShapeObjectDraggingEllipse extends ShapeObject{
     public ShapeObject clone() {
         // TODO Auto-generated method stub
         return null;
+    }
+
+
+    @Override
+    public void setRotation(double rotation, Point p) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void setState(stateDraggingShape state) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void setRotationCenterUpdate() {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void setScale(double scale, Point scalePoint) {
+       this.scale = scale;
+    }
+
+    @Override
+    public double getScale() {
+        return scale;
     }
 }

@@ -35,10 +35,6 @@ public class InputController {
     protected MouseWheelListener getMouseWheelListener(){
         return mkListener;
     }
-
-    public void setRotationStrategy(){
-        mkListener.setRotationStrategy();
-    }
     
     public void setRotationCenterStrategy(){
         mkListener.setRotationCenterStrategy();

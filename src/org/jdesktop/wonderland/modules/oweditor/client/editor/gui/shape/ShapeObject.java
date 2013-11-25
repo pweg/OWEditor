@@ -59,9 +59,13 @@ public abstract class ShapeObject extends SimpleShapeObject{
     
     public abstract double getRotation();
     
+    public abstract double getScale();
+    
     public abstract ShapeObject clone();
     
     public abstract void setRotation(double rotation);
+    
+    public abstract void setScale(double scale);
     
     /**
      * Sets the dimensions and the position of the shape.

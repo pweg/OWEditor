@@ -21,16 +21,19 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.GUISettings;
  * @author Patrick
  *
  */
-public class ShapeObjectDraggingRect extends ShapeDraggingObject{
+public class ShapeDraggingRect extends ShapeDraggingObject{
     
     private Shape originalShape = null;
     private Shape transformedShape = null;
     private Paint color = GUISettings.draggingColor;
     private long id = 0;
+    
     private double rotation = 0;
     private double lastRotation = 0;
     private Point rotationPoint = null;
     private double initialRotation = 0;
+    
+    private double scale = 0;
     
     private int initialWidth = 0;
     private int initialHeight = 0;
@@ -48,13 +51,15 @@ public class ShapeObjectDraggingRect extends ShapeDraggingObject{
      * @param height the height of the shape.
      * @param id the id of the shape. Usually this is the id of the shape which
      *               is copied.
+     * @param scale 
      */
-    public ShapeObjectDraggingRect(int x, int y, int width, int height, long id, double rotation,
-            AffineTransform at){
+    public ShapeDraggingRect(int x, int y, int width, int height, long id, double rotation,
+            double scale, AffineTransform at){
         originalShape = new Rectangle (x, y, width, height);
         this.id = id;
         this.initialRotation = rotation;
         this.at = at;
+        this.scale = scale;
         initialWidth = width;
         initialHeight = height;
         
@@ -220,6 +225,16 @@ public class ShapeObjectDraggingRect extends ShapeDraggingObject{
         lastRotation += rotation;
         rotation = 0;
         
+    }
+
+    @Override
+    public void setScale(double scale, Point scalePoint) {
+        this.scale = scale;
+    }
+
+    @Override
+    public double getScale() {
+        return scale;
     }
 
 }

@@ -80,7 +80,7 @@ public class ServerSimulator {
             double scale, float width, float height, String name,
             boolean isAvatar){
         ServerObject o = new ServerObject(currentID, x, y, z, rotationX, 
-                scale, scale, scale, width, height, name);
+                scale, width, height, name);
 
         o.rotationY = rotationY;
         o.rotationZ = rotationZ;
@@ -95,7 +95,7 @@ public class ServerSimulator {
             float width, float height, String name,
             boolean isAvatar){
         ServerObject o = new ServerObject(currentID, x, y, z, rotationX, 
-                scaleX, scaleY, scaleZ, width, height, name);
+                scaleX, width, height, name);
 
         o.rotationY = rotationY;
         o.rotationZ = rotationZ;

@@ -30,4 +30,9 @@ public class InputToFrame implements InputToFrameInterface{
         ic.mkListener.rotateShapes();
     }
 
+    @Override
+    public void scaleShapes() {
+        ic.mkListener.scaleShapes();
+    }
+
 }

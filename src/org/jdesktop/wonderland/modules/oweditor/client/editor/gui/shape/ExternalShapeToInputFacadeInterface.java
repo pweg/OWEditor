@@ -119,6 +119,14 @@ public interface ExternalShapeToInputFacadeInterface {
      */
     public void rotationUpdate();
 
+
+    public void scaleInitialize();
+
+
+    public void scale(Point p);
+
+    public void scaleUpdate();
+    
     /**
      * Initializes the selection for the 
      * popup menu.
@@ -220,6 +228,7 @@ public interface ExternalShapeToInputFacadeInterface {
      * false otherwise.
      */
     public boolean isMouseInBorderCenter(Point p);
+
 
 
 

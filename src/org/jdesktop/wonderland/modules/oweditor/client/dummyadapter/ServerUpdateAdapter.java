@@ -54,7 +54,7 @@ public class ServerUpdateAdapter {
     public void createObject(ServerObject sObject){
         
         long id = sObject.id;            
-        double scale = sObject.scaleX;
+        double scale = sObject.scale;
         
         String name = sObject.name;
         
@@ -112,9 +112,7 @@ public class ServerUpdateAdapter {
             object.y = backup.getTranslationY();
             object.z = backup.getTranslationZ();
 
-            object.scaleX = backup.getScaleX();
-            object.scaleY = backup.getScaleY();
-            object.scaleZ = backup.getScaleZ();
+            object.scale = backup.getScaleX();
 
             object.rotationX = backup.getRotationX();
             object.rotationY = backup.getRotationY();

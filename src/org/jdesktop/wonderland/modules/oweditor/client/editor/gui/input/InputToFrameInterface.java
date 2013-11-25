@@ -10,4 +10,6 @@ public interface InputToFrameInterface {
 
     public void rotateShapes();
 
+    public void scaleShapes();
+
 }

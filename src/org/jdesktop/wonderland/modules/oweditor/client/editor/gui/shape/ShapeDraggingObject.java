@@ -16,4 +16,8 @@ public abstract class ShapeDraggingObject extends SimpleShapeObject{
     public abstract void setRotationCenterUpdate();
     
     public abstract void setCollision(boolean col);
+
+    public abstract void setScale(double scale, Point scalePoint);
+        
+    public abstract double getScale();
 }

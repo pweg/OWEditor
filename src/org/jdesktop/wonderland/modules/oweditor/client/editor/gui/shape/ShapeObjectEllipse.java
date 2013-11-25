@@ -29,6 +29,7 @@ public class ShapeObjectEllipse extends ShapeObject{
     private String name = "";
     private boolean nameWrapp = false;
     private double rotation = 0;
+    private double scale = 0;
     
     //These variables are used to determine, where the name of the object should be.
     private int nameBoundsX = GUISettings.namePositionInX;
@@ -45,12 +46,13 @@ public class ShapeObjectEllipse extends ShapeObject{
      * @param name the name of the shape.
      */
     public ShapeObjectEllipse(int x, int y, int width, int height, long id, String name,
-            double rotation){
+            double rotation, double scale){
         
         originalShape = new Rectangle (x, y, width, height);
         this.name = name;
         this.id = id;
         this.rotation = rotation;
+        this.scale = scale;
     }
     
     @Override
@@ -224,6 +226,16 @@ public class ShapeObjectEllipse extends ShapeObject{
     public ShapeObject clone() {
         // TODO Auto-generated method stub
         return null;
+    }
+
+    @Override
+    public double getScale() {
+        return scale;
+    }
+
+    @Override
+    public void setScale(double scale) {
+        this.scale = scale;
     }
 
 }

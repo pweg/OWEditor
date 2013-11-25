@@ -125,4 +125,13 @@ public class ShapeObjectAvatar extends ShapeObject{
         return null;
     }
 
+    @Override
+    public double getScale() {
+        return 1;
+    }
+
+    @Override
+    public void setScale(double scale) {
+    }
+
 }

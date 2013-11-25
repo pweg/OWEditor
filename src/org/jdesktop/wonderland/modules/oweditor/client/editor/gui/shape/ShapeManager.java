@@ -276,13 +276,14 @@ public class ShapeManager {
         int height = dataObject.getHeight();
         String name = dataObject.getName();
         double rotation = dataObject.getRotation();
+        double scale = dataObject.getScale();
         
         if(name.length() > 20){
             name = name.substring(0, 18)+ "...";
         }
         if(dataObject.getType() == DataObjectInterface.AVATAR){
             ShapeObject shape = factory.createShapeObject(ShapeFactory.AVATAR, 
-                    x, y, width, height, id, name, rotation);
+                    x, y, width, height, id, name, rotation, scale);
             writeLock.lock();
             try {
                 avatarShapes.add(shape);
@@ -291,7 +292,7 @@ public class ShapeManager {
             }
         }else{
             ShapeObject shape = factory.createShapeObject(ShapeFactory.RECTANGLE, 
-                    x, y, width, height, id, name, rotation);
+                    x, y, width, height, id, name, rotation, scale);
             writeLock.lock();
             try {
                 shapes.add(shape);
@@ -315,15 +316,16 @@ public class ShapeManager {
         long id = shape.getID();
         String name = shape.getName();
         double rotation = shape.getRotation();
+        double scale = shape.getScale();
              
         ShapeDraggingObject newShape = null;
         
         if(shape instanceof ShapeObjectRectangle){
             newShape = factory.createDraggingShapeObject(ShapeFactory.RECTANGLE, x,y,
-                    width,height, id, name, rotation, at);
+                    width,height, id, name, rotation, scale, at);
         }else if(shape instanceof ShapeObjectEllipse){
             newShape = factory.createDraggingShapeObject(ShapeFactory.CIRCLE, x,y,
-                    width,height, id, name, rotation, at);
+                    width,height, id, name, rotation, scale, at);
         }
         return newShape;
     }
@@ -364,7 +366,7 @@ public class ShapeManager {
     }
     
     public void createShapeBorder(double scale, Point coordinates, 
-            ArrayList<ShapeObject> shapes){
+            ArrayList<ShapeObject> shapes, byte mode){
 
         int min_x = Integer.MAX_VALUE;
         int max_x = Integer.MIN_VALUE;
@@ -398,7 +400,7 @@ public class ShapeManager {
         int x = (int) Math.round(coordinates.x/scale);
         int y = (int) Math.round(coordinates.y/scale);
         border = new ShapeObjectBorder(x, y, width, height, at,
-                ShapeObjectBorder.MODECENTER);
+                mode);
     }
     
     public byte isInBorderShapes(Point p){

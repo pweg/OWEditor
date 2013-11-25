@@ -34,15 +34,15 @@ public class ShapeFactory {
      * @param id the id for the rectangle, which has to be the same id as in the virtual world.
      */
     public ShapeObject createShapeObject(int type, int x, int y, int width, int height, 
-            long id, String name, double rotation){
+            long id, String name, double rotation, double scale){
         
         switch(type){
             case AVATAR:
                 return new ShapeObjectAvatar(id, x,y,width, height);
             case RECTANGLE:
-                return new ShapeObjectRectangle(x,y,width, height, id, name, rotation);
+                return new ShapeObjectRectangle(x,y,width, height, id, name, rotation, scale);
             case CIRCLE:
-                return new ShapeObjectEllipse(x,y,width,height, id, name, rotation);
+                return new ShapeObjectEllipse(x,y,width,height, id, name, rotation, scale);
             
             default:
                 throw new IllegalArgumentException(
@@ -51,10 +51,10 @@ public class ShapeFactory {
     }
     
     public ShapeDraggingObject createDraggingShapeObject(int type, int x, int y, int width, int height, 
-            long id, String name, double rotation, AffineTransform at){
+            long id, String name, double rotation, double scale, AffineTransform at){
         switch(type){
             case RECTANGLE:
-                return new ShapeObjectDraggingRect(x,y,width,height, id, rotation,
+                return new ShapeDraggingRect(x,y,width,height, id, rotation, scale,
                         at);
             default:
                 throw new IllegalArgumentException(

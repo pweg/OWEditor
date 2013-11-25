@@ -45,7 +45,7 @@ public class BackupManager {
         double rotationY = object.rotationY;
         double rotationZ = object.rotationZ;
 
-        double scaleX = object.scaleX;
+        double scaleX = object.scale;
         double scaleY = object.scaleY;
         double scaleZ = object.scaleZ;
         

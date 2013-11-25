@@ -12,8 +12,8 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.GUISettings;
 
 public class ShapeObjectBorder extends SimpleShapeObject{
     
-    public static final byte MODENOCENTER   = 0;
-    public static final byte MODECENTER     = 1;
+    public static final byte MODEONECENTER   = 0;
+    public static final byte MODEALLCENTER     = 1;
     
     public static final byte INNOTHING           = 0;
     public static final byte INROTATIONCENTER    = 1;
@@ -35,10 +35,12 @@ public class ShapeObjectBorder extends SimpleShapeObject{
     private int tinySizeHalf = 0;
     private byte mode = 0;
     
-    private double  rotation = 0;
+    private double rotation = 0;
+    private double scale = 1;
     
     public ShapeObjectBorder(int x, int y, int width, int height, AffineTransform at,
             byte mode){
+        this.mode = mode;
         
         double scaleX = at.getScaleX();
         double scaleY = at.getScaleY();
@@ -117,7 +119,7 @@ public class ShapeObjectBorder extends SimpleShapeObject{
             transformedTinyShapes.add(transformedRect);
         }
 
-        if(mode != ShapeObjectBorder.MODECENTER){
+        if(mode != ShapeObjectBorder.MODEALLCENTER){
             g.draw(rotationCenter); 
         }
         
@@ -218,6 +220,10 @@ public class ShapeObjectBorder extends SimpleShapeObject{
         }
         rotation = 0;
         
+    }
+
+    public void setScale(double scale) {
+        this.scale = scale;
     }
 
 }

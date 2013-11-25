@@ -10,6 +10,7 @@ public class ExternalShapeToInputFacade implements ExternalShapeToInputFacadeInt
     protected ShapeManager sm = null;
     protected CopyManager scm = null;
     protected RotationManager srm = null;
+    protected ScaleManager scale = null;
     protected SelectionManager ssm = null;
     protected TranslationManager stm = null;
     
@@ -31,6 +32,7 @@ public class ExternalShapeToInputFacade implements ExternalShapeToInputFacadeInt
         srm = sc.srm;
         ssm = sc.ssm;
         smi = sc.smi;
+        scale = sc.scale;
     }
 
     @Override
@@ -115,32 +117,23 @@ public class ExternalShapeToInputFacade implements ExternalShapeToInputFacadeInt
         sm.clearDraggingShapes();
     }
 
-
     @Override
     public void rotationInitialize() {
         sm.createDraggingShapes(ssm.getSelection());
         sm.setShapeStates(new stateDraggingShapeRotation());
         
         sm.createShapeBorder(sc.frame.getScale(), 
-                ssm.getSelectionCoords(), ssm.getSelection());
+                ssm.getSelectionCoords(), ssm.getSelection(),
+                ShapeObjectBorder.MODEONECENTER);
 
         srm.initializeRotation();
     }
+    
     @Override
     public void rotate(Point p) {
         srm.rotate(p);
         stm.setStrategy(new sCollisionNotSelectedStrategy(smi));
         stm.checkForCollision();
-    }
-
-    @Override
-    public void rotateFinished() {
-        
-        for(ShapeDraggingObject shape : srm.getRotatedShapes()){
-            long id = shape.getID();
-            adapter.setRotationUpdate(id, shape.getX(), 
-                    shape.getY(), shape.getRotation());
-        }
     }
     
     @Override
@@ -162,6 +155,44 @@ public class ExternalShapeToInputFacade implements ExternalShapeToInputFacadeInt
         for(ShapeDraggingObject shape : sm.getDraggingShapes()){
             shape.setRotationCenterUpdate();
         }
+    }
+
+    @Override
+    public void rotateFinished() {
+        
+        if(stm.checkForCollision())
+            return;
+        for(ShapeDraggingObject shape : srm.getRotatedShapes()){
+            long id = shape.getID();
+            adapter.setRotationUpdate(id, shape.getX(), 
+                    shape.getY(), shape.getRotation());
+        }
+    }
+    
+    @Override
+    public void scaleInitialize() {
+        sm.createDraggingShapes(ssm.getSelection());
+        sm.setShapeStates(new stateDraggingShapeRotation());
+        
+        sm.createShapeBorder(sc.frame.getScale(), 
+                ssm.getSelectionCoords(), ssm.getSelection(),
+                ShapeObjectBorder.MODEALLCENTER);
+
+        srm.initializeRotation();
+    }
+
+
+    @Override
+    public void scale(Point p) {
+        scale.scale(p);
+        stm.setStrategy(new sCollisionNotSelectedStrategy(smi));
+        stm.checkForCollision();
+    }
+
+    @Override
+    public void scaleUpdate() {
+        // TODO Auto-generated method stub
+        
     }
 
     @Override
