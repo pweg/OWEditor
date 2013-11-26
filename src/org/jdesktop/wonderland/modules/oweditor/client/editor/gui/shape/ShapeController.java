@@ -8,10 +8,9 @@ public class ShapeController {
     
     protected ShapeManager sm = null;
     protected CopyManager scm = null;
-    protected RotationManager srm = null;
+    protected TransformationManager srm = null;
     protected SelectionManager ssm = null;
     protected TranslationManager stm = null;
-    protected ScaleManager scale = null;
     
     protected InternalShapeMediatorInterface smi = null;
     
@@ -30,8 +29,7 @@ public class ShapeController {
         sm = new ShapeManager(smi);
         stm = new TranslationManager(smi);
         ssm = new SelectionManager(smi);
-        srm = new RotationManager(smi);
-        scale = new ScaleManager(smi);
+        srm = new TransformationManager(smi);
         scm = new CopyManager(smi);
         
         smi.registerSelectionManager(ssm);

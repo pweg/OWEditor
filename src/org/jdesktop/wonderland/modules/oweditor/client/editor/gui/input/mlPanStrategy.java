@@ -1,5 +1,6 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.input;
 
+import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;
 
@@ -42,6 +43,15 @@ public class mlPanStrategy implements mlMouseStrategy{
             here = p;  
             visiRect.x += (pressed.x - here.x);  
             visiRect.y += (pressed.y - here.y);  
+
+            Dimension size = effi.getPanelSize();
+
+            visiRect.x = Math.max(0, visiRect.x);
+            visiRect.y = Math.max(0, visiRect.y);
+            
+            visiRect.x = Math.min(size.width, visiRect.x);
+            visiRect.y = Math.min(size.height, visiRect.y);
+            
             effi.scrollRectToVisible(visiRect); 
         }
     }

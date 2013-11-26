@@ -1,5 +1,6 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.frame;
 
+import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;
 
@@ -32,7 +33,11 @@ public class FrameToInput implements FrameToInputInterface {
     public int getTranslationY() {
         return fc.getTranslationY();
     }
-    
+
+    @Override
+    public Dimension getPanelSize() {
+        return drawingPan.getSize();
+    }
     @Override
     public double getScale() {
         return drawingPan.getScale();

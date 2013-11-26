@@ -9,7 +9,7 @@ public class ExternalShape implements ExternalShapeInterface{
     
     private InternalShapeMediatorInterface smi = null;
     private ShapeManager sm = null;
-    private RotationManager srm = null;
+    private TransformationManager srm = null;
     private TranslationManager stm = null;
     
     private ShapeController sc = null;

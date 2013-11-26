@@ -1,5 +1,6 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.frame;
 
+import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;
 
@@ -26,6 +27,13 @@ public interface FrameToInputInterface {
      * @return the value of the graph translation.
      */
     public int getTranslationY();
+    
+    /**
+     * Returns the current size of the drawing panel.
+     * 
+     * @return the current size of the drawing panel.
+     */
+    public Dimension getPanelSize();
     
     /**
      * Returns the scale of the drawing panel.

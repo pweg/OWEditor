@@ -9,8 +9,7 @@ public class ExternalShapeToInputFacade implements ExternalShapeToInputFacadeInt
 
     protected ShapeManager sm = null;
     protected CopyManager scm = null;
-    protected RotationManager srm = null;
-    protected ScaleManager scale = null;
+    protected TransformationManager srm = null;
     protected SelectionManager ssm = null;
     protected TranslationManager stm = null;
     
@@ -32,7 +31,6 @@ public class ExternalShapeToInputFacade implements ExternalShapeToInputFacadeInt
         srm = sc.srm;
         ssm = sc.ssm;
         smi = sc.smi;
-        scale = sc.scale;
     }
 
     @Override
@@ -126,7 +124,7 @@ public class ExternalShapeToInputFacade implements ExternalShapeToInputFacadeInt
                 ssm.getSelectionCoords(), ssm.getSelection(),
                 ShapeObjectBorder.MODEONECENTER);
 
-        srm.initializeRotation();
+        srm.initializeTransformation();
     }
     
     @Override
@@ -162,7 +160,7 @@ public class ExternalShapeToInputFacade implements ExternalShapeToInputFacadeInt
         
         if(stm.checkForCollision())
             return;
-        for(ShapeDraggingObject shape : srm.getRotatedShapes()){
+        for(ShapeDraggingObject shape : srm.getTransformedShapes()){
             long id = shape.getID();
             adapter.setRotationUpdate(id, shape.getX(), 
                     shape.getY(), shape.getRotation());
@@ -178,13 +176,13 @@ public class ExternalShapeToInputFacade implements ExternalShapeToInputFacadeInt
                 ssm.getSelectionCoords(), ssm.getSelection(),
                 ShapeObjectBorder.MODEALLCENTER);
 
-        srm.initializeRotation();
+        srm.initializeTransformation();
     }
 
 
     @Override
     public void scale(Point p) {
-        scale.scale(p);
+        srm.scale(p);
         stm.setStrategy(new sCollisionNotSelectedStrategy(smi));
         stm.checkForCollision();
     }
