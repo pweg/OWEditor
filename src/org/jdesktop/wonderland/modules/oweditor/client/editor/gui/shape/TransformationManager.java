@@ -54,6 +54,8 @@ public class TransformationManager {
 
     public void scale(Point p){
         ShapeObjectBorder border = smi.getShapeBorder();
+
+        byte clicked = border.getCurrentClicked();
         
         int x = border.getX();
         int y = border.getY();
@@ -61,38 +63,92 @@ public class TransformationManager {
         double width = border.getWidth();
         double height = border.getHeight();
         
-        double new_width = p.x - x;
-        double new_height = p.y - y;
+        double new_width = 0;
+        double new_height = 0;
         
-        double scale_x = new_width/width;
-        double scale_y = new_height/height;
-        
-        double scale = Math.max(Math.abs(scale_x), Math.abs(scale_y));
-        System.out.println(scale_x + " xscalele");
-        System.out.println(scale_y + " yscalele");
-        
-        byte clicked = border.getCurrentClicked();
+        double scale_x = 0;
+        double scale_y = 0;
 
+        
+        switch(clicked){
+            case(ShapeObjectBorder.UPPERLEFT):
+                new_width = p.x - (x+width);
+                new_height = p.y - (y+height);
+                scale_x = new_width/width;
+                scale_y = new_height/height;
+
+                scale_x = Math.min(0, scale_x);
+                scale_y = Math.min(0, scale_y);
+                break;
+            case(ShapeObjectBorder.UPPERRIGHT):
+                new_width = p.x - x;
+                new_height = p.y - (y+height);
+                scale_x = new_width/width;
+                scale_y = new_height/height;
+
+                scale_x = Math.max(0, scale_x);
+                scale_y = Math.min(0, scale_y);
+                break;
+            case(ShapeObjectBorder.BOTTOMLEFT):
+                new_width = p.x - (x+width);
+                new_height = p.y - y;
+                scale_x = new_width/width;
+                scale_y = new_height/height;
+
+                scale_x = Math.min(0, scale_x);
+                scale_y = Math.max(0, scale_y);
+                break;
+            case(ShapeObjectBorder.BOTTOMRIGHT):
+                new_width = p.x - x;
+                new_height = p.y - y;
+                scale_x = new_width/width;
+                scale_y = new_height/height;
+                
+                scale_x = Math.max(0, scale_x);
+                scale_y = Math.max(0, scale_y);
+                break;
+            default:
+                return;
+                
+        }
+        
+        double distance = 0;
+        double scale = 0;
+
+        scale_x = Math.abs(scale_x);
+        scale_y = Math.abs(scale_y);
+        
+        if(scale_x > scale_y){
+            distance = Math.abs(new_width);
+            scale = Math.abs(scale_x);
+        }else{
+            distance = Math.abs(new_height);
+            scale = Math.abs(scale_y);
+        }
+        
+        if(scale < 0.1)
+            return;
+        
         
         double distance_x = 0;
         double distance_y = 0;
                 
         switch(clicked){
             case(ShapeObjectBorder.UPPERLEFT):
-                distance_x = (x*scale) - x;
-                distance_y = (y*scale) - y;
+                distance_x = (distance - width);
+                distance_y = (distance - height);
                 break;
             case(ShapeObjectBorder.UPPERRIGHT):
-                distance_x = x - (x*scale);
-                distance_y = (y*scale) - y;
+                distance_x = 0;
+                distance_y = distance - height;
                 break;
             case(ShapeObjectBorder.BOTTOMLEFT):
-                distance_x = (x*scale) - x;
-                distance_y = y - (y*scale);
+                distance_x = distance - width;
+                distance_y = 0;
                 break;
             case(ShapeObjectBorder.BOTTOMRIGHT):
-                distance_x = x - (x*scale);
-                distance_y = y - (y*scale);
+                distance_x = 0;
+                distance_y = 0;
                 break;
             default:
                 return;
@@ -138,6 +194,11 @@ public class TransformationManager {
 
     public void setRotationCenterUpdate(ShapeObjectBorder border) {
         border.setRotationCenterUpdate();
+    }
+
+    public void scaleUpdate() {
+        ShapeObjectBorder border = smi.getShapeBorder();
+        border.updateTranslation();
     }
 
 }

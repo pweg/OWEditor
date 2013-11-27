@@ -7,6 +7,7 @@ import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.NoninvertibleTransformException;
+import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.GUISettings;
@@ -45,24 +46,30 @@ public class ShapeObjectBorder extends SimpleShapeObject{
     private byte mode = 0;
     
     private double rotation = 0;
-    private double scale = 1;
-    private double distance_x = 0;
-    private double distance_y = 0;
+    
+    private double realScale = 1;
+    private double workingScale = 1;
+    
+    private double distanceX = 0;
+    private double distanceY = 0;
+
+    private double initialScaleX = 0;
+    private double initialScaleY = 0;
     
     
     public ShapeObjectBorder(int x, int y, int width, int height, AffineTransform at,
             byte mode){
         this.mode = mode;
         
-        double scaleX = at.getScaleX();
-        double scaleY = at.getScaleY();
+        initialScaleX = at.getScaleX();
+        initialScaleY = at.getScaleY();
         
         AffineTransform transform = new AffineTransform();
-        transform.scale(scaleX, scaleY);
+        transform.scale(initialScaleX, initialScaleY);
         
         
-        tinySizeHalf = (int) Math.round(tinySize/scaleX/2);
-        tinySize = (int) Math.round(tinySize/scaleX);
+        tinySizeHalf = (int) Math.round(tinySize/2);
+        tinySize = (int) Math.round(tinySize);
 
         tinyShapes = new ArrayList<Shape>();
         transformedTinyShapes = new ArrayList<Shape>();
@@ -78,26 +85,8 @@ public class ShapeObjectBorder extends SimpleShapeObject{
         y = y-margin;
         originalShape = new Rectangle (x, y, width+2*margin, height+2*margin);
         originalShape = transform.createTransformedShape(originalShape);
-                
-        Shape tiny = new Rectangle(x-tinySizeHalf,y-tinySizeHalf,tinySize,tinySize);
-        tiny = transform.createTransformedShape(tiny);
-        tinyShapes.add(tiny);
-        
-        Shape tiny2 = new Rectangle(x+width+margin*2-tinySizeHalf,y-tinySizeHalf,
-                tinySize,tinySize);
-        tiny2 = transform.createTransformedShape(tiny2);
-        tinyShapes.add(tiny2);
-        
-        Shape tiny3 = new Rectangle(x-tinySizeHalf,y+height+margin*2
-                -tinySizeHalf,tinySize,tinySize);
-        tiny3 = transform.createTransformedShape(tiny3);
-        tinyShapes.add(tiny3);
-        
-        Shape tiny4 = new Rectangle(x+width+margin*2-tinySizeHalf,
-                y+height+margin*2-tinySizeHalf,tinySize,tinySize);
-        tiny4 = transform.createTransformedShape(tiny4);
-        tinyShapes.add(tiny4);
 
+        setTinyRectangle(originalShape, tinyShapes);
     }
     
     @Override
@@ -116,12 +105,11 @@ public class ShapeObjectBorder extends SimpleShapeObject{
         g.setPaint(color);  
         
         AffineTransform transform = new AffineTransform();
-        transform.scale(scale, scale);
+        transform.scale(workingScale, workingScale);
         transform.rotate(Math.toRadians(rotation), 
                 rotationCenter.getBounds().getCenterX(), 
                 rotationCenter.getBounds().getCenterY());
         transformedShape = transform.createTransformedShape(originalShape);
-        
         
         transformedTinyShapes.clear();
         
@@ -131,7 +119,8 @@ public class ShapeObjectBorder extends SimpleShapeObject{
         }
         
         try {
-            translate();
+            if(workingScale != 1)
+                translate();
         } catch (NoninvertibleTransformException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -155,47 +144,78 @@ public class ShapeObjectBorder extends SimpleShapeObject{
     }
 
     private void translate() throws NoninvertibleTransformException{
-        AffineTransform transform2 = new AffineTransform();
-        transform2.scale(scale, scale);
-        Shape s = transform2.createTransformedShape(transformedShape);
-        System.out.println("have to be "+s.getBounds().x);
         
-        
-        AffineTransform transform = new AffineTransform();
-        Point point = originalShape.getBounds().getLocation();
-        //transform2.inverseTransform(transformedShape.getBounds().getLocation(), point);
-        
-        System.out.println(point.x + " xxxxxxxxxxxxxxxxxxxxx");
+        Point point = originalShape.getBounds().getLocation();        
         
         Rectangle bound = transformedShape.getBounds();
-        
-        transformedShape = new Rectangle(point.x, point.y, bound.width, bound.height);
-        //transformedShape.getBounds().x = point.x;
-        //transformedShape.getBounds().y = point.y;
 
-        System.out.println("Now "+ transformedShape.getBounds().x);
+        int x = (int) Math.round(point.x - distanceX);
+        int y = (int) Math.round(point.y - distanceY);
         
-        transform.translate(distance_x, distance_y);
-        //transformedShape = transform.createTransformedShape(transformedShape);
+        /**
+         * Not the best way to change the shape, but currently the simplest.
+         */
+        transformedShape = new Rectangle(x, y, bound.width, bound.height);
+        setTinyRectangle(transformedShape, transformedTinyShapes);
         
-        int i=0;
-        for(Shape r : transformedTinyShapes){
-            transformedTinyShapes.set(i, transform.createTransformedShape(r));
-            i++;
-        }
-        
-        
-
-        transform2 = new AffineTransform();
-        transform2.scale(scale, scale);
-        s = transform2.createTransformedShape(transformedShape);
-        System.out.println("scaled now " +s.getBounds().x);
     }
     
+    /**
+     * Creates the four tiny rectangles that are at the corners of a
+     * main rectangle. 
+     * 
+     * @param main The main rectangle as a shape instance, where the 
+     * tiny rectangles will sit.
+     * @param list The list, where the rectangles will be saved.
+     */
+    private void setTinyRectangle(Shape main, ArrayList<Shape> list){
+        list.clear();
+        
+        Rectangle bounds = main.getBounds();
+        int x = bounds.x;
+        int y = bounds.y;
+        int width = bounds.width;
+        int height = bounds.height;
+
+        AffineTransform transform = new AffineTransform();
+        transform.scale(initialScaleX, initialScaleY);
+        
+        Shape tiny = new Rectangle(x-tinySizeHalf,y-tinySizeHalf,tinySize,tinySize);
+        list.add(tiny);
+        
+        Shape tiny2 = new Rectangle(x+width+-tinySizeHalf,y-tinySizeHalf,
+                tinySize,tinySize);
+        list.add(tiny2);
+        
+        Shape tiny3 = new Rectangle(x-tinySizeHalf,y+height+
+                -tinySizeHalf,tinySize,tinySize);
+        list.add(tiny3);
+        
+        Shape tiny4 = new Rectangle(x+width-tinySizeHalf,
+                y+height-tinySizeHalf,tinySize,tinySize);
+        list.add(tiny4);
+    }
+    
+    /**
+     * This has to be called, after one scaling operation, in order
+     * to do another scaling and the border not going back to its old
+     * position.
+     */
+    public void updateTranslation(){
+        Rectangle bounds = transformedShape.getBounds();
+        originalShape = new Rectangle(bounds.x, bounds.y, bounds.width, bounds.height);
+        realScale -= (1-workingScale);
+        System.out.println(realScale  + " " + workingScale);
+    }
+    
+    /**
+     * This translates the border, but only after scaling operations have 
+     * been completed. 
+     */
     @Override
     public void setTranslation(double distance_x, double distance_y) { 
-        this.distance_x = distance_x;
-        this.distance_y = distance_y;   
+        this.distanceX = distance_x;
+        this.distanceY = distance_y;   
         
     }
 
@@ -300,7 +320,8 @@ public class ShapeObjectBorder extends SimpleShapeObject{
     }
 
     public void setScale(double scale) {
-        this.scale = scale;
+        //workingScale = workingScale+(scale-this.scale); 
+        this.workingScale = scale;
     }
 
 }

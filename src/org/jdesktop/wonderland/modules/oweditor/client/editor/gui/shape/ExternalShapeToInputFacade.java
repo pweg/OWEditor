@@ -189,8 +189,7 @@ public class ExternalShapeToInputFacade implements ExternalShapeToInputFacadeInt
 
     @Override
     public void scaleUpdate() {
-        // TODO Auto-generated method stub
-        
+        srm.scaleUpdate();
     }
 
     @Override
