@@ -21,6 +21,7 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.GUISettings;
 public class ShapeObjectRectangle extends ShapeObject{
     
     private Rectangle originalShape = null;
+    private Shape scaledShape = null;
     private Shape transformedShape = null;
     private long id = -1;
     private boolean isSelected = false;
@@ -52,6 +53,7 @@ public class ShapeObjectRectangle extends ShapeObject{
         this.name = name;
         this.id = id;
         this.rotation = rotation;
+        this.scale = scale;
     }
     
     @Override
@@ -73,12 +75,11 @@ public class ShapeObjectRectangle extends ShapeObject{
     public void paintOriginal(Graphics2D g, AffineTransform at) {
         g.setPaint(color);  
         
-        AffineTransform transform = new AffineTransform();
-        transform.rotate(Math.toRadians(rotation), 
-                originalShape.getCenterX(), originalShape.getCenterY());
         
-        transformedShape = transform.createTransformedShape(originalShape);
+        scaleInitialShape();
+        rotateInitalShape();
         
+        //image transformation
         transformedShape =  at.createTransformedShape(transformedShape);
         
         g.fill(transformedShape);
@@ -88,6 +89,37 @@ public class ShapeObjectRectangle extends ShapeObject{
             g.setPaint(GUISettings.selectionBorderColor);
         
         g.draw(transformedShape); 
+    }
+    
+    private void scaleInitialShape(){
+        AffineTransform transform = new AffineTransform();
+        transform.scale(scale, scale);
+        
+        scaledShape = transform.createTransformedShape(originalShape);
+        
+        /*
+         * This is to center the whole mess after scaling.
+         */
+        double center_x = originalShape.getBounds().getCenterX();
+        double center_y = originalShape.getBounds().getCenterY();
+
+        int new_width = scaledShape.getBounds().width;
+        int new_height = scaledShape.getBounds().height;
+
+        int new_x = (int) Math.round(center_x-(double)new_width/2);
+        int new_y = (int) Math.round(center_y-(double)new_height/2);
+        
+        scaledShape = new Rectangle(new_x,new_y, new_width, new_height);
+    }
+    
+    private void rotateInitalShape(){
+        
+        AffineTransform transform = new AffineTransform();
+        transform.rotate(Math.toRadians(rotation), 
+                scaledShape.getBounds().getCenterX(), 
+                scaledShape.getBounds().getCenterY());
+        
+        transformedShape = transform.createTransformedShape(scaledShape);
     }
     
     @Override
@@ -106,7 +138,8 @@ public class ShapeObjectRectangle extends ShapeObject{
 
         //You have to create a transformed shape without rotation, or
         //the text will be somewhere else.
-        Shape transformed =  at.createTransformedShape(originalShape);
+        
+        Shape transformed =  at.createTransformedShape(scaledShape);
         Rectangle r = transformed.getBounds();
         int x = (int) (r.getX() + Math.round(nameBoundsX*scale));
         int y = (int) (r.getY() + Math.round(nameBoundsAbove*scale));

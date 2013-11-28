@@ -19,6 +19,7 @@ public class mlScaleStrategy implements mlMouseStrategy {
     public void mouseReleased(Point p) {
         controller.mkListener.removeStrategy();
         controller.shape.scaleUpdate();
+        controller.frame.repaint();
     }
 
     @Override

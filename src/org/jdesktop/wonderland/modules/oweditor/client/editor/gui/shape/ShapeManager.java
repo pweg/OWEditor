@@ -253,6 +253,7 @@ public class ShapeManager {
         shape.setName(dataObject.getName());
         shape.setLocation(dataObject.getX(), dataObject.getY());
         shape.setRotation(dataObject.getRotation());
+        shape.setScale(dataObject.getScale());
     }
     
     public void changeShape(long id, int x, int y, String name){
@@ -317,6 +318,7 @@ public class ShapeManager {
         String name = shape.getName();
         double rotation = shape.getRotation();
         double scale = shape.getScale();
+        System.out.println(scale);
              
         ShapeDraggingObject newShape = null;
         

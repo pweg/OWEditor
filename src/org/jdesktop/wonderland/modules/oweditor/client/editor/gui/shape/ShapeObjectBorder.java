@@ -6,8 +6,6 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
-import java.awt.geom.NoninvertibleTransformException;
-import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.GUISettings;
@@ -104,6 +102,7 @@ public class ShapeObjectBorder extends SimpleShapeObject{
         
         g.setPaint(color);  
         
+        
         AffineTransform transform = new AffineTransform();
         transform.scale(workingScale, workingScale);
         transform.rotate(Math.toRadians(rotation), 
@@ -113,18 +112,17 @@ public class ShapeObjectBorder extends SimpleShapeObject{
         
         transformedTinyShapes.clear();
         
-        for(Shape r : tinyShapes){
-            Shape transformedRect = transform.createTransformedShape(r);
-            transformedTinyShapes.add(transformedRect);
+        
+       
+        if(workingScale != 1){
+             translate();
+        }else{
+            for(Shape r : tinyShapes){
+                Shape transformedRect = transform.createTransformedShape(r);
+                transformedTinyShapes.add(transformedRect);
+            }
         }
         
-        try {
-            if(workingScale != 1)
-                translate();
-        } catch (NoninvertibleTransformException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
 
         g.draw(transformedShape); 
         
@@ -137,20 +135,20 @@ public class ShapeObjectBorder extends SimpleShapeObject{
         }
         
     }
-    
+
     @Override
     public void setLocation(int x, int y) { 
         originalShape.getBounds().setLocation(x, y);
     }
 
-    private void translate() throws NoninvertibleTransformException{
+    private void translate() {
         
         Point point = originalShape.getBounds().getLocation();        
         
         Rectangle bound = transformedShape.getBounds();
 
-        int x = (int) Math.round(point.x - distanceX);
-        int y = (int) Math.round(point.y - distanceY);
+        int x = (int) Math.round((double)point.x - distanceX);
+        int y = (int) Math.round((double)point.y - distanceY);
         
         /**
          * Not the best way to change the shape, but currently the simplest.
@@ -204,8 +202,9 @@ public class ShapeObjectBorder extends SimpleShapeObject{
     public void updateTranslation(){
         Rectangle bounds = transformedShape.getBounds();
         originalShape = new Rectangle(bounds.x, bounds.y, bounds.width, bounds.height);
-        realScale -= (1-workingScale);
-        System.out.println(realScale  + " " + workingScale);
+        realScale -= (1-workingScale)*realScale;
+        setTinyRectangle(originalShape, tinyShapes);
+        workingScale = 1;
     }
     
     /**

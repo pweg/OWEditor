@@ -14,7 +14,7 @@ public class DataObject implements DataObjectInterface{
     private double rotationX = 0;
     private double rotationY = 0;
     private double rotationZ = 0;
-    private double scale = 0;
+    private double scale = 1;
     private long id = 0;
     private float width = 0;
     private float height = 0;

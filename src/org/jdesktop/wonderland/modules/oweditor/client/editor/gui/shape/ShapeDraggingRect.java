@@ -24,6 +24,7 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.GUISettings;
 public class ShapeDraggingRect extends ShapeDraggingObject{
     
     private Shape originalShape = null;
+    private Shape scaledShape = null;
     private Shape transformedShape = null;
     private Paint color = GUISettings.draggingColor;
     private long id = 0;
@@ -67,6 +68,7 @@ public class ShapeDraggingRect extends ShapeDraggingObject{
         
         //This is needed for copy shapes, in order to check for
         //collisions correctly.
+        scaleInitalShape();
         rotateInitialShape();    
     }
     
@@ -92,9 +94,8 @@ public class ShapeDraggingRect extends ShapeDraggingObject{
         //be disturbed. Otherwise the objects will be all over the place.
         g.setPaint(color);
         
+        scaleInitalShape();
         rotateInitialShape();
-        
-        //transformedShape = at.createTransformedShape(transformedShape);
 
         //This is the rotation, when using the rotate opperation.
         if(rotationPoint != null){
@@ -109,15 +110,36 @@ public class ShapeDraggingRect extends ShapeDraggingObject{
         g.draw(transformedShape); 
     }
     
+    private void scaleInitalShape(){
+        AffineTransform transform = new AffineTransform();
+        transform.scale(scale, scale);
+        
+        scaledShape = transform.createTransformedShape(originalShape);
+        
+        /*
+         * This part is for centering the whole mess.
+         */
+        double center_x = originalShape.getBounds().getCenterX();
+        double center_y = originalShape.getBounds().getCenterY();
+
+        int new_width = scaledShape.getBounds().width;
+        int new_height = scaledShape.getBounds().height;
+
+        int new_x = (int) Math.round(center_x-(double)new_width/2);
+        int new_y = (int) Math.round(center_y-(double)new_height/2);
+        
+        scaledShape = new Rectangle(new_x,new_y, new_width, new_height);
+    }
+    
     private void rotateInitialShape(){
         //This is the initial rotation, whether the object was rotated
         //before.
         AffineTransform transform = new AffineTransform();
         
         transform.rotate(Math.toRadians(initialRotation), 
-                originalShape.getBounds().getCenterX(), 
-                originalShape.getBounds().getCenterY());
-        transformedShape = transform.createTransformedShape(originalShape);  
+                scaledShape.getBounds().getCenterX(), 
+                scaledShape.getBounds().getCenterY());
+        transformedShape = transform.createTransformedShape(scaledShape);  
     }
 
     @Override

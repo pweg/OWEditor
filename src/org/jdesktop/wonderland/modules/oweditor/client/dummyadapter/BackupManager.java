@@ -45,14 +45,12 @@ public class BackupManager {
         double rotationY = object.rotationY;
         double rotationZ = object.rotationZ;
 
-        double scaleX = object.scale;
-        double scaleY = object.scaleY;
-        double scaleZ = object.scaleZ;
+        double scale = object.scale;
         
         long id = object.id;
         
         BackupObject bobject = new BackupObject(object, rotationX, rotationY,
-                rotationZ, scaleX, scaleY, scaleZ);
+                rotationZ, scale);
         
         backup.put(id, bobject);
     }

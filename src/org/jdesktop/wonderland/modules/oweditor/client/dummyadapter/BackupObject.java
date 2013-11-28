@@ -10,24 +10,20 @@ public class BackupObject {
     private float translationY = 0;
     private float translationZ = 0;
     
-    private double scaleX = 0;
-    private double scaleY = 0;
-    private double scaleZ = 0;
+    private double scale = 1;
     
     private boolean toDelete = false;
     
     private ServerObject object = null;
     
     public BackupObject(ServerObject object, double rotationX, double rotationY,
-            double rotationZ, double scaleX, double scaleY, double scaleZ){
+            double rotationZ, double scale){
         this.object = object;
         this.rotationX = rotationX;
         this.rotationY = rotationY;
         this.rotationZ = rotationZ;
         
-        this.scaleX = scaleX;
-        this.scaleY = scaleY;
-        this.scaleZ = scaleZ;
+        this.scale = scale;
     }
     
     public void setTranslation(float x, float y, float z){
@@ -64,18 +60,8 @@ public class BackupObject {
         return rotationZ;
     }
     
-    public double getScaleX(){
-        return scaleX;
-    }
-
-    
-    public double getScaleY(){
-        return scaleY;
-    }
-
-    
-    public double getScaleZ(){
-        return scaleZ;
+    public double getScale(){
+        return scale;
     }
     
     public void setDeletion(boolean delete){

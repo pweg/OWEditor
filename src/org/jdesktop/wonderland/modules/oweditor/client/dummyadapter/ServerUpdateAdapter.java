@@ -112,7 +112,7 @@ public class ServerUpdateAdapter {
             object.y = backup.getTranslationY();
             object.z = backup.getTranslationZ();
 
-            object.scale = backup.getScaleX();
+            object.scale = backup.getScale();
 
             object.rotationX = backup.getRotationX();
             object.rotationY = backup.getRotationY();
