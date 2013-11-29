@@ -114,17 +114,8 @@ public class TransformationManager {
         
         double distance = 0;
         double scale = 0;
-
-        scale_x = Math.abs(scale_x);
-        scale_y = Math.abs(scale_y);
         
-        if(scale_x > scale_y){
-            distance = Math.abs(new_width);
-            scale = Math.abs(scale_x);
-        }else{
-            distance = Math.abs(new_height);
-            scale = Math.abs(scale_y);
-        }
+        scale = Math.max(Math.abs(scale_x), Math.abs(scale_y));
         
         if(scale < 0.1)
             return;
@@ -134,20 +125,21 @@ public class TransformationManager {
         System.out.println("width       "+ width + " " + height);
         System.out.println("new width   "+ new_width + " " + new_height);
         System.out.println("Distance    "+ distance);
+        
         double distance_x = 0;
         double distance_y = 0;
                 
         switch(clicked){
             case(ShapeObjectBorder.UPPERLEFT):
-                distance_x = (Math.abs(new_width) - width);
-                distance_y = (Math.abs(new_height) - height);
+                distance_x = (Math.abs(width*scale) - width);
+                distance_y = (Math.abs(height*scale) - height);
                 break;
             case(ShapeObjectBorder.UPPERRIGHT):
                 distance_x = 0;
-                distance_y = Math.abs(new_height) - height;
+                distance_y = Math.abs(height*scale) - height;
                 break;
             case(ShapeObjectBorder.BOTTOMLEFT):
-                distance_x = Math.abs(new_width) - width;
+                distance_x = Math.abs(width*scale) - width;
                 distance_y = 0;
                 break;
             case(ShapeObjectBorder.BOTTOMRIGHT):
