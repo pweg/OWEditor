@@ -6,10 +6,21 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.GUISettings;
 
+/**
+ * This is the class for the border sorounding the selection, when using
+ * rotation or scaling.
+ * 
+ * @author Patrick
+ *
+ * Scaling part is from JFreeReport : a free Java reporting library
+ * found under
+ * http://www.java2s.com/Code/Java/2D-Graphics-GUI/ResizesortranslatesaShape.htm
+ */
 public class ShapeObjectBorder extends SimpleShapeObject{
     
     public static final byte MODEONECENTER   = 0;
@@ -84,7 +95,7 @@ public class ShapeObjectBorder extends SimpleShapeObject{
         originalShape = new Rectangle (x, y, width+2*margin, height+2*margin);
         originalShape = transform.createTransformedShape(originalShape);
 
-        setTinyRectangle(originalShape, tinyShapes);
+        tinyShapes = setTinyRectangle(originalShape);
     }
     
     @Override
@@ -104,7 +115,7 @@ public class ShapeObjectBorder extends SimpleShapeObject{
         
         
         AffineTransform transform = new AffineTransform();
-        transform.scale(workingScale, workingScale);
+        //transform.scale(workingScale, workingScale);
         transform.rotate(Math.toRadians(rotation), 
                 rotationCenter.getBounds().getCenterX(), 
                 rotationCenter.getBounds().getCenterY());
@@ -112,10 +123,10 @@ public class ShapeObjectBorder extends SimpleShapeObject{
         
         transformedTinyShapes.clear();
         
-        
-       
         if(workingScale != 1){
-             translate();
+            //translate();
+            transformedShape = scaleInitalShape(transformedShape);
+            transformedTinyShapes = setTinyRectangle(transformedShape);
         }else{
             for(Shape r : tinyShapes){
                 Shape transformedRect = transform.createTransformedShape(r);
@@ -123,7 +134,6 @@ public class ShapeObjectBorder extends SimpleShapeObject{
             }
         }
         
-
         g.draw(transformedShape); 
         
         for(Shape r : transformedTinyShapes){
@@ -154,8 +164,25 @@ public class ShapeObjectBorder extends SimpleShapeObject{
          * Not the best way to change the shape, but currently the simplest.
          */
         transformedShape = new Rectangle(x, y, bound.width, bound.height);
-        setTinyRectangle(transformedShape, transformedTinyShapes);
+        transformedTinyShapes=setTinyRectangle(transformedShape);
+
         
+    }
+
+    
+    private Shape scaleInitalShape(Shape shape){        
+        Rectangle2D bounds = shape.getBounds2D();
+        AffineTransform af = AffineTransform.getTranslateInstance(0 - bounds.getX(), 0 - bounds.getY());
+        // apply normalisation translation ...
+        Shape s = af.createTransformedShape(shape);
+        af = AffineTransform.getScaleInstance(workingScale, workingScale);
+        // apply scaling ...
+        s = af.createTransformedShape(s);
+
+        // now retranslate the shape to its original position ...
+        af = AffineTransform.getTranslateInstance(bounds.getX()-distanceX, 
+                bounds.getY()-distanceY);
+        return af.createTransformedShape(s);
     }
     
     /**
@@ -166,8 +193,8 @@ public class ShapeObjectBorder extends SimpleShapeObject{
      * tiny rectangles will sit.
      * @param list The list, where the rectangles will be saved.
      */
-    private void setTinyRectangle(Shape main, ArrayList<Shape> list){
-        list.clear();
+    private ArrayList<Shape> setTinyRectangle(Shape main){
+        ArrayList<Shape> list = new ArrayList<Shape>();
         
         Rectangle bounds = main.getBounds();
         int x = bounds.x;
@@ -192,6 +219,8 @@ public class ShapeObjectBorder extends SimpleShapeObject{
         Shape tiny4 = new Rectangle(x+width-tinySizeHalf,
                 y+height-tinySizeHalf,tinySize,tinySize);
         list.add(tiny4);
+        
+        return list;
     }
     
     /**
@@ -200,10 +229,11 @@ public class ShapeObjectBorder extends SimpleShapeObject{
      * position.
      */
     public void updateTranslation(){
-        Rectangle bounds = transformedShape.getBounds();
-        originalShape = new Rectangle(bounds.x, bounds.y, bounds.width, bounds.height);
-        realScale -= (1-workingScale)*realScale;
-        setTinyRectangle(originalShape, tinyShapes);
+        //Rectangle bounds = transformedShape.getBounds();
+        //originalShape = new Rectangle(bounds.x, bounds.y, bounds.width, bounds.height);
+        //realScale -= (1-workingScale)*realScale;
+        originalShape = scaleInitalShape(originalShape);
+        tinyShapes = setTinyRectangle(originalShape);
         workingScale = 1;
     }
     

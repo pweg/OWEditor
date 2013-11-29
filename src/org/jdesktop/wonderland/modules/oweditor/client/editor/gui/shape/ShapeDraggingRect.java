@@ -6,6 +6,7 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Rectangle2D;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.GUISettings;
 
@@ -19,6 +20,10 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.GUISettings;
  * This shape only draws the shape outline and does not fill it.
  * 
  * @author Patrick
+ * 
+ * Scaling part is from JFreeReport : a free Java reporting library
+ * found under
+ * http://www.java2s.com/Code/Java/2D-Graphics-GUI/ResizesortranslatesaShape.htm
  *
  */
 public class ShapeDraggingRect extends ShapeDraggingObject{
@@ -68,8 +73,8 @@ public class ShapeDraggingRect extends ShapeDraggingObject{
         
         //This is needed for copy shapes, in order to check for
         //collisions correctly.
-        scaleInitalShape();
-        rotateInitialShape();    
+        scaledShape = scaleInitalShape(originalShape);
+        transformedShape = rotateInitialShape(scaledShape);    
     }
     
     @Override
@@ -94,13 +99,12 @@ public class ShapeDraggingRect extends ShapeDraggingObject{
         //be disturbed. Otherwise the objects will be all over the place.
         g.setPaint(color);
         
-        scaleInitalShape();
-        rotateInitialShape();
+        scaledShape = scaleInitalShape(originalShape);
+        transformedShape = rotateInitialShape(scaledShape);
 
         //This is the rotation, when using the rotate opperation.
         if(rotationPoint != null){
             AffineTransform transform = new AffineTransform();
-            
             transform.rotate(Math.toRadians(rotation), 
                     rotationPoint.getX(), 
                     rotationPoint.getY());
@@ -110,36 +114,30 @@ public class ShapeDraggingRect extends ShapeDraggingObject{
         g.draw(transformedShape); 
     }
     
-    private void scaleInitalShape(){
-        AffineTransform transform = new AffineTransform();
-        transform.scale(scale, scale);
-        
-        scaledShape = transform.createTransformedShape(originalShape);
-        
-        /*
-         * This part is for centering the whole mess.
-         */
-        double center_x = originalShape.getBounds().getCenterX();
-        double center_y = originalShape.getBounds().getCenterY();
+    private Shape scaleInitalShape(Shape shape){        
+        Rectangle2D bounds = shape.getBounds2D();
+        AffineTransform af = AffineTransform.getTranslateInstance(0 - bounds.getX(), 0 - bounds.getY());
+        // apply normalisation translation ...
+        Shape s = af.createTransformedShape(shape);
 
-        int new_width = scaledShape.getBounds().width;
-        int new_height = scaledShape.getBounds().height;
+        af = AffineTransform.getScaleInstance(scale, scale);
+        // apply scaling ...
+        s = af.createTransformedShape(s);
 
-        int new_x = (int) Math.round(center_x-(double)new_width/2);
-        int new_y = (int) Math.round(center_y-(double)new_height/2);
-        
-        scaledShape = new Rectangle(new_x,new_y, new_width, new_height);
+        // now retranslate the shape to its original position ...
+        af = AffineTransform.getTranslateInstance(bounds.getX(), bounds.getY());
+        return af.createTransformedShape(s);
     }
     
-    private void rotateInitialShape(){
+    private Shape rotateInitialShape(Shape shape){
         //This is the initial rotation, whether the object was rotated
         //before.
         AffineTransform transform = new AffineTransform();
         
         transform.rotate(Math.toRadians(initialRotation), 
-                scaledShape.getBounds().getCenterX(), 
-                scaledShape.getBounds().getCenterY());
-        transformedShape = transform.createTransformedShape(scaledShape);  
+                shape.getBounds().getCenterX(), 
+                shape.getBounds().getCenterY());
+        return transform.createTransformedShape(shape);  
     }
 
     @Override
@@ -152,7 +150,7 @@ public class ShapeDraggingRect extends ShapeDraggingObject{
         AffineTransform transform = new AffineTransform();
         transform.translate(distance_x, distance_y);
         originalShape = transform.createTransformedShape(originalShape);
-        rotateInitialShape();
+        transformedShape = rotateInitialShape(scaledShape);
     }
     
     /**

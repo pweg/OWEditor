@@ -13,9 +13,14 @@ import java.awt.geom.Rectangle2D;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.GUISettings;
 
 /**
- * A class for standard rectangles. 
+ * A class for standard rectangles. The rectangles are used as a 
+ * representation of non-round objects.
  * 
  * @author Patrick
+ * 
+ * Scaling part is from JFreeReport : a free Java reporting library
+ * found under
+ * http://www.java2s.com/Code/Java/2D-Graphics-GUI/ResizesortranslatesaShape.htm
  *
  */
 public class ShapeObjectRectangle extends ShapeObject{
@@ -76,8 +81,8 @@ public class ShapeObjectRectangle extends ShapeObject{
         g.setPaint(color);  
         
         
-        scaleInitialShape();
-        rotateInitalShape();
+        scaledShape = scaleInitialShape(originalShape);
+        transformedShape = rotateInitalShape(scaledShape);
         
         //image transformation
         transformedShape =  at.createTransformedShape(transformedShape);
@@ -91,35 +96,29 @@ public class ShapeObjectRectangle extends ShapeObject{
         g.draw(transformedShape); 
     }
     
-    private void scaleInitialShape(){
-        AffineTransform transform = new AffineTransform();
-        transform.scale(scale, scale);
-        
-        scaledShape = transform.createTransformedShape(originalShape);
-        
-        /*
-         * This is to center the whole mess after scaling.
-         */
-        double center_x = originalShape.getBounds().getCenterX();
-        double center_y = originalShape.getBounds().getCenterY();
+    private Shape scaleInitialShape(Shape shape){
+        Rectangle2D bounds = shape.getBounds2D();
+        AffineTransform af = AffineTransform.getTranslateInstance(0 - bounds.getX(), 0 - bounds.getY());
+        // apply normalisation translation ...
+        Shape s = af.createTransformedShape(shape);
 
-        int new_width = scaledShape.getBounds().width;
-        int new_height = scaledShape.getBounds().height;
+        af = AffineTransform.getScaleInstance(scale, scale);
+        // apply scaling ...
+        s = af.createTransformedShape(s);
 
-        int new_x = (int) Math.round(center_x-(double)new_width/2);
-        int new_y = (int) Math.round(center_y-(double)new_height/2);
-        
-        scaledShape = new Rectangle(new_x,new_y, new_width, new_height);
+        // now retranslate the shape to its original position ...
+        af = AffineTransform.getTranslateInstance(bounds.getX(), bounds.getY());
+        return af.createTransformedShape(s);
     }
     
-    private void rotateInitalShape(){
+    private Shape rotateInitalShape(Shape shape){
         
         AffineTransform transform = new AffineTransform();
         transform.rotate(Math.toRadians(rotation), 
-                scaledShape.getBounds().getCenterX(), 
-                scaledShape.getBounds().getCenterY());
+                shape.getBounds().getCenterX(), 
+                shape.getBounds().getCenterY());
         
-        transformedShape = transform.createTransformedShape(scaledShape);
+        return transform.createTransformedShape(shape);
     }
     
     @Override

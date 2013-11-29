@@ -129,21 +129,25 @@ public class TransformationManager {
         if(scale < 0.1)
             return;
         
-        
+
+        System.out.println("scale       "+ scale_x + " " + scale_y);
+        System.out.println("width       "+ width + " " + height);
+        System.out.println("new width   "+ new_width + " " + new_height);
+        System.out.println("Distance    "+ distance);
         double distance_x = 0;
         double distance_y = 0;
                 
         switch(clicked){
             case(ShapeObjectBorder.UPPERLEFT):
-                distance_x = (distance - width);
-                distance_y = (distance - height);
+                distance_x = (Math.abs(new_width) - width);
+                distance_y = (Math.abs(new_height) - height);
                 break;
             case(ShapeObjectBorder.UPPERRIGHT):
                 distance_x = 0;
-                distance_y = distance - height;
+                distance_y = Math.abs(new_height) - height;
                 break;
             case(ShapeObjectBorder.BOTTOMLEFT):
-                distance_x = distance - width;
+                distance_x = Math.abs(new_width) - width;
                 distance_y = 0;
                 break;
             case(ShapeObjectBorder.BOTTOMRIGHT):
@@ -157,6 +161,9 @@ public class TransformationManager {
 
         border.setScale(scale);
         border.setTranslation(distance_x, distance_y);
+
+        System.out.println("Distances   "+ distance_x + " " + distance_y);
+        System.out.println("------------");
         
         
         //Point rot_center = border.getCenter();
