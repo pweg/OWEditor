@@ -111,20 +111,12 @@ public class TransformationManager {
                 return;
                 
         }
-        
-        double distance = 0;
         double scale = 0;
         
         scale = Math.max(Math.abs(scale_x), Math.abs(scale_y));
         
         if(scale < 0.1)
             return;
-        
-
-        System.out.println("scale       "+ scale_x + " " + scale_y);
-        System.out.println("width       "+ width + " " + height);
-        System.out.println("new width   "+ new_width + " " + new_height);
-        System.out.println("Distance    "+ distance);
         
         double distance_x = 0;
         double distance_y = 0;
@@ -152,23 +144,21 @@ public class TransformationManager {
         }
 
         border.setScale(scale);
-        border.setTranslation(distance_x, distance_y);
-
-        System.out.println("Distances   "+ distance_x + " " + distance_y);
-        System.out.println("------------");
-        
-        
-        //Point rot_center = border.getCenter();
-        
-        //double rotation = getAngle(rot_center, p);
-        
-        //Point edge = border.getEdge();        
-        //double edge_rotation = getAngle(border.getOriginalCenter(), edge);
-        
-        //border.setRotation(rotation-edge_rotation);
+        border.setScaleDistance(distance_x, distance_y);
         
         for(ShapeDraggingObject shape : transformedShapes){
-            //shape.setRotation(rotation-edge_rotation, rot_center);
+            
+            int shapeX = shape.getX();
+            int shapeY = shape.getY();
+            
+            double distanceToBorderX = shapeX-x;
+            double distanceToBorderY = shapeY-y;
+            double newDistanceX = (distance_x+distanceToBorderX)-distanceToBorderX*scale;
+            double newDistanceY = (distance_y+distanceToBorderY)-distanceToBorderY*scale;
+  
+            shape.setScale(scale);
+            shape.setScaleDistance(newDistanceX, 
+                    newDistanceY);
         }
         
     }
@@ -197,7 +187,12 @@ public class TransformationManager {
 
     public void scaleUpdate() {
         ShapeObjectBorder border = smi.getShapeBorder();
-        border.updateTranslation();
+        border.scaleUpdate();
+        
+        for(ShapeDraggingObject shape : transformedShapes){
+            shape.scaleUpdate();
+        }
+        
     }
 
 }

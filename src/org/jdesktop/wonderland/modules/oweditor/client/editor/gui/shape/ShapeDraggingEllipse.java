@@ -162,12 +162,18 @@ public class ShapeDraggingEllipse extends ShapeDraggingObject{
     }
 
     @Override
-    public void setScale(double scale, Point scalePoint) {
+    public void setScale(double scale) {
        this.scale = scale;
     }
 
     @Override
     public double getScale() {
         return scale;
+    }
+
+    @Override
+    public void setScaleDistance(double distanceX, double distanceY) {
+        // TODO Auto-generated method stub
+        
     }
 }

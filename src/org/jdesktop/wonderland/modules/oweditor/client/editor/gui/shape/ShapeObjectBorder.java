@@ -56,11 +56,10 @@ public class ShapeObjectBorder extends SimpleShapeObject{
     
     private double rotation = 0;
     
-    private double realScale = 1;
-    private double workingScale = 1;
+    private double scale = 1;
     
-    private double distanceX = 0;
-    private double distanceY = 0;
+    private double scaleTranslationX = 0;
+    private double scaleTranslationY = 0;
 
     private double initialScaleX = 0;
     private double initialScaleY = 0;
@@ -86,9 +85,12 @@ public class ShapeObjectBorder extends SimpleShapeObject{
         int center_x = (int) Math.round(x+(width/2));
         int center_y = (int) Math.round(y+(height/2));
         
-        rotationCenter = new Rectangle(center_x-tinySizeHalf,
-                center_y-tinySizeHalf,tinySize,tinySize);    
+        rotationCenter = new Rectangle(center_x-(int)Math.round(tinySizeHalf/initialScaleX),
+                center_y-(int)Math.round(tinySizeHalf/initialScaleY),
+                (int) Math.round(tinySize/initialScaleX),
+                (int) Math.round(tinySize/initialScaleY));    
         rotationCenter = transform.createTransformedShape(rotationCenter);
+        //rotationCenter = scaleShape(rotationCenter, initialScaleX, initialScaleY);
 
         x = x-margin;
         y = y-margin;
@@ -113,7 +115,6 @@ public class ShapeObjectBorder extends SimpleShapeObject{
         
         g.setPaint(color);  
         
-        
         AffineTransform transform = new AffineTransform();
         //transform.scale(workingScale, workingScale);
         transform.rotate(Math.toRadians(rotation), 
@@ -123,9 +124,9 @@ public class ShapeObjectBorder extends SimpleShapeObject{
         
         transformedTinyShapes.clear();
         
-        if(workingScale != 1){
+        if(scale != 1){
             //translate();
-            transformedShape = scaleInitalShape(transformedShape);
+            transformedShape = scaleShape(transformedShape, scale,scale);
             transformedTinyShapes = setTinyRectangle(transformedShape);
         }else{
             for(Shape r : tinyShapes){
@@ -150,38 +151,27 @@ public class ShapeObjectBorder extends SimpleShapeObject{
     public void setLocation(int x, int y) { 
         originalShape.getBounds().setLocation(x, y);
     }
-
-    private void translate() {
-        
-        Point point = originalShape.getBounds().getLocation();        
-        
-        Rectangle bound = transformedShape.getBounds();
-
-        int x = (int) Math.round((double)point.x - distanceX);
-        int y = (int) Math.round((double)point.y - distanceY);
-        
-        /**
-         * Not the best way to change the shape, but currently the simplest.
-         */
-        transformedShape = new Rectangle(x, y, bound.width, bound.height);
-        transformedTinyShapes=setTinyRectangle(transformedShape);
-
-        
-    }
-
     
-    private Shape scaleInitalShape(Shape shape){        
+    /**
+     * Scales the shape, without changing its coordinates.
+     * 
+     * @param shape
+     * @param scale
+     * @return
+     */
+    private Shape scaleShape(Shape shape, double scaleX, double scaleY){        
         Rectangle2D bounds = shape.getBounds2D();
-        AffineTransform af = AffineTransform.getTranslateInstance(0 - bounds.getX(), 0 - bounds.getY());
+        AffineTransform af = AffineTransform.getTranslateInstance(0 - bounds.getX(), 
+                0 - bounds.getY());
         // apply normalisation translation ...
         Shape s = af.createTransformedShape(shape);
-        af = AffineTransform.getScaleInstance(workingScale, workingScale);
+        af = AffineTransform.getScaleInstance(scaleX, scaleY);
         // apply scaling ...
         s = af.createTransformedShape(s);
 
         // now retranslate the shape to its original position ...
-        af = AffineTransform.getTranslateInstance(bounds.getX()-distanceX, 
-                bounds.getY()-distanceY);
+        af = AffineTransform.getTranslateInstance(bounds.getX()-scaleTranslationX, 
+                bounds.getY()-scaleTranslationY);
         return af.createTransformedShape(s);
     }
     
@@ -228,33 +218,36 @@ public class ShapeObjectBorder extends SimpleShapeObject{
      * to do another scaling and the border not going back to its old
      * position.
      */
-    public void updateTranslation(){
+    public void scaleUpdate(){
         //Rectangle bounds = transformedShape.getBounds();
         //originalShape = new Rectangle(bounds.x, bounds.y, bounds.width, bounds.height);
         //realScale -= (1-workingScale)*realScale;
-        originalShape = scaleInitalShape(originalShape);
+        originalShape = scaleShape(originalShape, scale,scale);
         tinyShapes = setTinyRectangle(originalShape);
-        workingScale = 1;
+        scale = 1;
     }
     
     /**
      * This translates the border, but only after scaling operations have 
      * been completed. 
      */
-    @Override
-    public void setTranslation(double distance_x, double distance_y) { 
-        this.distanceX = distance_x;
-        this.distanceY = distance_y;   
+    public void setScaleDistance(double distanceX, double distanceY) { 
+        this.scaleTranslationX = distanceX;
+        this.scaleTranslationY = distanceY;   
         
     }
 
-    public void setCenterLocation(int x, int y) { 
-        rotationCenter.getBounds().setLocation(x, y);
-    }
-
-    public void setCenterTranslation(double distance_x, double distance_y) { 
+    /**
+     * Translates the center rectangle, which is used as rotation center.
+     * 
+     * @param distanceX The distance in x direction. The sign should not
+     * be changed, because it will be subtracted.
+     * @param distanceY The distance in y direction. The sign should not
+     * be changed, because it will be subtracted.
+     */
+    public void setCenterTranslation(double distanceX, double distanceY) { 
         AffineTransform transform = new AffineTransform();
-        transform.translate(-distance_x, -distance_y);
+        transform.translate(-distanceX, -distanceY);
         rotationCenter = transform.createTransformedShape(rotationCenter);
     }
 
@@ -350,7 +343,13 @@ public class ShapeObjectBorder extends SimpleShapeObject{
 
     public void setScale(double scale) {
         //workingScale = workingScale+(scale-this.scale); 
-        this.workingScale = scale;
+        this.scale = scale;
+    }
+
+    @Override
+    public void setTranslation(double distance_x, double distance_y) {
+        // TODO Auto-generated method stub
+        
     }
 
 }

@@ -38,8 +38,10 @@ public class ShapeDraggingRect extends ShapeDraggingObject{
     private double lastRotation = 0;
     private Point rotationPoint = null;
     private double initialRotation = 0;
-    
-    private double scale = 0;
+
+    private double initialScale = 1;
+    private double realScale = 1;
+    private double workingScale = 1;
     
     private int initialWidth = 0;
     private int initialHeight = 0;
@@ -47,17 +49,24 @@ public class ShapeDraggingRect extends ShapeDraggingObject{
     private AffineTransform at = null;
     
     private stateDraggingShape state = null;
+
+    private double scaleTranslationX = 0;
+    private double scaleTranslationY = 0;
+    
     
     /**
      * Creates a new dragginRect shape object.
      * 
-     * @param x the x coordinate of the shape.
-     * @param y the y coordinate of the shape.
-     * @param width the width of the shape.
-     * @param height the height of the shape.
-     * @param id the id of the shape. Usually this is the id of the shape which
+     * @param x The x coordinate of the shape.
+     * @param y The y coordinate of the shape.
+     * @param width The width of the shape.
+     * @param height The height of the shape.
+     * @param id The id of the shape. Usually this is the id of the shape which
      *               is copied.
-     * @param scale 
+     * @param rotation The rotation of the shape.
+     * @param scale  The scale of the shape.
+     * @param at     The affine transformation, which was used in the last 
+     * draw cycle. 
      */
     public ShapeDraggingRect(int x, int y, int width, int height, long id, double rotation,
             double scale, AffineTransform at){
@@ -65,7 +74,9 @@ public class ShapeDraggingRect extends ShapeDraggingObject{
         this.id = id;
         this.initialRotation = rotation;
         this.at = at;
-        this.scale = scale;
+        this.initialScale = scale;
+        workingScale = scale;
+        //realScale = scale;
         initialWidth = width;
         initialHeight = height;
         
@@ -73,7 +84,7 @@ public class ShapeDraggingRect extends ShapeDraggingObject{
         
         //This is needed for copy shapes, in order to check for
         //collisions correctly.
-        scaledShape = scaleInitalShape(originalShape);
+        scaledShape = scaleShape(originalShape, initialScale);
         transformedShape = rotateInitialShape(scaledShape);    
     }
     
@@ -99,7 +110,8 @@ public class ShapeDraggingRect extends ShapeDraggingObject{
         //be disturbed. Otherwise the objects will be all over the place.
         g.setPaint(color);
         
-        scaledShape = scaleInitalShape(originalShape);
+        //AffineTransform af = AffineTransform.getScaleInstance(scale, scale);
+        scaledShape = scaleShape(originalShape, workingScale);
         transformedShape = rotateInitialShape(scaledShape);
 
         //This is the rotation, when using the rotate opperation.
@@ -110,13 +122,15 @@ public class ShapeDraggingRect extends ShapeDraggingObject{
                     rotationPoint.getY());
             transformedShape = transform.createTransformedShape(transformedShape);
         }
+
         
         g.draw(transformedShape); 
     }
     
-    private Shape scaleInitalShape(Shape shape){        
+    private Shape scaleShape(Shape shape, double scale){        
         Rectangle2D bounds = shape.getBounds2D();
-        AffineTransform af = AffineTransform.getTranslateInstance(0 - bounds.getX(), 0 - bounds.getY());
+        AffineTransform af = AffineTransform.getTranslateInstance(0 - bounds.getX(), 
+                0 - bounds.getY());
         // apply normalisation translation ...
         Shape s = af.createTransformedShape(shape);
 
@@ -125,7 +139,8 @@ public class ShapeDraggingRect extends ShapeDraggingObject{
         s = af.createTransformedShape(s);
 
         // now retranslate the shape to its original position ...
-        af = AffineTransform.getTranslateInstance(bounds.getX(), bounds.getY());
+        af = AffineTransform.getTranslateInstance(bounds.getX()-scaleTranslationX, 
+                bounds.getY()-scaleTranslationY);
         return af.createTransformedShape(s);
     }
     
@@ -154,7 +169,7 @@ public class ShapeDraggingRect extends ShapeDraggingObject{
     }
     
     /**
-     * Sets up a new rectangle
+     * Is not used for dragging shapes.
      * 
      * @param x the new x coordinate.
      * @param y the new y coordinate.
@@ -184,8 +199,7 @@ public class ShapeDraggingRect extends ShapeDraggingObject{
     @Override
     public int getX() {
         if(state == null){
-            throw new NullPointerException(
-                    "Dragging shape state is null!");
+            return originalShape.getBounds().x;
         }
 
         return state.getX(this, at);
@@ -194,8 +208,7 @@ public class ShapeDraggingRect extends ShapeDraggingObject{
     @Override
     public int getY() {
         if(state == null){
-            throw new NullPointerException(
-                    "Dragging shape state is null!");
+            return originalShape.getBounds().y;
         }
         return state.getY(this, at);
     }
@@ -209,12 +222,6 @@ public class ShapeDraggingRect extends ShapeDraggingObject{
     public int getHeight() {
         return initialHeight;
     }
-
-    /*
-    @Override
-    public String getName() {
-        return "DraggingShape"+id;
-    }*/
 
     @Override
     public void setRotation(double rotation, Point p) {
@@ -248,13 +255,37 @@ public class ShapeDraggingRect extends ShapeDraggingObject{
     }
 
     @Override
-    public void setScale(double scale, Point scalePoint) {
-        this.scale = scale;
+    public void setScale(double scale) {
+        this.workingScale = initialScale*scale;
+        
+        //2,56
+        System.out.println(realScale+ " init");
+        System.out.println(workingScale);
     }
 
     @Override
     public double getScale() {
-        return scale;
+        return workingScale;
+    }
+
+    @Override
+    public void setScaleDistance(double distanceX, double distanceY) {
+        this.scaleTranslationX = distanceX;
+        this.scaleTranslationY = distanceY;  
+        
+    }
+
+    @Override
+    public void scaleUpdate() {
+
+        originalShape = scaleShape(originalShape, workingScale);
+        realScale = (workingScale)*realScale;
+        workingScale = 1;
+        initialScale = 1;
+        scaleTranslationX = 0;
+        scaleTranslationY = 0;
+        System.out.println(realScale+ " init");
+        System.out.println(workingScale + " working");
     }
 
 }

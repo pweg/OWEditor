@@ -170,7 +170,7 @@ public class ExternalShapeToInputFacade implements ExternalShapeToInputFacadeInt
     @Override
     public void scaleInitialize() {
         sm.createDraggingShapes(ssm.getSelection());
-        sm.setShapeStates(new stateDraggingShapeRotation());
+        //sm.setShapeStates(new stateDraggingShapeTranslation());
         
         sm.createShapeBorder(sc.frame.getScale(), 
                 ssm.getSelectionCoords(), ssm.getSelection(),
