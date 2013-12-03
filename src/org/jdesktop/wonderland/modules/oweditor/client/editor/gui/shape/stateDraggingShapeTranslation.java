@@ -9,6 +9,7 @@ public class stateDraggingShapeTranslation implements stateDraggingShape{
     @Override
     public int getX(ShapeDraggingObject shape, AffineTransform at) {
         Shape original = shape.getShape();
+
         try {
             AffineTransform revert_back = at.createInverse();
             Shape transformed = revert_back.createTransformedShape(original);

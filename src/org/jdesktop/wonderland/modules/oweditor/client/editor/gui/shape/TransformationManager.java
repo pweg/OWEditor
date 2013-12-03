@@ -183,6 +183,10 @@ public class TransformationManager {
 
     public void setRotationCenterUpdate(ShapeObjectBorder border) {
         border.setRotationCenterUpdate();
+
+        for(ShapeDraggingObject shape : transformedShapes){
+            shape.setRotationCenterUpdate();
+        }
     }
 
     public void scaleUpdate() {

@@ -10,13 +10,13 @@ import java.awt.Point;
  * @author Patrick
  *
  */
-public class mlDragAndDropStrategy implements mlMouseStrategy{
+public class mlTranslateStrategy implements mlMouseStrategy{
 
     private InputController controller;
     private Point start = new Point();
     private boolean dragging = false;
     
-    public mlDragAndDropStrategy(InputController contr){
+    public mlTranslateStrategy(InputController contr){
         controller = contr;
     }
     
@@ -40,7 +40,6 @@ public class mlDragAndDropStrategy implements mlMouseStrategy{
     @Override
     public void mouseReleased(Point p) {
         dragging = false;
-        
         controller.shape.translateFinished();
         controller.frame.repaint();
     }
@@ -53,6 +52,7 @@ public class mlDragAndDropStrategy implements mlMouseStrategy{
             start.x = p.x;
             start.y = p.y;
         }
+        controller.frame.repaint();
     }
 
     @Override

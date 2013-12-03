@@ -40,7 +40,7 @@ public class TranslationManager {
         int distance_x = start.x - x;
         int distance_y = start.y - y;
 
-        translateDraggingShapes(distance_x*(-1), distance_y*(-1));
+        translateDraggingShapes(-distance_x, -distance_y);
         checkForCollision();
           
         smi.repaint();

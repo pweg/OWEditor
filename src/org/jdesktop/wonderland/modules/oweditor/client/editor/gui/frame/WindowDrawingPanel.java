@@ -29,6 +29,7 @@ public class WindowDrawingPanel extends JPanel implements ChangeListener {
     
     private Dimension size;
     private double scale = 1.0;
+    private MouseCoordinates mouseCoords = null;
       
     private FrameController fc = null;
     
@@ -64,6 +65,7 @@ public class WindowDrawingPanel extends JPanel implements ChangeListener {
 
         size = new Dimension(10,10);  
         setBackground(new Color(255,255,255)); 
+        mouseCoords = new MouseCoordinates();
     } 
     
     /**
@@ -139,6 +141,9 @@ public class WindowDrawingPanel extends JPanel implements ChangeListener {
         g2.setPaint(GUISettings.backgroundColor); 
         
         fc.shapes.drawShapes(g2, at, scale);
+        
+        mouseCoords.paintCoordinates(this, g2, at);
+        
     } 
     
     /**

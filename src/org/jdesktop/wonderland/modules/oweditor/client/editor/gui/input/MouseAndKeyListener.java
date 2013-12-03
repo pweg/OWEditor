@@ -62,7 +62,7 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
                      Point p = e.getPoint();
                         
                      if(ic.shape.isMouseInObject(p)){
-                         strategy = new mlDragAndDropStrategy(ic);
+                         strategy = new mlTranslateStrategy(ic);
                          strategy.mousePressed(e.getPoint());
                      }else{
                          strategy = new mlSelectionRectStrategy(ic);
@@ -132,20 +132,27 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
     }
     
     public void mouseDragged(MouseEvent e) {
-        if(strategy == null)
+        if(strategy == null){
+            ic.frame.repaint();
             return;
+        }
         strategy.mouseDragged(e.getPoint());
+        ic.frame.repaint();
     }
     
     public void mouseMoved(MouseEvent e){
-        if(strategy == null)
+        if(strategy == null){
+            ic.frame.repaint();
             return;
+        }
         strategy.mouseMoved(e.getPoint());
     }
     
     public void mouseReleased(MouseEvent e){
-        if(strategy == null)
+        if(strategy == null){
+            ic.frame.repaint();
             return;
+        }
         strategy.mouseReleased(e.getPoint());
         strategy = null;
     }

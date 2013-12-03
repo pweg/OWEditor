@@ -9,12 +9,14 @@ public class stateDraggingShapeRotation implements stateDraggingShape{
     @Override
     public int getX(ShapeDraggingObject shape, AffineTransform at) {
         Shape original = shape.getShape();
+        System.out.println(original.getBounds().x);
         
         try {
             AffineTransform revert_back = at.createInverse();
             Shape transformed = revert_back.createTransformedShape(original);
             
             double x = transformed.getBounds().getCenterX();
+            System.out.println(x + " xxxx");
 
             return (int) Math.round(x - shape.getWidth()/2);
         } catch (NoninvertibleTransformException e) {

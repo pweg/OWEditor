@@ -169,7 +169,7 @@ public class ShapeDraggingRect extends ShapeDraggingObject{
     }
     
     /**
-     * Is not used for dragging shapes.
+     * NOT IMPLEMENTED for dragging shapes.
      * 
      * @param x the new x coordinate.
      * @param y the new y coordinate.
@@ -247,10 +247,15 @@ public class ShapeDraggingRect extends ShapeDraggingObject{
         AffineTransform transform = new AffineTransform();
         transform.rotate(Math.toRadians(rotation), 
                 rotationPoint.x, rotationPoint.y);
-        
-        originalShape = transform.createTransformedShape(originalShape);
+
+        System.out.println(originalShape.getBounds().x);
+        originalShape = transform.createTransformedShape(scaledShape);
+        System.out.println(originalShape.getBounds().x);
         lastRotation += rotation;
         rotation = 0;
+        realScale = (workingScale)*realScale;
+        workingScale = 1;
+        initialScale = 1;
         
     }
 

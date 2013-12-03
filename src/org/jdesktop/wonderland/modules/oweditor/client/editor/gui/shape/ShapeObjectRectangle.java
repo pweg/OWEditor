@@ -90,10 +90,10 @@ public class ShapeObjectRectangle extends ShapeObject{
         g.fill(transformedShape);
         
         //changes color when selected.
-        if(isSelected)
+        if(isSelected){
             g.setPaint(GUISettings.selectionBorderColor);
-        
-        g.draw(transformedShape); 
+            g.draw(transformedShape); 
+        }
     }
     
     private Shape scaleInitialShape(Shape shape){

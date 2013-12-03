@@ -137,9 +137,6 @@ public class ExternalShapeToInputFacade implements ExternalShapeToInputFacadeInt
     @Override
     public void rotationCenterUpdate() {
         srm.setRotationCenterUpdate(sm.getShapeBorder());
-        for(ShapeDraggingObject shape : sm.getDraggingShapes()){
-            shape.setRotationCenterUpdate();
-        }
     }
 
     @Override

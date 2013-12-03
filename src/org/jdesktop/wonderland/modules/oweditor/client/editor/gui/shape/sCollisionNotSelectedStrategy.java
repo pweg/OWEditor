@@ -39,13 +39,11 @@ public class sCollisionNotSelectedStrategy implements sCollisionStrategy {
                 areaA.intersect(new Area(selected.getTransformedShape()));
 
                 if(selected instanceof ShapeDraggingRect){
-                    ShapeDraggingRect r = (ShapeDraggingRect) selected;
                     if(!areaA.isEmpty()){
-                        is_collision = true;
-                        r.setCollision(true);
+                        selected.setCollision(true);
                         break;
                     }else{
-                        r.setCollision(false);
+                        selected.setCollision(false);
                     }
                 }
             }
