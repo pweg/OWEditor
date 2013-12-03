@@ -28,6 +28,26 @@ public interface GUIObserverInterface {
     
     public void notifyPaste(long id, int x, int y);
 
+    /**
+     * Notifies a simple rotation, which means a rotation around
+     * the y axis. This is the rotation done directly in the 
+     * 2d environment.
+     * 
+     * @param id the object id.
+     * @param x the x coordinate, the object is moved to.
+     * @param y the y coordinate, the object is moved to.
+     * @param rotation the rotation of the object.
+     */
     public void notifyRotation(long id, int x, int y, double rotation);
+
+    /**
+     * Notifies adapter for object scaling.
+     * 
+     * @param id the object id.
+     * @param x the x coordinate, the object is moved to.
+     * @param y the y coordinate, the object is moved to.
+     * @param scale the new scale.
+     */
+    public void notifyScaling(long id, int x, int y, double scale);
 
 }

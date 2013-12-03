@@ -11,7 +11,7 @@ public interface CoordinateTranslatorInterface {
     
     public int transformHeight(float height);
     
-    public double getScale();
+    public double getScale(double scale);
     
     public double getRotation(DataObjectInterface object);
 

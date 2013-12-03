@@ -257,15 +257,11 @@ public class ShapeDraggingRect extends ShapeDraggingObject{
     @Override
     public void setScale(double scale) {
         this.workingScale = initialScale*scale;
-        
-        //2,56
-        System.out.println(realScale+ " init");
-        System.out.println(workingScale);
     }
 
     @Override
     public double getScale() {
-        return workingScale;
+        return realScale;
     }
 
     @Override
@@ -284,8 +280,6 @@ public class ShapeDraggingRect extends ShapeDraggingObject{
         initialScale = 1;
         scaleTranslationX = 0;
         scaleTranslationY = 0;
-        System.out.println(realScale+ " init");
-        System.out.println(workingScale + " working");
     }
 
 }

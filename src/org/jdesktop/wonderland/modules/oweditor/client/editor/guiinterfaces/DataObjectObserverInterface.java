@@ -28,4 +28,6 @@ public interface DataObjectObserverInterface {
     public void notifyChange(long id, int x, int y, String name);
 
     public void notifyRotation(long id, double rotation);
+
+    public void notifyScaling(long id, double scale);
 }

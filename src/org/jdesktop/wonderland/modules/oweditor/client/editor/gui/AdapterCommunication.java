@@ -67,4 +67,9 @@ public class AdapterCommunication implements AdapterCommunicationInterface{
     public void setRotationUpdate(long id, int x, int y, double rotation) {
         goi.notifyRotation(id, x, y, rotation);
     }
+
+    @Override
+    public void setScaleUpdate(long id, int x, int y, double scale) {
+        goi.notifyScaling(id, x, y, scale);
+    }
 }

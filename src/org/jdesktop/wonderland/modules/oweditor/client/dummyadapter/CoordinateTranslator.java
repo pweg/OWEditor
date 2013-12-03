@@ -31,7 +31,7 @@ public class CoordinateTranslator implements CoordinateTranslatorInterface{
     
 
     @Override
-    public double getScale() {
+    public double getScale(double scale) {
         return scale;
     }
 

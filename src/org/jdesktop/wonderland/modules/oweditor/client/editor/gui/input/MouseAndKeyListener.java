@@ -92,9 +92,9 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
                      
                      if(ic.shape.isMouseInBorder(p))
                          strategy = new mlScaleStrategy(ic);
-                     else if (ic.shape.isMouseInBorderCenter(p)){
-                         setRotationCenterStrategy();
-                     }
+                     //else if (ic.shape.isMouseInBorderCenter(p)){
+                     //    setRotationCenterStrategy();
+                     //}
                      if(strategy != null)
                          strategy.mousePressed(p);
                  }
@@ -192,6 +192,9 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
             if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                 if(mode == ROTATE){
                     ic.shape.rotateFinished();
+                    clear();
+                }else if(mode == SCALE){
+                    ic.shape.scaleFinished();
                     clear();
                 }
             }

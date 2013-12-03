@@ -24,4 +24,6 @@ public interface ExternalShapeInterface {
 
     public void updateShapeRotation(long id, double rotation);
 
+    public void updateShapeScale(long id, double scale);
+
 }

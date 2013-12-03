@@ -176,4 +176,10 @@ public class ShapeDraggingEllipse extends ShapeDraggingObject{
         // TODO Auto-generated method stub
         
     }
+
+    @Override
+    public void scaleUpdate() {
+        // TODO Auto-generated method stub
+        
+    }
 }

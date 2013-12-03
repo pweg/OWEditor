@@ -49,11 +49,15 @@ public class ExternalShape implements ExternalShapeInterface{
 
     @Override
     public void updateShapeRotation(long id, double rotation) {
-      
         srm.setRotation(id, rotation);
-        //cleanAll();
         
     }
+
+    @Override
+    public void updateShapeScale(long id, double scale) {
+        srm.setScale(id, scale);
+    }
+
 
     @Override
     public void registerFrameInterface(FrameToShapeInterface frameInterface) {
@@ -75,5 +79,4 @@ public class ExternalShape implements ExternalShapeInterface{
     public ExternalShapeToInputFacadeInterface getInputInterface() {
         return sc.inputInterface;
     }
-
 }

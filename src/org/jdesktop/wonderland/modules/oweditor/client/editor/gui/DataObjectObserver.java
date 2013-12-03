@@ -59,4 +59,10 @@ public class DataObjectObserver implements
         gc.frame.repaint();
     }
 
+    @Override
+    public void notifyScaling(long id, double scale) {
+        gc.shape.updateShapeScale(id, scale);
+        gc.frame.repaint();
+    }
+
 }

@@ -135,4 +135,18 @@ public class ServerUpdateAdapter {
         dui.notifyRotation(id, so.rotationX, so.rotationY ,so.rotationZ);
     }
 
+    public void serverScalingEvent(long id) {
+        if(dui == null){
+            System.out.println("DataInterface is not in the adapter");
+            return;
+        }
+        
+        ServerObject so = ac.ses.getObject(id);
+        
+        if(so == null)
+            return;
+        
+        dui.notifyScaling(id, so.scale);
+    }
+
 }

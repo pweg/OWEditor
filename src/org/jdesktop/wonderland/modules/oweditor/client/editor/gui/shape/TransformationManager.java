@@ -195,4 +195,9 @@ public class TransformationManager {
         
     }
 
+    public void setScale(long id, double scale) {
+        ShapeObject shape = smi.getShape(id);
+        shape.setScale(scale);
+    }
+
 }

@@ -191,4 +191,20 @@ public class DataObjectManager implements DataObjectManagerGUIInterface{
             domo.notifyRotation(id, rotation_new);
     }
 
+    public void updateScale(long id, double scale) {
+        DataObject d = data.get(id);
+        
+        if(d == null)
+            return;
+        
+        scale = ct.getScale(scale);
+        double old_scale = ct.getScale(d.getScale());
+        
+        if(scale != old_scale){
+            domo.notifyScaling(id, scale);
+        }
+        
+        
+    }
+
 }

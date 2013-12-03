@@ -119,13 +119,13 @@ public interface ExternalShapeToInputFacadeInterface {
      */
     public void rotationUpdate();
 
-
     public void scaleInitialize();
-
 
     public void scale(Point p);
 
     public void scaleUpdate();
+
+    public void scaleFinished();
     
     /**
      * Initializes the selection for the 

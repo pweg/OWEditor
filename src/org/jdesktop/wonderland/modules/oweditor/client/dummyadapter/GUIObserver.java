@@ -86,9 +86,20 @@ public class GUIObserver implements GUIObserverInterface{
             return ;
    
         object.rotationX = rotation;
-        
         notifyTranslation(id, x,y);
         ac.sua.serverRotationEvent(id);
+    }
+
+    @Override
+    public void notifyScaling(long id, int x, int y, double scale) {
+        ServerObject object = ac.ses.getObject(id);
+        
+        if(object == null)
+            return ;
+        
+        object.scale = scale;        
+        notifyTranslation(id, x,y);
+        ac.sua.serverScalingEvent(id);
     }
 
 }

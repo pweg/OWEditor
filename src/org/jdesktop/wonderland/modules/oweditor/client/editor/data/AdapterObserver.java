@@ -53,4 +53,9 @@ public class AdapterObserver implements AdapterObserverInterface{
         dm.updateRotation(id,rotationX, rotationY, rotationZ);
     }
 
+    @Override
+    public void notifyScaling(long id, double scale) {
+        dm.updateScale(id, scale);
+    }
+
 }

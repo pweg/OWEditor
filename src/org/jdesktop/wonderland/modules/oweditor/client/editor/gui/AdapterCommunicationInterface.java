@@ -14,4 +14,6 @@ public interface AdapterCommunicationInterface {
     
     public void setRotationUpdate(long id, int x, int y, double rotation);
 
+    public void setScaleUpdate(long id, int x, int y, double scale);
+
 }

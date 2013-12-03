@@ -191,6 +191,18 @@ public class ExternalShapeToInputFacade implements ExternalShapeToInputFacadeInt
     public void scaleUpdate() {
         srm.scaleUpdate();
     }
+    
+    @Override
+    public void scaleFinished(){
+        if(stm.checkForCollision())
+            return;
+        sm.setShapeStates(new stateDraggingShapeTranslation());
+        for(ShapeDraggingObject shape : srm.getTransformedShapes()){
+            long id = shape.getID();
+            adapter.setScaleUpdate(id, shape.getX(), 
+                    shape.getY(), shape.getScale());
+        }
+    }
 
     @Override
     public boolean popupInitialize(Point p) {
