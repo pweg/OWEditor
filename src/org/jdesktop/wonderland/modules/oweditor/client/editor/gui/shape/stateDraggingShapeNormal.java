@@ -4,7 +4,21 @@ import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.NoninvertibleTransformException;
 
-public class stateDraggingShapeTranslation implements stateDraggingShape{
+/**
+ * This method for retrieving the coordinates is used for translation
+ * and scaling.
+ * It calculates the coordinate out of the center using the 
+ * shape dimensions. It reverts back the coordinates to the 
+ * original coordinates. This are the coordinates which are used
+ * by the adapter, BUT ARE NOT THE ACTUAL OBJECT COORDINATES.
+ * For instance, the wonderland server uses the coordinates from
+ * the center of the object. These methods only return the java2d
+ * coordinates, which are on the left top side of a shape. 
+ * 
+ * @author Patrick
+ *
+ */
+public class stateDraggingShapeNormal implements stateDraggingShape{
 
     @Override
     public int getX(ShapeDraggingObject shape, AffineTransform at) {

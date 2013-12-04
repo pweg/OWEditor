@@ -14,19 +14,19 @@ import java.awt.geom.AffineTransform;
 public abstract class SimpleShapeObject {
     
     /**
+     * Returns the original version of the shape.
+     * 
+     * @return The original shape.
+     */
+    public abstract Shape getShape();
+    
+    /**
      * Returns the transformed version of the shape from
      * the last repaint.
      * 
      * @return The transformed shape.
      */
     public abstract Shape getTransformedShape();
-    
-    /**
-     * Returns the original version of the shape.
-     * 
-     * @return The original shape.
-     */
-    public abstract Shape getShape();
     
     /**
      * Transforms and then paints the original shape.
@@ -38,6 +38,7 @@ public abstract class SimpleShapeObject {
     
     /**
      * Sets the location of the shape.
+     * (This function is not implemented for dragging shapes)
      * 
      * @param x the x coordinate.
      * @param y the y coordinate.
@@ -82,6 +83,7 @@ public abstract class SimpleShapeObject {
 
     /**
      * Sets the dimensions and the position of the shape.
+     * (This function is not implemented for dragging shapes)
      * 
      * @param x the x coordinate.
      * @param y the y coordinate.

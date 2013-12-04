@@ -47,10 +47,10 @@ public class ShapeObjectBorder extends SimpleShapeObject{
     private Shape currentClicked = null;
     private byte currentClickedCode = 0;
     
-    private Paint color = GUISettings.surroundingBorderColor;
+    private Paint color = GUISettings.SURROUNDINGBORDERCOLOR;
     
-    private int tinySize = GUISettings.surroundingBorderTinyShapeSize;
-    private int margin = GUISettings.surroundingBorderMargin;
+    private int tinySize = GUISettings.SURROUNDINGBORDEREDGESSIZE;
+    private int margin = GUISettings.SURROUNDINGBORDERMARGIN;
     private int tinySizeHalf = 0;
     private byte mode = 0;
     

@@ -3,22 +3,52 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.shape;
 import java.awt.Point;
 import java.util.ArrayList;
 
+/**
+ * This class is used for transforming shapes, like 
+ * rotation and scaling.
+ * 
+ * @author Patrick
+ *
+ */
 public class TransformationManager {
     
     private InternalShapeMediatorInterface smi = null;
     private ArrayList<ShapeDraggingObject> transformedShapes = null;
     
+    /**
+     * Creates a new TransformationManager instance.
+     * @param smi The internal mediator instance.
+     */
     public TransformationManager(InternalShapeMediatorInterface smi){
         transformedShapes = new ArrayList<ShapeDraggingObject>();
         this.smi = smi;
     }
     
+    /**
+     * Initializes a transformation. Adds all
+     * created dragging shapes to its own list.
+     */
     public void initializeTransformation(){
         transformedShapes.clear();
         transformedShapes.addAll(smi.getDraggingShapes());
-
+    }
+    
+    /**
+     * Returns all transformed shapes.
+     * 
+     * @return A ArrayList containing all transformed shapes.
+     */
+    public ArrayList<ShapeDraggingObject> getTransformedShapes(){
+        return transformedShapes;
     }
 
+    /**
+     * Rotates the shapes in its list.
+     * The point is used to calculate the angle.
+     * 
+     * @param p The  point, which is used to calculate
+     * the rotation angle.
+     */
     public void rotate(Point p){
         ShapeObjectBorder border = smi.getShapeBorder();
         
@@ -36,22 +66,54 @@ public class TransformationManager {
         }
         
     }
-    
-    private double getAngle(Point center, Point p){
-        int x = center.x;
-        int y = center.y;
-        double rotation = 0f;
-        
-        int deltaX = p.x - x;
-        int deltaY = p.y - y;
-        
-        rotation = -Math.atan2(deltaX, deltaY);
-        rotation = Math.toDegrees(rotation)+180;
-        
-        return rotation;
+
+    /**
+     * Sets the rotation of an shape.
+     * 
+     * @param id The id of the shape.
+     * @param rotation The rotation angle.
+     */
+    public void setRotation(long id, double rotation) {
+        ShapeObject shape = smi.getShape(id);
+        shape.setRotation(rotation);
     }
 
+    /**
+     * Translates the rotation center.
+     * 
+     * @param border The border for which its rotation center
+     * should be updated.
+     * @param start The start point of the translation.
+     * @param end The end point of the translation.
+     */
+    public void setRotationCenter(ShapeObjectBorder border, Point start, Point end) {
+        int distance_x = start.x - end.x;
+        int distance_y = start.y - end.y;
+        
+        border.setCenterTranslation(distance_x, distance_y);
+    }
 
+    /**
+     * Updates the rotation center. This means, the original
+     * shape for the border and all dragging shapes is overwritten
+     * in order to make further rotations possible.
+     * 
+     * @param border The border which should be updated.
+     */
+    public void setRotationCenterUpdate(ShapeObjectBorder border) {
+        border.setRotationCenterUpdate();
+
+        for(ShapeDraggingObject shape : transformedShapes){
+            shape.setRotationCenterUpdate();
+        }
+    } 
+    
+    /**
+     * Scales the shapes in its list.
+     * 
+     * @param p The point, which is used to calculate the 
+     * scale.
+     */
     public void scale(Point p){
         ShapeObjectBorder border = smi.getShapeBorder();
 
@@ -69,7 +131,8 @@ public class TransformationManager {
         double scale_x = 0;
         double scale_y = 0;
 
-        
+        //Case for the four different border edges.
+        //(Scale calculation is different for every edge)
         switch(clicked){
             case(ShapeObjectBorder.UPPERLEFT):
                 new_width = p.x - (x+width);
@@ -120,7 +183,9 @@ public class TransformationManager {
         
         double distance_x = 0;
         double distance_y = 0;
-                
+             
+        //Case for the four different border edges.
+        //(Every edge needs different distances)
         switch(clicked){
             case(ShapeObjectBorder.UPPERLEFT):
                 distance_x = (Math.abs(width*scale) - width);
@@ -146,6 +211,10 @@ public class TransformationManager {
         border.setScale(scale);
         border.setScaleDistance(distance_x, distance_y);
         
+        /*
+         * The position for the shapes in the border is calculated
+         * with the distance to the border.
+         */
         for(ShapeDraggingObject shape : transformedShapes){
             
             int shapeX = shape.getX();
@@ -156,39 +225,16 @@ public class TransformationManager {
             double newDistanceX = (distance_x+distanceToBorderX)-distanceToBorderX*scale;
             double newDistanceY = (distance_y+distanceToBorderY)-distanceToBorderY*scale;
   
-            shape.setScale(scale);
-            shape.setScaleDistance(newDistanceX, 
-                    newDistanceY);
+            shape.setScale(scale, newDistanceX, newDistanceY);
         }
         
     }
-    
-    public ArrayList<ShapeDraggingObject> getTransformedShapes(){
-        return transformedShapes;
-    }
 
-    public void setRotation(long id, double rotation) {
-        ShapeObject shape = smi.getShape(id);
-        shape.setRotation(rotation);
-    }
-
-    public void setRotationCenter(ShapeObjectBorder border, Point start, Point end) {
-        int distance_x = start.x - end.x;
-        int distance_y = start.y - end.y;
-        
-        border.setCenterTranslation(distance_x, distance_y);
-        
-        //border.setLocation(x, y);
-    }
-
-    public void setRotationCenterUpdate(ShapeObjectBorder border) {
-        border.setRotationCenterUpdate();
-
-        for(ShapeDraggingObject shape : transformedShapes){
-            shape.setRotationCenterUpdate();
-        }
-    }
-
+    /**
+     * Updates the scale of the border and the dragging shapes,
+     * which means their original shapes are overwritten in order
+     * to do further scale operations.
+     */
     public void scaleUpdate() {
         ShapeObjectBorder border = smi.getShapeBorder();
         border.scaleUpdate();
@@ -196,12 +242,38 @@ public class TransformationManager {
         for(ShapeDraggingObject shape : transformedShapes){
             shape.scaleUpdate();
         }
-        
     }
 
+    /**
+     * Sets the scale of a specific shape.
+     * 
+     * @param id The id of the shape.
+     * @param scale The new scale.
+     */
     public void setScale(long id, double scale) {
         ShapeObject shape = smi.getShape(id);
         shape.setScale(scale);
+    }
+
+    /**
+     * Calculates the rotation angle.
+     * 
+     * @param center The rotation center.
+     * @param p A point.
+     * @return The angle in double.
+     */
+    private double getAngle(Point center, Point p){
+        int x = center.x;
+        int y = center.y;
+        double rotation = 0f;
+        
+        int deltaX = p.x - x;
+        int deltaY = p.y - y;
+        
+        rotation = -Math.atan2(deltaX, deltaY);
+        rotation = Math.toDegrees(rotation)+180;
+        
+        return rotation;
     }
 
 }

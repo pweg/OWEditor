@@ -28,8 +28,8 @@ public class MainFrame extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 
         //f.getContentPane().add(app.getControl(), "Last");  
-        setSize(GUISettings.frameWidth, GUISettings.frameHeight);  
-        setLocation(GUISettings.framePositionX, GUISettings.framePositionY);  
+        setSize(GUISettings.FRAMEWIDTH, GUISettings.FRAMEHEIGHT);  
+        setLocation(GUISettings.FRAMEPOSITIONX, GUISettings.FRAMEPOSITIONY);  
         setTitle(BUNDLE.getString("FrameTitle"));
         setVisible(false); 
     }

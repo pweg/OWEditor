@@ -10,7 +10,14 @@ import java.awt.geom.AffineTransform;
 public class MouseCoordinates {
 
     private Point lastPosition = null;
+    private Font coordFont = null;
+    private Color coordColor = Color.black;
     
+    public MouseCoordinates(Font coordFont, Color coordColor) {
+        this.coordFont = coordFont;
+        this.coordColor = coordColor;
+    }
+
     public void paintCoordinates(WindowDrawingPanel panel, 
             Graphics2D g2, AffineTransform at){
         
@@ -34,13 +41,11 @@ public class MouseCoordinates {
         int x = view.x + 10;
         int y = view.y + view.height-10;
         
-        Font font = new Font("Arial", Font.PLAIN, 12);
-        
-        g2.setFont(font);
-        g2.setPaint(Color.gray);
+        g2.setFont(coordFont);
+        g2.setPaint(coordColor);
 
         g2.drawString("X: " + Math.round(mouse_x) + " Y: " +
-                Math.round(mouse_y) +" " + font.getSize(), x,y);
+                Math.round(mouse_y), x,y);
       
         lastPosition = position;
     }

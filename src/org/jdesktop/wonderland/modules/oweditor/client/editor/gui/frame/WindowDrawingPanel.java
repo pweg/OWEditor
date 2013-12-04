@@ -65,7 +65,8 @@ public class WindowDrawingPanel extends JPanel implements ChangeListener {
 
         size = new Dimension(10,10);  
         setBackground(new Color(255,255,255)); 
-        mouseCoords = new MouseCoordinates();
+        mouseCoords = new MouseCoordinates(GUISettings.COORDFONT,
+                GUISettings.COORDCOLOR);
     } 
     
     /**
@@ -138,7 +139,7 @@ public class WindowDrawingPanel extends JPanel implements ChangeListener {
         AffineTransform at = new AffineTransform();
         at.translate(translationX*scale, translationY*scale); 
         at.scale(scale, scale);  
-        g2.setPaint(GUISettings.backgroundColor); 
+        g2.setPaint(GUISettings.BGCOLOR); 
         
         fc.shapes.drawShapes(g2, at, scale);
         
@@ -152,7 +153,7 @@ public class WindowDrawingPanel extends JPanel implements ChangeListener {
      * @param width the new width.
      */
     public void setNewWidth(int width){
-        size.width = (int)( (width + fc.frame.getWidth()/GUISettings.widthDivisor));
+        size.width = (int)( (width + fc.frame.getWidth()/GUISettings.WIDTHDIVISOR));
         if(size.width < fc.frame.getWidth())
             size.width = fc.frame.getWidth();
         
@@ -165,7 +166,7 @@ public class WindowDrawingPanel extends JPanel implements ChangeListener {
      * @param height the new height.
      */
     public void setNewHeight(int height){
-        size.height = (int)( (height + fc.frame.getHeight()/GUISettings.heightDivisor));
+        size.height = (int)( (height + fc.frame.getHeight()/GUISettings.HEIGHTDIVISOR));
         if(size.height < fc.frame.getHeight())
             size.height = fc.frame.getHeight();
         
@@ -198,7 +199,7 @@ public class WindowDrawingPanel extends JPanel implements ChangeListener {
      */
     public void setNewMinX(int x){
         int curTrans = translationX;
-        translationX = (-x)+ fc.frame.getWidth()/(GUISettings.widthDivisor*2);
+        translationX = (-x)+ fc.frame.getWidth()/(GUISettings.WIDTHDIVISOR*2);
         setViewportSizeChange(translationX-curTrans, 0);
     }
     
@@ -210,7 +211,7 @@ public class WindowDrawingPanel extends JPanel implements ChangeListener {
      */
     public void setNewMinY(int y){
         int curTrans = translationY;
-        translationY = (-y)+ fc.frame.getHeight()/(GUISettings.heightDivisor*2);
+        translationY = (-y)+ fc.frame.getHeight()/(GUISettings.HEIGHTDIVISOR*2);
         setViewportSizeChange(0, translationY-curTrans);
     }
     

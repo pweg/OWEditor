@@ -13,7 +13,7 @@ public class ShapeObjectAvatar extends ShapeObject{
     private long id = 0;
     private Ellipse2D originalShape = null;
     private Shape transformedShape = null;
-    private Paint color = GUISettings.avatarColor;
+    private Paint color = GUISettings.AVATARCOLOR;
     private String name = "";
     
     ShapeObjectAvatar(long id, int x, int y, int width, int height){

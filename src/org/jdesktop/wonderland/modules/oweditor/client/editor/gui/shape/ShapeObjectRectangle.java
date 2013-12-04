@@ -30,16 +30,16 @@ public class ShapeObjectRectangle extends ShapeObject{
     private Shape transformedShape = null;
     private long id = -1;
     private boolean isSelected = false;
-    private Paint color = GUISettings.objectColor;
-    private Paint nameColor = GUISettings.objectNameColor;
+    private Paint color = GUISettings.OBJECTCOLOR;
+    private Paint nameColor = GUISettings.OBJECTNAMECOLOR;
     private String name = "";
     private boolean nameWrapp = false;
     private double rotation = 0;
     private double scale = 0;
     
     //These variables are used to determine, where the name of the object should be.
-    private int nameBoundsX = GUISettings.namePositionInX;
-    private int nameBoundsAbove = GUISettings.namePositionInY;
+    private int nameBoundsX = GUISettings.NAMEPOSITIONINX;
+    private int nameBoundsAbove = GUISettings.NAMEPOSITIONINY;
     
     /**
      * Creates a new ObjectRectangle shape instance.
@@ -91,7 +91,7 @@ public class ShapeObjectRectangle extends ShapeObject{
         
         //changes color when selected.
         if(isSelected){
-            g.setPaint(GUISettings.selectionBorderColor);
+            g.setPaint(GUISettings.SELECTIONCOLOR);
             g.draw(transformedShape); 
         }
     }
@@ -127,12 +127,12 @@ public class ShapeObjectRectangle extends ShapeObject{
         
         //changes color when selected.
         if(isSelected)
-            g.setPaint(GUISettings.selectionBorderColor);
+            g.setPaint(GUISettings.SELECTIONCOLOR);
 
         int screenRes = Toolkit.getDefaultToolkit().getScreenResolution();
-        int font_size = (int)Math.round(GUISettings.objectNameSize*scale * screenRes / 72.0);
+        int font_size = (int)Math.round(GUISettings.OBJECTNAMESIZE*scale * screenRes / 72.0);
 
-        Font font = new Font(GUISettings.objectNameTextType, Font.PLAIN, font_size);        
+        Font font = new Font(GUISettings.OBJECTNAMEFONTTYPE, Font.PLAIN, font_size);        
         g.setFont(font);
 
         //You have to create a transformed shape without rotation, or
@@ -173,9 +173,9 @@ public class ShapeObjectRectangle extends ShapeObject{
         double height = bounds_r.getHeight();
         double xBounds = nameBoundsX*scale;
         
-        if(height+(GUISettings.namePositionInYAdd*scale) > r.height){
-            nameBoundsX = GUISettings.namePositionOutX;
-            nameBoundsAbove = GUISettings.namePositionOutY;
+        if(height+(GUISettings.NAMEPOSITIONINYADD*scale) > r.height){
+            nameBoundsX = GUISettings.NAMEPOSITIONOUTX;
+            nameBoundsAbove = GUISettings.NAMEPOSITIONOUTY;
         }
         
         double max_width = r.width-2*xBounds;
@@ -185,8 +185,8 @@ public class ShapeObjectRectangle extends ShapeObject{
             int cut = (int) Math.round(name.length()*percent/100)-3;
             if(cut <= 1){
                 cut = 3;
-                nameBoundsX = GUISettings.namePositionOutX;
-                nameBoundsAbove = GUISettings.namePositionOutY;
+                nameBoundsX = GUISettings.NAMEPOSITIONOUTX;
+                nameBoundsAbove = GUISettings.NAMEPOSITIONOUTY;
             }
             
             if(cut < name.length())

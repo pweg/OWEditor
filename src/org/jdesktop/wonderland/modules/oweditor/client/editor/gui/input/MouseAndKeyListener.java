@@ -128,7 +128,7 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
          */
         clear();        
         
-        ic.frame.changeScale(GUISettings.zoomSpeed * -(double)e.getWheelRotation());
+        ic.frame.changeScale(GUISettings.ZOOMSPEED * -(double)e.getWheelRotation());
     }
     
     public void mouseDragged(MouseEvent e) {

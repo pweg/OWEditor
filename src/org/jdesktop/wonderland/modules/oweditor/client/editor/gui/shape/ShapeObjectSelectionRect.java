@@ -19,7 +19,7 @@ public class ShapeObjectSelectionRect extends SimpleShapeObject{
     
     private Rectangle originalShape = null;
     private Shape transformedShape = null;
-    private Paint color = GUISettings.selectionRectangleColor;
+    private Paint color = GUISettings.SELECTIONRECTCOLOR;
     
     final static BasicStroke dashed = new BasicStroke(
             1.0f,                      // Width

@@ -25,7 +25,7 @@ public class ShapeDraggingEllipse extends ShapeDraggingObject{
     
     private Ellipse2D originalShape = null;
     private Shape transformedShape = null;
-    private Paint color = GUISettings.draggingColor;
+    private Paint color = GUISettings.DRAGGINGCOLOR;
     private long id;
     private double rotation = 0;
     private double scale = 0;
@@ -46,107 +46,11 @@ public class ShapeDraggingEllipse extends ShapeDraggingObject{
         this.id = id;
         this.rotation = rotation;
     }
-    
-    @Override
-    public Shape getTransformedShape() {
-        return transformedShape;
-    }
-
-    @Override
-    public Ellipse2D getShape() {
-        return originalShape;
-    }
 
     @Override
     public long getID() {
-        return id;
-    }
-
-    @Override
-    public void paintOriginal(Graphics2D g, AffineTransform at) {
-        g.setPaint(color);
-        
-        transformedShape = at.createTransformedShape(originalShape);
-        g.draw(at.createTransformedShape(originalShape)); 
-    }
-
-    @Override
-    public void setLocation(int x, int y) {
-        originalShape.setFrame(x, y, originalShape.getWidth(), originalShape.getHeight());
-    }
-
-    @Override
-    public void setTranslation(double distance_x, double distance_y) {
-        int new_x = (int) Math.round(originalShape.getX()-distance_x);
-        int new_y = (int) Math.round(originalShape.getY()-distance_y);
-        originalShape.setFrame(new_x, new_y, originalShape.getWidth(), originalShape.getHeight());
-        
-    }
-    
-    /**
-     * Sets up a new rectangle
-     * 
-     * @param x the new x coordinate.
-     * @param y the new y coordinate.
-     * @param width the new width.
-     * @param height the new height.
-     */
-    public void set(int x, int y, int width, int height){
-        originalShape.setFrame(x, y, width, height);
-    }
-    
-    /**
-     * Changes color of the shape, when collision is
-     * detected or not.
-     * 
-     * @param col true, when collision is detected,
-     *         false otherwise.
-     */
-    public void setCollision(boolean col){
-
-        if(!col)
-            color = GUISettings.draggingColor;
-        else
-            color = GUISettings.draggingCollisionColor;
-    }
-
-    @Override
-    public int getX() {
-        return (int) originalShape.getX();
-    }
-
-    @Override
-    public int getY() {
-        return (int)originalShape.getY();
-    }
-
-    @Override
-    public int getWidth() {
-        return (int) originalShape.getBounds2D().getWidth();
-    }
-
-    @Override
-    public int getHeight() {
-        return (int) originalShape.getBounds2D().getHeight();
-    }
-
-
-    @Override
-    public double getRotation() {
-        return rotation;
-    }
-
-    @Override
-    public ShapeObject clone() {
         // TODO Auto-generated method stub
-        return null;
-    }
-
-
-    @Override
-    public void setRotation(double rotation, Point p) {
-        // TODO Auto-generated method stub
-        
+        return 0;
     }
 
     @Override
@@ -156,29 +60,109 @@ public class ShapeDraggingEllipse extends ShapeDraggingObject{
     }
 
     @Override
+    public stateDraggingShape getState() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public void setCollision(boolean col) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void setRotation(double rotation, Point p) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public double getRotation() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    @Override
     public void setRotationCenterUpdate() {
         // TODO Auto-generated method stub
         
     }
 
     @Override
-    public void setScale(double scale) {
-       this.scale = scale;
-    }
-
-    @Override
-    public double getScale() {
-        return scale;
-    }
-
-    @Override
-    public void setScaleDistance(double distanceX, double distanceY) {
+    public void setScale(double scale, double distanceX, double distanceY) {
         // TODO Auto-generated method stub
         
     }
 
     @Override
     public void scaleUpdate() {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public double getScale() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    @Override
+    public Shape getShape() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Shape getTransformedShape() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public void paintOriginal(Graphics2D g, AffineTransform at) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void setLocation(int x, int y) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void setTranslation(double distance_x, double distance_y) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public int getX() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    @Override
+    public int getY() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    @Override
+    public int getWidth() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    @Override
+    public int getHeight() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    @Override
+    public void set(int x, int y, int width, int height) {
         // TODO Auto-generated method stub
         
     }

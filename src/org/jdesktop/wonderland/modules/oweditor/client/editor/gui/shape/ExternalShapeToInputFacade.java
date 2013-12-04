@@ -49,7 +49,7 @@ public class ExternalShapeToInputFacade implements ExternalShapeToInputFacadeInt
             ssm.setSelected(shape, true);
         }
         smi.createDraggingShapes(ssm.getSelection());
-        sm.setShapeStates(new stateDraggingShapeTranslation());
+        sm.setShapeStates(new stateDraggingShapeNormal());
     }
     
     @Override
@@ -95,7 +95,7 @@ public class ExternalShapeToInputFacade implements ExternalShapeToInputFacadeInt
     @Override
     public void pasteInitialize() {
         smi.createDraggingShapes(scm.getCopyShapes());
-        sm.setShapeStates(new stateDraggingShapeTranslation());
+        sm.setShapeStates(new stateDraggingShapeNormal());
     }
 
     @Override
@@ -193,7 +193,7 @@ public class ExternalShapeToInputFacade implements ExternalShapeToInputFacadeInt
     public void scaleFinished(){
         if(stm.checkForCollision())
             return;
-        sm.setShapeStates(new stateDraggingShapeTranslation());
+        sm.setShapeStates(new stateDraggingShapeNormal());
         for(ShapeDraggingObject shape : srm.getTransformedShapes()){
             long id = shape.getID();
             adapter.setScaleUpdate(id, shape.getX(), 
