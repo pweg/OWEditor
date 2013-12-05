@@ -171,6 +171,5 @@ public interface DataObjectInterface extends TranslatedObjectInterface{
      * @param type the type of the object
      */
     public void setType(byte type);
-    
 
 }

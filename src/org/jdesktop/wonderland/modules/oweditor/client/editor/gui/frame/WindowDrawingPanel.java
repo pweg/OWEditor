@@ -12,6 +12,7 @@ import java.awt.geom.AffineTransform;
 import javax.swing.JPanel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.CoordinateTranslatorInterface;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.GUISettings;
 
@@ -242,11 +243,8 @@ public class WindowDrawingPanel extends JPanel implements ChangeListener {
         return translationY;
     }
 
-
-    
-   
-    
-    
-   
+    public void setCoordinateTranslator(CoordinateTranslatorInterface coordinateTranslator) {
+        mouseCoords.setCoordinateTranslator(coordinateTranslator);
+    }
      
 }  

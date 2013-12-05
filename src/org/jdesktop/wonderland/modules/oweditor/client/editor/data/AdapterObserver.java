@@ -35,7 +35,7 @@ public class AdapterObserver implements AdapterObserverInterface{
 
     @Override
     public void notifyObjectCreation(DataObjectInterface dataObject) {
-        dm.createNewObject(dataObject);
+        dm.createNewObject((DataObject) dataObject);
     }
 
     public void notifyTranslation(long id, float x, float y, float z) {

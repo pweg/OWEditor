@@ -1,5 +1,6 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.gui;
 
+import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.CoordinateTranslatorInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.GUIObserverInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataObjectManagerGUIInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.frame.Frame;
@@ -92,6 +93,10 @@ public class GUIController implements GUIControllerInterface{
     @Override
     public EnvironmentObserverInterface getEnvironmentObserver() {
         return eo;
+    }
+
+    public void registerCoordinateTranslator(CoordinateTranslatorInterface coordinateTranslator) {
+        frame.setCoordinateTranslator(coordinateTranslator);
     }
     
 

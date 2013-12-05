@@ -16,11 +16,12 @@ public class WonderlandAdapterController implements AdapterControllerMainControl
     
     protected GUIObserver go = null;
     protected CoordinateTranslator ct = null;
-    protected ServerUpdateAdapter sua = null;
+    protected UpdateManager um = null;
     protected TransformListener tl = null;
     protected CellStatusListener csl = null;
     protected BackupManager bm = null;
     protected SessionManager sm = null;
+    protected ServerCommunication sc = null;
     
     public WonderlandAdapterController(){
         
@@ -30,17 +31,18 @@ public class WonderlandAdapterController implements AdapterControllerMainControl
     public void initialize() {
         ct = new CoordinateTranslator();
         go = new GUIObserver(this);
-        sua = new ServerUpdateAdapter(this);
-        tl = new TransformListener(sua);
-        csl = new CellStatusListener(sua);
-        bm = new BackupManager();
+        um = new UpdateManager(this);
+        sc = new ServerCommunication(this);
+        tl = new TransformListener(um);
+        csl = new CellStatusListener(um);
         sm = new SessionManager();
+        bm = new BackupManager(sm);
         CellManager.getCellManager().addCellStatusChangeListener(csl);
     }
 
     @Override
     public void registerDataUpdateInterface(AdapterObserverInterface i) {
-       sua.setDataUpdateInterface(i);
+       um.setDataUpdateInterface(i);
         
     }
 
@@ -51,7 +53,7 @@ public class WonderlandAdapterController implements AdapterControllerMainControl
 
     @Override
     public void getCurrentWorld() {
-        WorldBuilder builder = new WorldBuilder(this, sua);
+        WorldBuilder builder = new WorldBuilder(this, um);
         builder.build();
     }
 

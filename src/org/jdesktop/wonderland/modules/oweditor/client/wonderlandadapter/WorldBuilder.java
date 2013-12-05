@@ -18,7 +18,7 @@ import org.jdesktop.wonderland.client.cell.CellCache;
 public class WorldBuilder {
     
     private UpdateManager sua = null;
-    private AdapterController ac = null;
+    private WonderlandAdapterController ac = null;
     
     private ArrayList<Cell> cells = null;
         private static final Logger LOGGER =
@@ -30,7 +30,7 @@ public class WorldBuilder {
      * @param ac a adapterController instance.
      * @param sua a serverUpdate instance.
      */
-    public WorldBuilder( AdapterController ac, UpdateManager sua){
+    public WorldBuilder( WonderlandAdapterController ac, UpdateManager sua){
         this.sua = sua;
         this.ac = ac;
         cells = new ArrayList<Cell>();

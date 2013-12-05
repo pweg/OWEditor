@@ -36,11 +36,11 @@ public class ServerCommunication {
     private static final ResourceBundle BUNDLE = ResourceBundle.getBundle(
             "org/jdesktop/wonderland/modules/oweditor/client/resources/Bundle");
     
-    private AdapterController ac = null;
+    private WonderlandAdapterController ac = null;
     
     private LinkedHashMap<Long, Integer> copies = null;
     
-    public ServerCommunication(AdapterController ac){
+    public ServerCommunication(WonderlandAdapterController ac){
         this.ac = ac;
         copies = new LinkedHashMap<Long, Integer>();
     }
@@ -187,6 +187,30 @@ public class ServerCommunication {
             cellTransform.setRotation(newRotation);
             movableComponent.localMoveRequest(cellTransform);
         }
+    }
+    
+    public void scale(long id, int x, int y, double scale){
+        
+        CellCache cache = ac.sm.getCellCache();
+        if (cache == null) {
+            LOGGER.log(Level.WARNING, "Unable to find Cell cache for session {0}", ac.sm.getSession());
+            return;
+        }
+        CellID cellid = new CellID(id);
+        Cell cell = cache.getCell(cellid);
+        
+        if(cell == null)
+            return;
+        
+        MovableComponent movableComponent = cell.getComponent(MovableComponent.class);
+        
+        if (movableComponent != null) {
+            CellTransform cellTransform = cell.getLocalTransform();
+            cellTransform.setScaling((float) scale);
+            movableComponent.localMoveRequest(cellTransform);
+        }
+        
+        translate(id, x, y);
     }
     
 }

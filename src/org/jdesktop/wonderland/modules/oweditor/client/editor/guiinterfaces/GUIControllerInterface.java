@@ -1,5 +1,6 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces;
 
+import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.CoordinateTranslatorInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.GUIObserverInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataObjectManagerGUIInterface;
 
@@ -48,7 +49,13 @@ public interface GUIControllerInterface {
      * @param clientUpdateInterface the instance.
      */
     public void registerGUIObserver (GUIObserverInterface clientUpdateInterface);
-    
-    
+
+    /**
+     * Sets the coordinate translator from the adapter package.
+     * This is needed for the correct mouse coordinates.
+     * 
+     * @param coordinateTranslator A coordinateTranslaterInterface.
+     */
+    public void registerCoordinateTranslator(CoordinateTranslatorInterface coordinateTranslator);
 
 }

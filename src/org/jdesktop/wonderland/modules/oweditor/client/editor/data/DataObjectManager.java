@@ -2,11 +2,13 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.data;
 
 import java.awt.Point;
 import java.util.LinkedHashMap;
+import java.util.logging.Logger;
 
 import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.CoordinateTranslatorInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataObjectInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataObjectManagerGUIInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.DataObjectObserverInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter.GUIObserver;
 
 /**
  * Stores, manages anobject creates objectata objects. 
@@ -15,6 +17,9 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.Data
  *
  */
 public class DataObjectManager implements DataObjectManagerGUIInterface{
+    
+    private static final Logger LOGGER =
+            Logger.getLogger(GUIObserver.class.getName());
         
     private DataController dc = null;
     private DataObjectObserverInterface domo = null;
@@ -48,8 +53,9 @@ public class DataObjectManager implements DataObjectManagerGUIInterface{
             float y = dataObject.getYf();
             float widthf = dataObject.getWidthf();
             float heightf = dataObject.getHeightf();
+            float scale = (float)dataObject.getScale();
             
-            Point p = ct.transformCoordinates(x, y, widthf, heightf);
+            Point p = ct.transformCoordinates(x, y, widthf* scale, heightf* scale);
             int width = ct.transformWidth(widthf);
             int height = ct.transformHeight(heightf);
             
@@ -75,17 +81,34 @@ public class DataObjectManager implements DataObjectManagerGUIInterface{
         
         if(object == null)
             return;
-        
-       Point p = ct.transformCoordinates(x, y, object.getWidthf(), object.getHeightf());
-        
-       if(object.getX() != x)
+           
+       float scale = (float)object.getScale();
+       float old_scale = (float) object.getOldScale();
+       
+       Point p = ct.transformCoordinates(x, y, object.getWidthf()*scale, 
+               object.getHeightf()*scale);
+       Point p_old = ct.transformCoordinates(object.getX(), object.getY(), 
+               object.getWidthf()*old_scale, 
+               object.getHeightf()*old_scale);
+       
+       
+       boolean new_coords = false;
+       
+       if(p.x != p_old.x){
            dc.em.setX(p.x, ct.transformWidth(object.getWidthf()));
-       if(object.getX() != y)
+           new_coords = true;
+       }
+       if(p.y != p_old.y){
            dc.em.setY(p.y, ct.transformHeight(object.getHeightf()));
-            
-        object.setCoordinates(x, y, z);
-        
-        domo.notifyTranslation(id, p.x, p.y);
+           new_coords = true;
+       }
+          
+       if(!new_coords){
+           return;
+       }
+       
+       object.setCoordinates(x, y, z);
+       domo.notifyTranslation(id, p.x, p.y);
     }
     
     /**
@@ -117,7 +140,8 @@ public class DataObjectManager implements DataObjectManagerGUIInterface{
             
             DataObject d = data.get(id);
 
-            Point p = ct.transformCoordinates(x, y, d.getWidthf(), d.getHeightf());
+            Point p = ct.transformCoordinates(x, y, d.getWidthf()*(float)scale, 
+                    d.getHeightf()*(float) scale);
             
             if(d.getX() != x)
                 dc.em.setX(p.x, ct.transformWidth(d.getWidthf()));
@@ -201,6 +225,7 @@ public class DataObjectManager implements DataObjectManagerGUIInterface{
         double old_scale = ct.getScale(d.getScale());
         
         if(scale != old_scale){
+            d.setScale(scale);
             domo.notifyScaling(id, scale);
         }
         

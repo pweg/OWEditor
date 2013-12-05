@@ -4,6 +4,7 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseWheelListener;
 
 import javax.swing.event.MouseInputAdapter;
+import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.CoordinateTranslatorInterface;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.input.InputToFrameInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.shape.ExternalShapeToFrameInterface;
@@ -82,6 +83,8 @@ public interface FrameInterface {
     public void setNewMinX(int x);
 
     public void setNewMinY(int y);
+
+    public void setCoordinateTranslator(CoordinateTranslatorInterface coordinateTranslator);
 
     
 

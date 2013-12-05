@@ -7,6 +7,10 @@ public interface CoordinateTranslatorInterface {
     
     public Point transformCoordinates(float x, float y, float width, float height);
     
+    public double transformXBack(double x);
+    
+    public double transformYBack(double y);
+    
     public int transformWidth(float width);
     
     public int transformHeight(float height);

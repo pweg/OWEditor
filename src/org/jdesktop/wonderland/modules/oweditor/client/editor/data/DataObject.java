@@ -15,6 +15,7 @@ public class DataObject implements DataObjectInterface{
     private double rotationY = 0;
     private double rotationZ = 0;
     private double scale = 1;
+    private double oldScale = 1;
     private long id = 0;
     private float width = 0;
     private float height = 0;
@@ -36,7 +37,9 @@ public class DataObject implements DataObjectInterface{
      * @param x the object x coordinate.
      * @param y the object y coordinate.
      * @param z the object z coordinate.
-     * @param rotation the objects rotation.
+     * @param rotationX the object roation in x axis.
+     * @param rotationY the object rotation in y axis.
+     * @param rotationZ the object rotation in z axis.
      * @param scale the objects scale.
      * @param width the objects width.
      * @param height the objects height.
@@ -51,6 +54,8 @@ public class DataObject implements DataObjectInterface{
         this.rotationY = rotationY;
         this.rotationZ = rotationZ;
         this.scale = scale;
+        oldScale = scale;
+        
         this.width = width;
         this.height = height;
         this.name = name;
@@ -152,6 +157,7 @@ public class DataObject implements DataObjectInterface{
 
     @Override
     public void setScale(double scale) {
+        oldScale = this.scale;
         this.scale = scale;
     }
 
@@ -217,6 +223,10 @@ public class DataObject implements DataObjectInterface{
 
     public double getRotation() {
         return rotationX;
+    }
+    
+    public double getOldScale(){
+        return oldScale;
     }
 
 }

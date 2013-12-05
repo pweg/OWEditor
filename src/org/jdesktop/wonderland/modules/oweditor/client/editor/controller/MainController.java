@@ -9,7 +9,7 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.data.DataControlle
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataControllerMainControllerInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.GUIController;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.GUIControllerInterface;
-import org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter.AdapterController;
+import org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter.WonderlandAdapterController;
 
 /**
  * The main controller class is only used to set up the remaining packages
@@ -52,7 +52,7 @@ public class MainController implements MainControllerDataInterface,
                 adapter = new DummyAdapterController();
                 break;
             case 1: 
-                adapter = new AdapterController();
+                adapter = new WonderlandAdapterController();
                 break;
             default:
                 throw new IllegalArgumentException(
@@ -64,6 +64,7 @@ public class MainController implements MainControllerDataInterface,
 
         gui.registerDataManager(data.getDataManagerInterface());
         gui.registerGUIObserver(adapter.getClientUpdateInterface());
+        gui.registerCoordinateTranslator(adapter.getCoordinateTranslator());
         
         data.registerDataObjectObserver(gui.getDataObjectObserver());
         data.registerEnvironmentObserver(gui.getEnvironmentObserver());

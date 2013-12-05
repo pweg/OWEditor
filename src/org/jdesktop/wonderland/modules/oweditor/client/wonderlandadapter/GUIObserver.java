@@ -16,14 +16,14 @@ public class GUIObserver implements GUIObserverInterface{
     private static final Logger LOGGER =
             Logger.getLogger(GUIObserver.class.getName());
     
-    private AdapterController ac = null;    
+    private WonderlandAdapterController ac = null;    
     
     /**
      * Creates a new clientUpdate instance.
      * 
      * @param ac a adpater controller instance.
      */
-    public GUIObserver(AdapterController ac){
+    public GUIObserver(WonderlandAdapterController ac){
         this.ac = ac;
     }
 
@@ -55,5 +55,9 @@ public class GUIObserver implements GUIObserverInterface{
     @Override
     public void notifyRotation(long id, int x, int y, double rotation) {
         ac.sc.rotate(id, x, y, rotation);
+    }
+
+    public void notifyScaling(long id, int x, int y, double scale) {
+        ac.sc.scale(id, x, y, scale);
     }
 }

@@ -25,7 +25,7 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.Dat
  */
 public class CoordinateTranslator implements CoordinateTranslatorInterface{
     
-    private final int scale = AdapterSettings.initalScale;
+    private final int globalScale = AdapterSettings.initalScale;
     private static final Logger LOGGER =
             Logger.getLogger(WorldBuilder.class.getName());
     
@@ -117,6 +117,7 @@ public class CoordinateTranslator implements CoordinateTranslatorInterface{
         
         Vector3f vector = new Vector3f();
         BoundingVolume bounds = cell.getLocalBounds();
+        float scale = CellInfoReader.getScale(cell);
         
          /*
          * Note: OW uses y value for height, not for 2d coordinates,
@@ -124,17 +125,17 @@ public class CoordinateTranslator implements CoordinateTranslatorInterface{
          */        
         if(bounds instanceof BoundingBox){
             BoundingBox box = (BoundingBox) bounds;
-            float xExtent = box.xExtent;
-            float yExtent = box.zExtent;
-            vector.x = (float)(x/scale+xExtent);
-            vector.z = (float)(y/scale+yExtent);
+            float xExtent = box.xExtent*scale;
+            float yExtent = box.zExtent*scale;
+            vector.x = (float)(x/globalScale+xExtent);
+            vector.z = (float)(y/globalScale+yExtent);
             vector.y = z;
             
         }else if(bounds instanceof BoundingSphere){
             BoundingSphere sphere = (BoundingSphere) bounds;
-            float radius = sphere.radius;
-            vector.x = (float)(x/scale+radius);
-            vector.z = (float)(y/scale+radius);
+            float radius = sphere.radius*scale;
+            vector.x = (float)(x/globalScale+radius);
+            vector.z = (float)(y/globalScale+radius);
             vector.y = z;
         }
         return vector;
@@ -144,23 +145,36 @@ public class CoordinateTranslator implements CoordinateTranslatorInterface{
         return new Vector3f(coords.x, coords.z, coords.y);
     }
 
+    @Override
     public Point transformCoordinates(float x, float y, float width, float height) {        
-        int x_int = (int) Math.round((x-width/2)*scale);
-        int y_int = (int) Math.round((y-height/2)*scale);
+        int x_int = (int) Math.round((x-width/2)*globalScale);
+        int y_int = (int) Math.round((y-height/2)*globalScale);
         
         return new Point(x_int, y_int);
     }
 
-    public int transformWidth(float width) {
-        return (int)Math.round(width * scale);
+    @Override
+    public double transformXBack(double x) {
+        return x/globalScale;
     }
 
+    @Override
+    public double transformYBack(double y) {
+        return y/globalScale;
+    }
+
+    @Override
+    public int transformWidth(float width) {
+        return (int)Math.round(width * globalScale);
+    }
+
+    @Override
     public int transformHeight(float height) {
-        return (int)Math.round(height * scale);
+        return (int)Math.round(height * globalScale);
     }
 
     public double getScale() {
-        return scale;
+        return globalScale;
     }
 
     public double getRotation(DataObjectInterface object) {
@@ -197,6 +211,11 @@ public class CoordinateTranslator implements CoordinateTranslatorInterface{
         float rotationY = (float) Math.toRadians(rotation.y);
         
         return new Quaternion(new float[] { rotationX, rotationY, rotationZ });
+    }
+
+    @Override
+    public double getScale(double scale) {
+        return scale;
     }
     
 }

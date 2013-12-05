@@ -20,7 +20,7 @@ public class FrameController {
         frame = new MainFrame();
         
         drawingPan = new WindowDrawingPanel(this);
-        mainScrollPanel = new JScrollPane(drawingPan);
+        mainScrollPanel = new ScrollingPane(drawingPan);
         mainScrollPanel.setWheelScrollingEnabled(false);
         frame.getContentPane().add(mainScrollPanel);
         popupMenu = new WindowPopupMenu();

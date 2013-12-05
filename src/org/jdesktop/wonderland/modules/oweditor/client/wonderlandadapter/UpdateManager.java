@@ -22,7 +22,7 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.Ada
  */
 public class UpdateManager {
     
-    private AdapterController ac = null;
+    private WonderlandAdapterController ac = null;
     private AdapterObserverInterface dui = null;
     
     private ComponentChangeListener componentListener = null;
@@ -36,7 +36,7 @@ public class UpdateManager {
      * 
      * @param ac: the adapter controller instance.
      */
-    public UpdateManager(AdapterController ac){
+    public UpdateManager(WonderlandAdapterController ac){
         this.ac = ac;
         
         componentListener = new ComponentChangeListener() {
@@ -67,7 +67,8 @@ public class UpdateManager {
         }
         
         Vector3fInfo vector = CellInfoReader.getCoordinates(cell);
-        Vector3f rotation = CellInfoReader.getRotation(cell);    
+        Vector3f rotation = CellInfoReader.getRotation(cell); 
+        float scale = CellInfoReader.getScale(cell);
         
         float x =  vector.x;
         float y =  vector.y;
@@ -75,8 +76,9 @@ public class UpdateManager {
         
         long id = CellInfoReader.getID(cell);
         
+        dui.notifyScaling(id,(double) scale); 
         dui.notifyTranslation(id , x, y, z); 
-        dui.notifyRotation(id, rotation.x, rotation.y, rotation.z);        
+        dui.notifyRotation(id, rotation.x, rotation.y, rotation.z);
     }
 
     /**
