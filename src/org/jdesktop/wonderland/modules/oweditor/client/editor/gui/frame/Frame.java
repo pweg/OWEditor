@@ -106,7 +106,7 @@ public class Frame implements FrameInterface{
     }
 
     public void setCoordinateTranslator(CoordinateTranslatorInterface coordinateTranslator) {
-        drawingPan.setCoordinateTranslator(coordinateTranslator);
+        fc.setCoordinateTranslator(coordinateTranslator);
     }
 
 }

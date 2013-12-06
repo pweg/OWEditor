@@ -72,5 +72,9 @@ public class FrameToInput implements FrameToInputInterface {
     public void scrollRectToVisible(Rectangle rect) {
         drawingPan.scrollRectToVisible(rect);
     }
+    @Override
+    public void changeMouseCoords(int x, int y) {
+        fc.mouseCoords.paintCoordinates(drawingPan);
+    }
 
 }

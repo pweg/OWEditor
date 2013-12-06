@@ -2,12 +2,14 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.frame;
 
 import javax.swing.JScrollPane;
 
+import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.CoordinateTranslatorInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.shape.ExternalShapeToFrameInterface;
 
 public class FrameController {
 
     protected JScrollPane mainScrollPanel = null;
     protected WindowDrawingPanel drawingPan = null;
+
     protected ExternalShapeToFrameInterface shapes = null;
     protected WindowPopupMenu popupMenu = null;
     
@@ -16,17 +18,22 @@ public class FrameController {
     protected FrameToShapeInterface shapeInterface = null;
     protected FrameToInputInterface inputInterface = null;
     
+    protected MouseCoordinates mouseCoords = null;
+    
     public FrameController(){
-        frame = new MainFrame();
         
         drawingPan = new WindowDrawingPanel(this);
-        mainScrollPanel = new ScrollingPane(drawingPan);
+        mainScrollPanel = new JScrollPane(drawingPan);
         mainScrollPanel.setWheelScrollingEnabled(false);
-        frame.getContentPane().add(mainScrollPanel);
+
+        frame = new MainFrame(mainScrollPanel);
         popupMenu = new WindowPopupMenu();
         
         shapeInterface = new FrameToShape(drawingPan);
         inputInterface = new FrameToInput(this);
+        
+        mouseCoords = new MouseCoordinates();
+        mouseCoords.setToolBar(frame.getBottomToolBar());
     }
 
     public void repaint() {
@@ -40,6 +47,9 @@ public class FrameController {
     public int getTranslationY() {
         return drawingPan.getTranslationY();
     }
-    
+
+    public void setCoordinateTranslator(CoordinateTranslatorInterface coordinateTranslator) {
+        mouseCoords.setCoordinateTranslator(coordinateTranslator);
+    }
    
 }

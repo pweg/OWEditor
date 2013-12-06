@@ -79,6 +79,8 @@ public interface FrameToInputInterface {
      * @param scale the new scale.
      */
     public void changeScale(double scale);
+    
+    public void changeMouseCoords(int x, int y);
 
 
 }

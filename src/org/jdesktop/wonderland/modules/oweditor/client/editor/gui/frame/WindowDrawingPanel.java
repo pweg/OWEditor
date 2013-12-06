@@ -12,7 +12,6 @@ import java.awt.geom.AffineTransform;
 import javax.swing.JPanel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.CoordinateTranslatorInterface;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.GUISettings;
 
@@ -30,7 +29,6 @@ public class WindowDrawingPanel extends JPanel implements ChangeListener {
     
     private Dimension size;
     private double scale = 1.0;
-    private MouseCoordinates mouseCoords = null;
       
     private FrameController fc = null;
     
@@ -66,8 +64,6 @@ public class WindowDrawingPanel extends JPanel implements ChangeListener {
 
         size = new Dimension(10,10);  
         setBackground(new Color(255,255,255)); 
-        mouseCoords = new MouseCoordinates(GUISettings.COORDFONT,
-                GUISettings.COORDCOLOR);
     } 
     
     /**
@@ -143,8 +139,6 @@ public class WindowDrawingPanel extends JPanel implements ChangeListener {
         g2.setPaint(GUISettings.BGCOLOR); 
         
         fc.shapes.drawShapes(g2, at, scale);
-        
-        mouseCoords.paintCoordinates(this, g2, at);
         
     } 
     
@@ -241,10 +235,6 @@ public class WindowDrawingPanel extends JPanel implements ChangeListener {
     
     public int getTranslationY(){
         return translationY;
-    }
-
-    public void setCoordinateTranslator(CoordinateTranslatorInterface coordinateTranslator) {
-        mouseCoords.setCoordinateTranslator(coordinateTranslator);
     }
      
 }  

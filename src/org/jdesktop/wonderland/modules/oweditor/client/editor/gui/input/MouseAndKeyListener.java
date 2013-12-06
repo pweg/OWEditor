@@ -132,20 +132,21 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
     }
     
     public void mouseDragged(MouseEvent e) {
+        Point p = e.getPoint();
+        ic.frame.changeMouseCoords(p.x, p.y);
         if(strategy == null){
-            ic.frame.repaint();
             return;
         }
-        strategy.mouseDragged(e.getPoint());
-        ic.frame.repaint();
+        strategy.mouseDragged(p);
     }
     
     public void mouseMoved(MouseEvent e){
+        Point p = e.getPoint();
+        ic.frame.changeMouseCoords(p.x, p.y);
         if(strategy == null){
-            ic.frame.repaint();
             return;
         }
-        strategy.mouseMoved(e.getPoint());
+        strategy.mouseMoved(p);
     }
     
     public void mouseReleased(MouseEvent e){

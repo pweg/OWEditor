@@ -1,30 +1,23 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.frame;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Graphics2D;
 import java.awt.Point;
-import java.awt.Rectangle;
-import java.awt.geom.AffineTransform;
 import java.text.DecimalFormat;
+
 import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.CoordinateTranslatorInterface;
 
 public class MouseCoordinates {
 
-    private Point lastPosition = null;
-    private Font coordFont = null;
-    private Color coordColor = Color.black;
     private CoordinateTranslatorInterface translator = null;
+    private BottomToolBar toolBar = null;
+
+    private Point lastPosition = null;
     private DecimalFormat format = null;
     
-    public MouseCoordinates(Font coordFont, Color coordColor) {
-        this.coordFont = coordFont;
-        this.coordColor = coordColor;
-        format = new DecimalFormat("0.00000");
+    public MouseCoordinates() {
+        format = new DecimalFormat("0.000");
     }
 
-    public void paintCoordinates(WindowDrawingPanel panel, 
-            Graphics2D g2, AffineTransform at){
+    public void paintCoordinates(WindowDrawingPanel panel){
         
         Point position = panel.getMousePosition();
         if(position == null)
@@ -41,14 +34,6 @@ public class MouseCoordinates {
         double mouse_x = (position.x/scale - translation_x);
         double mouse_y = (position.y/scale - translation_y);
         
-        Rectangle view = panel.getVisibleRect();
-        
-        int x = view.x + 10;
-        int y = view.y + view.height-10;
-        
-        g2.setFont(coordFont);
-        g2.setPaint(coordColor);
-        
         double real_x = 0;
         double real_y = 0;
         
@@ -59,15 +44,17 @@ public class MouseCoordinates {
             real_x = mouse_x;
             real_y = mouse_y;
         }
-
-        g2.drawString("X: " + RoundDouble(real_x) + " Y: " +
-                RoundDouble(real_y), x,y);
-      
+        
+        toolBar.setCoordinates(RoundDouble(real_x), RoundDouble(real_y));
         lastPosition = position;
     }
 
     public void setCoordinateTranslator(CoordinateTranslatorInterface coordinateTranslator) {
         translator = coordinateTranslator;
+    }
+    
+    public void setToolBar(BottomToolBar toolBar){
+        this.toolBar = toolBar;
     }
     
     private String RoundDouble(double val) {
