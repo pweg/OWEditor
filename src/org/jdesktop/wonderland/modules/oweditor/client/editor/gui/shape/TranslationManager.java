@@ -73,7 +73,7 @@ public class TranslationManager {
      */
     public boolean checkForCollision() {
         if(strategy == null)
-            return true;
+            return false;
         
         return strategy.checkForCollision(smi.getAllShapes(), smi.getDraggingShapes());
     }

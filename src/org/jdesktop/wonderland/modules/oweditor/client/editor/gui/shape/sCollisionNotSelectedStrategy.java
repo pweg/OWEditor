@@ -31,9 +31,12 @@ public class sCollisionNotSelectedStrategy implements sCollisionStrategy {
                 shapes2.add(shape);
             }
         }
-
+        
         boolean is_collision = false;
-        for(ShapeDraggingObject selected : draggingShapes){
+        for(ShapeDraggingObject selected : draggingShapes ){
+            if(is_collision)
+                break;
+            
             for(ShapeObject shape : shapes2){
                 Area areaA = new Area(shape.getTransformedShape());
                 areaA.intersect(new Area(selected.getTransformedShape()));
@@ -41,6 +44,7 @@ public class sCollisionNotSelectedStrategy implements sCollisionStrategy {
                 if(selected instanceof ShapeDraggingRect){
                     if(!areaA.isEmpty()){
                         selected.setCollision(true);
+                        is_collision = true;
                         break;
                     }else{
                         selected.setCollision(false);
