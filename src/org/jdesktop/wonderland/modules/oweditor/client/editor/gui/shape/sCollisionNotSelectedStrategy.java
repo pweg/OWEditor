@@ -34,8 +34,6 @@ public class sCollisionNotSelectedStrategy implements sCollisionStrategy {
         
         boolean is_collision = false;
         for(ShapeDraggingObject selected : draggingShapes ){
-            if(is_collision)
-                break;
             
             for(ShapeObject shape : shapes2){
                 Area areaA = new Area(shape.getTransformedShape());
