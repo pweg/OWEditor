@@ -236,5 +236,12 @@ public class WindowDrawingPanel extends JPanel implements ChangeListener {
     public int getTranslationY(){
         return translationY;
     }
+
+    public AffineTransform getTransformation() {
+        AffineTransform at = new AffineTransform();
+        at.translate(translationX*scale, translationY*scale); 
+        at.scale(scale, scale);  
+        return at;
+    }
      
 }  

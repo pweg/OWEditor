@@ -53,9 +53,9 @@ public class TransformationManager {
     public void rotate(Point p){
         ShapeObjectBorder border = smi.getShapeBorder();
         
-        Point rot_center = border.getTransformedCenter();
+        Point rot_center = border.getOriginalCenter();
         
-        double rotation = getAngle(rot_center, p);
+        double rotation = getAngle(rot_center, smi.revertBack(p));
         
         Point edge = border.getEdge();        
         double edge_rotation = getAngle(border.getOriginalCenter(), edge);
@@ -118,13 +118,13 @@ public class TransformationManager {
      * scale.
      */
     public void scale(Point p){
+        p = smi.revertBack(p);
         ShapeObjectBorder border = smi.getShapeBorder();
 
         byte clicked = border.getCurrentClicked();
         
-        Rectangle bounds = border.getTransformedShape().getBounds();
-        double x = bounds.getX();
-        double y = bounds.getY();
+        double x = border.getX();
+        double y = border.getY();
         
         double width = border.getWidth();
         double height = border.getHeight();
@@ -139,8 +139,11 @@ public class TransformationManager {
         //(Scale calculation is different for every edge)
         switch(clicked){
             case(ShapeObjectBorder.UPPERLEFT):
+                System.out.println(width + " " + height + "size");
+            System.out.println(x + " " + y + "xcy");
                 new_width = p.x - (x+width);
                 new_height = p.y - (y+height);
+                System.out.println(new_width + " " + new_height + "size");
                 scale_x = new_width/width;
                 scale_y = new_height/height;
 
@@ -181,6 +184,8 @@ public class TransformationManager {
         double scale = 0;
         
         scale = Math.max(Math.abs(scale_x), Math.abs(scale_y));
+
+        System.out.println(scale);
         
         if(scale < 0.1)
             return;

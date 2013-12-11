@@ -1,5 +1,6 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.shape;
 
+import java.awt.Point;
 import java.util.ArrayList;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.AdapterCommunicationInterface;
@@ -112,6 +113,11 @@ public class InternalShapeMediator implements InternalShapeMediatorInterface{
     public void registerFrameInterface(
             FrameToShapeInterface frameInterface) {
         this.frame = frameInterface;
+    }
+
+    @Override
+    public Point revertBack(Point p) {
+        return frame.revertBack(p);
     }
     
     

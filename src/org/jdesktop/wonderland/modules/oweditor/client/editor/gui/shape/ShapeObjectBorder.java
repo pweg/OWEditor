@@ -159,11 +159,15 @@ public class ShapeObjectBorder extends SimpleShapeObject{
     }
     
     /**
-     * Scales the shape, without changing its coordinates.
+     * Scales the shape, without changing its coordinates and also
+     * adding the scale translation, which is needed, when the border
+     * needs to move its coordinates in order to give the impression it
+     * is resizing to the mouse point.
      * 
-     * @param shape
-     * @param scale
-     * @return
+     * @param shape The shape to scale
+     * @param scaleX The scale x value.
+     * @param scaleY The scale y value.
+     * @return The scaled shape.
      */
     private Shape scaleShape(Shape shape, double scaleX, double scaleY){        
         Rectangle2D bounds = shape.getBounds2D();
@@ -181,6 +185,15 @@ public class ShapeObjectBorder extends SimpleShapeObject{
         return af.createTransformedShape(s);
     }
     
+    /**
+     * Scales shapes in a way they keep their initial center value.
+     * It does NOT add the scaling translation.
+     * 
+     * @param shape The shape to scale
+     * @param scaleX The scale x value.
+     * @param scaleY The scale y value.
+     * @return The scaled shape.
+     */
     private Shape scaleShapeCenter(Shape shape, double scaleX, double scaleY){
         Rectangle2D bounds = shape.getBounds2D();
         AffineTransform af = AffineTransform.getTranslateInstance(0 - bounds.getX(), 
@@ -198,8 +211,8 @@ public class ShapeObjectBorder extends SimpleShapeObject{
             // now retranslate the shape to its original position ...
             Rectangle2D bounds2 = s.getBounds2D();
             af = AffineTransform.getTranslateInstance(
-                    bounds.getX()-scaleTranslationX-(bounds2.getWidth()/2-bounds.getWidth()/2), 
-                    bounds.getY()-scaleTranslationY-(bounds2.getHeight()/2-bounds.getHeight()/2));
+                    bounds.getX()-(bounds2.getWidth()/2-bounds.getWidth()/2), 
+                    bounds.getY()-(bounds2.getHeight()/2-bounds.getHeight()/2));
             return af.createTransformedShape(s);
         } catch (NoninvertibleTransformException e) {
             // TODO Auto-generated catch block
@@ -344,21 +357,6 @@ public class ShapeObjectBorder extends SimpleShapeObject{
         int x = (int) Math.round(rotationCenter.getBounds().getCenterX());
         int y = (int) Math.round(rotationCenter.getBounds().getCenterY());
         return new Point (x, y);
-    }
-    
-    /**
-     * Returns the transformed rotation center, which uses the coordinates
-     * of the 2d printout. This can be needed when doing rotation including 
-     * mousepoints, because mousepoints do not have to be transformed back
-     * in order to calculate the angle.
-     * @return The transformed rotation center as point.
-     */
-    public Point getTransformedCenter(){
-        int x = (int) Math.round(transformedCenter.getBounds().getCenterX());
-        int y = (int) Math.round(transformedCenter.getBounds().getCenterY());
-        
-        Point p = new Point(x,y);
-        return p;
     }
 
     public Point getEdge(){

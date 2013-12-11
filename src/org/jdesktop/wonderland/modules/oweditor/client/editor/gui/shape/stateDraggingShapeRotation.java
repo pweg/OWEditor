@@ -31,7 +31,8 @@ public class stateDraggingShapeRotation implements stateDraggingShape{
 
             //Bounds have to be used for width, because shape returns the 
             //width of the original shape.
-            return (int) Math.round(x - bounds.getWidth()/2);
+            System.out.println(x - bounds.getWidth()/2*shape.getScale());
+            return (int) Math.round(x - bounds.getWidth()/2*shape.getScale());
         } catch (NoninvertibleTransformException e) {
             e.printStackTrace();
             return 0;
@@ -50,7 +51,7 @@ public class stateDraggingShapeRotation implements stateDraggingShape{
 
             //Bounds have to be used for height, because shape returns the 
             //height of the original shape.
-            return (int) Math.round(y - bounds.getHeight()/2);
+            return (int) Math.round(y - bounds.getHeight()/2*shape.getScale());
             
         } catch (NoninvertibleTransformException e) {
             e.printStackTrace();
