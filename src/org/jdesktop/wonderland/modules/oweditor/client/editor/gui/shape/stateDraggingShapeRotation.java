@@ -1,5 +1,6 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.shape;
 
+import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.NoninvertibleTransformException;
@@ -21,13 +22,16 @@ public class stateDraggingShapeRotation implements stateDraggingShape{
 
     @Override
     public int getX(ShapeDraggingObject shape, AffineTransform at) {
-        Shape original = shape.getShape();
+        Shape original = shape.getTransformedShape();
         try {
             AffineTransform revert_back = at.createInverse();
             Shape transformed = revert_back.createTransformedShape(original);
-            double x = transformed.getBounds().getCenterX();
+            Rectangle bounds = transformed.getBounds();
+            double x = bounds.getCenterX();
 
-            return (int) Math.round(x - shape.getWidth()/2*shape.getScale());
+            //Bounds have to be used for width, because shape returns the 
+            //width of the original shape.
+            return (int) Math.round(x - bounds.getWidth()/2);
         } catch (NoninvertibleTransformException e) {
             e.printStackTrace();
             return 0;
@@ -36,13 +40,17 @@ public class stateDraggingShapeRotation implements stateDraggingShape{
 
     @Override
     public int getY(ShapeDraggingObject shape, AffineTransform at) {
-        Shape original = shape.getShape();
+        Shape original = shape.getTransformedShape();
         try {
             AffineTransform revert_back = at.createInverse();
             Shape transformed = revert_back.createTransformedShape(original);
-            double y = transformed.getBounds().getCenterY();
-        
-            return (int) Math.round(y - shape.getHeight()/2*shape.getScale());
+            Rectangle bounds = transformed.getBounds();
+            double y = bounds.getCenterY();
+
+
+            //Bounds have to be used for height, because shape returns the 
+            //height of the original shape.
+            return (int) Math.round(y - bounds.getHeight()/2);
             
         } catch (NoninvertibleTransformException e) {
             e.printStackTrace();

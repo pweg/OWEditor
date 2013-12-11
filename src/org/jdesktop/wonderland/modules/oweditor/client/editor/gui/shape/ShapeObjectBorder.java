@@ -6,6 +6,7 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.NoninvertibleTransformException;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
@@ -38,6 +39,7 @@ public class ShapeObjectBorder extends SimpleShapeObject{
 
     private Shape originalShape = null;
     private Shape rotationCenter = null;
+    private Shape transformedCenter = null;
     
     private Shape transformedShape = null;
     
@@ -72,8 +74,8 @@ public class ShapeObjectBorder extends SimpleShapeObject{
         initialScaleX = at.getScaleX();
         initialScaleY = at.getScaleY();
         
-        AffineTransform transform = new AffineTransform();
-        transform.scale(initialScaleX, initialScaleY);
+        //AffineTransform transform = new AffineTransform();
+        //transform.scale(initialScaleX, initialScaleY);
         
         
         tinySizeHalf = (int) Math.round(tinySize/2);
@@ -89,13 +91,13 @@ public class ShapeObjectBorder extends SimpleShapeObject{
                 center_y-(int)Math.round(tinySizeHalf/initialScaleY),
                 (int) Math.round(tinySize/initialScaleX),
                 (int) Math.round(tinySize/initialScaleY));    
-        rotationCenter = transform.createTransformedShape(rotationCenter);
+        //rotationCenter = transform.createTransformedShape(rotationCenter);
         //rotationCenter = scaleShape(rotationCenter, initialScaleX, initialScaleY);
 
         x = x-margin;
         y = y-margin;
         originalShape = new Rectangle (x, y, width+2*margin, height+2*margin);
-        originalShape = transform.createTransformedShape(originalShape);
+        //originalShape = transform.createTransformedShape(originalShape);
 
         tinyShapes = setTinyRectangle(originalShape);
     }
@@ -112,7 +114,6 @@ public class ShapeObjectBorder extends SimpleShapeObject{
 
     @Override
     public void paintOriginal(Graphics2D g, AffineTransform at) {
-        
         g.setPaint(color);  
         
         AffineTransform transform = new AffineTransform();
@@ -123,6 +124,8 @@ public class ShapeObjectBorder extends SimpleShapeObject{
         transformedShape = transform.createTransformedShape(originalShape);
         
         transformedTinyShapes.clear();
+
+        transformedShape = at.createTransformedShape(transformedShape);
         
         if(scale != 1){
             //translate();
@@ -131,6 +134,8 @@ public class ShapeObjectBorder extends SimpleShapeObject{
         }else{
             for(Shape r : tinyShapes){
                 Shape transformedRect = transform.createTransformedShape(r);
+                transformedRect = at.createTransformedShape(transformedRect);
+                transformedRect = scaleShapeCenter(transformedRect, at.getScaleX(), at.getScaleY());
                 transformedTinyShapes.add(transformedRect);
             }
         }
@@ -141,8 +146,9 @@ public class ShapeObjectBorder extends SimpleShapeObject{
             g.draw(r);
         }
 
+        transformedCenter = at.createTransformedShape(rotationCenter);
         if(mode != ShapeObjectBorder.MODEALLCENTER){
-            g.draw(rotationCenter); 
+            g.draw(transformedCenter); 
         }
         
     }
@@ -173,6 +179,34 @@ public class ShapeObjectBorder extends SimpleShapeObject{
         af = AffineTransform.getTranslateInstance(bounds.getX()-scaleTranslationX, 
                 bounds.getY()-scaleTranslationY);
         return af.createTransformedShape(s);
+    }
+    
+    private Shape scaleShapeCenter(Shape shape, double scaleX, double scaleY){
+        Rectangle2D bounds = shape.getBounds2D();
+        AffineTransform af = AffineTransform.getTranslateInstance(0 - bounds.getX(), 
+                0 - bounds.getY());
+        // apply normalisation translation ...
+        Shape s = af.createTransformedShape(shape);
+        
+        AffineTransform at = new AffineTransform();
+        at.scale(scaleX, scaleY);
+        try {
+            at = at.createInverse();
+            // apply scaling ...
+            s = at.createTransformedShape(s);
+
+            // now retranslate the shape to its original position ...
+            Rectangle2D bounds2 = s.getBounds2D();
+            af = AffineTransform.getTranslateInstance(
+                    bounds.getX()-scaleTranslationX-(bounds2.getWidth()/2-bounds.getWidth()/2), 
+                    bounds.getY()-scaleTranslationY-(bounds2.getHeight()/2-bounds.getHeight()/2));
+            return af.createTransformedShape(s);
+        } catch (NoninvertibleTransformException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return shape;
+        
     }
     
     /**
@@ -284,7 +318,7 @@ public class ShapeObjectBorder extends SimpleShapeObject{
 
     public byte checkShapes(Point p) {
         
-        if(rotationCenter.contains(p)){
+        if(transformedCenter.contains(p)){
             return ShapeObjectBorder.INROTATIONCENTER;
         }
         int i = 0;
@@ -300,18 +334,33 @@ public class ShapeObjectBorder extends SimpleShapeObject{
         return ShapeObjectBorder.INNOTHING;
     }
     
-    public Point getCenter(){
+    /**
+     * Returns the original rotation center, which uses the coordinates
+     * of the virtual world, except the scaling value. 
+     * This can be needed when doing operations on other shapes.
+     * @return The original rotation center as point.
+     */
+    public Point getOriginalCenter(){
         int x = (int) Math.round(rotationCenter.getBounds().getCenterX());
         int y = (int) Math.round(rotationCenter.getBounds().getCenterY());
+        return new Point (x, y);
+    }
+    
+    /**
+     * Returns the transformed rotation center, which uses the coordinates
+     * of the 2d printout. This can be needed when doing rotation including 
+     * mousepoints, because mousepoints do not have to be transformed back
+     * in order to calculate the angle.
+     * @return The transformed rotation center as point.
+     */
+    public Point getTransformedCenter(){
+        int x = (int) Math.round(transformedCenter.getBounds().getCenterX());
+        int y = (int) Math.round(transformedCenter.getBounds().getCenterY());
         
         Point p = new Point(x,y);
         return p;
     }
-    
-    public Point getOriginalCenter(){
-        return new Point (rotationCenter.getBounds().x, rotationCenter.getBounds().y);
-    }
-    
+
     public Point getEdge(){
         int x = currentClicked.getBounds().x;
         int y = currentClicked.getBounds().y;

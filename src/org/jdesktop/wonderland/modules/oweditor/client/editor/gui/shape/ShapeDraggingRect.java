@@ -73,19 +73,20 @@ public class ShapeDraggingRect extends ShapeDraggingObject{
         originalShape = new Rectangle (x, y, width, height);
         this.id = id;
         this.initialRotation = rotation;
-        this.at = at;
         this.initialScale = scale;
         workingScale = scale;
         //realScale = scale;
         initialWidth = width;
         initialHeight = height;
+        this.at = at;
         
-        originalShape = at.createTransformedShape(originalShape);
+        //originalShape = at.createTransformedShape(originalShape);
         
-        //This is needed for copy shapes, in order to check for
-        //collisions correctly.
+        //This is needed for creating the border around dragging shapes
+        //When the border is created, the shapes still have not been drawn.
         scaledShape = scaleShape(originalShape, initialScale);
-        transformedShape = rotateShape(scaledShape, initialRotation);    
+        transformedShape = rotateShape(scaledShape, initialRotation);  
+        transformedShape = at.createTransformedShape(transformedShape);
     }
 
     @Override
@@ -100,6 +101,7 @@ public class ShapeDraggingRect extends ShapeDraggingObject{
 
     @Override
     public void paintOriginal(Graphics2D g, AffineTransform at) {
+        this.at = at;
         
         //Be advised, the following order of this section should not
         //be disturbed. Otherwise the objects will be all over the place.
@@ -109,7 +111,7 @@ public class ShapeDraggingRect extends ShapeDraggingObject{
         scaledShape = scaleShape(originalShape, workingScale);
         transformedShape = rotateShape(scaledShape, initialRotation);
 
-        //This is the rotation, when using the rotate opperation.
+        //This is the rotation, when using the rotate operation.
         if(rotationCenter != null){
             AffineTransform transform = new AffineTransform();
             transform.rotate(Math.toRadians(rotation), 
@@ -118,7 +120,7 @@ public class ShapeDraggingRect extends ShapeDraggingObject{
             transformedShape = transform.createTransformedShape(transformedShape);
         }
 
-        
+        transformedShape = at.createTransformedShape(transformedShape);
         g.draw(transformedShape); 
     }
 
@@ -134,25 +136,27 @@ public class ShapeDraggingRect extends ShapeDraggingObject{
         AffineTransform transform = new AffineTransform();
         transform.translate(distance_x, distance_y);
         originalShape = transform.createTransformedShape(originalShape);
-        scaledShape = scaleShape(originalShape, initialScale);
-        transformedShape = rotateShape(scaledShape, initialRotation);
+        
+        //scaledShape = scaleShape(originalShape, initialScale);
+        //transformedShape = rotateShape(scaledShape, initialRotation);
+        //transformedShape = at.createTransformedShape(transformedShape);
     }
 
     @Override
     public int getX() {
-        if(state == null){
+        if(state == null)
             return originalShape.getBounds().x;
-        }
-
-        return state.getX(this, at);
+        else
+            return state.getX(this, at);
     }
+    
 
     @Override
     public int getY() {
-        if(state == null){
+        if(state == null)
             return originalShape.getBounds().y;
-        }
-        return state.getY(this, at);
+        else
+            return state.getY(this, at);
     }
 
     @Override

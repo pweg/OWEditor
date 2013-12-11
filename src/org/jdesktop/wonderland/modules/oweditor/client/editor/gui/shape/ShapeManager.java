@@ -318,7 +318,6 @@ public class ShapeManager {
         String name = shape.getName();
         double rotation = shape.getRotation();
         double scale = shape.getScale();
-        System.out.println(scale);
              
         ShapeDraggingObject newShape = null;
         
@@ -367,41 +366,49 @@ public class ShapeManager {
         border = null;
     }
     
-    public void createShapeBorder(double scale, Point coordinates, 
+    public void createShapeBorder(double scale, 
             ArrayList<ShapeObject> shapes, byte mode){
-
-        int min_x = Integer.MAX_VALUE;
-        int max_x = Integer.MIN_VALUE;
-        int min_y = Integer.MAX_VALUE;
-        int max_y = Integer.MIN_VALUE;
                 
+        int min_x = Integer.MAX_VALUE;
+        int min_y = Integer.MAX_VALUE;
+        int max_x = Integer.MIN_VALUE;
+        int max_y = Integer.MIN_VALUE;
+        
         /*
-         * Gets the width and heihgt of the selection
+         * Get the original coordinates and the needed width/height.
+         * The max_x/y have to be done via transformed shape, because
+         * of rotation and scaling, to get the right size of the objects.
+         * The min_x/y are done with original coordinates, because the 
+         * border is later translated/scaled into the right place.
          */
-        for(ShapeObject shape : shapes){
-            Rectangle r = shape.getTransformedShape().getBounds();
+        for(ShapeDraggingObject shape : draggingShapes){
             
-            int x = (int) Math.round(r.x/scale);
-            int y = (int) Math.round(r.y/scale);
+            Rectangle r = shape.getTransformedShape().getBounds();
+            shape.setState(new stateDraggingShapeRotation());
+            
+            int s_x = shape.getX();
+            int s_y = shape.getY();
+            shape.setState(null);
+            
             int width = (int) Math.round(r.width/scale);
             int height = (int) Math.round(r.height/scale);
 
-            if(min_x > x)
-                min_x = x;
-            if(max_x < x+width)
-                max_x = x+width;
-            if(min_y > y)
-                min_y = y;
-            if(max_y < y+height)
-                max_y = y+height;
+            if(s_x < min_x)
+                min_x = s_x;
+            if(s_y < min_y)
+                min_y = s_y;
+            if(max_x < s_x+width)
+                max_x = s_x+width;
+            if(max_y < s_y+height)
+                max_y = s_y+height;
+            
         }
-        
+        int border_x = min_x;
+        int border_y = min_y;
         int width = max_x-min_x;
         int height = max_y-min_y;
 
-        int x = (int) Math.round(coordinates.x/scale);
-        int y = (int) Math.round(coordinates.y/scale);
-        border = new ShapeObjectBorder(x, y, width, height, at,
+        border = new ShapeObjectBorder(border_x, border_y, width, height, at,
                 mode);
     }
     

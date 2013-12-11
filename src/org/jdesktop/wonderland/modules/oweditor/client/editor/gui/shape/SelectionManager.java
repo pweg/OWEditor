@@ -188,25 +188,6 @@ public class SelectionManager {
         
         return new Point(x,y);
     }
-
-    public Point getSelectionCoords(){
-        
-        int min_x = Integer.MAX_VALUE;
-        int min_y = Integer.MAX_VALUE;
-        
-        for(ShapeObject shape : selectedShapes){
-            int s_x = shape.getTransformedShape().getBounds().x;
-            int s_y = shape.getTransformedShape().getBounds().y;
-
-            if(s_x < min_x)
-                min_x = s_x;
-            if(s_y < min_y)
-                min_y = s_y;
-        }
-        
-        return new Point(min_x,min_y);
-    }
-
     
     /**
      * Searches for shape objects which are enclosed by the 

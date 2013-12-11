@@ -1,6 +1,7 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.shape;
 
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.util.ArrayList;
 
 /**
@@ -52,17 +53,17 @@ public class TransformationManager {
     public void rotate(Point p){
         ShapeObjectBorder border = smi.getShapeBorder();
         
-        Point rot_center = border.getCenter();
+        Point rot_center = border.getTransformedCenter();
         
         double rotation = getAngle(rot_center, p);
         
         Point edge = border.getEdge();        
         double edge_rotation = getAngle(border.getOriginalCenter(), edge);
-        
+                
         border.setRotation(rotation-edge_rotation);
         
         for(ShapeDraggingObject shape : transformedShapes){
-            shape.setRotation(rotation-edge_rotation, rot_center);
+            shape.setRotation(rotation-edge_rotation, border.getOriginalCenter());
         }
         
     }
@@ -87,8 +88,10 @@ public class TransformationManager {
      * @param end The end point of the translation.
      */
     public void setRotationCenter(ShapeObjectBorder border, Point start, Point end) {
-        int distance_x = start.x - end.x;
-        int distance_y = start.y - end.y;
+        
+        double scale = smi.getScale();
+        double distance_x = (start.x - end.x)/scale;
+        double distance_y = (start.y - end.y)/scale;
         
         border.setCenterTranslation(distance_x, distance_y);
     }
@@ -119,8 +122,9 @@ public class TransformationManager {
 
         byte clicked = border.getCurrentClicked();
         
-        int x = border.getX();
-        int y = border.getY();
+        Rectangle bounds = border.getTransformedShape().getBounds();
+        double x = bounds.getX();
+        double y = bounds.getY();
         
         double width = border.getWidth();
         double height = border.getHeight();
@@ -210,7 +214,13 @@ public class TransformationManager {
 
         border.setScale(scale);
         border.setScaleDistance(distance_x, distance_y);
-        
+
+        /*
+         * The original border coordinates have to be set, for
+         * the shapes to calculate the right distance.
+         */
+        x = border.getX();
+        y = border.getY();
         /*
          * The position for the shapes in the border is calculated
          * with the distance to the border.
