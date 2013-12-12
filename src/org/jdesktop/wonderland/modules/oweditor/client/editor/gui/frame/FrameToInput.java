@@ -73,8 +73,12 @@ public class FrameToInput implements FrameToInputInterface {
         drawingPan.scrollRectToVisible(rect);
     }
     @Override
-    public void changeMouseCoords(int x, int y) {
+    public void paintMouseCoords(int x, int y) {
         fc.mouseCoords.paintCoordinates(drawingPan);
+    }
+    @Override
+    public Point revertBack(Point point) {
+        return drawingPan.revertBack(point);
     }
 
 }

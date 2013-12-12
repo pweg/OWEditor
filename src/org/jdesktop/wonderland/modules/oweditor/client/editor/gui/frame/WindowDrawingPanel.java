@@ -8,6 +8,7 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.NoninvertibleTransformException;
 
 import javax.swing.JPanel;
 import javax.swing.event.ChangeEvent;
@@ -242,6 +243,19 @@ public class WindowDrawingPanel extends JPanel implements ChangeListener {
         at.translate(translationX*scale, translationY*scale); 
         at.scale(scale, scale);  
         return at;
+    }
+
+    public Point revertBack(Point p) {
+
+        try {
+            Point revert = new Point(0,0);
+            AffineTransform at = getTransformation();
+            at.inverseTransform(p, revert);
+            return revert;
+        } catch (NoninvertibleTransformException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
      
 }  

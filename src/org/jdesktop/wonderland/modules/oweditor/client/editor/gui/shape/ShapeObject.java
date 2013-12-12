@@ -57,6 +57,14 @@ public abstract class ShapeObject extends SimpleShapeObject{
      */
     public abstract String getName();
     
+    /**
+     * Returns true, if the shapes name is abbreviated,
+     * false otherwise.
+     * @return true, if the name is abbreviated,
+     * false otherwise.
+     */
+    public abstract boolean isNameAbbreviated();
+    
     public abstract double getRotation();
     
     public abstract double getScale();

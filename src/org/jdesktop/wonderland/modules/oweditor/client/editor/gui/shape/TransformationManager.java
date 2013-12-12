@@ -1,7 +1,6 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.shape;
 
 import java.awt.Point;
-import java.awt.Rectangle;
 import java.util.ArrayList;
 
 /**
@@ -138,12 +137,9 @@ public class TransformationManager {
         //Case for the four different border edges.
         //(Scale calculation is different for every edge)
         switch(clicked){
-            case(ShapeObjectBorder.UPPERLEFT):
-                System.out.println(width + " " + height + "size");
-            System.out.println(x + " " + y + "xcy");
+            case(ShapeObjectBorder.UPPERLEFT):;
                 new_width = p.x - (x+width);
                 new_height = p.y - (y+height);
-                System.out.println(new_width + " " + new_height + "size");
                 scale_x = new_width/width;
                 scale_y = new_height/height;
 
@@ -184,8 +180,6 @@ public class TransformationManager {
         double scale = 0;
         
         scale = Math.max(Math.abs(scale_x), Math.abs(scale_y));
-
-        System.out.println(scale);
         
         if(scale < 0.1)
             return;

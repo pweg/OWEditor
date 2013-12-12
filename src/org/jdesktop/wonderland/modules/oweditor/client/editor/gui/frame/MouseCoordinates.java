@@ -27,22 +27,21 @@ public class MouseCoordinates {
             else
                 position = lastPosition;
         }
-        double translation_x = panel.getTranslationX();
-        double translation_y = panel.getTranslationY();
-        double scale = panel.getScale();
         
-        double mouse_x = (position.x/scale - translation_x);
-        double mouse_y = (position.y/scale - translation_y);
+        position = panel.revertBack(position);
+        //double translation_x = panel.getTranslationX();
+        //double translation_y = panel.getTranslationY();
+        //double scale = panel.getScale();
         
         double real_x = 0;
         double real_y = 0;
         
         if(translator != null){
-            real_x = translator.transformXBack(mouse_x);
-            real_y = translator.transformXBack(mouse_y);
+            real_x = translator.transformXBack(position.x);
+            real_y = translator.transformXBack(position.y);
         }else{
-            real_x = mouse_x;
-            real_y = mouse_y;
+            real_x = 0;
+            real_y = 0;
         }
         
         toolBar.setCoordinates(RoundDouble(real_x), RoundDouble(real_y));

@@ -43,6 +43,8 @@ public class ShapeManager {
     private final ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
     private final Lock readLock = lock.readLock();
     private final Lock writeLock = lock.writeLock();
+    
+    private ShapeToolTip shapeName = null;
 
     
     
@@ -208,6 +210,9 @@ public class ShapeManager {
 
         if(selectionRectangle != null)
             selectionRectangle.paintOriginal(g2);
+        
+        if(shapeName != null)
+            shapeName.paint(g2, at, scale);
     }
     
     /**
@@ -384,11 +389,16 @@ public class ShapeManager {
         for(ShapeDraggingObject shape : draggingShapes){
             
             Rectangle r = shape.getTransformedShape().getBounds();
-            shape.setState(new stateDraggingShapeRotation());
+            stateDraggingShape state = shape.getState();
+            
+            if(!(state instanceof stateDraggingShapeBorderBuild))
+                shape.setState(new stateDraggingShapeBorderBuild());
             
             int s_x = shape.getX();
             int s_y = shape.getY();
-            shape.setState(null);
+            
+            if(!(state instanceof stateDraggingShapeBorderBuild))
+                shape.setState(state);
             
             int width = (int) Math.round(r.width/scale);
             int height = (int) Math.round(r.height/scale);
@@ -423,6 +433,22 @@ public class ShapeManager {
     public void setShapeStates(stateDraggingShape state){
         for(ShapeDraggingObject shape : draggingShapes){
             shape.setState(state);
+        }
+    }
+
+    public void setToolTip(Point p, String name) {
+        
+        if(name == null){
+            shapeName = null;
+            return;
+        }
+        
+        if(shapeName == null)
+            shapeName = new ShapeToolTip(p,name);
+        else if(shapeName.getContent().equals(name)){
+            shapeName.setCoordinates(p);
+        }else{
+            shapeName.set(p, name);
         }
     }
     

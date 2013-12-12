@@ -238,4 +238,10 @@ public class ShapeObjectEllipse extends ShapeObject{
         this.scale = scale;
     }
 
+    @Override
+    public boolean isNameAbbreviated() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
 }

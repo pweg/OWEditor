@@ -229,7 +229,15 @@ public interface ExternalShapeToInputFacadeInterface {
      */
     public boolean isMouseInBorderCenter(Point p);
 
+    /**
+     * Returns the name of a shape, which surrounds 
+     * the point p, if the name is abbreviated.
+     * @param p The point.
+     * @return The name of the shape, or null otherwise.
+     */
+    public String getShapeName(Point p);
 
+    public void paintShapeName(Point p, String name);
 
 
 

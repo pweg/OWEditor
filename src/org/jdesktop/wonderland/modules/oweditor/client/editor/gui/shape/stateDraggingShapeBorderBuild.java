@@ -6,11 +6,9 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.NoninvertibleTransformException;
 
 /**
- * This method for retrieving the coordinates used for rotation.
+ * This method for retrieving the coordinates used for the border creation.
  * It calculates the coordinate out of the center using the 
- * shape dimensions, BUT uses the ORIGINALS width in order to
- * get the right x,y coordinates for the server object. 
- * It reverts back the coordinates to the 
+ * shapes transformed dimensions. It reverts back the coordinates to the 
  * original coordinates. This are the coordinates which are used
  * by the adapter, BUT ARE NOT THE ACTUAL OBJECT COORDINATES.
  * For instance, the wonderland server uses the coordinates from
@@ -20,7 +18,7 @@ import java.awt.geom.NoninvertibleTransformException;
  * @author Patrick
  *
  */
-public class stateDraggingShapeRotation implements stateDraggingShape{
+public class stateDraggingShapeBorderBuild implements stateDraggingShape{
 
     @Override
     public int getX(ShapeDraggingObject shape, AffineTransform at) {
@@ -31,10 +29,9 @@ public class stateDraggingShapeRotation implements stateDraggingShape{
             Rectangle bounds = transformed.getBounds();
             double x = bounds.getCenterX();
             
-            //Shapes original width has to be used , because we want to get 
-            //the originals coordinates. This may have to be considered, when
-            //building the coordinate translator in the adapter package.
-            return (int) Math.round(x - shape.getWidth()/2*shape.getScale());
+            //Bounds have to be used for width, because shape returns the 
+            //width of the original shape.
+            return (int) Math.round(x - bounds.getWidth()/2);
         } catch (NoninvertibleTransformException e) {
             e.printStackTrace();
             return 0;
@@ -50,10 +47,9 @@ public class stateDraggingShapeRotation implements stateDraggingShape{
             Rectangle bounds = transformed.getBounds();
             double y = bounds.getCenterY();
 
-            //Shapes original height has to be used , because we want to get 
-            //the originals coordinates. This may have to be considered, when
-            //building the coordinate translator in the adapter package.
-            return (int) Math.round(y - shape.getHeight()/2*shape.getScale());
+            //Bounds have to be used for height, because shape returns the 
+            //height of the original shape.
+            return (int) Math.round(y - bounds.getHeight()/2);
             
         } catch (NoninvertibleTransformException e) {
             e.printStackTrace();

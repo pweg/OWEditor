@@ -25,15 +25,7 @@ public class FrameToShape implements FrameToShapeInterface{
 
     @Override
     public Point revertBack(Point p) {
-        try {
-            Point revert = new Point(0,0);
-            AffineTransform at = drawingPan.getTransformation();
-            at.inverseTransform(p, revert);
-            return revert;
-        } catch (NoninvertibleTransformException e) {
-            e.printStackTrace();
-        }
-        return null;
+        return drawingPan.revertBack(p);
     }
 
 }

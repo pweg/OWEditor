@@ -35,6 +35,9 @@ public class GUISettings {
     public static Paint SELECTIONCOLOR = Color.red;
     public static Paint SELECTIONRECTCOLOR = Color.lightGray;
     
+    public static Paint TOOLTIPTEXTCOLOR = Color.black;
+    public static Paint TOOLTIPBGCOLOR = Color.yellow;
+    
     /*
      * This color is used for the border surrounding the selected
      * objects, when rotating and scaling. The edges size is used 
@@ -58,6 +61,8 @@ public class GUISettings {
     public static int NAMEPOSITIONINY = OBJECTNAMESIZE+NAMEPOSITIONINYADD;
     public static int NAMEPOSITIONOUTX = 0;
     public static int NAMEPOSITIONOUTY = -5;
+    
+    public static int TOOLTIPIN = 5;
     
     /*
      * Width/Height, position and title of the window frame,

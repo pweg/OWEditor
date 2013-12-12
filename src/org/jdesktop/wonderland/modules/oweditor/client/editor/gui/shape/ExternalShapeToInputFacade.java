@@ -289,5 +289,21 @@ public class ExternalShapeToInputFacade implements ExternalShapeToInputFacadeInt
         return false;
     }
 
+    @Override
+    public String getShapeName(Point p) {
+
+        ShapeObject shape = sm.getShapeSuroundingPoint(p);
+        
+        if(shape == null || !shape.isNameAbbreviated())
+            return null;
+        
+        return shape.getName();
+    }
+    
+    @Override
+    public void paintShapeName(Point p, String name) {
+        sm.setToolTip(p, name);
+    }
+
 
 }

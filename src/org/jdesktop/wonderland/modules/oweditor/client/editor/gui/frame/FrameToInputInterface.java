@@ -80,7 +80,23 @@ public interface FrameToInputInterface {
      */
     public void changeScale(double scale);
     
-    public void changeMouseCoords(int x, int y);
+    /**
+     * Is used to update the mouse coordinates.
+     * 
+     * @param x The x value of the coordinates.
+     * @param y The y value of the coordinates.
+     */
+    public void paintMouseCoords(int x, int y);
+
+    /**
+     * Writes the Name of a shape in a tooltip box
+     * at the given coordinates.
+     * 
+     * @param p The coordinates, where the name should appear.
+     * @param name The name in String.
+     */
+    public Point revertBack(Point point);
+
 
 
 }

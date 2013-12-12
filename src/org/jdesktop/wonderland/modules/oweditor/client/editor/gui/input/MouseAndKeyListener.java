@@ -43,11 +43,14 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
     
     public void mousePressed(MouseEvent e) {
         
+        //operations with shift pressed
         if(shiftPressed && mode == NOMODE){
             if(e.getButton() ==  MouseEvent.BUTTON1){
                 
                 Point p = e.getPoint();
                 
+                //switch selection, or selection rectangle
+                //in shift mode
                 if(!ic.shape.selectionSwitch(p)){
                     strategy = new mlSelectionRectShiftStrategy(ic);
                     strategy.mousePressed(e.getPoint());
@@ -92,9 +95,6 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
                      
                      if(ic.shape.isMouseInBorder(p))
                          strategy = new mlScaleStrategy(ic);
-                     //else if (ic.shape.isMouseInBorderCenter(p)){
-                     //    setRotationCenterStrategy();
-                     //}
                      if(strategy != null)
                          strategy.mousePressed(p);
                  }
@@ -133,7 +133,7 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
     
     public void mouseDragged(MouseEvent e) {
         Point p = e.getPoint();
-        ic.frame.changeMouseCoords(p.x, p.y);
+        ic.frame.paintMouseCoords(p.x, p.y);
         if(strategy == null){
             return;
         }
@@ -142,11 +142,15 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
     
     public void mouseMoved(MouseEvent e){
         Point p = e.getPoint();
-        ic.frame.changeMouseCoords(p.x, p.y);
+        ic.frame.paintMouseCoords(p.x, p.y);
+
+        writeShapeName(p);
+        
         if(strategy == null){
             return;
         }
         strategy.mouseMoved(p);
+        
     }
     
     public void mouseReleased(MouseEvent e){
@@ -272,6 +276,13 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
     
     public mlPasteStrategy getPasteStrategy(){
         return pasteStrategy;
+    }
+    
+    private void writeShapeName(Point p){
+        String name = ic.shape.getShapeName(p);
+        
+        ic.shape.paintShapeName(p, name);
+        ic.frame.repaint();
     }
 
 }

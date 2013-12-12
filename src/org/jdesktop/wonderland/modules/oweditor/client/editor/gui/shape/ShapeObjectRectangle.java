@@ -33,6 +33,7 @@ public class ShapeObjectRectangle extends ShapeObject{
     private Paint color = GUISettings.OBJECTCOLOR;
     private Paint nameColor = GUISettings.OBJECTNAMECOLOR;
     private String name = "";
+    private String printName = "";
     private boolean nameWrapp = false;
     private double rotation = 0;
     private double scale = 0;
@@ -40,7 +41,7 @@ public class ShapeObjectRectangle extends ShapeObject{
     //These variables are used to determine, where the name of the object should be.
     private int nameBoundsX = GUISettings.NAMEPOSITIONINX;
     private int nameBoundsAbove = GUISettings.NAMEPOSITIONINY;
-    
+        
     /**
      * Creates a new ObjectRectangle shape instance.
      * 
@@ -53,7 +54,6 @@ public class ShapeObjectRectangle extends ShapeObject{
      */
     public ShapeObjectRectangle(int x, int y, int width, int height, long id, String name,
             double rotation, double scale){
-        
         originalShape = new Rectangle (x, y, width, height);
         this.name = name;
         this.id = id;
@@ -79,8 +79,7 @@ public class ShapeObjectRectangle extends ShapeObject{
     @Override
     public void paintOriginal(Graphics2D g, AffineTransform at) {
         g.setPaint(color);  
-        
-        
+
         scaledShape = scaleInitialShape(originalShape);
         transformedShape = rotateInitalShape(scaledShape);
         
@@ -94,31 +93,6 @@ public class ShapeObjectRectangle extends ShapeObject{
             g.setPaint(GUISettings.SELECTIONCOLOR);
             g.draw(transformedShape); 
         }
-    }
-    
-    private Shape scaleInitialShape(Shape shape){
-        Rectangle2D bounds = shape.getBounds2D();
-        AffineTransform af = AffineTransform.getTranslateInstance(0 - bounds.getX(), 0 - bounds.getY());
-        // apply normalisation translation ...
-        Shape s = af.createTransformedShape(shape);
-
-        af = AffineTransform.getScaleInstance(scale, scale);
-        // apply scaling ...
-        s = af.createTransformedShape(s);
-
-        // now retranslate the shape to its original position ...
-        af = AffineTransform.getTranslateInstance(bounds.getX(), bounds.getY());
-        return af.createTransformedShape(s);
-    }
-    
-    private Shape rotateInitalShape(Shape shape){
-        
-        AffineTransform transform = new AffineTransform();
-        transform.rotate(Math.toRadians(rotation), 
-                shape.getBounds().getCenterX(), 
-                shape.getBounds().getCenterY());
-        
-        return transform.createTransformedShape(shape);
     }
     
     @Override
@@ -150,7 +124,7 @@ public class ShapeObjectRectangle extends ShapeObject{
         g.rotate(Math.toRadians(rotation), 
                 r.getCenterX(), 
                 r.getCenterY());
-        g.drawString(name, x, y);  
+        g.drawString(printName, x, y);  
         g.setTransform(original);
     }
     
@@ -179,7 +153,7 @@ public class ShapeObjectRectangle extends ShapeObject{
         }
         
         double max_width = r.width-2*xBounds;
-        
+                
         if(width > max_width){
             double percent = max_width/width*100;
             int cut = (int) Math.round(name.length()*percent/100)-3;
@@ -190,9 +164,38 @@ public class ShapeObjectRectangle extends ShapeObject{
             }
             
             if(cut < name.length())
-                name = name.substring(0,cut)+"...";
+                printName = name.substring(0,cut)+"...";
+            else
+                printName = name;
+            nameWrapp = true;
+        }else{
+            printName = name;
         }
-        nameWrapp = true;
+    }
+    
+    private Shape scaleInitialShape(Shape shape){
+        Rectangle2D bounds = shape.getBounds2D();
+        AffineTransform af = AffineTransform.getTranslateInstance(0 - bounds.getX(), 0 - bounds.getY());
+        // apply normalisation translation ...
+        Shape s = af.createTransformedShape(shape);
+
+        af = AffineTransform.getScaleInstance(scale, scale);
+        // apply scaling ...
+        s = af.createTransformedShape(s);
+
+        // now retranslate the shape to its original position ...
+        af = AffineTransform.getTranslateInstance(bounds.getX(), bounds.getY());
+        return af.createTransformedShape(s);
+    }
+    
+    private Shape rotateInitalShape(Shape shape){
+        
+        AffineTransform transform = new AffineTransform();
+        transform.rotate(Math.toRadians(rotation), 
+                shape.getBounds().getCenterX(), 
+                shape.getBounds().getCenterY());
+        
+        return transform.createTransformedShape(shape);
     }
 
     @Override
@@ -254,6 +257,11 @@ public class ShapeObjectRectangle extends ShapeObject{
     }
 
     @Override
+    public boolean isNameAbbreviated() {
+        return nameWrapp;
+    }
+
+    @Override
     public void setRotation(double rotation) {
         this.rotation = rotation;
     }
@@ -285,6 +293,8 @@ public class ShapeObjectRectangle extends ShapeObject{
     @Override
     public void setScale(double scale) {
         this.scale = scale;
+        nameWrapp = false;
     }
+
 
 }

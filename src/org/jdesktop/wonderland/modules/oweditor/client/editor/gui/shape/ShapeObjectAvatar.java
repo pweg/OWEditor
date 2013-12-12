@@ -134,4 +134,9 @@ public class ShapeObjectAvatar extends ShapeObject{
     public void setScale(double scale) {
     }
 
+    @Override
+    public boolean isNameAbbreviated() {
+        return false;
+    }
+
 }
