@@ -436,11 +436,13 @@ public class ShapeManager {
         }
     }
 
-    public void setToolTip(Point p, String name) {
+    public boolean setNameToolTip(Point p, String name) {
         
-        if(name == null){
+        if(name == null && shapeName != null){
             shapeName = null;
-            return;
+            return true;
+        }else if(name == null && shapeName == null){
+            return false;
         }
         
         if(shapeName == null)
@@ -449,6 +451,16 @@ public class ShapeManager {
             shapeName.setCoordinates(p);
         }else{
             shapeName.set(p, name);
+        }
+        return true;
+    }
+
+    public boolean removeNameTooltip() {
+        if(shapeName == null)
+            return false;
+        else{
+            shapeName = null;
+            return true;
         }
     }
     

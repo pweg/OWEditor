@@ -22,6 +22,9 @@ public class ShapeToolTip {
     private int contentY = 0;
     private int fontSize = 0;
     
+    private int marginMouse = GUISettings.TOOLTIPMARGIN;
+    private int marginText = GUISettings.TOOLTIPIN;
+    
     public ShapeToolTip(Point coordinates, String content){
         this.content = content;
         this.coordinates = coordinates;
@@ -45,10 +48,20 @@ public class ShapeToolTip {
         g.draw(shape);
         
 
-        contentX = (int) (shape.getX() + Math.round(GUISettings.TOOLTIPIN*scale));
-        contentY = (int) (shape.getY() + Math.round(GUISettings.TOOLTIPIN*scale)+fontSize);
+        contentX = (int) (shape.getX() + marginText);
+        contentY = (int) (shape.getY() + marginText+fontSize);
         
+        AffineTransform original =  g.getTransform();
+        AffineTransform invert = new AffineTransform();
+        double inverted_scale = 1/scale;
+        invert.scale(1/scale, 1/scale);
+
+        contentX = (int)Math.round(contentX/inverted_scale);
+        contentY = (int)Math.round(contentY/inverted_scale);
+        
+        g.transform(invert);
         g.drawString(content, contentX, contentY);
+        g.setTransform(original);
         
     }
     
@@ -56,32 +69,34 @@ public class ShapeToolTip {
 
 
         int screenRes = Toolkit.getDefaultToolkit().getScreenResolution();
-        fontSize = (int)Math.round(GUISettings.OBJECTNAMESIZE*scale * screenRes / 72.0);
+        fontSize = (int)Math.round(GUISettings.OBJECTNAMESIZE * screenRes / 72.0);
 
         Font font = new Font(GUISettings.OBJECTNAMEFONTTYPE, Font.PLAIN, fontSize);  
         
         FontRenderContext context = g.getFontRenderContext();
         Rectangle2D bounds = font.getStringBounds(content, context);
 
-        int width = (int) Math.round(bounds.getWidth()+2*scale*GUISettings.TOOLTIPIN);
-        int height = (int) Math.round(bounds.getHeight()+2*scale*GUISettings.TOOLTIPIN);
-        System.out.println(height + " " +bounds.getHeight() + " " );
+        int width = (int) Math.ceil(bounds.getWidth()+2*marginText);
+        int height = (int) Math.round(bounds.getHeight()+2*marginText);
         
-        shape = new Rectangle(coordinates.x, coordinates.y, width, height );
+        shape = new Rectangle(coordinates.x+marginMouse, coordinates.y+marginMouse,
+                width, height );
         
         firstPaint = false;
     }
     
     public void setCoordinates(Point p){
+        p.x = p.x + marginMouse;
+        p.y = p.y + marginMouse;
         shape.setLocation(p);
     }
 
     public void set(Point coordinates, String content) {
-        this.coordinates = coordinates;
+        this.coordinates.x = coordinates.x+marginMouse;
+        this.coordinates.y = coordinates.y+marginMouse;
         this.content = content;
         
         firstPaint = true;
-        
     }
 
 }

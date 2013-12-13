@@ -127,10 +127,12 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
          * also need some refinements, due to the new scales.
          */
         clear();        
-        
+
         ic.frame.changeScale(GUISettings.ZOOMSPEED * -(double)e.getWheelRotation());
+        
+        clearShapeName();
     }
-    
+
     public void mouseDragged(MouseEvent e) {
         Point p = e.getPoint();
         ic.frame.paintMouseCoords(p.x, p.y);
@@ -281,8 +283,17 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
     private void writeShapeName(Point p){
         String name = ic.shape.getShapeName(p);
         
-        ic.shape.paintShapeName(p, name);
-        ic.frame.repaint();
+        //only repaint, when necessary, ergo when the name
+        //tooltip moves or has to be shown/hidden.
+        if(ic.shape.paintShapeName(p, name)){
+            ic.frame.repaint();
+        }
+    }
+
+    
+    private void clearShapeName() {
+        if(ic.shape.removeShapeName())
+            ic.frame.repaint();
     }
 
 }

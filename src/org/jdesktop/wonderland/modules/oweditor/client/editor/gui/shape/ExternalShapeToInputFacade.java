@@ -301,8 +301,13 @@ public class ExternalShapeToInputFacade implements ExternalShapeToInputFacadeInt
     }
     
     @Override
-    public void paintShapeName(Point p, String name) {
-        sm.setToolTip(p, name);
+    public boolean paintShapeName(Point p, String name) {
+        return sm.setNameToolTip(p, name);
+    }
+    
+    @Override
+    public boolean removeShapeName(){
+        return sm.removeNameTooltip();
     }
 
 

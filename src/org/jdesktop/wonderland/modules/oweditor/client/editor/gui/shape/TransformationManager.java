@@ -117,7 +117,7 @@ public class TransformationManager {
      * scale.
      */
     public void scale(Point p){
-        p = smi.revertBack(p);
+        Point reverted = smi.revertBack(p);
         ShapeObjectBorder border = smi.getShapeBorder();
 
         byte clicked = border.getCurrentClicked();
@@ -138,8 +138,8 @@ public class TransformationManager {
         //(Scale calculation is different for every edge)
         switch(clicked){
             case(ShapeObjectBorder.UPPERLEFT):;
-                new_width = p.x - (x+width);
-                new_height = p.y - (y+height);
+                new_width = reverted.x - (x+width);
+                new_height = reverted.y - (y+height);
                 scale_x = new_width/width;
                 scale_y = new_height/height;
 
@@ -147,8 +147,8 @@ public class TransformationManager {
                 scale_y = Math.min(0, scale_y);
                 break;
             case(ShapeObjectBorder.UPPERRIGHT):
-                new_width = p.x - x;
-                new_height = p.y - (y+height);
+                new_width = reverted.x - x;
+                new_height = reverted.y - (y+height);
                 scale_x = new_width/width;
                 scale_y = new_height/height;
 
@@ -156,8 +156,8 @@ public class TransformationManager {
                 scale_y = Math.min(0, scale_y);
                 break;
             case(ShapeObjectBorder.BOTTOMLEFT):
-                new_width = p.x - (x+width);
-                new_height = p.y - y;
+                new_width = reverted.x - (x+width);
+                new_height = reverted.y - y;
                 scale_x = new_width/width;
                 scale_y = new_height/height;
 
@@ -165,8 +165,8 @@ public class TransformationManager {
                 scale_y = Math.max(0, scale_y);
                 break;
             case(ShapeObjectBorder.BOTTOMRIGHT):
-                new_width = p.x - x;
-                new_height = p.y - y;
+                new_width = reverted.x - x;
+                new_height = reverted.y - y;
                 scale_x = new_width/width;
                 scale_y = new_height/height;
                 

@@ -237,7 +237,23 @@ public interface ExternalShapeToInputFacadeInterface {
      */
     public String getShapeName(Point p);
 
-    public void paintShapeName(Point p, String name);
+    /**
+     * Paints the shape name on the position given by the point.
+     * 
+     * @param p The point where the Shape name should appear.
+     * @param name The shapes name.
+     * @return Returns true, if there is a need for repaint
+     * and false otherwise.
+     */
+    public boolean paintShapeName(Point p, String name);
+
+    /**
+     * Removes the tooltip holding the shape name.
+     * 
+     * @return true if there is a need for repaint,
+     * false otherwise
+     */
+    public boolean removeShapeName();
 
 
 

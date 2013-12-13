@@ -36,7 +36,7 @@ public class GUISettings {
     public static Paint SELECTIONRECTCOLOR = Color.lightGray;
     
     public static Paint TOOLTIPTEXTCOLOR = Color.black;
-    public static Paint TOOLTIPBGCOLOR = Color.yellow;
+    public static Paint TOOLTIPBGCOLOR = new Color(255,255,200);
     
     /*
      * This color is used for the border surrounding the selected
@@ -62,7 +62,12 @@ public class GUISettings {
     public static int NAMEPOSITIONOUTX = 0;
     public static int NAMEPOSITIONOUTY = -5;
     
-    public static int TOOLTIPIN = 5;
+    /*
+     * Tooltipin states the distance of the text to the border surrounding it.
+     * Tooltipmagrin gives the distance of the tooltip to the mouse.
+     */
+    public static int TOOLTIPIN = 4;
+    public static int TOOLTIPMARGIN = 10;
     
     /*
      * Width/Height, position and title of the window frame,

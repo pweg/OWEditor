@@ -127,9 +127,11 @@ public class ShapeObjectBorder extends SimpleShapeObject{
 
         transformedShape = at.createTransformedShape(transformedShape);
         
+        double globalScale = at.getScaleX();
+        
         if(scale != 1){
             //translate();
-            transformedShape = scaleShape(transformedShape, scale,scale);
+            transformedShape = scaleShape(transformedShape, scale,scale, globalScale);
             transformedTinyShapes = setTinyRectangle(transformedShape);
         }else{
             for(Shape r : tinyShapes){
@@ -169,7 +171,8 @@ public class ShapeObjectBorder extends SimpleShapeObject{
      * @param scaleY The scale y value.
      * @return The scaled shape.
      */
-    private Shape scaleShape(Shape shape, double scaleX, double scaleY){        
+    private Shape scaleShape(Shape shape, double scaleX, double scaleY,
+            double globalScale){        
         Rectangle2D bounds = shape.getBounds2D();
         AffineTransform af = AffineTransform.getTranslateInstance(0 - bounds.getX(), 
                 0 - bounds.getY());
@@ -180,8 +183,8 @@ public class ShapeObjectBorder extends SimpleShapeObject{
         s = af.createTransformedShape(s);
 
         // now retranslate the shape to its original position ...
-        af = AffineTransform.getTranslateInstance(bounds.getX()-scaleTranslationX, 
-                bounds.getY()-scaleTranslationY);
+        af = AffineTransform.getTranslateInstance(bounds.getX()-scaleTranslationX*globalScale, 
+                bounds.getY()-scaleTranslationY*globalScale);
         return af.createTransformedShape(s);
     }
     
@@ -269,7 +272,7 @@ public class ShapeObjectBorder extends SimpleShapeObject{
         //Rectangle bounds = transformedShape.getBounds();
         //originalShape = new Rectangle(bounds.x, bounds.y, bounds.width, bounds.height);
         //realScale -= (1-workingScale)*realScale;
-        originalShape = scaleShape(originalShape, scale,scale);
+        originalShape = scaleShape(originalShape, scale,scale,1);
         tinyShapes = setTinyRectangle(originalShape);
         scale = 1;
     }
