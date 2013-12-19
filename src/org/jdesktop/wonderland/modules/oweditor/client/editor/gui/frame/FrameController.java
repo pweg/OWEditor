@@ -3,14 +3,14 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.frame;
 import javax.swing.JScrollPane;
 
 import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.CoordinateTranslatorInterface;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.shape.ExternalShapeToFrameInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.GraphicToFrameInterface;
 
 public class FrameController {
 
     protected JScrollPane mainScrollPanel = null;
     protected WindowDrawingPanel drawingPan = null;
 
-    protected ExternalShapeToFrameInterface shapes = null;
+    protected GraphicToFrameInterface graphic = null;
     protected WindowPopupMenu popupMenu = null;
     
     protected MainFrame frame = null;

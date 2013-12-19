@@ -7,8 +7,6 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.frame.Frame;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.frame.FrameInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.input.Input;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.input.InputInterface;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.shape.ExternalShape;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.shape.ExternalShapeInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.DataObjectObserverInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.EnvironmentObserverInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.GUIControllerInterface;
@@ -24,7 +22,6 @@ public class GUIController implements GUIControllerInterface{
 
     protected DataObjectObserver domo = null;
     protected EnvironmentObserver eo = null;
-    protected ExternalShapeInterface shape = null;
     protected FrameInterface frame = null;
     protected InputInterface input = null;
     
@@ -44,8 +41,7 @@ public class GUIController implements GUIControllerInterface{
         eo = new EnvironmentObserver(this);
         ac = new AdapterCommunication();
         
-        shape = new ExternalShape(ac);
-        frame = new Frame();
+        frame = new Frame(ac);
         input = new Input();
         
         frame.addMouseListener(input.getMouseListener());
@@ -57,14 +53,14 @@ public class GUIController implements GUIControllerInterface{
     
     private void registerInterfaces(){
         
-        frame.registerShapeInterface(shape.getFrameInterface());
+        //frame.registerGraphicInterface(frame.getGraphicInputInterface().getFrameInterface());
         frame.registerInputInterface(input.getFrameInterface());
         
-        input.registerShapeInterface(shape.getInputInterface());
+        input.registerGraphicInterface(frame.getGraphicInputInterface());
         input.registerFrameInterface(frame.getInputInterface());
         
-        shape.registerFrameInterface(frame.getShapeInterface());
-        shape.registerInputInterface(input.getShapeInterface());
+        frame.registerFrameInterface(frame.getShapeInterface());
+        frame.registerInputInterface(input.getShapeInterface());
     }
 
     @Override

@@ -6,8 +6,11 @@ import java.awt.event.MouseWheelListener;
 import javax.swing.event.MouseInputAdapter;
 import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.CoordinateTranslatorInterface;
 
+import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.TranslatedObjectInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.GraphicToFrameInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.GraphicToInputFacadeInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.input.InputToFrameInterface;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.shape.ExternalShapeToFrameInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.input.InputToShapeInterface;
 
 public interface FrameInterface {
     
@@ -31,13 +34,6 @@ public interface FrameInterface {
      * @param mouseWheelListener the listener
      */
     public void addMouseWheelListener(MouseWheelListener mouseWheelListener);
-
-    /**
-     * Registers the shape interface to the frame controller.
-     * 
-     * @param esmi the shape facade.
-     */
-    public void registerShapeInterface(ExternalShapeToFrameInterface shape);
     
     /**
      * Registers the input interface to the frame controller.
@@ -85,6 +81,27 @@ public interface FrameInterface {
     public void setNewMinY(int y);
 
     public void setCoordinateTranslator(CoordinateTranslatorInterface coordinateTranslator);
+    
+    public void registerFrameInterface(FrameToShapeInterface frameInterface);
+
+    public void registerInputInterface(InputToShapeInterface input);
+
+    public GraphicToFrameInterface getFrameInterface();
+    
+    public GraphicToInputFacadeInterface getGraphicInputInterface();
+
+    public void createShape(TranslatedObjectInterface dataObject);
+
+    public void updateShape(long id, int x, int y, String name);
+
+    public void removeShape(long id);
+
+    public void updateShapeCoordinates(long id, int x, int y);
+
+    public void updateShapeRotation(long id, double rotation);
+
+    public void updateShapeScale(long id, double scale);
+
 
     
 

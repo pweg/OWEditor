@@ -6,7 +6,7 @@ import java.awt.event.MouseWheelListener;
 import javax.swing.event.MouseInputAdapter;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.frame.FrameToInputInterface;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.shape.ExternalShapeToInputFacadeInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.GraphicToInputFacadeInterface;
 
 public class Input implements InputInterface{
     
@@ -56,7 +56,7 @@ public class Input implements InputInterface{
     }
 
     @Override
-    public void registerShapeInterface(ExternalShapeToInputFacadeInterface shape) {
+    public void registerGraphicInterface(GraphicToInputFacadeInterface shape) {
         ic.registerShapeInterface(shape);
     }
 

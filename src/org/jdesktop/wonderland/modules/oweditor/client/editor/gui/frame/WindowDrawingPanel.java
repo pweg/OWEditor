@@ -139,7 +139,7 @@ public class WindowDrawingPanel extends JPanel implements ChangeListener {
         at.scale(scale, scale);  
         g2.setPaint(GUISettings.BGCOLOR); 
         
-        fc.shapes.drawShapes(g2, at, scale);
+        fc.graphic.drawShapes(g2, at);
         
     } 
     

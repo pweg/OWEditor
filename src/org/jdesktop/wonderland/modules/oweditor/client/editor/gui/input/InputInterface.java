@@ -6,7 +6,7 @@ import java.awt.event.MouseWheelListener;
 import javax.swing.event.MouseInputAdapter;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.frame.FrameToInputInterface;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.shape.ExternalShapeToInputFacadeInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.GraphicToInputFacadeInterface;
 
 /**
  * This interface is used by the guis main controller
@@ -30,7 +30,7 @@ public interface InputInterface {
     
     public void notifyMinYChange(int y);
     
-    public void registerShapeInterface(ExternalShapeToInputFacadeInterface shape);
+    public void registerGraphicInterface(GraphicToInputFacadeInterface shape);
     
     public void registerFrameInterface(FrameToInputInterface frameToInputInterface);
 

@@ -6,11 +6,11 @@ import java.awt.event.MouseWheelListener;
 import javax.swing.event.MouseInputAdapter;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.frame.FrameToInputInterface;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.shape.ExternalShapeToInputFacadeInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.GraphicToInputFacadeInterface;
 
 public class InputController {
     
-    protected ExternalShapeToInputFacadeInterface shape = null;
+    protected GraphicToInputFacadeInterface shape = null;
     protected FrameToInputInterface frame = null;
     
     protected MouseAndKeyListener mkListener = null;
@@ -41,7 +41,7 @@ public class InputController {
         
     }
 
-    public void registerShapeInterface(ExternalShapeToInputFacadeInterface shape) {
+    public void registerShapeInterface(GraphicToInputFacadeInterface shape) {
         this.shape = shape;
     }
 
