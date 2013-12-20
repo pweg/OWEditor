@@ -42,7 +42,7 @@ public class mlRotationCenterStrategy implements mlMouseStrategy{
     public void mouseReleased(Point p) {
         dragging = false;
         
-        controller.shape.rotationCenterUpdate();
+        controller.graphic.rotationCenterUpdate();
         controller.frame.repaint();
     }
 
@@ -50,7 +50,7 @@ public class mlRotationCenterStrategy implements mlMouseStrategy{
     public void mouseDragged(Point p) {
         if(dragging) {
             
-            controller.shape.rotationCenterTranslate(start, p);
+            controller.graphic.rotationCenterTranslate(start, p);
             start.x = p.x;
             start.y = p.y;
         }

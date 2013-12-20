@@ -19,6 +19,7 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shape
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.ShapeRectangle;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.SimpleShapeObject;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.ToolTipInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.TransformationBorderInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter.WorldBuilder;
 
 /**
@@ -39,13 +40,13 @@ public class ShapeManager {
     private ArrayList<DraggingObject> draggingShapes = null;
         
     private SimpleShapeObject selectionRectangle = null;
-    private TransformationBorder border = null;
+    private TransformationBorderInterface border = null;
     
     private AffineTransform at = null;
     
     private static final Logger LOGGER =
             Logger.getLogger(WorldBuilder.class.getName());
-    private InternalShapeMediatorInterface smi = null;
+    private InternalMediatorInterface smi = null;
     
     private final ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
     private final Lock readLock = lock.readLock();
@@ -59,7 +60,7 @@ public class ShapeManager {
      * Creates a new ShapeManager instance.
      * @param smi
      */
-    public ShapeManager(InternalShapeMediatorInterface smi){
+    public ShapeManager(InternalMediatorInterface smi){
         factory = new ShapeFactory(smi);
         
         shapes = new ArrayList<ShapeObject>();
@@ -433,16 +434,35 @@ public class ShapeManager {
         return border.checkShapes(p);
     }
     
-    public TransformationBorder getShapeBorder(){
+    /**
+     * 
+     * @return
+     */
+    public TransformationBorderInterface getShapeBorder(){
         return border;
     }
     
+    /**
+     * Changes the state of the draggingshapes. The states are
+     * used for coordinate calculation.
+     * 
+     * @param state The state which all shapes have to be set.
+     */
     public void setShapeStates(stateDraggingShape state){
         for(DraggingObject shape : draggingShapes){
             shape.setState(state);
         }
     }
 
+    /**
+     * Sets the tooltip for the shape names, which is shown
+     * when a name is abbreviated.
+     * 
+     * @param p The point for the tooltip to appear.
+     * @param name The name of the tooltip.
+     * @return true, if the tooltip has changed and a repaint
+     * has to be made, false otherwise.
+     */
     public boolean setNameToolTip(Point p, String name) {
         
         if(name == null && shapeName != null){
@@ -462,6 +482,12 @@ public class ShapeManager {
         return true;
     }
 
+    /**
+     * Removes the name tooltip.
+     * 
+     * @return true, if the tooltip has been removed, 
+     * false if there was no tooltip to remove.
+     */
     public boolean removeNameTooltip() {
         if(shapeName == null)
             return false;

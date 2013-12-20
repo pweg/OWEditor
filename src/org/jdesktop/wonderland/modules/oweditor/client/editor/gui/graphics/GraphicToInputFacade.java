@@ -16,7 +16,7 @@ public class GraphicToInputFacade implements GraphicToInputFacadeInterface{
     protected SelectionManager ssm = null;
     protected TranslationManager stm = null;
     
-    protected InternalShapeMediatorInterface smi = null;
+    protected InternalMediatorInterface smi = null;
     
     private AdapterCommunicationInterface adapter = null;
     private ShapeController sc = null;

@@ -29,9 +29,9 @@ public class ShapeFactory {
     //public static final int DRAGGINGRECTANGLE = 11;
    // public static final int DRAGGINGRELLIPSE = 12;
     
-    public InternalShapeMediatorInterface smi = null;
+    public InternalMediatorInterface smi = null;
     
-    public ShapeFactory(InternalShapeMediatorInterface smi){
+    public ShapeFactory(InternalMediatorInterface smi){
         this.smi = smi;
     }
 

@@ -4,15 +4,18 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseWheelListener;
 
 import javax.swing.event.MouseInputAdapter;
+
 import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.CoordinateTranslatorInterface;
-
-import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.TranslatedObjectInterface;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.GraphicToFrameInterface;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.GraphicToInputFacadeInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.input.InputToFrameInterface;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.input.InputToShapeInterface;
 
-public interface FrameInterface {
+/**
+ * Interface for the gui package, which extends the 
+ * interface, which forwards changes to the graphics.
+ * 
+ * @author Patrick
+ *
+ */
+public interface FrameInterface extends FrameGraphicInterface{
     
     /**
      * Adds a mouse to the drawing panel
@@ -38,11 +41,9 @@ public interface FrameInterface {
     /**
      * Registers the input interface to the frame controller.
      * 
-     * @param esmi the shape facade.
+     * @param input The input interface for the frame package.
      */
     public void registerInputInterface(InputToFrameInterface input);
-    
-    public FrameToShapeInterface getShapeInterface();
     
     public FrameToInputInterface getInputInterface();
     /**
@@ -72,6 +73,8 @@ public interface FrameInterface {
      */
     public int getTranslationY();
 
+    public void setCoordinateTranslator(CoordinateTranslatorInterface coordinateTranslator);
+
     public void setNewWidth(int width);
 
     public void setNewHeight(int height);
@@ -79,28 +82,6 @@ public interface FrameInterface {
     public void setNewMinX(int x);
 
     public void setNewMinY(int y);
-
-    public void setCoordinateTranslator(CoordinateTranslatorInterface coordinateTranslator);
-    
-    public void registerFrameInterface(FrameToShapeInterface frameInterface);
-
-    public void registerInputInterface(InputToShapeInterface input);
-
-    public GraphicToFrameInterface getFrameInterface();
-    
-    public GraphicToInputFacadeInterface getGraphicInputInterface();
-
-    public void createShape(TranslatedObjectInterface dataObject);
-
-    public void updateShape(long id, int x, int y, String name);
-
-    public void removeShape(long id);
-
-    public void updateShapeCoordinates(long id, int x, int y);
-
-    public void updateShapeRotation(long id, double rotation);
-
-    public void updateShapeScale(long id, double scale);
 
 
     

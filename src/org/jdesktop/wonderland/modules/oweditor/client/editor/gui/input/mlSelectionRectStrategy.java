@@ -23,7 +23,7 @@ public class mlSelectionRectStrategy implements mlMouseStrategy{
     @Override
     public void mousePressed(Point p) {
         
-        controller.shape.clearCurSelection();
+        controller.graphic.clearCurSelection();
             
         start = p;
         selectionRect = true;
@@ -37,7 +37,7 @@ public class mlSelectionRectStrategy implements mlMouseStrategy{
         if(selectionRect != false){
                selectionRect = false;
 
-               controller.shape.selectionRectFinished();
+               controller.graphic.selectionRectFinished();
                controller.frame.repaint();
            }
     }
@@ -47,7 +47,7 @@ public class mlSelectionRectStrategy implements mlMouseStrategy{
          if(selectionRect != false){
                 Point end = p;
                
-                controller.shape.selectionRectUpdate(start, end);
+                controller.graphic.selectionRectUpdate(start, end);
                 controller.frame.repaint();
             }
     }

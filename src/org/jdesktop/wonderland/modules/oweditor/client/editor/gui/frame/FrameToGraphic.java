@@ -2,12 +2,12 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.frame;
 
 import java.awt.Point;
 
-public class FrameToShape implements FrameToShapeInterface{
+public class FrameToGraphic implements FrameToGraphicInterface{
     
 
     private WindowDrawingPanel drawingPan = null;
     
-    public FrameToShape(WindowDrawingPanel drawingPan){
+    public FrameToGraphic(WindowDrawingPanel drawingPan){
         this.drawingPan = drawingPan;
     }
 

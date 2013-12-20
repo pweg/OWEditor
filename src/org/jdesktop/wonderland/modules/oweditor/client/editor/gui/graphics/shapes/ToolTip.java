@@ -101,9 +101,11 @@ public class ToolTip implements ToolTipInterface{
     
     @Override
     public void setCoordinates(Point p){
-        p.x = p.x + marginMouse;
-        p.y = p.y + marginMouse;
-        shape.setLocation(p);
+        //Do not use the point directly, because it 
+        //is used for dragging shapes too.
+        int x = p.x + marginMouse;
+        int y = p.y + marginMouse;
+        shape.setLocation(x,y);
     }
 
     @Override

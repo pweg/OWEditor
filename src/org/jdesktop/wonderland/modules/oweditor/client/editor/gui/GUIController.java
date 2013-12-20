@@ -52,15 +52,11 @@ public class GUIController implements GUIControllerInterface{
     }
     
     private void registerInterfaces(){
-        
-        //frame.registerGraphicInterface(frame.getGraphicInputInterface().getFrameInterface());
         frame.registerInputInterface(input.getFrameInterface());
         
         input.registerGraphicInterface(frame.getGraphicInputInterface());
         input.registerFrameInterface(frame.getInputInterface());
         
-        frame.registerFrameInterface(frame.getShapeInterface());
-        frame.registerInputInterface(input.getShapeInterface());
     }
 
     @Override

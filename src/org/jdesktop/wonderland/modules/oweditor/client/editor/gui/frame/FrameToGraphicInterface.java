@@ -2,7 +2,7 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.frame;
 
 import java.awt.Point;
 
-public interface FrameToShapeInterface {
+public interface FrameToGraphicInterface {
     
     /**
      * Repaints the drawing panel.

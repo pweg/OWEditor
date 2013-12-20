@@ -1,8 +1,7 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.AdapterCommunicationInterface;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.frame.FrameToShapeInterface;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.input.InputToShapeInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.frame.FrameToGraphicInterface;
 
 public class ShapeController {
     
@@ -12,10 +11,9 @@ public class ShapeController {
     protected SelectionManager ssm = null;
     protected TranslationManager stm = null;
     
-    protected InternalShapeMediatorInterface smi = null;
+    protected InternalMediatorInterface smi = null;
     
-    protected FrameToShapeInterface frame = null;
-    protected InputToShapeInterface input = null;
+    protected FrameToGraphicInterface frame = null;
     
     //protected ExternalShapeToFrameInterface frameInterface = null;
     protected GraphicToInputFacadeInterface inputInterface = null;
@@ -24,7 +22,7 @@ public class ShapeController {
     public ShapeController(GraphicToFrame shapeFacade, AdapterCommunicationInterface adapter){
         this.shapeFacadeInterface = shapeFacade;
 
-        smi = new InternalShapeMediator(adapter);
+        smi = new InternaMediator(adapter);
         
         sm = new ShapeManager(smi);
         stm = new TranslationManager(smi);

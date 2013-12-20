@@ -14,7 +14,7 @@ public class mlPasteStrategy implements mlMouseStrategy{
         this.controller = contr;
         this.listener = listener;
         
-        copyPoint = controller.shape.copyInitialize();
+        copyPoint = controller.graphic.copyInitialize();
         copyPoint.x += contr.frame.getTranslationX();
         copyPoint.y += contr.frame.getTranslationY();
     }
@@ -34,14 +34,14 @@ public class mlPasteStrategy implements mlMouseStrategy{
             start.x = x;
             start.y = y;
 
-            controller.shape.clearCurSelection();
-            controller.shape.pasteInitialize();
+            controller.graphic.clearCurSelection();
+            controller.graphic.pasteInitialize();
             
             dragging = true;
         }else{
             dragging = false;
             
-            controller.shape.pasteFinished();
+            controller.graphic.pasteFinished();
             
             listener.clear();
             controller.frame.repaint();
@@ -56,7 +56,7 @@ public class mlPasteStrategy implements mlMouseStrategy{
     @Override
     public void mouseMoved(Point p) {
         if(dragging) {
-            controller.shape.pasteTranslate(p.x,p.y, start);
+            controller.graphic.pasteTranslate(p.x,p.y, start);
             start.x = p.x;
             start.y = p.y;
         }

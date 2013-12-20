@@ -5,13 +5,12 @@ import java.awt.geom.AffineTransform;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.TranslatedObjectInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.AdapterCommunicationInterface;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.frame.FrameToShapeInterface;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.input.InputToShapeInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.frame.FrameToGraphicInterface;
 
 public class GraphicToFrame implements GraphicToFrameInterface{
 
 
-    private InternalShapeMediatorInterface smi = null;
+    private InternalMediatorInterface smi = null;
     private ShapeManager sm = null;
     private TransformationManager srm = null;
     private TranslationManager stm = null;
@@ -70,14 +69,9 @@ public class GraphicToFrame implements GraphicToFrameInterface{
 
 
     @Override
-    public void registerFrameInterface(FrameToShapeInterface frameInterface) {
+    public void registerFrameInterface(FrameToGraphicInterface frameInterface) {
         sc.frame = frameInterface;
         smi.registerFrameInterface(frameInterface);
-    }
-
-    @Override
-    public void registerInputInterface(InputToShapeInterface input) {
-        sc.input = input;
     }
 
     @Override

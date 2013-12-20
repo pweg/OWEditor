@@ -22,19 +22,7 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.GUISettings;
  * found under
  * http://www.java2s.com/Code/Java/2D-Graphics-GUI/ResizesortranslatesaShape.htm
  */
-public class TransformationBorder extends SimpleShapeObject{
-    
-    public static final byte MODEONECENTER   = 0;
-    public static final byte MODEALLCENTER     = 1;
-    
-    public static final byte INNOTHING           = 0;
-    public static final byte INROTATIONCENTER    = 1;
-    public static final byte INEDGES             = 2;
-    
-    public static final byte UPPERLEFT      = 1;
-    public static final byte UPPERRIGHT     = 2;
-    public static final byte BOTTOMLEFT     = 3;
-    public static final byte BOTTOMRIGHT    = 4;
+public class TransformationBorder extends SimpleShapeObject implements TransformationBorderInterface{
     
 
     private Shape originalShape = null;
@@ -262,12 +250,8 @@ public class TransformationBorder extends SimpleShapeObject{
         
         return list;
     }
-    
-    /**
-     * This has to be called, after one scaling operation, in order
-     * to do another scaling and the border not going back to its old
-     * position.
-     */
+
+    @Override
     public void scaleUpdate(){
         //Rectangle bounds = transformedShape.getBounds();
         //originalShape = new Rectangle(bounds.x, bounds.y, bounds.width, bounds.height);
@@ -276,25 +260,15 @@ public class TransformationBorder extends SimpleShapeObject{
         tinyShapes = setTinyRectangle(originalShape);
         scale = 1;
     }
-    
-    /**
-     * This translates the border, but only after scaling operations have 
-     * been completed. 
-     */
+
+    @Override
     public void setScaleDistance(double distanceX, double distanceY) { 
         this.scaleTranslationX = distanceX;
         this.scaleTranslationY = distanceY;   
         
     }
 
-    /**
-     * Translates the center rectangle, which is used as rotation center.
-     * 
-     * @param distanceX The distance in x direction. The sign should not
-     * be changed, because it will be subtracted.
-     * @param distanceY The distance in y direction. The sign should not
-     * be changed, because it will be subtracted.
-     */
+    @Override
     public void setCenterTranslation(double distanceX, double distanceY) { 
         AffineTransform transform = new AffineTransform();
         transform.translate(-distanceX, -distanceY);
@@ -328,10 +302,12 @@ public class TransformationBorder extends SimpleShapeObject{
     }
 
 
+    @Override
     public void setRotation(double rotation) {
         this.rotation = rotation;
     }
 
+    @Override
     public byte checkShapes(Point p) {
         
         if(transformedCenter.contains(p)){
@@ -349,29 +325,27 @@ public class TransformationBorder extends SimpleShapeObject{
         
         return TransformationBorder.INNOTHING;
     }
-    
-    /**
-     * Returns the original rotation center, which uses the coordinates
-     * of the virtual world, except the scaling value. 
-     * This can be needed when doing operations on other shapes.
-     * @return The original rotation center as point.
-     */
+
+    @Override
     public Point getOriginalCenter(){
         int x = (int) Math.round(rotationCenter.getBounds().getCenterX());
         int y = (int) Math.round(rotationCenter.getBounds().getCenterY());
         return new Point (x, y);
     }
 
+    @Override
     public Point getEdge(){
         int x = currentClicked.getBounds().x;
         int y = currentClicked.getBounds().y;
         return new Point(x, y);
     }
-    
+
+    @Override
     public byte getCurrentClicked(){
         return currentClickedCode;
     }
 
+    @Override
     public void setRotationCenterUpdate() {        
         
         AffineTransform transform = new AffineTransform();
@@ -391,6 +365,7 @@ public class TransformationBorder extends SimpleShapeObject{
         
     }
 
+    @Override
     public void setScale(double scale) {
         //workingScale = workingScale+(scale-this.scale); 
         this.scale = scale;

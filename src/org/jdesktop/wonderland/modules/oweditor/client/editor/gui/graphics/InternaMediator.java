@@ -4,21 +4,21 @@ import java.awt.Point;
 import java.util.ArrayList;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.AdapterCommunicationInterface;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.frame.FrameToShapeInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.frame.FrameToGraphicInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.DraggingObject;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.ShapeObject;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.TransformationBorder;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.SimpleShapeObject;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.TransformationBorderInterface;
 
-public class InternalShapeMediator implements InternalShapeMediatorInterface{
+public class InternaMediator implements InternalMediatorInterface{
     
     private ShapeManager sm = null;
     private SelectionManager ssm = null;
     private TranslationManager stm = null;
     private AdapterCommunicationInterface adapter = null;
-    private FrameToShapeInterface frame = null;
+    private FrameToGraphicInterface frame = null;
     
-    public InternalShapeMediator(AdapterCommunicationInterface adapter) {
+    public InternaMediator(AdapterCommunicationInterface adapter) {
         this.adapter = adapter;
     }
 
@@ -109,13 +109,13 @@ public class InternalShapeMediator implements InternalShapeMediatorInterface{
     }
 
     @Override
-    public TransformationBorder getShapeBorder() {
+    public TransformationBorderInterface getShapeBorder() {
         return sm.getShapeBorder();
     }
 
     @Override
     public void registerFrameInterface(
-            FrameToShapeInterface frameInterface) {
+            FrameToGraphicInterface frameInterface) {
         this.frame = frameInterface;
     }
 

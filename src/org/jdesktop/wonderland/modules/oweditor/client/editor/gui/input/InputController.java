@@ -10,18 +10,16 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.Graph
 
 public class InputController {
     
-    protected GraphicToInputFacadeInterface shape = null;
+    protected GraphicToInputFacadeInterface graphic = null;
     protected FrameToInputInterface frame = null;
     
     protected MouseAndKeyListener mkListener = null;
     
     protected InputToFrame inputInterface = null;
-    protected InputToShape shapeInterface = null;
     
     public InputController(){
         mkListener = new MouseAndKeyListener(this);
         inputInterface = new InputToFrame(this);
-        shapeInterface = new InputToShape(this);
     }
 
     protected MouseInputAdapter getMouseListener(){
@@ -41,8 +39,8 @@ public class InputController {
         
     }
 
-    public void registerShapeInterface(GraphicToInputFacadeInterface shape) {
-        this.shape = shape;
+    public void registerGraphicInterface(GraphicToInputFacadeInterface graphic) {
+        this.graphic = graphic;
     }
 
     public void registerFrameInterface(FrameToInputInterface frame) {

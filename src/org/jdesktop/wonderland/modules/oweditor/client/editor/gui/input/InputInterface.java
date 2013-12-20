@@ -23,14 +23,12 @@ public interface InputInterface {
     public MouseWheelListener getMouseWheelListener();
     
     public InputToFrameInterface getFrameInterface();
-
-    public InputToShapeInterface getShapeInterface();
     
     public void notifyMinXChange(int x);
     
     public void notifyMinYChange(int y);
     
-    public void registerGraphicInterface(GraphicToInputFacadeInterface shape);
+    public void registerGraphicInterface(GraphicToInputFacadeInterface graphic);
     
     public void registerFrameInterface(FrameToInputInterface frameToInputInterface);
 

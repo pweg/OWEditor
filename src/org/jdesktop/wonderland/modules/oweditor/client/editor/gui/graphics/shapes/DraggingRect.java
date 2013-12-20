@@ -122,6 +122,7 @@ public class DraggingRect extends DraggingObject{
         }
 
         transformedShape = at.createTransformedShape(transformedShape);
+        
         g.draw(transformedShape); 
     }
 
@@ -130,6 +131,7 @@ public class DraggingRect extends DraggingObject{
      */
     @Override
     public void setLocation(int x, int y) {
+        
     }
 
     @Override

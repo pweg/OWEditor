@@ -9,9 +9,9 @@ public class TranslationManager {
 
     //These are shapes for updates.
     private sCollisionStrategy strategy = null;
-    private InternalShapeMediatorInterface smi = null;
+    private InternalMediatorInterface smi = null;
 
-    public TranslationManager(InternalShapeMediatorInterface smi){
+    public TranslationManager(InternalMediatorInterface smi){
         
         this.smi = smi;
     }

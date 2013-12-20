@@ -1,20 +1,22 @@
-package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics;
-
-import java.awt.Graphics2D;
-import java.awt.geom.AffineTransform;
+package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.frame;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.TranslatedObjectInterface;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.frame.FrameToGraphicInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.GraphicToFrameInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.GraphicToInputFacadeInterface;
 
-public interface GraphicToFrameInterface {
-    
-    public void drawShapes(Graphics2D g2, AffineTransform at);
-    
-    public void registerFrameInterface(FrameToGraphicInterface frameInterface);
+/**
+ * This is the interface, which forwards data changes  from the gui package
+ * to the graphics package.
+ * 
+ * @author Patrick
+ *
+ */
+public interface FrameGraphicInterface {
+
 
     public GraphicToFrameInterface getFrameInterface();
     
-    public GraphicToInputFacadeInterface getInputInterface();
+    public GraphicToInputFacadeInterface getGraphicInputInterface();
 
     public void createShape(TranslatedObjectInterface dataObject);
 
@@ -27,5 +29,4 @@ public interface GraphicToFrameInterface {
     public void updateShapeRotation(long id, double rotation);
 
     public void updateShapeScale(long id, double scale);
-
 }

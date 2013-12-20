@@ -35,11 +35,6 @@ public class Input implements InputInterface{
     public InputToFrameInterface getFrameInterface() {
         return ic.inputInterface;
     }
-    
-    @Override
-    public InputToShapeInterface getShapeInterface(){
-        return ic.shapeInterface;
-    }
 
     @Override
     public void notifyMinXChange(int x) {
@@ -56,8 +51,8 @@ public class Input implements InputInterface{
     }
 
     @Override
-    public void registerGraphicInterface(GraphicToInputFacadeInterface shape) {
-        ic.registerShapeInterface(shape);
+    public void registerGraphicInterface(GraphicToInputFacadeInterface graphic) {
+        ic.registerGraphicInterface(graphic);
     }
 
     @Override

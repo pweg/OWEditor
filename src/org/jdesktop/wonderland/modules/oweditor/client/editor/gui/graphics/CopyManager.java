@@ -7,9 +7,9 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shape
 public class CopyManager {
 
     private ArrayList<ShapeObject> copyShapes = null;
-    private InternalShapeMediatorInterface smi = null;
+    private InternalMediatorInterface smi = null;
     
-    public CopyManager(InternalShapeMediatorInterface smi){
+    public CopyManager(InternalMediatorInterface smi){
         this.smi = smi;
         copyShapes = new ArrayList<ShapeObject>();
     }

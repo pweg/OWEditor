@@ -3,13 +3,13 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics;
 import java.awt.Point;
 import java.util.ArrayList;
 
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.frame.FrameToShapeInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.frame.FrameToGraphicInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.DraggingObject;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.ShapeObject;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.TransformationBorder;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.SimpleShapeObject;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.TransformationBorderInterface;
 
-public interface InternalShapeMediatorInterface {
+public interface InternalMediatorInterface {
     
     public void registerShapeManager(ShapeManager sm);
     public void registerTranslationManager(TranslationManager stm);
@@ -48,10 +48,10 @@ public interface InternalShapeMediatorInterface {
     
     public ShapeObject getShape(long id);
     
-    public TransformationBorder getShapeBorder();
+    public TransformationBorderInterface getShapeBorder();
     
     public void registerFrameInterface(
-            FrameToShapeInterface frameInterface);
+            FrameToGraphicInterface frameInterface);
     
     public Point revertBack(Point p);
 }

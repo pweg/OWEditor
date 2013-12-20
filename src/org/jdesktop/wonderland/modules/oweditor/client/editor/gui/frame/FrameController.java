@@ -15,7 +15,7 @@ public class FrameController {
     
     protected MainFrame frame = null;
 
-    protected FrameToShapeInterface shapeInterface = null;
+    protected FrameToGraphicInterface graphicInterface = null;
     protected FrameToInputInterface inputInterface = null;
     
     protected MouseCoordinates mouseCoords = null;
@@ -29,7 +29,7 @@ public class FrameController {
         frame = new MainFrame(mainScrollPanel);
         popupMenu = new WindowPopupMenu();
         
-        shapeInterface = new FrameToShape(drawingPan);
+        graphicInterface = new FrameToGraphic(drawingPan);
         inputInterface = new FrameToInput(this);
         
         mouseCoords = new MouseCoordinates();
