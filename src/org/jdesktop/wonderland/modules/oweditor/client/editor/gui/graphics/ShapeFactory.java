@@ -13,6 +13,8 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shape
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.SimpleShapeObject;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.ToolTip;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.ToolTipInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.TransformationBorder;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.TransformationBorderInterface;
 
 /**
  * A factory, which is used to create different kinds of
@@ -112,6 +114,26 @@ public class ShapeFactory {
                 throw new IllegalArgumentException(
                     "Unknown type");  
         }
+    }
+    
+    /**
+     * Creates a transformation border, which is shown by transformation,
+     * like rotation and scaling.
+     * 
+     * @param x The x coordinate.
+     * @param y The y coordinate.
+     * @param width The width.
+     * @param height The height.
+     * @param at The last affine transform used to paint the image.
+     * @param mode The mode of the border.
+     * @return The created border.
+     */
+    public TransformationBorderInterface createTransformBorder(int x, int y, 
+            int width, int height, 
+            AffineTransform at,
+            byte mode){
+        return new TransformationBorder(x, y, width, height, at,
+                mode);
     }
     
     /**

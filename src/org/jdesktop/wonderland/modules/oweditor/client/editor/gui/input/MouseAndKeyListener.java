@@ -136,6 +136,8 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
     public void mouseDragged(MouseEvent e) {
         Point p = e.getPoint();
         ic.frame.paintMouseCoords(p.x, p.y);
+        writeShapeName(p);
+        
         if(strategy == null){
             return;
         }
@@ -181,11 +183,18 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
     public void keyReleased(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
                 shiftPressed = false;
-        }else if( e.getKeyCode() == KeyEvent.VK_DELETE){
+        }
+        //DELETE
+        else if( e.getKeyCode() == KeyEvent.VK_DELETE){
             ic.graphic.deleteCurrentSelection();
-        }else if(e.getKeyCode() == KeyEvent.VK_ESCAPE){
+        }
+        //ESCAPE
+        else if(e.getKeyCode() == KeyEvent.VK_ESCAPE){
             clear();
-        }else if(e.isControlDown()){
+        }
+        //CTRL
+        else if(e.isControlDown()){
+            //COPY
             if(e.getKeyCode() == KeyEvent.VK_C){
                 copyShapes();
                 //This can be used, if you want the copies to appear
@@ -197,17 +206,25 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
                  * copyPoint.x = (int) Math.round(copyPoint.x / scale);
                  * copyPoint.y = (int) Math.round(copyPoint.y / scale);
                 */
-            }else if(e.getKeyCode() == KeyEvent.VK_V && mode != COPY){
+            }
+            //PASTE
+            else if(e.getKeyCode() == KeyEvent.VK_V && mode != COPY){
                 pasteShapes(); 
-            }else if(e.getKeyCode() == KeyEvent.VK_X && mode != COPY){
+            }
+            //CUT
+            else if(e.getKeyCode() == KeyEvent.VK_X && mode != COPY){
                 cutShapes();
             }
         }else{
+            //ENTER
             if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                //FINISH ROTATION
                 if(mode == ROTATE){
                     ic.graphic.rotateFinished();
                     clear();
-                }else if(mode == SCALE){
+                }
+                //FINISH SCALING
+                else if(mode == SCALE){
                     ic.graphic.scaleFinished();
                     clear();
                 }
@@ -215,6 +232,11 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
         }
     }
     
+    /**
+     * Removes the current set mode, cleans all helping shapes
+     * and sets the current strategy to zero. If the paste
+     * strategy is set, the strategy will be reseted.
+     */
     public void clear(){
         mode = NOMODE;
         ic.graphic.cleanAll();
@@ -229,16 +251,26 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
         ic.frame.repaint();
     }
     
+    /**
+     * Cut shapes, like copy, but removing the
+     * original shapes.
+     */
     public void cutShapes(){
         copyShapes();
         ic.graphic.deleteCurrentSelection();
     }
     
+    /**
+     * Copy shapes.
+     */
     public void copyShapes(){
         pasteStrategy = new mlPasteStrategy(ic, this);
         strategy = pasteStrategy;
     }
     
+    /**
+     * Paste shapes.
+     */
     public void pasteShapes(){
         
         if (pasteStrategy == null)
@@ -253,6 +285,9 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
         ic.frame.repaint();
     }
 
+    /**
+     * Rotates the shapes.
+     */
     public void rotateShapes() {
         strategy = null;
         ic.graphic.rotationInitialize();
@@ -260,6 +295,9 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
         ic.frame.repaint();
     }
     
+    /**
+     * Scales the shapes.
+     */
     public void scaleShapes(){
         strategy = null;
         ic.graphic.scaleInitialize();
@@ -267,19 +305,35 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
         ic.frame.repaint();
     }
     
+    /**
+     * Removes the current strategy.
+     */
     public void removeStrategy(){
         strategy = null;
     }
     
-    
+    /**
+     * Sets a new strategy for the rotation center.
+     */
     public void setRotationCenterStrategy(){
         strategy = new mlRotationCenterStrategy(ic);
     }
     
+    /**
+     * Returns the current paste strategy set.
+     * 
+     * @return The paste Strategy.
+     */
     public mlPasteStrategy getPasteStrategy(){
         return pasteStrategy;
     }
     
+    /**
+     * Check for name tooltip. If the graphic package 
+     * returns true, a repaint is necessary. 
+     * 
+     * @param p The current mouse point.
+     */
     private void writeShapeName(Point p){
         String name = ic.graphic.getShapeName(p);
         
@@ -290,7 +344,9 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
         }
     }
 
-    
+    /**
+     * Removes the shape name tooltip.
+     */
     private void clearShapeName() {
         if(ic.graphic.removeShapeName())
             ic.frame.repaint();

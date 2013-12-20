@@ -174,8 +174,9 @@ public class SelectionManager {
         int max_y = Integer.MIN_VALUE;
         
         for(ShapeObject shape : selectedShapes){
-            int s_x = (int) Math.round(shape.getX()+shape.getWidth()/2);
-            int s_y = (int) Math.round(shape.getY()+shape.getHeight()/2);
+            Rectangle bounds = shape.getTransformedShape().getBounds();
+            int s_x = (int) Math.round(bounds.getX()+bounds.getWidth()/2);
+            int s_y = (int) Math.round(bounds.getY()+bounds.getHeight()/2);
 
             if(s_x > max_x)
                 max_x = s_x;

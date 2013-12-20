@@ -4,8 +4,7 @@ import java.awt.Point;
 
 /**
  * This mouse listener strategy is used for dragging
- * objects and creates the dragging shapes in the 
- * ShapeManager.
+ * the center of the rotation border.
  * 
  * @author Patrick
  *

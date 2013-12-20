@@ -84,7 +84,7 @@ public class GraphicToInputFacade implements GraphicToInputFacadeInterface{
         }
         
         adapter.setCopyUpdate(ids);
-        return ssm.getSelectionCenter();
+        return sc.frame.revertBack(ssm.getSelectionCenter());
     }
 
     @Override
