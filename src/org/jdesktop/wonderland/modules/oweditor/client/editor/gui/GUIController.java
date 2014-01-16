@@ -42,7 +42,7 @@ public class GUIController implements GUIControllerInterface{
         ac = new AdapterCommunication();
         
         frame = new Frame(ac);
-        input = new Input();
+        input = new Input(this);
         
         frame.addMouseListener(input.getMouseListener());
         frame.addKeyListener(input.getKeyListener());
@@ -89,6 +89,10 @@ public class GUIController implements GUIControllerInterface{
 
     public void registerCoordinateTranslator(CoordinateTranslatorInterface coordinateTranslator) {
         frame.setCoordinateTranslator(coordinateTranslator);
+    }
+
+    public void createTemp() {
+        ac.createObject();
     }
     
 

@@ -9,6 +9,8 @@ import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.NoninvertibleTransformException;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import javax.swing.JPanel;
 import javax.swing.event.ChangeEvent;
@@ -32,6 +34,10 @@ public class WindowDrawingPanel extends JPanel implements ChangeListener {
     private double scale = 1.0;
       
     private FrameController fc = null;
+
+    private final ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
+    private final Lock readLock = lock.readLock();
+    private final Lock writeLock = lock.writeLock();
     
     /*
      * These two translation integers are used to 
@@ -74,15 +80,21 @@ public class WindowDrawingPanel extends JPanel implements ChangeListener {
      * the scale value.
      */
     public void changeScale(double toAdd){
+        writeLock.lock();
         
         Rectangle r = getVisibleRect();
+        
         if(size.width < r.width/(scale) &&
                 size.height < r.height/(scale) &&
-                toAdd < 0)
+                toAdd < 0){
+
+            writeLock.unlock();
             return;
+        }
     
         scale += toAdd;
         scale = Math.max(0.01, scale);
+        writeLock.unlock();
 
         repaint();  
         revalidate(); 
@@ -98,11 +110,13 @@ public class WindowDrawingPanel extends JPanel implements ChangeListener {
     public void changeViewPort(double curScale){
         Rectangle r = getVisibleRect();
         
+        readLock.lock();
         double v_x = r.x/(curScale)*scale;
         double v_y = r.y/(curScale)*scale;
         
         double add_x = (r.width/curScale-r.width/scale)/2; 
         double add_y = (r.height/curScale-r.height/scale)/2; 
+        readLock.unlock();
         
         int new_x = (int) Math.round(v_x+ add_x);
         int new_y = (int) Math.round(v_y+ add_y);
@@ -135,8 +149,12 @@ public class WindowDrawingPanel extends JPanel implements ChangeListener {
         g2.setRenderingHints(hints);  
 
         AffineTransform at = new AffineTransform();
+        
+        readLock.lock();
         at.translate(translationX*scale, translationY*scale); 
         at.scale(scale, scale);  
+        readLock.unlock();
+        
         g2.setPaint(GUISettings.BGCOLOR); 
         
         fc.graphic.drawShapes(g2, at);
@@ -173,8 +191,11 @@ public class WindowDrawingPanel extends JPanel implements ChangeListener {
      * Returns the preferred size of the drawing panel.
      */
     public Dimension getPreferredSize() {  
+        readLock.lock();
         int w = (int)(scale*size.width);  
         int h = (int)(scale*size.height);  
+        readLock.unlock();
+        
         return new Dimension(w, h);  
     } 
     
@@ -194,8 +215,12 @@ public class WindowDrawingPanel extends JPanel implements ChangeListener {
      * @param x the new x value.
      */
     public void setNewMinX(int x){
+        
+        writeLock.lock();
         int curTrans = translationX;
         translationX = (-x)+ fc.frame.getWidth()/(GUISettings.WIDTHDIVISOR*2);
+        writeLock.unlock();
+        
         setViewportSizeChange(translationX-curTrans, 0);
     }
     
@@ -206,8 +231,11 @@ public class WindowDrawingPanel extends JPanel implements ChangeListener {
      * @param y the new y value.
      */
     public void setNewMinY(int y){
+        writeLock.lock();
         int curTrans = translationY;
         translationY = (-y)+ fc.frame.getHeight()/(GUISettings.HEIGHTDIVISOR*2);
+        writeLock.unlock();
+        
         setViewportSizeChange(0, translationY-curTrans);
     }
     
@@ -215,19 +243,23 @@ public class WindowDrawingPanel extends JPanel implements ChangeListener {
      * @NonNull String scrollPanel;
      */
     private void setViewportSizeChange(int x, int y){
+        readLock.lock();
         Rectangle r = getVisibleRect();
         
         if(y == 0){
-            Point p = new Point((int)Math.round(r.x+x*scale), r.y);            
+            Point p = new Point((int)Math.round(r.x+x*scale), r.y);
+            
             fc.mainScrollPanel.getViewport().setView(fc.mainScrollPanel.getViewport().getView());
             fc.mainScrollPanel.getViewport().setViewPosition(p);
             
         }else if(x == 0){
             Point p = new Point(r.x, (int)Math.round(r.y+y*scale));
+            
             fc.mainScrollPanel.getViewport().setView(fc.mainScrollPanel.getViewport().getView());
             fc.mainScrollPanel.getViewport().setViewPosition(p);
             
         }
+        readLock.unlock();
     }
     
     public int getTranslationX(){
@@ -239,9 +271,15 @@ public class WindowDrawingPanel extends JPanel implements ChangeListener {
     }
 
     public AffineTransform getTransformation() {
+        
+        readLock.lock();
+        
         AffineTransform at = new AffineTransform();
         at.translate(translationX*scale, translationY*scale); 
-        at.scale(scale, scale);  
+        at.scale(scale, scale);
+        
+        readLock.unlock();
+        
         return at;
     }
 

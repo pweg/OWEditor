@@ -18,6 +18,11 @@ public class GUIObserver implements GUIObserverInterface{
     private static final ResourceBundle BUNDLE = ResourceBundle.getBundle(
             "org/jdesktop/wonderland/modules/oweditor/client/resources/Bundle");
     
+    private ServerObject tmp = null;
+    private int count = 1;
+    private int substract = 2;
+    
+    
     /**
      * Creates a new clientUpdate instance.
      * 
@@ -100,6 +105,23 @@ public class GUIObserver implements GUIObserverInterface{
         object.scale = scale;        
         notifyTranslation(id, x,y);
         ac.sua.serverScalingEvent(id);
+    }
+
+    @Override
+    public void notifyCreation() {
+        
+        if(tmp == null){
+            tmp = new ServerObject(596, (float)-12, (float)-14, 0, 1, 
+                    0, (float)1.00, (float)1.00, "TMP");
+            tmp.isAvatar = false;
+        }else{
+            count++;
+            tmp.name = "TMP" + count;
+            tmp.id++;
+            tmp.y-=substract;
+        }
+        ac.ses.addObject(tmp);
+        
     }
 
 }

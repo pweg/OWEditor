@@ -23,6 +23,7 @@ public class ShapeRectangle extends ShapeObject{
     private Rectangle originalShape = null;
     private Shape scaledShape = null;
     private Shape transformedShape = null;
+    private Shape printShape = null;
     private long id = -1;
     private boolean isSelected = false;
     private Paint color = GUISettings.OBJECTCOLOR;
@@ -49,6 +50,10 @@ public class ShapeRectangle extends ShapeObject{
      */
     public ShapeRectangle(int x, int y, int width, int height, long id, String name,
             double rotation, double scale){
+        
+        if(scale == 0)
+            scale = 1;
+        
         originalShape = new Rectangle (x, y, width, height);
         this.name = name;
         this.id = id;
@@ -73,20 +78,19 @@ public class ShapeRectangle extends ShapeObject{
 
     @Override
     public void paintOriginal(Graphics2D g, AffineTransform at) {
-        g.setPaint(color);  
-
+        g.setPaint(color); 
         scaledShape = ShapeUtilities.scaleShape(originalShape, scale, 0,0);
         transformedShape = ShapeUtilities.rotateShape(scaledShape, rotation);
         
         //image transformation
-        transformedShape =  at.createTransformedShape(transformedShape);
+        printShape =  at.createTransformedShape(transformedShape);
         
-        g.fill(transformedShape);
+        g.fill(printShape);
         
         //changes color when selected.
         if(isSelected){
             g.setPaint(GUISettings.SELECTIONCOLOR);
-            g.draw(transformedShape); 
+            g.draw(printShape); 
         }
     }
     

@@ -50,4 +50,7 @@ public interface GUIObserverInterface {
      */
     public void notifyScaling(long id, int x, int y, double scale);
 
+    
+    public void notifyCreation();
+
 }

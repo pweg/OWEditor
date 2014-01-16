@@ -241,13 +241,13 @@ public class GraphicToInputFacade implements GraphicToInputFacadeInterface{
     }
 
     @Override
-    public boolean selectionSwitch(Point p) {
+    public boolean selectionSwitch(Point p, boolean mode) {
         ShapeObject shape = sm.getShapeSuroundingPoint(p);
         
         if(shape == null)
             return false;
         
-        ssm.switchSelection(shape);
+        ssm.switchSelection(shape, mode);
         return true;
     }
 

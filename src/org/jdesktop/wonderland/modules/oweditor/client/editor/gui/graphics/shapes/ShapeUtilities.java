@@ -1,5 +1,6 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes;
 
+import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
@@ -25,7 +26,7 @@ public class ShapeUtilities {
      * @param distance_y The distance on the y axis.
      * @return The translated shape.
      */
-    public static final Shape setTranslation(Shape shape, 
+    public static final Shape translateShape(Shape shape, 
             double distance_x, double distance_y) {        
         AffineTransform transform = new AffineTransform();
         transform.translate(distance_x, distance_y);
@@ -77,5 +78,24 @@ public class ShapeUtilities {
                 shape.getBounds().getCenterX(), 
                 shape.getBounds().getCenterY());
         return transform.createTransformedShape(shape);  
+    }
+    
+    /**
+     * This resizes a shape. BE AWARE, this method should only be used
+     * for rectangle shapes, because it creates a new rectangle.
+     * It would be possible to build a function which would work also for
+     * Ellipses, but it would get too messy.
+     * 
+     * @param shape The shape to resize.
+     * @param width The new width.
+     * @param height The new height.
+     * @return The resized shape.
+     */
+    public static final Shape resizeShape(Shape shape, int width, int height){
+        
+        Rectangle bounds = shape.getBounds();
+        
+        return new Rectangle(bounds.x, bounds.y, width, height); 
+        
     }
 }

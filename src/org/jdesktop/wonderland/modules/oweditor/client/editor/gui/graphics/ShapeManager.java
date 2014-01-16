@@ -51,7 +51,7 @@ public class ShapeManager {
     private final Lock readLock = lock.readLock();
     private final Lock writeLock = lock.writeLock();
     
-    private ToolTipInterface shapeName = null;
+    private ToolTipInterface nameToolTip = null;
 
     
     
@@ -218,8 +218,8 @@ public class ShapeManager {
         if(selectionRectangle != null)
             selectionRectangle.paintOriginal(g2, at);
         
-        if(shapeName != null)
-            shapeName.paint(g2, at);
+        if(nameToolTip != null)
+            nameToolTip.paint(g2, at);
     }
     
     /**
@@ -464,19 +464,19 @@ public class ShapeManager {
      */
     public boolean setNameToolTip(Point p, String name) {
         
-        if(name == null && shapeName != null){
-            shapeName = null;
+        if(name == null && nameToolTip != null){
+            nameToolTip = null;
             return true;
-        }else if(name == null && shapeName == null){
+        }else if(name == null && nameToolTip == null){
             return false;
         }
         
-        if(shapeName == null)
-            shapeName = factory.createToolTip(p, name);
-        else if(shapeName.getText().equals(name)){
-            shapeName.setCoordinates(p);
+        if(nameToolTip == null)
+            nameToolTip = factory.createToolTip(p, name);
+        else if(nameToolTip.getText().equals(name)){
+            nameToolTip.setCoordinates(p);
         }else{
-            shapeName.set(p, name);
+            nameToolTip.set(p, name);
         }
         return true;
     }
@@ -488,10 +488,10 @@ public class ShapeManager {
      * false if there was no tooltip to remove.
      */
     public boolean removeNameTooltip() {
-        if(shapeName == null)
+        if(nameToolTip == null)
             return false;
         else{
-            shapeName = null;
+            nameToolTip = null;
             return true;
         }
     }

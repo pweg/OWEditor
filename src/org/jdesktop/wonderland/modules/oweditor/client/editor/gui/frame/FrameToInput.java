@@ -74,7 +74,7 @@ public class FrameToInput implements FrameToInputInterface {
     }
     @Override
     public void paintMouseCoords(int x, int y) {
-        fc.mouseCoords.paintCoordinates(drawingPan);
+        fc.mouseCoords.paintCoordinates(x,y);
     }
     @Override
     public Point revertBack(Point point) {

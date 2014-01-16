@@ -88,12 +88,13 @@ public interface FrameToInputInterface {
      */
     public void paintMouseCoords(int x, int y);
 
+
     /**
-     * Writes the Name of a shape in a tooltip box
-     * at the given coordinates.
+     * Transforms a point back to the original coordinates,
+     * meaning undoing global scaling and translation.
      * 
-     * @param p The coordinates, where the name should appear.
-     * @param name The name in String.
+     * @param p The point which needs to be reverted.
+     * @return The reverted point when possible, null otherwise.
      */
     public Point revertBack(Point point);
 

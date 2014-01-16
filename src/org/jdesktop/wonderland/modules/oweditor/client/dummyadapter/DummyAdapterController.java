@@ -31,7 +31,11 @@ public class DummyAdapterController implements AdapterControllerMainControllerIn
         ct = new CoordinateTranslator();
         bom = new BackupManager();
         
-        
+        registerComponents();
+    }
+    
+    private void registerComponents(){
+        ses.registerServerUpdate(sua);
     }
 
     @Override

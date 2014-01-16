@@ -172,11 +172,14 @@ public interface GraphicToInputFacadeInterface {
      * the point p.
      * 
      * @param p the point in question.
+     * @param mode The mode of switching. If false, the selection will
+     * only be activated, not deactivated if it is currently activated.
+     * Otherwise it is switch normally.
      * 
      * @return returns true, if a shape was actually found, 
      * surrounding p, false otherwise.
      */
-    public boolean selectionSwitch(Point p);
+    public boolean selectionSwitch(Point p, boolean mode);
     
     /**
      * Resizes the selection rectangle.

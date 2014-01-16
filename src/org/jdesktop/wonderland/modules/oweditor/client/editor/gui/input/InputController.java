@@ -5,6 +5,7 @@ import java.awt.event.MouseWheelListener;
 
 import javax.swing.event.MouseInputAdapter;
 
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.GUIController;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.frame.FrameToInputInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.GraphicToInputFacadeInterface;
 
@@ -16,10 +17,12 @@ public class InputController {
     protected MouseAndKeyListener mkListener = null;
     
     protected InputToFrame inputInterface = null;
+    protected GUIController gc = null;
     
-    public InputController(){
+    public InputController(GUIController gc){
         mkListener = new MouseAndKeyListener(this);
         inputInterface = new InputToFrame(this);
+        this.gc = gc;
     }
 
     protected MouseInputAdapter getMouseListener(){
@@ -45,6 +48,10 @@ public class InputController {
 
     public void registerFrameInterface(FrameToInputInterface frame) {
         this.frame = frame;
+    }
+
+    public void createTemp() {
+        gc.createTemp();
     }
 
 }

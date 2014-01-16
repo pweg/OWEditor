@@ -15,10 +15,16 @@ public class ServerSimulator {
     
     public long currentID = 0;
     
+    public ServerUpdateAdapter sua = null;
+    
     public ServerSimulator(){
         objects = new ArrayList<ServerObject> ();
         
         initializeObjects();
+    }
+    
+    public void registerServerUpdate(ServerUpdateAdapter sua){
+        this.sua = sua;
     }
     
     private void initializeObjects(){
@@ -150,5 +156,11 @@ public class ServerSimulator {
     public ArrayList<ServerObject> getObjects(){
         return objects;
     }
+    
+    public void addObject(ServerObject so){
+        objects.add(so);
+        sua.createObject(so);
+    }
+    
 
 }

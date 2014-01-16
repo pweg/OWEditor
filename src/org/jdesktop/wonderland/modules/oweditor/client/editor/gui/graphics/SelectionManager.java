@@ -49,11 +49,20 @@ public class SelectionManager {
      * selected it will be unselected and vice versa.
      * 
      * @param shape the shape in question.
+     * @param mode false: does only switch, if the shape is not selected, 
+     * clearing the current selection. true: switches every time.
      */
-    public void switchSelection(ShapeObject shape){
+    public void switchSelection(ShapeObject shape, boolean mode){
+              
         if(shape.isSelected()){
-            selectedShapes.remove(shape);   
+            if(mode == true){
+                selectedShapes.remove(shape);   
+            }
+            else
+                return;
         }else{
+            if(mode == false)
+                clearCurSelection();
             selectedShapes.add(shape);
         }
         shape.switchSelection();
@@ -134,7 +143,7 @@ public class SelectionManager {
         ArrayList<ShapeObject> list = smi.getShapesInSelectionRect();
         
         for(ShapeObject shape : list){
-            switchSelection(shape);
+            switchSelection(shape, true);
         }
     }
     

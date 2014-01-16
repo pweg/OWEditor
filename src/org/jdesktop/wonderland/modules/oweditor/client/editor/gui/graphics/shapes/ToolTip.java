@@ -4,6 +4,7 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.Shape;
 import java.awt.Toolkit;
 import java.awt.font.FontRenderContext;
 import java.awt.geom.AffineTransform;
@@ -48,16 +49,19 @@ public class ToolTip implements ToolTipInterface{
         if(firstPaint)
             createRectangle(g);
         
-
+        Shape transformed = at.createTransformedShape(shape);
+        transformed = ShapeUtilities.resizeShape(transformed, shape.width, shape.height);
+        transformed = ShapeUtilities.translateShape(transformed, marginMouse, marginMouse);
+        
         g.setPaint(GUISettings.TOOLTIPBGCOLOR);
-        g.fill(shape);
+        g.fill(transformed);
         
         g.setPaint(GUISettings.TOOLTIPTEXTCOLOR);
-        g.draw(shape);
+        g.draw(transformed);
         
 
-        textX = (int) (shape.getX() + marginText);
-        textY = (int) (shape.getY() + marginText+fontSize);
+        textX = (int) (transformed.getBounds().getX() + marginText);
+        textY = (int) (transformed.getBounds().getY() + marginText+fontSize);
         
         AffineTransform original =  g.getTransform();
         AffineTransform invert = new AffineTransform();
@@ -93,7 +97,7 @@ public class ToolTip implements ToolTipInterface{
         int width = (int) Math.ceil(bounds.getWidth()+2*marginText);
         int height = (int) Math.round(bounds.getHeight()+2*marginText);
         
-        shape = new Rectangle(coordinates.x+marginMouse, coordinates.y+marginMouse,
+        shape = new Rectangle(coordinates.x, coordinates.y,
                 width, height );
         
         firstPaint = false;
@@ -103,15 +107,15 @@ public class ToolTip implements ToolTipInterface{
     public void setCoordinates(Point p){
         //Do not use the point directly, because it 
         //is used for dragging shapes too.
-        int x = p.x + marginMouse;
-        int y = p.y + marginMouse;
+        int x = p.x;
+        int y = p.y;
         shape.setLocation(x,y);
     }
 
     @Override
     public void set(Point coordinates, String text) {
-        this.coordinates.x = coordinates.x+marginMouse;
-        this.coordinates.y = coordinates.y+marginMouse;
+        this.coordinates.x = coordinates.x;
+        this.coordinates.y = coordinates.y;
         this.text = text;
         
         firstPaint = true;

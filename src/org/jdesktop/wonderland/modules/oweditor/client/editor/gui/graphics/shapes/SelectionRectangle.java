@@ -57,7 +57,7 @@ public class SelectionRectangle extends SimpleShapeObject{
          * may be changed later, because rectangle should be transformed.
          */
         //transformedShape = at.createTransformedShape(originalShape);
-        g.draw(originalShape); 
+        g.draw(at.createTransformedShape(originalShape)); 
     }
 
     @Override

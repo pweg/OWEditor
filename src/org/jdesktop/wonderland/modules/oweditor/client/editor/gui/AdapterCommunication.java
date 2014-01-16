@@ -72,4 +72,8 @@ public class AdapterCommunication implements AdapterCommunicationInterface{
     public void setScaleUpdate(long id, int x, int y, double scale) {
         goi.notifyScaling(id, x, y, scale);
     }
+
+    public void createObject() {
+        goi.notifyCreation();
+    }
 }

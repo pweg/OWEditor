@@ -43,43 +43,39 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
     
     public void mousePressed(MouseEvent e) {
         
+        Point p = ic.frame.revertBack(e.getPoint());
+        
         //operations with shift pressed
         if(shiftPressed && mode == NOMODE){
             if(e.getButton() ==  MouseEvent.BUTTON1){
-                
-                Point p = e.getPoint();
-                
                 //switch selection, or selection rectangle
                 //in shift mode
-                if(!ic.graphic.selectionSwitch(p)){
+                if(!ic.graphic.selectionSwitch(p, true)){
                     strategy = new mlSelectionRectShiftStrategy(ic);
-                    strategy.mousePressed(e.getPoint());
+                    strategy.mousePressed(p);
                 } 
                 ic.frame.repaint();               
             }
         }else{
-             //dragging shapes/selection
+             //dragging shapes/selection rectangle
              if(e.getButton() ==  MouseEvent.BUTTON1){
                  if(mode == NOMODE){
-             
-                     Point p = e.getPoint();
                         
                      if(ic.graphic.isMouseInObject(p)){
                          strategy = new mlTranslateStrategy(ic);
-                         strategy.mousePressed(e.getPoint());
+                         strategy.mousePressed(p);
                      }else{
                          strategy = new mlSelectionRectStrategy(ic);
-                         strategy.mousePressed(e.getPoint());
+                         strategy.mousePressed(p);
                      }
                  }
                  //paste/insertion
                  else if(mode == COPY){
                      if(strategy != null)
-                         strategy.mousePressed(e.getPoint());
+                         strategy.mousePressed(p);
                  }
                  //rotation
                  else if(mode == ROTATE){
-                     Point p = e.getPoint();
                      
                      if(ic.graphic.isMouseInBorder(p))
                          strategy = new mlRotationStrategy(ic);
@@ -91,7 +87,6 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
                  }
                  //scale
                  else if(mode == SCALE){
-                     Point p = e.getPoint();
                      
                      if(ic.graphic.isMouseInBorder(p))
                          strategy = new mlScaleStrategy(ic);
@@ -104,17 +99,22 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
                  if(mode == NOMODE || mode == COPY)
                      ic.graphic.cleanHelpingShapes();
                  strategy = new mlPanStrategy(ic.frame);
-                 strategy.mousePressed(e.getPoint());
+                 strategy.mousePressed(p);
              }else{
                  clear();
                  
              }
         }
     }
+    
     public void mouseClicked(MouseEvent e) {
+
+        Point p = e.getPoint();
+        
         if (e.getButton() ==  MouseEvent.BUTTON3 && mode <= COPY){
+            ic.graphic.selectionSwitch(ic.frame.revertBack(p), false);
             strategy = new mlPopupStrategy(ic);
-            strategy.mousePressed(e.getPoint());
+            strategy.mousePressed(p);
         }
      }
     
@@ -134,7 +134,8 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
     }
 
     public void mouseDragged(MouseEvent e) {
-        Point p = e.getPoint();
+        Point p = ic.frame.revertBack(e.getPoint());
+        
         ic.frame.paintMouseCoords(p.x, p.y);
         writeShapeName(p);
         
@@ -145,7 +146,8 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
     }
     
     public void mouseMoved(MouseEvent e){
-        Point p = e.getPoint();
+        Point p = ic.frame.revertBack(e.getPoint());
+        
         ic.frame.paintMouseCoords(p.x, p.y);
 
         writeShapeName(p);
@@ -158,11 +160,14 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
     }
     
     public void mouseReleased(MouseEvent e){
+
+        Point p = ic.frame.revertBack(e.getPoint());
+        
         if(strategy == null){
             ic.frame.repaint();
             return;
         }
-        strategy.mouseReleased(e.getPoint());
+        strategy.mouseReleased(p);
         strategy = null;
     }
     
@@ -176,15 +181,7 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
     public void keyPressed(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
             shiftPressed = true;
-        }
-    }
-
-    @Override
-    public void keyReleased(KeyEvent e) {
-        if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
-                shiftPressed = false;
-        }
-        //DELETE
+        }//DELETE
         else if( e.getKeyCode() == KeyEvent.VK_DELETE){
             ic.graphic.deleteCurrentSelection();
         }
@@ -215,21 +212,30 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
             else if(e.getKeyCode() == KeyEvent.VK_X && mode != COPY){
                 cutShapes();
             }
-        }else{
-            //ENTER
-            if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                //FINISH ROTATION
-                if(mode == ROTATE){
-                    ic.graphic.rotateFinished();
-                    clear();
-                }
-                //FINISH SCALING
-                else if(mode == SCALE){
-                    ic.graphic.scaleFinished();
-                    clear();
-                }
+          //ENTER
+        }else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+            //FINISH ROTATION
+            if(mode == ROTATE){
+                ic.graphic.rotateFinished();
+                clear();
             }
+            //FINISH SCALING
+            else if(mode == SCALE){
+                ic.graphic.scaleFinished();
+                clear();
+            } 
         }
+        else if (e.getKeyCode() == KeyEvent.VK_F9){
+            ic.createTemp();
+        }
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+        if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
+                shiftPressed = false;
+        }
+        
     }
     
     /**
