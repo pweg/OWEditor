@@ -41,7 +41,8 @@ public class FrameGraphic implements FrameGraphicInterface{
 
     @Override
     public void updateShape(long id, int x, int y, String name) {
-        graphic.updateShape(id, x, y, name);
+        graphic.updateShapeCoordinates(id, x, y);
+        graphic.updateShapeName(id, name);
     }
 
     @Override

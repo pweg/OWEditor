@@ -51,8 +51,8 @@ public class GraphicToFrame implements GraphicToFrameInterface{
     }
 
     @Override
-    public void updateShape(long id, int x, int y, String name) {
-        sm.changeShape(id, x, y, name);
+    public void updateShapeName(long id, String name) {
+        sm.renameShape(id,name);
     }
 
 

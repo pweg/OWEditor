@@ -24,10 +24,6 @@ public interface InputInterface {
     
     public InputToFrameInterface getFrameInterface();
     
-    public void notifyMinXChange(int x);
-    
-    public void notifyMinYChange(int y);
-    
     public void registerGraphicInterface(GraphicToInputFacadeInterface graphic);
     
     public void registerFrameInterface(FrameToInputInterface frameToInputInterface);

@@ -92,9 +92,8 @@ public class TransformationManager {
      */
     public void setRotationCenter(TransformationBorderInterface border, Point start, Point end) {
         
-        double scale = smi.getScale();
-        double distance_x = (start.x - end.x)/scale;
-        double distance_y = (start.y - end.y)/scale;
+        double distance_x = (start.x - end.x);
+        double distance_y = (start.y - end.y);
         
         border.setCenterTranslation(distance_x, distance_y);
     }

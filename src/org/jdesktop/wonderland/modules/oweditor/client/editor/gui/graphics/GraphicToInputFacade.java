@@ -74,18 +74,10 @@ public class GraphicToInputFacade implements GraphicToInputFacadeInterface{
     }
     @Override
     public Point copyInitialize() {
-        scm.initilaizeCopy();
-        
-        ArrayList<Long> ids = new ArrayList<Long>();
-        
-        ArrayList<ShapeObject> copy = scm.getCopyShapes();
-        
-        for(ShapeObject shape : copy){
-            ids.add(shape.getID());
-        }
+        ArrayList<Long> ids = scm.initilaizeCopy();
         
         adapter.setCopyUpdate(ids);
-        return sc.frame.revertBack(ssm.getSelectionCenter());
+        return ssm.getSelectionCenter();
     }
 
     @Override

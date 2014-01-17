@@ -26,10 +26,10 @@ public class TransformationBorder extends SimpleShapeObject implements Transform
     
 
     private Shape originalShape = null;
-    private Shape rotationCenter = null;
-    private Shape transformedCenter = null;
-    
     private Shape transformedShape = null;
+    
+    private Shape originalCenter = null;
+    private Shape transformedCenter = null;
     
     ArrayList<Shape> tinyShapes = null;
     ArrayList<Shape> transformedTinyShapes = null;
@@ -75,7 +75,7 @@ public class TransformationBorder extends SimpleShapeObject implements Transform
         int center_x = (int) Math.round(x+(width/2));
         int center_y = (int) Math.round(y+(height/2));
         
-        rotationCenter = new Rectangle(center_x-(int)Math.round(tinySizeHalf/initialScaleX),
+        originalCenter = new Rectangle(center_x-(int)Math.round(tinySizeHalf/initialScaleX),
                 center_y-(int)Math.round(tinySizeHalf/initialScaleY),
                 (int) Math.round(tinySize/initialScaleX),
                 (int) Math.round(tinySize/initialScaleY));    
@@ -107,8 +107,8 @@ public class TransformationBorder extends SimpleShapeObject implements Transform
         AffineTransform transform = new AffineTransform();
         //transform.scale(workingScale, workingScale);
         transform.rotate(Math.toRadians(rotation), 
-                rotationCenter.getBounds().getCenterX(), 
-                rotationCenter.getBounds().getCenterY());
+                originalCenter.getBounds().getCenterX(), 
+                originalCenter.getBounds().getCenterY());
         transformedShape = transform.createTransformedShape(originalShape);
         
         transformedTinyShapes.clear();
@@ -136,7 +136,7 @@ public class TransformationBorder extends SimpleShapeObject implements Transform
             g.draw(r);
         }
 
-        transformedCenter = at.createTransformedShape(rotationCenter);
+        transformedCenter = at.createTransformedShape(originalCenter);
         if(mode != TransformationBorder.MODEALLCENTER){
             g.draw(transformedCenter); 
         }
@@ -272,7 +272,7 @@ public class TransformationBorder extends SimpleShapeObject implements Transform
     public void setCenterTranslation(double distanceX, double distanceY) { 
         AffineTransform transform = new AffineTransform();
         transform.translate(-distanceX, -distanceY);
-        rotationCenter = transform.createTransformedShape(rotationCenter);
+        originalCenter = transform.createTransformedShape(originalCenter);
     }
 
     @Override
@@ -310,11 +310,11 @@ public class TransformationBorder extends SimpleShapeObject implements Transform
     @Override
     public byte checkShapes(Point p) {
         
-        if(transformedCenter.contains(p)){
+        if(originalCenter.contains(p)){
             return TransformationBorder.INROTATIONCENTER;
         }
         int i = 0;
-        for(Shape r : transformedTinyShapes){
+        for(Shape r : tinyShapes){
             if(r.contains(p)){
                 currentClicked = tinyShapes.get(i);
                 currentClickedCode = (byte) (i+1);
@@ -328,8 +328,8 @@ public class TransformationBorder extends SimpleShapeObject implements Transform
 
     @Override
     public Point getOriginalCenter(){
-        int x = (int) Math.round(rotationCenter.getBounds().getCenterX());
-        int y = (int) Math.round(rotationCenter.getBounds().getCenterY());
+        int x = (int) Math.round(originalCenter.getBounds().getCenterX());
+        int y = (int) Math.round(originalCenter.getBounds().getCenterY());
         return new Point (x, y);
     }
 
@@ -350,8 +350,8 @@ public class TransformationBorder extends SimpleShapeObject implements Transform
         
         AffineTransform transform = new AffineTransform();
         transform.rotate(Math.toRadians(rotation), 
-                rotationCenter.getBounds().getCenterX(), 
-                rotationCenter.getBounds().getCenterY());
+                originalCenter.getBounds().getCenterX(), 
+                originalCenter.getBounds().getCenterY());
         originalShape = transform.createTransformedShape(originalShape);
         
         ArrayList<Shape> list = new ArrayList<Shape>();

@@ -9,38 +9,11 @@ public interface FrameToInputInterface {
     public void repaint();
     
     /**
-     * Returns the translation value in x direction.
-     * This translation value is used to move the whole 2d graph away
-     * from the minus coordinates, to fit in the 0,0 coordinates of the shapes,
-     * which do not allow for minus coordinates.
-     * 
-     * @return the value of the graph translation.
-     */
-    public int getTranslationX();
-    
-    /**
-     * Returns the translation value in y direction.
-     * This translation value is used to move the whole 2d graph away
-     * from the minus coordinates, to fit in the 0,0 coordinates of the shapes,
-     * which do not allow for minus coordinates.
-     * 
-     * @return the value of the graph translation.
-     */
-    public int getTranslationY();
-    
-    /**
      * Returns the current size of the drawing panel.
      * 
      * @return the current size of the drawing panel.
      */
     public Dimension getPanelSize();
-    
-    /**
-     * Returns the scale of the drawing panel.
-     * 
-     * @return the scale in double
-     */
-    public double getScale();
 
     /**
      * Shows the popup menu at the specified position.
@@ -88,7 +61,6 @@ public interface FrameToInputInterface {
      */
     public void paintMouseCoords(int x, int y);
 
-
     /**
      * Transforms a point back to the original coordinates,
      * meaning undoing global scaling and translation.
@@ -97,7 +69,6 @@ public interface FrameToInputInterface {
      * @return The reverted point when possible, null otherwise.
      */
     public Point revertBack(Point point);
-
 
 
 }

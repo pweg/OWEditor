@@ -1,6 +1,5 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics;
 
-import java.awt.Point;
 import java.util.ArrayList;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.frame.FrameToGraphicInterface;
@@ -20,8 +19,6 @@ public interface InternalMediatorInterface {
     public ArrayList<ShapeObject> getSelectedShapes();
     
     public void clearDraggingShapes();
-
-    public double getScale();
 
     public void translateDraggingShapes(double distance_x, double distance_y);
 
@@ -52,6 +49,4 @@ public interface InternalMediatorInterface {
     
     public void registerFrameInterface(
             FrameToGraphicInterface frameInterface);
-    
-    public Point revertBack(Point p);
 }

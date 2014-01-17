@@ -38,20 +38,6 @@ public class Input implements InputInterface{
     }
 
     @Override
-    public void notifyMinXChange(int x) {
-        mlPasteStrategy strat = ic.mkListener.getPasteStrategy();
-        if(strat != null)
-            strat.notifyMinXChange(x);
-    }
-
-    @Override
-    public void notifyMinYChange(int y) {
-        mlPasteStrategy strat = ic.mkListener.getPasteStrategy();
-        if(strat != null)
-            strat.notifyMinYChange(y);
-    }
-
-    @Override
     public void registerGraphicInterface(GraphicToInputFacadeInterface graphic) {
         ic.registerGraphicInterface(graphic);
     }

@@ -198,7 +198,6 @@ public class SelectionManager {
         }
         int x = (int) Math.round(min_x + (max_x-min_x)/2);
         int y = (int) Math.round(min_y + (max_y-min_y)/2);
-        
         return new Point(x,y);
     }
     

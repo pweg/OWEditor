@@ -15,24 +15,19 @@ public class mlPasteStrategy implements mlMouseStrategy{
         this.listener = listener;
         
         copyPoint = controller.graphic.copyInitialize();
-        copyPoint.x += contr.frame.getTranslationX();
-        copyPoint.y += contr.frame.getTranslationY();
     }
     
     
     @Override
     public void mousePressed(Point p) {
         if(!dragging){
+            
             if(copyPoint == null)
                 return;
             
-            double scale = controller.frame.getScale();
             
-            int x = (int) Math.round(copyPoint.x * scale);
-            int y = (int) Math.round(copyPoint.y * scale);
-            
-            start.x = x;
-            start.y = y;
+            start.x = copyPoint.x;
+            start.y = copyPoint.y;
 
             controller.graphic.clearCurSelection();
             controller.graphic.pasteInitialize();
@@ -75,14 +70,6 @@ public class mlPasteStrategy implements mlMouseStrategy{
     
     public void setDragging(boolean dragging){
         this.dragging = dragging;
-    }
-    
-    public void notifyMinXChange(int x) {
-        copyPoint.x -= x;
-    }
-
-    public void notifyMinYChange(int y) {
-       copyPoint.y -= y;
     }
 
 }

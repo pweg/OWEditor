@@ -59,8 +59,8 @@ public class TranslationManager {
      */
     public void translateDraggingShapes(double distance_x, double distance_y){
         
-        for(DraggingObject selShape : smi.getDraggingShapes()){
-            selShape.setTranslation(distance_x, distance_y);
+        for(DraggingObject shape : smi.getDraggingShapes()){
+            shape.setTranslation(distance_x, distance_y);
         }
     }
     

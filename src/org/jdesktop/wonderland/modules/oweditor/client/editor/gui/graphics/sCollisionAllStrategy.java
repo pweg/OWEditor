@@ -19,11 +19,13 @@ public class sCollisionAllStrategy implements sCollisionStrategy {
 
         boolean is_collision = false;
         for(DraggingObject selected : draggingShapes){
+            Area draggingArea = new Area(selected.getTransformedShape());
+            
             for(ShapeObject shape : shapes){
-                Area areaA = new Area(shape.getTransformedShape());
-                areaA.intersect(new Area(selected.getTransformedShape()));
+                Area area = new Area(shape.getTransformedShape());
 
-                if(!areaA.isEmpty()){
+                area.intersect(draggingArea);
+                if(!area.isEmpty()){
                     is_collision = true;
                     break;
                 }

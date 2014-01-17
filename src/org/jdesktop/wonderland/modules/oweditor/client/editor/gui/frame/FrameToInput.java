@@ -23,24 +23,10 @@ public class FrameToInput implements FrameToInputInterface {
     public void repaint() {
         fc.repaint();
     }
-    
-    @Override
-    public int getTranslationX() {
-        return fc.getTranslationX();
-    }
-
-    @Override
-    public int getTranslationY() {
-        return fc.getTranslationY();
-    }
 
     @Override
     public Dimension getPanelSize() {
         return drawingPan.getSize();
-    }
-    @Override
-    public double getScale() {
-        return drawingPan.getScale();
     }
     
     @Override

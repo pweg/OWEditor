@@ -79,7 +79,6 @@ public class DraggingRect extends DraggingObject{
         initialWidth = width;
         initialHeight = height;
         this.at = at;
-        
         //originalShape = at.createTransformedShape(originalShape);
         
         //This is needed for creating the border around dragging shapes
@@ -140,9 +139,14 @@ public class DraggingRect extends DraggingObject{
         transform.translate(distance_x, distance_y);
         originalShape = transform.createTransformedShape(originalShape);
         
-        //scaledShape = scaleShape(originalShape, initialScale);
-        //transformedShape = rotateShape(scaledShape, initialRotation);
-        //transformedShape = at.createTransformedShape(transformedShape);
+        /*
+         * This needs to be done in order for translation affect immediately.
+         * Otherwise all usage of the transformed shape will be from the last
+         * repaint. So, collision detection would be off, for example.
+         */
+        scaledShape = ShapeUtilities.scaleShape(originalShape, workingScale,
+                scaleTranslationX,scaleTranslationY);
+        transformedShape = ShapeUtilities.rotateShape(scaledShape, initialRotation);
     }
 
     @Override

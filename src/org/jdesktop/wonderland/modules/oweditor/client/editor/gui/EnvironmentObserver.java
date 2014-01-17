@@ -34,27 +34,12 @@ public class EnvironmentObserver implements EnvironmentObserverInterface{
 
     @Override
     public void notifyMinXChange(int x) {
-
-        int translation = gc.frame.getTranslationX();
-        
         gc.frame.setNewMinX(x);
-        translation -= gc.frame.getTranslationX();
-
-        gc.input.notifyMinXChange(translation);
-        
-        
     }
 
     @Override
-    public void notifyMinYChange(int y) {
-        
-        int translation = gc.frame.getTranslationY();
-        
+    public void notifyMinYChange(int y) {        
         gc.frame.setNewMinY(y);
-        translation -= gc.frame.getTranslationY();
-        
-        gc.input.notifyMinYChange(translation);
-       
     }
     
 

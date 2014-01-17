@@ -270,11 +270,9 @@ public class ShapeManager {
         shape.setScale(dataObject.getScale());
     }
     
-    public void changeShape(long id, int x, int y, String name){
+    public void renameShape(long id, String name){
         ShapeObject shape = getShape(id);
-        
         shape.setName(name);
-        shape.setLocation(x, y);
     }
     
     /**

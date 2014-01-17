@@ -14,14 +14,20 @@ public class CopyManager {
         copyShapes = new ArrayList<ShapeObject>();
     }
     
-    public void initilaizeCopy() {
+    public ArrayList<Long> initilaizeCopy() {
         copyShapes.clear();
         ArrayList<ShapeObject> shapes = smi.getSelectedShapes();
+
+        ArrayList<Long> ids = new ArrayList<Long>();
         
         for(ShapeObject shape : shapes){
             ShapeObject tmp = shape.clone();
             copyShapes.add(tmp);
+            
+            ids.add(shape.getID());
         }
+        
+        return ids;
        
     }
     

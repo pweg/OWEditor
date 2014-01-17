@@ -1,6 +1,5 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics;
 
-import java.awt.Point;
 import java.util.ArrayList;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.AdapterCommunicationInterface;
@@ -51,11 +50,6 @@ public class InternaMediator implements InternalMediatorInterface{
     @Override
     public void clearDraggingShapes() {
         sm.clearDraggingShapes();
-    }
-
-    @Override
-    public double getScale() {
-        return frame.getScale();
     }
 
     @Override
@@ -117,11 +111,6 @@ public class InternaMediator implements InternalMediatorInterface{
     public void registerFrameInterface(
             FrameToGraphicInterface frameInterface) {
         this.frame = frameInterface;
-    }
-
-    @Override
-    public Point revertBack(Point p) {
-        return frame.revertBack(p);
     }
     
     
