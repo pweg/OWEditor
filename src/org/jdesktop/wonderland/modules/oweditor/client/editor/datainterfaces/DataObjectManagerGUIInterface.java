@@ -1,5 +1,8 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces;
 
+import java.awt.Point;
+import java.awt.geom.Point2D;
+
 /**
  * An interface used between the data and gui package.
  * 
@@ -23,5 +26,13 @@ public interface DataObjectManagerGUIInterface {
      * @return the z coordinate of the object.
      */
     public float getZ(long id);
+    
+    /**
+     * Transforms coordinates used by the GUI back to the
+     * original coordinates used by the virtual world
+     * @param coordinates The coordinates to be transformed back.
+     * @return The transformed coordinates.
+     */
+    public Point2D.Double transformCoordsBack(Point coordinates);
     
 }

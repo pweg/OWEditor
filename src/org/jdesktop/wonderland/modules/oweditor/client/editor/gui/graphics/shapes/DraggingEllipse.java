@@ -8,7 +8,6 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.GUISettings;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.stateDraggingShape;
 
 /**
  * Derived from ShapeObject. This is a shape type, which is used

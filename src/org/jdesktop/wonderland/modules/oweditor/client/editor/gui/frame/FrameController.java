@@ -2,7 +2,7 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.frame;
 
 import javax.swing.JScrollPane;
 
-import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.CoordinateTranslatorInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataObjectManagerGUIInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.GraphicToFrameInterface;
 
 public class FrameController {
@@ -48,8 +48,8 @@ public class FrameController {
         return drawingPan.getTranslationY();
     }
 
-    public void setCoordinateTranslator(CoordinateTranslatorInterface coordinateTranslator) {
-        mouseCoords.setCoordinateTranslator(coordinateTranslator);
+    public void registerDataManager(DataObjectManagerGUIInterface dm) {
+        mouseCoords.registerDataManager(dm);
     }
    
 }

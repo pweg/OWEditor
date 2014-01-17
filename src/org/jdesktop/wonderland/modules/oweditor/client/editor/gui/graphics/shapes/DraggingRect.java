@@ -8,7 +8,6 @@ import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.GUISettings;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.stateDraggingShape;
 
 /**
  * Derived from ShapeObject. This is a shape type, which is used
@@ -31,6 +30,7 @@ public class DraggingRect extends DraggingObject{
     private Shape originalShape = null;
     private Shape scaledShape = null;
     private Shape transformedShape = null;
+    private Shape printShape = null;
     private Paint color = GUISettings.DRAGGINGCOLOR;
     private long id = 0;
     
@@ -86,7 +86,7 @@ public class DraggingRect extends DraggingObject{
         //When the border is created, the shapes still have not been drawn.
         scaledShape = ShapeUtilities.scaleShape(originalShape, initialScale,0,0);
         transformedShape = ShapeUtilities.rotateShape(scaledShape, initialRotation);  
-        transformedShape = at.createTransformedShape(transformedShape);
+        printShape = at.createTransformedShape(transformedShape);
     }
 
     @Override
@@ -121,9 +121,9 @@ public class DraggingRect extends DraggingObject{
             transformedShape = transform.createTransformedShape(transformedShape);
         }
 
-        transformedShape = at.createTransformedShape(transformedShape);
+        printShape = at.createTransformedShape(transformedShape);
         
-        g.draw(transformedShape); 
+        g.draw(printShape); 
     }
 
     /**

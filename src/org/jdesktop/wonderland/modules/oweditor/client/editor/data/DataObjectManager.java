@@ -1,6 +1,7 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.data;
 
 import java.awt.Point;
+import java.awt.geom.Point2D;
 import java.util.LinkedHashMap;
 import java.util.logging.Logger;
 
@@ -230,6 +231,15 @@ public class DataObjectManager implements DataObjectManagerGUIInterface{
         }
         
         
+    }
+
+    @Override
+    public Point2D.Double transformCoordsBack(Point coordinates) {
+
+        double x = ct.transformXBack(coordinates.x);
+        double y = ct.transformXBack(coordinates.y);
+        
+        return new Point2D.Double(x, y);
     }
 
 }

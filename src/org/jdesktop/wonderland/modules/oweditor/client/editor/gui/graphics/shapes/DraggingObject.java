@@ -2,7 +2,6 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shap
 
 import java.awt.Point;
 
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.stateDraggingShape;
 
 /**
  * Dragging objects are shapes, which appear, when an operation is 

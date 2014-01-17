@@ -1,8 +1,7 @@
-package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics;
+package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes;
 
 import java.awt.geom.AffineTransform;
 
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.DraggingObject;
 
 /**
  * The states are used to determined the coordinates, which 

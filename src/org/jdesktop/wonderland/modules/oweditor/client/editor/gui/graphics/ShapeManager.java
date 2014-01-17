@@ -19,6 +19,8 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shape
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.SimpleShapeObject;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.ToolTipInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.TransformationBorderInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.stateDraggingShape;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.stateDraggingShapeBorderBuild;
 import org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter.WorldBuilder;
 
 /**
@@ -378,8 +380,8 @@ public class ShapeManager {
         border = null;
     }
     
-    public void createShapeBorder(double scale, 
-            ArrayList<ShapeObject> shapes, byte mode){
+    public void createShapeBorder(ArrayList<ShapeObject> shapes, 
+            byte mode){
                 
         int min_x = Integer.MAX_VALUE;
         int min_y = Integer.MAX_VALUE;
@@ -407,17 +409,15 @@ public class ShapeManager {
             if(!(state instanceof stateDraggingShapeBorderBuild))
                 shape.setState(state);
             
-            int width = (int) Math.round(r.width/scale);
-            int height = (int) Math.round(r.height/scale);
 
             if(s_x < min_x)
                 min_x = s_x;
             if(s_y < min_y)
                 min_y = s_y;
-            if(max_x < s_x+width)
-                max_x = s_x+width;
-            if(max_y < s_y+height)
-                max_y = s_y+height;
+            if(max_x < s_x+r.width)
+                max_x = s_x+r.width;
+            if(max_y < s_y+r.height)
+                max_y = s_y+r.height;
             
         }
         int border_x = min_x;

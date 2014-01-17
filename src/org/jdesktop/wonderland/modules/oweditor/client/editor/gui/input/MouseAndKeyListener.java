@@ -76,7 +76,6 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
                  }
                  //rotation
                  else if(mode == ROTATE){
-                     
                      if(ic.graphic.isMouseInBorder(p))
                          strategy = new mlRotationStrategy(ic);
                      else if (ic.graphic.isMouseInBorderCenter(p)){
@@ -286,7 +285,7 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
         strategy = pasteStrategy;
         
         strategy.mousePressed(null);
-        strategy.mouseMoved(ic.frame.getMousePosition());
+        strategy.mouseMoved(ic.frame.revertBack(ic.frame.getMousePosition()));
         mode = COPY;
         ic.frame.repaint();
     }

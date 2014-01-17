@@ -58,7 +58,7 @@ public class TransformationManager {
         
         Point rot_center = border.getOriginalCenter();
         
-        double rotation = getAngle(rot_center, smi.revertBack(p));
+        double rotation = getAngle(rot_center, p);
         
         Point edge = border.getEdge();        
         double edge_rotation = getAngle(border.getOriginalCenter(), edge);
@@ -72,7 +72,7 @@ public class TransformationManager {
     }
 
     /**
-     * Sets the rotation of an shape.
+     * Sets the rotation of one shape.
      * 
      * @param id The id of the shape.
      * @param rotation The rotation angle.
@@ -121,7 +121,6 @@ public class TransformationManager {
      * scale.
      */
     public void scale(Point p){
-        Point reverted = smi.revertBack(p);
         TransformationBorderInterface border = smi.getShapeBorder();
 
         byte clicked = border.getCurrentClicked();
@@ -142,8 +141,8 @@ public class TransformationManager {
         //(Scale calculation is different for every edge)
         switch(clicked){
             case(TransformationBorderInterface.UPPERLEFT):;
-                new_width = reverted.x - (x+width);
-                new_height = reverted.y - (y+height);
+                new_width = p.x - (x+width);
+                new_height = p.y - (y+height);
                 scale_x = new_width/width;
                 scale_y = new_height/height;
 
@@ -151,8 +150,8 @@ public class TransformationManager {
                 scale_y = Math.min(0, scale_y);
                 break;
             case(TransformationBorderInterface.UPPERRIGHT):
-                new_width = reverted.x - x;
-                new_height = reverted.y - (y+height);
+                new_width = p.x - x;
+                new_height = p.y - (y+height);
                 scale_x = new_width/width;
                 scale_y = new_height/height;
 
@@ -160,8 +159,8 @@ public class TransformationManager {
                 scale_y = Math.min(0, scale_y);
                 break;
             case(TransformationBorderInterface.BOTTOMLEFT):
-                new_width = reverted.x - (x+width);
-                new_height = reverted.y - y;
+                new_width = p.x - (x+width);
+                new_height = p.y - y;
                 scale_x = new_width/width;
                 scale_y = new_height/height;
 
@@ -169,8 +168,8 @@ public class TransformationManager {
                 scale_y = Math.max(0, scale_y);
                 break;
             case(TransformationBorderInterface.BOTTOMRIGHT):
-                new_width = reverted.x - x;
-                new_height = reverted.y - y;
+                new_width = p.x - x;
+                new_height = p.y - y;
                 scale_x = new_width/width;
                 scale_y = new_height/height;
                 

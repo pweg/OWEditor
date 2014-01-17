@@ -5,7 +5,7 @@ import java.awt.event.MouseWheelListener;
 
 import javax.swing.event.MouseInputAdapter;
 
-import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.CoordinateTranslatorInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataObjectManagerGUIInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.AdapterCommunicationInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.input.InputToFrameInterface;
 
@@ -106,8 +106,9 @@ public class Frame extends FrameGraphic implements FrameInterface {
         return fc.inputInterface;
     }
 
-    public void setCoordinateTranslator(CoordinateTranslatorInterface coordinateTranslator) {
-        fc.setCoordinateTranslator(coordinateTranslator);
+    @Override
+    public void registerDataManager(DataObjectManagerGUIInterface dm) {
+        fc.registerDataManager(dm);
     }
 
 }

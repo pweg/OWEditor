@@ -1,5 +1,6 @@
 package org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces;
 
+import java.awt.Point;
 import java.util.ArrayList;
 
 /**

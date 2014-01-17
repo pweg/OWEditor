@@ -7,6 +7,7 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.AdapterCommuni
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.DraggingObject;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.ShapeObject;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.TransformationBorder;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.stateDraggingShapeRotation;
 
 public class GraphicToInputFacade implements GraphicToInputFacadeInterface{
 
@@ -121,7 +122,7 @@ public class GraphicToInputFacade implements GraphicToInputFacadeInterface{
         sm.createDraggingShapes(ssm.getSelection());
         sm.setShapeStates(new stateDraggingShapeRotation());
         
-        sm.createShapeBorder(sc.frame.getScale(), ssm.getSelection(),
+        sm.createShapeBorder(ssm.getSelection(),
                 TransformationBorder.MODEONECENTER);
 
         srm.initializeTransformation();
@@ -169,7 +170,7 @@ public class GraphicToInputFacade implements GraphicToInputFacadeInterface{
         sm.createDraggingShapes(ssm.getSelection());
         //sm.setShapeStates(new stateDraggingShapeTranslation());
         
-        sm.createShapeBorder(sc.frame.getScale(), ssm.getSelection(),
+        sm.createShapeBorder(ssm.getSelection(),
                 TransformationBorder.MODEALLCENTER);
 
         srm.initializeTransformation();

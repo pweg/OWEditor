@@ -5,7 +5,7 @@ import java.awt.event.MouseWheelListener;
 
 import javax.swing.event.MouseInputAdapter;
 
-import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.CoordinateTranslatorInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataObjectManagerGUIInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.input.InputToFrameInterface;
 
 /**
@@ -73,15 +73,47 @@ public interface FrameInterface extends FrameGraphicInterface{
      */
     public int getTranslationY();
 
-    public void setCoordinateTranslator(CoordinateTranslatorInterface coordinateTranslator);
-
+    /**
+     * This sets a new width for the world represented in the 
+     * drawing panel
+     * 
+     * @param width The new width.
+     */
     public void setNewWidth(int width);
+
+    /**
+     * This sets a new height for the world represented in the 
+     * drawing panel
+     * 
+     * @param height The new height.
+     */
 
     public void setNewHeight(int height);
 
+    /**
+     * This sets a new minimal x for the world represented
+     * in the drawing panel. This is needed for viewport changes
+     * in order to maintain the current view.
+     *  
+     * @param x The new minimal x.
+     */
     public void setNewMinX(int x);
 
+    /**
+     * This sets a new minimal y for the world represented
+     * in the drawing panel. This is needed for viewport changes
+     * in order to maintain the current view.
+     *  
+     * @param y The new minimal y.
+     */
     public void setNewMinY(int y);
+
+    /**
+     * Registers a data manager interface instance.
+     * 
+     * @param dm The instance
+     */
+    public void registerDataManager(DataObjectManagerGUIInterface dm);
 
 
     

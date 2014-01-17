@@ -68,6 +68,7 @@ public class GUIController implements GUIControllerInterface{
     @Override
     public void registerDataManager(DataObjectManagerGUIInterface dm) {
         dmi = dm;
+        frame.registerDataManager(dm);
     }
 
     @Override
@@ -85,10 +86,6 @@ public class GUIController implements GUIControllerInterface{
     @Override
     public EnvironmentObserverInterface getEnvironmentObserver() {
         return eo;
-    }
-
-    public void registerCoordinateTranslator(CoordinateTranslatorInterface coordinateTranslator) {
-        frame.setCoordinateTranslator(coordinateTranslator);
     }
 
     public void createTemp() {

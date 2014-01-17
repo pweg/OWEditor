@@ -50,12 +50,4 @@ public interface GUIControllerInterface {
      */
     public void registerGUIObserver (GUIObserverInterface clientUpdateInterface);
 
-    /**
-     * Sets the coordinate translator from the adapter package.
-     * This is needed for the correct mouse coordinates.
-     * 
-     * @param coordinateTranslator A coordinateTranslaterInterface.
-     */
-    public void registerCoordinateTranslator(CoordinateTranslatorInterface coordinateTranslator);
-
 }

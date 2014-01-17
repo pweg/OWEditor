@@ -170,7 +170,6 @@ public class WindowDrawingPanel extends JPanel implements ChangeListener {
         size.width = (int)( (width + fc.frame.getWidth()/GUISettings.WIDTHDIVISOR));
         if(size.width < fc.frame.getWidth())
             size.width = fc.frame.getWidth();
-        
         revalidate();  
     }
     
