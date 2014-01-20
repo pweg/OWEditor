@@ -1,5 +1,6 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes;
 
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
@@ -77,6 +78,47 @@ public class ShapeUtilities {
         transform.rotate(Math.toRadians(rotation), 
                 shape.getBounds().getCenterX(), 
                 shape.getBounds().getCenterY());
+        
+        return transform.createTransformedShape(shape);  
+    }
+
+    
+    /**
+     * Rotates a given shape around a given point.
+     * 
+     * @param shape The shape to rotate.
+     * @param rotation The rotation.
+     * @param rotationPoint The point the shape is rotated around.
+     * @return The rotated shape.
+     */
+    public static final Shape rotateShape(Shape shape, double rotation,
+            Point rotationPoint){
+        AffineTransform transform = new AffineTransform();
+        
+        transform.rotate(Math.toRadians(rotation), 
+                rotationPoint.x, 
+                rotationPoint.y);
+        
+        return transform.createTransformedShape(shape);  
+    }
+    
+    /**
+     * Rotates a given shape around a given point.
+     * 
+     * @param shape The shape to rotate.
+     * @param rotation The rotation.
+     * @param pointX The x coordinate of the rotation point.
+     * @param pointY The y coordinate of the rotation point.
+     * @return The rotated shape.
+     */
+    public static final Shape rotateShape(Shape shape, double rotation,
+            double pointX, double pointY){
+        AffineTransform transform = new AffineTransform();
+        
+        transform.rotate(Math.toRadians(rotation), 
+                pointX, 
+                pointY);
+        
         return transform.createTransformedShape(shape);  
     }
     

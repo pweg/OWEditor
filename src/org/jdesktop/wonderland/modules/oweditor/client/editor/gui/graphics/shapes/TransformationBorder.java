@@ -103,13 +103,12 @@ public class TransformationBorder extends SimpleShapeObject implements Transform
     @Override
     public void paintOriginal(Graphics2D g, AffineTransform at) {
         g.setPaint(color);  
+
+        double rotationX = originalCenter.getBounds().getCenterX();
+        double rotationY = originalCenter.getBounds().getCenterY();
         
-        AffineTransform transform = new AffineTransform();
-        //transform.scale(workingScale, workingScale);
-        transform.rotate(Math.toRadians(rotation), 
-                originalCenter.getBounds().getCenterX(), 
-                originalCenter.getBounds().getCenterY());
-        transformedShape = transform.createTransformedShape(originalShape);
+        transformedShape = ShapeUtilities.rotateShape(originalShape, 
+                rotation, rotationX, rotationY);
         
         transformedTinyShapes.clear();
 
@@ -119,11 +118,15 @@ public class TransformationBorder extends SimpleShapeObject implements Transform
         
         if(scale != 1){
             //translate();
-            transformedShape = scaleShape(transformedShape, scale,scale, globalScale);
+            transformedShape = ShapeUtilities.scaleShape(transformedShape, scale, 
+                    scaleTranslationX*globalScale, scaleTranslationY*globalScale);
+                    
+                    //scaleShape(transformedShape, scale,scale, globalScale);
             transformedTinyShapes = setTinyRectangle(transformedShape);
         }else{
             for(Shape r : tinyShapes){
-                Shape transformedRect = transform.createTransformedShape(r);
+                Shape transformedRect = ShapeUtilities.rotateShape(r, 
+                        rotation, rotationX, rotationY);
                 transformedRect = at.createTransformedShape(transformedRect);
                 transformedRect = scaleShapeCenter(transformedRect, at.getScaleX(), at.getScaleY());
                 transformedTinyShapes.add(transformedRect);
@@ -146,34 +149,6 @@ public class TransformationBorder extends SimpleShapeObject implements Transform
     @Override
     public void setLocation(int x, int y) { 
         originalShape.getBounds().setLocation(x, y);
-    }
-    
-    /**
-     * Scales the shape, without changing its coordinates and also
-     * adding the scale translation, which is needed, when the border
-     * needs to move its coordinates in order to give the impression it
-     * is resizing to the mouse point.
-     * 
-     * @param shape The shape to scale
-     * @param scaleX The scale x value.
-     * @param scaleY The scale y value.
-     * @return The scaled shape.
-     */
-    private Shape scaleShape(Shape shape, double scaleX, double scaleY,
-            double globalScale){        
-        Rectangle2D bounds = shape.getBounds2D();
-        AffineTransform af = AffineTransform.getTranslateInstance(0 - bounds.getX(), 
-                0 - bounds.getY());
-        // apply normalisation translation ...
-        Shape s = af.createTransformedShape(shape);
-        af = AffineTransform.getScaleInstance(scaleX, scaleY);
-        // apply scaling ...
-        s = af.createTransformedShape(s);
-
-        // now retranslate the shape to its original position ...
-        af = AffineTransform.getTranslateInstance(bounds.getX()-scaleTranslationX*globalScale, 
-                bounds.getY()-scaleTranslationY*globalScale);
-        return af.createTransformedShape(s);
     }
     
     /**
@@ -256,7 +231,8 @@ public class TransformationBorder extends SimpleShapeObject implements Transform
         //Rectangle bounds = transformedShape.getBounds();
         //originalShape = new Rectangle(bounds.x, bounds.y, bounds.width, bounds.height);
         //realScale -= (1-workingScale)*realScale;
-        originalShape = scaleShape(originalShape, scale,scale,1);
+        originalShape = ShapeUtilities.scaleShape(originalShape, scale, 
+                scaleTranslationX, scaleTranslationY);
         tinyShapes = setTinyRectangle(originalShape);
         scale = 1;
     }
@@ -346,23 +322,24 @@ public class TransformationBorder extends SimpleShapeObject implements Transform
     }
 
     @Override
-    public void setRotationCenterUpdate() {        
+    public void setRotationCenterUpdate() {  
+
+        double rotationX = originalCenter.getBounds().getCenterX();
+        double rotationY = originalCenter.getBounds().getCenterY();
         
-        AffineTransform transform = new AffineTransform();
-        transform.rotate(Math.toRadians(rotation), 
-                originalCenter.getBounds().getCenterX(), 
-                originalCenter.getBounds().getCenterY());
-        originalShape = transform.createTransformedShape(originalShape);
+        originalShape = ShapeUtilities.rotateShape(originalShape, 
+                rotation, rotationX, rotationY);
         
         ArrayList<Shape> list = new ArrayList<Shape>();
         list.addAll(tinyShapes);
         tinyShapes.clear();
+        
         for (Shape shape : list){
-            shape = transform.createTransformedShape(shape);
+            shape = ShapeUtilities.rotateShape(shape, 
+                    rotation, rotationX, rotationY);
             tinyShapes.add(shape);
         }
         rotation = 0;
-        
     }
 
     @Override

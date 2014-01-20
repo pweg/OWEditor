@@ -9,7 +9,7 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shape
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.TransformationBorder;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.stateDraggingShapeRotation;
 
-public class GraphicToInputFacade implements GraphicToInputFacadeInterface{
+public class GraphicToInputFacade implements GraphicToInputInterface{
 
     protected ShapeManager sm = null;
     protected CopyManager scm = null;

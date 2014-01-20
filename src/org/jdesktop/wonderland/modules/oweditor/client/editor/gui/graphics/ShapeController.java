@@ -16,7 +16,7 @@ public class ShapeController {
     protected FrameToGraphicInterface frame = null;
     
     //protected ExternalShapeToFrameInterface frameInterface = null;
-    protected GraphicToInputFacadeInterface inputInterface = null;
+    protected GraphicToInputInterface inputInterface = null;
     protected GraphicToFrameInterface shapeFacadeInterface = null;
     
     public ShapeController(GraphicToFrame shapeFacade, AdapterCommunicationInterface adapter){

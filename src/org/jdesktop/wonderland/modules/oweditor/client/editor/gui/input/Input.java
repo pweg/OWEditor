@@ -7,7 +7,7 @@ import javax.swing.event.MouseInputAdapter;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.GUIController;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.frame.FrameToInputInterface;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.GraphicToInputFacadeInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.GraphicToInputInterface;
 
 public class Input implements InputInterface{
     
@@ -38,7 +38,7 @@ public class Input implements InputInterface{
     }
 
     @Override
-    public void registerGraphicInterface(GraphicToInputFacadeInterface graphic) {
+    public void registerGraphicInterface(GraphicToInputInterface graphic) {
         ic.registerGraphicInterface(graphic);
     }
 

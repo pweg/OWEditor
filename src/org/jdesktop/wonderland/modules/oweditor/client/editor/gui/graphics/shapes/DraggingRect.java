@@ -134,10 +134,9 @@ public class DraggingRect extends DraggingObject{
     }
 
     @Override
-    public void setTranslation(double distance_x, double distance_y) {        
-        AffineTransform transform = new AffineTransform();
-        transform.translate(distance_x, distance_y);
-        originalShape = transform.createTransformedShape(originalShape);
+    public void setTranslation(double distance_x, double distance_y) {       
+        originalShape = ShapeUtilities.translateShape(originalShape,
+                distance_x,distance_y);
         
         /*
          * This needs to be done in order for translation affect immediately.
@@ -221,12 +220,8 @@ public class DraggingRect extends DraggingObject{
     public void setRotationCenterUpdate() {
         if(rotationCenter == null)
             return;
-        
-        AffineTransform transform = new AffineTransform();
-        transform.rotate(Math.toRadians(rotation), 
-                rotationCenter.x, rotationCenter.y);
 
-        originalShape = transform.createTransformedShape(scaledShape);
+        originalShape = ShapeUtilities.rotateShape(scaledShape, rotation, rotationCenter);
         lastRotation += rotation;
         rotation = 0;
         realScale = (workingScale)*realScale;

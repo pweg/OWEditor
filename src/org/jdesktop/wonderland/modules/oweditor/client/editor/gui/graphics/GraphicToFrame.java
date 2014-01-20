@@ -80,7 +80,7 @@ public class GraphicToFrame implements GraphicToFrameInterface{
     }
 
     @Override
-    public GraphicToInputFacadeInterface getInputInterface() {
+    public GraphicToInputInterface getInputInterface() {
         return sc.inputInterface;
     }
 

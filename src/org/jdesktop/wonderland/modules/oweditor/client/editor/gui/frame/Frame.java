@@ -17,31 +17,28 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.input.InputToF
  * @author Patrick
  *
  */
-public class Frame extends FrameGraphic implements FrameInterface {
+public class Frame extends GraphicForward implements FrameInterface {
     
     private WindowDrawingPanel drawingPan = null;
-    private WindowPopupMenu popupMenu = null;
     private MainFrame frame = null;
     private FrameController fc = null;
     
     public Frame(AdapterCommunicationInterface adapter){
         super(adapter);
-        this.fc = new FrameController();
+        this.fc = new FrameController(adapter);
+        registerGraphicInterface(fc.graphic);
         
-        fc.graphic = getInterface();
-        getInterface().registerFrameInterface(fc.graphicInterface);
         registerComponents();
     }
     
     private void registerComponents(){
         drawingPan = fc.drawingPan;
-        popupMenu = fc.popupMenu;
         frame = fc.frame;
     }
     
     @Override
     public void registerInputInterface(InputToFrameInterface input){
-        popupMenu.registerInputInterface(input);
+        fc.registerInputInterface(input);
     }
 
     @Override

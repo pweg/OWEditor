@@ -1,8 +1,7 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.frame;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.TranslatedObjectInterface;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.GraphicToFrameInterface;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.GraphicToInputFacadeInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.GraphicToInputInterface;
 
 /**
  * This is the interface, which forwards data changes  from the gui package
@@ -11,12 +10,10 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.Graph
  * @author Patrick
  *
  */
-public interface FrameGraphicInterface {
+public interface GraphicForwardInterface {
 
-
-    public GraphicToFrameInterface getFrameInterface();
     
-    public GraphicToInputFacadeInterface getGraphicInputInterface();
+    public GraphicToInputInterface getGraphicInputInterface();
 
     public void createShape(TranslatedObjectInterface dataObject);
 

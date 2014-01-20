@@ -4,19 +4,21 @@ import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;
 
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.frame.menu.MenuInterface;
+
 public class FrameToInput implements FrameToInputInterface {
 
     private FrameController fc = null;    
     private WindowDrawingPanel drawingPan = null;
-    private WindowPopupMenu popupMenu = null;
+    private MenuInterface menu = null;
     
     public FrameToInput(FrameController fc){
         this.fc = fc;
         registerComponents();
+        menu = fc.menu;
     }
     private void registerComponents(){
         drawingPan = fc.drawingPan;
-        popupMenu = fc.popupMenu;
     }
 
     @Override
@@ -31,10 +33,9 @@ public class FrameToInput implements FrameToInputInterface {
     
     @Override
     public void showPopupMenu(boolean shapesSelected, boolean copyShapesExist, int x, int y) {
-        popupMenu.setItemsEnabled(shapesSelected,copyShapesExist);
+        menu.setItemsEnabled(shapesSelected, copyShapesExist);
         drawingPan.repaint();
-        
-        popupMenu.show(drawingPan, x, y);
+        menu.showPopup(drawingPan, x, y);
     }
 
     @Override

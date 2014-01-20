@@ -15,7 +15,7 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.input.InputToF
  * @author Patrick
  *
  */
-public interface FrameInterface extends FrameGraphicInterface{
+public interface FrameInterface extends GraphicForwardInterface{
     
     /**
      * Adds a mouse to the drawing panel

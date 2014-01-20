@@ -7,11 +7,11 @@ import javax.swing.event.MouseInputAdapter;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.GUIController;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.frame.FrameToInputInterface;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.GraphicToInputFacadeInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.GraphicToInputInterface;
 
 public class InputController {
     
-    protected GraphicToInputFacadeInterface graphic = null;
+    protected GraphicToInputInterface graphic = null;
     protected FrameToInputInterface frame = null;
     
     protected MouseAndKeyListener mkListener = null;
@@ -42,7 +42,7 @@ public class InputController {
         
     }
 
-    public void registerGraphicInterface(GraphicToInputFacadeInterface graphic) {
+    public void registerGraphicInterface(GraphicToInputInterface graphic) {
         this.graphic = graphic;
     }
 

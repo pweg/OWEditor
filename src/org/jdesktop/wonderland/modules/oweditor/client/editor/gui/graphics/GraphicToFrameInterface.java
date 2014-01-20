@@ -35,7 +35,7 @@ public interface GraphicToFrameInterface {
      * 
      * @return The inputfacadeInstance.
      */
-    public GraphicToInputFacadeInterface getInputInterface();
+    public GraphicToInputInterface getInputInterface();
 
     /**
      * Creates a new shape.

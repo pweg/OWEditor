@@ -2,9 +2,8 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.frame;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.TranslatedObjectInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.AdapterCommunicationInterface;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.GraphicToFrame;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.GraphicToFrameInterface;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.GraphicToInputFacadeInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.GraphicToInputInterface;
 
 /**
  * Implements the frameGraphicInterface, which forwards 
@@ -14,23 +13,16 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.Graph
  * @author Patrick
  *
  */
-public class FrameGraphic implements FrameGraphicInterface{
+public class GraphicForward implements GraphicForwardInterface{
 
     private GraphicToFrameInterface graphic = null;
     
-    public FrameGraphic(AdapterCommunicationInterface adapter){
+    public GraphicForward(AdapterCommunicationInterface adapter){
 
-        graphic = new GraphicToFrame(adapter);
     }
     
-
     @Override
-    public GraphicToFrameInterface getFrameInterface() {
-        return graphic.getFrameInterface();
-    }
-
-    @Override
-    public GraphicToInputFacadeInterface getGraphicInputInterface() {
+    public GraphicToInputInterface getGraphicInputInterface() {
         return graphic.getInputInterface();
     }
 
@@ -63,6 +55,10 @@ public class FrameGraphic implements FrameGraphicInterface{
     @Override
     public void updateShapeScale(long id, double scale) {
         graphic.updateShapeScale(id, scale);
+    }
+    
+    protected void registerGraphicInterface(GraphicToFrameInterface graphic){
+        this.graphic = graphic;
     }
     
     protected GraphicToFrameInterface getInterface(){

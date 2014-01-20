@@ -1,4 +1,4 @@
-package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.frame;
+package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.frame.menu;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -11,7 +11,7 @@ import javax.swing.KeyStroke;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.input.InputToFrameInterface;
 
-public class WindowPopupMenu extends JPopupMenu{
+public class PopupMenu extends JPopupMenu{
 
     /**
      * 
@@ -23,11 +23,11 @@ public class WindowPopupMenu extends JPopupMenu{
     
     private InputToFrameInterface input = null;
     
-    public WindowPopupMenu(){
+    public PopupMenu(){
         initializeComponents();
     }
     
-    protected void registerInputInterface(InputToFrameInterface input){
+    public void registerInputInterface(InputToFrameInterface input){
         this.input = input;
     }
     
