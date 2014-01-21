@@ -25,10 +25,13 @@ public class MenuController implements MenuInterface{
         topMenu = new TopMenuBuilder();
         popupMenu = new PopupMenu();
         
-        createStandardMenu();
+        createMenu();
     }
     
-    private void createStandardMenu(){
+    /**
+     * Creates the standard top menu, as well as the popup menu.
+     */
+    private void createMenu(){
         
         final Callable<Void> newItem = new Callable<Void>() {
             public Void call(){
@@ -36,8 +39,6 @@ public class MenuController implements MenuInterface{
                 return null;
             }
         };
-        topMenu.addItem(BUNDLE.getString("MenuFile"), "New", newItem, KeyStroke.getKeyStroke(
-                KeyEvent.VK_N, ActionEvent.CTRL_MASK));
         
         final Callable<Void> copy = new Callable<Void>() {
             public Void call(){
@@ -45,10 +46,6 @@ public class MenuController implements MenuInterface{
                 return null;
             }
         };
-        topMenu.addItem(BUNDLE.getString("MenuEdit"), 
-                BUNDLE.getString("MenuCopy"), copy, 
-                KeyStroke.getKeyStroke(
-                KeyEvent.VK_C, ActionEvent.CTRL_MASK));
         
         final Callable<Void> cut = new Callable<Void>() {
             public Void call(){
@@ -56,10 +53,6 @@ public class MenuController implements MenuInterface{
                 return null;
             }
         };
-        topMenu.addItem(BUNDLE.getString("MenuEdit"), 
-                BUNDLE.getString("MenuCut"), cut, 
-                KeyStroke.getKeyStroke(
-                KeyEvent.VK_C, ActionEvent.CTRL_MASK));
         
         final Callable<Void> paste = new Callable<Void>() {
             public Void call(){
@@ -67,10 +60,6 @@ public class MenuController implements MenuInterface{
                 return null;
             }
         };
-        topMenu.addItem(BUNDLE.getString("MenuEdit"), 
-                BUNDLE.getString("MenuPaste"), paste, 
-                KeyStroke.getKeyStroke(
-                KeyEvent.VK_V, ActionEvent.CTRL_MASK));
         
         final Callable<Void> rotate = new Callable<Void>() {
             public Void call(){
@@ -78,8 +67,6 @@ public class MenuController implements MenuInterface{
                 return null;
             }
         };
-        topMenu.addItem(BUNDLE.getString("MenuEdit"), 
-                BUNDLE.getString("MenuRotate"), rotate, null);
 
         
         final Callable<Void> scale = new Callable<Void>() {
@@ -88,6 +75,26 @@ public class MenuController implements MenuInterface{
                 return null;
             }
         };
+        
+        /*
+         * Top menu items.
+         */
+        topMenu.addItem(BUNDLE.getString("MenuFile"), "New", newItem, KeyStroke.getKeyStroke(
+                KeyEvent.VK_N, ActionEvent.CTRL_MASK));
+        topMenu.addItem(BUNDLE.getString("MenuEdit"), 
+                BUNDLE.getString("MenuCopy"), copy, 
+                KeyStroke.getKeyStroke(
+                KeyEvent.VK_C, ActionEvent.CTRL_MASK));
+        topMenu.addItem(BUNDLE.getString("MenuEdit"), 
+                BUNDLE.getString("MenuCut"), cut, 
+                KeyStroke.getKeyStroke(
+                KeyEvent.VK_C, ActionEvent.CTRL_MASK));
+        topMenu.addItem(BUNDLE.getString("MenuEdit"), 
+                BUNDLE.getString("MenuPaste"), paste, 
+                KeyStroke.getKeyStroke(
+                KeyEvent.VK_V, ActionEvent.CTRL_MASK));
+        topMenu.addItem(BUNDLE.getString("MenuEdit"), 
+                BUNDLE.getString("MenuRotate"), rotate, null);
         topMenu.addItem(BUNDLE.getString("MenuEdit"), 
                 BUNDLE.getString("MenuScale"), scale, null);
 
@@ -96,8 +103,8 @@ public class MenuController implements MenuInterface{
          * Usually menu items will be shown in the order of adding them,
          * but this can be used to change their positions.
          */
-        topMenu.reorder("File", 0);
-        topMenu.reorder("Edit", 1);
+        topMenu.rearange("File", 0);
+        topMenu.rearange("Edit", 1);
     }
     
     private void function(){

@@ -3,6 +3,7 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.frame.menu;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import javax.swing.JMenuItem;
@@ -22,9 +23,11 @@ public class PopupMenu extends JPopupMenu{
             "org/jdesktop/wonderland/modules/oweditor/client/resources/Bundle");
     
     private InputToFrameInterface input = null;
+    private ArrayList<MenuItemInterface> items = null;
     
     public PopupMenu(){
         initializeComponents();
+        items = new ArrayList<MenuItemInterface>();
     }
     
     public void registerInputInterface(InputToFrameInterface input){

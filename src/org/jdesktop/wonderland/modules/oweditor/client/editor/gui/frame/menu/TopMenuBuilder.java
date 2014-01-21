@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.Callable;
 
 import javax.swing.JMenu;
@@ -18,15 +19,20 @@ import javax.swing.KeyStroke;
  * @author Patrick
  *
  */
-public class TopMenuBuilder {
+public class TopMenuBuilder implements MenuBuilder{
     
     private HashMap<String, ArrayList<MenuItemInterface>> menuList = null;
     private ArrayList<String> menuOrder = null;
     
+    private TreeNode root = null;
     
     public TopMenuBuilder(){
         menuList = new HashMap<String, ArrayList<MenuItemInterface>>();
         menuOrder = new ArrayList<String>();
+        
+        MenuItemInterface rootItem = new MenuItem("", null, null);
+        
+        root = new TreeNode(rootItem);
     }
     
     private ArrayList<MenuItemInterface> getMenu(String menuName){
@@ -43,7 +49,8 @@ public class TopMenuBuilder {
         return -1;
     }
     
-    public void reorder(String name, int order){
+    @Override
+    public void rearange(String name, int order){
         
         if(order < 0)
             return;
@@ -56,9 +63,28 @@ public class TopMenuBuilder {
         }
     }
     
-    
+    @Override
     public void addItem(String menuName, String itemName, Callable<Void> function,
             KeyStroke keyCombination){
+        
+        if(menuName == null || menuName.equals("") || itemName == null ||
+                itemName.equals("") || function == null){
+            return;
+        }
+
+        MenuItemInterface item = new MenuItem(itemName, function, keyCombination);
+        TreeNode node = new TreeNode(item);
+        
+        TreeNode parent = root.findNode(menuName);
+        
+        if(parent == null){
+            parent = new TreeNode(new MenuItem(menuName, null,null));
+            root.addChild(parent);
+        }
+        
+        parent.addChild(node);
+        
+        
         ArrayList<MenuItemInterface> menu = getMenu(menuName);
         if(menu == null){
             menu = new ArrayList<MenuItemInterface>();
@@ -68,12 +94,14 @@ public class TopMenuBuilder {
                 menuOrder.add(menuName);
             }
         }
-        MenuItemInterface item = new MenuItem(itemName, function, keyCombination);
+        
         menu.add(item);
     }
     
-    
+    @Override
     public JMenuBar buildMenu(){
+        
+        root.printTree();
         JMenuBar menuBar = new JMenuBar();
         
         for (String menu_name : menuOrder) {
