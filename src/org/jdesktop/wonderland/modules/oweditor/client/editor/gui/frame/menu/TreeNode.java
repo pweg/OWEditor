@@ -8,10 +8,9 @@ public class TreeNode {
     private ArrayList<TreeNode> children;
     protected MenuItemInterface item;
 
-    public TreeNode(MenuItemInterface caption) {
-        super();
+    public TreeNode(MenuItemInterface item) {
         children = new ArrayList<TreeNode>();
-        this.item = caption;
+        this.item = item;
     }
 
     public ArrayList<TreeNode> getChildren() {
@@ -25,8 +24,14 @@ public class TreeNode {
     public void addChild(TreeNode child){
         children.add(child);
     }
+    
+    public TreeNode addChild(MenuItemInterface item){
+        TreeNode node = new TreeNode(item);
+        children.add(node);
+        return node;
+    }
 
-    public MenuItemInterface getCaption() {
+    public MenuItemInterface getMenuItem() {
         return item;
     }
 
@@ -36,9 +41,16 @@ public class TreeNode {
     
     public TreeNode findNode(String menuName){
         
+        if(menuName == null){
+            return null;
+        }
+        
         for(TreeNode child : children){
-            if(iterate(child, menuName) != null)
-                return child;
+            
+            TreeNode found = iterate(child, menuName);
+            if(found != null){
+                return found;
+            }
         }
         return null;
     }
@@ -49,28 +61,12 @@ public class TreeNode {
             return node;
         }
         for(TreeNode child : node.getChildren()){
-            if(iterate(child, name) != null){
-                return child;
+            TreeNode node2 = iterate(child, name);
+            if(node2 != null){
+                return node2;
             }
         }
         return null;
     }
-    
-    public void printTree(){
-        System.out.println(item.getName());
-        
-        for(TreeNode child : children){
-            iteratePrint(child);
-            System.out.println("--------");
-        }
-    }
-    
-    public void iteratePrint(TreeNode node){
-        System.out.println(node.item.getName());
-        
-        for(TreeNode child : node.getChildren()){
-            iteratePrint(child);
-        }
-    }
-
+   
 }

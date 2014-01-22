@@ -81,13 +81,6 @@ public class GraphicToInputFacade implements GraphicToInputInterface{
     }
 
     @Override
-    public boolean copyShapesExist() {
-        if(scm.getCopyShapes().size() == 0)
-            return false;
-        return true;
-    }
-
-    @Override
     public void pasteInitialize() {
         smi.createDraggingShapes(scm.getCopyShapes());
     }
@@ -304,6 +297,14 @@ public class GraphicToInputFacade implements GraphicToInputInterface{
     @Override
     public boolean removeShapeName(){
         return sm.removeNameTooltip();
+    }
+
+    @Override
+    public boolean isShapeSelected() {
+        if(ssm.getSelection().size() > 0)
+            return true;
+        
+        return false;
     }
 
 

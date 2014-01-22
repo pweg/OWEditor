@@ -32,8 +32,8 @@ public class FrameToInput implements FrameToInputInterface {
     }
     
     @Override
-    public void showPopupMenu(boolean shapesSelected, boolean copyShapesExist, int x, int y) {
-        menu.setItemsEnabled(shapesSelected, copyShapesExist);
+    public void showPopupMenu(int x, int y) {
+        //menu.setItemsEnabled(shapesSelected, copyShapesExist);
         drawingPan.repaint();
         menu.showPopup(drawingPan, x, y);
     }
@@ -66,6 +66,14 @@ public class FrameToInput implements FrameToInputInterface {
     @Override
     public Point revertBack(Point point) {
         return drawingPan.revertBack(point);
+    }
+    @Override
+    public void selectionChange(boolean shapesSelected) {
+        menu.setItemsEnabledSelection(shapesSelected);
+    }
+    @Override
+    public void copyChange(boolean copyShapesExist) {
+        menu.setItemsEnabledCopy(copyShapesExist);
     }
 
 }

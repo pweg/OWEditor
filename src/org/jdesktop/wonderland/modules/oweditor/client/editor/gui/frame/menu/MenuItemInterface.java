@@ -9,4 +9,8 @@ public interface MenuItemInterface {
     public String getName();
     
     public KeyStroke getKeyCombination();
+    
+    public boolean hasFunction();
+    
+    public boolean hasSeparator();
 }

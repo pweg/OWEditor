@@ -13,11 +13,7 @@ public class mlPopupStrategy implements mlMouseStrategy{
     @Override
     public void mousePressed(Point p) {
         
-        boolean shapesSelected = controller.graphic.popupInitialize(p);
-        boolean copyShapesExist = controller.graphic.copyShapesExist();
-        
-        controller.frame.showPopupMenu(shapesSelected,copyShapesExist, 
-                p.x, p.y);
+        controller.frame.showPopupMenu(p.x, p.y);
             
     }
 

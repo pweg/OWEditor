@@ -7,23 +7,27 @@ import java.util.ResourceBundle;
 import java.util.concurrent.Callable;
 
 import javax.swing.JMenuBar;
+import javax.swing.JPopupMenu;
 import javax.swing.KeyStroke;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.input.InputToFrameInterface;
 
 public class MenuController implements MenuInterface{
-    
-    private TopMenuBuilder topMenu = null;
+
+    private MenuBuilder topBuilder = null;
+    private MenuBuilder popupBuilder = null;
     private InputToFrameInterface input = null;
-    private PopupMenu popupMenu = null;
+    private JPopupMenu popupMenu = null;
+    private JItemManager itemManager = null;
     
 
     private static final ResourceBundle BUNDLE = ResourceBundle.getBundle(
             "org/jdesktop/wonderland/modules/oweditor/client/resources/Bundle");
     
     public MenuController(){
-        topMenu = new TopMenuBuilder();
-        popupMenu = new PopupMenu();
+        topBuilder = new TopMenuBuilder();
+        popupBuilder = new PopupMenuBuilder();
+        itemManager = new JItemManager();
         
         createMenu();
     }
@@ -33,6 +37,11 @@ public class MenuController implements MenuInterface{
      */
     private void createMenu(){
         
+        //get the strings for the submenus.
+        String menuFile = BUNDLE.getString("MenuFile");
+        String menuEdit = BUNDLE.getString("MenuEdit");
+        
+        //create the functions
         final Callable<Void> newItem = new Callable<Void>() {
             public Void call(){
                 function();
@@ -79,59 +88,94 @@ public class MenuController implements MenuInterface{
         /*
          * Top menu items.
          */
-        topMenu.addItem(BUNDLE.getString("MenuFile"), "New", newItem, KeyStroke.getKeyStroke(
-                KeyEvent.VK_N, ActionEvent.CTRL_MASK));
-        topMenu.addItem(BUNDLE.getString("MenuEdit"), 
+        topBuilder.addItem(menuFile, "New", newItem, KeyStroke.getKeyStroke(
+                KeyEvent.VK_N, ActionEvent.CTRL_MASK), false);
+        topBuilder.addItem(menuEdit, 
                 BUNDLE.getString("MenuCopy"), copy, 
                 KeyStroke.getKeyStroke(
-                KeyEvent.VK_C, ActionEvent.CTRL_MASK));
-        topMenu.addItem(BUNDLE.getString("MenuEdit"), 
+                KeyEvent.VK_C, ActionEvent.CTRL_MASK), false);
+        topBuilder.addItem(menuEdit, 
                 BUNDLE.getString("MenuCut"), cut, 
                 KeyStroke.getKeyStroke(
-                KeyEvent.VK_C, ActionEvent.CTRL_MASK));
-        topMenu.addItem(BUNDLE.getString("MenuEdit"), 
+                KeyEvent.VK_X, ActionEvent.CTRL_MASK), false);
+        topBuilder.addItem(menuEdit, 
                 BUNDLE.getString("MenuPaste"), paste, 
                 KeyStroke.getKeyStroke(
-                KeyEvent.VK_V, ActionEvent.CTRL_MASK));
-        topMenu.addItem(BUNDLE.getString("MenuEdit"), 
-                BUNDLE.getString("MenuRotate"), rotate, null);
-        topMenu.addItem(BUNDLE.getString("MenuEdit"), 
-                BUNDLE.getString("MenuScale"), scale, null);
-
+                KeyEvent.VK_V, ActionEvent.CTRL_MASK), false);
+        topBuilder.addItem(menuEdit, 
+                BUNDLE.getString("MenuRotate"), rotate, null, false);
+        topBuilder.addItem(menuEdit, 
+                BUNDLE.getString("MenuScale"), scale, null, false);
+        
         /*
-         * This is used to keep the menu system in the right order.
-         * Usually menu items will be shown in the order of adding them,
-         * but this can be used to change their positions.
+         * Popup menu items
          */
-        topMenu.rearange("File", 0);
-        topMenu.rearange("Edit", 1);
+        popupBuilder.addItem(null, 
+                BUNDLE.getString("MenuCopy"), copy, 
+                KeyStroke.getKeyStroke(
+                KeyEvent.VK_C, ActionEvent.CTRL_MASK), false);
+        popupBuilder.addItem(null, 
+                BUNDLE.getString("MenuCut"), cut, 
+                KeyStroke.getKeyStroke(
+                KeyEvent.VK_X, ActionEvent.CTRL_MASK), false);
+        popupBuilder.addItem(null, 
+                BUNDLE.getString("MenuPaste"), paste, 
+                KeyStroke.getKeyStroke(
+                KeyEvent.VK_V, ActionEvent.CTRL_MASK), false);
+        popupBuilder.addItem(null, 
+                BUNDLE.getString("MenuRotate"), rotate, null, false);
+        popupBuilder.addItem(null, 
+                BUNDLE.getString("MenuScale"), scale, null, false);
+        popupBuilder.addItem(null, 
+                BUNDLE.getString("MenuProperties"), newItem, null, true);
+        
+        popupMenu =  (JPopupMenu) popupBuilder.buildMenu();
+        
+        //sets the popup menu and deactivates the entries.
+        itemManager.setPopupItems(popupBuilder.getMenuItems());
+        itemManager.setItemsEnabledSelection(false);
+        itemManager.setItemsEnabledCopy(false);
     }
     
     private void function(){
-        System.out.println("blar");
+        System.out.println("not implemented");
     }
 
     @Override
     public void addMenuItem(String menuName, String itemName,
-            Callable<Void> function, KeyStroke keyCombination) {
+            Callable<Void> function, KeyStroke keyCombination, boolean separator) {
 
-        topMenu.addItem(menuName, itemName, function, keyCombination);
+        topBuilder.addItem(menuName, itemName, function, keyCombination, separator);
     }
 
     @Override
     public JMenuBar buildMenubar() {
-        return topMenu.buildMenu();
+        JMenuBar menu = (JMenuBar) topBuilder.buildMenu();
+        
+        //deactivates the entries of the new menu.
+        itemManager.setTopItems(topBuilder.getMenuItems());
+        itemManager.setItemsEnabledSelection(false);
+        itemManager.setItemsEnabledCopy(false);
+        
+        return menu;
     }
 
     @Override
     public void registerInputInterface(InputToFrameInterface input) {
         this.input = input;
-        popupMenu.registerInputInterface(input);
+        //popupMenu.registerInputInterface(input);
     }
 
     @Override
-    public void setItemsEnabled(boolean shapesSelected, boolean copyShapesExist) {
-        popupMenu.setItemsEnabled(shapesSelected, copyShapesExist);
+    public void setItemsEnabledSelection(boolean shapesSelected) {
+        //popupMenu.setItemsEnabled(shapesSelected, copyShapesExist);
+        itemManager.setItemsEnabledSelection(shapesSelected);
+    }
+
+    @Override
+    public void setItemsEnabledCopy(boolean copyShapesExist) {
+        //popupMenu.setItemsEnabled(shapesSelected, copyShapesExist);
+        itemManager.setItemsEnabledCopy(copyShapesExist);
     }
 
     @Override

@@ -38,6 +38,7 @@ public class mlSelectionRectStrategy implements mlMouseStrategy{
                selectionRect = false;
 
                controller.graphic.selectionRectFinished();
+               controller.frame.selectionChange(controller.graphic.isShapeSelected());
                controller.frame.repaint();
            }
     }

@@ -2,11 +2,10 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.frame.menu;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.concurrent.Callable;
 
+import javax.swing.JComponent;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -21,112 +20,104 @@ import javax.swing.KeyStroke;
  */
 public class TopMenuBuilder implements MenuBuilder{
     
-    private HashMap<String, ArrayList<MenuItemInterface>> menuList = null;
-    private ArrayList<String> menuOrder = null;
-    
+    //tree for menu creation.
     private TreeNode root = null;
+    //stores the menu items for later access.
+    private HashMap<String, JMenuItem> itemList = null;
     
     public TopMenuBuilder(){
-        menuList = new HashMap<String, ArrayList<MenuItemInterface>>();
-        menuOrder = new ArrayList<String>();
+        itemList = new HashMap<String, JMenuItem>();
         
-        MenuItemInterface rootItem = new MenuItem("", null, null);
+        MenuItemInterface rootItem = new MenuItem("", null, null, false);
         
         root = new TreeNode(rootItem);
     }
     
-    private ArrayList<MenuItemInterface> getMenu(String menuName){
-        return menuList.get(menuName);
-    }
-    
-    private int containsName(String name){
-        int i=0;
-        for(String ordername : menuOrder){
-            if(ordername.equals(name))
-                return i;
-            i++;
-        }
-        return -1;
-    }
-    
-    @Override
-    public void rearange(String name, int order){
-        
-        if(order < 0)
-            return;
-        
-        int index = containsName(name);
-        
-        if(index != -1){
-            menuOrder.remove(index);
-            menuOrder.add(order, name);
-        }
-    }
-    
     @Override
     public void addItem(String menuName, String itemName, Callable<Void> function,
-            KeyStroke keyCombination){
+            KeyStroke keyCombination, boolean separator){
         
-        if(menuName == null || menuName.equals("") || itemName == null ||
-                itemName.equals("") || function == null){
+        if( (menuName != null && menuName.equals("")) || itemName == null || 
+                itemName.equals("")){
             return;
         }
 
-        MenuItemInterface item = new MenuItem(itemName, function, keyCombination);
-        TreeNode node = new TreeNode(item);
+        MenuItemInterface item = new MenuItem(itemName, function, keyCombination, separator);
         
         TreeNode parent = root.findNode(menuName);
         
-        if(parent == null){
-            parent = new TreeNode(new MenuItem(menuName, null,null));
-            root.addChild(parent);
+        if(parent == null && menuName != null){
+            MenuItem parent_item = new MenuItem(menuName, null,null, false);
+            parent = root.addChild(parent_item);
+        }else if (parent == null){
+            parent = root;
         }
         
-        parent.addChild(node);
-        
-        
-        ArrayList<MenuItemInterface> menu = getMenu(menuName);
-        if(menu == null){
-            menu = new ArrayList<MenuItemInterface>();
-            this.menuList.put(menuName, menu);
-            
-            if(containsName(menuName) == -1){
-                menuOrder.add(menuName);
-            }
-        }
-        
-        menu.add(item);
+        parent.addChild(item);
     }
     
     @Override
     public JMenuBar buildMenu(){
         
-        root.printTree();
         JMenuBar menuBar = new JMenuBar();
         
-        for (String menu_name : menuOrder) {
-            
-            ArrayList<MenuItemInterface> menuEntries = menuList.get(menu_name);
-            
-            JMenu menu = new JMenu(menu_name);
-            
-            for(final MenuItemInterface item : menuEntries){
-                
-                JMenuItem jItem = new JMenuItem(item.getName());
-                
-                if(item.getKeyCombination() != null)
-                    jItem.setAccelerator(item.getKeyCombination());                
-                jItem.addActionListener(new ActionListener() {
-                    public void actionPerformed(ActionEvent e) {
-                        item.call();
-                      }
-                });
-                menu.add(jItem);
-            }
-            menuBar.add(menu);
+        for(TreeNode child : root.getChildren()){
+            buildIterator(child, menuBar);
         }
 
         return menuBar;
+    }
+    
+    private void buildIterator(TreeNode node, JComponent menu){
+        
+        MenuItemInterface item = node.getMenuItem();
+        String name = node.getMenuItem().getName();
+        
+        if(item.hasSeparator()){
+            if(menu instanceof JMenu)
+                ((JMenu) menu).addSeparator();
+        }
+        
+        //creates the leafs aka the menu items.
+        if(item.hasFunction()){
+            menu.add(createMenuItem(item));
+        }
+        //creates the submenus.
+        else{
+            JMenu jmenu = new JMenu(item.getName());
+            jmenu.setName(name);
+            menu.add(jmenu);
+            
+            for(TreeNode child : node.getChildren()){
+                buildIterator(child, jmenu);
+            }
+        }
+        
+    }
+    
+    private JMenuItem createMenuItem(final MenuItemInterface item){
+        
+        String name = item.getName();
+        
+        JMenuItem jItem = new JMenuItem(name);
+        jItem.setName(name);
+        
+        if(item.getKeyCombination() != null)
+            jItem.setAccelerator(item.getKeyCombination());                
+        jItem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                item.call();
+              }
+        });
+        
+        itemList.put(name, jItem);
+        
+        return jItem;
+    }
+
+    @Override
+    public HashMap<String, JMenuItem> getMenuItems() {
+        return itemList;
     }
 
 }

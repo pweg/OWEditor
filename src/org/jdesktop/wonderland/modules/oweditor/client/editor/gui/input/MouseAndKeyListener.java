@@ -53,7 +53,9 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
                 if(!ic.graphic.selectionSwitch(p, true)){
                     strategy = new mlSelectionRectShiftStrategy(ic);
                     strategy.mousePressed(p);
-                } 
+                }else{
+                    ic.frame.selectionChange(ic.graphic.isShapeSelected());
+                }
                 ic.frame.repaint();               
             }
         }else{
@@ -64,6 +66,7 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
                      if(ic.graphic.isMouseInObject(p)){
                          strategy = new mlTranslateStrategy(ic);
                          strategy.mousePressed(p);
+                         ic.frame.selectionChange(ic.graphic.isShapeSelected());
                      }else{
                          strategy = new mlSelectionRectStrategy(ic);
                          strategy.mousePressed(p);
@@ -112,6 +115,8 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
         
         if (e.getButton() ==  MouseEvent.BUTTON3 && mode <= COPY){
             ic.graphic.selectionSwitch(ic.frame.revertBack(p), false);
+            ic.frame.selectionChange(ic.graphic.isShapeSelected());
+            
             strategy = new mlPopupStrategy(ic);
             strategy.mousePressed(p);
         }
@@ -188,31 +193,8 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
         else if(e.getKeyCode() == KeyEvent.VK_ESCAPE){
             clear();
         }
-        //CTRL
-        else if(e.isControlDown()){
-            //COPY
-            if(e.getKeyCode() == KeyEvent.VK_C){
-                copyShapes();
-                //This can be used, if you want the copies to appear
-                //approximated to the mouse position, when the copy
-                //button was hit.
-                /*
-                 * copyPoint = gc.drawingPan.getMousePosition();
-                 * double scale = gc.drawingPan.getScale();
-                 * copyPoint.x = (int) Math.round(copyPoint.x / scale);
-                 * copyPoint.y = (int) Math.round(copyPoint.y / scale);
-                */
-            }
-            //PASTE
-            else if(e.getKeyCode() == KeyEvent.VK_V && mode != COPY){
-                pasteShapes(); 
-            }
-            //CUT
-            else if(e.getKeyCode() == KeyEvent.VK_X && mode != COPY){
-                cutShapes();
-            }
-          //ENTER
-        }else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+        //ENTER
+        else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
             //FINISH ROTATION
             if(mode == ROTATE){
                 ic.graphic.rotateFinished();
@@ -234,7 +216,6 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
         if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
                 shiftPressed = false;
         }
-        
     }
     
     /**
@@ -271,6 +252,9 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
     public void copyShapes(){
         pasteStrategy = new mlPasteStrategy(ic, this);
         strategy = pasteStrategy;
+        
+        //set menu entry paste active
+        ic.frame.copyChange(true);
     }
     
     /**

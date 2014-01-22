@@ -23,7 +23,7 @@ public interface FrameToInputInterface {
      * @param x the x position of the popup menu.
      * @param y the y position of the popup menu.
      */
-    public void showPopupMenu(boolean shapesSelected, boolean copyShapesExist, int x, int y);
+    public void showPopupMenu(int x, int y);
 
     /**
      * Returns the current mouse position in the drawing panel.
@@ -69,6 +69,25 @@ public interface FrameToInputInterface {
      * @return The reverted point when possible, null otherwise.
      */
     public Point revertBack(Point point);
+
+
+    /**
+     * Is used for some menu items. When nothing is selected they get
+     * deactivated. 
+     * 
+     * @param shapesSelected True means, that at least one shape is currently 
+     * selected
+     */
+    public void selectionChange(boolean shapesSelected);
+
+    /**
+     * Is used for the paste menu item. This activates the
+     * menu entry, if a copy was made and paste is possible.
+     * 
+     * @param copyShapesExist True if a copy was invoked and therefore
+     * shapes for copy are ready.
+     */
+    public void copyChange(boolean copyShapesExist);
 
 
 }

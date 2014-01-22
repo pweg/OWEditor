@@ -45,15 +45,6 @@ public interface GraphicToInputInterface {
     public Point copyInitialize();
     
     /**
-     * Looks for copy shape, whether there were shapes
-     * copied or not.
-     * 
-     * @return true, when there are copied shapes,
-     * false otherwise
-     */
-    public boolean copyShapesExist();
-
-    /**
      * Creates dragging shapes for placing them.
      */
     public void pasteInitialize();
@@ -257,6 +248,14 @@ public interface GraphicToInputInterface {
      * false otherwise
      */
     public boolean removeShapeName();
+    
+    /**
+     * Looks if shapes are selected.
+     * 
+     * @return True, if at least one shape is selected,
+     * false otherwise.
+     */
+    public boolean isShapeSelected();
 
 
 
