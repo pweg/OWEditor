@@ -12,7 +12,7 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.Tra
  * @author Patrick
  *
  */
-public interface DataObjectObserverInterface {
+public interface IDataObjectObserver {
 
     /**
      * Notifies, that an object has changed.

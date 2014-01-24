@@ -42,7 +42,7 @@ public class mlRotationCenterStrategy implements mlMouseStrategy{
         dragging = false;
         
         controller.graphic.rotationCenterUpdate();
-        controller.frame.repaint();
+        controller.window.repaint();
     }
 
     @Override
@@ -53,7 +53,7 @@ public class mlRotationCenterStrategy implements mlMouseStrategy{
             start.x = p.x;
             start.y = p.y;
         }
-        controller.frame.repaint();
+        controller.window.repaint();
     }
 
     @Override

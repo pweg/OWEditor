@@ -22,7 +22,7 @@ public class PopupMenuBuilder implements MenuBuilder{
     public PopupMenuBuilder(){
         itemList = new HashMap<String, JMenuItem>();
         
-        MenuItemInterface rootItem = new MenuItem("", null, null, false);
+        IMenuItem rootItem = new MenuItem("", null, null, false);
         
         root = new TreeNode(rootItem);
     }
@@ -36,7 +36,7 @@ public class PopupMenuBuilder implements MenuBuilder{
             return;
         }
 
-        MenuItemInterface item = new MenuItem(itemName, function, keyCombination, separator);
+        IMenuItem item = new MenuItem(itemName, function, keyCombination, separator);
         
         TreeNode parent = root.findNode(menuName);
         
@@ -64,7 +64,7 @@ public class PopupMenuBuilder implements MenuBuilder{
     
     private void buildIterator(TreeNode node, JComponent menu){
         
-        MenuItemInterface item = node.getMenuItem();
+        IMenuItem item = node.getMenuItem();
         String name = node.getMenuItem().getName();
         
         if(item.hasSeparator()){
@@ -91,7 +91,7 @@ public class PopupMenuBuilder implements MenuBuilder{
         
     }
     
-    private JMenuItem createMenuItem(final MenuItemInterface item){
+    private JMenuItem createMenuItem(final IMenuItem item){
         
         String name = item.getName();
         

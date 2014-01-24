@@ -39,7 +39,7 @@ public class mlPasteStrategy implements mlMouseStrategy{
             controller.graphic.pasteFinished();
             
             listener.clear();
-            controller.frame.repaint();
+            controller.window.repaint();
         }
     }
 

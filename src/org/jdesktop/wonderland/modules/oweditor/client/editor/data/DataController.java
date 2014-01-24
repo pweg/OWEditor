@@ -4,8 +4,8 @@ import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.Coordin
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataControllerMainControllerInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataObjectManagerGUIInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.AdapterObserverInterface;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.DataObjectObserverInterface;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.EnvironmentObserverInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.IDataObjectObserver;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.IEnvironmentObserver;
 
 /**
  * This is the main data controller class, which is used to 
@@ -43,13 +43,13 @@ public class DataController implements DataControllerMainControllerInterface {
 
     @Override
     public void registerDataObjectObserver(
-            DataObjectObserverInterface domo) {
+            IDataObjectObserver domo) {
         dm.registerObserver(domo);
         
     }
 
     @Override
-    public void registerEnvironmentObserver(EnvironmentObserverInterface en) {
+    public void registerEnvironmentObserver(IEnvironmentObserver en) {
         em.registerObserver(en);
     }
 

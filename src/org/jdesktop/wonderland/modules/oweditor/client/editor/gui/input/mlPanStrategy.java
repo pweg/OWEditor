@@ -4,7 +4,7 @@ import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;
 
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.WindowToInputInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.IWindowToInput;
 
 /**
  * This mouse listener strategy is used for 
@@ -16,12 +16,12 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.WindowT
 public class mlPanStrategy implements mlMouseStrategy{
 
     private Rectangle visiRect = null;  
-    private WindowToInputInterface effi = null;
+    private IWindowToInput effi = null;
     private Point pressed = null;  
     private Point here = null;  
     private boolean drag = false;
     
-    public mlPanStrategy(WindowToInputInterface effi){
+    public mlPanStrategy(IWindowToInput effi){
         this.effi = effi;
     }
     

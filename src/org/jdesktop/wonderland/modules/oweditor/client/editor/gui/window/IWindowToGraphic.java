@@ -1,7 +1,7 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window;
 
 
-public interface WindowToGraphicInterface {
+public interface IWindowToGraphic {
     
     /**
      * Repaints the drawing panel.

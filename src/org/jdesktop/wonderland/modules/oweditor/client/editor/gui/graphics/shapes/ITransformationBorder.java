@@ -5,7 +5,7 @@ import java.awt.Point;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 
-public interface TransformationBorderInterface {
+public interface ITransformationBorder {
 
     
     public static final byte MODEONECENTER   = 0;

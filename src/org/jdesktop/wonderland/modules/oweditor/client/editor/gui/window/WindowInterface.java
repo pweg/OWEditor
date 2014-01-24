@@ -6,7 +6,7 @@ import java.awt.event.MouseWheelListener;
 import javax.swing.event.MouseInputAdapter;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataObjectManagerGUIInterface;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.input.InputToMenuInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.input.IInputToWindow;
 
 /**
  * Interface for the gui package, which extends the 
@@ -43,9 +43,9 @@ public interface WindowInterface extends GraphicForwardInterface{
      * 
      * @param input The input interface for the frame package.
      */
-    public void registerInputInterface(InputToMenuInterface input);
+    public void registerInputInterface(IInputToWindow input);
     
-    public WindowToInputInterface getInputInterface();
+    public IWindowToInput getInputInterface();
     /**
      * This repaints ONLY the drawing panel, nothing else.
      */

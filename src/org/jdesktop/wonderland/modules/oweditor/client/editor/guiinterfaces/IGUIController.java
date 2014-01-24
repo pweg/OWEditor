@@ -5,7 +5,7 @@ import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.GUIObse
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataObjectManagerGUIInterface;
 
 
-public interface GUIControllerInterface {
+public interface IGUIController {
     
     /**
      * Creates the main frame, which houses
@@ -26,14 +26,14 @@ public interface GUIControllerInterface {
      * 
      * @return a dataObjectObserverInterface.
      */
-    public DataObjectObserverInterface getDataObjectObserver();
+    public IDataObjectObserver getDataObjectObserver();
     
     /**
      * Returns a EnvironmentObserver instance.
      * 
      * @return a environmentObserverInterface.
      */
-    public EnvironmentObserverInterface getEnvironmentObserver();
+    public IEnvironmentObserver getEnvironmentObserver();
     
     /**
      * Sets a DataObjectManager instance.

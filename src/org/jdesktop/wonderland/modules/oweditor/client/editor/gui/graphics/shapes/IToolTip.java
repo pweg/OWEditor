@@ -4,7 +4,7 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.geom.AffineTransform;
 
-public interface ToolTipInterface {
+public interface IToolTip {
     
     /**
      * Returns the text, which is displayed in the tooltip.

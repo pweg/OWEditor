@@ -2,22 +2,22 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics;
 
 import java.util.ArrayList;
 
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.AdapterCommunicationInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.IAdapterCommunication;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.DraggingObject;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.ShapeObject;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.SimpleShapeObject;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.TransformationBorderInterface;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.WindowToGraphicInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.ITransformationBorder;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.IWindowToGraphic;
 
-public class InternaMediator implements InternalMediatorInterface{
+public class InternaMediator implements IInternalMediator{
     
     private ShapeManager sm = null;
     private SelectionManager ssm = null;
     private TranslationManager stm = null;
-    private AdapterCommunicationInterface adapter = null;
-    private WindowToGraphicInterface frame = null;
+    private IAdapterCommunication adapter = null;
+    private IWindowToGraphic frame = null;
     
-    public InternaMediator(AdapterCommunicationInterface adapter) {
+    public InternaMediator(IAdapterCommunication adapter) {
         this.adapter = adapter;
     }
 
@@ -103,13 +103,13 @@ public class InternaMediator implements InternalMediatorInterface{
     }
 
     @Override
-    public TransformationBorderInterface getShapeBorder() {
+    public ITransformationBorder getShapeBorder() {
         return sm.getShapeBorder();
     }
 
     @Override
     public void registerFrameInterface(
-            WindowToGraphicInterface frameInterface) {
+            IWindowToGraphic frameInterface) {
         this.frame = frameInterface;
     }
     

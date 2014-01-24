@@ -5,8 +5,8 @@ import java.awt.event.MouseWheelListener;
 
 import javax.swing.event.MouseInputAdapter;
 
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.GraphicToInputInterface;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.WindowToInputInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.IGraphicToInput;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.IWindowToInput;
 
 public class Input implements InputInterface{
     
@@ -32,17 +32,17 @@ public class Input implements InputInterface{
     }
 
     @Override
-    public InputToMenuInterface getFrameInterface() {
+    public IInputToWindow getFrameInterface() {
         return ic.inputInterface;
     }
 
     @Override
-    public void registerGraphicInterface(GraphicToInputInterface graphic) {
+    public void registerGraphicInterface(IGraphicToInput graphic) {
         ic.registerGraphicInterface(graphic);
     }
 
     @Override
-    public void registerFrameInterface(WindowToInputInterface frame) {
+    public void registerFrameInterface(IWindowToInput frame) {
        ic.registerFrameInterface(frame);
     }
 

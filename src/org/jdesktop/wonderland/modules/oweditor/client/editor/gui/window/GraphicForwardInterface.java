@@ -1,7 +1,7 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.TranslatedObjectInterface;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.GraphicToInputInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.IGraphicToInput;
 
 /**
  * This is the interface, which forwards data changes  from the gui package
@@ -13,7 +13,7 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.Graph
 public interface GraphicForwardInterface {
 
     
-    public GraphicToInputInterface getGraphicInputInterface();
+    public IGraphicToInput getGraphicInputInterface();
 
     public void createShape(TranslatedObjectInterface dataObject);
 

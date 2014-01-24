@@ -12,9 +12,9 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shape
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.ShapeRectangle;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.SimpleShapeObject;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.ToolTip;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.ToolTipInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.IToolTip;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.TransformationBorder;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.TransformationBorderInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.ITransformationBorder;
 
 /**
  * A factory, which is used to create different kinds of
@@ -31,9 +31,9 @@ public class ShapeFactory {
     //public static final int DRAGGINGRECTANGLE = 11;
    // public static final int DRAGGINGRELLIPSE = 12;
     
-    public InternalMediatorInterface smi = null;
+    public IInternalMediator smi = null;
     
-    public ShapeFactory(InternalMediatorInterface smi){
+    public ShapeFactory(IInternalMediator smi){
         this.smi = smi;
     }
 
@@ -128,7 +128,7 @@ public class ShapeFactory {
      * @param mode The mode of the border.
      * @return The created border.
      */
-    public TransformationBorderInterface createTransformBorder(int x, int y, 
+    public ITransformationBorder createTransformBorder(int x, int y, 
             int width, int height, 
             AffineTransform at,
             byte mode){
@@ -143,7 +143,7 @@ public class ShapeFactory {
      * @param text the text the tooltip should contain.
      * @return The created tooltip.
      */
-    public ToolTipInterface createToolTip(Point coordinates, String text){
+    public IToolTip createToolTip(Point coordinates, String text){
         return new ToolTip(coordinates, text);
     }
 

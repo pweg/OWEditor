@@ -8,7 +8,7 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces;
  * @author Patrick
  *
  */
-public interface EnvironmentObserverInterface {
+public interface IEnvironmentObserver {
     
     /**
      * Sets a new width for the drawing panel.

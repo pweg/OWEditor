@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.DraggingObject;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.ShapeObject;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.TransformationBorderInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.ITransformationBorder;
 
 /**
  * This class is used for transforming shapes, like 
@@ -16,14 +16,14 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shape
  */
 public class TransformationManager {
     
-    private InternalMediatorInterface smi = null;
+    private IInternalMediator smi = null;
     private ArrayList<DraggingObject> transformedShapes = null;
     
     /**
      * Creates a new TransformationManager instance.
      * @param smi The internal mediator instance.
      */
-    public TransformationManager(InternalMediatorInterface smi){
+    public TransformationManager(IInternalMediator smi){
         transformedShapes = new ArrayList<DraggingObject>();
         this.smi = smi;
     }
@@ -54,7 +54,7 @@ public class TransformationManager {
      * the rotation angle.
      */
     public void rotate(Point p){
-        TransformationBorderInterface border = smi.getShapeBorder();
+        ITransformationBorder border = smi.getShapeBorder();
         
         Point rot_center = border.getOriginalCenter();
         
@@ -90,7 +90,7 @@ public class TransformationManager {
      * @param start The start point of the translation.
      * @param end The end point of the translation.
      */
-    public void setRotationCenter(TransformationBorderInterface border, Point start, Point end) {
+    public void setRotationCenter(ITransformationBorder border, Point start, Point end) {
         
         double distance_x = (start.x - end.x);
         double distance_y = (start.y - end.y);
@@ -105,7 +105,7 @@ public class TransformationManager {
      * 
      * @param border The border which should be updated.
      */
-    public void setRotationCenterUpdate(TransformationBorderInterface border) {
+    public void setRotationCenterUpdate(ITransformationBorder border) {
         border.setRotationCenterUpdate();
 
         for(DraggingObject shape : transformedShapes){
@@ -120,7 +120,7 @@ public class TransformationManager {
      * scale.
      */
     public void scale(Point p){
-        TransformationBorderInterface border = smi.getShapeBorder();
+        ITransformationBorder border = smi.getShapeBorder();
 
         byte clicked = border.getCurrentClicked();
         
@@ -139,7 +139,7 @@ public class TransformationManager {
         //Case for the four different border edges.
         //(Scale calculation is different for every edge)
         switch(clicked){
-            case(TransformationBorderInterface.UPPERLEFT):;
+            case(ITransformationBorder.UPPERLEFT):;
                 new_width = p.x - (x+width);
                 new_height = p.y - (y+height);
                 scale_x = new_width/width;
@@ -148,7 +148,7 @@ public class TransformationManager {
                 scale_x = Math.min(0, scale_x);
                 scale_y = Math.min(0, scale_y);
                 break;
-            case(TransformationBorderInterface.UPPERRIGHT):
+            case(ITransformationBorder.UPPERRIGHT):
                 new_width = p.x - x;
                 new_height = p.y - (y+height);
                 scale_x = new_width/width;
@@ -157,7 +157,7 @@ public class TransformationManager {
                 scale_x = Math.max(0, scale_x);
                 scale_y = Math.min(0, scale_y);
                 break;
-            case(TransformationBorderInterface.BOTTOMLEFT):
+            case(ITransformationBorder.BOTTOMLEFT):
                 new_width = p.x - (x+width);
                 new_height = p.y - y;
                 scale_x = new_width/width;
@@ -166,7 +166,7 @@ public class TransformationManager {
                 scale_x = Math.min(0, scale_x);
                 scale_y = Math.max(0, scale_y);
                 break;
-            case(TransformationBorderInterface.BOTTOMRIGHT):
+            case(ITransformationBorder.BOTTOMRIGHT):
                 new_width = p.x - x;
                 new_height = p.y - y;
                 scale_x = new_width/width;
@@ -192,19 +192,19 @@ public class TransformationManager {
         //Case for the four different border edges.
         //(Every edge needs different distances)
         switch(clicked){
-            case(TransformationBorderInterface.UPPERLEFT):
+            case(ITransformationBorder.UPPERLEFT):
                 distance_x = (Math.abs(width*scale) - width);
                 distance_y = (Math.abs(height*scale) - height);
                 break;
-            case(TransformationBorderInterface.UPPERRIGHT):
+            case(ITransformationBorder.UPPERRIGHT):
                 distance_x = 0;
                 distance_y = Math.abs(height*scale) - height;
                 break;
-            case(TransformationBorderInterface.BOTTOMLEFT):
+            case(ITransformationBorder.BOTTOMLEFT):
                 distance_x = Math.abs(width*scale) - width;
                 distance_y = 0;
                 break;
-            case(TransformationBorderInterface.BOTTOMRIGHT):
+            case(ITransformationBorder.BOTTOMRIGHT):
                 distance_x = 0;
                 distance_y = 0;
                 break;
@@ -247,7 +247,7 @@ public class TransformationManager {
      * to do further scale operations.
      */
     public void scaleUpdate() {
-        TransformationBorderInterface border = smi.getShapeBorder();
+        ITransformationBorder border = smi.getShapeBorder();
         border.scaleUpdate();
         
         for(DraggingObject shape : transformedShapes){

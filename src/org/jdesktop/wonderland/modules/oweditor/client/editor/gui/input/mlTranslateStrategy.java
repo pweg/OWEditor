@@ -34,14 +34,14 @@ public class mlTranslateStrategy implements mlMouseStrategy{
             start.y = p.y;
             dragging = true;
         }
-        controller.frame.repaint();
+        controller.window.repaint();
     }
 
     @Override
     public void mouseReleased(Point p) {
         dragging = false;
         controller.graphic.translateFinished();
-        controller.frame.repaint();
+        controller.window.repaint();
     }
 
     @Override
@@ -52,7 +52,7 @@ public class mlTranslateStrategy implements mlMouseStrategy{
             start.x = p.x;
             start.y = p.y;
         }
-        controller.frame.repaint();
+        controller.window.repaint();
     }
 
     @Override

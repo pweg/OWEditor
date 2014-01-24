@@ -9,9 +9,9 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shape
 
 public class sCollisionNotSelectedStrategy implements sCollisionStrategy {
     
-    private InternalMediatorInterface smi = null;
+    private IInternalMediator smi = null;
     
-    public sCollisionNotSelectedStrategy(InternalMediatorInterface smi){
+    public sCollisionNotSelectedStrategy(IInternalMediator smi){
         this.smi = smi;
     }
 

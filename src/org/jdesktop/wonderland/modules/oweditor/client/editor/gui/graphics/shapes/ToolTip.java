@@ -12,7 +12,7 @@ import java.awt.geom.Rectangle2D;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.GUISettings;
 
-public class ToolTip implements ToolTipInterface{
+public class ToolTip implements IToolTip{
     
     private Point coordinates = null;
     private Rectangle shape = null;

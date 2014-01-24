@@ -6,9 +6,9 @@ import java.util.ArrayList;
 public class TreeNode {
 
     private ArrayList<TreeNode> children;
-    protected MenuItemInterface item;
+    protected IMenuItem item;
 
-    public TreeNode(MenuItemInterface item) {
+    public TreeNode(IMenuItem item) {
         children = new ArrayList<TreeNode>();
         this.item = item;
     }
@@ -25,17 +25,17 @@ public class TreeNode {
         children.add(child);
     }
     
-    public TreeNode addChild(MenuItemInterface item){
+    public TreeNode addChild(IMenuItem item){
         TreeNode node = new TreeNode(item);
         children.add(node);
         return node;
     }
 
-    public MenuItemInterface getMenuItem() {
+    public IMenuItem getMenuItem() {
         return item;
     }
 
-    public void setCaption(MenuItemInterface caption) {
+    public void setCaption(IMenuItem caption) {
         this.item = caption;
     }
     

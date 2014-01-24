@@ -1,6 +1,8 @@
-package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.input;
+package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window;
 
-public interface InputToMenuInterface {
+public interface IWindowToMenu {
+    
+    public void importKmz();
 
     public void copyShapes();
     

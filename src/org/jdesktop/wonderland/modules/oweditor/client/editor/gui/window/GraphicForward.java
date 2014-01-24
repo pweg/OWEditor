@@ -1,9 +1,9 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.TranslatedObjectInterface;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.AdapterCommunicationInterface;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.GraphicToWindowInterface;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.GraphicToInputInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.IAdapterCommunication;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.IGraphicToWindow;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.IGraphicToInput;
 
 /**
  * Implements the frameGraphicInterface, which forwards 
@@ -15,14 +15,14 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.Graph
  */
 public class GraphicForward implements GraphicForwardInterface{
 
-    private GraphicToWindowInterface graphic = null;
+    private IGraphicToWindow graphic = null;
     
-    public GraphicForward(AdapterCommunicationInterface adapter){
+    public GraphicForward(IAdapterCommunication adapter){
 
     }
     
     @Override
-    public GraphicToInputInterface getGraphicInputInterface() {
+    public IGraphicToInput getGraphicInputInterface() {
         return graphic.getInputInterface();
     }
 
@@ -57,11 +57,11 @@ public class GraphicForward implements GraphicForwardInterface{
         graphic.updateShapeScale(id, scale);
     }
     
-    protected void registerGraphicInterface(GraphicToWindowInterface graphic){
+    protected void registerGraphicInterface(IGraphicToWindow graphic){
         this.graphic = graphic;
     }
     
-    protected GraphicToWindowInterface getInterface(){
+    protected IGraphicToWindow getInterface(){
         return graphic;
     }
 }

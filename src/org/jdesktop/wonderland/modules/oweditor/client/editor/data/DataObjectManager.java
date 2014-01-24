@@ -8,7 +8,7 @@ import java.util.logging.Logger;
 import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.CoordinateTranslatorInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataObjectInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataObjectManagerGUIInterface;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.DataObjectObserverInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.IDataObjectObserver;
 import org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter.GUIObserver;
 
 /**
@@ -23,7 +23,7 @@ public class DataObjectManager implements DataObjectManagerGUIInterface{
             Logger.getLogger(GUIObserver.class.getName());
         
     private DataController dc = null;
-    private DataObjectObserverInterface domo = null;
+    private IDataObjectObserver domo = null;
     private CoordinateTranslatorInterface ct = null;
     
     private LinkedHashMap<Long, DataObject> data = null;
@@ -190,7 +190,7 @@ public class DataObjectManager implements DataObjectManagerGUIInterface{
      * 
      * @param domo the observer instance.
      */
-    public void registerObserver(DataObjectObserverInterface domo) {
+    public void registerObserver(IDataObjectObserver domo) {
         this.domo = domo;
     }
     

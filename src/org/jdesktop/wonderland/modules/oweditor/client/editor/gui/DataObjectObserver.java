@@ -3,7 +3,7 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.gui;
 import java.util.logging.Logger;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.TranslatedObjectInterface;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.DataObjectObserverInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.IDataObjectObserver;
 
 /**
  * Implements the DataObjectObserverInterface and is used
@@ -13,7 +13,7 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.Data
  *
  */
 public class DataObjectObserver implements 
-                                DataObjectObserverInterface{
+                                IDataObjectObserver{
 
     private static final Logger LOGGER =
             Logger.getLogger(DataObjectObserver.class.getName());

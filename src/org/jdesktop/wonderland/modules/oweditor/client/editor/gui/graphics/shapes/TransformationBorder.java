@@ -22,7 +22,7 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.GUISettings;
  * found under
  * http://www.java2s.com/Code/Java/2D-Graphics-GUI/ResizesortranslatesaShape.htm
  */
-public class TransformationBorder extends SimpleShapeObject implements TransformationBorderInterface{
+public class TransformationBorder extends SimpleShapeObject implements ITransformationBorder{
     
 
     private Shape originalShape = null;

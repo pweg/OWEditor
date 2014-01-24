@@ -2,7 +2,7 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics;
 
 import java.awt.Point;
 
-public interface GraphicToInputInterface {
+public interface IGraphicToInput {
     
     
     /**

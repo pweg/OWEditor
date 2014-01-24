@@ -17,9 +17,9 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shape
 public class SelectionManager {
 
     private ArrayList<ShapeObject> selectedShapes = null;
-    private InternalMediatorInterface smi = null;
+    private IInternalMediator smi = null;
     
-    public SelectionManager(InternalMediatorInterface smi){
+    public SelectionManager(IInternalMediator smi){
         selectedShapes = new ArrayList<ShapeObject>();     
         
         this.smi = smi;

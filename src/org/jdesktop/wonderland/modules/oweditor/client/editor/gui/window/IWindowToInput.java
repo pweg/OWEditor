@@ -4,7 +4,7 @@ import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;
 
-public interface WindowToInputInterface {
+public interface IWindowToInput {
     
     public void repaint();
     

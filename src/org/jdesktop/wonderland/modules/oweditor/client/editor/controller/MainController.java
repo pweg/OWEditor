@@ -8,7 +8,7 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.controllerinterfac
 import org.jdesktop.wonderland.modules.oweditor.client.editor.data.DataController;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataControllerMainControllerInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.GUIController;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.GUIControllerInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.IGUIController;
 import org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter.WonderlandAdapterController;
 
 /**
@@ -22,7 +22,7 @@ import org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter.Wonderl
 public class MainController implements MainControllerDataInterface, 
                 MainControllerGUIInterface, MainControllerPluginInterface{
     
-    private GUIControllerInterface gui = null;
+    private IGUIController gui = null;
     private AdapterControllerMainControllerInterface adapter = null;
     private DataControllerMainControllerInterface data = null;
     

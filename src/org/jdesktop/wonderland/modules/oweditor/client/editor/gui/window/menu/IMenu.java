@@ -6,14 +6,14 @@ import java.util.concurrent.Callable;
 import javax.swing.JMenuBar;
 import javax.swing.KeyStroke;
 
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.input.InputToMenuInterface;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.WindowToMenuInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.IWindowToMenu;
 
-public interface MenuInterface {
+public interface IMenu {
     
     /**
      * Creates and adds a new Menu item to the menu, BUT this does not change
-     * the current menu. The menu has to be build again and swapped with the old
+     * the current menu, because it is not implemented currently. 
+     * The menu has to be build again and swapped with the old
      * one in the frame package.
      * 
      * @param menuName The name of the submenu, if the submenu is not
@@ -35,10 +35,13 @@ public interface MenuInterface {
      * @return The JMenubar
      */
     public JMenuBar buildMenubar();
-
-    public void registerInputInterface(InputToMenuInterface input);
     
-    public void registerWindowInterface(WindowToMenuInterface window);
+    /**
+     * Registers the window interface.
+     * 
+     * @param window An interface instance.
+     */
+    public void registerWindowInterface(IWindowToMenu window);
 
     /**
      * Is used for some menu items. When nothing is selected they get

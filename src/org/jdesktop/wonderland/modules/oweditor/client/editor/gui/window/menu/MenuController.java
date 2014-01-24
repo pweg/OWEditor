@@ -10,17 +10,15 @@ import javax.swing.JMenuBar;
 import javax.swing.JPopupMenu;
 import javax.swing.KeyStroke;
 
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.input.InputToMenuInterface;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.WindowToMenuInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.IWindowToMenu;
 
-public class MenuController implements MenuInterface{
+public class MenuController implements IMenu{
 
     private MenuBuilder topBuilder = null;
     private MenuBuilder popupBuilder = null;
-    private InputToMenuInterface input = null;
     private JPopupMenu popupMenu = null;
     private JItemManager itemManager = null;
-    private WindowToMenuInterface window = null;
+    private IWindowToMenu window = null;
     
 
     private static final ResourceBundle BUNDLE = ResourceBundle.getBundle(
@@ -54,28 +52,30 @@ public class MenuController implements MenuInterface{
         
         final Callable<Void> copy = new Callable<Void>() {
             public Void call(){
-                input.copyShapes();
+                window.copyShapes();
+                setItemsEnabledCopy(true);
                 return null;
             }
         };
         
         final Callable<Void> cut = new Callable<Void>() {
             public Void call(){
-                input.cutShapes();
+                window.cutShapes();
+                setItemsEnabledCopy(true);
                 return null;
             }
         };
         
         final Callable<Void> paste = new Callable<Void>() {
             public Void call(){
-                input.pasteShapes();
+                window.pasteShapes();
                 return null;
             }
         };
         
         final Callable<Void> rotate = new Callable<Void>() {
             public Void call(){
-                input.rotateShapes();
+                window.rotateShapes();
                 return null;
             }
         };
@@ -83,7 +83,7 @@ public class MenuController implements MenuInterface{
         
         final Callable<Void> scale = new Callable<Void>() {
             public Void call(){
-                input.scaleShapes();
+                window.scaleShapes();
                 return null;
             }
         };
@@ -171,12 +171,7 @@ public class MenuController implements MenuInterface{
         
         return menu;
     }
-
-    @Override
-    public void registerInputInterface(InputToMenuInterface input) {
-        this.input = input;
-    }
-
+    
     @Override
     public void setItemsEnabledSelection(boolean shapesSelected) {
         itemManager.setItemsEnabledSelection(shapesSelected);
@@ -193,7 +188,7 @@ public class MenuController implements MenuInterface{
     }
 
     @Override
-    public void registerWindowInterface(WindowToMenuInterface window) {
+    public void registerWindowInterface(IWindowToMenu window) {
         this.window  = window;
     }
 

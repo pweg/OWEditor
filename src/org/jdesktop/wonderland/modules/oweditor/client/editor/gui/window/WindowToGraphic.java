@@ -1,7 +1,7 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window;
 
 
-public class WindowToGraphic implements WindowToGraphicInterface{
+public class WindowToGraphic implements IWindowToGraphic{
     
 
     private DrawingPanel drawingPan = null;

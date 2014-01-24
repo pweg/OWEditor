@@ -11,7 +11,7 @@ import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.GUIObse
  * @author Patrick
  *
  */
-public class AdapterCommunication implements AdapterCommunicationInterface{
+public class AdapterCommunication implements IAdapterCommunication{
 
     private GUIObserverInterface goi = null;
     

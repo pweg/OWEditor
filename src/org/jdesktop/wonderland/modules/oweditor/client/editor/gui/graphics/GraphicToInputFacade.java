@@ -3,13 +3,13 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics;
 import java.awt.Point;
 import java.util.ArrayList;
 
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.AdapterCommunicationInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.IAdapterCommunication;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.DraggingObject;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.ShapeObject;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.TransformationBorder;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.stateDraggingShapeRotation;
 
-public class GraphicToInputFacade implements GraphicToInputInterface{
+public class GraphicToInputFacade implements IGraphicToInput{
 
     protected ShapeManager sm = null;
     protected CopyManager cm = null;
@@ -17,11 +17,11 @@ public class GraphicToInputFacade implements GraphicToInputInterface{
     protected SelectionManager ssm = null;
     protected TranslationManager stm = null;
     
-    protected InternalMediatorInterface smi = null;
+    protected IInternalMediator smi = null;
     
-    private AdapterCommunicationInterface adapter = null;
+    private IAdapterCommunication adapter = null;
     
-    public GraphicToInputFacade(AdapterCommunicationInterface adapter){
+    public GraphicToInputFacade(IAdapterCommunication adapter){
         this.adapter = adapter;
     }
 
@@ -45,7 +45,7 @@ public class GraphicToInputFacade implements GraphicToInputInterface{
         this.stm = stm;
     }
     
-    public void registerMediator(InternalMediatorInterface smi){
+    public void registerMediator(IInternalMediator smi){
         this.smi = smi;
     }
 

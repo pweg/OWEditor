@@ -4,7 +4,7 @@ import java.util.concurrent.Callable;
 
 import javax.swing.KeyStroke;
 
-public class MenuItem implements MenuItemInterface{
+public class MenuItem implements IMenuItem{
 
     private Callable<Void> function = null;
     private String name = "";

@@ -1,8 +1,10 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window;
 
-public class WindowToMenu implements WindowToMenuInterface{
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.input.IInputToWindow;
 
-    private WindowController wc = null;;
+public class WindowToMenu implements IWindowToMenu{
+
+    private WindowController wc = null;
 
     public WindowToMenu(WindowController wc){
         this.wc  = wc;
@@ -15,32 +17,36 @@ public class WindowToMenu implements WindowToMenuInterface{
 
     @Override
     public void copyShapes() {
-        // TODO Auto-generated method stub
-        
+        wc.input.setInputMode(IInputToWindow.COPY);
+        wc.menu.setItemsEnabledCopy(true);
+        wc.repaint();
     }
 
     @Override
     public void cutShapes() {
-        // TODO Auto-generated method stub
+        wc.input.setInputMode(IInputToWindow.CUT);
+        wc.repaint();
         
     }
 
     @Override
     public void pasteShapes() {
-        // TODO Auto-generated method stub
+        wc.input.setInputMode(IInputToWindow.PASTE);
+        wc.repaint();
         
     }
 
     @Override
     public void rotateShapes() {
-        // TODO Auto-generated method stub
+        wc.input.setInputMode(IInputToWindow.ROTATE);
+        wc.repaint();
         
     }
 
     @Override
     public void scaleShapes() {
-        // TODO Auto-generated method stub
-        
+        wc.input.setInputMode(IInputToWindow.SCALE);
+        wc.repaint();
     }
 
 }

@@ -2,11 +2,11 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.frames
 
 import javax.swing.JFrame;
 
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.WindowToFrameInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.IWindowToFrame;
 
-public interface FrameInterface {
+public interface IFrame {
     
-    public void registerWindow(WindowToFrameInterface window);
+    public void registerWindow(IWindowToFrame window);
     
     public void registerMainFrame(JFrame mainframe);
     
@@ -14,5 +14,10 @@ public interface FrameInterface {
      * Shows the add file frame.
      */
     public void showImportFrame();
+
+    /**
+     * Repaints the frame.
+     */
+    //public void repaint();
 
 }

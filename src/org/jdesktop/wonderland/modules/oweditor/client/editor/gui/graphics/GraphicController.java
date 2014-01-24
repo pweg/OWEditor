@@ -4,13 +4,13 @@ import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.TranslatedObjectInterface;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.AdapterCommunicationInterface;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.WindowToGraphicInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.IAdapterCommunication;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.IWindowToGraphic;
 
-public class GraphicController implements GraphicToWindowInterface{
+public class GraphicController implements IGraphicToWindow{
 
 
-    protected InternalMediatorInterface smi = null;
+    protected IInternalMediator smi = null;
     protected ShapeManager sm = null;
     protected TransformationManager srm = null;
     protected TranslationManager stm = null;
@@ -18,11 +18,11 @@ public class GraphicController implements GraphicToWindowInterface{
     protected CopyManager scm = null;
     
     protected GraphicToInputFacade inputInterface = null;
-    protected GraphicToWindowInterface shapeFacadeInterface = null;
+    protected IGraphicToWindow shapeFacadeInterface = null;
 
-    protected WindowToGraphicInterface frame = null;
+    protected IWindowToGraphic frame = null;
     
-    public GraphicController(AdapterCommunicationInterface adapter){
+    public GraphicController(IAdapterCommunication adapter){
         
         smi = new InternaMediator(adapter);
         
@@ -93,18 +93,18 @@ public class GraphicController implements GraphicToWindowInterface{
 
 
     @Override
-    public void registerFrameInterface(WindowToGraphicInterface frameInterface) {
+    public void registerFrameInterface(IWindowToGraphic frameInterface) {
         frame = frameInterface;
         smi.registerFrameInterface(frameInterface);
     }
 
     @Override
-    public GraphicToWindowInterface getFrameInterface() {
+    public IGraphicToWindow getFrameInterface() {
         return this;
     }
 
     @Override
-    public GraphicToInputInterface getInputInterface() {
+    public IGraphicToInput getInputInterface() {
         return inputInterface;
     }
 

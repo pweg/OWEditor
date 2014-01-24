@@ -4,9 +4,9 @@ import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.TranslatedObjectInterface;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.WindowToGraphicInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.IWindowToGraphic;
 
-public interface GraphicToWindowInterface {
+public interface IGraphicToWindow {
     
     /**
      * Draws all shape objects. 
@@ -21,21 +21,21 @@ public interface GraphicToWindowInterface {
      * 
      * @param frameInterface A interface instance.
      */
-    public void registerFrameInterface(WindowToGraphicInterface frameInterface);
+    public void registerFrameInterface(IWindowToGraphic frameInterface);
 
     /**
      * Returns the interface for the frame package.
      * 
      * @return The frameinterfaceInstance.
      */
-    public GraphicToWindowInterface getFrameInterface();
+    public IGraphicToWindow getFrameInterface();
     
     /**
      * Returns the interface for the input package.
      * 
      * @return The inputfacadeInstance.
      */
-    public GraphicToInputInterface getInputInterface();
+    public IGraphicToInput getInputInterface();
 
     /**
      * Creates a new shape.

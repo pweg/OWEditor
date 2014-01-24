@@ -28,7 +28,7 @@ public class mlSelectionRectStrategy implements mlMouseStrategy{
         start = p;
         selectionRect = true;
             
-        controller.frame.repaint();
+        controller.window.repaint();
         
     }
 
@@ -38,8 +38,8 @@ public class mlSelectionRectStrategy implements mlMouseStrategy{
                selectionRect = false;
 
                controller.graphic.selectionRectFinished();
-               controller.frame.selectionChange(controller.graphic.isShapeSelected());
-               controller.frame.repaint();
+               controller.window.selectionChange(controller.graphic.isShapeSelected());
+               controller.window.repaint();
            }
     }
 
@@ -49,7 +49,7 @@ public class mlSelectionRectStrategy implements mlMouseStrategy{
                 Point end = p;
                
                 controller.graphic.selectionRectUpdate(start, end);
-                controller.frame.repaint();
+                controller.window.repaint();
             }
     }
 

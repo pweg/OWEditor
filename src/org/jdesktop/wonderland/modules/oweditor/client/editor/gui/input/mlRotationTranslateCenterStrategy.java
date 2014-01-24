@@ -30,7 +30,7 @@ public class mlRotationTranslateCenterStrategy implements mlMouseStrategy{
     @Override
     public void mouseDragged(Point p) {
         controller.graphic.rotate(p);
-        controller.frame.repaint();
+        controller.window.repaint();
     }
 
     @Override

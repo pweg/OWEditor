@@ -6,9 +6,9 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.input.Input;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.input.InputInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.Window;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.WindowInterface;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.DataObjectObserverInterface;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.EnvironmentObserverInterface;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.GUIControllerInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.IDataObjectObserver;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.IEnvironmentObserver;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.IGUIController;
 
 /**
  * The main controller unit for the GUI package.
@@ -17,7 +17,7 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.GUIC
  * @author Patrick
  *
  */
-public class GUIController implements GUIControllerInterface{
+public class GUIController implements IGUIController{
 
     protected DataObjectObserver domo = null;
     protected EnvironmentObserver eo = null;
@@ -78,12 +78,12 @@ public class GUIController implements GUIControllerInterface{
     
 
     @Override
-    public DataObjectObserverInterface getDataObjectObserver() {
+    public IDataObjectObserver getDataObjectObserver() {
         return domo;
     }
 
     @Override
-    public EnvironmentObserverInterface getEnvironmentObserver() {
+    public IEnvironmentObserver getEnvironmentObserver() {
         return eo;
     }
     

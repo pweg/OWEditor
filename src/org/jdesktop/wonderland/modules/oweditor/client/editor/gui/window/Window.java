@@ -6,8 +6,8 @@ import java.awt.event.MouseWheelListener;
 import javax.swing.event.MouseInputAdapter;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataObjectManagerGUIInterface;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.AdapterCommunicationInterface;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.input.InputToMenuInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.IAdapterCommunication;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.input.IInputToWindow;
 
 /**
  * Implements the FrameInterface for the gui package and also
@@ -23,7 +23,7 @@ public class Window extends GraphicForward implements WindowInterface {
     private MainFrame mainframe = null;
     private WindowController fc = null;
     
-    public Window(AdapterCommunicationInterface adapter){
+    public Window(IAdapterCommunication adapter){
         super(adapter);
         this.fc = new WindowController(adapter, this);
         
@@ -35,7 +35,7 @@ public class Window extends GraphicForward implements WindowInterface {
     }
     
     @Override
-    public void registerInputInterface(InputToMenuInterface input){
+    public void registerInputInterface(IInputToWindow input){
         fc.registerInputInterface(input);
     }
 
@@ -97,7 +97,7 @@ public class Window extends GraphicForward implements WindowInterface {
     }
 
     @Override
-    public WindowToInputInterface getInputInterface() {
+    public IWindowToInput getInputInterface() {
         return fc.inputInterface;
     }
 

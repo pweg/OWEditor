@@ -17,8 +17,8 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shape
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.ShapeObject;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.ShapeRectangle;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.SimpleShapeObject;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.ToolTipInterface;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.TransformationBorderInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.IToolTip;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.ITransformationBorder;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.stateDraggingShape;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.stateDraggingShapeBorderBuild;
 import org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter.WorldBuilder;
@@ -41,19 +41,19 @@ public class ShapeManager {
     private ArrayList<DraggingObject> draggingShapes = null;
         
     private SimpleShapeObject selectionRectangle = null;
-    private TransformationBorderInterface border = null;
+    private ITransformationBorder border = null;
     
     private AffineTransform at = null;
     
     private static final Logger LOGGER =
             Logger.getLogger(WorldBuilder.class.getName());
-    private InternalMediatorInterface smi = null;
+    private IInternalMediator smi = null;
     
     private final ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
     private final Lock readLock = lock.readLock();
     private final Lock writeLock = lock.writeLock();
     
-    private ToolTipInterface nameToolTip = null;
+    private IToolTip nameToolTip = null;
 
     
     
@@ -61,7 +61,7 @@ public class ShapeManager {
      * Creates a new ShapeManager instance.
      * @param smi
      */
-    public ShapeManager(InternalMediatorInterface smi){
+    public ShapeManager(IInternalMediator smi){
         factory = new ShapeFactory(smi);
         
         shapes = new ArrayList<ShapeObject>();
@@ -435,7 +435,7 @@ public class ShapeManager {
      * 
      * @return
      */
-    public TransformationBorderInterface getShapeBorder(){
+    public ITransformationBorder getShapeBorder(){
         return border;
     }
     

@@ -5,10 +5,10 @@ import java.util.ArrayList;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.DraggingObject;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.ShapeObject;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.SimpleShapeObject;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.TransformationBorderInterface;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.WindowToGraphicInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.ITransformationBorder;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.IWindowToGraphic;
 
-public interface InternalMediatorInterface {
+public interface IInternalMediator {
     
     public void registerShapeManager(ShapeManager sm);
     public void registerTranslationManager(TranslationManager stm);
@@ -44,8 +44,8 @@ public interface InternalMediatorInterface {
     
     public ShapeObject getShape(long id);
     
-    public TransformationBorderInterface getShapeBorder();
+    public ITransformationBorder getShapeBorder();
     
     public void registerFrameInterface(
-            WindowToGraphicInterface frameInterface);
+            IWindowToGraphic frameInterface);
 }

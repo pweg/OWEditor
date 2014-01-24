@@ -1,6 +1,6 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.gui;
 
-import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.EnvironmentObserverInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.IEnvironmentObserver;
 
 /**
  * Implements the EnvironmentObserverInterface and is used to
@@ -9,7 +9,7 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.Envi
  * @author Patrick
  *
  */
-public class EnvironmentObserver implements EnvironmentObserverInterface{
+public class EnvironmentObserver implements IEnvironmentObserver{
 
     private GUIController gc = null;
             

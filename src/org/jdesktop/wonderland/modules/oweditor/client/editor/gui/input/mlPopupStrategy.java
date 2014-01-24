@@ -13,7 +13,7 @@ public class mlPopupStrategy implements mlMouseStrategy{
     @Override
     public void mousePressed(Point p) {
         
-        controller.frame.showPopupMenu(p.x, p.y);
+        controller.window.showPopupMenu(p.x, p.y);
             
     }
 

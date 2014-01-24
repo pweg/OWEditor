@@ -1,6 +1,6 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.data;
 
-import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.EnvironmentObserverInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.IEnvironmentObserver;
 
 /**
  * This class manages the environment of the virtual world.
@@ -11,7 +11,7 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.Envi
  */
 public class EnvironmentManager {
     
-    private EnvironmentObserverInterface en = null;
+    private IEnvironmentObserver en = null;
     
     private int maxX = Integer.MIN_VALUE;
     private int maxY = Integer.MIN_VALUE;
@@ -111,7 +111,7 @@ public class EnvironmentManager {
      * 
      * @param en the observer.
      */
-    public void registerObserver(EnvironmentObserverInterface en) {
+    public void registerObserver(IEnvironmentObserver en) {
         this.en = en;
     }
     

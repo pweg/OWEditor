@@ -2,7 +2,7 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.gui;
 
 import java.util.ArrayList;
 
-public interface AdapterCommunicationInterface {
+public interface IAdapterCommunication {
     
     public void setObjectRemoval(long id);
     

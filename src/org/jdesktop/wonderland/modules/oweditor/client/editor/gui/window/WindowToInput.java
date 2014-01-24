@@ -4,13 +4,13 @@ import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;
 
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.menu.MenuInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.menu.IMenu;
 
-public class WindowToInput implements WindowToInputInterface {
+public class WindowToInput implements IWindowToInput {
 
     private WindowController fc = null;    
     private DrawingPanel drawingPan = null;
-    private MenuInterface menu = null;
+    private IMenu menu = null;
     
     public WindowToInput(WindowController fc){
         this.fc = fc;

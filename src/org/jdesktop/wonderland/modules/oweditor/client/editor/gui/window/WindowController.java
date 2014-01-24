@@ -3,34 +3,34 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window;
 import javax.swing.JScrollPane;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataObjectManagerGUIInterface;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.AdapterCommunicationInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.IAdapterCommunication;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.GraphicController;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.GraphicToWindowInterface;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.input.InputToMenuInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.IGraphicToWindow;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.input.IInputToWindow;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.frames.FrameController;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.frames.FrameInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.frames.IFrame;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.menu.MenuController;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.menu.MenuInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.menu.IMenu;
 
 public class WindowController {
 
     protected JScrollPane mainScrollPanel = null;
     protected DrawingPanel drawingPan = null;
     
-    protected InputToMenuInterface input = null;
+    protected IInputToWindow input = null;
 
-    protected GraphicToWindowInterface graphic = null;
+    protected IGraphicToWindow graphic = null;
     
     protected MainFrame mainframe = null;
 
-    protected WindowToInputInterface inputInterface = null;
+    protected IWindowToInput inputInterface = null;
     
     protected MouseCoordinates mouseCoords = null;
-    protected MenuInterface menu = null;
+    protected IMenu menu = null;
     protected Window mainInterface = null;
-    protected FrameInterface frame = null;
+    protected IFrame frame = null;
     
-    public WindowController(AdapterCommunicationInterface adapter, Window mainInterface){
+    public WindowController(IAdapterCommunication adapter, Window mainInterface){
         
         this.mainInterface = mainInterface;
         
@@ -69,7 +69,6 @@ public class WindowController {
         frame.registerWindow(new WindowToFrame(this));
         
         menu.registerWindowInterface(new WindowToMenu(this));
-        
     }
 
     public void repaint() {
@@ -88,8 +87,7 @@ public class WindowController {
         mouseCoords.registerDataManager(dm);
     }
 
-    public void registerInputInterface(InputToMenuInterface input) {
+    public void registerInputInterface(IInputToWindow input) {
         this.input = input;
-        menu.registerInputInterface(input);
     }
 }
