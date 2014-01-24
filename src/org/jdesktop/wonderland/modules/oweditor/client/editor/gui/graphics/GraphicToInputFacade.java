@@ -12,29 +12,41 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shape
 public class GraphicToInputFacade implements GraphicToInputInterface{
 
     protected ShapeManager sm = null;
-    protected CopyManager scm = null;
-    protected TransformationManager srm = null;
+    protected CopyManager cm = null;
+    protected TransformationManager tm = null;
     protected SelectionManager ssm = null;
     protected TranslationManager stm = null;
     
     protected InternalMediatorInterface smi = null;
     
     private AdapterCommunicationInterface adapter = null;
-    private ShapeController sc = null;
     
-    public GraphicToInputFacade(ShapeController sc, AdapterCommunicationInterface adapter){
+    public GraphicToInputFacade(AdapterCommunicationInterface adapter){
         this.adapter = adapter;
-        this.sc = sc;
-        registerComponents(sc);
+    }
+
+    public void registerShapeManager(ShapeManager sm){
+        this.sm = sm;
     }
     
-    private void registerComponents(ShapeController sc){
-        sm = sc.sm;
-        stm = sc.stm;
-        scm = sc.scm;
-        srm = sc.srm;
-        ssm = sc.ssm;
-        smi = sc.smi;
+    public void registerCopyManager(CopyManager cm){
+        this.cm = cm;
+    }
+    
+    public void registerTransformationManager(TransformationManager tm){
+        this.tm = tm;
+    }
+    
+    public void registerSelectionManager(SelectionManager ssm){
+        this.ssm = ssm;
+    }
+    
+    public void registerTranslationManager(TranslationManager stm){
+        this.stm = stm;
+    }
+    
+    public void registerMediator(InternalMediatorInterface smi){
+        this.smi = smi;
     }
 
     @Override
@@ -74,7 +86,7 @@ public class GraphicToInputFacade implements GraphicToInputInterface{
     }
     @Override
     public Point copyInitialize() {
-        ArrayList<Long> ids = scm.initilaizeCopy();
+        ArrayList<Long> ids = cm.initilaizeCopy();
         
         adapter.setCopyUpdate(ids);
         return ssm.getSelectionCenter();
@@ -82,7 +94,7 @@ public class GraphicToInputFacade implements GraphicToInputInterface{
 
     @Override
     public void pasteInitialize() {
-        smi.createDraggingShapes(scm.getCopyShapes());
+        smi.createDraggingShapes(cm.getCopyShapes());
     }
 
     @Override
@@ -110,24 +122,24 @@ public class GraphicToInputFacade implements GraphicToInputInterface{
         sm.createShapeBorder(ssm.getSelection(),
                 TransformationBorder.MODEONECENTER);
 
-        srm.initializeTransformation();
+        tm.initializeTransformation();
     }
     
     @Override
     public void rotate(Point p) {
-        srm.rotate(p);
+        tm.rotate(p);
         stm.setStrategy(new sCollisionNotSelectedStrategy(smi));
         stm.checkForCollision();
     }
     
     @Override
     public void rotationCenterUpdate() {
-        srm.setRotationCenterUpdate(sm.getShapeBorder());
+        tm.setRotationCenterUpdate(sm.getShapeBorder());
     }
 
     @Override
     public void rotationCenterTranslate(Point start, Point end) {
-        srm.setRotationCenter(sm.getShapeBorder(), start, end);
+        tm.setRotationCenter(sm.getShapeBorder(), start, end);
     }
 
     @Override
@@ -143,7 +155,7 @@ public class GraphicToInputFacade implements GraphicToInputInterface{
         
         if(stm.checkForCollision())
             return;
-        for(DraggingObject shape : srm.getTransformedShapes()){
+        for(DraggingObject shape : tm.getTransformedShapes()){
             long id = shape.getID();
             adapter.setRotationUpdate(id, shape.getX(), 
                     shape.getY(), shape.getRotation());
@@ -158,27 +170,27 @@ public class GraphicToInputFacade implements GraphicToInputInterface{
         sm.createShapeBorder(ssm.getSelection(),
                 TransformationBorder.MODEALLCENTER);
 
-        srm.initializeTransformation();
+        tm.initializeTransformation();
     }
 
 
     @Override
     public void scale(Point p) {
-        srm.scale(p);
+        tm.scale(p);
         stm.setStrategy(new sCollisionNotSelectedStrategy(smi));
         stm.checkForCollision();
     }
 
     @Override
     public void scaleUpdate() {
-        srm.scaleUpdate();
+        tm.scaleUpdate();
     }
     
     @Override
     public void scaleFinished(){
         if(stm.checkForCollision())
             return;
-        for(DraggingObject shape : srm.getTransformedShapes()){
+        for(DraggingObject shape : tm.getTransformedShapes()){
             long id = shape.getID();
             adapter.setScaleUpdate(id, shape.getX(), 
                     shape.getY(), shape.getScale());

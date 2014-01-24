@@ -2,11 +2,11 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics;
 
 import java.util.ArrayList;
 
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.frame.FrameToGraphicInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.DraggingObject;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.ShapeObject;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.SimpleShapeObject;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.TransformationBorderInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.WindowToGraphicInterface;
 
 public interface InternalMediatorInterface {
     
@@ -25,7 +25,6 @@ public interface InternalMediatorInterface {
     public void createDraggingShapes(ArrayList<ShapeObject> selectedShapes);
     
     public void repaint();
-    
 
     public void createSelectionRect(int x, int y, int width, int height);
 
@@ -48,5 +47,5 @@ public interface InternalMediatorInterface {
     public TransformationBorderInterface getShapeBorder();
     
     public void registerFrameInterface(
-            FrameToGraphicInterface frameInterface);
+            WindowToGraphicInterface frameInterface);
 }

@@ -2,10 +2,10 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.gui;
 
 import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.GUIObserverInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataObjectManagerGUIInterface;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.frame.Frame;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.frame.FrameInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.input.Input;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.input.InputInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.Window;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.WindowInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.DataObjectObserverInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.EnvironmentObserverInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.GUIControllerInterface;
@@ -21,7 +21,7 @@ public class GUIController implements GUIControllerInterface{
 
     protected DataObjectObserver domo = null;
     protected EnvironmentObserver eo = null;
-    protected FrameInterface frame = null;
+    protected WindowInterface frame = null;
     protected InputInterface input = null;
     
     private DataObjectManagerGUIInterface dmi = null;
@@ -40,8 +40,8 @@ public class GUIController implements GUIControllerInterface{
         eo = new EnvironmentObserver(this);
         ac = new AdapterCommunication();
         
-        frame = new Frame(ac);
-        input = new Input(this);
+        frame = new Window(ac);
+        input = new Input();
         
         frame.addMouseListener(input.getMouseListener());
         frame.addKeyListener(input.getKeyListener());
@@ -85,10 +85,6 @@ public class GUIController implements GUIControllerInterface{
     @Override
     public EnvironmentObserverInterface getEnvironmentObserver() {
         return eo;
-    }
-
-    public void createTemp() {
-        ac.createObject();
     }
     
 

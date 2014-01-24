@@ -206,9 +206,6 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
                 clear();
             } 
         }
-        else if (e.getKeyCode() == KeyEvent.VK_F9){
-            ic.createTemp();
-        }
     }
 
     @Override

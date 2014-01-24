@@ -3,11 +3,11 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics;
 import java.util.ArrayList;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.AdapterCommunicationInterface;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.frame.FrameToGraphicInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.DraggingObject;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.ShapeObject;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.SimpleShapeObject;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.TransformationBorderInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.WindowToGraphicInterface;
 
 public class InternaMediator implements InternalMediatorInterface{
     
@@ -15,7 +15,7 @@ public class InternaMediator implements InternalMediatorInterface{
     private SelectionManager ssm = null;
     private TranslationManager stm = null;
     private AdapterCommunicationInterface adapter = null;
-    private FrameToGraphicInterface frame = null;
+    private WindowToGraphicInterface frame = null;
     
     public InternaMediator(AdapterCommunicationInterface adapter) {
         this.adapter = adapter;
@@ -109,7 +109,7 @@ public class InternaMediator implements InternalMediatorInterface{
 
     @Override
     public void registerFrameInterface(
-            FrameToGraphicInterface frameInterface) {
+            WindowToGraphicInterface frameInterface) {
         this.frame = frameInterface;
     }
     

@@ -73,10 +73,16 @@ public class GUISettings {
      * Width/Height, position and title of the window frame,
      * which will be shown, when the editor starts.
      */
-    public static int FRAMEWIDTH = 800;
-    public static int FRAMEHEIGHT = 600;
-    public static int FRAMEPOSITIONX = 200;
-    public static int FRAMEPOSITIONY = 200;
+    
+    //main frame
+    public static int MAINWIDTH = 800;
+    public static int MAINHEIGHT = 600;
+    public static int MAINPOSX = 200;
+    public static int MAINPOSY = 200;
+    
+    //other frames
+    public static int FRAMEPOSX = MAINPOSX +100;
+    public static int FRAMEPOSY = MAINPOSY +50;
     
     /*
      * These are two values, which are used to add a empty space
