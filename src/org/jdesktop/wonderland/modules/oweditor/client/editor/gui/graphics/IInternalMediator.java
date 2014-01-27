@@ -46,6 +46,6 @@ public interface IInternalMediator {
     
     public ITransformationBorder getShapeBorder();
     
-    public void registerFrameInterface(
+    public void registerWindowInterface(
             IWindowToGraphic frameInterface);
 }

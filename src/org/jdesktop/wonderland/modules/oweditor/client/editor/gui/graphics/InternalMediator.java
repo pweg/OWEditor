@@ -2,23 +2,20 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics;
 
 import java.util.ArrayList;
 
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.IAdapterCommunication;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.DraggingObject;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.ITransformationBorder;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.ShapeObject;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.SimpleShapeObject;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.ITransformationBorder;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.IWindowToGraphic;
 
-public class InternaMediator implements IInternalMediator{
+public class InternalMediator implements IInternalMediator{
     
     private ShapeManager sm = null;
     private SelectionManager ssm = null;
     private TranslationManager stm = null;
-    private IAdapterCommunication adapter = null;
     private IWindowToGraphic frame = null;
     
-    public InternaMediator(IAdapterCommunication adapter) {
-        this.adapter = adapter;
+    public InternalMediator() {
     }
 
     @Override
@@ -79,7 +76,7 @@ public class InternaMediator implements IInternalMediator{
 
     @Override
     public void setObjectRemoval(long id) {
-        adapter.setObjectRemoval(id);
+        frame.setObjectRemoval(id);
     }
 
     @Override
@@ -108,7 +105,7 @@ public class InternaMediator implements IInternalMediator{
     }
 
     @Override
-    public void registerFrameInterface(
+    public void registerWindowInterface(
             IWindowToGraphic frameInterface) {
         this.frame = frameInterface;
     }

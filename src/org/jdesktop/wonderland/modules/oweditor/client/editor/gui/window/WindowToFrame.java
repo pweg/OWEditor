@@ -9,9 +9,8 @@ public class WindowToFrame implements IWindowToFrame{
     }
 
     @Override
-    public void importKMZ(String url) {
-        // TODO Auto-generated method stub
-        
+    public int[] loadKMZ(String url) {        
+        return wc.adapter.loadKMZ(url);
     }
 
 }

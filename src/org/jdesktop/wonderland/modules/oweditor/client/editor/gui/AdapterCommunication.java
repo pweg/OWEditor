@@ -76,4 +76,9 @@ public class AdapterCommunication implements IAdapterCommunication{
     public void createObject() {
         goi.notifyCreation();
     }
+
+    @Override
+    public int[] loadKMZ(String url) {
+        return goi.loadKMZ(url);
+    }
 }

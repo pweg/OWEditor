@@ -1,6 +1,5 @@
 package org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces;
 
-import java.awt.Point;
 import java.util.ArrayList;
 
 /**
@@ -53,5 +52,16 @@ public interface GUIObserverInterface {
 
     
     public void notifyCreation();
+
+    /**
+     * Reads a KMZ file and returns the object bounds in an
+     * integer array.
+     * 
+     * @param url The url in string.
+     * @return The object bounds in integer format.
+     * int[0] should be the xExtend 
+     * int[1] should be the zExtend (which is y in ow editor)
+     */
+    public int[] loadKMZ(String url);
 
 }

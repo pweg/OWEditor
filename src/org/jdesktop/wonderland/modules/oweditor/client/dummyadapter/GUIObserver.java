@@ -124,4 +124,19 @@ public class GUIObserver implements GUIObserverInterface{
         
     }
 
+    @Override
+    public int[] loadKMZ(String url) {
+        /*
+         * unfortunately reading a kmz is difficult, so the
+         * dummy adapter returns just the same sizes.
+         */
+        
+        int[] bounds = new int[2];
+        bounds[0] = 10;
+        bounds[1] = 15;
+        
+        
+        return bounds;
+    }
+
 }

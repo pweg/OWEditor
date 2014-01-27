@@ -24,22 +24,22 @@ public class EnvironmentObserver implements IEnvironmentObserver{
     
     @Override
     public void notifyWidthChange(int width) {
-        gc.frame.setNewWidth(width);
+        gc.window.setNewWidth(width);
     }
 
     @Override
     public void notifyHeightChange(int height) {
-        gc.frame.setNewHeight(height);
+        gc.window.setNewHeight(height);
     }
 
     @Override
     public void notifyMinXChange(int x) {
-        gc.frame.setNewMinX(x);
+        gc.window.setNewMinX(x);
     }
 
     @Override
     public void notifyMinYChange(int y) {        
-        gc.frame.setNewMinY(y);
+        gc.window.setNewMinY(y);
     }
     
 

@@ -21,7 +21,7 @@ public class GUIController implements IGUIController{
 
     protected DataObjectObserver domo = null;
     protected EnvironmentObserver eo = null;
-    protected WindowInterface frame = null;
+    protected WindowInterface window = null;
     protected InputInterface input = null;
     
     private DataObjectManagerGUIInterface dmi = null;
@@ -40,34 +40,34 @@ public class GUIController implements IGUIController{
         eo = new EnvironmentObserver(this);
         ac = new AdapterCommunication();
         
-        frame = new Window(ac);
+        window = new Window(ac);
         input = new Input();
         
-        frame.addMouseListener(input.getMouseListener());
-        frame.addKeyListener(input.getKeyListener());
-        frame.addMouseWheelListener(input.getMouseWheelListener());
+        window.addMouseListener(input.getMouseListener());
+        window.addKeyListener(input.getKeyListener());
+        window.addMouseWheelListener(input.getMouseWheelListener());
         
         registerInterfaces();
     }
     
     private void registerInterfaces(){
-        frame.registerInputInterface(input.getFrameInterface());
+        window.registerInputInterface(input.getFrameInterface());
         
-        input.registerGraphicInterface(frame.getGraphicInputInterface());
-        input.registerFrameInterface(frame.getInputInterface());
+        input.registerGraphicInterface(window.getGraphicInputInterface());
+        input.registerFrameInterface(window.getInputInterface());
         
     }
 
     @Override
     public void setVisible(boolean visibility) {
-        frame.setVisible(visibility);        
+        window.setVisible(visibility);        
     }
 
 
     @Override
     public void registerDataManager(DataObjectManagerGUIInterface dm) {
         dmi = dm;
-        frame.registerDataManager(dm);
+        window.registerDataManager(dm);
     }
 
     @Override

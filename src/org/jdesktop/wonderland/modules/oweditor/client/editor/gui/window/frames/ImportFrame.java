@@ -1,10 +1,15 @@
 
 package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.frames;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
+import java.text.NumberFormat;
 import java.util.ResourceBundle;
 
+import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.GUISettings;
@@ -25,13 +30,22 @@ public class ImportFrame extends javax.swing.JFrame {
 
     private String lastDirModel = "";
     private String lastDirRep = "";
+    private FrameController fc = null;
+    
+    private int boundsX = 0;
+    private int boundsY = 0;
+    private boolean working = false;
             
     /**
      * Creates new form NewJFrame
      */
-    public ImportFrame() {
+    public ImportFrame(FrameController fc) {
+        this.fc = fc;
+        
         initComponents();
+        reset();
     }
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -40,16 +54,19 @@ public class ImportFrame extends javax.swing.JFrame {
      */
     // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
     private void initComponents() {
-
+        
+        NumberFormat customFormat = NumberFormat.getIntegerInstance();
+        customFormat.setGroupingUsed(false);
+        
         jPanel1 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        locationYField = new javax.swing.JTextField();
-        locationZField = new javax.swing.JTextField();
+        locationFieldY = new javax.swing.JFormattedTextField(customFormat);
+        locationFieldZ = new javax.swing.JFormattedTextField(customFormat);
         locationButton = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
-        locationXField = new javax.swing.JTextField();
+        locationFieldX = new javax.swing.JFormattedTextField(customFormat);
         jPanel3 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -57,33 +74,33 @@ public class ImportFrame extends javax.swing.JFrame {
         modelField = new javax.swing.JTextField();
         modelButton = new javax.swing.JButton();
         jLabel12 = new javax.swing.JLabel();
-        represField = new javax.swing.JTextField();
-        represButton = new javax.swing.JButton();
-        Image = new javax.swing.JPanel();
+        repField = new javax.swing.JTextField();
+        repButton = new javax.swing.JButton();
+        image = new ImagePanel();
         jPanel4 = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
-        rotationXField = new javax.swing.JTextField();
-        rotationYField = new javax.swing.JTextField();
-        rotationZField = new javax.swing.JTextField();
+        rotationFieldX = new javax.swing.JFormattedTextField(customFormat);
+        rotationFieldY = new javax.swing.JFormattedTextField(customFormat);
+        rotationFieldZ = new javax.swing.JFormattedTextField(customFormat);
         jPanel5 = new javax.swing.JPanel();
         jLabel11 = new javax.swing.JLabel();
-        scaleField = new javax.swing.JTextField();
+        scaleField = new javax.swing.JFormattedTextField(customFormat);
         okButton = new javax.swing.JButton();
         cancelButton = new javax.swing.JButton();
         resetButton = new javax.swing.JButton();
 
         jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
-        jLabel3.setText("Location:");
+        jLabel3.setText(BUNDLE.getString("ImportLocation"));
 
         jLabel5.setText("Y:");
 
         jLabel6.setText("Z:");
 
-        locationButton.setText("Choose Location");
+        locationButton.setText(BUNDLE.getString("ImportLocButton"));
         locationButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 locationButtonActionPerformed(evt);
@@ -91,28 +108,31 @@ public class ImportFrame extends javax.swing.JFrame {
         });
 
         jLabel4.setText("X:");
+        locationFieldX.setText("0");
+        locationFieldY.setText("0");
+        locationFieldZ.setText("0");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap(44, Short.MAX_VALUE)
+                .addContainerGap(45, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel6)
                             .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING))
-                        .addGap(18, 18, 18)
+                        .addGap(20, 20, 20)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(locationYField)
-                            .addComponent(locationZField)
+                            .addComponent(locationFieldY)
+                            .addComponent(locationFieldZ)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(locationXField, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(locationFieldX, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(0, 0, Short.MAX_VALUE))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(28, 28, 28)
+                        .addGap(30, 30, 30)
                         .addComponent(locationButton)))
                 .addContainerGap(45, Short.MAX_VALUE))
             .addGroup(jPanel1Layout.createSequentialGroup()
@@ -121,44 +141,44 @@ public class ImportFrame extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jPanel1Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {locationXField, locationYField, locationZField});
+        jPanel1Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {locationFieldX, locationFieldY, locationFieldZ});
 
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel3)
-                .addGap(14, 14, 14)
+                .addGap(15, 15, 15)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(locationXField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(locationFieldX, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
-                    .addComponent(locationYField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(locationFieldY, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
-                    .addComponent(locationZField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                    .addComponent(locationFieldZ, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(20, 20, 20)
                 .addComponent(locationButton)
-                .addGap(18, 18, 18))
+                .addGap(20, 20, 20))
         );
 
-        jPanel1Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {locationXField, locationYField, locationZField});
+        jPanel1Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {locationFieldX, locationFieldY, locationFieldZ});
 
         jPanel3.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
-        jLabel1.setText("Model File:");
+        jLabel1.setText(BUNDLE.getString("ImportModel"));
         jLabel1.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
 
-        jLabel2.setText("ModelName:");
+        jLabel2.setText(BUNDLE.getString("ImportModelName"));
         jLabel2.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
 
         modelNameField.setToolTipText("");
 
         modelField.setEditable(false);
-        modelField.setToolTipText("The file for the model");
+        modelField.setToolTipText(BUNDLE.getString("ImportModelTooltipp"));
         modelField.setEnabled(false);
         modelField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -166,39 +186,39 @@ public class ImportFrame extends javax.swing.JFrame {
             }
         });
 
-        modelButton.setText("Select");
+        modelButton.setText(BUNDLE.getString("Select"));
         modelButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 modelButtonActionPerformed(evt);
             }
         });
 
-        jLabel12.setText("Representation: ");
+        jLabel12.setText(BUNDLE.getString("ImportRep"));
         jLabel12.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
 
-        represField.setEditable(false);
-        represField.setToolTipText("The file for the model");
-        represField.setEnabled(false);
-        represField.addActionListener(new java.awt.event.ActionListener() {
+        repField.setEditable(false);
+        repField.setToolTipText(BUNDLE.getString("ImportRepTooltipp"));
+        repField.setEnabled(false);
+        repField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 represFieldActionPerformed(evt);
             }
         });
 
-        represButton.setText("Select");
-        represButton.addActionListener(new java.awt.event.ActionListener() {
+        repButton.setText(BUNDLE.getString("Select"));
+        repButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 represButtonActionPerformed(evt);
             }
         });
 
-        Image.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        image.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
-        javax.swing.GroupLayout ImageLayout = new javax.swing.GroupLayout(Image);
-        Image.setLayout(ImageLayout);
+        javax.swing.GroupLayout ImageLayout = new javax.swing.GroupLayout(image);
+        image.setLayout(ImageLayout);
         ImageLayout.setHorizontalGroup(
             ImageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 114, Short.MAX_VALUE)
+            .addGap(0, 115, Short.MAX_VALUE)
         );
         ImageLayout.setVerticalGroup(
             ImageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -218,23 +238,23 @@ public class ImportFrame extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(represField)
+                        .addComponent(repField)
                         .addGap(10, 10, 10)
-                        .addComponent(represButton, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(repButton, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(modelField)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(modelButton, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(modelButton, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(modelNameField)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(Image, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(image, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addGap(13, 13, 13)
+                .addGap(15, 15, 15)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(modelField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -243,8 +263,8 @@ public class ImportFrame extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel12)
-                    .addComponent(represField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(represButton))
+                    .addComponent(repField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(repButton))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
@@ -252,13 +272,13 @@ public class ImportFrame extends javax.swing.JFrame {
                             .addComponent(jLabel2)
                             .addComponent(modelNameField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(80, 80, 80))
-                    .addComponent(Image, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(image, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
         jPanel4.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
-        jLabel7.setText("Rotation:");
+        jLabel7.setText(BUNDLE.getString("ImportRotation"));
 
         jLabel8.setText("X:");
 
@@ -276,20 +296,20 @@ public class ImportFrame extends javax.swing.JFrame {
                         .addContainerGap()
                         .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGap(44, 44, 44)
+                        .addGap(45, 45, 45)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel10)
                             .addComponent(jLabel9)
                             .addComponent(jLabel8))
-                        .addGap(18, 18, 18)
+                        .addGap(50, 50, 50)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(rotationYField, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(rotationXField, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(rotationZField, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(rotationFieldY, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(rotationFieldX, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(rotationFieldZ, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jPanel4Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {rotationXField, rotationYField, rotationZField});
+        jPanel4Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {rotationFieldX, rotationFieldY, rotationFieldZ});
 
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -299,23 +319,23 @@ public class ImportFrame extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8)
-                    .addComponent(rotationXField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(rotationFieldX, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel9)
-                    .addComponent(rotationYField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(rotationFieldY, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel10)
-                    .addComponent(rotationZField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(rotationFieldZ, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jPanel4Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {rotationXField, rotationYField, rotationZField});
+        jPanel4Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {rotationFieldX, rotationFieldY, rotationFieldZ});
 
         jPanel5.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
-        jLabel11.setText("Scale:");
+        jLabel11.setText(BUNDLE.getString("ImportScale"));
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -324,8 +344,8 @@ public class ImportFrame extends javax.swing.JFrame {
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel11)
-                .addGap(34, 34, 34)
-                .addComponent(scaleField, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(27, 27, 27)
+                .addComponent(scaleField, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(61, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
@@ -338,21 +358,21 @@ public class ImportFrame extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        okButton.setText("OK");
+        okButton.setText(BUNDLE.getString("OK"));
         okButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 okButtonActionPerformed(evt);
             }
         });
 
-        cancelButton.setText("Cancel");
+        cancelButton.setText(BUNDLE.getString("Cancel"));
         cancelButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cancelButtonActionPerformed(evt);
             }
         });
 
-        resetButton.setText("Reset");
+        resetButton.setText(BUNDLE.getString("Reset"));
         resetButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 resetButtonActionPerformed(evt);
@@ -413,12 +433,17 @@ public class ImportFrame extends javax.swing.JFrame {
         pack();
     }// </editor-fold>                        
 
-    private void locationButtonActionPerformed(java.awt.event.ActionEvent evt) {  
+    private void locationButtonActionPerformed(java.awt.event.ActionEvent evt) { 
+        working = true;
     }                                               
 
     private void modelFieldActionPerformed(java.awt.event.ActionEvent evt) {                                          
         modelButtonActionPerformed(evt);
-    }                                         
+    }                                             
+
+    private void represFieldActionPerformed(java.awt.event.ActionEvent evt) {                                            
+        represButtonActionPerformed(evt);
+    }                                            
 
     private void modelButtonActionPerformed(java.awt.event.ActionEvent evt) {                                             
         
@@ -426,6 +451,7 @@ public class ImportFrame extends javax.swing.JFrame {
         chooser.setCurrentDirectory(new File (lastDirModel));
         FileNameExtensionFilter filter = new FileNameExtensionFilter(
                 "KMZ Models", "kmz");
+        chooser.removeChoosableFileFilter(chooser.getAcceptAllFileFilter());
         chooser.setFileFilter(filter);
         int returnVal = chooser.showOpenDialog(this);
         
@@ -441,43 +467,86 @@ public class ImportFrame extends javax.swing.JFrame {
             }
             modelField.setText(path);
             
-            if(modelNameField.getText().equals("")){
-                String[] tokens = name.split("\\.(?=[^\\.]+$)");
-                if(tokens[0] != null)
-                    modelNameField.setText(tokens[0]);
+            //split url
+            String[] tokens = name.split("\\.(?=[^\\.]+$)");
+            
+            if(tokens[0] == null || tokens[tokens.length-1] == null){
+                showError(BUNDLE.getString("FileReadError"),
+                        BUNDLE.getString("FileReadErrorTitle"));
+                return;
             }
             
+            //set name, if nothing has been entered already
+            if(modelNameField.getText().equals("")){
+                modelNameField.setText(tokens[0]);
+            }
             
-        }
-    }                                            
+            int[] bounds = fc.window.loadKMZ(path);
+                
+            //if bounds are wrong or null
+            if(bounds == null || bounds.length<2){
+                showError(BUNDLE.getString("ImportWrongBounds"),
+                        BUNDLE.getString("ImportWrongBoundsTitle"));
+                return;
+            }
 
-    private void represFieldActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        represButtonActionPerformed(evt);
+            this.boundsX = bounds[0];
+            this.boundsY = bounds[1];
+            okButton.setEnabled(true);
+        } 
     }                                           
 
     private void represButtonActionPerformed(java.awt.event.ActionEvent evt) {                                             
         
         JFileChooser chooser = new JFileChooser();
         FileNameExtensionFilter filter = new FileNameExtensionFilter(
-                "JPG", "jpg", "jpeg");
+                "JPG", "jpg", "jpeg", "JPEG");
         FileNameExtensionFilter filter2 = new FileNameExtensionFilter(
-                "GIF", "gif", "gif");
+                "GIF", "gif", "GIF");
+        FileNameExtensionFilter filter3 = new FileNameExtensionFilter(
+                "PNG", "png", "PNG");
+        FileNameExtensionFilter filter4 = new FileNameExtensionFilter(
+                "BMP", "bmp", "BMP");
+        chooser.removeChoosableFileFilter(chooser.getAcceptAllFileFilter());
         chooser.addChoosableFileFilter(filter);
         chooser.addChoosableFileFilter(filter2);
+        chooser.addChoosableFileFilter(filter3);
+        chooser.addChoosableFileFilter(filter4);
         int returnVal = chooser.showOpenDialog(this);
         
         if(returnVal == JFileChooser.APPROVE_OPTION) {
             File file = chooser.getSelectedFile();
             
-            String name = file.getName();
+            //String name = file.getName();
             String path = file.getAbsolutePath();
             lastDirRep = file.getParent();
             
             if(lastDirModel.equals("")){
                 lastDirModel = lastDirRep;
             }
+            repField.setText(path);
+            
+            //split url
+            /*String[] tokens = name.split("\\.(?=[^\\.]+$)");
+            
+            if(tokens[0] == null || tokens[tokens.length-1] == null){
+                showError(BUNDLE.getString("FileReadError"),
+                        BUNDLE.getString("FileReadErrorTitle"));
+                return;
+            }*/
+            
+            BufferedImage img = null;
+            try {
+                img = ImageIO.read(new File(path));
+                image.setImage(img);
+                image.repaint();
+                
+            } catch (IOException e) {
+                System.err.println("Fehla");
+            }
+
         } 
-    }                                             
+    }                                         
 
     private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {                                         
         // TODO add your handling code here:
@@ -488,50 +557,47 @@ public class ImportFrame extends javax.swing.JFrame {
     } 
 
     private void resetButtonActionPerformed(java.awt.event.ActionEvent evt) {                                         
-        // TODO add your handling code here:
+        reset();
     } 
     
     public void setVisible(boolean b) {
         super.setVisible(b);
+        
+        //working means, the choose location button was hit.
+        if(working){
+            working = false;
+            return;
+            
+        }
         if(!b){
             modelField.setText("");
-            represField.setText("");
+            repField.setText("");
             modelNameField.setText("");
+            image.setImage(null);
+            reset();
         }else{
             pack();
             okButton.setEnabled(false);
             locationButton.setEnabled(false);
         }
     }
+    
+    private void reset(){
+        rotationFieldX.setText("0");
+        rotationFieldY.setText("0");
+        rotationFieldZ.setText("0");
+        scaleField.setText("1");
+    }
+    
+    private void showError(String text, String title){
+        JOptionPane.showMessageDialog(this,
+                text, title, JOptionPane.ERROR_MESSAGE);
+    }
 
     /**
      * @param args the command line arguments
      */
     /*public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         *
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ImportFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ImportFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ImportFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ImportFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new ImportFrame().setVisible(true);
@@ -540,12 +606,12 @@ public class ImportFrame extends javax.swing.JFrame {
     }*/
 
     // Variables declaration - do not modify                     
-    private javax.swing.JPanel Image;
+    private ImagePanel image;
     private javax.swing.JButton cancelButton;
     private javax.swing.JButton okButton;
     private javax.swing.JButton resetButton;
     private javax.swing.JButton locationButton;
-    private javax.swing.JButton represButton;
+    private javax.swing.JButton repButton;
     private javax.swing.JButton modelButton;
     private javax.swing.JTextField modelField;
     private javax.swing.JLabel jLabel1;
@@ -561,18 +627,17 @@ public class ImportFrame extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
-    private javax.swing.JTextField locationXField;
-    private javax.swing.JTextField locationYField;
-    private javax.swing.JTextField locationZField;
+    private javax.swing.JFormattedTextField locationFieldX;
+    private javax.swing.JFormattedTextField locationFieldY;
+    private javax.swing.JFormattedTextField locationFieldZ;
     private javax.swing.JTextField modelNameField;
-    private javax.swing.JTextField represField;
-    private javax.swing.JTextField rotationXField;
-    private javax.swing.JTextField rotationYField;
-    private javax.swing.JTextField rotationZField;
-    private javax.swing.JTextField scaleField;
+    private javax.swing.JTextField repField;
+    private javax.swing.JFormattedTextField rotationFieldX;
+    private javax.swing.JFormattedTextField rotationFieldY;
+    private javax.swing.JFormattedTextField rotationFieldZ;
+    private javax.swing.JFormattedTextField scaleField;
     // End of variables declaration                   
 }

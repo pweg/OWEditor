@@ -27,7 +27,7 @@ public class FrameController implements IFrame{
     public void showImportFrame() {
         
         if(importFrame == null){
-            importFrame = new ImportFrame();
+            importFrame = new ImportFrame(this);
         }
         importFrame.setVisible(true);
     }

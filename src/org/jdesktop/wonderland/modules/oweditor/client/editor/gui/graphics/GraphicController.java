@@ -4,7 +4,6 @@ import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.TranslatedObjectInterface;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.IAdapterCommunication;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.IWindowToGraphic;
 
 public class GraphicController implements IGraphicToWindow{
@@ -20,11 +19,11 @@ public class GraphicController implements IGraphicToWindow{
     protected GraphicToInputFacade inputInterface = null;
     protected IGraphicToWindow shapeFacadeInterface = null;
 
-    protected IWindowToGraphic frame = null;
+    protected IWindowToGraphic window = null;
     
-    public GraphicController(IAdapterCommunication adapter){
+    public GraphicController(){
         
-        smi = new InternaMediator(adapter);
+        smi = new InternalMediator();
         
         sm = new ShapeManager(smi);
         stm = new TranslationManager(smi);
@@ -33,7 +32,7 @@ public class GraphicController implements IGraphicToWindow{
         scm = new CopyManager(smi);
         
         //frameInterface = new ExternalShapeToFrame(sm);
-        inputInterface = new GraphicToInputFacade(adapter);
+        inputInterface = new GraphicToInputFacade();
         
         registerComponents();
     }
@@ -93,9 +92,10 @@ public class GraphicController implements IGraphicToWindow{
 
 
     @Override
-    public void registerFrameInterface(IWindowToGraphic frameInterface) {
-        frame = frameInterface;
-        smi.registerFrameInterface(frameInterface);
+    public void registerWindowInterface(IWindowToGraphic window) {
+        this.window = window;
+        smi.registerWindowInterface(window);
+        inputInterface.registerWindowInterface(window);
     }
 
     @Override

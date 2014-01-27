@@ -3,11 +3,11 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics;
 import java.awt.Point;
 import java.util.ArrayList;
 
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.IAdapterCommunication;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.DraggingObject;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.ShapeObject;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.TransformationBorder;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.stateDraggingShapeRotation;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.IWindowToGraphic;
 
 public class GraphicToInputFacade implements IGraphicToInput{
 
@@ -18,11 +18,9 @@ public class GraphicToInputFacade implements IGraphicToInput{
     protected TranslationManager stm = null;
     
     protected IInternalMediator smi = null;
+    private IWindowToGraphic window = null;
     
-    private IAdapterCommunication adapter = null;
-    
-    public GraphicToInputFacade(IAdapterCommunication adapter){
-        this.adapter = adapter;
+    public GraphicToInputFacade(){
     }
 
     public void registerShapeManager(ShapeManager sm){
@@ -79,7 +77,7 @@ public class GraphicToInputFacade implements IGraphicToInput{
             
             for(DraggingObject shape : sm.getDraggingShapes()){
                 long id = shape.getID();
-                adapter.setTranslationUpdate(id, shape.getX(), shape.getY());
+                window.setTranslationUpdate(id, shape.getX(), shape.getY());
             }
         }
         sm.clearDraggingShapes();
@@ -88,7 +86,7 @@ public class GraphicToInputFacade implements IGraphicToInput{
     public Point copyInitialize() {
         ArrayList<Long> ids = cm.initilaizeCopy();
         
-        adapter.setCopyUpdate(ids);
+        window.setCopyUpdate(ids);
         return ssm.getSelectionCenter();
     }
 
@@ -108,7 +106,7 @@ public class GraphicToInputFacade implements IGraphicToInput{
             
             for(DraggingObject shape : sm.getDraggingShapes()){
                 long id = shape.getID();
-                adapter.setPasteUpdate(id, shape.getX(), shape.getY());
+                window.setPasteUpdate(id, shape.getX(), shape.getY());
             }
         }
         sm.clearDraggingShapes();
@@ -157,7 +155,7 @@ public class GraphicToInputFacade implements IGraphicToInput{
             return;
         for(DraggingObject shape : tm.getTransformedShapes()){
             long id = shape.getID();
-            adapter.setRotationUpdate(id, shape.getX(), 
+            window.setRotationUpdate(id, shape.getX(), 
                     shape.getY(), shape.getRotation());
         }
     }
@@ -192,7 +190,7 @@ public class GraphicToInputFacade implements IGraphicToInput{
             return;
         for(DraggingObject shape : tm.getTransformedShapes()){
             long id = shape.getID();
-            adapter.setScaleUpdate(id, shape.getX(), 
+            window.setScaleUpdate(id, shape.getX(), 
                     shape.getY(), shape.getScale());
         }
     }
@@ -317,6 +315,10 @@ public class GraphicToInputFacade implements IGraphicToInput{
             return true;
         
         return false;
+    }
+
+    public void registerWindowInterface(IWindowToGraphic window) {
+        this.window  = window;
     }
 
 

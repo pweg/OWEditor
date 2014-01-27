@@ -21,7 +21,7 @@ public interface IGraphicToWindow {
      * 
      * @param frameInterface A interface instance.
      */
-    public void registerFrameInterface(IWindowToGraphic frameInterface);
+    public void registerWindowInterface(IWindowToGraphic frameInterface);
 
     /**
      * Returns the interface for the frame package.

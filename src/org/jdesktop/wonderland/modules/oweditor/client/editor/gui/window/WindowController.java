@@ -30,9 +30,12 @@ public class WindowController {
     protected Window mainInterface = null;
     protected IFrame frame = null;
     
+    protected IAdapterCommunication adapter = null;
+    
     public WindowController(IAdapterCommunication adapter, Window mainInterface){
         
         this.mainInterface = mainInterface;
+        this.adapter = adapter;
         
         drawingPan = new DrawingPanel(this);
         mainScrollPanel = new JScrollPane(drawingPan);
@@ -42,7 +45,7 @@ public class WindowController {
         mainframe = new MainFrame(mainScrollPanel);
 
         //Create graphics package
-        graphic = new GraphicController(adapter);
+        graphic = new GraphicController();
         frame = new FrameController();
         menu = new MenuController();
         
@@ -60,7 +63,7 @@ public class WindowController {
     }
 
     private void registerComponents(){
-        graphic.registerFrameInterface(new WindowToGraphic(drawingPan));
+        graphic.registerWindowInterface(new WindowToGraphic(drawingPan, adapter));
         
         mainInterface.registerComponents(drawingPan, mainframe);
         mainInterface.registerGraphicInterface(graphic);
