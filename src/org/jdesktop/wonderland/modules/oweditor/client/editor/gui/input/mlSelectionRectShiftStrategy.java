@@ -2,6 +2,7 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.input;
 
 import java.awt.Point;
 
+
 /**
  * This mouse event strategy is used, when a selection rectangle
  * should be painted AND the shift-key is pressed.

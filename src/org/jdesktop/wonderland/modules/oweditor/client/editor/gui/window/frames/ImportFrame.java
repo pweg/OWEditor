@@ -4,6 +4,7 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.frames
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ResourceBundle;
 
@@ -24,6 +25,7 @@ public class ImportFrame extends javax.swing.JFrame {
      * 
      */
     private static final long serialVersionUID = 1L;
+    
 
     private static final ResourceBundle BUNDLE = ResourceBundle.getBundle(
             "org/jdesktop/wonderland/modules/oweditor/client/resources/Bundle");
@@ -54,19 +56,19 @@ public class ImportFrame extends javax.swing.JFrame {
      */
     // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
     private void initComponents() {
-        
-        NumberFormat customFormat = NumberFormat.getIntegerInstance();
-        customFormat.setGroupingUsed(false);
+
+        NumberFormat doubleFormat = new DecimalFormat("0.#####");
+        doubleFormat.setGroupingUsed(false);
         
         jPanel1 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        locationFieldY = new javax.swing.JFormattedTextField(customFormat);
-        locationFieldZ = new javax.swing.JFormattedTextField(customFormat);
+        locationFieldY = new javax.swing.JFormattedTextField(doubleFormat);
+        locationFieldZ = new javax.swing.JFormattedTextField(doubleFormat);
         locationButton = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
-        locationFieldX = new javax.swing.JFormattedTextField(customFormat);
+        locationFieldX = new javax.swing.JFormattedTextField(doubleFormat);
         jPanel3 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -82,12 +84,12 @@ public class ImportFrame extends javax.swing.JFrame {
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
-        rotationFieldX = new javax.swing.JFormattedTextField(customFormat);
-        rotationFieldY = new javax.swing.JFormattedTextField(customFormat);
-        rotationFieldZ = new javax.swing.JFormattedTextField(customFormat);
+        rotationFieldX = new javax.swing.JFormattedTextField(doubleFormat);
+        rotationFieldY = new javax.swing.JFormattedTextField(doubleFormat);
+        rotationFieldZ = new javax.swing.JFormattedTextField(doubleFormat);
         jPanel5 = new javax.swing.JPanel();
         jLabel11 = new javax.swing.JLabel();
-        scaleField = new javax.swing.JFormattedTextField(customFormat);
+        scaleField = new javax.swing.JFormattedTextField(doubleFormat);
         okButton = new javax.swing.JButton();
         cancelButton = new javax.swing.JButton();
         resetButton = new javax.swing.JButton();
@@ -435,6 +437,14 @@ public class ImportFrame extends javax.swing.JFrame {
 
     private void locationButtonActionPerformed(java.awt.event.ActionEvent evt) { 
         working = true;
+        
+        //TODO: Should also add a focus to the drawing panel,
+        //otherwise null pointer!
+        this.setVisible(false);
+        
+        double rotation = Double.valueOf(rotationFieldX.getText());
+        double scale = Double.valueOf(scaleField.getText());
+        fc.window.chooseLocation(boundsX, boundsY, rotation, scale);
     }                                               
 
     private void modelFieldActionPerformed(java.awt.event.ActionEvent evt) {                                          
@@ -493,12 +503,13 @@ public class ImportFrame extends javax.swing.JFrame {
             this.boundsX = bounds[0];
             this.boundsY = bounds[1];
             okButton.setEnabled(true);
+            locationButton.setEnabled(true);
         } 
     }                                           
 
     private void represButtonActionPerformed(java.awt.event.ActionEvent evt) {                                             
         
-        JFileChooser chooser = new JFileChooser();
+        JFileChooser chooser = new JFileChooser(new File (lastDirRep));
         FileNameExtensionFilter filter = new FileNameExtensionFilter(
                 "JPG", "jpg", "jpeg", "JPEG");
         FileNameExtensionFilter filter2 = new FileNameExtensionFilter(
@@ -524,7 +535,6 @@ public class ImportFrame extends javax.swing.JFrame {
             if(lastDirModel.equals("")){
                 lastDirModel = lastDirRep;
             }
-            repField.setText(path);
             
             //split url
             /*String[] tokens = name.split("\\.(?=[^\\.]+$)");
@@ -540,9 +550,10 @@ public class ImportFrame extends javax.swing.JFrame {
                 img = ImageIO.read(new File(path));
                 image.setImage(img);
                 image.repaint();
+                repField.setText(path);
                 
             } catch (IOException e) {
-                System.err.println("Fehla");
+                showError(BUNDLE.getString("ImageError"),BUNDLE.getString("ImageErrorTitle"));
             }
 
         } 
@@ -564,11 +575,12 @@ public class ImportFrame extends javax.swing.JFrame {
         super.setVisible(b);
         
         //working means, the choose location button was hit.
-        if(working){
+        if(b && working){
             working = false;
             return;
-            
-        }
+        }else if(!b && working)
+            return;
+        
         if(!b){
             modelField.setText("");
             repField.setText("");
@@ -576,10 +588,14 @@ public class ImportFrame extends javax.swing.JFrame {
             image.setImage(null);
             reset();
         }else{
-            pack();
             okButton.setEnabled(false);
             locationButton.setEnabled(false);
         }
+    }                
+
+    public void setLocation(double x, double y) {
+        locationFieldX.setText(String.valueOf(x));
+        locationFieldY.setText(String.valueOf(y));
     }
     
     private void reset(){
@@ -639,5 +655,5 @@ public class ImportFrame extends javax.swing.JFrame {
     private javax.swing.JFormattedTextField rotationFieldY;
     private javax.swing.JFormattedTextField rotationFieldZ;
     private javax.swing.JFormattedTextField scaleField;
-    // End of variables declaration                   
+    // End of variables declaration   
 }

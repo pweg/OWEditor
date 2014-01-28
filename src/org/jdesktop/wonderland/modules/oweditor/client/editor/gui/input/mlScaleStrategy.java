@@ -2,6 +2,7 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.input;
 
 import java.awt.Point;
 
+
 public class mlScaleStrategy implements mlMouseStrategy {
     
     private InputController controller = null;

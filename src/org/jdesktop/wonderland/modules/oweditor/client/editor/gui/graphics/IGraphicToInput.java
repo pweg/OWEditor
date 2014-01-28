@@ -35,6 +35,13 @@ public interface IGraphicToInput {
      * is made, whether the shape can be moved to the position.
      */
     public void translateFinished();
+    
+    /**
+     * Returns the center of the dragging shapes.
+     * 
+     * @return A point containing the center of all dragging shapes.
+     */
+    public Point getDraggingCenter();
 
     /**
      * Copies shapes of the current selection and

@@ -50,16 +50,6 @@ public class InternalMediator implements IInternalMediator{
     }
 
     @Override
-    public void translateDraggingShapes(double distance_x, double distance_y) {
-        stm.translateDraggingShapes(distance_x, distance_y);
-    }
-
-    @Override
-    public void createDraggingShapes(ArrayList<ShapeObject> selectedShapes) {
-        sm.createDraggingShapes(selectedShapes);
-    }
-
-    @Override
     public void repaint() {
         frame.repaint();
     }

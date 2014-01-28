@@ -3,62 +3,81 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.input;
 import java.awt.Point;
 
 /**
- * This mouse listener strategy is used for dragging
- * objects and creates the dragging shapes in the 
- * ShapeManager.
+ * This strategy is like the drag translate, but does not need the mouse
+ * to be dragged. 
  * 
  * @author Patrick
  *
  */
 public class mlTranslateStrategy implements mlMouseStrategy{
 
-    private InputController controller;
+    public InputController controller = null;
+    public MouseAndKeyListener listener = null;
     private Point start = new Point();
     private boolean dragging = false;
+    private Point movePoint = null;
     
-    public mlTranslateStrategy(InputController contr){
-        controller = contr;
+    public mlTranslateStrategy(InputController contr, MouseAndKeyListener listener){
+        this.controller = contr;
+        this.listener = listener;
+        
+        movePoint = controller.graphic.getDraggingCenter();
     }
     
-    /**
-     * Selects a shape, if the mouse pointer is in one
-     * and activates dragging.
-     */
+    
     @Override
     public void mousePressed(Point p) {
-        
-        controller.graphic.translateIntialize(p);
-        
-        if(controller.graphic.isMouseInObject(p)){
-            start.x = p.x;
-            start.y = p.y;
+        if(!dragging){
+            
+            if(movePoint == null)
+                return;
+            
+            
+            start.x = movePoint.x;
+            start.y = movePoint.y;
+            
+
+            //controller.graphic.clearCurSelection();
+            //controller.graphic.pasteInitialize();
+            
             dragging = true;
+        }else{
+            dragging = false;
+            
+            controller.window.translateFinish();
+            
+            listener.clear();
+            controller.window.repaint();
         }
-        controller.window.repaint();
     }
 
     @Override
     public void mouseReleased(Point p) {
-        dragging = false;
-        controller.graphic.translateFinished();
-        controller.window.repaint();
-    }
-
-    @Override
-    public void mouseDragged(Point p) {
-        if(dragging) {
-            
-            controller.graphic.translate(p.x, p.y, start);
-            start.x = p.x;
-            start.y = p.y;
-        }
-        controller.window.repaint();
+        
     }
 
     @Override
     public void mouseMoved(Point p) {
+        if(dragging) {
+            controller.graphic.pasteTranslate(p.x,p.y, start);
+            start.x = p.x;
+            start.y = p.y;
+        }
+    }
+    
+    public void reset(){
+        dragging = false;
+    }
+
+
+    @Override
+    public void mouseDragged(Point p) {
         // TODO Auto-generated method stub
         
+    }
+    
+    public void setDragging(boolean dragging){
+        this.dragging = dragging;
     }
 
 }

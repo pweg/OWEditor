@@ -1,9 +1,12 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics;
 
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.geom.AffineTransform;
+import java.util.ArrayList;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.TranslatedObjectInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.DraggingObject;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.IWindowToGraphic;
 
 public class GraphicController implements IGraphicToWindow{
@@ -64,6 +67,18 @@ public class GraphicController implements IGraphicToWindow{
     }
 
     @Override
+    public void createDraggingRect(int width, int height, int x, int y,
+            double rotation, double scale) {
+        sm.createDraggingRect(width, height, x, y, rotation, scale);
+    }
+
+    @Override
+    public void createDraggingCircle(int width, int height, int x, int y,
+            double rotation, double scale) {
+        sm.createDraggingCircle(width, height, x, y, rotation, scale);
+    }
+
+    @Override
     public void removeShape(long id) {
         sm.removeShape(id);
     }
@@ -106,6 +121,25 @@ public class GraphicController implements IGraphicToWindow{
     @Override
     public IGraphicToInput getInputInterface() {
         return inputInterface;
+    }
+
+    @Override
+    public Point getDraggingCoords() {
+        ArrayList<DraggingObject> shapes = sm.getDraggingShapes();
+        int x = Integer.MAX_VALUE;
+        int y = Integer.MAX_VALUE;
+        
+        for(DraggingObject shape : shapes){
+            int sx = shape.getX();
+            int sy = shape.getY();
+
+            x = Math.min(sx, x);
+            y = Math.min(sy, y);
+        }
+        
+        sm.clearDraggingShapes();
+        
+        return new Point(x,y);
     }
 
 }

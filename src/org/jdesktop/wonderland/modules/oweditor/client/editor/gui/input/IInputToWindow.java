@@ -8,6 +8,7 @@ public interface IInputToWindow {
     public static final byte ROTATE = 3;
     public static final byte SCALE = 4;
     public static final byte CUT = 5;
+    public static final byte TRANSLATE = 6;
     
     public void setInputMode(byte mode);
 

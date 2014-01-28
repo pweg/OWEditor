@@ -12,6 +12,8 @@ public class ImagePanel extends JPanel{
      * 
      */
     private static final long serialVersionUID = 1L;
+    private static final int MARGIN = 3;
+    
     private BufferedImage img = null;
     
     public ImagePanel(){
@@ -29,8 +31,8 @@ public class ImagePanel extends JPanel{
             int iwidth = img.getWidth();
             int iheight= img.getHeight();
             
-            int width = this.getWidth()-4;
-            int height = this.getHeight()-4;
+            int width = this.getWidth()-MARGIN*2;
+            int height = this.getHeight()-MARGIN*2;
             
             double scale_w = (double)width/iwidth;
             double scale_h = (double)height/iheight;
@@ -42,22 +44,19 @@ public class ImagePanel extends JPanel{
             if(iheight_s <= height){
                 iwidth=width;
                 iheight=iheight_s;
-                System.out.println("width");
             }else if(iwidth_s <= width){
                 iwidth=iwidth_s;
                 iheight=height;
-                System.out.println("height");
             }else{
                 iwidth= width;
                 iheight=height;
-                System.out.println("else");
             }
             
             int x = (int) Math.round((width-iwidth)/2);
             int y = (int) Math.round((height-iheight)/2);
             
-            x=Math.max(x+2, 0);
-            y=Math.max(y+2, 0);
+            x=Math.max(x+MARGIN, 0);
+            y=Math.max(y+MARGIN, 0);
             
             g.drawImage(img,x,y,iwidth, iheight, null);
         }

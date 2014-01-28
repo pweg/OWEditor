@@ -343,6 +343,23 @@ public class ShapeManager {
         return newShape;
     }
     
+    public void createDraggingRect(int width, int height, int x, int y,
+            double rotation, double scale){
+        
+            DraggingObject shape = factory.createDraggingShapeObject(
+                    ShapeFactory.RECTANGLE, x, y, 
+                    width, height, -1, "", rotation, scale, at);
+            draggingShapes.add(shape);
+    }
+    
+    public void createDraggingCircle(int width, int height, int x, int y,
+            double rotation, double scale){
+        
+            DraggingObject shape = factory.createDraggingShapeObject(ShapeFactory.CIRCLE, x, y, 
+                    width, height, -1, "", rotation, scale, at);
+            draggingShapes.add(shape);
+    }
+    
     /**
      * Creates multiple dragging shapes from a given list of 
      * shapes.

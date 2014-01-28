@@ -31,6 +31,13 @@ public class FrameController implements IFrame{
         }
         importFrame.setVisible(true);
     }
+    @Override
+    public void setImportLocation(double x, double y) {
+        if(importFrame == null)
+            return;
+        
+        importFrame.setLocation(x,y);
+    }
 
 
 }

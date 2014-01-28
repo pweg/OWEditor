@@ -23,7 +23,7 @@ public class WindowController {
     
     protected MainFrame mainframe = null;
 
-    protected IWindowToInput inputInterface = null;
+    protected WindowToInput inputInterface = null;
     
     protected MouseCoordinates mouseCoords = null;
     protected IMenu menu = null;
@@ -88,6 +88,7 @@ public class WindowController {
 
     public void registerDataManager(DataObjectManagerGUIInterface dm) {
         mouseCoords.registerDataManager(dm);
+        inputInterface.registerDataManager(dm);
     }
 
     public void registerInputInterface(IInputToWindow input) {

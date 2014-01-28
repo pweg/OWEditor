@@ -1,6 +1,7 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics;
 
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.geom.AffineTransform;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.TranslatedObjectInterface;
@@ -44,6 +45,36 @@ public interface IGraphicToWindow {
      * for the shape to be created.
      */
     public void createShape(TranslatedObjectInterface dataObject);
+    
+    /**
+     * Creates a new dragging rectangle. 
+     * Note that the shape will not have a valid id, because it is
+     * no copy of normal, existing shapes.
+     * 
+     * @param width The width of the shape.
+     * @param height The height of the shape.
+     * @param x The x coordinate.
+     * @param y The y coordinate.
+     * @param rotation The rotation.
+     * @param scale The scale.
+     */
+    public void createDraggingRect(int width, int height, int x, int y, double rotation,
+            double scale);
+    
+    /**
+     * Creates a new dragging circle. 
+     * Note that the shape will not have a valid id, because it is
+     * no copy of normal, existing shapes.
+     * 
+     * @param width The width of the shape.
+     * @param height The height of the shape.
+     * @param x The x coordinate.
+     * @param y The y coordinate.
+     * @param rotation The rotation.
+     * @param scale The scale.
+     */
+    public void createDraggingCircle(int width, int height, int x, int y, double rotation,
+            double scale);
 
     /**
      * Removes a specific shape.
@@ -84,5 +115,12 @@ public interface IGraphicToWindow {
      * @param scale The new scale of the shape.
      */
     public void updateShapeScale(long id, double scale);
+
+    /**
+     * Returns the coordinates of the dragging shapes.
+     * 
+     * @return Point containing the coordinates.
+     */
+    public Point getDraggingCoords();
 
 }

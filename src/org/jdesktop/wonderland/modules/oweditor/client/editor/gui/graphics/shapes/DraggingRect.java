@@ -254,4 +254,24 @@ public class DraggingRect extends DraggingObject{
         return realScale;
     }
 
+    @Override
+    public int getTransformedX() {
+        return transformedShape.getBounds().x;
+    }
+
+    @Override
+    public int getTransformedY() {
+        return transformedShape.getBounds().y;
+    }
+
+    @Override
+    public int getTransformedWidth() {
+        return transformedShape.getBounds().width;
+    }
+
+    @Override
+    public int getTransformedHeight() {
+        return transformedShape.getBounds().height;
+    }
+
 }

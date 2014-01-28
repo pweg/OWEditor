@@ -62,7 +62,7 @@ public class GraphicToInputFacade implements IGraphicToInput{
             ssm.clearCurSelection();
             ssm.setSelected(shape, true);
         }
-        smi.createDraggingShapes(ssm.getSelection());
+        sm.createDraggingShapes(ssm.getSelection());
     }
     
     @Override
@@ -82,6 +82,39 @@ public class GraphicToInputFacade implements IGraphicToInput{
         }
         sm.clearDraggingShapes();
     }
+    
+    @Override
+    public Point getDraggingCenter(){
+        int center_x = 0;
+        int center_y = 0;
+        
+        ArrayList<DraggingObject> shapes = sm.getDraggingShapes();
+        
+        int min_x = Integer.MAX_VALUE;
+        int max_x = Integer.MIN_VALUE;
+        int min_y = Integer.MAX_VALUE;
+        int max_y = Integer.MIN_VALUE;
+        
+        for(DraggingObject shape : shapes){
+            int x = shape.getTransformedX();
+            int y = shape.getTransformedY();
+            
+            int x2 = x + shape.getTransformedWidth();
+            int y2 = y + shape.getTransformedHeight();
+            
+            Math.max(x2, max_x);
+            Math.max(y2, max_y);
+            Math.min(x, min_x);
+            Math.min(y, min_y);
+        }
+        
+        center_x = (int) Math.round((max_x-min_x)/2);
+        center_y = (int) Math.round((max_y-min_y)/2);
+        
+        return new Point(center_x, center_y);
+        
+    }
+    
     @Override
     public Point copyInitialize() {
         ArrayList<Long> ids = cm.initilaizeCopy();
@@ -92,7 +125,7 @@ public class GraphicToInputFacade implements IGraphicToInput{
 
     @Override
     public void pasteInitialize() {
-        smi.createDraggingShapes(cm.getCopyShapes());
+        sm.createDraggingShapes(cm.getCopyShapes());
     }
 
     @Override

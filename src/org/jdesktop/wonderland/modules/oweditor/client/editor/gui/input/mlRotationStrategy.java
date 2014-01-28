@@ -2,6 +2,7 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.input;
 
 import java.awt.Point;
 
+
 /**
  * This mouse listener strategy is used for 
  * panning.

@@ -93,4 +93,32 @@ public abstract class DraggingObject extends SimpleShapeObject{
      * @return The scale.
      */
     public abstract double getScale();
+    
+    /**
+     * Returns the x value of the transformed shape.
+     * 
+     * @return The x coordinate.
+     */
+    public abstract int getTransformedX();
+    
+    /**
+     * Returns the y value of the transformed shape.
+     * 
+     * @return The y coordinate.
+     */
+    public abstract int getTransformedY();
+    
+    /**
+     * Returns the width of the transformed shape.
+     * 
+     * @return The width coordinate.
+     */
+    public abstract int getTransformedWidth();
+    
+    /**
+     * Returns the height value of the transformed shape.
+     * 
+     * @return The height coordinate.
+     */
+    public abstract int getTransformedHeight();
 }

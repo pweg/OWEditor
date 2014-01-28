@@ -26,6 +26,7 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
     private static final byte ROTATE = IInputToWindow.ROTATE;
     private static final byte SCALE = IInputToWindow.SCALE;
     private static final byte CUT = IInputToWindow.CUT;
+    private static final byte TRANSLATE = IInputToWindow.TRANSLATE;
     
     private mlMouseStrategy strategy = null;
     private mlPasteStrategy pasteStrategy = null;
@@ -65,18 +66,14 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
                  if(mode == NOMODE){
                         
                      if(ic.graphic.isMouseInObject(p)){
-                         strategy = new mlTranslateStrategy(ic);
-                         strategy.mousePressed(p);
+                         strategy = new mlTranslateDragStrategy(ic);
                          ic.window.selectionChange(ic.graphic.isShapeSelected());
                      }else{
                          strategy = new mlSelectionRectStrategy(ic);
-                         strategy.mousePressed(p);
                      }
                  }
                  //paste/insertion
                  else if(mode == PASTE){
-                     if(strategy != null)
-                         strategy.mousePressed(p);
                  }
                  //rotation
                  else if(mode == ROTATE){
@@ -85,17 +82,15 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
                      else if (ic.graphic.isMouseInBorderCenter(p)){
                          setRotationCenterStrategy();
                      }
-                     if(strategy != null)
-                         strategy.mousePressed(p);
                  }
                  //scale
                  else if(mode == SCALE){
-                     
                      if(ic.graphic.isMouseInBorder(p))
                          strategy = new mlScaleStrategy(ic);
-                     if(strategy != null)
-                         strategy.mousePressed(p);
                  }
+
+             if(strategy != null)
+                 strategy.mousePressed(p);
              }
              //Panning
              else if ((e.getButton() ==  MouseEvent.BUTTON2 || e.getButton() ==  MouseEvent.BUTTON3)){
@@ -126,6 +121,12 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
     @Override
     public void mouseWheelMoved( MouseWheelEvent e )
     {
+        /*
+         * Do not allow scaling the image while translating.
+         */
+        if(mode == TRANSLATE)
+            return;
+        
         /*
          * When removing this, it should be possible to drag selected
          * objects further when zooming in and out, but it will 
@@ -295,6 +296,13 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
                 //from other scaling operations
                 ic.graphic.scaleInitialize();
                 this.mode = SCALE;
+                break;
+            case(TRANSLATE):
+                strategy = new mlTranslateStrategy(ic, this);
+                strategy.mousePressed(null);
+                strategy.mouseMoved(ic.window.revertBack(ic.window.getMousePosition()));
+            
+                this.mode = TRANSLATE;
                 break;
             default:
                 return;

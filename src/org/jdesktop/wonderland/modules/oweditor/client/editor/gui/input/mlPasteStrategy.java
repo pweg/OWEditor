@@ -2,19 +2,20 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.input;
 
 import java.awt.Point;
 
+
 public class mlPasteStrategy implements mlMouseStrategy{
 
     public InputController controller = null;
     public MouseAndKeyListener listener = null;
     private Point start = new Point();
     private boolean dragging = false;
-    private Point copyPoint = null;
+    private Point movePoint = null;
     
     public mlPasteStrategy(InputController contr, MouseAndKeyListener listener){
         this.controller = contr;
         this.listener = listener;
         
-        copyPoint = controller.graphic.copyInitialize();
+        movePoint = controller.graphic.copyInitialize();
     }
     
     
@@ -22,12 +23,12 @@ public class mlPasteStrategy implements mlMouseStrategy{
     public void mousePressed(Point p) {
         if(!dragging){
             
-            if(copyPoint == null)
+            if(movePoint == null)
                 return;
             
             
-            start.x = copyPoint.x;
-            start.y = copyPoint.y;
+            start.x = movePoint.x;
+            start.y = movePoint.y;
 
             controller.graphic.clearCurSelection();
             controller.graphic.pasteInitialize();

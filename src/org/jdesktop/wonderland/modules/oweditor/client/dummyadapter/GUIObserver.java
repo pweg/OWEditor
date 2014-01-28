@@ -132,8 +132,8 @@ public class GUIObserver implements GUIObserverInterface{
          */
         
         int[] bounds = new int[2];
-        bounds[0] = 10;
-        bounds[1] = 15;
+        bounds[0] = 50;
+        bounds[1] = 50;
         
         
         return bounds;

@@ -166,4 +166,28 @@ public class DraggingEllipse extends DraggingObject{
         // TODO Auto-generated method stub
         
     }
+
+    @Override
+    public int getTransformedX() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    @Override
+    public int getTransformedY() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    @Override
+    public int getTransformedWidth() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    @Override
+    public int getTransformedHeight() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
 }

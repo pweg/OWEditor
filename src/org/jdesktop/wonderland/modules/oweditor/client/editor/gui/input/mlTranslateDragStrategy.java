@@ -5,18 +5,19 @@ import java.awt.Point;
 
 /**
  * This mouse listener strategy is used for dragging
- * the center of the rotation border.
+ * objects and creates the dragging shapes in the 
+ * ShapeManager.
  * 
  * @author Patrick
  *
  */
-public class mlRotationCenterStrategy implements mlMouseStrategy{
+public class mlTranslateDragStrategy implements mlMouseStrategy{
 
     private InputController controller;
     private Point start = new Point();
     private boolean dragging = false;
     
-    public mlRotationCenterStrategy(InputController contr){
+    public mlTranslateDragStrategy(InputController contr){
         controller = contr;
     }
     
@@ -26,23 +27,21 @@ public class mlRotationCenterStrategy implements mlMouseStrategy{
      */
     @Override
     public void mousePressed(Point p) {
-        start.x = p.x;
-        start.y = p.y;
-        dragging = true;
         
-        /*controller.esmi.rotationCenterInitialization(p);
+        controller.graphic.translateIntialize(p);
         
-        if(controller.esmi.isMouseInObject(p)){
-            
+        if(controller.graphic.isMouseInObject(p)){
+            start.x = p.x;
+            start.y = p.y;
+            dragging = true;
         }
-        controller.drawingPan.repaint();*/
+        controller.window.repaint();
     }
 
     @Override
     public void mouseReleased(Point p) {
         dragging = false;
-        
-        controller.graphic.rotationCenterUpdate();
+        controller.graphic.translateFinished();
         controller.window.repaint();
     }
 
@@ -50,7 +49,7 @@ public class mlRotationCenterStrategy implements mlMouseStrategy{
     public void mouseDragged(Point p) {
         if(dragging) {
             
-            controller.graphic.rotationCenterTranslate(start, p);
+            controller.graphic.translate(p.x, p.y, start);
             start.x = p.x;
             start.y = p.y;
         }

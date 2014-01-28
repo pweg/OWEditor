@@ -16,6 +16,14 @@ public interface IFrame {
     public void showImportFrame();
 
     /**
+     * Sets the position fields of the import frame
+     * 
+     * @param x The x position.
+     * @param y The y position.
+     */
+    public void setImportLocation(double x, double y);
+
+    /**
      * Repaints the frame.
      */
     //public void repaint();

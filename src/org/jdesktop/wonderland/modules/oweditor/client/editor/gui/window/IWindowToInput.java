@@ -89,5 +89,10 @@ public interface IWindowToInput {
      */
     public void copyChange(boolean copyShapesExist);
 
+    /**
+     * Called, when the translation operation is finished.
+     */
+    public void translateFinish();
+
 
 }
