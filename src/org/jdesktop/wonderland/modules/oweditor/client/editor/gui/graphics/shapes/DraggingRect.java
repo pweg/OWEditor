@@ -46,7 +46,6 @@ public class DraggingRect extends DraggingObject{
     private int initialWidth = 0;
     private int initialHeight = 0;
     
-    private AffineTransform at = null;
     
     private stateDraggingShape state = null;
 
@@ -78,7 +77,6 @@ public class DraggingRect extends DraggingObject{
         //realScale = scale;
         initialWidth = width;
         initialHeight = height;
-        this.at = at;
         //originalShape = at.createTransformedShape(originalShape);
         
         //This is needed for creating the border around dragging shapes
@@ -100,7 +98,6 @@ public class DraggingRect extends DraggingObject{
 
     @Override
     public void paintOriginal(Graphics2D g, AffineTransform at) {
-        this.at = at;
         
         //Be advised, the following order of this section should not
         //be disturbed. Otherwise the objects will be all over the place.
@@ -153,7 +150,7 @@ public class DraggingRect extends DraggingObject{
         if(state == null)
             return originalShape.getBounds().x;
         else
-            return state.getX(this, at);
+            return state.getX(this);
     }
     
 
@@ -162,7 +159,7 @@ public class DraggingRect extends DraggingObject{
         if(state == null)
             return originalShape.getBounds().y;
         else
-            return state.getY(this, at);
+            return state.getY(this);
     }
 
     @Override

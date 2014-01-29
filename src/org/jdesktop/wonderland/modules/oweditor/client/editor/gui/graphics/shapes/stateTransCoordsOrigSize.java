@@ -2,27 +2,24 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shap
 
 import java.awt.Rectangle;
 import java.awt.Shape;
-import java.awt.geom.AffineTransform;
 
 
 /**
  * This method is used for retrieving the coordinates during a rotation.
  * It calculates the coordinate out of the center, using the 
- * shape dimensions, BUT uses the ORIGINALS width in order to
+ * the transformed shape, BUT uses the ORIGINALS size in order to
  * get the right x,y coordinates for the server object. 
- * This are the coordinates  used
- * by the adapter, BUT ARE NOT THE ACTUAL OBJECT COORDINATES.
- * For instance, the wonderland server uses the coordinates from
- * the center of the object. These methods only return the java2d
- * coordinates, which are on the left top side of a shape. 
+ * This is needed because the rotated object does give wrong size information.
+ * 
+ * This are not the coordinates used by the adapter!
  * 
  * @author Patrick
  *
  */
-public class stateDraggingShapeRotation implements stateDraggingShape{
+public class stateTransCoordsOrigSize implements stateDraggingShape{
 
     @Override
-    public int getX(DraggingObject shape, AffineTransform at) {
+    public int getX(DraggingObject shape) {
         Shape transformed = shape.getTransformedShape();
         Rectangle bounds = transformed.getBounds();
         double x = bounds.getCenterX();
@@ -35,7 +32,7 @@ public class stateDraggingShapeRotation implements stateDraggingShape{
     }
 
     @Override
-    public int getY(DraggingObject shape, AffineTransform at) {
+    public int getY(DraggingObject shape) {
         Shape transformed = shape.getTransformedShape();
         Rectangle bounds = transformed.getBounds();
         double y = bounds.getCenterY();

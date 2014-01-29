@@ -72,7 +72,7 @@ public class WindowToInput implements IWindowToInput {
     }
     @Override
     public Point revertBack(Point point) {
-        return drawingPan.revertBack(point);
+        return drawingPan.transformBack(point);
     }
     @Override
     public void selectionChange(boolean shapesSelected) {
@@ -89,10 +89,10 @@ public class WindowToInput implements IWindowToInput {
     
     @Override
     public void translateFinish() {
+        //This is build just, if other parts also need translation.
         switch(mode){
             case IMPORT:
                 Point coords = fc.graphic.getDraggingCoords();
-                coords = fc.drawingPan.revertBack(coords);
                 Point2D coords_origin = dm.transformCoordsBack(coords);
                 
                 fc.frame.setImportLocation(coords_origin.getX(), coords_origin.getY());

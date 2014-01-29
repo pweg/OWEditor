@@ -1,6 +1,5 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes;
 
-import java.awt.geom.AffineTransform;
 
 
 /**
@@ -23,7 +22,7 @@ public interface stateDraggingShape {
      * @param at The last global transform.
      * @return The x coordinate.
      */
-    public int getX(DraggingObject shape, AffineTransform at);
+    public int getX(DraggingObject shape);
     
     /**
      * This function returns the y coordinate of the dragging shape.
@@ -36,6 +35,6 @@ public interface stateDraggingShape {
      * @param at The last global transform.
      * @return The y coordinate.
      */
-    public int getY(DraggingObject shape, AffineTransform at);
+    public int getY(DraggingObject shape);
 
 }

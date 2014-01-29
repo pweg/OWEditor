@@ -20,7 +20,7 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shape
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.IToolTip;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.ITransformationBorder;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.stateDraggingShape;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.stateDraggingShapeBorderBuild;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.stateTransformedEdge;
 import org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter.WorldBuilder;
 
 /**
@@ -415,13 +415,13 @@ public class ShapeManager {
             Rectangle r = shape.getTransformedShape().getBounds();
             stateDraggingShape state = shape.getState();
             
-            if(!(state instanceof stateDraggingShapeBorderBuild))
-                shape.setState(new stateDraggingShapeBorderBuild());
+            if(!(state instanceof stateTransformedEdge))
+                shape.setState(new stateTransformedEdge());
             
             int s_x = shape.getX();
             int s_y = shape.getY();
             
-            if(!(state instanceof stateDraggingShapeBorderBuild))
+            if(!(state instanceof stateTransformedEdge))
                 shape.setState(state);
             
 

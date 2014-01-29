@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.TranslatedObjectInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.DraggingObject;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.stateTransformedCenter;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.IWindowToGraphic;
 
 public class GraphicController implements IGraphicToWindow{
@@ -130,6 +131,8 @@ public class GraphicController implements IGraphicToWindow{
         int y = Integer.MAX_VALUE;
         
         for(DraggingObject shape : shapes){
+            shape.setState(new stateTransformedCenter());
+            
             int sx = shape.getX();
             int sy = shape.getY();
 

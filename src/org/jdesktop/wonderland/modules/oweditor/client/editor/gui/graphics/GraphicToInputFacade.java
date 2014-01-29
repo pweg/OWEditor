@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.DraggingObject;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.ShapeObject;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.TransformationBorder;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.stateDraggingShapeRotation;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.stateTransCoordsOrigSize;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.IWindowToGraphic;
 
 public class GraphicToInputFacade implements IGraphicToInput{
@@ -102,10 +102,10 @@ public class GraphicToInputFacade implements IGraphicToInput{
             int x2 = x + shape.getTransformedWidth();
             int y2 = y + shape.getTransformedHeight();
             
-            Math.max(x2, max_x);
-            Math.max(y2, max_y);
-            Math.min(x, min_x);
-            Math.min(y, min_y);
+            max_x = Math.max(x2, max_x);
+            max_y = Math.max(y2, max_y);
+            min_x = Math.min(x, min_x);
+            min_y = Math.min(y, min_y);
         }
         
         center_x = (int) Math.round((max_x-min_x)/2);
@@ -148,7 +148,7 @@ public class GraphicToInputFacade implements IGraphicToInput{
     @Override
     public void rotationInitialize() {
         sm.createDraggingShapes(ssm.getSelection());
-        sm.setShapeStates(new stateDraggingShapeRotation());
+        sm.setShapeStates(new stateTransCoordsOrigSize());
         
         sm.createShapeBorder(ssm.getSelection(),
                 TransformationBorder.MODEONECENTER);

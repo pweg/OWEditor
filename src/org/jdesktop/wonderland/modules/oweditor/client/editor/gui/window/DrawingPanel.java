@@ -282,7 +282,7 @@ public class DrawingPanel extends JPanel implements ChangeListener {
         return at;
     }
 
-    public Point revertBack(Point p) {
+    public Point transformBack(Point p) {
 
         try {
             Point revert = new Point(0,0);
