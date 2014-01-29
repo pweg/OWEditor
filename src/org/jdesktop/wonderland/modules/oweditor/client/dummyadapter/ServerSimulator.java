@@ -1,5 +1,6 @@
 package org.jdesktop.wonderland.modules.oweditor.client.dummyadapter;
 
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 /**
@@ -115,7 +116,7 @@ public class ServerSimulator {
         createObject(4, 100, 100, 0, 0, 1, 150, 25, "TinyVeryLong");*/
     }
 
-    public void createObject(int id, 
+    public ServerObject createObject(int id, 
             float x, float y, float z, 
             double rotationX, double rotationY, double rotationZ, 
             double scale,
@@ -123,6 +124,7 @@ public class ServerSimulator {
             String name,
             boolean isAvatar){
         ServerObject o = new ServerObject(currentID, x, y, z, rotationX, 
+                rotationY, rotationZ,
                 scale, width, height, name);
 
         o.rotationY = rotationY;
@@ -130,12 +132,44 @@ public class ServerSimulator {
         o.isAvatar = isAvatar;
         objects.add(o);
         currentID++;
+        
+        return o;
+    }
+
+    public ServerObject createObject(int id, 
+            float x, float y, float z, 
+            double rotationX, double rotationY, double rotationZ, 
+            double scale,
+            float width, float height, 
+            String name,
+            boolean isAvatar, 
+            BufferedImage image){
+        ServerObject o = new ServerObject(currentID, x, y, z, rotationX, 
+                rotationY, rotationZ,
+                scale, width, height, name, image);
+
+        o.rotationY = rotationY;
+        o.rotationZ = rotationZ;
+        o.isAvatar = isAvatar;
+        objects.add(o);
+        currentID++;
+        
+        return o;
     }
     
     public ServerObject getObject(long id){
         for(ServerObject object : objects){
             if(id == object.id)
                 return object;
+        }
+        return null;
+    }
+    
+    public ServerObject getObject(String name){
+        for(ServerObject object: objects){
+            if(name.equals(object.name)){
+                return object;
+            }
         }
         return null;
     }

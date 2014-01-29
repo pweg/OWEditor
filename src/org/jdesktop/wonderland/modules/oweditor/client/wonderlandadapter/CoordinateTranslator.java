@@ -146,7 +146,7 @@ public class CoordinateTranslator implements CoordinateTranslatorInterface{
     }
 
     @Override
-    public Point transformCoordinates(float x, float y, float width, float height) {        
+    public Point transformCoordinatesInt(float x, float y, float width, float height) {        
         int x_int = (int) Math.round((x-width/2)*globalScale);
         int y_int = (int) Math.round((y-height/2)*globalScale);
         

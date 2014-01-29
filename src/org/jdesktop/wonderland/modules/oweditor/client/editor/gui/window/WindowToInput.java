@@ -3,34 +3,28 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.awt.geom.Point2D;
 
-import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataObjectManagerGUIInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.menu.IMenu;
 
 public class WindowToInput implements IWindowToInput {
-    
-    protected static final byte NOMODE = 0;
-    protected static final byte IMPORT = 1;
 
-    private WindowController fc = null;    
+    private WindowController wc = null;    
     private DrawingPanel drawingPan = null;
     private IMenu menu = null;
-    private byte mode = 0;
-    private DataObjectManagerGUIInterface dm = null;
+    private stateInput state = null;
     
     public WindowToInput(WindowController fc){
-        this.fc = fc;
+        this.wc = fc;
         registerComponents();
         menu = fc.menu;
     }
     private void registerComponents(){
-        drawingPan = fc.drawingPan;
+        drawingPan = wc.drawingPan;
     }
 
     @Override
     public void repaint() {
-        fc.repaint();
+        wc.repaint();
     }
 
     @Override
@@ -68,7 +62,7 @@ public class WindowToInput implements IWindowToInput {
     }
     @Override
     public void paintMouseCoords(int x, int y) {
-        fc.mouseCoords.paintCoordinates(x,y);
+        wc.mouseCoords.paintCoordinates(x,y);
     }
     @Override
     public Point revertBack(Point point) {
@@ -83,28 +77,16 @@ public class WindowToInput implements IWindowToInput {
         menu.setItemsEnabledCopy(copyShapesExist);
     }
     
-    public void setMode(byte mode){
-        this.mode  = mode;
+    public void setState(stateInput state){
+        this.state  = state;
     }
     
     @Override
     public void translateFinish() {
         //This is build just, if other parts also need translation.
-        switch(mode){
-            case IMPORT:
-                Point coords = fc.graphic.getDraggingCoords();
-                Point2D coords_origin = dm.transformCoordsBack(coords);
-                
-                fc.frame.setImportLocation(coords_origin.getX(), coords_origin.getY());
-                fc.frame.showImportFrame();
-                
-                break;
-            default:
-                return;
-        }
-    }
-    public void registerDataManager(DataObjectManagerGUIInterface dm) {
-        this.dm = dm;
+        if(state != null)
+            state.finished();
+        
     }
 
 }

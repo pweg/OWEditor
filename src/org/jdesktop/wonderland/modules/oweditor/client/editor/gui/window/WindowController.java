@@ -24,6 +24,7 @@ public class WindowController {
     protected MainFrame mainframe = null;
 
     protected WindowToInput inputInterface = null;
+    protected WindowToFrame frameInterface = null;
     
     protected MouseCoordinates mouseCoords = null;
     protected IMenu menu = null;
@@ -50,8 +51,9 @@ public class WindowController {
         menu = new MenuController();
         
         
-        //Create interfaces
+        //Create interfaces needed for later
         inputInterface = new WindowToInput(this);
+        frameInterface = new WindowToFrame(this);
         
         mouseCoords = new MouseCoordinates();
         mouseCoords.setToolBar(mainframe.getBottomToolBar());
@@ -69,7 +71,7 @@ public class WindowController {
         mainInterface.registerGraphicInterface(graphic);
         
         frame.registerMainFrame(mainframe);
-        frame.registerWindow(new WindowToFrame(this));
+        frame.registerWindow(frameInterface);
         
         menu.registerWindowInterface(new WindowToMenu(this));
     }
@@ -88,7 +90,7 @@ public class WindowController {
 
     public void registerDataManager(DataObjectManagerGUIInterface dm) {
         mouseCoords.registerDataManager(dm);
-        inputInterface.registerDataManager(dm);
+        frameInterface.registerDataManager(dm);
     }
 
     public void registerInputInterface(IInputToWindow input) {

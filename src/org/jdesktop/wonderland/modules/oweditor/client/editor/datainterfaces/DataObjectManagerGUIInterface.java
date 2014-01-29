@@ -29,10 +29,27 @@ public interface DataObjectManagerGUIInterface {
     
     /**
      * Transforms coordinates used by the GUI back to the
-     * original coordinates used by the virtual world
+     * original coordinates used by the virtual world.
+     * 
+     * DO ONLY USE FOR POINTS, NOT FOR MODEL COORDINATES.
+     * 
      * @param coordinates The coordinates to be transformed back.
      * @return The transformed coordinates.
      */
     public Point2D.Double transformCoordsBack(Point coordinates);
+    
+    /**
+     * Transforms coordinates used by the GUI back to the original 
+     * coordinates used by the virtual world.
+     * The transformation does incorporate width and height 
+     * of the object AND SHOULD THEREFORE BE USED WHEN
+     * TRANSFORMING COORDINATES FOR MODELS.
+     * 
+     * @param coordinates
+     * @param width
+     * @param height
+     * @return
+     */
+    public Point2D.Double transformCoordsBack(Point coordinates, int width, int height);
     
 }

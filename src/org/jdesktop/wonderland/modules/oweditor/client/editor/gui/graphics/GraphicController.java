@@ -7,7 +7,6 @@ import java.util.ArrayList;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.TranslatedObjectInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.DraggingObject;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.stateTransformedCenter;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.IWindowToGraphic;
 
 public class GraphicController implements IGraphicToWindow{
@@ -124,6 +123,11 @@ public class GraphicController implements IGraphicToWindow{
         return inputInterface;
     }
 
+    /*
+     * This function can theoretically be used for 
+     * all dragging shapes, when making an array of points,
+     * but currently there is no need for it.
+     */
     @Override
     public Point getDraggingCoords() {
         ArrayList<DraggingObject> shapes = sm.getDraggingShapes();
@@ -131,7 +135,6 @@ public class GraphicController implements IGraphicToWindow{
         int y = Integer.MAX_VALUE;
         
         for(DraggingObject shape : shapes){
-            shape.setState(new stateTransformedCenter());
             
             int sx = shape.getX();
             int sy = shape.getY();

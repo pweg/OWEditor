@@ -1,7 +1,12 @@
 package org.jdesktop.wonderland.modules.oweditor.client.dummyadapter;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
+
+import javax.imageio.ImageIO;
 
 import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.GUIObserverInterface;
 
@@ -18,9 +23,9 @@ public class GUIObserver implements GUIObserverInterface{
     private static final ResourceBundle BUNDLE = ResourceBundle.getBundle(
             "org/jdesktop/wonderland/modules/oweditor/client/resources/Bundle");
     
-    private ServerObject tmp = null;
-    private int count = 1;
-    private int substract = 2;
+    
+    //dummy bounds for new objects
+    private float[] bounds = new float[2];
     
     
     /**
@@ -30,6 +35,9 @@ public class GUIObserver implements GUIObserverInterface{
      */
     public GUIObserver(DummyAdapterController ac){
         this.ac = ac;
+        
+        bounds[0] = (float) 1.0;
+        bounds[1] = (float) 1.0;
     }
 
     @Override
@@ -108,35 +116,85 @@ public class GUIObserver implements GUIObserverInterface{
     }
 
     @Override
-    public void notifyCreation() {
-        
-        if(tmp == null){
-            tmp = new ServerObject(596, (float)-12, (float)-14, 0, 1, 
-                    0, (float)1.00, (float)1.00, "TMP");
-            tmp.isAvatar = false;
-        }else{
-            count++;
-            tmp.name = "TMP" + count;
-            tmp.id++;
-            tmp.y-=substract;
-        }
-        ac.ses.addObject(tmp);
-        
-    }
-
-    @Override
     public int[] loadKMZ(String url) {
         /*
          * unfortunately reading a kmz is difficult, so the
          * dummy adapter returns just the same sizes.
          */
         
-        int[] bounds = new int[2];
-        bounds[0] = 50;
-        bounds[1] = 50;
+        int[] transformed = new int [bounds.length];
         
+        transformed[0] = ac.ct.transformWidth(bounds[0]);
+        transformed[1] = ac.ct.transformHeight(bounds[1]);        
         
-        return bounds;
+        return transformed;
+    }
+
+    @Override
+    public long importKMZ(String name, String image_url, double x, double y,
+            double z, double rotationX, double rotationY, double rotationZ,
+            double scale) {
+        
+        ServerObject object = ac.ses.getObject(name);
+        
+        if(object != null){
+            return object.id;
+        }else{
+            BufferedImage img = null;
+            
+            try {
+                img = ImageIO.read(new File(image_url));
+                
+            } catch (IOException e) {
+                System.err.println("Reading image was not possible");
+            }
+            ServerObject tmp = ac.ses.createObject(0, (float)x, (float)y, (float)z, 
+                rotationX, rotationY, rotationZ, scale, 
+                (float)bounds[0], (float)bounds[1], name, false, img);
+            ac.sua.createObject(tmp);
+            return -1;
+        }
+    }
+
+    @Override
+    public void notifyCopy(long id, String image_url, double x, double y,
+            double z, double rot_x, double rot_y, double rot_z, double scale) {
+        
+        ServerObject o = ac.ses.getObject(id);
+
+        BufferedImage img = null;
+        
+        try {
+            img = ImageIO.read(new File(image_url));
+            
+        } catch (IOException e) {
+            System.err.println("Reading image was not possible");
+        }
+        
+        if(o == null)
+            return;
+        
+        String name = BUNDLE.getString("CopyName")+o.name;
+        ServerObject clone = ac.ses.copyObject(id, name);
+        clone.x=(float) x;
+        clone.y=(float) y;
+        clone.z=(float) z;
+        clone.rotationX=rot_x;
+        clone.rotationY=rot_y;
+        clone.rotationZ=rot_z;
+        clone.scale=scale;
+        clone.image=img;
+        ac.sua.createObject(clone);
+    }
+
+    @Override
+    public void notifyOverwrite(long id, String image_url, double x, double y,
+            double z, double rot_x, double rot_y, double rot_z, double scale) {
+        //No modules are used in this dummy server,
+        //so simple copy will suffice.
+        
+        notifyCopy(id,image_url, x, y,z, rot_x, rot_y, rot_z, scale);
+        
     }
 
 }

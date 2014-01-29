@@ -56,7 +56,7 @@ public class DataObjectManager implements DataObjectManagerGUIInterface{
             float heightf = dataObject.getHeightf();
             float scale = (float)dataObject.getScale();
             
-            Point p = ct.transformCoordinates(x, y, widthf* scale, heightf* scale);
+            Point p = ct.transformCoordinatesInt(x, y, widthf* scale, heightf* scale);
             int width = ct.transformWidth(widthf);
             int height = ct.transformHeight(heightf);
             
@@ -86,9 +86,9 @@ public class DataObjectManager implements DataObjectManagerGUIInterface{
        float scale = (float)object.getScale();
        float old_scale = (float) object.getOldScale();
        
-       Point p = ct.transformCoordinates(x, y, object.getWidthf()*scale, 
+       Point p = ct.transformCoordinatesInt(x, y, object.getWidthf()*scale, 
                object.getHeightf()*scale);
-       Point p_old = ct.transformCoordinates(object.getX(), object.getY(), 
+       Point p_old = ct.transformCoordinatesInt(object.getX(), object.getY(), 
                object.getWidthf()*old_scale, 
                object.getHeightf()*old_scale);
        
@@ -141,7 +141,7 @@ public class DataObjectManager implements DataObjectManagerGUIInterface{
             
             DataObject d = data.get(id);
 
-            Point p = ct.transformCoordinates(x, y, d.getWidthf()*(float)scale, 
+            Point p = ct.transformCoordinatesInt(x, y, d.getWidthf()*(float)scale, 
                     d.getHeightf()*(float) scale);
             
             if(d.getX() != x)
@@ -240,6 +240,14 @@ public class DataObjectManager implements DataObjectManagerGUIInterface{
         double y = ct.transformXBack(coordinates.y);
         
         return new Point2D.Double(x, y);
+    }
+
+    @Override
+    public Point2D.Double transformCoordsBack(Point coordinates, int width, int height) {
+
+        Point2D.Double point = ct.transformCoordinatesBack((float)coordinates.x,
+                (float)coordinates.y, (float)width, (float)height);
+        return point;
     }
 
 }

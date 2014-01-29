@@ -70,4 +70,55 @@ public interface IAdapterCommunication {
      */
     public int[] loadKMZ(String url);
 
+    /**
+     * Calls the adapter to import the pre-loaded model.
+     * 
+     * @param name The name of the new model
+     * @param image_url The url of the image representation
+     * @param x The x coordinate of the new model.
+     * @param y The y coordinate of the new model.
+     * @param z The z coordinate of the new model.
+     * @param rotationX The x rotation of the new model.
+     * @param rotationY The y rotation of the new model.
+     * @param rotationZ The z rotation of the new model.
+     * @param scale The scale of the new model.
+     * 
+     * @return Return true, if creation is possible, false,
+     * if the same name already exists
+     */
+    public long importKMZ(String name, String image_url, double x, double y,
+            double z, double rotationX, double rotationY, double rotationZ,
+            double scale);
+
+    /**
+     * Used during a conflict resolution. Copies an
+     * existing model.
+     * 
+     * @param id The id of the model, which will be copied.
+     * @param image_url The image of the new object.
+     * @param x The x coordinate of the new object.
+     * @param y The y coordinate of the new object.
+     * @param z The z coordinate of the new object.
+     * @param rot_x The x rotation of the new object.
+     * @param rot_y The y rotation of the new object.
+     * @param rot_z The z rotation of the new object.
+     * @param scale The scale of the new object.
+     */
+    public void copyKMZ(long id, String image_url, double x, double y, double z, double rot_x, double rot_y, double rot_z, double scale);
+
+    /**
+     * Overwrites a module during conflict resolution.
+     * 
+     * @param id The id of the model, which will be copied.
+     * @param image_url The image of the new object.
+     * @param x The x coordinate of the new object.
+     * @param y The y coordinate of the new object.
+     * @param z The z coordinate of the new object.
+     * @param rot_x The x rotation of the new object.
+     * @param rot_y The y rotation of the new object.
+     * @param rot_z The z rotation of the new object.
+     * @param scale The scale of the new object.
+     */
+    public void overwriteKMZ(long id, String image_url, double x, double y, double z, double rot_x, double rot_y, double rot_z, double scale);
+
 }

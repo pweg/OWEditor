@@ -73,12 +73,31 @@ public class AdapterCommunication implements IAdapterCommunication{
         goi.notifyScaling(id, x, y, scale);
     }
 
-    public void createObject() {
-        goi.notifyCreation();
-    }
-
     @Override
     public int[] loadKMZ(String url) {
         return goi.loadKMZ(url);
+    }
+
+    @Override
+    public long importKMZ(String name, String image_url, double x, double y,
+            double z, double rotationX, double rotationY, double rotationZ,
+            double scale) {
+        return goi.importKMZ(name, image_url, x,y,z, rotationX, 
+                rotationY, rotationZ, scale);
+    }
+
+    @Override
+    public void copyKMZ(long id, String image_url, double x, double y,
+            double z, double rot_x, double rot_y, double rot_z, double scale) {
+        goi.notifyCopy(id, image_url, x, y, z,
+                rot_x,rot_y,rot_z,scale);
+        
+    }
+
+    @Override
+    public void overwriteKMZ(long id, String image_url, double x, double y,
+            double z, double rot_x, double rot_y, double rot_z, double scale) {
+        goi.notifyOverwrite(id, image_url, x, y, z,
+                rot_x,rot_y,rot_z,scale);
     }
 }
