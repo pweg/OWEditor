@@ -27,7 +27,7 @@ public interface IGraphicToInput {
      * @param y the new y coordinate.
      * @param start the starting point of the translation.
      */
-    public void translate(int x, int y, Point start);
+    public void draggingTranslate(int x, int y, Point start);
 
     /**
      * This is used, when the translation is finished 
@@ -66,7 +66,7 @@ public interface IGraphicToInput {
      * @param y the new y coordinate.
      * @param start the starting point of the translation.
      */
-    public void pasteTranslate(int x, int y, Point start);
+    public void translate(int x, int y, Point start);
     
     /**
      * Checks for collision, if no one occurred, it sends an

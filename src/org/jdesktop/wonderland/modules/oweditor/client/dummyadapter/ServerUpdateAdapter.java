@@ -66,6 +66,8 @@ public class ServerUpdateAdapter {
         object.setRotationZ(sObject.rotationZ);
         object.setScale(scale);
         object.setName(name);
+        object.setImage(sObject.image);
+        
         if(sObject.isAvatar){
             object.setType(DataObjectInterface.AVATAR);
             object.setWidth(AdapterSettings.avatarSizeX);

@@ -2,6 +2,7 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics;
 
 import java.awt.Point;
 import java.awt.geom.AffineTransform;
+import java.awt.image.BufferedImage;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.DraggingObject;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.DraggingRect;
@@ -40,24 +41,25 @@ public class ShapeFactory {
     /**
      * Creates a new ShapeObject.
      * 
-     * @param type the type of shape that should be created.
-     * @param x the x coordinate.
-     * @param y the y coordinate.
-     * @param width the width of the rectangle.
-     * @param height the height of the rectangle.
-     * @param id the id for the object, which has to be the same id as in the virtual world.
+     * @param type The type of shape that should be created.
+     * @param x The x coordinate.
+     * @param y The y coordinate.
+     * @param width The width of the rectangle.
+     * @param height The height of the rectangle.
+     * @param id The id for the object, which has to be the same id as in the virtual world.
+     * @param img The representational image.
      * @return The created shape.
      */
     public ShapeObject createShapeObject(int type, int x, int y, int width, int height, 
-            long id, String name, double rotation, double scale){
+            long id, String name, double rotation, double scale, BufferedImage img){
         
         switch(type){
             case AVATAR:
                 return new Avatar(id, x,y,width, height);
             case RECTANGLE:
-                return new ShapeRectangle(x,y,width, height, id, name, rotation, scale);
+                return new ShapeRectangle(x,y,width, height, id, name, rotation, scale, img);
             case CIRCLE:
-                return new ShapeEllipse(x,y,width,height, id, name, rotation, scale);
+                return new ShapeEllipse(x,y,width,height, id, name, rotation, scale, img);
             
             default:
                 throw new IllegalArgumentException(

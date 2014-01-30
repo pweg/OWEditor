@@ -1,5 +1,8 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window;
 
+import java.awt.Graphics2D;
+import java.awt.geom.AffineTransform;
+
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataObjectManagerGUIInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.input.IInputToWindow;
 
@@ -54,6 +57,11 @@ public class WindowToFrame implements IWindowToFrame{
             double scale) {
         wc.adapter.overwriteKMZ(id, image_url, x, y, z,
                 rot_x,rot_y,rot_z,scale);
+    }
+
+    @Override
+    public void drawShapes(Graphics2D g2, AffineTransform at) {
+        wc.graphic.drawShapes(g2, at);
     }
 
 }

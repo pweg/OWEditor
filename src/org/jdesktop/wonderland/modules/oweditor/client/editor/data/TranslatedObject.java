@@ -1,5 +1,7 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.data;
 
+import java.awt.image.BufferedImage;
+
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataObjectInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.TranslatedObjectInterface;
 
@@ -15,9 +17,11 @@ public class TranslatedObject implements TranslatedObjectInterface{
     private double rotation = 0;
     private long id = 0;
     private byte type = DataObjectInterface.RECTANGLE;
+    private BufferedImage img = null;
     
     public TranslatedObject(long id, int x, int y, int width, int height,
-            double scale, double rotation, String name, byte type){
+            double scale, double rotation, String name, byte type, 
+            BufferedImage img){
         this.id = id;
         this.x = x;
         this.y = y;
@@ -27,6 +31,7 @@ public class TranslatedObject implements TranslatedObjectInterface{
         this.height = height;
         this.name = name;
         this.type = type;
+        this.img = img;
     }
     
     
@@ -74,6 +79,11 @@ public class TranslatedObject implements TranslatedObjectInterface{
     @Override
     public byte getType() {
         return type;
+    }
+    
+    @Override
+    public BufferedImage getImage(){
+        return img;
     }
 
 }

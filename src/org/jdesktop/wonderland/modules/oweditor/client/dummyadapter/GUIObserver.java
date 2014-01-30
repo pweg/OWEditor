@@ -23,6 +23,7 @@ public class GUIObserver implements GUIObserverInterface{
     private static final ResourceBundle BUNDLE = ResourceBundle.getBundle(
             "org/jdesktop/wonderland/modules/oweditor/client/resources/Bundle");
     
+    private ServerObject save = null;
     
     //dummy bounds for new objects
     private float[] bounds = new float[2];
@@ -136,18 +137,23 @@ public class GUIObserver implements GUIObserverInterface{
             double scale) {
         
         ServerObject object = ac.ses.getObject(name);
+        BufferedImage img = null;
+        
+        try {
+            img = ImageIO.read(new File(image_url));
+            
+        } catch (IOException e) {
+            System.err.println("Reading image was not possible");
+        }
         
         if(object != null){
+            save = new ServerObject(-1, (float)x, (float)y, (float)z, rotationX, 
+            rotationY, rotationZ, scale,  (float)bounds[0], (float)bounds[1],  name,
+            img);
+            
             return object.id;
         }else{
-            BufferedImage img = null;
-            
-            try {
-                img = ImageIO.read(new File(image_url));
-                
-            } catch (IOException e) {
-                System.err.println("Reading image was not possible");
-            }
+
             ServerObject tmp = ac.ses.createObject(0, (float)x, (float)y, (float)z, 
                 rotationX, rotationY, rotationZ, scale, 
                 (float)bounds[0], (float)bounds[1], name, false, img);
@@ -160,6 +166,7 @@ public class GUIObserver implements GUIObserverInterface{
     public void notifyCopy(long id, String image_url, double x, double y,
             double z, double rot_x, double rot_y, double rot_z, double scale) {
         
+       
         ServerObject o = ac.ses.getObject(id);
 
         BufferedImage img = null;

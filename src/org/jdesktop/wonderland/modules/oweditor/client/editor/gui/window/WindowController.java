@@ -1,7 +1,5 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window;
 
-import javax.swing.JScrollPane;
-
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataObjectManagerGUIInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.IAdapterCommunication;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.GraphicController;
@@ -9,41 +7,36 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.IGrap
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.input.IInputToWindow;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.frames.FrameController;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.frames.IFrame;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.menu.MenuController;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.menu.IMenu;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.menu.MenuController;
 
 public class WindowController {
 
-    protected JScrollPane mainScrollPanel = null;
-    protected DrawingPanel drawingPan = null;
+    //protected JScrollPane mainScrollPanel = null;
+    //protected DrawingPanel drawingPan = null;
     
     protected IInputToWindow input = null;
 
     protected IGraphicToWindow graphic = null;
     
-    protected MainFrame mainframe = null;
+    //protected MainFrame mainframe = null;
 
     protected WindowToInput inputInterface = null;
     protected WindowToFrame frameInterface = null;
     
     protected MouseCoordinates mouseCoords = null;
     protected IMenu menu = null;
-    protected Window mainInterface = null;
+    protected Window window = null;
     protected IFrame frame = null;
     
     protected IAdapterCommunication adapter = null;
     
     public WindowController(IAdapterCommunication adapter, Window mainInterface){
         
-        this.mainInterface = mainInterface;
+        this.window = mainInterface;
         this.adapter = adapter;
         
-        drawingPan = new DrawingPanel(this);
-        mainScrollPanel = new JScrollPane(drawingPan);
-        mainScrollPanel.setWheelScrollingEnabled(false);
-
-
-        mainframe = new MainFrame(mainScrollPanel);
+        
 
         //Create graphics package
         graphic = new GraphicController();
@@ -56,36 +49,36 @@ public class WindowController {
         frameInterface = new WindowToFrame(this);
         
         mouseCoords = new MouseCoordinates();
-        mouseCoords.setToolBar(mainframe.getBottomToolBar());
+        
         
         registerComponents();
+        build();
         
         //Creating menu
-        mainframe.setJMenuBar(menu.buildMenubar());
     }
 
     private void registerComponents(){
-        graphic.registerWindowInterface(new WindowToGraphic(drawingPan, adapter));
+        graphic.registerWindowInterface(new WindowToGraphic(this, adapter));
         
-        mainInterface.registerComponents(drawingPan, mainframe);
-        mainInterface.registerGraphicInterface(graphic);
+        //mainInterface.registerComponents(drawingPan, mainframe);
+        window.registerGraphicInterface(graphic);
+        window.registerFrameInterface(frame);
         
-        frame.registerMainFrame(mainframe);
+        //frame.registerMainFrame(mainframe);
         frame.registerWindow(frameInterface);
+        
+        inputInterface.registerDrawingPan(frame.getDrawingPan());
         
         menu.registerWindowInterface(new WindowToMenu(this));
     }
+    
+    private void build(){
+        mouseCoords.setToolBar(frame.getBottomToolBar());
+        frame.setJMenuBar(menu.buildMenubar());
+    }
 
     public void repaint() {
-        drawingPan.repaint();
-    }
-
-    public int getTranslationX() {
-        return drawingPan.getTranslationX();
-    }
-
-    public int getTranslationY() {
-        return drawingPan.getTranslationY();
+        frame.repaint();
     }
 
     public void registerDataManager(DataObjectManagerGUIInterface dm) {

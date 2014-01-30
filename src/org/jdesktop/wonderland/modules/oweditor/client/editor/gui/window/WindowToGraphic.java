@@ -8,17 +8,19 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.IAdapterCommun
 public class WindowToGraphic implements IWindowToGraphic{
     
 
-    private DrawingPanel drawingPan = null;
+    //private DrawingPanel drawingPan = null;
     private IAdapterCommunication adapter = null;
+    private WindowController wc = null;
     
-    public WindowToGraphic(DrawingPanel drawingPan, IAdapterCommunication adapter){
-        this.drawingPan = drawingPan;
+    public WindowToGraphic(WindowController wc, IAdapterCommunication adapter){
+        //this.drawingPan = drawingPan;
         this.adapter = adapter;
+        this.wc = wc;
     }
 
     @Override
     public void repaint() {
-        drawingPan.repaint();
+        wc.repaint();
     }
 
     @Override

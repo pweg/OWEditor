@@ -5,9 +5,8 @@ import java.awt.Point;
 
 /**
  * This mouse listener strategy is used for dragging
- * objects and creates the dragging shapes in the 
- * ShapeManager.
- * 
+ * objects.
+ *  
  * @author Patrick
  *
  */
@@ -27,33 +26,24 @@ public class mlTranslateDragStrategy implements mlMouseStrategy{
      */
     @Override
     public void mousePressed(Point p) {
-        
-        controller.graphic.translateIntialize(p);
-        
-        if(controller.graphic.isMouseInObject(p)){
             start.x = p.x;
             start.y = p.y;
             dragging = true;
-        }
-        controller.window.repaint();
     }
 
     @Override
     public void mouseReleased(Point p) {
         dragging = false;
         controller.graphic.translateFinished();
-        controller.window.repaint();
     }
 
     @Override
     public void mouseDragged(Point p) {
         if(dragging) {
-            
-            controller.graphic.translate(p.x, p.y, start);
+            controller.graphic.draggingTranslate(p.x, p.y, start);
             start.x = p.x;
             start.y = p.y;
         }
-        controller.window.repaint();
     }
 
     @Override

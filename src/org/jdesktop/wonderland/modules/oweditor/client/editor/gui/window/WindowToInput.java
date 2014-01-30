@@ -1,25 +1,27 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window;
 
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;
 
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.frames.IDrawingPanel;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.menu.IMenu;
 
 public class WindowToInput implements IWindowToInput {
 
     private WindowController wc = null;    
-    private DrawingPanel drawingPan = null;
+    private IDrawingPanel drawingPan = null;
     private IMenu menu = null;
     private stateInput state = null;
     
     public WindowToInput(WindowController fc){
         this.wc = fc;
-        registerComponents();
         menu = fc.menu;
     }
-    private void registerComponents(){
-        drawingPan = wc.drawingPan;
+    
+    public void registerDrawingPan(IDrawingPanel drawingPan){
+        this.drawingPan = drawingPan;
     }
 
     @Override
@@ -35,15 +37,15 @@ public class WindowToInput implements IWindowToInput {
     @Override
     public void showPopupMenu(int x, int y) {
         //menu.setItemsEnabled(shapesSelected, copyShapesExist);
-        drawingPan.repaint();
-        menu.showPopup(drawingPan, x, y);
+        wc.repaint();
+        menu.showPopup((Component)drawingPan, x, y);
     }
 
     @Override
     public void changeScale(double scale) {
-        double curScale = drawingPan.getScale();
+        //double curScale = drawingPan.getScale();
         drawingPan.changeScale(scale);
-        drawingPan.changeViewPort(curScale);
+        //drawingPan.changeViewPort(curScale);
     }
 
     @Override

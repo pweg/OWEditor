@@ -3,27 +3,40 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.input;
 import java.awt.Point;
 
 /**
- * This strategy is like the drag translate, but does not need the mouse
- * to be dragged. 
- * 
+ * This strategy is used for normal translation, without dragging the mouse.
+ * It has two modes, the first is for translation, which is called
+ * through frames of the window package. The second is for paste translation.
  * @author Patrick
  *
  */
 public class mlTranslateStrategy implements mlMouseStrategy{
+    
+    public static final byte TRANSLATE = 0;
+    public static final byte PASTE = 1;
 
     public InputController controller = null;
     public MouseAndKeyListener listener = null;
     private Point start = new Point();
     private boolean dragging = false;
     private Point movePoint = null;
+    private byte mode = 0;;
     
-    public mlTranslateStrategy(InputController contr, MouseAndKeyListener listener){
+    public mlTranslateStrategy(InputController contr, MouseAndKeyListener listener,
+            byte mode){
         this.controller = contr;
         this.listener = listener;
         
-        movePoint = controller.graphic.getDraggingCenter();
+        this.mode  = mode;
+        
+        switch(mode){
+            case(TRANSLATE):
+                movePoint = controller.graphic.getDraggingCenter();
+                break;                
+            case(PASTE):
+                movePoint = controller.graphic.copyInitialize();
+                break;
+        }
     }
-    
     
     @Override
     public void mousePressed(Point p) {
@@ -35,19 +48,26 @@ public class mlTranslateStrategy implements mlMouseStrategy{
             
             start.x = movePoint.x;
             start.y = movePoint.y;
-            
 
-            //controller.graphic.clearCurSelection();
-            //controller.graphic.pasteInitialize();
+            if(mode == PASTE){
+                controller.graphic.clearCurSelection();
+                controller.graphic.pasteInitialize();
+            }
             
             dragging = true;
         }else{
             dragging = false;
             
-            controller.window.translateFinish();
+            switch(mode){
+                case(TRANSLATE):
+                    controller.window.translateFinish();
+                    break;
+                case(PASTE):
+                    controller.graphic.pasteFinished();
+                    break;
+            }
             
             listener.clear();
-            controller.window.repaint();
         }
     }
 
@@ -59,7 +79,7 @@ public class mlTranslateStrategy implements mlMouseStrategy{
     @Override
     public void mouseMoved(Point p) {
         if(dragging) {
-            controller.graphic.pasteTranslate(p.x,p.y, start);
+            controller.graphic.translate(p.x,p.y, start);
             start.x = p.x;
             start.y = p.y;
         }

@@ -5,6 +5,7 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -290,13 +291,14 @@ public class ShapeManager {
         String name = dataObject.getName();
         double rotation = dataObject.getRotation();
         double scale = dataObject.getScale();
+        BufferedImage img = dataObject.getImage();
         
         if(name.length() > 20){
             name = name.substring(0, 18)+ "...";
         }
         if(dataObject.getType() == DataObjectInterface.AVATAR){
             ShapeObject shape = factory.createShapeObject(ShapeFactory.AVATAR, 
-                    x, y, width, height, id, name, rotation, scale);
+                    x, y, width, height, id, name, rotation, scale, img);
             writeLock.lock();
             try {
                 avatarShapes.add(shape);
@@ -305,7 +307,7 @@ public class ShapeManager {
             }
         }else{
             ShapeObject shape = factory.createShapeObject(ShapeFactory.RECTANGLE, 
-                    x, y, width, height, id, name, rotation, scale);
+                    x, y, width, height, id, name, rotation, scale, img);
             writeLock.lock();
             try {
                 shapes.add(shape);

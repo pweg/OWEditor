@@ -15,7 +15,7 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.input.IInputTo
  * @author Patrick
  *
  */
-public interface WindowInterface extends GraphicForwardInterface{
+public interface IWindow extends GraphicForwardInterface{
     
     /**
      * Adds a mouse to the drawing panel
@@ -61,8 +61,6 @@ public interface WindowInterface extends GraphicForwardInterface{
      * 
      * @return the value of the graph translation.
      */
-    public int getTranslationX();
-    
     /**
      * Returns the translation value in y direction.
      * This translation value is used to move the whole 2d graph away
@@ -71,7 +69,6 @@ public interface WindowInterface extends GraphicForwardInterface{
      * 
      * @return the value of the graph translation.
      */
-    public int getTranslationY();
 
     /**
      * This sets a new width for the world represented in the 

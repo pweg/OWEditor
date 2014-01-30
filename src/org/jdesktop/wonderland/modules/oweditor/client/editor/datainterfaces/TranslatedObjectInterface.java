@@ -1,5 +1,7 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces;
 
+import java.awt.image.BufferedImage;
+
 /**
  * This interface is used for updates for the GUI, which are
  * handled directly in the drawing panel and therefore only need
@@ -78,5 +80,13 @@ public interface TranslatedObjectInterface {
      * otherwise.
      */
     public byte getType();
+
+    /**
+     * Returns the image representation of the object.
+     * 
+     * @return A buffered image, or null, if no image 
+     * is stored.
+     */
+    public BufferedImage getImage();
 
 }

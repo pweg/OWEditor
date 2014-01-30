@@ -8,7 +8,7 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.IWindow
 
 /**
  * This mouse listener strategy is used for 
- * panning.
+ * normal panning.
  * 
  * @author Patrick
  *
@@ -16,19 +16,19 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.IWindow
 public class mlPanStrategy implements mlMouseStrategy{
 
     private Rectangle visiRect = null;  
-    private IWindowToInput effi = null;
+    private IWindowToInput window = null;
     private Point pressed = null;  
     private Point here = null;  
     private boolean drag = false;
     
     public mlPanStrategy(IWindowToInput effi){
-        this.effi = effi;
+        this.window = effi;
     }
     
     @Override
     public void mousePressed(Point p) {
          pressed = p;  
-         visiRect = effi.getVisibleRect();
+         visiRect = window.getVisibleRect();
          drag = true;
     }
 
@@ -44,7 +44,7 @@ public class mlPanStrategy implements mlMouseStrategy{
             visiRect.x += (pressed.x - here.x);  
             visiRect.y += (pressed.y - here.y);  
 
-            Dimension size = effi.getPanelSize();
+            Dimension size = window.getPanelSize();
 
             visiRect.x = Math.max(0, visiRect.x);
             visiRect.y = Math.max(0, visiRect.y);
@@ -52,7 +52,7 @@ public class mlPanStrategy implements mlMouseStrategy{
             visiRect.x = Math.min(size.width, visiRect.x);
             visiRect.y = Math.min(size.height, visiRect.y);
             
-            effi.scrollRectToVisible(visiRect); 
+            window.scrollRectToVisible(visiRect); 
         }
     }
 

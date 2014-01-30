@@ -3,9 +3,9 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.gui;
 import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.GUIObserverInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataObjectManagerGUIInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.input.Input;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.input.InputInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.input.IInput;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.Window;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.WindowInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.IWindow;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.IDataObjectObserver;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.IEnvironmentObserver;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.IGUIController;
@@ -21,8 +21,8 @@ public class GUIController implements IGUIController{
 
     protected DataObjectObserver domo = null;
     protected EnvironmentObserver eo = null;
-    protected WindowInterface window = null;
-    protected InputInterface input = null;
+    protected IWindow window = null;
+    protected IInput input = null;
     
     private DataObjectManagerGUIInterface dmi = null;
     private AdapterCommunication ac = null;

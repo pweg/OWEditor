@@ -1,5 +1,7 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces;
 
+import java.awt.image.BufferedImage;
+
 public interface DataObjectInterface extends TranslatedObjectInterface{
 
     /**
@@ -171,5 +173,12 @@ public interface DataObjectInterface extends TranslatedObjectInterface{
      * @param type the type of the object
      */
     public void setType(byte type);
+
+    /**
+     * Sets the representation image of the object.
+     * 
+     * @param img A buffered image.
+     */
+    void setImage(BufferedImage img);
 
 }

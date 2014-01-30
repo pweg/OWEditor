@@ -8,6 +8,7 @@ import javax.swing.event.MouseInputAdapter;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataObjectManagerGUIInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.IAdapterCommunication;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.input.IInputToWindow;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.frames.IFrame;
 
 /**
  * Implements the FrameInterface for the gui package and also
@@ -17,21 +18,18 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.input.IInputTo
  * @author Patrick
  *
  */
-public class Window extends GraphicForward implements WindowInterface {
+public class Window extends GraphicForward implements IWindow {
     
-    private DrawingPanel drawingPan = null;
-    private MainFrame mainframe = null;
+    
     private WindowController fc = null;
+    private IFrame frame = null;
+    
+    
     
     public Window(IAdapterCommunication adapter){
         super(adapter);
         this.fc = new WindowController(adapter, this);
         
-    }
-    
-    public void registerComponents(DrawingPanel drawingPan, MainFrame mainframe){
-        this.drawingPan = drawingPan;
-        this.mainframe = mainframe;
     }
     
     @Override
@@ -41,18 +39,17 @@ public class Window extends GraphicForward implements WindowInterface {
 
     @Override
     public void addMouseListener(MouseInputAdapter mkListener){
-        drawingPan.addMouseListener(mkListener);
-        drawingPan.addMouseMotionListener(mkListener);
+        frame.addMouseListener(mkListener);
     }
     
     @Override
     public void addKeyListener(KeyListener mkListener){
-        mainframe.addKeyListener(mkListener);
+        frame.addKeyListener(mkListener);
     }
     
     @Override
     public void addMouseWheelListener(MouseWheelListener mouseWheelListener){
-        drawingPan.addMouseWheelListener(mouseWheelListener);
+        frame.addMouseWheelListener(mouseWheelListener);
     }
 
     @Override
@@ -62,38 +59,28 @@ public class Window extends GraphicForward implements WindowInterface {
 
     @Override
     public void setVisible(boolean visibility) {
-       mainframe.setVisible(visibility);
-    }
-
-    @Override
-    public int getTranslationX() {
-        return fc.getTranslationX();
-    }
-
-    @Override
-    public int getTranslationY() {
-        return fc.getTranslationY();
+        frame.setMainFrameVisible(visibility);
     }
 
     @Override
     public void setNewWidth(int width) {
-        drawingPan.setNewWidth(width);
+        frame.setNewWidth(width);
         
     }
 
     @Override
     public void setNewHeight(int height) {
-        drawingPan.setNewHeight(height);
+        frame.setNewHeight(height);
     }
 
     @Override
     public void setNewMinX(int x) {
-        drawingPan.setNewMinX(x);
+        frame.setNewMinX(x);
     }
 
     @Override
     public void setNewMinY(int y) {
-        drawingPan.setNewMinY(y);
+        frame.setNewMinY(y);
     }
 
     @Override
@@ -104,6 +91,10 @@ public class Window extends GraphicForward implements WindowInterface {
     @Override
     public void registerDataManager(DataObjectManagerGUIInterface dm) {
         fc.registerDataManager(dm);
+    }
+
+    public void registerFrameInterface(IFrame frame) {
+        this.frame = frame;
     }
 
 }

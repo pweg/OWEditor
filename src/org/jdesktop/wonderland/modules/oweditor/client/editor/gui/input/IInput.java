@@ -14,7 +14,7 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.IWindow
  * @author Patrick
  *
  */
-public interface InputInterface {
+public interface IInput {
     
     public MouseInputAdapter getMouseListener();
     

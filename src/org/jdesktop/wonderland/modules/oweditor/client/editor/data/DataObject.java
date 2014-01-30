@@ -1,5 +1,7 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.data;
 
+import java.awt.image.BufferedImage;
+
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataObjectInterface;
 
 /**
@@ -21,6 +23,7 @@ public class DataObject implements DataObjectInterface{
     private float height = 0;
     private String name = "";
     private byte type = DataObjectInterface.RECTANGLE;
+    private BufferedImage img = null;
     
     /**
      * Creates an empty object instance.
@@ -227,6 +230,15 @@ public class DataObject implements DataObjectInterface{
     
     public double getOldScale(){
         return oldScale;
+    }
+    
+    @Override
+    public void setImage(BufferedImage img){
+        this.img = img;
+    }
+    
+    public BufferedImage getImage(){
+        return img;
     }
 
 }

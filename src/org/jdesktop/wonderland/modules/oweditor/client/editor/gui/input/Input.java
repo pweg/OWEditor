@@ -8,7 +8,7 @@ import javax.swing.event.MouseInputAdapter;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.IGraphicToInput;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.IWindowToInput;
 
-public class Input implements InputInterface{
+public class Input implements IInput{
     
     private InputController ic = null;
     

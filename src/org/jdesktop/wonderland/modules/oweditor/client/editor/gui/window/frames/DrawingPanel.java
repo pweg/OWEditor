@@ -1,4 +1,4 @@
-package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window;
+package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.frames;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -25,7 +25,8 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.GUISettings;
  * @author Patrick
  *
  */
-public class DrawingPanel extends JPanel implements ChangeListener {  
+public class DrawingPanel extends JPanel implements ChangeListener, 
+                                IDrawingPanel {  
 
     private static final long serialVersionUID = 1L;
     private RenderingHints hints;  
@@ -33,7 +34,7 @@ public class DrawingPanel extends JPanel implements ChangeListener {
     private Dimension size;
     private double scale = 1.0;
       
-    private WindowController fc = null;
+    private FrameController fc = null;
 
     private final ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
     private final Lock readLock = lock.readLock();
@@ -57,7 +58,7 @@ public class DrawingPanel extends JPanel implements ChangeListener {
      * 
      * @param gc A GUIController instance.
      */
-    public DrawingPanel(WindowController fc) {
+    public DrawingPanel(FrameController fc) {
         
         this.fc = fc;
         
@@ -80,6 +81,9 @@ public class DrawingPanel extends JPanel implements ChangeListener {
      * the scale value.
      */
     public void changeScale(double toAdd){
+
+        double curScale = getScale();
+        
         writeLock.lock();
         
         Rectangle r = getVisibleRect();
@@ -98,6 +102,8 @@ public class DrawingPanel extends JPanel implements ChangeListener {
 
         repaint();  
         revalidate(); 
+
+        changeViewPort(curScale);
     }
     
     /**
@@ -157,7 +163,7 @@ public class DrawingPanel extends JPanel implements ChangeListener {
         
         g2.setPaint(GUISettings.BGCOLOR); 
         
-        fc.graphic.drawShapes(g2, at);
+        fc.window.drawShapes(g2, at);
         
     } 
     
@@ -282,6 +288,7 @@ public class DrawingPanel extends JPanel implements ChangeListener {
         return at;
     }
 
+    @Override
     public Point transformBack(Point p) {
 
         try {

@@ -6,6 +6,9 @@ import java.awt.Rectangle;
 
 public interface IWindowToInput {
     
+    /**
+     * Repaints the drawing panel.
+     */
     public void repaint();
     
     /**

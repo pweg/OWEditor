@@ -2,7 +2,12 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.input;
 
 import java.awt.Point;
 
-
+/**
+ * This state is used for scaling.
+ * 
+ * @author Patrick
+ *
+ */
 public class mlScaleStrategy implements mlMouseStrategy {
     
     private InputController controller = null;
@@ -20,13 +25,11 @@ public class mlScaleStrategy implements mlMouseStrategy {
     public void mouseReleased(Point p) {
         controller.mkListener.removeStrategy();
         controller.graphic.scaleUpdate();
-        controller.window.repaint();
     }
 
     @Override
     public void mouseDragged(Point p) {
         controller.graphic.scale(p);
-        controller.window.repaint();
     }
 
     @Override

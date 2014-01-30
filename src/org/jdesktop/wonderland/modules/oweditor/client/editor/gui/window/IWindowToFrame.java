@@ -1,5 +1,8 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window;
 
+import java.awt.Graphics2D;
+import java.awt.geom.AffineTransform;
+
 public interface IWindowToFrame {
     
     /**
@@ -78,6 +81,14 @@ public interface IWindowToFrame {
             double x, double y, double z, 
             double rot_x, double rot_y, double rot_z, 
             double scale);
+
+    /**
+     * Draws all the shapes.
+     * 
+     * @param g2 A graphics2d instance.
+     * @param at A affine transform instance.
+     */
+    public void drawShapes(Graphics2D g2, AffineTransform at);
 
 
 }

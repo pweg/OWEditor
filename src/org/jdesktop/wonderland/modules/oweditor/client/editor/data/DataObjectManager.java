@@ -66,7 +66,7 @@ public class DataObjectManager implements DataObjectManagerGUIInterface{
             
             TranslatedObject t = new TranslatedObject(id, p.x, p.y, width, height,
                     dataObject.getScale(), ct.getRotation(dataObject), dataObject.getName(),
-                    dataObject.getType());
+                    dataObject.getType(), dataObject.getImage());
             
             domo.notifyCreation(t);
         }

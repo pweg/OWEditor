@@ -4,8 +4,12 @@ import java.awt.Point;
 
 
 /**
- * This mouse listener strategy is used, when a selection rectangle
- * should be created and NO other key is pressed.
+ * This mouse event strategy is used, when a selection rectangle
+ * should be painted.
+ * 
+ * If the normal behavior of the strategy should be created, so
+ * that it just selects, not selection swap, graphic.clearCurSelection()
+ * should be  called bevore.
  * 
  * @author Patrick
  *
@@ -23,13 +27,9 @@ public class mlSelectionRectStrategy implements mlMouseStrategy{
 
     @Override
     public void mousePressed(Point p) {
-        
-        controller.graphic.clearCurSelection();
             
         start = p;
         selectionRect = true;
-            
-        controller.window.repaint();
         
     }
 
@@ -37,10 +37,9 @@ public class mlSelectionRectStrategy implements mlMouseStrategy{
     public void mouseReleased(Point p) {
         if(selectionRect != false){
                selectionRect = false;
-
+               
                controller.graphic.selectionRectFinished();
                controller.window.selectionChange(controller.graphic.isShapeSelected());
-               controller.window.repaint();
            }
     }
 
@@ -50,7 +49,6 @@ public class mlSelectionRectStrategy implements mlMouseStrategy{
                 Point end = p;
                
                 controller.graphic.selectionRectUpdate(start, end);
-                controller.window.repaint();
             }
     }
 

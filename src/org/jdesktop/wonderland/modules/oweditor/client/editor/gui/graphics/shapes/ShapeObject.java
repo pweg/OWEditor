@@ -2,6 +2,7 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shap
 
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
+import java.awt.image.BufferedImage;
 
 /**
  * An abstract shape object, which is used to represent
@@ -93,6 +94,8 @@ public abstract class ShapeObject extends SimpleShapeObject{
      * @param height the height.
      */
     public abstract void set(int x, int y, int width, int height);
+
+    public abstract void setImage(BufferedImage img);
     
     
 

@@ -5,7 +5,7 @@ import java.awt.Point;
 
 /**
  * This mouse listener strategy is used for 
- * panning.
+ * rotating.
  * 
  * @author Patrick
  *
@@ -32,7 +32,6 @@ public class mlRotationStrategy implements mlMouseStrategy{
     @Override
     public void mouseDragged(Point p) {
         controller.graphic.rotate(p);
-        controller.window.repaint();
     }
 
     @Override

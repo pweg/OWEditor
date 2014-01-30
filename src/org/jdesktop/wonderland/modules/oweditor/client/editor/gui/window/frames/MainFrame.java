@@ -1,4 +1,4 @@
-package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window;
+package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.frames;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
@@ -8,6 +8,7 @@ import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.GUISettings;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.BottomToolBar;
 
 /**
  * This is the main window of the editor.

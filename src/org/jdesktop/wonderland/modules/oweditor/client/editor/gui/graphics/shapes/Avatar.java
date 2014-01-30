@@ -5,6 +5,7 @@ import java.awt.Paint;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
+import java.awt.image.BufferedImage;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.GUISettings;
 
@@ -137,6 +138,12 @@ public class Avatar extends ShapeObject{
     @Override
     public boolean isNameAbbreviated() {
         return false;
+    }
+
+    @Override
+    public void setImage(BufferedImage img) {
+        // TODO Auto-generated method stub
+        
     }
 
 }

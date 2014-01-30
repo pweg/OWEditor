@@ -1,5 +1,7 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes;
 
+import java.awt.AlphaComposite;
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Paint;
@@ -9,6 +11,7 @@ import java.awt.Toolkit;
 import java.awt.font.FontRenderContext;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.GUISettings;
 
@@ -34,6 +37,8 @@ public class ShapeRectangle extends ShapeObject{
     private double rotation = 0;
     private double scale = 0;
     
+    private BufferedImage img = null;
+    
     //These variables are used to determine, where the name of the object should be.
     private int nameBoundsX = GUISettings.NAMEPOSITIONINX;
     private int nameBoundsAbove = GUISettings.NAMEPOSITIONINY;
@@ -47,9 +52,10 @@ public class ShapeRectangle extends ShapeObject{
      * @param height the height of the shape.
      * @param id the shape id.
      * @param name the name of the shape.
+     * @param img the representational image.
      */
     public ShapeRectangle(int x, int y, int width, int height, long id, String name,
-            double rotation, double scale){
+            double rotation, double scale, BufferedImage img){
         
         if(scale == 0)
             scale = 1;
@@ -59,6 +65,7 @@ public class ShapeRectangle extends ShapeObject{
         this.id = id;
         this.rotation = rotation;
         this.scale = scale;
+        this.img = img;
     }
     
     @Override
@@ -92,6 +99,22 @@ public class ShapeRectangle extends ShapeObject{
             g.setPaint(GUISettings.SELECTIONCOLOR);
             g.draw(printShape); 
         }
+        paintImage(g, at);
+    }
+    
+    public void paintImage(Graphics2D g, AffineTransform at){
+        if(img == null)
+            return;
+        
+        Rectangle r = printShape.getBounds();
+        AlphaComposite alpha = AlphaComposite.getInstance(
+                AlphaComposite.SRC_OVER, 0.3f);
+        g.setComposite(alpha);
+        g.setColor(Color.white);
+
+        g.drawImage(img,r.x+5,r.y+5,r.width-10, r.height-10, null);
+        //g.dispose();
+
     }
     
     @Override
@@ -257,7 +280,7 @@ public class ShapeRectangle extends ShapeObject{
     @Override
     public ShapeObject clone() {
         ShapeObject shape = new ShapeRectangle(originalShape.x, originalShape.y, 
-                originalShape.width, originalShape.height, id, name, rotation, scale);
+                originalShape.width, originalShape.height, id, name, rotation, scale, img);
         return shape;
     }
 
@@ -270,6 +293,11 @@ public class ShapeRectangle extends ShapeObject{
     public void setScale(double scale) {
         this.scale = scale;
         nameWrapp = false;
+    }
+    
+    @Override
+    public void setImage(BufferedImage img){
+        this.img = img;
     }
 
 

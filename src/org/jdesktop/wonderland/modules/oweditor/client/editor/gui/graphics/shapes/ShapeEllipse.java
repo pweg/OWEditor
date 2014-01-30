@@ -9,6 +9,7 @@ import java.awt.Toolkit;
 import java.awt.font.FontRenderContext;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.GUISettings;
 
@@ -35,6 +36,8 @@ public class ShapeEllipse extends ShapeObject{
     private int nameBoundsX = GUISettings.NAMEPOSITIONINX;
     private int nameBoundsAbove = GUISettings.NAMEPOSITIONINY;
     
+    private BufferedImage img = null;
+    
     /**
      * Creates a new ObjectRectangle shape instance.
      * 
@@ -46,13 +49,14 @@ public class ShapeEllipse extends ShapeObject{
      * @param name the name of the shape.
      */
     public ShapeEllipse(int x, int y, int width, int height, long id, String name,
-            double rotation, double scale){
+            double rotation, double scale, BufferedImage img){
         
         originalShape = new Rectangle (x, y, width, height);
         this.name = name;
         this.id = id;
         this.rotation = rotation;
         this.scale = scale;
+        this.img = img;
     }
     
     @Override
@@ -242,6 +246,11 @@ public class ShapeEllipse extends ShapeObject{
     public boolean isNameAbbreviated() {
         // TODO Auto-generated method stub
         return false;
+    }
+
+    @Override
+    public void setImage(BufferedImage img) {
+        this.img = img;
     }
 
 }
