@@ -19,6 +19,8 @@ public interface DataObjectManagerGUIInterface {
      */
     public DataObjectInterface getObject(long id);
     
+    public TransformedObjectInterface getTransformedObject(long id);
+    
     /**
      * Returns the z coordinate to an object, given by the id.
      * 

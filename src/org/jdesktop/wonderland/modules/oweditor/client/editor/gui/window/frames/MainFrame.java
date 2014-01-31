@@ -9,6 +9,7 @@ import javax.swing.JScrollPane;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.GUISettings;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.BottomToolBar;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.frames.toolbar.UndoBar;
 
 /**
  * This is the main window of the editor.
@@ -26,17 +27,22 @@ public class MainFrame extends JFrame {
 
     
     protected BottomToolBar bottomBar = null;
+    protected UndoBar undoBar = null;
   
 
     /**
      * Creates a new Window frame instance and sets it up.
      */
-    public MainFrame(JScrollPane mainScrollPanel){
+    public MainFrame(JScrollPane mainScrollPanel, FrameController frame){
         
         Container content = this.getContentPane();
-        content.add(mainScrollPanel);
+        
+        undoBar = new UndoBar(frame);
         bottomBar = new BottomToolBar();
+        
+        content.add(undoBar, BorderLayout.NORTH);
         content.add(bottomBar, BorderLayout.SOUTH);
+        content.add(mainScrollPanel);
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 

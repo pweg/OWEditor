@@ -8,6 +8,7 @@ import java.util.logging.Logger;
 import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.CoordinateTranslatorInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataObjectInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataObjectManagerGUIInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.TransformedObjectInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.IDataObjectObserver;
 import org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter.GUIObserver;
 
@@ -64,7 +65,7 @@ public class DataObjectManager implements DataObjectManagerGUIInterface{
             dc.em.setX(p.x, width);
             dc.em.setY(p.y, height);
             
-            TranslatedObject t = new TranslatedObject(id, p.x, p.y, width, height,
+            TransformedObject t = new TransformedObject(id, p.x, p.y, width, height,
                     dataObject.getScale(), ct.getRotation(dataObject), dataObject.getName(),
                     dataObject.getType(), dataObject.getImage());
             
@@ -112,57 +113,32 @@ public class DataObjectManager implements DataObjectManagerGUIInterface{
        domo.notifyTranslation(id, p.x, p.y);
     }
     
-    /**
-     * Upobjectates the objectata from the given objectataObject, but 
- objectoes not store this object. Insteaobject it searches for
- the iobject anobject changes the objects objectata which is founobject.
- If the iobject is not founobject, createNewObject is calleobject with 
- the objectataObject.
-     * 
-     * @param dataObject the objectataObject which shoulobject contain
-         all objectata.
-     */
-    public void updataData(DataObjectInterface dataObject){
-        
-        long id = dataObject.getID();
-        
-        if(!data.containsKey(id))
-            createNewObject(dataObject);
-        else{
-            
-            float x = dataObject.getXf();
-            float y = dataObject.getYf();
-            float z = dataObject.getZf();
-            double rotation_x = dataObject.getRotationX();
-            double rotation_y = dataObject.getRotationY();
-            double rotation_z = dataObject.getRotationZ();
-            double scale = dataObject.getScale();
-            String name = dataObject.getName();
-            
-            DataObject d = data.get(id);
-
-            Point p = ct.transformCoordinatesInt(x, y, d.getWidthf()*(float)scale, 
-                    d.getHeightf()*(float) scale);
-            
-            if(d.getX() != x)
-                dc.em.setX(p.x, ct.transformWidth(d.getWidthf()));
-            if(d.getX() != y)
-                dc.em.setY(p.y, ct.transformHeight(d.getHeightf()));
-            
-            d.setCoordinates(x, y, z);
-            d.setRotationX(rotation_x);
-            d.setRotationY(rotation_y);
-            d.setRotationZ(rotation_z);
-            d.setScale(scale);
-            d.setName(name);
-    
-            domo.notifyChange(id, p.x, p.y, name);
-        }
-    }
-    
     @Override
     public DataObjectInterface getObject(long id){
         return data.get(id);
+    }
+    
+    @Override
+    public TransformedObjectInterface getTransformedObject(long id){
+
+        return createTransformedObject(data.get(id));
+    }
+    
+    private TransformedObjectInterface createTransformedObject(DataObject object){
+        float x = object.getXf();
+        float y = object.getYf();
+        float widthf = object.getWidthf();
+        float heightf = object.getHeightf();
+        float scale = (float)object.getScale();
+        
+        Point p = ct.transformCoordinatesInt(x, y, widthf* scale, heightf* scale);
+        int width = ct.transformWidth(widthf);
+        int height = ct.transformHeight(heightf);
+        
+        TransformedObject t = new TransformedObject(object.getID(), p.x, p.y, width, height,
+                object.getScale(), ct.getRotation(object), object.getName(),
+                object.getType(), object.getImage());
+        return t;
     }
 
     @Override

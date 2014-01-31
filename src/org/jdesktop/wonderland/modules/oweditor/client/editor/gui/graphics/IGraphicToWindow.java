@@ -4,7 +4,7 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.geom.AffineTransform;
 
-import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.TranslatedObjectInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.TransformedObjectInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.IWindowToGraphic;
 
 public interface IGraphicToWindow {
@@ -44,7 +44,7 @@ public interface IGraphicToWindow {
      * @param dataObject The data object containing all information
      * for the shape to be created.
      */
-    public void createShape(TranslatedObjectInterface dataObject);
+    public void createShape(TransformedObjectInterface dataObject);
     
     /**
      * Creates a new dragging rectangle. 

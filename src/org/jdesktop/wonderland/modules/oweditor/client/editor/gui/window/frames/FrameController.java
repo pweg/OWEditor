@@ -29,7 +29,7 @@ public class FrameController implements IFrame{
         mainScrollPanel.setWheelScrollingEnabled(false);
 
 
-        mainframe = new MainFrame(mainScrollPanel);
+        mainframe = new MainFrame(mainScrollPanel, this);
     }
     
     @Override

@@ -1,6 +1,6 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces;
 
-import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.TranslatedObjectInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.TransformedObjectInterface;
 
 
 /**
@@ -19,7 +19,7 @@ public interface IDataObjectObserver {
      * 
      * @param dataObject the object which has been changed.
      */
-    public void notifyCreation(TranslatedObjectInterface dataObject);
+    public void notifyCreation(TransformedObjectInterface dataObject);
     
     public void notifyTranslation(long id, int x, int y);
     

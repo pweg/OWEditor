@@ -91,4 +91,8 @@ public interface IWindowToFrame {
     public void drawShapes(Graphics2D g2, AffineTransform at);
 
 
+    public void undo();
+    
+    public void redo();
+
 }

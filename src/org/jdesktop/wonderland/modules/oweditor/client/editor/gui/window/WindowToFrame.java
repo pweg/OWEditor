@@ -64,4 +64,15 @@ public class WindowToFrame implements IWindowToFrame{
         wc.graphic.drawShapes(g2, at);
     }
 
+    @Override
+    public void undo() {
+        wc.adapter.undo();
+    }
+
+    @Override
+    public void redo() {
+        wc.adapter.redo();
+    }
+
+
 }

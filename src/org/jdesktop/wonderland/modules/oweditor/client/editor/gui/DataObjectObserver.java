@@ -2,7 +2,7 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.gui;
 
 import java.util.logging.Logger;
 
-import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.TranslatedObjectInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.TransformedObjectInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.IDataObjectObserver;
 
 /**
@@ -29,7 +29,7 @@ public class DataObjectObserver implements
     }
     
     @Override
-    public void notifyCreation(TranslatedObjectInterface dataObject) {
+    public void notifyCreation(TransformedObjectInterface dataObject) {
         gc.window.createShape(dataObject);
         gc.window.repaint();
     }

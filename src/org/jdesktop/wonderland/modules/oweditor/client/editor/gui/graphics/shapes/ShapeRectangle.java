@@ -152,7 +152,6 @@ public class ShapeRectangle extends ShapeObject{
 
         //Draw image
         AffineTransform original =  g.getTransform();
-        //g.setTransform(at);
         g.rotate(Math.toRadians(rotation), 
                 r.getCenterX(), 
                 r.getCenterY());

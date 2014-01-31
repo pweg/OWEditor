@@ -12,7 +12,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.logging.Logger;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataObjectInterface;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.TranslatedObjectInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.TransformedObjectInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.DraggingObject;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.ShapeEllipse;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.ShapeObject;
@@ -251,7 +251,7 @@ public class ShapeManager {
      * 
      * @param dataObject which is the updated object.
      */
-    public void setDataUpdate(TranslatedObjectInterface dataObject) {
+    public void setDataUpdate(TransformedObjectInterface dataObject) {
         
         if(dataObject == null)
             return;
@@ -281,7 +281,7 @@ public class ShapeManager {
      * 
      * @param dataObject which needs to be created.
      */
-    private void createShape(TranslatedObjectInterface dataObject){
+    private void createShape(TransformedObjectInterface dataObject){
         
         long id = dataObject.getID();
         int x = dataObject.getX();

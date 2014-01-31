@@ -26,15 +26,6 @@ public interface AdapterObserverInterface {
      */
     public void notifyObjectCreation(DataObjectInterface dataObject);
     
-    /**
-     * Updates a data object with the data stored in the given
-     * object.
-     * 
-     * @param dataObject The dataObject which holds all data necessary
-     * for updating the data object.
-     */
-    public void notifyObjectChange(DataObjectInterface dataObject);
-    
     
     /**
      * Notifies the translation event of an object.

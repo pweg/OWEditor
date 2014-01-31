@@ -67,6 +67,7 @@ public class GUIController implements IGUIController{
     @Override
     public void registerDataManager(DataObjectManagerGUIInterface dm) {
         dmi = dm;
+        ac.registerDataManager(dm);
         window.registerDataManager(dm);
     }
 

@@ -29,11 +29,6 @@ public class AdapterObserver implements AdapterObserverInterface{
     }
 
     @Override
-    public void notifyObjectChange(DataObjectInterface dataObject) {
-        dm.updataData(dataObject);
-    }
-
-    @Override
     public void notifyObjectCreation(DataObjectInterface dataObject) {
         dm.createNewObject((DataObject) dataObject);
     }

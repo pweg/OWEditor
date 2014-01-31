@@ -121,4 +121,8 @@ public interface IAdapterCommunication {
      */
     public void overwriteKMZ(long id, String image_url, double x, double y, double z, double rot_x, double rot_y, double rot_z, double scale);
 
+    public void undo();
+    
+    public void redo();
+    
 }
