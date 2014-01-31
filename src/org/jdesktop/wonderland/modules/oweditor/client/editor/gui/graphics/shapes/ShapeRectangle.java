@@ -2,6 +2,7 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shap
 
 import java.awt.AlphaComposite;
 import java.awt.Color;
+import java.awt.Composite;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Paint;
@@ -42,6 +43,7 @@ public class ShapeRectangle extends ShapeObject{
     //These variables are used to determine, where the name of the object should be.
     private int nameBoundsX = GUISettings.NAMEPOSITIONINX;
     private int nameBoundsAbove = GUISettings.NAMEPOSITIONINY;
+    private int imageMargin = GUISettings.IMGMARGIN;
         
     /**
      * Creates a new ObjectRectangle shape instance.
@@ -106,14 +108,61 @@ public class ShapeRectangle extends ShapeObject{
         if(img == null)
             return;
         
-        Rectangle r = printShape.getBounds();
+        //Create an unrotated transformed shape from the scaled one
+        //Interestingly using just the affine transform on the graphics2d
+        //does not seem to work every time. Zooming and right clicking
+        //moves the shape when affine transform is used on g.
+        Shape transformed =  at.createTransformedShape(scaledShape);
+        Rectangle r = transformed.getBounds();
+        int imageMargin = (int) Math.round(this.imageMargin*at.getScaleX());
+
+        //Make the image size proportional to the shape size
+        int width = r.width-2*imageMargin;
+        int height = r.height-2*imageMargin;
+        int iwidth = img.getWidth();
+        int iheight= img.getHeight();
+        double scale_w = (double)width/iwidth;
+        double scale_h = (double)height/iheight;
+
+        int iheight_s = (int) Math.round(iheight * scale_w);
+        int iwidth_s = (int) Math.round(iwidth * scale_h);
+        
+        if(iheight_s <= height){
+            iwidth=width;
+            iheight=iheight_s;
+        }else if(iwidth_s <= width){
+            iwidth=iwidth_s;
+            iheight=height;
+        }else{
+            iwidth= width;
+            iheight=height;
+        }
+        
+        int x = r.x+(int) Math.round((width-iwidth)/2);
+        int y = r.y+(int) Math.round((height-iheight)/2);
+        
+        x=Math.max(x+imageMargin, r.x);
+        y=Math.max(y+imageMargin, r.y);
+        
+        //Watermark image
         AlphaComposite alpha = AlphaComposite.getInstance(
-                AlphaComposite.SRC_OVER, 0.3f);
-        g.setComposite(alpha);
+                AlphaComposite.SRC_OVER, GUISettings.ALPHA);
+        Composite cur_comp = g.getComposite();
         g.setColor(Color.white);
 
-        g.drawImage(img,r.x+5,r.y+5,r.width-10, r.height-10, null);
-        //g.dispose();
+        //Draw image
+        AffineTransform original =  g.getTransform();
+        //g.setTransform(at);
+        g.rotate(Math.toRadians(rotation), 
+                r.getCenterX(), 
+                r.getCenterY());
+        g.fillRect(x, y, iwidth, iheight);
+        g.setComposite(alpha);
+        g.drawImage(img,x,y,iwidth, iheight, null);
+        
+        //Reset graphics
+        g.setTransform(original);
+        g.setComposite(cur_comp);
 
     }
     

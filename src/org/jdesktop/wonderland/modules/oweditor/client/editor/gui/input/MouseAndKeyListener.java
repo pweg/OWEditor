@@ -107,7 +107,8 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
                  
              }
         }
-        ic.window.repaint();    
+        if(strategy != null)
+            ic.window.repaint();    
     }
     
     public void mouseClicked(MouseEvent e) {

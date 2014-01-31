@@ -5,6 +5,8 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.JPanel;
 
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.GUISettings;
+
 
 public class ImagePanel extends JPanel{
 
@@ -12,7 +14,7 @@ public class ImagePanel extends JPanel{
      * 
      */
     private static final long serialVersionUID = 1L;
-    private static final int MARGIN = 3;
+    private static final int MARGIN = GUISettings.IMGMARGINPANEL;
     
     private BufferedImage img = null;
     
@@ -28,6 +30,7 @@ public class ImagePanel extends JPanel{
         super.paint(g);
         if(img != null){
             
+            //Calculate the right width proportional to the panel
             int iwidth = img.getWidth();
             int iheight= img.getHeight();
             

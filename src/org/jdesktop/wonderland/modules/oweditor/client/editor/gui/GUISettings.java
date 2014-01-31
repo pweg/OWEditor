@@ -62,6 +62,11 @@ public class GUISettings {
     public static int NAMEPOSITIONOUTX = 0;
     public static int NAMEPOSITIONOUTY = -5;
     
+    //The margin of images in objects and its watermark value.
+    public static int IMGMARGIN = 5;
+    public static int IMGMARGINPANEL = 3;
+    public static float ALPHA = 0.65f;
+    
     /*
      * Tooltipin states the distance of the text to the border surrounding it.
      * Tooltipmagrin gives the distance of the tooltip to the mouse.
