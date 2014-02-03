@@ -28,7 +28,7 @@ public class GUIObserver implements GUIObserverInterface{
     }
 
     @Override
-    public void notifyTranslation(long id, int x, int y ){
+    public void notifyTranslationXY(long id, int x, int y ){
         ac.sc.translate(id,x,y);
     }
     

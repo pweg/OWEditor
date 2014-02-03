@@ -80,10 +80,10 @@ public class GUISettings {
      */
     
     //main frame
-    public static int MAINWIDTH = 800;
-    public static int MAINHEIGHT = 600;
+    public static int MAINWIDTH = 850;
+    public static int MAINHEIGHT = 650;
     public static int MAINPOSX = 200;
-    public static int MAINPOSY = 200;
+    public static int MAINPOSY = 180;
     
     //other frames
     public static int FRAMEPOSX = MAINPOSX +100;

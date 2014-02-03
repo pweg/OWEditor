@@ -62,6 +62,7 @@ public class FrameController implements IFrame{
     @Override
     public void addKeyListener(KeyListener mkListener){
         mainframe.addKeyListener(mkListener);
+        drawingPan.addKeyListener(mkListener);
     }
     
     @Override

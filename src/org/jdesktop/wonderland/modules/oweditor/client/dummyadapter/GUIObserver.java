@@ -23,6 +23,7 @@ public class GUIObserver implements GUIObserverInterface{
     private static final ResourceBundle BUNDLE = ResourceBundle.getBundle(
             "org/jdesktop/wonderland/modules/oweditor/client/resources/Bundle");
     
+    //This server object is used for import conflict resolution
     private ServerObject save = null;
     
     //dummy bounds for new objects
@@ -42,9 +43,9 @@ public class GUIObserver implements GUIObserverInterface{
     }
 
     @Override
-    public void notifyTranslation(long id, int x, int y) {
+    public void notifyTranslationXY(long id, int x, int y) {
 
-        ServerObject object = ac.ses.getObject(id);
+        ServerObject object = ac.server.getObject(id);
         if(object == null)
             return ;
 
@@ -53,12 +54,17 @@ public class GUIObserver implements GUIObserverInterface{
         object.x = p.x;
         object.y = p.y;      
         
-        ac.sua.serverTranslationChangeEvent(id);
+        ac.da.serverTranslationChangeEvent(id);
     }
 
     @Override
     public void notifyRemoval(long id) {
-        ac.sua.serverRemovalEvent(id);
+        ac.da.serverRemovalEvent(id);
+    }
+    
+    @Override
+    public void undoRemoval(long id){
+        ac.da.createObject(ac.server.getObject(id));
     }
 
     @Override
@@ -71,7 +77,7 @@ public class GUIObserver implements GUIObserverInterface{
         ac.bom.clearBackup();
         
         for(long id : object_ids){
-            ServerObject object = ac.ses.getObject(id);
+            ServerObject object = ac.server.getObject(id);
             ac.bom.addObject(object);
         }
     }
@@ -79,7 +85,7 @@ public class GUIObserver implements GUIObserverInterface{
     @Override
     public void notifyPaste(long id, int x, int y) {
         
-        ServerObject o = ac.ses.getObject(id);
+        ServerObject o = ac.server.getObject(id);
         if(o == null)
             return;
         String name = BUNDLE.getString("CopyName")+o.name;
@@ -88,32 +94,53 @@ public class GUIObserver implements GUIObserverInterface{
         
         ac.bom.addTranslation(id, name, p.x, p.y, 0);
         
-        ServerObject clone = ac.ses.copyObject(id, name);
-        ac.sua.serverCopyEvent(clone);
+        ServerObject clone = ac.server.copyObject(id, name);
+        ac.bom.addCreatedID(clone.id);
+        ac.da.serverCopyEvent(clone);
+    }
+
+    @Override
+    public void undoObjectCreation(){
+        long id = ac.bom.getCreationUndoID();
+
+        if(id == -1)
+            return;
+        
+        notifyRemoval(id);
+    }
+    
+    @Override
+    public void redoObjectCreation(){
+        long id = ac.bom.getCreationRedoID();
+        
+        if(id == -1)
+            return;
+        
+        ac.da.createObject(ac.server.getObject(id));
     }
 
     @Override
     public void notifyRotation(long id, int x, int y, double rotation) {
-        ServerObject object = ac.ses.getObject(id);
+        ServerObject object = ac.server.getObject(id);
         
         if(object == null)
             return ;
    
         object.rotationX = rotation;
-        notifyTranslation(id, x,y);
-        ac.sua.serverRotationEvent(id);
+        notifyTranslationXY(id, x,y);
+        ac.da.serverRotationEvent(id);
     }
 
     @Override
     public void notifyScaling(long id, int x, int y, double scale) {
-        ServerObject object = ac.ses.getObject(id);
+        ServerObject object = ac.server.getObject(id);
         
         if(object == null)
             return ;
         
         object.scale = scale;        
-        notifyTranslation(id, x,y);
-        ac.sua.serverScalingEvent(id);
+        notifyTranslationXY(id, x,y);
+        ac.da.serverScalingEvent(id);
     }
 
     @Override
@@ -136,7 +163,7 @@ public class GUIObserver implements GUIObserverInterface{
             double z, double rotationX, double rotationY, double rotationZ,
             double scale) {
         
-        ServerObject object = ac.ses.getObject(name);
+        ServerObject object = ac.server.getObject(name);
         BufferedImage img = null;
         
         try {
@@ -154,53 +181,44 @@ public class GUIObserver implements GUIObserverInterface{
             return object.id;
         }else{
 
-            ServerObject tmp = ac.ses.createObject(0, (float)x, (float)y, (float)z, 
+            ServerObject tmp = ac.server.createObject((float)x, (float)y, (float)z, 
                 rotationX, rotationY, rotationZ, scale, 
                 (float)bounds[0], (float)bounds[1], name, false, img);
-            ac.sua.createObject(tmp);
+            ac.bom.addCreatedID(tmp.id);
+            ac.da.createObject(tmp);
             return -1;
         }
     }
 
     @Override
-    public void notifyCopy(long id, String image_url, double x, double y,
-            double z, double rot_x, double rot_y, double rot_z, double scale) {
+    public void importConflictCopy(long id) {
         
        
-        ServerObject o = ac.ses.getObject(id);
-
-        BufferedImage img = null;
-        
-        try {
-            img = ImageIO.read(new File(image_url));
-            
-        } catch (IOException e) {
-            System.err.println("Reading image was not possible");
-        }
+        ServerObject o = ac.server.getObject(id);
         
         if(o == null)
             return;
         
         String name = BUNDLE.getString("CopyName")+o.name;
-        ServerObject clone = ac.ses.copyObject(id, name);
-        clone.x=(float) x;
-        clone.y=(float) y;
-        clone.z=(float) z;
-        clone.rotationX=rot_x;
-        clone.rotationY=rot_y;
-        clone.rotationZ=rot_z;
-        clone.scale=scale;
-        clone.image=img;
-        ac.sua.createObject(clone);
+        ServerObject clone = ac.server.copyObject(id, name);
+        clone.x=(float) save.x;
+        clone.y=(float) save.y;
+        clone.z=(float) save.z;
+        clone.rotationX=save.rotationX;
+        clone.rotationY=save.rotationY;
+        clone.rotationZ=save.rotationZ;
+        clone.scale=save.scale;
+        clone.image=save.image;
+        ac.bom.addCreatedID(clone.id);
+        ac.da.createObject(clone);
     }
 
     @Override
-    public void notifyOverwrite(long id, String image_url, double x, double y,
-            double z, double rot_x, double rot_y, double rot_z, double scale) {
+    public void importConflictOverwrite(long id) {
         //No modules are used in this dummy server,
-        //so simple copy will suffice.
+        //so simple copy hast to suffice.
         
-        notifyCopy(id,image_url, x, y,z, rot_x, rot_y, rot_z, scale);
+        importConflictCopy(id);
         
     }
 

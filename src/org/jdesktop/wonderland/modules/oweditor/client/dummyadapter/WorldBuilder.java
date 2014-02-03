@@ -13,7 +13,7 @@ import java.util.ArrayList;
  */
 public class WorldBuilder {
     
-    private ServerUpdateAdapter sua = null;
+    private DataUpdater sua = null;
     private DummyAdapterController ac = null;
     
     /**
@@ -21,7 +21,7 @@ public class WorldBuilder {
      * 
      * @param sua: a serverUpdate instance.
      */
-    public WorldBuilder( DummyAdapterController ac, ServerUpdateAdapter sua){
+    public WorldBuilder( DummyAdapterController ac, DataUpdater sua){
         this.sua = sua;
         this.ac = ac;
     }
@@ -38,7 +38,7 @@ public class WorldBuilder {
      */
     private void initShapes() {  
 
-        ArrayList<ServerObject> objects = ac.ses.getObjects();
+        ArrayList<ServerObject> objects = ac.server.getObjects();
         
         for(ServerObject object : objects){
             sua.createObject(object);

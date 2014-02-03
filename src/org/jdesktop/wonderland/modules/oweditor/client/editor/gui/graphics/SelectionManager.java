@@ -161,10 +161,14 @@ public class SelectionManager {
     /**
      * Deletes all shapes, which are in the current selection.
      */
-    public void deleteCurrentSelection(){        
+    public void deleteCurrentSelection(){   
+        
+        ArrayList<Long> ids = new ArrayList<Long>();
+        
         for(ShapeObject shape : selectedShapes){
-            smi.setObjectRemoval(shape.getID());
+            ids.add(shape.getID());
         }
+        smi.setObjectRemoval(ids);
         smi.clearCurSelection();
     }
     

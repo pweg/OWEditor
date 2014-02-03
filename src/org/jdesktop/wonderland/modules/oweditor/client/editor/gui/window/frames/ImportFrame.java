@@ -610,7 +610,7 @@ public class ImportFrame extends javax.swing.JFrame {
         long id = fc.window.importKMZ(name, image_url, x, y, z, rot_x, rot_y, rot_z, scale);
         
         if(id != -1){
-            Object[] options = {BUNDLE.getString("MakeCopy"),
+            Object[] options = {BUNDLE.getString("UseExisting"),
                     BUNDLE.getString("Overwrite"),
                     BUNDLE.getString("Cancel")};
             int ret2 = JOptionPane.showOptionDialog(this,
@@ -624,10 +624,10 @@ public class ImportFrame extends javax.swing.JFrame {
             
             //copy
             if(ret2 == 0){
-                fc.window.copyKMZ(id,image_url, x, y, z, rot_x, rot_y, rot_z, scale);                
+                fc.window.importConflictCopy(id);                
             }//overwrite
             else if(ret2 == 1){
-                fc.window.overwriteKMZ(id, name, image_url, x, y, z, rot_x, rot_y, rot_z, scale);
+                fc.window.importConflictOverwrite(id);
             }//cancel
             else if(ret2==2){
                 return;

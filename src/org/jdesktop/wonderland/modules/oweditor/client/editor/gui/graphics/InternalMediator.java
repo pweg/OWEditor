@@ -65,8 +65,8 @@ public class InternalMediator implements IInternalMediator{
     }
 
     @Override
-    public void setObjectRemoval(long id) {
-        frame.setObjectRemoval(id);
+    public void setObjectRemoval(ArrayList<Long> ids) {
+        frame.setObjectRemoval(ids);
     }
 
     @Override

@@ -14,8 +14,8 @@ public class DummyAdapterController implements AdapterControllerMainControllerIn
     
     
     protected GUIObserver cua = null;
-    protected ServerUpdateAdapter sua = null;
-    protected ServerSimulator ses = null;
+    protected DataUpdater da = null;
+    protected ServerSimulator server = null;
     protected CoordinateTranslator ct = null;
     protected BackupManager bom = null;
     
@@ -26,8 +26,8 @@ public class DummyAdapterController implements AdapterControllerMainControllerIn
     @Override
     public void initialize() {
         cua = new GUIObserver(this);
-        sua = new ServerUpdateAdapter(this);
-        ses = new ServerSimulator();
+        da = new DataUpdater(this);
+        server = new ServerSimulator();
         ct = new CoordinateTranslator();
         bom = new BackupManager();
         
@@ -35,12 +35,12 @@ public class DummyAdapterController implements AdapterControllerMainControllerIn
     }
     
     private void registerComponents(){
-        ses.registerServerUpdate(sua);
+        server.registerServerUpdate(da);
     }
 
     @Override
     public void registerDataUpdateInterface(AdapterObserverInterface i) {
-       sua.setDataUpdateInterface(i);
+       da.setDataUpdateInterface(i);
         
     }
 
@@ -51,7 +51,7 @@ public class DummyAdapterController implements AdapterControllerMainControllerIn
 
     @Override
     public void getCurrentWorld() {
-        WorldBuilder builder = new WorldBuilder(this, sua);
+        WorldBuilder builder = new WorldBuilder(this, da);
         builder.build();
     }
 

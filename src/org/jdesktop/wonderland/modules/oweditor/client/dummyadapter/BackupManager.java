@@ -1,5 +1,6 @@
 package org.jdesktop.wonderland.modules.oweditor.client.dummyadapter;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -15,10 +16,16 @@ public class BackupManager {
     
     private HashMap<Long, BackupObject> backup = null;
     private HashMap<String, Long> stringToID = null;
+
+    private ArrayList<Long> pasteUndo = null;
+    private ArrayList<Long> pasteRedo = null;
     
     public BackupManager(){
         backup = new LinkedHashMap<Long, BackupObject>();
         stringToID = new LinkedHashMap<String, Long>();
+
+        pasteUndo = new ArrayList<Long>();
+        pasteRedo = new ArrayList<Long>();
     }
     
     public BackupObject getObject(long id){
@@ -56,6 +63,7 @@ public class BackupManager {
     }
     
     public void clearBackup(){
+        
         HashMap<Long, BackupObject> new_map = new LinkedHashMap<Long, BackupObject>();
 
         if(stringToID.size() > 0){
@@ -86,6 +94,55 @@ public class BackupManager {
     
     public boolean translationContainsKey(String name){
         return stringToID.containsKey(name);
+    }
+    
+    /**
+     * Adds a newly generated id of an 
+     * object which was newly created by the user.
+     * The creation could be through import, copy, etc.
+     * 
+     * @param id The id to add.
+     */
+    public void addCreatedID(long id){
+        pasteUndo.add(id);
+    }
+
+    /**
+     * Returns the last object id, which
+     * was generated during a creation action.
+     * This is used for a undo action.
+     * 
+     * @return A id in long.
+     */
+    public long getCreationUndoID(){
+        
+        if(pasteUndo.size() <= 0)
+            return -1;
+
+        long id = pasteUndo.get(pasteUndo.size()-1);
+         
+        pasteUndo.remove(pasteUndo.size()-1);  
+        pasteRedo.add(id);
+        return id;
+    }
+    
+    /**
+     * Returns the last id for the creation 
+     * redo action.
+     * 
+     * @return A id in long.
+     */
+    public long getCreationRedoID(){
+        
+        if(pasteRedo.size() <= 0)
+            return -1;
+
+        long id = pasteRedo.get(pasteRedo.size()-1);
+         
+        pasteRedo.remove(pasteRedo.size()-1);  
+        pasteUndo.add(id);
+        return id;
+        
     }
 
 }

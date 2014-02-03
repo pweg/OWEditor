@@ -51,36 +51,15 @@ public interface IWindowToFrame {
      * existing model.
      * 
      * @param id The id of the model, which will be copied.
-     * @param image_url The image of the new object.
-     * @param x The x coordinate of the new object.
-     * @param y The y coordinate of the new object.
-     * @param z The z coordinate of the new object.
-     * @param rot_x The x rotation of the new object.
-     * @param rot_y The y rotation of the new object.
-     * @param rot_z The z rotation of the new object.
-     * @param scale The scale of the new object.
      */
-    public void copyKMZ(long id, String image_url, 
-            double x, double y, double z, double rot_x,
-            double rot_y, double rot_z, double scale);
+    public void importConflictCopy(long id);
 
     /**
      * Overwrites a module during conflict resolution.
      * 
      * @param id The id of the model, which will be copied.
-     * @param image_url The image of the new object.
-     * @param x The x coordinate of the new object.
-     * @param y The y coordinate of the new object.
-     * @param z The z coordinate of the new object.
-     * @param rot_x The x rotation of the new object.
-     * @param rot_y The y rotation of the new object.
-     * @param rot_z The z rotation of the new object.
-     * @param scale The scale of the new object.
      */
-    public void overwriteKMZ(long id, String name, String image_url, 
-            double x, double y, double z, 
-            double rot_x, double rot_y, double rot_z, 
-            double scale);
+    public void importConflictOverwrite(long id);
 
     /**
      * Draws all the shapes.

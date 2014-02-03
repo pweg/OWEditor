@@ -20,13 +20,52 @@ public interface GUIObserverInterface {
      * @param x the x coordinate, the object is moved to.
      * @param y the y coordinate, the object is moved to.
      */
-    public void notifyTranslation(long id, int x, int y);
+    public void notifyTranslationXY(long id, int x, int y);
     
+    /**
+     * Deletes an object.
+     * 
+     * @param id The id of the object.
+     */
     public void notifyRemoval(long id);
     
+    /**
+     * Undos object removal.
+     * 
+     * @param id The id of the deleted object.
+     */
+    public void undoRemoval(long id);
+    
+    /**
+     * Notifies a copy command, which makes a backup
+     * of the given ids, in case they are deleted later
+     * on.
+     * 
+     * @param object_ids All ids, which should be backed up.
+     */
     public void notifyCopy(ArrayList<Long> object_ids);
     
+    /**
+     * Notifies a paste order, which copies previously 
+     * copied objects.
+     * 
+     * @param id The id of the object, which should be copied.
+     * @param x The x coordinate of the new object.
+     * @param y The y coordinate of the new object.
+     */
     public void notifyPaste(long id, int x, int y);
+    
+    /**
+     * Undoes creational actions, which generate a new
+     * object, like the paste, or import command.
+     */
+    public void undoObjectCreation();
+
+    /**
+     * Redoes creational actions, which generate a new
+     * object, like the paste, or import command.
+     */
+    public void redoObjectCreation();
 
     /**
      * Notifies a simple rotation, which means a rotation around
@@ -86,33 +125,17 @@ public interface GUIObserverInterface {
 
     /**
      * Used during a conflict resolution. Copies an
-     * existing model.
+     * existing module.
      * 
-     * @param id The id of the model, which will be copied.
-     * @param image_url The image of the new object.
-     * @param x The x coordinate of the new object.
-     * @param y The y coordinate of the new object.
-     * @param z The z coordinate of the new object.
-     * @param rot_x The x rotation of the new object.
-     * @param rot_y The y rotation of the new object.
-     * @param rot_z The z rotation of the new object.
-     * @param scale The scale of the new object.
+     * @param id The id of the module, which will be copied.
      */
-    public void notifyCopy(long id, String image_url, double x, double y, double z, double rot_x, double rot_y, double rot_z, double scale);
+    public void importConflictCopy(long id);
   
     /**
      * Overwrites a module during conflict resolution.
      * 
-     * @param id The id of the model, which will be copied.
-     * @param image_url The image of the new object.
-     * @param x The x coordinate of the new object.
-     * @param y The y coordinate of the new object.
-     * @param z The z coordinate of the new object.
-     * @param rot_x The x rotation of the new object.
-     * @param rot_y The y rotation of the new object.
-     * @param rot_z The z rotation of the new object.
-     * @param scale The scale of the new object.
+     * @param id The id of the module, which will be overwritten.
      */
-    public void notifyOverwrite(long id, String image_url, double x, double y, double z, double rot_x, double rot_y, double rot_z, double scale);
+    public void importConflictOverwrite(long id);
 
 }

@@ -39,6 +39,8 @@ public class UndoBar extends JToolBar{
         
         this.add(undo);
         this.add(redo);
+        undo.setFocusable(false);
+        redo.setFocusable(false);
     }
 
     private void undo(ActionEvent evt) {

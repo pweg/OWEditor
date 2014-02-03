@@ -2,6 +2,7 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.frames
 
 import java.awt.BorderLayout;
 import java.awt.Container;
+import java.awt.event.KeyListener;
 import java.util.ResourceBundle;
 
 import javax.swing.JFrame;
@@ -39,7 +40,8 @@ public class MainFrame extends JFrame {
         
         undoBar = new UndoBar(frame);
         bottomBar = new BottomToolBar();
-        
+        content.setFocusable(false);
+        undoBar.setFocusable(false);
         content.add(undoBar, BorderLayout.NORTH);
         content.add(bottomBar, BorderLayout.SOUTH);
         content.add(mainScrollPanel);
@@ -51,10 +53,19 @@ public class MainFrame extends JFrame {
         setLocation(GUISettings.MAINPOSX, GUISettings.MAINPOSY);  
         setTitle(BUNDLE.getString("FrameTitle"));
         setVisible(false); 
+        this.requestFocus();
     }
     
     public BottomToolBar getBottomToolBar(){
         return bottomBar;
+    }
+    
+    
+    @Override
+    public synchronized void addKeyListener(KeyListener l){
+        super.addKeyListener(l);
+        getContentPane().addKeyListener(l);  
+        undoBar.addKeyListener(l);
     }
 
     

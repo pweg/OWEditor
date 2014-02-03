@@ -10,7 +10,7 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.Dat
  * @author Patrick
  *
  */
-public class ServerUpdateAdapter {
+public class DataUpdater {
     
     private DummyAdapterController ac = null;
     private AdapterObserverInterface dui = null;
@@ -21,7 +21,7 @@ public class ServerUpdateAdapter {
      * 
      * @param ac: the adapter controller instance.
      */
-    public ServerUpdateAdapter(DummyAdapterController ac){
+    public DataUpdater(DummyAdapterController ac){
         this.ac = ac;
     }
     
@@ -96,7 +96,7 @@ public class ServerUpdateAdapter {
             return;
         }
         
-        ServerObject so = ac.ses.getObject(id);
+        ServerObject so = ac.server.getObject(id);
         
         if(so == null)
             return;
@@ -129,7 +129,7 @@ public class ServerUpdateAdapter {
             return;
         }
         
-        ServerObject so = ac.ses.getObject(id);
+        ServerObject so = ac.server.getObject(id);
         
         if(so == null)
             return;
@@ -143,7 +143,7 @@ public class ServerUpdateAdapter {
             return;
         }
         
-        ServerObject so = ac.ses.getObject(id);
+        ServerObject so = ac.server.getObject(id);
         
         if(so == null)
             return;

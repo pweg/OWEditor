@@ -1,5 +1,6 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window;
 
+import java.awt.Point;
 import java.util.ArrayList;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.IAdapterCommunication;
@@ -24,13 +25,14 @@ public class WindowToGraphic implements IWindowToGraphic{
     }
 
     @Override
-    public void setObjectRemoval(long id) {
-        adapter.setObjectRemoval(id);
+    public void setObjectRemoval(ArrayList<Long> ids) {
+        adapter.setObjectRemoval(ids);
     }
 
     @Override
-    public void setTranslationUpdate(long id, int x, int y) {
-        adapter.setTranslationUpdate(id, x, y);
+    public void setTranslationUpdate(ArrayList<Long> ids, 
+            ArrayList<Point> coordinates) {
+        adapter.setTranslationUpdate(ids, coordinates);
     }
 
     @Override
@@ -39,17 +41,21 @@ public class WindowToGraphic implements IWindowToGraphic{
     }
 
     @Override
-    public void setPasteUpdate(long id, int x, int y) {
-        adapter.setPasteUpdate(id, x, y);
+    public void setPasteUpdate(ArrayList<Long> ids, ArrayList<Point> coordinates) {
+        adapter.setPasteUpdate(ids, coordinates);
     }
 
     @Override
-    public void setRotationUpdate(long id, int x, int y, double rotation) {
-        adapter.setRotationUpdate(id, x, y, rotation);
+    public void setRotationUpdate(ArrayList<Long> ids, 
+            ArrayList<Point> coordinates, 
+            ArrayList<Double> rotation) {
+        adapter.setRotationUpdate(ids, coordinates, rotation);
     }
 
     @Override
-    public void setScaleUpdate(long id, int x, int y, double scale) {
-        adapter.setScaleUpdate(id, x, y, scale);
+    public void setScaleUpdate(ArrayList<Long> ids, 
+            ArrayList<Point> coordinates, 
+            ArrayList<Double> scale) {
+        adapter.setScaleUpdate(ids, coordinates, scale);
     }
 }

@@ -1,27 +1,48 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.commands;
 
+import java.awt.Point;
+import java.util.ArrayList;
+
 import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.GUIObserverInterface;
 
 public class Paste implements Command{
     
-    long id;
-    int x;
-    int y;
+    ArrayList<Long> ids;
+    ArrayList<Point> coords;
     
-    public Paste(long id, int x, int y){
-        this.id = id;
-        this.x = x;
-        this.y = y;
+    public Paste(ArrayList<Long> ids, ArrayList<Point> coords){
+        this.ids = ids;
+        this.coords = coords;
+
+        //null pointer prevention
+        if(ids == null)
+            this.ids = new ArrayList<Long>();
     }
 
     @Override
     public void execute(GUIObserverInterface goi) {
-        goi.notifyPaste(id, x, y);
+        
+        try{
+            for(int i=0; i<ids.size();i++){
+                Long id = ids.get(i);
+                Point p = coords.get(i);
+                goi.notifyPaste(id, p.x, p.y);
+            }
+        }catch(Exception e){
+            System.err.println("Paste command: list size dont match");
+        }
     }
 
     @Override
     public void undo(GUIObserverInterface goi) {
-        goi.notifyRemoval(id);
+        for(long id: ids)
+            goi.undoObjectCreation();
+    }
+
+    @Override
+    public void redo(GUIObserverInterface goi) {
+        for(long id: ids)
+            goi.redoObjectCreation();
     }
     
 

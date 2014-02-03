@@ -1,5 +1,6 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.gui;
 
+import java.awt.Point;
 import java.util.ArrayList;
 
 public interface IAdapterCommunication {
@@ -9,16 +10,17 @@ public interface IAdapterCommunication {
      * 
      * @param id The object id.
      */
-    public void setObjectRemoval(long id);
+    public void setObjectRemoval(ArrayList<Long> ids);
     
     /**
      * Calls the adapter for a translation update.
      * 
-     * @param id The object id making the translation.
-     * @param x The new x coordinate.
-     * @param y The new y coordinate.
+     * @param ids The object ids making the translation.
+     * @param coordinates The coordinates of each object. 
+     * The list should organized like the ids, so that the position
+     * of the id is the same position in the coordinates.
      */
-    public void setTranslationUpdate(long id, int x, int y);
+    public void setTranslationUpdate(ArrayList<Long> ids, ArrayList<Point> coordinates);
     
     /**
      * Calls the adapter for a copy update, which means
@@ -34,31 +36,38 @@ public interface IAdapterCommunication {
      * the given id will be copied to the given 
      * coordinates.
      * 
-     * @param id The id of the object which should be copied.
-     * @param x The x coordinate of the paste object.
-     * @param y The y coordinate of the paste object.
+     * @param ids The ids of the objects which should be pasted.
+     * @param coordinates The coordinates of each paste object. 
+     * The list should organized like the ids, so that the position
+     * of the id is the same position in the coordinates.
      */
-    public void setPasteUpdate(long id, int x, int y);
+    public void setPasteUpdate(ArrayList<Long> ids, ArrayList<Point> coordinates);
     
     /**
      * Calls the adapter for a rotation update.
      * 
-     * @param id The id of the object to rotate.
-     * @param x The new x coordinate of the rotated object.
-     * @param y The new y coordinate of the rotated object.
-     * @param rotation The new rotation value of the object.
+     * @param ids The ids of the objects to rotate.
+     * @param coordinates The coordinates of each object. 
+     * The list should organized like the ids, so that the position
+     * of the id is the same position in the coordinates.
+     * @param rotation The new rotation values of the objects, which should
+     * be organized like the coordinates.
      */
-    public void setRotationUpdate(long id, int x, int y, double rotation);
+    public void setRotationUpdate(ArrayList<Long> ids, ArrayList<Point> coordinates,
+            ArrayList<Double> rotation);
 
     /**
      * Calls the adapter for a scale update.
      *  
-     * @param id The id of the object to scale.
-     * @param x The new x coordinate of the scaled object.
-     * @param y The new y coordinate of the scaled object.
-     * @param scale The new scale of the object.
+     * @param ids The id of the object to scale.
+     * @param coordinates The coordinates of each object. 
+     * The list should organized like the ids, so that the position
+     * of the id is the same position in the coordinates.
+     * @param scale The scale of each object, which should be 
+     * organized like the coordinates.
      */
-    public void setScaleUpdate(long id, int x, int y, double scale);
+    public void setScaleUpdate(ArrayList<Long> ids, ArrayList<Point> coordinates,
+            ArrayList<Double> scale);
 
     /**
      * Calls the adapter for pre-loading a kmz model.
@@ -91,35 +100,19 @@ public interface IAdapterCommunication {
             double scale);
 
     /**
-     * Used during a conflict resolution. Copies an
-     * existing model.
+     * Used during a conflict resolution. Uses an
+     * existing module.
      * 
-     * @param id The id of the model, which will be copied.
-     * @param image_url The image of the new object.
-     * @param x The x coordinate of the new object.
-     * @param y The y coordinate of the new object.
-     * @param z The z coordinate of the new object.
-     * @param rot_x The x rotation of the new object.
-     * @param rot_y The y rotation of the new object.
-     * @param rot_z The z rotation of the new object.
-     * @param scale The scale of the new object.
+     * @param id The id of the module, which will be copied.
      */
-    public void copyKMZ(long id, String image_url, double x, double y, double z, double rot_x, double rot_y, double rot_z, double scale);
+    public void importConflictCopy(long id);
 
     /**
      * Overwrites a module during conflict resolution.
      * 
-     * @param id The id of the model, which will be copied.
-     * @param image_url The image of the new object.
-     * @param x The x coordinate of the new object.
-     * @param y The y coordinate of the new object.
-     * @param z The z coordinate of the new object.
-     * @param rot_x The x rotation of the new object.
-     * @param rot_y The y rotation of the new object.
-     * @param rot_z The z rotation of the new object.
-     * @param scale The scale of the new object.
+     * @param id The id of the module, which will be overwritten.
      */
-    public void overwriteKMZ(long id, String image_url, double x, double y, double z, double rot_x, double rot_y, double rot_z, double scale);
+    public void importConflictOverwrite(long id);
 
     public void undo();
     

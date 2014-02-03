@@ -80,7 +80,7 @@ public interface IInternalMediator {
      * 
      * @param id The id of the shape, which should be removed.
      */
-    public void setObjectRemoval(long id);
+    public void setObjectRemoval(ArrayList<Long> ids);
 
     /**
      * Clears the current selection, which means all
@@ -129,4 +129,5 @@ public interface IInternalMediator {
      */
     public void registerWindowInterface(
             IWindowToGraphic frameInterface);
+
 }

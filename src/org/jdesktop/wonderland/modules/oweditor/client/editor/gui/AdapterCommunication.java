@@ -1,11 +1,14 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.gui;
 
+import java.awt.Point;
 import java.util.ArrayList;
 
 import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.GUIObserverInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataObjectManagerGUIInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.TransformedObjectInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.commands.Command;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.commands.Delete;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.commands.Import;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.commands.Paste;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.commands.Rotate;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.commands.Scale;
@@ -49,30 +52,28 @@ public class AdapterCommunication implements IAdapterCommunication{
         this.dm = dm;
     }
     
-    /**
-     * Notifies the Adapter for a removal of an
-     * object.
-     * 
-     * @param id the id of the object, that needs to 
-     * be removed.
-     */
     @Override
-    public void setObjectRemoval(long id){
-        goi.notifyRemoval(id);
+    public void setObjectRemoval(ArrayList<Long> ids){
+        Command command = new Delete(ids);
+        undoList.add(command);
+        command.execute(goi);
+        redoList.clear();
     }
     
-    /**
-    * Sets an translation update for the adapter
-    * 
-    * @param id the id of the object that should be updated.
-    * @param x the new x coordinate.
-    * @param y the new y coordinate.
-    * @param z the new z coordinate.
-    */
     @Override
-    public void setTranslationUpdate(long id, int x, int y) {
-        TransformedObjectInterface o = dm.getTransformedObject(id);
-        Command command = new TranslateXY(id, o.getX(), o.getY(), x, y);
+    public void setTranslationUpdate(ArrayList<Long> ids, ArrayList<Point> coordinates) {
+        
+        if(ids == null)
+            return;
+        
+        ArrayList<Point> coordinates_old = new ArrayList<Point>();
+        
+        for(long id : ids){
+            TransformedObjectInterface o = dm.getTransformedObject(id);
+            coordinates_old.add(new Point(o.getX(), o.getY()));
+        }
+        
+        Command command = new TranslateXY(ids, coordinates_old, coordinates);
         undoList.add(command);
         command.execute(goi);
         redoList.clear();
@@ -84,28 +85,54 @@ public class AdapterCommunication implements IAdapterCommunication{
     }
 
     @Override
-    public void setPasteUpdate(long id, int x, int y) {
-        Command command = new Paste(id, x, y);
+    public void setPasteUpdate(ArrayList<Long> ids, ArrayList<Point> coordinates) {
+        Command command = new Paste(ids, coordinates);
         undoList.add(command);
         command.execute(goi);
         redoList.clear();
     }
 
     @Override
-    public void setRotationUpdate(long id, int x, int y, double rotation) {
-        TransformedObjectInterface o = dm.getTransformedObject(id);
-        Command command = new Rotate(id, o.getX(), o.getY(), o.getRotation(), 
-                x, y, rotation);
+    public void setRotationUpdate(ArrayList<Long> ids, ArrayList<Point> coordinates,
+            ArrayList<Double> rotation) {
+        
+        if(ids == null)
+            return;
+        
+        ArrayList<Point> coordinates_old = new ArrayList<Point>();
+        ArrayList<Double> rotation_old = new ArrayList<Double>();
+        
+        for(long id : ids){
+            TransformedObjectInterface o = dm.getTransformedObject(id);
+            coordinates_old.add(new Point(o.getX(), o.getY()));
+            rotation_old.add(o.getRotation());
+        }
+        
+        Command command = new Rotate(ids, coordinates_old, rotation_old, 
+                coordinates, rotation);
         undoList.add(command);
         command.execute(goi);
         redoList.clear();
     }
 
     @Override
-    public void setScaleUpdate(long id, int x, int y, double scale) {
-        TransformedObjectInterface o = dm.getTransformedObject(id);
-        Command command = new Scale(id, o.getX(), o.getY(), o.getScale(), 
-                x, y, scale);
+    public void setScaleUpdate(ArrayList<Long> ids, ArrayList<Point> coordinates,
+            ArrayList<Double> scale) {
+        
+        if(ids == null)
+            return;
+        
+        ArrayList<Point> coordinates_old = new ArrayList<Point>();
+        ArrayList<Double> scale_old = new ArrayList<Double>();
+        
+        for(long id : ids){
+            TransformedObjectInterface o = dm.getTransformedObject(id);
+            coordinates_old.add(new Point(o.getX(), o.getY()));
+            scale_old.add(o.getScale());
+        }
+        
+        Command command = new Scale(ids, coordinates_old, scale_old, 
+                coordinates, scale);
         undoList.add(command);
         command.execute(goi);
         redoList.clear();
@@ -120,23 +147,29 @@ public class AdapterCommunication implements IAdapterCommunication{
     public long importKMZ(String name, String image_url, double x, double y,
             double z, double rotationX, double rotationY, double rotationZ,
             double scale) {
-        return goi.importKMZ(name, image_url, x,y,z, rotationX, 
+        
+        long ret_val = goi.importKMZ(name, image_url, x,y,z, rotationX, 
                 rotationY, rotationZ, scale);
+        
+        //Import does not need all the stuff in there
+        //in order to un/redo things.
+        if(ret_val == -1)
+            undoList.add(new Import());
+        
+        return ret_val;
     }
 
     @Override
-    public void copyKMZ(long id, String image_url, double x, double y,
-            double z, double rot_x, double rot_y, double rot_z, double scale) {
-        goi.notifyCopy(id, image_url, x, y, z,
-                rot_x,rot_y,rot_z,scale);
+    public void importConflictCopy(long id) {
+        undoList.add(new Import());
+        goi.importConflictCopy(id);
         
     }
 
     @Override
-    public void overwriteKMZ(long id, String image_url, double x, double y,
-            double z, double rot_x, double rot_y, double rot_z, double scale) {
-        goi.notifyOverwrite(id, image_url, x, y, z,
-                rot_x,rot_y,rot_z,scale);
+    public void importConflictOverwrite(long id) {
+        undoList.add(new Import());
+        goi.importConflictOverwrite(id);
     }
 
     @Override
@@ -157,7 +190,7 @@ public class AdapterCommunication implements IAdapterCommunication{
 
         Command command = redoList.get(redoList.size()-1);
         redoList.remove(redoList.size()-1);
-        command.execute(goi);
+        command.redo(goi);
         undoList.add(command);
     }
 }

@@ -74,11 +74,15 @@ public class GraphicToInputFacade implements IGraphicToInput{
     public void translateFinished() {
 
         if(!stm.checkForCollision()){
+            ArrayList<Long> ids = new ArrayList<Long>();
+            ArrayList<Point> coords = new ArrayList<Point>();
             
             for(DraggingObject shape : sm.getDraggingShapes()){
-                long id = shape.getID();
-                window.setTranslationUpdate(id, shape.getX(), shape.getY());
+                ids.add(shape.getID());
+                coords.add(new Point(shape.getX(), shape.getY()));
+                
             }
+            window.setTranslationUpdate(ids, coords);
         }
         sm.clearDraggingShapes();
     }
@@ -136,11 +140,14 @@ public class GraphicToInputFacade implements IGraphicToInput{
     @Override
     public void pasteFinished() {
         if(!stm.checkForCollision()){
+            ArrayList<Long> ids = new ArrayList<Long>();
+            ArrayList<Point> coords = new ArrayList<Point>();
             
             for(DraggingObject shape : sm.getDraggingShapes()){
-                long id = shape.getID();
-                window.setPasteUpdate(id, shape.getX(), shape.getY());
+                ids.add(shape.getID());
+                coords.add(new Point(shape.getX(), shape.getY()));
             }
+            window.setPasteUpdate(ids, coords);
         }
         sm.clearDraggingShapes();
     }
@@ -186,11 +193,17 @@ public class GraphicToInputFacade implements IGraphicToInput{
         
         if(stm.checkForCollision())
             return;
+        
+        ArrayList<Long> ids = new ArrayList<Long>();
+        ArrayList<Point> coords = new ArrayList<Point>();
+        ArrayList<Double> rotation = new ArrayList<Double>();
+        
         for(DraggingObject shape : tm.getTransformedShapes()){
-            long id = shape.getID();
-            window.setRotationUpdate(id, shape.getX(), 
-                    shape.getY(), shape.getRotation());
+            ids.add(shape.getID());
+            coords.add(new Point(shape.getX(), shape.getY()));
+            rotation.add(shape.getRotation());
         }
+        window.setRotationUpdate(ids, coords, rotation);
     }
     
     @Override
@@ -221,11 +234,17 @@ public class GraphicToInputFacade implements IGraphicToInput{
     public void scaleFinished(){
         if(stm.checkForCollision())
             return;
+        
+        ArrayList<Long> ids = new ArrayList<Long>();
+        ArrayList<Point> coords = new ArrayList<Point>();
+        ArrayList<Double> scale = new ArrayList<Double>();
+        
         for(DraggingObject shape : tm.getTransformedShapes()){
-            long id = shape.getID();
-            window.setScaleUpdate(id, shape.getX(), 
-                    shape.getY(), shape.getScale());
+            ids.add(shape.getID());
+            coords.add(new Point(shape.getX(), shape.getY()));
+            scale.add(shape.getScale());
         }
+        window.setScaleUpdate(ids, coords, scale);
     }
 
     @Override

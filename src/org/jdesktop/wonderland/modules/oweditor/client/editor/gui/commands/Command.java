@@ -7,5 +7,7 @@ public interface Command {
     public void execute(GUIObserverInterface goi);
     
     public void undo(GUIObserverInterface goi);
+    
+    public void redo(GUIObserverInterface goi);
 
 }

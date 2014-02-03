@@ -45,18 +45,13 @@ public class WindowToFrame implements IWindowToFrame{
     }
 
     @Override
-    public void copyKMZ(long id, String image_url, double x, double y,
-            double z, double rot_x, double rot_y, double rot_z, double scale) {
-        wc.adapter.copyKMZ(id, image_url, x, y, z,
-                rot_x,rot_y,rot_z,scale);
+    public void importConflictCopy(long id) {
+        wc.adapter.importConflictCopy(id);
     }
 
     @Override
-    public void overwriteKMZ(long id, String name, String image_url, double x,
-            double y, double z, double rot_x, double rot_y, double rot_z,
-            double scale) {
-        wc.adapter.overwriteKMZ(id, image_url, x, y, z,
-                rot_x,rot_y,rot_z,scale);
+    public void importConflictOverwrite(long id) {
+        wc.adapter.importConflictOverwrite(id);
     }
 
     @Override
