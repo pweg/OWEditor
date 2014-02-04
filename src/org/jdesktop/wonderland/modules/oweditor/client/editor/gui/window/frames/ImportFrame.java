@@ -11,6 +11,7 @@ import java.util.ResourceBundle;
 import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.JProgressBar;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.GUISettings;
@@ -37,6 +38,7 @@ public class ImportFrame extends javax.swing.JFrame {
     private int boundsX = 0;
     private int boundsY = 0;
     private boolean working = false;
+    private JProgressBar progressBar = null;
             
     /**
      * Creates new form NewJFrame
@@ -46,6 +48,11 @@ public class ImportFrame extends javax.swing.JFrame {
         
         initComponents();
         reset();
+        
+        progressBar = new JProgressBar();
+        progressBar.setIndeterminate(false);
+        progressBar.setVisible(false);
+        
     }
 
 
@@ -491,7 +498,9 @@ public class ImportFrame extends javax.swing.JFrame {
                 nameField.setText(tokens[0]);
             }
             
+            //progressBar.setVisible(true);
             int[] bounds = fc.window.loadKMZ(path);
+            //progressBar.setVisible(false);
                 
             //if bounds are wrong or null
             if(bounds == null || bounds.length<2){
@@ -607,7 +616,10 @@ public class ImportFrame extends javax.swing.JFrame {
         }catch(Exception ex){
         }           
        
+        
+        //progressBar.setVisible(true);
         long id = fc.window.importKMZ(name, image_url, x, y, z, rot_x, rot_y, rot_z, scale);
+        //progressBar.setVisible(false);
         
         if(id != -1){
             Object[] options = {BUNDLE.getString("UseExisting"),

@@ -12,6 +12,7 @@ import com.jme.bounding.BoundingVolume;
 import com.jme.math.Quaternion;
 import com.jme.math.Vector3f;
 import java.awt.Point;
+import java.awt.geom.Point2D;
 import java.util.logging.Logger;
 import org.jdesktop.wonderland.client.cell.Cell;
 import org.jdesktop.wonderland.common.cell.CellTransform;
@@ -28,83 +29,24 @@ public class CoordinateTranslator implements CoordinateTranslatorInterface{
     private final int globalScale = AdapterSettings.initalScale;
     private static final Logger LOGGER =
             Logger.getLogger(WorldBuilder.class.getName());
-    
-    /**
-     * Transforms the coordinates of a cell into coordinates, the editor
-     * will understand. That being said, it calculates the coordinates, which
-     * are in the center of wonderland cells to the left top of the cell, because
-     * the editor uses this sort of coordinates for shapes.
-     * 
-     * @param cell The cell of which the coordinates should be transformed.
-     * @return a Vector3fInfo instance, which holds additionaly to x,y,z 
-     * coordinates a width and height value as well.
-     */
-    /*public Vector3fInfo transformCoordinates(Cell cell){
+
+    @Override
+    public Point transformCoordinatesInt(float x, float y, 
+            float width, float height) {        
+        int x_int = (int) Math.round((x-width/2)*globalScale);
+        int y_int = (int) Math.round((y-height/2)*globalScale);
         
-        BoundingVolume bounds = cell.getWorldBounds();
-        
-        if(bounds instanceof BoundingBox){
-            BoundingBox box = (BoundingBox) bounds;
-            float xExtent = box.xExtent;
-            float yExtent = box.yExtent;
-            float zExtent = box.zExtent;
-            Vector3f vector = new Vector3f(xExtent, yExtent, zExtent);
-            return transformCoordinatesSpecificSize(cell, vector);
-            //LOGGER.warning("Box " + cell.getName() + " "+ xExtent + " " + zExtent + " " + x + " " +z + "\n"
-            //+ vector.x + " " + vector.y);
-            
-        }else if(bounds instanceof BoundingSphere){
-            BoundingSphere sphere = (BoundingSphere) bounds;
-            float radius = sphere.radius;
-            Vector3f vector = new Vector3f(radius, radius, radius);
-            return transformCoordinatesSpecificSize(cell, vector);
-            //LOGGER.warning("sphere "+ cell.getName() + " " + radius+ " " + x + " " +z + "\n"
-            //+ vector.x + " " + vector.y);
-        }
-        return null;
+        return new Point(x_int, y_int);
     }
     
-    /**
-     * Transforms the coordinates of a cell into coordinates, the editor
-     * will understand for a given object size. 
-     * That being said, it calculates the coordinates, which
-     * are in the center of wonderland cells to the left top of the cell, because
-     * the editor uses this sort of coordinates for shapes.
-     * 
-     * @param cell The cell of which the coordinates should be transformed.
-     * @param size The whole sizes of the object in x, y and z direction.
-     * @return a Vector3fInfo instance, which holds additionaly to x,y,z 
-     * coordinates a width and height value as well.
-     */
-   /* public Vector3fInfo transformCoordinatesSpecificSize(Cell cell, Vector3f size){
+    @Override
+    public Point2D.Double transformCoordinatesBack(float x, float y, 
+            float width, float height) {
+        double x_double = (x-width/2)/globalScale;
+        double y_double = (y-height/2)/globalScale;
         
-        Vector3fInfo vector = new Vector3fInfo();
-        
-        CellTransform transform = cell.getLocalTransform();
-        Vector3f transl = transform.getTranslation(null);
-                
-        float x = transl.x;
-        float y = transl.y;
-        float z = transl.z;
-        
-         /*
-         * Note: OW uses y value for height, not for 2d coordinates,
-         * but editor uses z for height.
-         *
-        float xExtent = size.x;
-        float yExtent = size.y;
-        float zExtent = size.z;
-        vector.width = (int) Math.round(xExtent*2*initialScale);
-        vector.height = (int) Math.round(zExtent*2*initialScale);
-        vector.x = (int) Math.round((x-xExtent)*initialScale);
-        vector.z = (int) Math.round((y-yExtent)*initialScale);
-        vector.y = (int) Math.round((z-zExtent)*initialScale);
-        //LOGGER.warning("Box " + cell.getName() + " "+ xExtent + " " + zExtent + " " + x + " " +z + "\n"
-        //+ vector.x + " " + vector.y);
-            
-        return vector;
-    }*/
-    
+        return new Point2D.Double(x_double, y_double);
+    }
     /**
      * 
      * @param cell
@@ -141,16 +83,37 @@ public class CoordinateTranslator implements CoordinateTranslatorInterface{
         return vector;
     }
     
+    public int[] transformSize(BoundingVolume bounds){
+        
+        int[] ret_val = new int[2];
+        
+        /*
+         * OW does not use width/heigt, but extend, which is the
+         * length from the center to the edge in x,y, or z direction.
+         * Therefore *2 is neccessary.
+         */
+        if(bounds instanceof BoundingBox){
+            BoundingBox box = (BoundingBox) bounds;
+            float xExtent = box.xExtent*globalScale*2;
+            float yExtent = box.zExtent*globalScale*2;
+            LOGGER.warning("BOUNDS " + xExtent + " "  + box.xExtent+ " " + globalScale);
+            ret_val[0] = (int) Math.round(xExtent);
+            ret_val[1] = (int) Math.round(yExtent);
+            return ret_val;
+            
+        }else if(bounds instanceof BoundingSphere){
+            BoundingSphere sphere = (BoundingSphere) bounds;
+            float radius = sphere.radius*globalScale*2;
+            ret_val[0] = (int) Math.round(radius);
+            ret_val[1] = (int) Math.round(radius);
+            return ret_val;
+            
+        }
+        return null;
+    }
+    
     public Vector3f transformVector(Vector3f coords){
         return new Vector3f(coords.x, coords.z, coords.y);
-    }
-
-    @Override
-    public Point transformCoordinatesInt(float x, float y, float width, float height) {        
-        int x_int = (int) Math.round((x-width/2)*globalScale);
-        int y_int = (int) Math.round((y-height/2)*globalScale);
-        
-        return new Point(x_int, y_int);
     }
 
     @Override

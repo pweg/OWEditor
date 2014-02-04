@@ -16,7 +16,8 @@ public class GUIObserver implements GUIObserverInterface{
     private static final Logger LOGGER =
             Logger.getLogger(GUIObserver.class.getName());
     
-    private WonderlandAdapterController ac = null;    
+    private WonderlandAdapterController ac = null;   
+    private KMZImporter importer = null;
     
     /**
      * Creates a new clientUpdate instance.
@@ -25,6 +26,7 @@ public class GUIObserver implements GUIObserverInterface{
      */
     public GUIObserver(WonderlandAdapterController ac){
         this.ac = ac;
+        importer = new KMZImporter();
     }
 
     @Override
@@ -59,5 +61,43 @@ public class GUIObserver implements GUIObserverInterface{
 
     public void notifyScaling(long id, int x, int y, double scale) {
         ac.sc.scale(id, x, y, scale);
+    }
+
+    public void undoRemoval(long id) {
+        
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public void undoObjectCreation() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public void redoObjectCreation() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public int[] loadKMZ(String url) {
+        importer.importKMZ(url);
+        return importer.getModelSize(ac.ct);
+    }
+
+    public long importKMZ(String name, String image_url, double x, double y, 
+            double z, double rotationX, double rotationY, double rotationZ, 
+            double scale){
+        boolean ret_val = importer.setProperties(name, image_url, x,y,z, 
+                rotationX, rotationY, 
+                rotationZ, scale);
+        if(ret_val == false)
+            return 1;
+        else
+            return -1;
+    }
+
+    public void importConflictCopy(long id) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public void importConflictOverwrite(long id) {
+        importer.deployToServer();
     }
 }
