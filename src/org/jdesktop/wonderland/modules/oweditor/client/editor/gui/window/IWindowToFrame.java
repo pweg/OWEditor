@@ -14,6 +14,15 @@ public interface IWindowToFrame {
      * int[1]: the height of the kml object.
      */
     public int[] loadKMZ(String url);
+    
+    /**
+     * Checks, whether the name already exists or not.
+     * 
+     * @param name The name to be checked.
+     * @return True, if a name conflict exists,
+     * false otherwise.
+     */
+    public boolean importCheckName(String name);
 
     /**
      * Imports the loaded kmz model
@@ -31,7 +40,7 @@ public interface IWindowToFrame {
      * @return Return true, if creation is possible, false,
      * if the same name already exists.
      */
-    public long importKMZ(String name, String image_url, double x,
+    public boolean importKMZ(String name, String image_url, double x,
             double y, double z, double rotationX, double rotationY, double rotationZ,
             double scale);
     
@@ -51,15 +60,15 @@ public interface IWindowToFrame {
      * existing model.
      * 
      * @param id The id of the model, which will be copied.
-     */
+     *
     public void importConflictCopy(long id);
 
     /**
      * Overwrites a module during conflict resolution.
      * 
      * @param id The id of the model, which will be copied.
-     */
-    public void importConflictOverwrite(long id);
+     *
+    public void importConflictOverwrite(long id);*/
 
     /**
      * Draws all the shapes.

@@ -617,13 +617,10 @@ public class ImportFrame extends javax.swing.JFrame {
         }           
        
         
-        //progressBar.setVisible(true);
-        long id = fc.window.importKMZ(name, image_url, x, y, z, rot_x, rot_y, rot_z, scale);
-        //progressBar.setVisible(false);
+        //progressBar.setVisible(true); //progressBar.setVisible(false);
         
-        if(id != -1){
-            Object[] options = {BUNDLE.getString("UseExisting"),
-                    BUNDLE.getString("Overwrite"),
+        if(fc.window.importCheckName(name)){
+            Object[] options = {BUNDLE.getString("Overwrite"),
                     BUNDLE.getString("Cancel")};
             int ret2 = JOptionPane.showOptionDialog(this,
                 BUNDLE.getString("ConflictError"),
@@ -633,18 +630,18 @@ public class ImportFrame extends javax.swing.JFrame {
                 null,
                 options,
                 options[2]);
-            
-            //copy
-            if(ret2 == 0){
-                fc.window.importConflictCopy(id);                
-            }//overwrite
-            else if(ret2 == 1){
-                fc.window.importConflictOverwrite(id);
-            }//cancel
-            else if(ret2==2){
+            //cancel
+            if(ret2==1){
                 return;
             }
         }
+        
+         boolean ret_val = fc.window.importKMZ(name, image_url, x, y, z, 
+                 rot_x, rot_y, rot_z, scale);
+         
+         if(!ret_val)
+             showError("Could not import.", "Import Error");
+       
         working = false;
         setVisible(false);
     } 
@@ -658,6 +655,7 @@ public class ImportFrame extends javax.swing.JFrame {
         reset();
     } 
     
+    @Override
     public void setVisible(boolean b) {
         super.setVisible(b);
         

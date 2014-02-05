@@ -6,27 +6,17 @@
 
 package org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter;
 
-import com.jme.bounding.BoundingBox;
-import com.jme.bounding.BoundingSphere;
 import com.jme.bounding.BoundingVolume;
 import com.jme.math.Vector3f;
 import com.jme.scene.Node;
-import com.jme.scene.state.MaterialState;
-import com.jme.scene.state.RenderState;
-import com.jme.scene.state.ZBufferState;
-import java.awt.BorderLayout;
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JDialog;
-import javax.swing.JOptionPane;
-import javax.swing.SwingUtilities;
 import javax.xml.bind.JAXBException;
 import org.jdesktop.mtgame.Entity;
 import org.jdesktop.mtgame.RenderComponent;
@@ -154,34 +144,21 @@ public class KMZImporter {
         return translator.transformSize(bounds);
     }
 
-    public boolean setProperties(String name, String image_url, 
+    public boolean importToServer(String name, String image_url, 
             double x, double y, double z, 
             double rotationX, double rotationY, double rotationZ, 
             double scale) {
         
-        Collection<ServerSessionManager> servers = LoginManager.getAll();
-        targetServer = null;
         
-        //@Todo: Make a selection option in the gui!
-        for (ServerSessionManager server : servers) {
-            targetServer = server;
-        }
         if(targetServer == null){
-            LOGGER.log(Level.SEVERE, "Could not find a server to connect!");
-            return true;
-        }
-
-        // Check we are not about to overwrite an existing module
-        String url = targetServer.getServerURL();
-        ModuleList moduleList = ModuleUtils.fetchModuleList(url);
-        ModuleInfo[] modules = moduleList.getModuleInfos();
-        
-        if (modules != null) {
-            boolean conflict = false;
-            for (int i = 0; i < modules.length && !conflict; i++) {
-                if (name.equals(modules[i].getName())) {
-                    return false;
-                }
+            Collection<ServerSessionManager> servers = LoginManager.getAll();
+            //@Todo: Make a selection option in the gui!
+            for (ServerSessionManager server : servers) {
+                targetServer = server;
+            }
+            if(targetServer == null){
+                LOGGER.log(Level.SEVERE, "Could not find a server to connect!");
+                return false;
             }
         }
         
@@ -193,13 +170,13 @@ public class KMZImporter {
         importedModel.setScale(new Vector3f(
                 (float)scale,(float)scale,(float)scale));
         importedModel.setOrientation(new Vector3f(
-                (float)rotationX,(float)rotationY,
-                (float)rotationZ));
-        deployToServer();
-        return true;
+                (float)rotationX,(float)rotationZ,
+                (float)rotationY));
+        return deployToServer();
+         
     }
     
-    public void deployToServer(){
+    private boolean deployToServer(){
         
         
         final ArrayList<DeployedModel> deploymentInfo = new ArrayList();
@@ -225,14 +202,14 @@ public class KMZImporter {
 
             uploader.upload(moduleJar);
         } catch (MalformedURLException ex) {
-                
-            return;
+            LOGGER.log(Level.SEVERE, "Importing: malformed url" + ex);
+            return false;
         } catch (IOException e) {
-                    
-            return;
+            LOGGER.log(Level.SEVERE, "Importing: IOException" +e);
+            return false;
         } catch (Throwable t) {
-                    
-           return;
+            LOGGER.log(Level.SEVERE, "Importing: Error" +t);
+           return false;
         }
 
         // Now create the cells for the new content
@@ -252,8 +229,8 @@ public class KMZImporter {
         // will be sent the client cells
         wm.removeEntity(importedModel.getEntity());
         
-
         importedModel = null;
+        return true;
     }
     
     private File createModuleJar(
@@ -312,6 +289,34 @@ public class KMZImporter {
         return moduleJar;
 
 }  
+
+    boolean checkName(String name) {
+        Collection<ServerSessionManager> servers = LoginManager.getAll();
+        targetServer = null;
+        
+        //@Todo: Make a selection option in the gui!
+        for (ServerSessionManager server : servers) {
+            targetServer = server;
+        }
+        if(targetServer == null){
+            LOGGER.log(Level.SEVERE, "Could not find a server to connect!");
+            return true;
+        }
+
+        // Check we are not about to overwrite an existing module
+        String url = targetServer.getServerURL();
+        ModuleList moduleList = ModuleUtils.fetchModuleList(url);
+        ModuleInfo[] modules = moduleList.getModuleInfos();
+        
+        if (modules != null) {
+            for (ModuleInfo module : modules) {
+                if (name.equals(module.getName())) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
 
     
 }

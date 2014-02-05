@@ -1,7 +1,12 @@
 package org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.GUIObserverInterface;
 
 /**
@@ -59,45 +64,61 @@ public class GUIObserver implements GUIObserverInterface{
         ac.sc.rotate(id, x, y, rotation);
     }
 
+    @Override
     public void notifyScaling(long id, int x, int y, double scale) {
         ac.sc.scale(id, x, y, scale);
     }
 
+    @Override
     public void undoRemoval(long id) {
         
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    @Override
     public void undoObjectCreation() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    @Override
     public void redoObjectCreation() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    @Override
     public int[] loadKMZ(String url) {
         importer.importKMZ(url);
         return importer.getModelSize(ac.ct);
     }
-
-    public long importKMZ(String name, String image_url, double x, double y, 
-            double z, double rotationX, double rotationY, double rotationZ, 
-            double scale){
-        boolean ret_val = importer.setProperties(name, image_url, x,y,z, 
-                rotationX, rotationY, 
-                rotationZ, scale);
-        if(ret_val == false)
-            return 1;
-        else
-            return -1;
+    
+    @Override
+    public boolean importCheckName(String name){
+        return importer.checkName(name);
     }
 
-    public void importConflictCopy(long id) {
+    @Override
+    public boolean importKMZ(String name, String image_url, double x, double y, 
+            double z, double rotationX, double rotationY, double rotationZ, 
+            double scale){
+        
+        BufferedImage img = null;
+        
+        try {
+            img = ImageIO.read(new File(image_url));
+        } catch (IOException ex) {
+            Logger.getLogger(GUIObserver.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return importer.importToServer(name, image_url, x,y,z, 
+                rotationX, rotationY, 
+                rotationZ, scale);
+    }
+
+    /*public void importConflictCopy(long id) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     public void importConflictOverwrite(long id) {
         importer.deployToServer();
-    }
+    }*/
 }

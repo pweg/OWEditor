@@ -159,7 +159,7 @@ public class GUIObserver implements GUIObserverInterface{
     }
 
     @Override
-    public long importKMZ(String name, String image_url, double x, double y,
+    public boolean importKMZ(String name, String image_url, double x, double y,
             double z, double rotationX, double rotationY, double rotationZ,
             double scale) {
         
@@ -178,7 +178,7 @@ public class GUIObserver implements GUIObserverInterface{
             rotationY, rotationZ, scale,  (float)bounds[0], (float)bounds[1],  name,
             img);
             
-            return object.id;
+            return true;
         }else{
 
             ServerObject tmp = ac.server.createObject((float)x, (float)y, (float)z, 
@@ -186,10 +186,11 @@ public class GUIObserver implements GUIObserverInterface{
                 (float)bounds[0], (float)bounds[1], name, false, img);
             ac.bom.addCreatedID(tmp.id);
             ac.da.createObject(tmp);
-            return -1;
+            return false;
         }
     }
 
+    /*
     @Override
     public void importConflictCopy(long id) {
         
@@ -220,6 +221,6 @@ public class GUIObserver implements GUIObserverInterface{
         
         importConflictCopy(id);
         
-    }
+    }*/
 
 }

@@ -78,6 +78,14 @@ public interface IAdapterCommunication {
      * int[1] is the y bound.
      */
     public int[] loadKMZ(String url);
+    
+    /**
+     * Checks for naming conflict, when importing.
+     * 
+     * @param name The name to be checked.
+     * @return  True, if a conflict exists, false otherwise.
+     */
+    public boolean importCheckName(String name);
 
     /**
      * Calls the adapter to import the pre-loaded model.
@@ -93,9 +101,9 @@ public interface IAdapterCommunication {
      * @param scale The scale of the new model.
      * 
      * @return Return true, if creation is possible, false,
-     * if the same name already exists
+     * if there was an error.
      */
-    public long importKMZ(String name, String image_url, double x, double y,
+    public boolean importKMZ(String name, String image_url, double x, double y,
             double z, double rotationX, double rotationY, double rotationZ,
             double scale);
 
@@ -104,15 +112,15 @@ public interface IAdapterCommunication {
      * existing module.
      * 
      * @param id The id of the module, which will be copied.
-     */
+     *
     public void importConflictCopy(long id);
 
     /**
      * Overwrites a module during conflict resolution.
      * 
      * @param id The id of the module, which will be overwritten.
-     */
-    public void importConflictOverwrite(long id);
+     *
+    public void importConflictOverwrite(long id);*/
 
     public void undo();
     

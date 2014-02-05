@@ -4,13 +4,17 @@ import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.GUIObse
 
 public class Import implements Command{
     
+    /*private String name;
+    private String image_url;
+    private double x, y, z;
+    private double rotationX, rotationY, rotationZ;
+    private double scale;*/
     
     public Import(){
     }
 
     @Override
     public void execute(GUIObserverInterface goi) {
-        // TODO Auto-generated method stub
         
     }
 

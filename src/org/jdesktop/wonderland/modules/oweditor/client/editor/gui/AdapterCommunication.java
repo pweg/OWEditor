@@ -8,10 +8,10 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.Dat
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.TransformedObjectInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.commands.Command;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.commands.Delete;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.commands.Import;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.commands.Paste;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.commands.Rotate;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.commands.Scale;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.commands.Import;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.commands.TranslateXY;
 
 /**
@@ -142,23 +142,27 @@ public class AdapterCommunication implements IAdapterCommunication{
     public int[] loadKMZ(String url) {
         return goi.loadKMZ(url);
     }
+    
+    @Override
+    public boolean importCheckName(String name){
+        return goi.importCheckName(name);
+    }
 
     @Override
-    public long importKMZ(String name, String image_url, double x, double y,
+    public boolean importKMZ(String name, String image_url, double x, double y,
             double z, double rotationX, double rotationY, double rotationZ,
             double scale) {
         
-        long ret_val = goi.importKMZ(name, image_url, x,y,z, rotationX, 
+        boolean ret_val = goi.importKMZ(name, image_url, x,y,z, rotationX, 
                 rotationY, rotationZ, scale);
         
-        //Import does not need all the stuff in there
-        //in order to un/redo things.
-        if(ret_val == -1)
+        //Import does not need all the baggage in order to undo/redo
+        if(ret_val)
             undoList.add(new Import());
-        
         return ret_val;
     }
 
+    /*
     @Override
     public void importConflictCopy(long id) {
         undoList.add(new Import());
@@ -167,10 +171,10 @@ public class AdapterCommunication implements IAdapterCommunication{
     }
 
     @Override
-    public void importConflictOverwrite(long id) {
+    public void importConflictOverwrite() {
         undoList.add(new Import());
         goi.importConflictOverwrite(id);
-    }
+    }*/
 
     @Override
     public void undo() {

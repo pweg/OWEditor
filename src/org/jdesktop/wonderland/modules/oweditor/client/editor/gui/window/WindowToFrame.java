@@ -19,9 +19,14 @@ public class WindowToFrame implements IWindowToFrame{
     public int[] loadKMZ(String url) {        
         return wc.adapter.loadKMZ(url);
     }
+    
+    @Override
+    public boolean importCheckName(String name){
+        return wc.adapter.importCheckName(name);
+    }
 
     @Override
-    public long importKMZ(String name, String image_url, double x, double y,
+    public boolean importKMZ(String name, String image_url, double x, double y,
             double z, double rotationX, double rotationY, double rotationZ,
             double scale) {
         return wc.adapter.importKMZ(name, image_url, x, y, z,
@@ -43,7 +48,8 @@ public class WindowToFrame implements IWindowToFrame{
     public void registerDataManager(DataObjectManagerGUIInterface dm) {
         this.dm  = dm;
     }
-
+    
+    /*
     @Override
     public void importConflictCopy(long id) {
         wc.adapter.importConflictCopy(id);
@@ -52,7 +58,7 @@ public class WindowToFrame implements IWindowToFrame{
     @Override
     public void importConflictOverwrite(long id) {
         wc.adapter.importConflictOverwrite(id);
-    }
+    }*/
 
     @Override
     public void drawShapes(Graphics2D g2, AffineTransform at) {

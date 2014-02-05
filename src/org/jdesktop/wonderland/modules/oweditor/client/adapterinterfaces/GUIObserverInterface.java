@@ -100,6 +100,15 @@ public interface GUIObserverInterface {
      * int[1] should be the zExtend (which is y in ow editor)
      */
     public int[] loadKMZ(String url);
+    
+    /**
+     * Checks for module name conflict. Returns true
+     * if there is a conflict, false otherwise.
+     * 
+     * @param name The name, which should be checked.
+     * @return True, if the name already exists, false otherwise.
+     */
+    public boolean importCheckName(String name);
 
     /**
      * Imports the laded KMZ file and creates a new module for
@@ -115,10 +124,10 @@ public interface GUIObserverInterface {
      * @param rotationZ The z rotation of the new model.
      * @param scale The scale of the new model.
      * 
-     * @return Return id if a conflict was found for the name,
-     * otherwise -1.
+     * @return Return true, if importing was a success,
+     * false otherwise.
      */
-    public long importKMZ(String name, String image_url, double x, double y,
+    public boolean importKMZ(String name, String image_url, double x, double y,
             double z, double rotationX, double rotationY, double rotationZ,
             double scale);
 
@@ -128,14 +137,14 @@ public interface GUIObserverInterface {
      * existing module.
      * 
      * @param id The id of the module, which will be copied.
-     */
+     *
     public void importConflictCopy(long id);
   
     /**
      * Overwrites a module during conflict resolution.
      * 
      * @param id The id of the module, which will be overwritten.
-     */
-    public void importConflictOverwrite(long id);
+     *
+    public void importConflictOverwrite(long id);*/
 
 }
