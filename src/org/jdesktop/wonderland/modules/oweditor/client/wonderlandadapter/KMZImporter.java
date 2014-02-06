@@ -23,6 +23,8 @@ import org.jdesktop.mtgame.RenderComponent;
 import org.jdesktop.mtgame.RenderManager;
 import org.jdesktop.mtgame.WorldManager;
 import org.jdesktop.wonderland.client.cell.CellEditChannelConnection;
+import org.jdesktop.wonderland.client.cell.utils.CellCreationException;
+import org.jdesktop.wonderland.client.cell.utils.CellUtils;
 import org.jdesktop.wonderland.client.comms.WonderlandSession;
 import org.jdesktop.wonderland.client.jme.ClientContextJME;
 import org.jdesktop.wonderland.client.jme.artimport.DeployedModel;
@@ -58,6 +60,7 @@ public class KMZImporter {
     
     private String moduleName = "";
     private ServerSessionManager targetServer = null;
+    private CellID lastCellID = null;
     
     public void importKMZ(String url){
         
@@ -91,7 +94,7 @@ public class KMZImporter {
 
 
         if (modelLoader == null) {
-            String urlString = url.toExternalForm();
+            //String urlString = url.toExternalForm();
             //String fileExtension = FileUtils.getFileExtension(urlString);
             return null;
         }
@@ -111,8 +114,8 @@ public class KMZImporter {
 
         //MaterialState matState =
         //        (MaterialState) renderManager.createRendererState(
-         //       RenderState.RS_MATERIAL);
-//        matState.setDiffuse(color);
+        //       RenderState.RS_MATERIAL);
+        //matState.setDiffuse(color);
         //rootBG.setRenderState(matState);
         //rootBG.setRenderState(buf);
 
@@ -182,6 +185,12 @@ public class KMZImporter {
         final ArrayList<DeployedModel> deploymentInfo = new ArrayList();
         WorldManager wm = ClientContextJME.getWorldManager();
         final File moduleJar = createModuleJar(deploymentInfo, null);
+        
+        if(moduleJar == null){
+            LOGGER.log(Level.SEVERE, "Deploy to Server: Could not create"
+                    + " a module ");
+            return false;
+        }
 
         // Now deploy to server
         try {
@@ -202,13 +211,13 @@ public class KMZImporter {
 
             uploader.upload(moduleJar);
         } catch (MalformedURLException ex) {
-            LOGGER.log(Level.SEVERE, "Importing: malformed url" + ex);
+            LOGGER.log(Level.SEVERE, "Deploy to Server: malformed url" + ex);
             return false;
         } catch (IOException e) {
-            LOGGER.log(Level.SEVERE, "Importing: IOException" +e);
+            LOGGER.log(Level.SEVERE, "Deploy to Server: IOException" +e);
             return false;
         } catch (Throwable t) {
-            LOGGER.log(Level.SEVERE, "Importing: Error" +t);
+            LOGGER.log(Level.SEVERE, "Deploy to Server: Error" +t);
            return false;
         }
 
@@ -219,10 +228,14 @@ public class KMZImporter {
                (CellEditChannelConnection) session.getConnection(
                CellEditConnectionType.CLIENT_TYPE);
         for (DeployedModel info : deploymentInfo) {
-            CellID parentCellID = null;
-            CellCreateMessage msg = new CellCreateMessage(
+            try {
+                lastCellID = CellUtils.createCell(info.getCellServerState());
+            } catch (CellCreationException ex) {
+                Logger.getLogger(KMZImporter.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            /*CellCreateMessage msg = new CellCreateMessage(
                 parentCellID, info.getCellServerState());
-            connection.send(msg);
+            connection.send(msg);*/
         }
 
         // Remove entities, once we create the cells on the server we
@@ -254,6 +267,7 @@ public class KMZImporter {
                 deploymentInfo.add(importedModel.getModelLoader().deployToModule(
                         tmpDir, importedModel));
             } catch (IOException ex) {
+                LOGGER.log(Level.SEVERE, "Building module " + ex);
             }
 
             ModuleJarWriter mjw = new ModuleJarWriter();
@@ -275,7 +289,9 @@ public class KMZImporter {
                 moduleJar = new File(targetDir, moduleName + ".jar");
                 mjw.writeToJar(moduleJar);
             } catch (IOException ex) {
+                LOGGER.log(Level.SEVERE, "Building module " + ex);
             } catch (JAXBException ex) {
+                LOGGER.log(Level.SEVERE, "Building module " + ex);
             }
 
             if (moduleJar == null) {
@@ -283,6 +299,7 @@ public class KMZImporter {
                 return null;
             }
         } catch (IOException ex) {
+            LOGGER.log(Level.SEVERE, "Building module " + ex);
             return null;
         }
 
@@ -311,11 +328,17 @@ public class KMZImporter {
         if (modules != null) {
             for (ModuleInfo module : modules) {
                 if (name.equals(module.getName())) {
-                    return false;
+                    return true;
                 }
             }
         }
-        return true;
+        return false;
+    }
+
+    public long getLastID() {
+        if(lastCellID == null)
+            return -1;
+        return Long.valueOf(lastCellID.toString());
     }
 
     

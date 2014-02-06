@@ -1,5 +1,6 @@
 package org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter;
 
+import com.jme.math.Vector3f;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -106,12 +107,33 @@ public class GUIObserver implements GUIObserverInterface{
         try {
             img = ImageIO.read(new File(image_url));
         } catch (IOException ex) {
-            Logger.getLogger(GUIObserver.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(GUIObserver.class.getName()).log(Level.INFO, 
+                    "Cannot read image file");
         }
         
-        return importer.importToServer(name, image_url, x,y,z, 
+        if(!importer.importToServer(name, image_url, x,y,z, 
                 rotationX, rotationY, 
-                rotationZ, scale);
+                rotationZ, scale)){
+            LOGGER.warning("NIX herer GESCHAFFT ODER WAT?");
+            return false;
+        }
+        
+        
+        
+        long id = importer.getLastID();
+        if(id == -1){
+            LOGGER.warning("RALALAALALA");
+            return false;
+        }
+        //
+        
+        if(!ac.sc.translate(id, (float)x, (float)y, (float)z)){
+            ac.bm.addTranslation(id, name, new Vector3f((float)x, (float)y, (float)z));
+        }
+        
+        
+        
+        return true;
     }
 
     /*public void importConflictCopy(long id) {

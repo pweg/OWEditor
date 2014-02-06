@@ -23,6 +23,7 @@ import org.jdesktop.wonderland.common.cell.CellEditConnectionType;
 import org.jdesktop.wonderland.common.cell.CellID;
 import org.jdesktop.wonderland.common.cell.CellTransform;
 import org.jdesktop.wonderland.common.cell.messages.CellDuplicateMessage;
+import org.jdesktop.wonderland.common.cell.state.CellServerState;
 
 /**
  * This class is used for outgoing communication with the server.
@@ -79,6 +80,40 @@ public class ServerCommunication {
         }else{
             return false;
         }
+    }
+    
+    public boolean translate(long id, float x, float y, float z){
+        CellCache cache = ac.sm.getCellCache();
+        
+        if (cache == null) {
+            LOGGER.log(Level.WARNING, "Unable to find Cell cache for session {0}", ac.sm.getSession());
+            return false;
+        }
+        CellID cellid = new CellID(id);
+        Cell cell = cache.getCell(cellid);
+        
+        if(cell == null)
+            return false;
+        
+        /*
+        CellTransform transform = cell.getLocalTransform();
+        Vector3f transl = transform.getTranslation(null);
+        float z = transl.z;
+        */
+        
+        
+        Vector3f translation =new Vector3f(x, y, z);
+        MovableComponent movableComponent = cell.getComponent(MovableComponent.class);
+
+        if (movableComponent != null) {
+            CellTransform cellTransform = cell.getLocalTransform();
+            cellTransform.setTranslation(translation);
+            movableComponent.localMoveRequest(cellTransform);
+            return true;
+        }else{
+            return false;
+        }
+        
     }
     
     public void remove(long id){

@@ -39,6 +39,7 @@ public class ImportFrame extends javax.swing.JFrame {
     private int boundsY = 0;
     private boolean working = false;
     private JProgressBar progressBar = null;
+    private NumberFormat doubleFormat = null;
             
     /**
      * Creates new form NewJFrame
@@ -64,7 +65,7 @@ public class ImportFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
     private void initComponents() {
 
-        NumberFormat doubleFormat = new DecimalFormat("0.#####");
+        doubleFormat = new DecimalFormat("0.#####");
         doubleFormat.setGroupingUsed(false);
         
         jPanel1 = new javax.swing.JPanel();
@@ -81,6 +82,7 @@ public class ImportFrame extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         nameField = new javax.swing.JTextField();
         modelField = new javax.swing.JTextField();
+        moduleNameField = new javax.swing.JTextField();
         modelButton = new javax.swing.JButton();
         jLabel12 = new javax.swing.JLabel();
         imgField = new javax.swing.JTextField();
@@ -91,11 +93,14 @@ public class ImportFrame extends javax.swing.JFrame {
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
+        jLabel14 = new javax.swing.JLabel();
+        serverList = new javax.swing.JComboBox<String>();
         rotationFieldX = new javax.swing.JFormattedTextField(doubleFormat);
         rotationFieldY = new javax.swing.JFormattedTextField(doubleFormat);
         rotationFieldZ = new javax.swing.JFormattedTextField(doubleFormat);
         jPanel5 = new javax.swing.JPanel();
         jLabel11 = new javax.swing.JLabel();
+        jLabel13 = new javax.swing.JLabel();
         scaleField = new javax.swing.JFormattedTextField(doubleFormat);
         okButton = new javax.swing.JButton();
         cancelButton = new javax.swing.JButton();
@@ -137,12 +142,10 @@ public class ImportFrame extends javax.swing.JFrame {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(locationFieldY)
                             .addComponent(locationFieldZ)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(locationFieldX, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE))))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(30, 30, 30)
-                        .addComponent(locationButton)))
+                            .addComponent(locationFieldX, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(locationButton)
+                        )
+                    ))
                 .addContainerGap(45, Short.MAX_VALUE))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
@@ -183,6 +186,11 @@ public class ImportFrame extends javax.swing.JFrame {
 
         jLabel2.setText(BUNDLE.getString("ImportModelName"));
         jLabel2.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        
+        jLabel13.setText(BUNDLE.getString("ImportModuleName"));
+        jLabel13.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        jLabel14.setText(BUNDLE.getString("ImportServer"));
+        jLabel14.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
 
         nameField.setToolTipText("");
 
@@ -243,7 +251,9 @@ public class ImportFrame extends javax.swing.JFrame {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jLabel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel14, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
@@ -255,11 +265,16 @@ public class ImportFrame extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(modelButton, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(nameField)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(image, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(nameField, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        //.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGap(25,25,25)
+                        .addComponent(image, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(moduleNameField)
+                        .addComponent(serverList))
                 .addContainerGap())
         );
+       jPanel3Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {serverList, nameField, moduleNameField});
+
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
@@ -280,10 +295,21 @@ public class ImportFrame extends javax.swing.JFrame {
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel2)
                             .addComponent(nameField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(80, 80, 80))
-                    .addComponent(image, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(40, 40, 40)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel13)
+                            .addComponent(moduleNameField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(10,10,10)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel14)
+                            .addComponent(serverList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(10, 10, 10))
+                    .addComponent(image, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGap(20, 20, 20))
                 .addContainerGap())
         );
+       jPanel3Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {nameField, moduleNameField, serverList});
+
 
         jPanel4.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
@@ -426,7 +452,7 @@ public class ImportFrame extends javax.swing.JFrame {
                         .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(okButton)
@@ -629,7 +655,7 @@ public class ImportFrame extends javax.swing.JFrame {
                 JOptionPane.QUESTION_MESSAGE,
                 null,
                 options,
-                options[2]);
+                options[1]);
             //cancel
             if(ret2==1){
                 return;
@@ -681,8 +707,10 @@ public class ImportFrame extends javax.swing.JFrame {
     }                
 
     public void setLocation(double x, double y) {
-        locationFieldX.setText(String.valueOf(x));
-        locationFieldY.setText(String.valueOf(y));
+        //formatting the string in order to look nice
+        //and to not change the textfield size.
+        locationFieldX.setText(doubleFormat.format(x));
+        locationFieldY.setText(doubleFormat.format(y));
     }
     
     private void reset(){
@@ -724,6 +752,7 @@ public class ImportFrame extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -736,14 +765,17 @@ public class ImportFrame extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
+    private javax.swing.JLabel jLabel14;
     private javax.swing.JFormattedTextField locationFieldX;
     private javax.swing.JFormattedTextField locationFieldY;
     private javax.swing.JFormattedTextField locationFieldZ;
     private javax.swing.JTextField nameField;
+    private javax.swing.JTextField moduleNameField;
     private javax.swing.JTextField imgField;
     private javax.swing.JFormattedTextField rotationFieldX;
     private javax.swing.JFormattedTextField rotationFieldY;
     private javax.swing.JFormattedTextField rotationFieldZ;
     private javax.swing.JFormattedTextField scaleField;
+    private javax.swing.JComboBox serverList;
     // End of variables declaration   
 }

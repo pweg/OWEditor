@@ -142,27 +142,39 @@ public class UpdateManager {
             
             Vector3f new_pos = ac.bm.getTranslation(name);
             
-            Vector3f tmp = ac.ct.transformCoordinatesBack(cell, new_pos.x, new_pos.y, new_pos.z);
-            tmp = ac.ct.transformVector(tmp);
-            
-            coordinates.set(tmp);
-            
-            //coordinates.y = new_pos.y;
-            
             BackupObject backup = ac.bm.getBackup(name);
-            rotation = backup.getRotation();
-            /*
-            * When problems arise, due to the absence of the movable component,
-            * a listener is created, for the purpose to translate the copied cell.
-            */
-            if(!ac.sc.translate(id, (int) new_pos.x, (int)new_pos.y)){
-                LOGGER.warning("TRANSLATE FALSE");
-                cell.addComponentChangeListener(componentListener);
-            }else{
-                //rotation = backup.getRotation();
-                //scale = backup.getScale();
-                ac.sc.rotate(id, rotation);
-                ac.bm.removeTranslation(name);
+            if(backup != null){//transformed coordinates
+            
+                 Vector3f tmp = ac.ct.transformCoordinatesBack(cell, new_pos.x, new_pos.y, new_pos.z);
+                 tmp = ac.ct.transformVector(tmp);
+                
+            
+                coordinates.set(tmp);
+            
+                rotation = backup.getRotation();
+                /*
+                * When problems arise, due to the absence of the movable component,
+                * a listener is created, for the purpose to translate the copied cell.
+                */
+                if(!ac.sc.translate(id, (int) new_pos.x, (int)new_pos.y)){
+                    LOGGER.warning("TRANSLATE FALSE");
+                    cell.addComponentChangeListener(componentListener);
+                }else{
+                    //rotation = backup.getRotation();
+                    //scale = backup.getScale();
+                    ac.sc.rotate(id, rotation);
+                    ac.bm.removeTranslation(name);
+                }
+            }else{//Untransformed coordinates.
+                new_pos = ac.ct.transformVector(new_pos);
+                coordinates.set(new_pos);
+                
+                if(!ac.sc.translate(id, new_pos.x, new_pos.y, new_pos.z)){
+                    LOGGER.warning("TRANSLATE FALSE");
+                    cell.addComponentChangeListener(componentListener);
+                }else{
+                    ac.bm.removeTranslation(name);
+                }
             }
         }
         
