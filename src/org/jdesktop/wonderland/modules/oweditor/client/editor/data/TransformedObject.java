@@ -2,10 +2,10 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.data;
 
 import java.awt.image.BufferedImage;
 
-import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataObjectInterface;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.TransformedObjectInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IDataObject;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.ITransformedObject;
 
-public class TransformedObject implements TransformedObjectInterface{
+public class TransformedObject implements ITransformedObject{
 
     private int x = 0;
     private int y = 0;
@@ -16,7 +16,7 @@ public class TransformedObject implements TransformedObjectInterface{
     private double scale = 0;
     private double rotation = 0;
     private long id = 0;
-    private byte type = DataObjectInterface.RECTANGLE;
+    private byte type = IDataObject.RECTANGLE;
     private BufferedImage img = null;
     
     public TransformedObject(long id, int x, int y, int width, int height,

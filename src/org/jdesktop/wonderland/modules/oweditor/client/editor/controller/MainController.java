@@ -6,7 +6,7 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.controllerinterfac
 import org.jdesktop.wonderland.modules.oweditor.client.editor.controllerinterfaces.MainControllerDataInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.controllerinterfaces.MainControllerGUIInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.data.DataController;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataControllerMainControllerInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IDataToMainController;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.GUIController;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.IGUIController;
 import org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter.WonderlandAdapterController;
@@ -24,7 +24,7 @@ public class MainController implements MainControllerDataInterface,
     
     private IGUIController gui = null;
     private AdapterControllerMainControllerInterface adapter = null;
-    private DataControllerMainControllerInterface data = null;
+    private IDataToMainController data = null;
     
     /**
      * Creates a new instance of the main controller and

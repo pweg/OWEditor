@@ -17,7 +17,7 @@ import java.util.logging.Logger;
 import org.jdesktop.wonderland.client.cell.Cell;
 import org.jdesktop.wonderland.common.cell.CellTransform;
 import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.CoordinateTranslatorInterface;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataObjectInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IDataObject;
 
 /**
  * This class is used to transform coorinates from the server
@@ -140,7 +140,7 @@ public class CoordinateTranslator implements CoordinateTranslatorInterface{
         return globalScale;
     }
 
-    public double getRotation(DataObjectInterface object) {
+    public double getRotation(IDataObject object) {
         return -object.getRotationY();
     }
     

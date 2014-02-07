@@ -1,6 +1,6 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window;
 
-import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.TransformedObjectInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.ITransformedObject;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.IGraphicToInput;
 
 /**
@@ -15,7 +15,7 @@ public interface GraphicForwardInterface {
     
     public IGraphicToInput getGraphicInputInterface();
 
-    public void createShape(TransformedObjectInterface dataObject);
+    public void createShape(ITransformedObject dataObject);
 
     public void updateShape(long id, int x, int y, String name);
 

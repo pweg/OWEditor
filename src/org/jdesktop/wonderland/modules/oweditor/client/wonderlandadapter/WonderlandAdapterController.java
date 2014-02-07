@@ -4,7 +4,7 @@ import org.jdesktop.wonderland.client.cell.CellManager;
 import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.AdapterControllerMainControllerInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.CoordinateTranslatorInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.GUIObserverInterface;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.AdapterObserverInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IAdapterObserver;
 
 /**
  * The adapter controller class, which initiallizes the adapter.
@@ -41,7 +41,7 @@ public class WonderlandAdapterController implements AdapterControllerMainControl
     }
 
     @Override
-    public void registerDataUpdateInterface(AdapterObserverInterface i) {
+    public void registerDataUpdateInterface(IAdapterObserver i) {
        um.setDataUpdateInterface(i);
         
     }

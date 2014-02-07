@@ -13,7 +13,7 @@ import java.util.ArrayList;
  */
 public class WorldBuilder {
     
-    private DataUpdater sua = null;
+    private UpdateManager sua = null;
     private DummyAdapterController ac = null;
     
     /**
@@ -21,7 +21,7 @@ public class WorldBuilder {
      * 
      * @param sua: a serverUpdate instance.
      */
-    public WorldBuilder( DummyAdapterController ac, DataUpdater sua){
+    public WorldBuilder( DummyAdapterController ac, UpdateManager sua){
         this.sua = sua;
         this.ac = ac;
     }
@@ -30,7 +30,18 @@ public class WorldBuilder {
      * Gets the world from the server and extracts data from it.
      */
     public void build(){
+        
+        setServerList();
         initShapes();
+    }
+    
+    public void setServerList(){
+        
+        String[] servers = new String[1];
+        servers[0] = ac.server.name;
+        
+        sua.setServerList(servers);
+        
     }
     
     /**

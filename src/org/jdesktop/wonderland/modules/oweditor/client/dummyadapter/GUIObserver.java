@@ -223,7 +223,7 @@ public class GUIObserver implements GUIObserverInterface{
         
     }*/
 
-    public boolean importCheckName(String name) {
+    public boolean importCheckName(String moduleName, String server) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

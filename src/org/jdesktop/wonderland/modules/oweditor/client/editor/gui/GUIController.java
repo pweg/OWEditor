@@ -1,7 +1,7 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.gui;
 
 import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.GUIObserverInterface;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataObjectManagerGUIInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IDataToGUI;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.input.Input;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.input.IInput;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.Window;
@@ -24,7 +24,7 @@ public class GUIController implements IGUIController{
     protected IWindow window = null;
     protected IInput input = null;
     
-    private DataObjectManagerGUIInterface dmi = null;
+    private IDataToGUI dmi = null;
     private AdapterCommunication ac = null;
     
     public GUIController(){
@@ -65,7 +65,7 @@ public class GUIController implements IGUIController{
 
 
     @Override
-    public void registerDataManager(DataObjectManagerGUIInterface dm) {
+    public void registerDataManager(IDataToGUI dm) {
         dmi = dm;
         ac.registerDataManager(dm);
         window.registerDataManager(dm);

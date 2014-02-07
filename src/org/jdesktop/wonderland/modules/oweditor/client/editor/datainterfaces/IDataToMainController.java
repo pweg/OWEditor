@@ -9,7 +9,7 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.IEnv
  * @author Patrick
  *
  */
-public interface DataControllerMainControllerInterface {
+public interface IDataToMainController {
     
     /**
      * Initializes the data controller.
@@ -22,14 +22,14 @@ public interface DataControllerMainControllerInterface {
      * 
      * @return a DataUpdateInterface.
      */
-    public AdapterObserverInterface getDataUpdateInterface();
+    public IAdapterObserver getDataUpdateInterface();
     
     /**
      * Returns a dataObjectManager instance, which is used for the GUI
      * to get updates from the dataManager.
      * @return a DataManagerInterface.
      */
-    public DataObjectManagerGUIInterface getDataManagerInterface();
+    public IDataToGUI getDataManagerInterface();
         
     /**
      * Registers an observer for the data object manager, which informs

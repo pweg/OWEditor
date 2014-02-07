@@ -10,7 +10,7 @@ import java.awt.image.BufferedImage;
  * @author Patrick
  *
  */
-public interface TransformedObjectInterface {
+public interface ITransformedObject {
     
     public static final byte AVATAR = 0;
     public static final byte RECTANGLE = 1;

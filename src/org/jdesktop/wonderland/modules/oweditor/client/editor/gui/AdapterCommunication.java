@@ -4,8 +4,8 @@ import java.awt.Point;
 import java.util.ArrayList;
 
 import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.GUIObserverInterface;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataObjectManagerGUIInterface;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.TransformedObjectInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IDataToGUI;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.ITransformedObject;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.commands.Command;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.commands.Delete;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.commands.Paste;
@@ -26,7 +26,7 @@ public class AdapterCommunication implements IAdapterCommunication{
     private GUIObserverInterface goi = null;
     private ArrayList<Command> undoList = null;
     private ArrayList<Command> redoList = null;
-    private DataObjectManagerGUIInterface dm;
+    private IDataToGUI dm;
     
     public AdapterCommunication(){
         undoList = new ArrayList<Command>();
@@ -48,7 +48,7 @@ public class AdapterCommunication implements IAdapterCommunication{
      * 
      * @param dm The data manger instance.
      */
-    public void registerDataManager(DataObjectManagerGUIInterface dm) {
+    public void registerDataManager(IDataToGUI dm) {
         this.dm = dm;
     }
     
@@ -69,7 +69,7 @@ public class AdapterCommunication implements IAdapterCommunication{
         ArrayList<Point> coordinates_old = new ArrayList<Point>();
         
         for(long id : ids){
-            TransformedObjectInterface o = dm.getTransformedObject(id);
+            ITransformedObject o = dm.getTransformedObject(id);
             coordinates_old.add(new Point(o.getX(), o.getY()));
         }
         
@@ -103,7 +103,7 @@ public class AdapterCommunication implements IAdapterCommunication{
         ArrayList<Double> rotation_old = new ArrayList<Double>();
         
         for(long id : ids){
-            TransformedObjectInterface o = dm.getTransformedObject(id);
+            ITransformedObject o = dm.getTransformedObject(id);
             coordinates_old.add(new Point(o.getX(), o.getY()));
             rotation_old.add(o.getRotation());
         }
@@ -126,7 +126,7 @@ public class AdapterCommunication implements IAdapterCommunication{
         ArrayList<Double> scale_old = new ArrayList<Double>();
         
         for(long id : ids){
-            TransformedObjectInterface o = dm.getTransformedObject(id);
+            ITransformedObject o = dm.getTransformedObject(id);
             coordinates_old.add(new Point(o.getX(), o.getY()));
             scale_old.add(o.getScale());
         }
@@ -144,8 +144,8 @@ public class AdapterCommunication implements IAdapterCommunication{
     }
     
     @Override
-    public boolean importCheckName(String name){
-        return goi.importCheckName(name);
+    public boolean importCheckName(String moduleName, String server){
+        return goi.importCheckName(moduleName, server);
     }
 
     @Override

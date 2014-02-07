@@ -17,11 +17,11 @@ public class EnvironmentManager {
     private int maxY = Integer.MIN_VALUE;
     private int minX = Integer.MAX_VALUE;
     private int minY = Integer.MAX_VALUE;
+    
+    private String[] serverList = null;
         
     /**
      * Creates a new EnvironmentManager instance.
-     * 
-     * @param dc a dataController instance.
      */
     public EnvironmentManager(){
     }
@@ -113,6 +113,14 @@ public class EnvironmentManager {
      */
     public void registerObserver(IEnvironmentObserver en) {
         this.en = en;
+    }
+
+    public void setServerList(String[] servers) {
+        this.serverList = servers;
+    }
+    
+    public String[] getServerList(){
+        return serverList;
     }
     
 

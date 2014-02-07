@@ -4,7 +4,7 @@ import java.awt.Point;
 import java.awt.geom.Point2D;
 
 import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.CoordinateTranslatorInterface;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataObjectInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IDataObject;
 
 public class CoordinateTranslator implements CoordinateTranslatorInterface{
 
@@ -57,7 +57,7 @@ public class CoordinateTranslator implements CoordinateTranslatorInterface{
     }
 
     @Override
-    public double getRotation(DataObjectInterface object) {
+    public double getRotation(IDataObject object) {
         return object.getRotationX();
     }
 

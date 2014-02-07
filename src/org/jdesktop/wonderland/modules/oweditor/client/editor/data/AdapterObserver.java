@@ -1,7 +1,7 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.data;
 
-import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataObjectInterface;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.AdapterObserverInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IDataObject;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IAdapterObserver;
 
 /**
  * This class is used to forward data updates from the adapter package.
@@ -9,27 +9,35 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.Ada
  * @author Patrick
  *
  */
-public class AdapterObserver implements AdapterObserverInterface{
+public class AdapterObserver implements IAdapterObserver{
     
     private DataObjectManager dm = null;
+    private EnvironmentManager em = null;
 
     /**
      * Creates a new dataUpdate instance.
      * 
      * @param dm a dataObjectManager instance, which is called,
      * when updates are made.
+     * @param em a environmentManager instance.
      */
-    public AdapterObserver(DataObjectManager dm) {
+    public AdapterObserver(DataObjectManager dm, EnvironmentManager em) {
         this.dm = dm;
+        this.em = em;
+    }
+    
+    @Override
+    public void setServerList(String[] servers) {
+       em.setServerList(servers);
     }
 
     @Override
-    public DataObjectInterface createEmptyObject() {
+    public IDataObject createEmptyObject() {
         return dm.getEmptyDataObject();
     }
 
     @Override
-    public void notifyObjectCreation(DataObjectInterface dataObject) {
+    public void notifyObjectCreation(IDataObject dataObject) {
         dm.createNewObject((DataObject) dataObject);
     }
 
@@ -52,5 +60,6 @@ public class AdapterObserver implements AdapterObserverInterface{
     public void notifyScaling(long id, double scale) {
         dm.updateScale(id, scale);
     }
+
 
 }

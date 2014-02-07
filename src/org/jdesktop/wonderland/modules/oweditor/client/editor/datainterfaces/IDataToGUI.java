@@ -2,6 +2,7 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces;
 
 import java.awt.Point;
 import java.awt.geom.Point2D;
+import java.util.ArrayList;
 
 /**
  * An interface used between the data and gui package.
@@ -9,7 +10,7 @@ import java.awt.geom.Point2D;
  * @author Patrick
  *
  */
-public interface DataObjectManagerGUIInterface {
+public interface IDataToGUI {
     
     /**
      * Returns a data object for the given id.
@@ -17,9 +18,9 @@ public interface DataObjectManagerGUIInterface {
      * @param id the id of the object.
      * @return a data object, when the id is stored, otherwise null.
      */
-    public DataObjectInterface getObject(long id);
+    public IDataObject getObject(long id);
     
-    public TransformedObjectInterface getTransformedObject(long id);
+    public ITransformedObject getTransformedObject(long id);
     
     /**
      * Returns the z coordinate to an object, given by the id.
@@ -53,5 +54,7 @@ public interface DataObjectManagerGUIInterface {
      * @return
      */
     public Point2D.Double transformCoordsBack(Point coordinates, int width, int height);
+    
+    public String[] getServerList();
     
 }

@@ -5,7 +5,7 @@ import java.awt.event.MouseWheelListener;
 
 import javax.swing.event.MouseInputAdapter;
 
-import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataObjectManagerGUIInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IDataToGUI;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.input.IInputToWindow;
 
 /**
@@ -110,7 +110,7 @@ public interface IWindow extends GraphicForwardInterface{
      * 
      * @param dm The instance
      */
-    public void registerDataManager(DataObjectManagerGUIInterface dm);
+    public void registerDataManager(IDataToGUI dm);
 
 
     

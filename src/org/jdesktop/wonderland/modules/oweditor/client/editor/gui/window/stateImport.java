@@ -3,18 +3,18 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window;
 import java.awt.Point;
 import java.awt.geom.Point2D;
 
-import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataObjectManagerGUIInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IDataToGUI;
 
 public class stateImport implements stateInput{
     
     private WindowController wc = null;
-    private DataObjectManagerGUIInterface dm = null;
+    private IDataToGUI dm = null;
     private int width = 0;
     private int height = 0;
     
     
     public stateImport(WindowController wc,
-            DataObjectManagerGUIInterface dm){
+            IDataToGUI dm){
         this.wc = wc;
         this.dm = dm;
     }

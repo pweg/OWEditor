@@ -147,6 +147,37 @@ public class KMZImporter {
         return translator.transformSize(bounds);
     }
 
+    boolean checkName(String moduleName, String serverName) {
+        Collection<ServerSessionManager> servers = LoginManager.getAll();
+        targetServer = null;
+        
+        //@Todo: Make a selection option in the gui!
+        for (ServerSessionManager server : servers) {
+            if(server.getServerNameAndPort().equals(serverName)){
+                targetServer = server;
+                break;
+            }
+        }
+        if(targetServer == null){
+            LOGGER.log(Level.SEVERE, "Could not find a server to connect!");
+            return true;
+        }
+
+        // Check we are not about to overwrite an existing module
+        String url = targetServer.getServerURL();
+        ModuleList moduleList = ModuleUtils.fetchModuleList(url);
+        ModuleInfo[] modules = moduleList.getModuleInfos();
+        
+        if (modules != null) {
+            for (ModuleInfo module : modules) {
+                if (moduleName.equals(module.getName())) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     public boolean importToServer(String name, String image_url, 
             double x, double y, double z, 
             double rotationX, double rotationY, double rotationZ, 
@@ -154,11 +185,6 @@ public class KMZImporter {
         
         
         if(targetServer == null){
-            Collection<ServerSessionManager> servers = LoginManager.getAll();
-            //@Todo: Make a selection option in the gui!
-            for (ServerSessionManager server : servers) {
-                targetServer = server;
-            }
             if(targetServer == null){
                 LOGGER.log(Level.SEVERE, "Could not find a server to connect!");
                 return false;
@@ -306,34 +332,6 @@ public class KMZImporter {
         return moduleJar;
 
 }  
-
-    boolean checkName(String name) {
-        Collection<ServerSessionManager> servers = LoginManager.getAll();
-        targetServer = null;
-        
-        //@Todo: Make a selection option in the gui!
-        for (ServerSessionManager server : servers) {
-            targetServer = server;
-        }
-        if(targetServer == null){
-            LOGGER.log(Level.SEVERE, "Could not find a server to connect!");
-            return true;
-        }
-
-        // Check we are not about to overwrite an existing module
-        String url = targetServer.getServerURL();
-        ModuleList moduleList = ModuleUtils.fetchModuleList(url);
-        ModuleInfo[] modules = moduleList.getModuleInfos();
-        
-        if (modules != null) {
-            for (ModuleInfo module : modules) {
-                if (name.equals(module.getName())) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
 
     public long getLastID() {
         if(lastCellID == null)

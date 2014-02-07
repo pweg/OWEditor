@@ -5,6 +5,8 @@ import java.util.Collection;
 import java.util.logging.Logger;
 import org.jdesktop.wonderland.client.cell.Cell;
 import org.jdesktop.wonderland.client.cell.CellCache;
+import org.jdesktop.wonderland.client.login.LoginManager;
+import org.jdesktop.wonderland.client.login.ServerSessionManager;
 
 
 /**
@@ -21,7 +23,7 @@ public class WorldBuilder {
     private WonderlandAdapterController ac = null;
     
     private ArrayList<Cell> cells = null;
-        private static final Logger LOGGER =
+    private static final Logger LOGGER =
             Logger.getLogger(WorldBuilder.class.getName());
     
     /**
@@ -41,6 +43,8 @@ public class WorldBuilder {
      */
     public void build(){
         
+        setServer();
+        
         CellCache cache = ac.sm.getCellCache();
         
         if (cache == null) {
@@ -56,6 +60,20 @@ public class WorldBuilder {
         for(Cell cell : cells){
             createDataObject(cell);
         }
+    }
+    
+    private void setServer(){
+        
+        Collection<ServerSessionManager> servers = LoginManager.getAll();
+        
+        String[] serverList = new String[servers.size()];
+            //@Todo: Make a selection option in the gui!
+        int i = 0;
+        for (ServerSessionManager server : servers) {
+            serverList[i] = server.getServerNameAndPort();
+            i++;
+        }
+        sua.setServerList(serverList);
     }
     
     private void iterateChilds(Cell cell, boolean b){

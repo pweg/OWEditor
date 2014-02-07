@@ -5,7 +5,7 @@ import java.awt.Point;
 import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
 
-import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.TransformedObjectInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.ITransformedObject;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.DraggingObject;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.IWindowToGraphic;
 
@@ -62,7 +62,7 @@ public class GraphicController implements IGraphicToWindow{
 
 
     @Override
-    public void createShape(TransformedObjectInterface dataObject) {
+    public void createShape(ITransformedObject dataObject) {
         sm.setDataUpdate(dataObject);
     }
 

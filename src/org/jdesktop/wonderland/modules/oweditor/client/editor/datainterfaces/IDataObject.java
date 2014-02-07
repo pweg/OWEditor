@@ -2,7 +2,7 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces;
 
 import java.awt.image.BufferedImage;
 
-public interface DataObjectInterface extends TransformedObjectInterface{
+public interface IDataObject extends ITransformedObject{
 
     /**
      * Returns the x coordinate of the object.

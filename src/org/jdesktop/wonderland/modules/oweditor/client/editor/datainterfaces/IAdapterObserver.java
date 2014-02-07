@@ -1,12 +1,21 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces;
 
+import java.util.ArrayList;
+
 /**
  * This interface is used between the data and the adapter package.
  * 
  * @author Patrick
  *
  */
-public interface AdapterObserverInterface {
+public interface IAdapterObserver {
+    
+    /**
+     * Sets a list of servers.
+     * 
+     * @param servers The serverlist as strings.
+     */
+    public void setServerList(String[] servers);
 
     
     /**
@@ -16,7 +25,7 @@ public interface AdapterObserverInterface {
      * 
      * @return An empty data object, which has only dummy values.
      */
-    public DataObjectInterface createEmptyObject();
+    public IDataObject createEmptyObject();
 
     /**
      * Creates a new data object with the given data object.
@@ -24,7 +33,7 @@ public interface AdapterObserverInterface {
      * @param dataObject The data object which needs to be stored 
      * in the data manager.
      */
-    public void notifyObjectCreation(DataObjectInterface dataObject);
+    public void notifyObjectCreation(IDataObject dataObject);
     
     
     /**
@@ -62,5 +71,6 @@ public interface AdapterObserverInterface {
      * @param scale The new scale of the object.
      */
     public void notifyScaling(long id, double scale);
+    
 
 }

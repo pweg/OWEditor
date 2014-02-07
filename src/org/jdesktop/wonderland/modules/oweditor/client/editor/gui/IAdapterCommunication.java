@@ -85,7 +85,7 @@ public interface IAdapterCommunication {
      * @param name The name to be checked.
      * @return  True, if a conflict exists, false otherwise.
      */
-    public boolean importCheckName(String name);
+    public boolean importCheckName(String moduleName, String server);
 
     /**
      * Calls the adapter to import the pre-loaded model.

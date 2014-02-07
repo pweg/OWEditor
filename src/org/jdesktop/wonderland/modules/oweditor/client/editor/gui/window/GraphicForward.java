@@ -1,6 +1,6 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window;
 
-import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.TransformedObjectInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.ITransformedObject;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.IAdapterCommunication;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.IGraphicToWindow;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.IGraphicToInput;
@@ -27,7 +27,7 @@ public class GraphicForward implements GraphicForwardInterface{
     }
 
     @Override
-    public void createShape(TransformedObjectInterface dataObject) {
+    public void createShape(ITransformedObject dataObject) {
         graphic.createShape(dataObject);
     }
 

@@ -1,7 +1,7 @@
 package org.jdesktop.wonderland.modules.oweditor.client.dummyadapter;
 
-import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.AdapterObserverInterface;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataObjectInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IAdapterObserver;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IDataObject;
 
 /**
  * This class is used for updating the data package, when
@@ -10,10 +10,10 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.Dat
  * @author Patrick
  *
  */
-public class DataUpdater {
+public class UpdateManager {
     
     private DummyAdapterController ac = null;
-    private AdapterObserverInterface dui = null;
+    private IAdapterObserver dui = null;
     
     
     /**
@@ -21,7 +21,7 @@ public class DataUpdater {
      * 
      * @param ac: the adapter controller instance.
      */
-    public DataUpdater(DummyAdapterController ac){
+    public UpdateManager(DummyAdapterController ac){
         this.ac = ac;
     }
     
@@ -40,7 +40,7 @@ public class DataUpdater {
      * 
      * @param dui a dataUpdate instance.
      */
-    public void setDataUpdateInterface(AdapterObserverInterface dui) {
+    public void setDataUpdateInterface(IAdapterObserver dui) {
         this.dui = dui;
     }
 
@@ -58,7 +58,7 @@ public class DataUpdater {
         
         String name = sObject.name;
         
-        DataObjectInterface object = dui.createEmptyObject();
+        IDataObject object = dui.createEmptyObject();
         object.setID(id);
         object.setCoordinates(sObject.x, sObject.y, sObject.z);
         object.setRotationX(sObject.rotationX);
@@ -69,7 +69,7 @@ public class DataUpdater {
         object.setImage(sObject.image);
         
         if(sObject.isAvatar){
-            object.setType(DataObjectInterface.AVATAR);
+            object.setType(IDataObject.AVATAR);
             object.setWidth(AdapterSettings.avatarSizeX);
             object.setHeight(AdapterSettings.avatarSizeY);
         }else{
@@ -149,6 +149,10 @@ public class DataUpdater {
             return;
         
         dui.notifyScaling(id, so.scale);
+    }
+
+    public void setServerList(String[] servers) {
+        dui.setServerList(servers); 
     }
 
 }

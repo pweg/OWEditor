@@ -2,7 +2,7 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.data;
 
 import java.awt.image.BufferedImage;
 
-import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataObjectInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IDataObject;
 
 /**
  * This class houses all necessary data of an virtual world item.
@@ -10,7 +10,7 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.Dat
  * @author Patrick
  *
  */
-public class DataObject implements DataObjectInterface{
+public class DataObject implements IDataObject{
     
     private Vector3D coords = null;
     private double rotationX = 0;
@@ -22,7 +22,7 @@ public class DataObject implements DataObjectInterface{
     private float width = 0;
     private float height = 0;
     private String name = "";
-    private byte type = DataObjectInterface.RECTANGLE;
+    private byte type = IDataObject.RECTANGLE;
     private BufferedImage img = null;
     
     /**

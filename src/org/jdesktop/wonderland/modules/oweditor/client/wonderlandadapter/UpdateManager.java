@@ -1,6 +1,7 @@
 package org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter;
 
 import com.jme.math.Vector3f;
+import java.util.ArrayList;
 import java.util.logging.Logger;
 import org.jdesktop.wonderland.client.cell.Cell;
 import org.jdesktop.wonderland.client.cell.CellComponent;
@@ -10,8 +11,8 @@ import org.jdesktop.wonderland.client.cell.view.AvatarCell;
 import org.jdesktop.wonderland.common.cell.messages.CellServerComponentMessage;
 import org.jdesktop.wonderland.common.messages.ErrorMessage;
 import org.jdesktop.wonderland.common.messages.ResponseMessage;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataObjectInterface;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.AdapterObserverInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IDataObject;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IAdapterObserver;
 
 /**
  * This class is used for updating the data package, when
@@ -23,7 +24,7 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.Ada
 public class UpdateManager {
     
     private WonderlandAdapterController ac = null;
-    private AdapterObserverInterface dui = null;
+    private IAdapterObserver dui = null;
     
     private ComponentChangeListener componentListener = null;
     
@@ -87,7 +88,7 @@ public class UpdateManager {
      * 
      * @param dui a dataUpdate instance.
      */
-    public void setDataUpdateInterface(AdapterObserverInterface dui) {
+    public void setDataUpdateInterface(IAdapterObserver dui) {
         this.dui = dui;
     }
     
@@ -178,7 +179,7 @@ public class UpdateManager {
             }
         }
         
-        DataObjectInterface object = dui.createEmptyObject();
+        IDataObject object= dui.createEmptyObject();
         
         float x = coordinates.x;
         float y = coordinates.y;
@@ -199,7 +200,7 @@ public class UpdateManager {
         object.setName(name);
         
         if(cell instanceof AvatarCell){
-            object.setType(DataObjectInterface.AVATAR);
+            object.setType(IDataObject.AVATAR);
             object.setWidth(AdapterSettings.avatarSizeX);
             object.setHeight(AdapterSettings.avatarSizeY);
         }
@@ -223,6 +224,10 @@ public class UpdateManager {
             
             ac.bm.removeTranslation(name);
         }
+    }
+
+    void setServerList(String[] serverList) {
+        dui.setServerList(serverList);
     }
 
 }

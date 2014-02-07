@@ -11,8 +11,8 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.logging.Logger;
 
-import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataObjectInterface;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.TransformedObjectInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IDataObject;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.ITransformedObject;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.DraggingObject;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.ShapeEllipse;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.ShapeObject;
@@ -251,7 +251,7 @@ public class ShapeManager {
      * 
      * @param dataObject which is the updated object.
      */
-    public void setDataUpdate(TransformedObjectInterface dataObject) {
+    public void setDataUpdate(ITransformedObject dataObject) {
         
         if(dataObject == null)
             return;
@@ -281,7 +281,7 @@ public class ShapeManager {
      * 
      * @param dataObject which needs to be created.
      */
-    private void createShape(TransformedObjectInterface dataObject){
+    private void createShape(ITransformedObject dataObject){
         
         long id = dataObject.getID();
         int x = dataObject.getX();
@@ -296,7 +296,7 @@ public class ShapeManager {
         if(name.length() > 20){
             name = name.substring(0, 18)+ "...";
         }
-        if(dataObject.getType() == DataObjectInterface.AVATAR){
+        if(dataObject.getType() == IDataObject.AVATAR){
             ShapeObject shape = factory.createShapeObject(ShapeFactory.AVATAR, 
                     x, y, width, height, id, name, rotation, scale, img);
             writeLock.lock();

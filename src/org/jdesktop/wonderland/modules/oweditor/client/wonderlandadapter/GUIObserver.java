@@ -93,8 +93,8 @@ public class GUIObserver implements GUIObserverInterface{
     }
     
     @Override
-    public boolean importCheckName(String name){
-        return importer.checkName(name);
+    public boolean importCheckName(String moduleName, String server){
+        return importer.checkName(moduleName, server);
     }
 
     @Override

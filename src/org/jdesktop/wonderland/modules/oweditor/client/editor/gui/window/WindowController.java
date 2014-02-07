@@ -1,6 +1,6 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window;
 
-import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataObjectManagerGUIInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IDataToGUI;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.IAdapterCommunication;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.GraphicController;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.IGraphicToWindow;
@@ -81,7 +81,7 @@ public class WindowController {
         frame.repaint();
     }
 
-    public void registerDataManager(DataObjectManagerGUIInterface dm) {
+    public void registerDataManager(IDataToGUI dm) {
         mouseCoords.registerDataManager(dm);
         frameInterface.registerDataManager(dm);
     }

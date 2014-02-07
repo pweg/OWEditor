@@ -2,7 +2,7 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces;
 
 import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.CoordinateTranslatorInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.GUIObserverInterface;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataObjectManagerGUIInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IDataToGUI;
 
 
 public interface IGUIController {
@@ -40,7 +40,7 @@ public interface IGUIController {
      * 
      * @param dm the instance.
      */
-    public void registerDataManager(DataObjectManagerGUIInterface dm);
+    public void registerDataManager(IDataToGUI dm);
     
     /**
      * Sets an observer from the adapter package to listen for 

@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ResourceBundle;
+import java.util.logging.Logger;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
@@ -27,6 +28,9 @@ public class ImportFrame extends javax.swing.JFrame {
      */
     private static final long serialVersionUID = 1L;
     
+    private static final Logger LOGGER =
+            Logger.getLogger(ImportFrame.class.getName());
+    
 
     private static final ResourceBundle BUNDLE = ResourceBundle.getBundle(
             "org/jdesktop/wonderland/modules/oweditor/client/resources/Bundle");
@@ -40,11 +44,17 @@ public class ImportFrame extends javax.swing.JFrame {
     private boolean working = false;
     private JProgressBar progressBar = null;
     private NumberFormat doubleFormat = null;
+    
+    private String[] serverList = null;
             
     /**
      * Creates new form NewJFrame
+     * 
+     * @param fc A frameController instance.
+     * @param serverList A serverlist, containing all available server.
      */
-    public ImportFrame(FrameController fc) {
+    public ImportFrame(FrameController fc, String[] serverList) {
+        this.serverList = serverList;
         this.fc = fc;
         
         initComponents();
@@ -53,6 +63,7 @@ public class ImportFrame extends javax.swing.JFrame {
         progressBar = new JProgressBar();
         progressBar.setIndeterminate(false);
         progressBar.setVisible(false);
+        
         
     }
 
@@ -64,7 +75,6 @@ public class ImportFrame extends javax.swing.JFrame {
      */
     // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
     private void initComponents() {
-
         doubleFormat = new DecimalFormat("0.#####");
         doubleFormat.setGroupingUsed(false);
         
@@ -94,7 +104,12 @@ public class ImportFrame extends javax.swing.JFrame {
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
-        serverList = new javax.swing.JComboBox<String>();
+        
+        if(serverList == null)
+            server = new javax.swing.JComboBox<String>();
+        else
+            server = new javax.swing.JComboBox<String>(serverList);
+        
         rotationFieldX = new javax.swing.JFormattedTextField(doubleFormat);
         rotationFieldY = new javax.swing.JFormattedTextField(doubleFormat);
         rotationFieldZ = new javax.swing.JFormattedTextField(doubleFormat);
@@ -270,10 +285,10 @@ public class ImportFrame extends javax.swing.JFrame {
                         .addGap(25,25,25)
                         .addComponent(image, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addComponent(moduleNameField)
-                        .addComponent(serverList))
+                        .addComponent(server))
                 .addContainerGap())
         );
-       jPanel3Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {serverList, nameField, moduleNameField});
+       jPanel3Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {server, nameField, moduleNameField});
 
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -302,13 +317,13 @@ public class ImportFrame extends javax.swing.JFrame {
                         .addGap(10,10,10)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel14)
-                            .addComponent(serverList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(server, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(10, 10, 10))
                     .addComponent(image, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGap(20, 20, 20))
                 .addContainerGap())
         );
-       jPanel3Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {nameField, moduleNameField, serverList});
+       jPanel3Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {nameField, moduleNameField, server});
 
 
         jPanel4.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -595,10 +610,18 @@ public class ImportFrame extends javax.swing.JFrame {
     }                                         
 
     private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {  
+        
         String image_url = imgField.getText();
         String name = nameField.getText();
+        String module_name = moduleNameField.getText();
+        String server_name = server.getSelectedItem().toString();
+        
         
         if(name.equals("")){
+            showError(BUNDLE.getString("NoNameError"), 
+                    BUNDLE.getString("NoNameErrorTitle"));
+            return;
+        }else if(module_name.equals("")){
             showError(BUNDLE.getString("NoNameError"), 
                     BUNDLE.getString("NoNameErrorTitle"));
             return;
@@ -645,7 +668,7 @@ public class ImportFrame extends javax.swing.JFrame {
         
         //progressBar.setVisible(true); //progressBar.setVisible(false);
         
-        if(fc.window.importCheckName(name)){
+        if(fc.window.importCheckName(module_name, server_name)){
             Object[] options = {BUNDLE.getString("Overwrite"),
                     BUNDLE.getString("Cancel")};
             int ret2 = JOptionPane.showOptionDialog(this,
@@ -701,6 +724,10 @@ public class ImportFrame extends javax.swing.JFrame {
             image.setImage(null);
             reset();
         }else{
+            if(serverList == null || serverList.length == 0){
+                showError("No server" , "Servererror");
+                setVisible(false);
+            }
             okButton.setEnabled(false);
             locationButton.setEnabled(false);
         }
@@ -776,6 +803,6 @@ public class ImportFrame extends javax.swing.JFrame {
     private javax.swing.JFormattedTextField rotationFieldY;
     private javax.swing.JFormattedTextField rotationFieldZ;
     private javax.swing.JFormattedTextField scaleField;
-    private javax.swing.JComboBox serverList;
+    private javax.swing.JComboBox<String> server;
     // End of variables declaration   
 }

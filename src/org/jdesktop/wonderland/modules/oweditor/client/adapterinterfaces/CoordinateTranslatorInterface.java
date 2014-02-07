@@ -3,7 +3,7 @@ package org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces;
 import java.awt.Point;
 import java.awt.geom.Point2D;
 
-import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataObjectInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IDataObject;
 
 public interface CoordinateTranslatorInterface {
 
@@ -91,6 +91,6 @@ public interface CoordinateTranslatorInterface {
      * @param object The object which contains the rotation.
      * @return The rotation transformed for the GUI.
      */
-    public double getRotation(DataObjectInterface object);
+    public double getRotation(IDataObject object);
 
 }

@@ -6,9 +6,9 @@ import java.util.LinkedHashMap;
 import java.util.logging.Logger;
 
 import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.CoordinateTranslatorInterface;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataObjectInterface;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataObjectManagerGUIInterface;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.TransformedObjectInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IDataObject;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IDataToGUI;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.ITransformedObject;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.IDataObjectObserver;
 import org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter.GUIObserver;
 
@@ -18,7 +18,7 @@ import org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter.GUIObse
  * @author Patrick
  *
  */
-public class DataObjectManager implements DataObjectManagerGUIInterface{
+public class DataObjectManager {
     
     private static final Logger LOGGER =
             Logger.getLogger(GUIObserver.class.getName());
@@ -44,7 +44,7 @@ public class DataObjectManager implements DataObjectManagerGUIInterface{
      * 
      * @param dataObject the objectata object to store.
      */
-    public void createNewObject(DataObjectInterface dataObject){
+    public void createNewObject(IDataObject dataObject){
         long id = dataObject.getID();
         
         
@@ -112,19 +112,17 @@ public class DataObjectManager implements DataObjectManagerGUIInterface{
        object.setCoordinates(x, y, z);
        domo.notifyTranslation(id, p.x, p.y);
     }
-    
-    @Override
-    public DataObjectInterface getObject(long id){
+
+    public IDataObject getObject(long id){
         return data.get(id);
     }
     
-    @Override
-    public TransformedObjectInterface getTransformedObject(long id){
+    public ITransformedObject getTransformedObject(long id){
 
         return createTransformedObject(data.get(id));
     }
     
-    private TransformedObjectInterface createTransformedObject(DataObject object){
+    private ITransformedObject createTransformedObject(DataObject object){
         float x = object.getXf();
         float y = object.getYf();
         float widthf = object.getWidthf();
@@ -141,7 +139,6 @@ public class DataObjectManager implements DataObjectManagerGUIInterface{
         return t;
     }
 
-    @Override
     public float getZ(long id) {
         DataObject object = data.get(id);
         
@@ -156,7 +153,7 @@ public class DataObjectManager implements DataObjectManagerGUIInterface{
      * 
      * @return an empty objectata object.
      */
-    public DataObjectInterface getEmptyDataObject() {
+    public IDataObject getEmptyDataObject() {
         return new DataObject();
     }
     
@@ -209,7 +206,6 @@ public class DataObjectManager implements DataObjectManagerGUIInterface{
         
     }
 
-    @Override
     public Point2D.Double transformCoordsBack(Point coordinates) {
 
         double x = ct.transformXBack(coordinates.x);
@@ -218,7 +214,6 @@ public class DataObjectManager implements DataObjectManagerGUIInterface{
         return new Point2D.Double(x, y);
     }
 
-    @Override
     public Point2D.Double transformCoordsBack(Point coordinates, int width, int height) {
 
         Point2D.Double point = ct.transformCoordinatesBack((float)coordinates.x,

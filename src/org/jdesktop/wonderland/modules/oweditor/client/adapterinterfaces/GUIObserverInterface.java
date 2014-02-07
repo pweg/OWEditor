@@ -105,10 +105,11 @@ public interface GUIObserverInterface {
      * Checks for module name conflict. Returns true
      * if there is a conflict, false otherwise.
      * 
-     * @param name The name, which should be checked.
+     * @param moduleName The name, which should be checked.
+     * @param server The name of the selected server.
      * @return True, if the name already exists, false otherwise.
      */
-    public boolean importCheckName(String name);
+    public boolean importCheckName(String moduleName, String server);
 
     /**
      * Imports the laded KMZ file and creates a new module for

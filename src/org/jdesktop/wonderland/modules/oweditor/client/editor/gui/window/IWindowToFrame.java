@@ -18,11 +18,12 @@ public interface IWindowToFrame {
     /**
      * Checks, whether the name already exists or not.
      * 
-     * @param name The name to be checked.
+     * @param moduleName The name to be checked.
+     * @param serverName The name of the selected server.
      * @return True, if a name conflict exists,
      * false otherwise.
      */
-    public boolean importCheckName(String name);
+    public boolean importCheckName(String moduleName, String serverName);
 
     /**
      * Imports the loaded kmz model
@@ -82,5 +83,7 @@ public interface IWindowToFrame {
     public void undo();
     
     public void redo();
+
+    public String[] getServerList();
 
 }

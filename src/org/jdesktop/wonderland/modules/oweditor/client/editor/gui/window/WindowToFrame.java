@@ -2,14 +2,13 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window;
 
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
-
-import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.DataObjectManagerGUIInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IDataToGUI;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.input.IInputToWindow;
 
 public class WindowToFrame implements IWindowToFrame{
 
     public WindowController wc = null;
-    private DataObjectManagerGUIInterface dm = null;
+    private IDataToGUI dm = null;
     
     public WindowToFrame(WindowController wc) {
         this.wc = wc;
@@ -21,8 +20,8 @@ public class WindowToFrame implements IWindowToFrame{
     }
     
     @Override
-    public boolean importCheckName(String name){
-        return wc.adapter.importCheckName(name);
+    public boolean importCheckName(String moduleName, String server){
+        return wc.adapter.importCheckName(moduleName, server);
     }
 
     @Override
@@ -45,7 +44,7 @@ public class WindowToFrame implements IWindowToFrame{
         wc.input.setInputMode(IInputToWindow.TRANSLATE);
     }
 
-    public void registerDataManager(DataObjectManagerGUIInterface dm) {
+    public void registerDataManager(IDataToGUI dm) {
         this.dm  = dm;
     }
     
@@ -73,6 +72,11 @@ public class WindowToFrame implements IWindowToFrame{
     @Override
     public void redo() {
         wc.adapter.redo();
+    }
+
+    @Override
+    public String[] getServerList() {
+        return dm.getServerList();
     }
 
 
