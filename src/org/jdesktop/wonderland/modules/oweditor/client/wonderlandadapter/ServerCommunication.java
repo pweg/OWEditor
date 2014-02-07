@@ -23,7 +23,6 @@ import org.jdesktop.wonderland.common.cell.CellEditConnectionType;
 import org.jdesktop.wonderland.common.cell.CellID;
 import org.jdesktop.wonderland.common.cell.CellTransform;
 import org.jdesktop.wonderland.common.cell.messages.CellDuplicateMessage;
-import org.jdesktop.wonderland.common.cell.state.CellServerState;
 
 /**
  * This class is used for outgoing communication with the server.
@@ -46,7 +45,13 @@ public class ServerCommunication {
         copies = new LinkedHashMap<Long, Integer>();
     }
     
-    
+    /**
+     * @TODO: Should be replaced by other translate method!
+     * @param id
+     * @param x
+     * @param y
+     * @return 
+     */
     public boolean translate(long id, int x, int y) {
         
         CellCache cache = ac.sm.getCellCache();
@@ -82,7 +87,7 @@ public class ServerCommunication {
         }
     }
     
-    public boolean translate(long id, float x, float y, float z){
+    public boolean translate(long id, Vector3f translation){
         CellCache cache = ac.sm.getCellCache();
         
         if (cache == null) {
@@ -95,14 +100,6 @@ public class ServerCommunication {
         if(cell == null)
             return false;
         
-        /*
-        CellTransform transform = cell.getLocalTransform();
-        Vector3f transl = transform.getTranslation(null);
-        float z = transl.z;
-        */
-        
-        
-        Vector3f translation =new Vector3f(x, y, z);
         MovableComponent movableComponent = cell.getComponent(MovableComponent.class);
 
         if (movableComponent != null) {
@@ -202,17 +199,18 @@ public class ServerCommunication {
             movableComponent.localMoveRequest(cellTransform);
         }
     }
-    public void rotate(long id, Vector3f rotation) {
+    
+    public boolean rotate(long id, Vector3f rotation) {
         
         CellCache cache = ac.sm.getCellCache();
         if (cache == null) {
             LOGGER.log(Level.WARNING, "Unable to find Cell cache for session {0}", ac.sm.getSession());
-            return;
+            return false;
         }
         CellID cellid = new CellID(id);
         Cell cell = cache.getCell(cellid);
         if(cell == null)
-            return;
+            return false;
         
         MovableComponent movableComponent = cell.getComponent(MovableComponent.class);
         
@@ -221,12 +219,15 @@ public class ServerCommunication {
             CellTransform cellTransform = cell.getLocalTransform();
             cellTransform.setRotation(newRotation);
             movableComponent.localMoveRequest(cellTransform);
+        }else{
+            return false;
         }
+        return true;
     }
     
     public void scale(long id, int x, int y, double scale){
         
-        CellCache cache = ac.sm.getCellCache();
+        /*CellCache cache = ac.sm.getCellCache();
         if (cache == null) {
             LOGGER.log(Level.WARNING, "Unable to find Cell cache for session {0}", ac.sm.getSession());
             return;
@@ -243,9 +244,34 @@ public class ServerCommunication {
             CellTransform cellTransform = cell.getLocalTransform();
             cellTransform.setScaling((float) scale);
             movableComponent.localMoveRequest(cellTransform);
-        }
-        
+        }*/
+        scale(id, scale);
         translate(id, x, y);
+    }
+    
+    
+    public boolean scale(long id, double scale){
+        
+        CellCache cache = ac.sm.getCellCache();
+        if (cache == null) {
+            LOGGER.log(Level.WARNING, "Unable to find Cell cache for session {0}", ac.sm.getSession());
+            return false;
+        }
+        CellID cellid = new CellID(id);
+        Cell cell = cache.getCell(cellid);
+        
+        if(cell == null)
+            return false;
+        
+        MovableComponent movableComponent = cell.getComponent(MovableComponent.class);
+        
+        if (movableComponent != null) {
+            CellTransform cellTransform = cell.getLocalTransform();
+            cellTransform.setScaling((float) scale);
+            movableComponent.localMoveRequest(cellTransform);
+            return true;
+        }
+        return false;
     }
     
 }

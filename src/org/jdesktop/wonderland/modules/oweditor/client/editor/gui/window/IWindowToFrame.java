@@ -46,6 +46,11 @@ public interface IWindowToFrame {
             double scale);
     
     /**
+     * Cancels the import.
+     */
+    public void cancelImport();
+    
+    /**
      * Creates a dragging object which lets the user pick a location with it.
      * 
      * @param width The shapes width.

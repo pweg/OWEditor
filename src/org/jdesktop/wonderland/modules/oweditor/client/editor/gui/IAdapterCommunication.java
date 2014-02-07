@@ -80,9 +80,15 @@ public interface IAdapterCommunication {
     public int[] loadKMZ(String url);
     
     /**
+     * Cancels the import, deleting the imported model.
+     */
+    public void cancelImport();
+    
+    /**
      * Checks for naming conflict, when importing.
      * 
-     * @param name The name to be checked.
+     * @param moduleName The name to be checked.
+     * @param server The server where the model will be loaded.
      * @return  True, if a conflict exists, false otherwise.
      */
     public boolean importCheckName(String moduleName, String server);

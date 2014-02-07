@@ -132,6 +132,7 @@ public interface GUIObserverInterface {
             double z, double rotationX, double rotationY, double rotationZ,
             double scale);
 
+    public void cancelImport();
 
     /**
      * Used during a conflict resolution. Copies an

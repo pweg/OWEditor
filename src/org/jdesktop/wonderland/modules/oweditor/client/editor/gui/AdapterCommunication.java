@@ -149,6 +149,11 @@ public class AdapterCommunication implements IAdapterCommunication{
     }
 
     @Override
+    public void cancelImport() {
+        goi.cancelImport();
+    }
+
+    @Override
     public boolean importKMZ(String name, String image_url, double x, double y,
             double z, double rotationX, double rotationY, double rotationZ,
             double scale) {

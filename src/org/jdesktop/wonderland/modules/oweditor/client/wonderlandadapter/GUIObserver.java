@@ -8,6 +8,9 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
+import org.jdesktop.wonderland.client.cell.Cell;
+import org.jdesktop.wonderland.client.cell.CellCache;
+import org.jdesktop.wonderland.common.cell.CellID;
 import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.GUIObserverInterface;
 
 /**
@@ -37,7 +40,22 @@ public class GUIObserver implements GUIObserverInterface{
 
     @Override
     public void notifyTranslationXY(long id, int x, int y ){
-        ac.sc.translate(id,x,y);
+        CellCache cache = ac.sm.getCellCache();
+        
+        if (cache == null) {
+            LOGGER.log(Level.WARNING, "Unable to find Cell cache for session {0}", ac.sm.getSession());
+            return;
+        }
+        CellID cellid = new CellID(id);
+        Cell cell = cache.getCell(cellid);
+        
+        if(cell == null)
+            return;
+        
+        Vector3fInfo coords = CellInfoReader.getCoordinates(cell);
+        
+        Vector3f translation = ac.ct.transformCoordinatesBack(cell, (float)x, (float)y, coords.z);
+        ac.sc.translate(id, translation);
     }
     
     @Override
@@ -114,23 +132,35 @@ public class GUIObserver implements GUIObserverInterface{
         if(!importer.importToServer(name, image_url, x,y,z, 
                 rotationX, rotationY, 
                 rotationZ, scale)){
-            LOGGER.warning("NIX herer GESCHAFFT ODER WAT?");
+            LOGGER.warning("Import to server failed.");
             return false;
         }
-        
-        
         
         long id = importer.getLastID();
         if(id == -1){
-            LOGGER.warning("RALALAALALA");
+            LOGGER.warning("No id was generated!");
             return false;
         }
-        //
         
-        if(!ac.sc.translate(id, (float)x, (float)y, (float)z)){
-            ac.bm.addTranslation(id, name, new Vector3f((float)x, (float)y, (float)z));
+        //Remember: z and y are reversed
+        Vector3f translate = new Vector3f((float)x, (float)z, (float)y);
+        if(!ac.sc.translate(id, translate)){
+            LOGGER.warning("TRANalslla");
+            ac.ltm.putTranslation(id, translate);
         }
         
+        Vector3f rotate = new Vector3f((float)rotationX, (float)rotationZ,
+                (float)rotationY);
+        if(!ac.sc.rotate(id, rotate)){
+            LOGGER.warning("TRANalslla2");
+            ac.ltm.putRotation(id, rotate);
+        }
+            
+        if(!ac.sc.scale(id, (float)scale)){
+            
+            LOGGER.warning("TRANalslla3");
+            ac.ltm.putScale(id, (float) scale);
+        }
         
         
         return true;
@@ -143,4 +173,8 @@ public class GUIObserver implements GUIObserverInterface{
     public void importConflictOverwrite(long id) {
         importer.deployToServer();
     }*/
+
+    public void cancelImport() {
+        importer.clearModel();
+    }
 }

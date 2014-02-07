@@ -139,6 +139,7 @@ public class UpdateManager {
          * This is not the best solution, because Wonderland does not create
          * the possibility to copy cells to a specific location.
          */
+        boolean b = true;
         if(ac.bm.translationContainsKey(name)){
             
             Vector3f new_pos = ac.bm.getTranslation(name);
@@ -159,7 +160,8 @@ public class UpdateManager {
                 */
                 if(!ac.sc.translate(id, (int) new_pos.x, (int)new_pos.y)){
                     LOGGER.warning("TRANSLATE FALSE");
-                    cell.addComponentChangeListener(componentListener);
+                    //cell.addComponentChangeListener(componentListener);
+                    b = false;
                 }else{
                     //rotation = backup.getRotation();
                     //scale = backup.getScale();
@@ -167,7 +169,7 @@ public class UpdateManager {
                     ac.bm.removeTranslation(name);
                 }
             }else{//Untransformed coordinates.
-                new_pos = ac.ct.transformVector(new_pos);
+                /*new_pos = ac.ct.transformVector(new_pos);
                 coordinates.set(new_pos);
                 
                 if(!ac.sc.translate(id, new_pos.x, new_pos.y, new_pos.z)){
@@ -175,8 +177,16 @@ public class UpdateManager {
                     cell.addComponentChangeListener(componentListener);
                 }else{
                     ac.bm.removeTranslation(name);
-                }
+                }*/
             }
+        }
+        
+        if(!invokeLateTransform(id) || !b)
+            cell.addComponentChangeListener(componentListener);
+        else{
+            coordinates = CellInfoReader.getCoordinates(cell);
+            rotation = CellInfoReader.getRotation(cell);
+            scale = CellInfoReader.getScale(cell);
         }
         
         IDataObject object= dui.createEmptyObject();
@@ -224,6 +234,44 @@ public class UpdateManager {
             
             ac.bm.removeTranslation(name);
         }
+        invokeLateTransform(id);
+    }
+    
+    public boolean invokeLateTransform(long id){
+        Vector3f lateTranslation = ac.ltm.getTranslation(id);
+        Vector3f lateRotation = ac.ltm.getRotation(id);
+        float lateScale = ac.ltm.getScale(id);
+        
+        boolean b = true;
+        
+        if(lateTranslation != null){
+            if(!ac.sc.translate(id, lateTranslation)){
+                 LOGGER.warning("LATE TRANSLATE IS FALSE");
+                 b = false;
+            }else{
+                //lateTranslation = ac.ct.transformVector(lateTranslation);
+                ac.ltm.removeTranslate(id);
+            }
+        }
+        if(lateRotation != null){
+            if(!ac.sc.rotate(id, lateRotation)){
+                 LOGGER.warning("LATE ROTATION IS FALSE");
+                 b = false;
+            }else{
+                ac.ltm.removeRotate(id);
+            }
+        }
+        
+        if(lateScale != -1){
+            if(!ac.sc.scale(id, lateScale)){
+                 LOGGER.warning("LATE Scale IS FALSE");
+                 b = false;
+            }else{
+                //lateTranslation = ac.ct.transformVector(lateTranslation);
+                ac.ltm.removeScale(id);
+            }
+        }
+        return b;
     }
 
     void setServerList(String[] serverList) {

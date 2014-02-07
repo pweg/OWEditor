@@ -20,6 +20,11 @@ public class WindowToFrame implements IWindowToFrame{
     }
     
     @Override
+    public void cancelImport(){
+        wc.adapter.cancelImport();
+    }
+    
+    @Override
     public boolean importCheckName(String moduleName, String server){
         return wc.adapter.importCheckName(moduleName, server);
     }

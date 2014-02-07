@@ -4,6 +4,7 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
+import java.util.logging.Logger;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.ITransformedObject;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.DraggingObject;
@@ -135,14 +136,13 @@ public class GraphicController implements IGraphicToWindow{
         int y = Integer.MAX_VALUE;
         
         for(DraggingObject shape : shapes){
-            
+            shape.setState(null);
             int sx = shape.getX();
             int sy = shape.getY();
 
             x = Math.min(sx, x);
             y = Math.min(sy, y);
         }
-        
         sm.clearDraggingShapes();
         
         return new Point(x,y);

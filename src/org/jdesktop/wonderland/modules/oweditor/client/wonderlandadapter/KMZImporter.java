@@ -7,7 +7,6 @@
 package org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter;
 
 import com.jme.bounding.BoundingVolume;
-import com.jme.math.Vector3f;
 import com.jme.scene.Node;
 import java.io.File;
 import java.io.IOException;
@@ -38,7 +37,6 @@ import org.jdesktop.wonderland.client.modules.ModuleUtils;
 import org.jdesktop.wonderland.common.FileUtils;
 import org.jdesktop.wonderland.common.cell.CellEditConnectionType;
 import org.jdesktop.wonderland.common.cell.CellID;
-import org.jdesktop.wonderland.common.cell.messages.CellCreateMessage;
 import org.jdesktop.wonderland.common.login.AuthenticationInfo;
 import org.jdesktop.wonderland.common.modules.ModuleInfo;
 import org.jdesktop.wonderland.common.modules.ModuleList;
@@ -151,7 +149,6 @@ public class KMZImporter {
         Collection<ServerSessionManager> servers = LoginManager.getAll();
         targetServer = null;
         
-        //@Todo: Make a selection option in the gui!
         for (ServerSessionManager server : servers) {
             if(server.getServerNameAndPort().equals(serverName)){
                 targetServer = server;
@@ -185,28 +182,29 @@ public class KMZImporter {
         
         
         if(targetServer == null){
-            if(targetServer == null){
-                LOGGER.log(Level.SEVERE, "Could not find a server to connect!");
-                return false;
-            }
+            LOGGER.log(Level.SEVERE, "No target server was selected!");
+            return false;
         }
         
         moduleName = name;
         importedModel.setWonderlandName(name);
-        //Remember the changed y and z values.
-        importedModel.setTranslation(new Vector3f(
+        
+        /*
+         * This is just not working correctly. Also it can be a little
+         * buggy, so better invoke transformations later.
+         */
+        /*importedModel.setTranslation(new Vector3f(
                 (float)x,(float)z,(float)y));
         importedModel.setScale(new Vector3f(
                 (float)scale,(float)scale,(float)scale));
         importedModel.setOrientation(new Vector3f(
                 (float)rotationX,(float)rotationZ,
-                (float)rotationY));
+                (float)rotationY));*/
         return deployToServer();
          
     }
     
     private boolean deployToServer(){
-        
         
         final ArrayList<DeployedModel> deploymentInfo = new ArrayList();
         WorldManager wm = ClientContextJME.getWorldManager();
@@ -337,6 +335,16 @@ public class KMZImporter {
         if(lastCellID == null)
             return -1;
         return Long.valueOf(lastCellID.toString());
+    }
+
+    public void clearModel() {
+        try{
+            WorldManager wm = ClientContextJME.getWorldManager();
+            wm.removeEntity(importedModel.getEntity());
+            importedModel = null;
+        }catch(Exception e){
+            LOGGER.log(Level.INFO, "Clear model exception", e);
+        }
     }
 
     

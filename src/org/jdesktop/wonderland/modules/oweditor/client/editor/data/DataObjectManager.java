@@ -209,7 +209,7 @@ public class DataObjectManager {
     public Point2D.Double transformCoordsBack(Point coordinates) {
 
         double x = ct.transformXBack(coordinates.x);
-        double y = ct.transformXBack(coordinates.y);
+        double y = ct.transformYBack(coordinates.y);
         
         return new Point2D.Double(x, y);
     }

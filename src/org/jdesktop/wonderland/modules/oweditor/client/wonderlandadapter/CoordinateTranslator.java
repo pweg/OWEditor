@@ -42,8 +42,8 @@ public class CoordinateTranslator implements CoordinateTranslatorInterface{
     @Override
     public Point2D.Double transformCoordinatesBack(float x, float y, 
             float width, float height) {
-        double x_double = (x-width/2)/globalScale;
-        double y_double = (y-height/2)/globalScale;
+        double x_double = (x+width/2)/globalScale;
+        double y_double = (y+height/2)/globalScale;
         
         return new Point2D.Double(x_double, y_double);
     }
@@ -96,7 +96,6 @@ public class CoordinateTranslator implements CoordinateTranslatorInterface{
             BoundingBox box = (BoundingBox) bounds;
             float xExtent = box.xExtent*globalScale*2;
             float yExtent = box.zExtent*globalScale*2;
-            LOGGER.warning("BOUNDS " + xExtent + " "  + box.xExtent+ " " + globalScale);
             ret_val[0] = (int) Math.round(xExtent);
             ret_val[1] = (int) Math.round(yExtent);
             return ret_val;

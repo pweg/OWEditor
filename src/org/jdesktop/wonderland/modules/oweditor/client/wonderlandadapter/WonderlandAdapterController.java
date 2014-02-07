@@ -22,6 +22,7 @@ public class WonderlandAdapterController implements AdapterControllerMainControl
     protected BackupManager bm = null;
     protected SessionManager sm = null;
     protected ServerCommunication sc = null;
+    protected LateTransformationManager ltm = null;
     
     public WonderlandAdapterController(){
         
@@ -29,6 +30,7 @@ public class WonderlandAdapterController implements AdapterControllerMainControl
 
     @Override
     public void initialize() {
+        ltm = new LateTransformationManager();
         ct = new CoordinateTranslator();
         go = new GUIObserver(this);
         um = new UpdateManager(this);

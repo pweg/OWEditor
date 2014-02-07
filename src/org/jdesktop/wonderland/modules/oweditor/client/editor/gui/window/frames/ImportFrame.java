@@ -46,6 +46,8 @@ public class ImportFrame extends javax.swing.JFrame {
     private NumberFormat doubleFormat = null;
     
     private String[] serverList = null;
+    //if a modell was already loaded, it has to be deleted.
+    private boolean modelLoaded = false;
             
     /**
      * Creates new form NewJFrame
@@ -538,6 +540,9 @@ public class ImportFrame extends javax.swing.JFrame {
             if(nameField.getText().equals("")){
                 nameField.setText(tokens[0]);
             }
+            if(moduleNameField.getText().equals("")){
+                moduleNameField.setText(tokens[0]);
+            }
             
             //progressBar.setVisible(true);
             int[] bounds = fc.window.loadKMZ(path);
@@ -554,6 +559,7 @@ public class ImportFrame extends javax.swing.JFrame {
             this.boundsY = bounds[1];
             okButton.setEnabled(true);
             locationButton.setEnabled(true);
+            modelLoaded = true;
         } 
     }                                           
 
@@ -636,32 +642,33 @@ public class ImportFrame extends javax.swing.JFrame {
         double scale = 1;
         
         try{
-            x = Double.valueOf(locationFieldX.getText());
+            x = Double.valueOf(locationFieldX.getText().replace(",", "."));
         }catch(Exception ex){
+            LOGGER.warning("COULD NOT X BLar");
         }
         try{
-            y = Double.valueOf(locationFieldY.getText());
+            y = Double.valueOf(locationFieldY.getText().replace(",", "."));
         }catch(Exception ex){
             }
         try{
-            z = Double.valueOf(locationFieldZ.getText());
+            z = Double.valueOf(locationFieldZ.getText().replace(",", "."));
         }catch(Exception ex){
         }
         
         try{
-            rot_x = Double.valueOf(rotationFieldX.getText());
+            rot_x = Double.valueOf(rotationFieldX.getText().replace(",", "."));
         }catch(Exception ex){
         }
         try{
-            rot_y = Double.valueOf(rotationFieldY.getText());
+            rot_y = Double.valueOf(rotationFieldY.getText().replace(",", "."));
         }catch(Exception ex){
         }
         try{
-            rot_z = Double.valueOf(rotationFieldZ.getText());
+            rot_z = Double.valueOf(rotationFieldZ.getText().replace(",", "."));
         }catch(Exception ex){
         }
         try{
-            scale = Double.valueOf(scaleField.getText());
+            scale = Double.valueOf(scaleField.getText().replace(",", "."));
         }catch(Exception ex){
         }           
        
@@ -708,6 +715,9 @@ public class ImportFrame extends javax.swing.JFrame {
     public void setVisible(boolean b) {
         super.setVisible(b);
         
+        if(isVisible() && b)
+            return;
+        
         //working means, the choose location button was hit.
         if(b && working){
             working = false;
@@ -718,9 +728,16 @@ public class ImportFrame extends javax.swing.JFrame {
         working = false;
         
         if(!b){
+            //removes imported model.
+            if(modelLoaded){
+                fc.window.cancelImport();
+                modelLoaded = false;
+            }
+            
             modelField.setText("");
             imgField.setText("");
             nameField.setText("");
+            moduleNameField.setText("");
             image.setImage(null);
             reset();
         }else{
@@ -736,8 +753,8 @@ public class ImportFrame extends javax.swing.JFrame {
     public void setLocation(double x, double y) {
         //formatting the string in order to look nice
         //and to not change the textfield size.
-        locationFieldX.setText(doubleFormat.format(x));
-        locationFieldY.setText(doubleFormat.format(y));
+        locationFieldX.setText(doubleFormat.format(x).replace(",", "."));
+        locationFieldY.setText(doubleFormat.format(y).replace(",", "."));
     }
     
     private void reset(){
