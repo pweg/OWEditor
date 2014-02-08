@@ -18,6 +18,7 @@ import java.util.HashMap;
 public class LateTransformationManager {
     
     private HashMap<Long, Vector3f> translationMap = null;
+    private HashMap<String, Vector3f> copyTranslation = null;
     private HashMap<Long, Vector3f> rotationMap = null;
     private HashMap<Long, Float> scaleMap = null;
     
@@ -25,6 +26,7 @@ public class LateTransformationManager {
         translationMap = new HashMap<Long, Vector3f>();
         rotationMap = new HashMap<Long, Vector3f>();
         scaleMap = new HashMap<Long, Float>();
+        copyTranslation  = new HashMap<String, Vector3f>();
     }
     
     /**
@@ -33,8 +35,19 @@ public class LateTransformationManager {
      * @param id The cell id, which should be translated
      * @param translation The translation.
      */
-    public void putTranslation(long id, Vector3f translation){
+    public void addTranslation(long id, Vector3f translation){
         translationMap.put(id, translation);
+    }
+    
+    /**
+     * Adds translation for later use, but it saves it with 
+     * the name instead of the id.
+     * 
+     * @param name The cells name.
+     * @param translation The translation.
+     */
+    public void addTranslation(String name, Vector3f translation){
+        copyTranslation.put(name, translation);
     }
     
     /**
@@ -43,7 +56,7 @@ public class LateTransformationManager {
      * @param id The cell id, which should be translated
      * @param rotation The rotation.
      */
-    public void putRotation(long id, Vector3f rotation){
+    public void addRotation(long id, Vector3f rotation){
         rotationMap.put(id, rotation);
     }
     
@@ -53,7 +66,7 @@ public class LateTransformationManager {
      * @param id The cell id, which should be scale
      * @param scale The scale.
      */
-    public void putScale(long id, float scale){
+    public void addScale(long id, float scale){
         scaleMap.put(id, scale);
     }
     
@@ -66,6 +79,10 @@ public class LateTransformationManager {
      */
     public Vector3f getTranslation(long id){
         return translationMap.get(id);
+    }
+    
+    public Vector3f getTranslation(String name){
+        return copyTranslation.get(name);
     }
     
     /**
@@ -95,6 +112,11 @@ public class LateTransformationManager {
     public void removeTranslate(long id){
         translationMap.remove(id);
     }
+    
+    public void removeTranslate(String name){
+        copyTranslation.remove(name);
+    }
+    
     public void removeRotate(long id){
         rotationMap.remove(id);
     }
@@ -102,5 +124,102 @@ public class LateTransformationManager {
         scaleMap.remove(id);
     }
     
+    public boolean containsCell(long id, String name){
+        return containsCell(name) || containsCell(id);
+        
+    }
+    
+    public boolean containsCell(String name){
+        return copyTranslation.containsKey(name);
+    }
+    
+    public boolean containsCell(long id){
+        return translationMap.containsKey(id) || rotationMap.containsKey(id)
+                || scaleMap.containsKey(id);
+    }
+    
+    /**
+     * Invokes a tranfsormation, if the name, or the id was added
+     * before.
+     * 
+     * @param server The server communication.
+     * @param id The id of the cell.
+     * @param name The name of the cell.
+     * @return True, if all translation events were successfull,
+     *  false otherwise.
+     */
+    public boolean invokeLateTransform(ServerCommunication server, long id, 
+            String name){
+        
+        boolean b = lateTransform(server, id, name);
+        b = b || lateTransform(server, id);
+        
+        return b; 
+    }
+    
+    /**
+     * Does a translation, if the name was stored before. 
+     * 
+     * @param server The server communication.
+     * @param id The id of the cell.
+     * @param name The name of the cell.
+     * @return True, if the translation was successful
+     */
+    public boolean lateTransform(ServerCommunication server, long id,
+            String name){
+        Vector3f lateTranslation = getTranslation(name);
+        
+        if(lateTranslation != null){
+            if(!server.translate(id, lateTranslation)){
+                 return false;
+            }else{
+                removeTranslate(id);
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    /**
+     * Does a late translation, if the id was stored before.
+     * 
+     * @param server The server communication.
+     * @param id The id of the cell.
+     * @return True, if the translation was successful
+     */
+    public boolean lateTransform(ServerCommunication server, long id){
+        
+        Vector3f lateTranslation = getTranslation(id);
+        Vector3f lateRotation = getRotation(id);
+        float lateScale = getScale(id);
+        
+        boolean b = true;
+        
+        if(lateTranslation != null){
+            if(!server.translate(id, lateTranslation)){
+                 b = false;
+            }else{
+                removeTranslate(id);
+            }
+        }
+        if(lateRotation != null){
+            if(!server.rotate(id, lateRotation)){
+                 b = false;
+            }else{
+                removeRotate(id);
+            }
+        }
+        
+        if(lateScale != -1){
+            if(!server.scale(id, lateScale)){
+                 b = false;
+            }else{
+                //lateTranslation = ac.ct.transformVector(lateTranslation);
+                removeScale(id);
+            }
+        }
+        return b;
+        
+    }
     
 }

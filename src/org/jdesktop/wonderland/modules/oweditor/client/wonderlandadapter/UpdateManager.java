@@ -129,18 +129,18 @@ public class UpdateManager {
         }        
         
         
-        Vector3fInfo coordinates = CellInfoReader.getCoordinates(cell);
+        /*Vector3fInfo coordinates = CellInfoReader.getCoordinates(cell);
         
         Vector3f rotation = CellInfoReader.getRotation(cell);
-        float scale = CellInfoReader.getScale(cell);
+        float scale = CellInfoReader.getScale(cell);*/
         
         /**
          * This is used for translating copied cells, after they are created.
          * This is not the best solution, because Wonderland does not create
          * the possibility to copy cells to a specific location.
          */
-        boolean b = true;
-        if(ac.bm.translationContainsKey(name)){
+        //boolean b = true;
+        /*if(ac.bm.translationContainsKey(name)){
             
             Vector3f new_pos = ac.bm.getTranslation(name);
             
@@ -157,7 +157,7 @@ public class UpdateManager {
                 /*
                 * When problems arise, due to the absence of the movable component,
                 * a listener is created, for the purpose to translate the copied cell.
-                */
+                *
                 if(!ac.sc.translate(id, (int) new_pos.x, (int)new_pos.y)){
                     LOGGER.warning("TRANSLATE FALSE");
                     //cell.addComponentChangeListener(componentListener);
@@ -165,6 +165,7 @@ public class UpdateManager {
                 }else{
                     //rotation = backup.getRotation();
                     //scale = backup.getScale();
+                    LOGGER.warning("I DONT KNOW WHAT THIS DOES");
                     ac.sc.rotate(id, rotation);
                     ac.bm.removeTranslation(name);
                 }
@@ -177,17 +178,19 @@ public class UpdateManager {
                     cell.addComponentChangeListener(componentListener);
                 }else{
                     ac.bm.removeTranslation(name);
-                }*/
+                }*
             }
+        }*/
+        
+        if((!ac.ltm.invokeLateTransform(ac.sc, id, name) && 
+                ac.ltm.containsCell(id, name))){//  !b)
+            cell.addComponentChangeListener(componentListener);
+            LOGGER.warning("LATE TRANSFORM FAILED");
         }
         
-        if(!invokeLateTransform(id) || !b)
-            cell.addComponentChangeListener(componentListener);
-        else{
-            coordinates = CellInfoReader.getCoordinates(cell);
-            rotation = CellInfoReader.getRotation(cell);
-            scale = CellInfoReader.getScale(cell);
-        }
+        Vector3fInfo coordinates = CellInfoReader.getCoordinates(cell);
+        Vector3f rotation = CellInfoReader.getRotation(cell);
+        float scale = CellInfoReader.getScale(cell);
         
         IDataObject object= dui.createEmptyObject();
         
@@ -224,7 +227,7 @@ public class UpdateManager {
         
         String name = cell.getName();
         long id = CellInfoReader.getID(cell);
-        
+        /*
         if(ac.bm.translationContainsKey(name)){
             Vector3f p = ac.bm.getTranslation(name);
             ac.sc.translate(id, (int) p.x, (int) p.y);
@@ -233,45 +236,8 @@ public class UpdateManager {
             ac.sc.rotate(id, backup.getRotation());
             
             ac.bm.removeTranslation(name);
-        }
-        invokeLateTransform(id);
-    }
-    
-    public boolean invokeLateTransform(long id){
-        Vector3f lateTranslation = ac.ltm.getTranslation(id);
-        Vector3f lateRotation = ac.ltm.getRotation(id);
-        float lateScale = ac.ltm.getScale(id);
-        
-        boolean b = true;
-        
-        if(lateTranslation != null){
-            if(!ac.sc.translate(id, lateTranslation)){
-                 LOGGER.warning("LATE TRANSLATE IS FALSE");
-                 b = false;
-            }else{
-                //lateTranslation = ac.ct.transformVector(lateTranslation);
-                ac.ltm.removeTranslate(id);
-            }
-        }
-        if(lateRotation != null){
-            if(!ac.sc.rotate(id, lateRotation)){
-                 LOGGER.warning("LATE ROTATION IS FALSE");
-                 b = false;
-            }else{
-                ac.ltm.removeRotate(id);
-            }
-        }
-        
-        if(lateScale != -1){
-            if(!ac.sc.scale(id, lateScale)){
-                 LOGGER.warning("LATE Scale IS FALSE");
-                 b = false;
-            }else{
-                //lateTranslation = ac.ct.transformVector(lateTranslation);
-                ac.ltm.removeScale(id);
-            }
-        }
-        return b;
+        }*/
+        ac.ltm.invokeLateTransform(ac.sc, id, name);
     }
 
     void setServerList(String[] serverList) {

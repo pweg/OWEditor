@@ -33,16 +33,12 @@ public class ServerCommunication {
     
     private static final Logger LOGGER =
             Logger.getLogger(GUIObserver.class.getName());
-    private static final ResourceBundle BUNDLE = ResourceBundle.getBundle(
-            "org/jdesktop/wonderland/modules/oweditor/client/resources/Bundle");
     
     private WonderlandAdapterController ac = null;
     
-    private LinkedHashMap<Long, Integer> copies = null;
     
     public ServerCommunication(WonderlandAdapterController ac){
         this.ac = ac;
-        copies = new LinkedHashMap<Long, Integer>();
     }
     
     /**
@@ -127,7 +123,13 @@ public class ServerCommunication {
         CellUtils.deleteCell(cell);
     }
     
-    public void paste(long id, int x, int y){
+    /**
+     * Copies a cell.
+     * 
+     * @param id The id of the cell to copy.
+     * @param name The name of the new cell.
+     */
+    public void paste(long id, String name){
         WonderlandSession session = ac.sm.getSession();
         CellCache cache = ac.sm.getCellCache();
         
@@ -142,25 +144,8 @@ public class ServerCommunication {
             
             if(cell == null)
                 cell = ac.bm.getCell(id);
-            
-            String name = cell.getName();
-            String count = "1";
-            
-            if(copies.containsKey(id)){
-                int copy_count = copies.get(id)+1;
-                count = String.valueOf(copy_count);
-                copies.put(id, (copy_count));
-            }else{
-                copies.put(id, 1);
-            }
-            
-            Vector3f coordinates = CellInfoReader.getCoordinates(cell);
-            coordinates.x = x;
-            coordinates.y = y;
-            
-            name = BUNDLE.getString("CopyName")+ name+"_"+count+"ID"+session.getID()+"_"+id;
-                        
-            ac.bm.addTranslation(id, name, coordinates);
+            if(cell == null)
+                return;
             
             String message = MessageFormat.format(name, cell.getName());
 
@@ -172,7 +157,9 @@ public class ServerCommunication {
             CellDuplicateMessage msg =
                     new CellDuplicateMessage(cell.getCellID(), message);
             connection.send(msg);
+            return;
         }catch(Exception ex){
+            return;
         }
     }
     

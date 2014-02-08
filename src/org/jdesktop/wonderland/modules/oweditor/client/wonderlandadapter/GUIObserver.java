@@ -5,11 +5,14 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import org.jdesktop.wonderland.client.cell.Cell;
 import org.jdesktop.wonderland.client.cell.CellCache;
+import org.jdesktop.wonderland.client.comms.WonderlandSession;
 import org.jdesktop.wonderland.common.cell.CellID;
 import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.GUIObserverInterface;
 
@@ -22,11 +25,16 @@ import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.GUIObse
  */
 public class GUIObserver implements GUIObserverInterface{
     
+    private static final ResourceBundle BUNDLE = ResourceBundle.getBundle(
+            "org/jdesktop/wonderland/modules/oweditor/client/resources/Bundle");
+    
     private static final Logger LOGGER =
             Logger.getLogger(GUIObserver.class.getName());
     
     private WonderlandAdapterController ac = null;   
     private KMZImporter importer = null;
+    
+    private LinkedHashMap<Long, Integer> copies = null;
     
     /**
      * Creates a new clientUpdate instance.
@@ -35,6 +43,7 @@ public class GUIObserver implements GUIObserverInterface{
      */
     public GUIObserver(WonderlandAdapterController ac){
         this.ac = ac;
+        copies = new LinkedHashMap<Long, Integer>();
         importer = new KMZImporter();
     }
 
@@ -75,7 +84,44 @@ public class GUIObserver implements GUIObserverInterface{
 
     @Override
     public void notifyPaste(long id, int x, int y) {
-        ac.sc.paste(id, x, y);
+        WonderlandSession session = ac.sm.getSession();
+        CellCache cache = ac.sm.getCellCache();
+        
+        if (cache == null) {
+            LOGGER.log(Level.WARNING, "Unable to find Cell cache for session {0}", ac.sm.getSession());
+            return;
+        }
+        CellID cellid = new CellID(id);
+        Cell cell = cache.getCell(cellid);
+        
+        if(cell == null)
+            return;
+        
+        Vector3f coordinates = CellInfoReader.getCoordinates(cell);
+        coordinates.x = x;
+        coordinates.y = y;
+        
+        String count = "1";
+           
+        if(copies.containsKey(id)){
+            int copy_count = copies.get(id)+1;
+            count = String.valueOf(copy_count);
+            copies.put(id, (copy_count));
+        }else{
+            copies.put(id, 1);
+        }
+        
+        String name = cell.getName();
+        name = BUNDLE.getString("CopyName")+ name+"_"+count+"ID"+session.getID()+"_"+id;
+        
+        Vector3fInfo coords = CellInfoReader.getCoordinates(cell);
+        coordinates = ac.ct.transformCoordinatesBack(cell, (float)x, 
+                (float)y, coords.z);
+        
+        //Do not change order of this, or this could lead to some problems
+        //if the server is faster than the addTranslation command.
+        ac.ltm.addTranslation(name, coordinates);
+        ac.sc.paste(id, name);
     }
     
     @Override
@@ -146,20 +192,20 @@ public class GUIObserver implements GUIObserverInterface{
         Vector3f translate = new Vector3f((float)x, (float)z, (float)y);
         if(!ac.sc.translate(id, translate)){
             LOGGER.warning("TRANalslla");
-            ac.ltm.putTranslation(id, translate);
+            ac.ltm.addTranslation(id, translate);
         }
         
         Vector3f rotate = new Vector3f((float)rotationX, (float)rotationZ,
                 (float)rotationY);
         if(!ac.sc.rotate(id, rotate)){
             LOGGER.warning("TRANalslla2");
-            ac.ltm.putRotation(id, rotate);
+            ac.ltm.addRotation(id, rotate);
         }
             
         if(!ac.sc.scale(id, (float)scale)){
             
             LOGGER.warning("TRANalslla3");
-            ac.ltm.putScale(id, (float) scale);
+            ac.ltm.addScale(id, (float) scale);
         }
         
         
