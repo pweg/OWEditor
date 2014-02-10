@@ -16,7 +16,7 @@ public class ServerSimulator {
     
     public long currentID = 0;
     
-    public UpdateManager sua = null;
+    public ServerEventManager sua = null;
     public String name = "DummyServer";
     
     public ServerSimulator(){
@@ -25,7 +25,7 @@ public class ServerSimulator {
         initializeObjects();
     }
     
-    public void registerServerUpdate(UpdateManager sua){
+    public void registerServerUpdate(ServerEventManager sua){
         this.sua = sua;
     }
     

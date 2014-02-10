@@ -28,18 +28,18 @@ public class Scale implements Command{
     }
 
     @Override
-    public void execute(GUIObserverInterface goi) {
+    public void execute(GUIObserverInterface goi)  throws Exception{
         scale(goi, coordsNew, scaleNew);
     }
 
     @Override
-    public void undo(GUIObserverInterface goi) {
+    public void undo(GUIObserverInterface goi)  throws Exception{
         scale(goi, coordsOld, scaleOld);
         
     }
 
     @Override
-    public void redo(GUIObserverInterface goi) {
+    public void redo(GUIObserverInterface goi)  throws Exception{
         execute(goi);
     }
     
@@ -51,18 +51,28 @@ public class Scale implements Command{
      * @param scale A list of scale values.
      */
     private void scale(GUIObserverInterface goi, ArrayList<Point> coords,
-            ArrayList<Double> scales){
+            ArrayList<Double> scales) throws Exception{
+        int failcount = 0;
+        
         try{
             for(int i=0;i < ids.size();i++){
                 Long id = ids.get(i);
                 Point p = coords.get(i);
                 double scale = scales.get(i);
-                
-                goi.notifyScaling(id, p.x, p.y, scale);
+                try{
+                    goi.notifyScaling(id, p.x, p.y, scale);
+                }catch(Exception e){
+                    failcount++;
+                }
             }
         }catch(Exception e){
             System.err.println("Scale command: list size dont match");
+            throw e;
         }
+        
+        //the command only failed, when every operation failed!
+        if(failcount == ids.size())
+            throw new CommandException();
     }
 
 }

@@ -13,8 +13,8 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IAd
 public class DummyAdapterController implements AdapterControllerMainControllerInterface{
     
     
-    protected GUIObserver cua = null;
-    protected UpdateManager da = null;
+    protected GUIEventManager cua = null;
+    protected ServerEventManager da = null;
     protected ServerSimulator server = null;
     protected CoordinateTranslator ct = null;
     protected BackupManager bom = null;
@@ -25,8 +25,8 @@ public class DummyAdapterController implements AdapterControllerMainControllerIn
 
     @Override
     public void initialize() {
-        cua = new GUIObserver(this);
-        da = new UpdateManager(this);
+        cua = new GUIEventManager(this);
+        da = new ServerEventManager(this);
         server = new ServerSimulator();
         ct = new CoordinateTranslator();
         bom = new BackupManager();

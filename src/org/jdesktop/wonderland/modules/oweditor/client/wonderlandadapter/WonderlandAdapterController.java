@@ -14,15 +14,16 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IAd
 public class WonderlandAdapterController implements AdapterControllerMainControllerInterface{
     
     
-    protected GUIObserver go = null;
+    protected GUIEventManager go = null;
     protected CoordinateTranslator ct = null;
-    protected UpdateManager um = null;
+    protected ServerEventManager um = null;
     protected TransformListener tl = null;
     protected CellStatusListener csl = null;
     protected BackupManager bm = null;
     protected SessionManager sm = null;
     protected ServerCommunication sc = null;
     protected LateTransformationManager ltm = null;
+    protected CopyNameManager cnm = null;
     
     public WonderlandAdapterController(){
         
@@ -30,10 +31,11 @@ public class WonderlandAdapterController implements AdapterControllerMainControl
 
     @Override
     public void initialize() {
+        cnm = new CopyNameManager();
         ltm = new LateTransformationManager();
         ct = new CoordinateTranslator();
-        go = new GUIObserver(this);
-        um = new UpdateManager(this);
+        go = new GUIEventManager(this);
+        um = new ServerEventManager(this);
         sc = new ServerCommunication(this);
         tl = new TransformListener(um);
         csl = new CellStatusListener(um);
@@ -44,7 +46,7 @@ public class WonderlandAdapterController implements AdapterControllerMainControl
 
     @Override
     public void registerDataUpdateInterface(IAdapterObserver i) {
-       um.setDataUpdateInterface(i);
+       um.registerDataInterface(i);
         
     }
 

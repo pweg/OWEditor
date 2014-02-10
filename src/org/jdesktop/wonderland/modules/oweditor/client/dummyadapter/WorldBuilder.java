@@ -13,7 +13,7 @@ import java.util.ArrayList;
  */
 public class WorldBuilder {
     
-    private UpdateManager sua = null;
+    private ServerEventManager sua = null;
     private DummyAdapterController ac = null;
     
     /**
@@ -21,7 +21,7 @@ public class WorldBuilder {
      * 
      * @param sua: a serverUpdate instance.
      */
-    public WorldBuilder( DummyAdapterController ac, UpdateManager sua){
+    public WorldBuilder( DummyAdapterController ac, ServerEventManager sua){
         this.sua = sua;
         this.ac = ac;
     }

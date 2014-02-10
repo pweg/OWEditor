@@ -5,14 +5,12 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import org.jdesktop.wonderland.client.cell.Cell;
 import org.jdesktop.wonderland.client.cell.CellCache;
-import org.jdesktop.wonderland.client.comms.WonderlandSession;
 import org.jdesktop.wonderland.common.cell.CellID;
 import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.GUIObserverInterface;
 
@@ -23,43 +21,41 @@ import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.GUIObse
  * @author Patrick
  *
  */
-public class GUIObserver implements GUIObserverInterface{
+public class GUIEventManager implements GUIObserverInterface{
     
     private static final ResourceBundle BUNDLE = ResourceBundle.getBundle(
             "org/jdesktop/wonderland/modules/oweditor/client/resources/Bundle");
     
     private static final Logger LOGGER =
-            Logger.getLogger(GUIObserver.class.getName());
+            Logger.getLogger(GUIEventManager.class.getName());
     
     private WonderlandAdapterController ac = null;   
     private KMZImporter importer = null;
     
-    private LinkedHashMap<Long, Integer> copies = null;
     
     /**
      * Creates a new clientUpdate instance.
      * 
      * @param ac a adpater controller instance.
      */
-    public GUIObserver(WonderlandAdapterController ac){
+    public GUIEventManager(WonderlandAdapterController ac){
         this.ac = ac;
-        copies = new LinkedHashMap<Long, Integer>();
         importer = new KMZImporter();
     }
 
     @Override
-    public void notifyTranslationXY(long id, int x, int y ){
+    public void notifyTranslationXY(long id, int x, int y ) throws Exception{
         CellCache cache = ac.sm.getCellCache();
         
         if (cache == null) {
             LOGGER.log(Level.WARNING, "Unable to find Cell cache for session {0}", ac.sm.getSession());
-            return;
+            throw new ServerCommException();
         }
         CellID cellid = new CellID(id);
         Cell cell = cache.getCell(cellid);
         
         if(cell == null)
-            return;
+            throw new ServerCommException();
         
         Vector3fInfo coords = CellInfoReader.getCoordinates(cell);
         
@@ -68,51 +64,78 @@ public class GUIObserver implements GUIObserverInterface{
     }
     
     @Override
-    public void notifyRemoval(long id) {
-       ac.sc.remove(id);
-    }
-
-    @Override
-    public void notifyCopy(ArrayList<Long> object_ids) {
+    public void notifyRotation(long id, int x, int y, double rotation) throws Exception{
+        notifyTranslationXY(id,x,y);
         
-        ac.bm.clearBackup();
-        
-        for(long id : object_ids){
-            ac.bm.addObject(id);
-        }
-    }
-
-    @Override
-    public void notifyPaste(long id, int x, int y) {
-        WonderlandSession session = ac.sm.getSession();
         CellCache cache = ac.sm.getCellCache();
-        
         if (cache == null) {
             LOGGER.log(Level.WARNING, "Unable to find Cell cache for session {0}", ac.sm.getSession());
             return;
         }
         CellID cellid = new CellID(id);
         Cell cell = cache.getCell(cellid);
+        Vector3f cell_rot = CellInfoReader.getRotation(cell);
+        cell_rot = ac.ct.createRotation(cell_rot, rotation);
+        try {
+            ac.sc.rotate(id, cell_rot);
+        } catch (ServerCommException ex) {
+            Logger.getLogger(GUIEventManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    @Override
+    public void notifyScaling(long id, int x, int y, double scale) throws Exception{
+        try{
+        ac.sc.scale(id,(float) scale);
+        notifyTranslationXY(id,x,y);
+        }catch(ServerCommException e){
+        }
+    }
+    
+    @Override
+    public void notifyRemoval(long id) throws Exception{
+        try {
+            ac.sc.remove(id);
+        } catch (ServerCommException ex) {
+            Logger.getLogger(GUIEventManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    @Override
+    public void notifyCopy(ArrayList<Long> object_ids) {
         
-        if(cell == null)
-            return;
+        ac.bm.clearCopy();
+        
+        for(long id : object_ids){
+            ac.bm.addCopy(id);
+        }
+    }
+
+    @Override
+    public void notifyPaste(long id, int x, int y) throws Exception{
+        CellCache cache = ac.sm.getCellCache();
+        
+        if (cache == null) {
+            LOGGER.log(Level.WARNING, "Unable to find Cell cache for session {0}", ac.sm.getSession());
+            throw new ServerCommException();
+        }
+        
+        CellID cellid = new CellID(id);
+        Cell cell = cache.getCell(cellid);
+        
+        if(cell == null){
+            cell = ac.bm.getCell(id);
+        }
+        if(cell == null){
+            throw new ServerCommException();
+        }
         
         Vector3f coordinates = CellInfoReader.getCoordinates(cell);
         coordinates.x = x;
         coordinates.y = y;
         
-        String count = "1";
-           
-        if(copies.containsKey(id)){
-            int copy_count = copies.get(id)+1;
-            count = String.valueOf(copy_count);
-            copies.put(id, (copy_count));
-        }else{
-            copies.put(id, 1);
-        }
-        
         String name = cell.getName();
-        name = BUNDLE.getString("CopyName")+ name+"_"+count+"ID"+session.getID()+"_"+id;
+        name = ac.cnm.createCopyName(ac.sm, id, name);
         
         Vector3fInfo coords = CellInfoReader.getCoordinates(cell);
         coordinates = ac.ct.transformCoordinatesBack(cell, (float)x, 
@@ -121,95 +144,86 @@ public class GUIObserver implements GUIObserverInterface{
         //Do not change order of this, or this could lead to some problems
         //if the server is faster than the addTranslation command.
         ac.ltm.addTranslation(name, coordinates);
-        ac.sc.paste(id, name);
-    }
-    
-    @Override
-    public void notifyRotation(long id, int x, int y, double rotation) {
-        ac.sc.rotate(id, x, y, rotation);
+        ac.sc.paste(cell, name);
+        
     }
 
     @Override
-    public void notifyScaling(long id, int x, int y, double scale) {
-        ac.sc.scale(id, x, y, scale);
-    }
-
-    @Override
-    public void undoRemoval(long id) {
+    public void undoRemoval(long id) throws Exception{
         
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void undoObjectCreation() {
+    public void undoObjectCreation() throws Exception{
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void redoObjectCreation() {
+    public void redoObjectCreation() throws Exception{
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public int[] loadKMZ(String url) {
+    public int[] loadKMZ(String url) throws Exception{
         importer.importKMZ(url);
-        return importer.getModelSize(ac.ct);
+        return ac.ct.transformSize(importer.getModelSize());
     }
     
     @Override
-    public boolean importCheckName(String moduleName, String server){
+    public boolean importCheckName(String moduleName, String server) 
+            throws Exception{
         return importer.checkName(moduleName, server);
     }
 
     @Override
-    public boolean importKMZ(String name, String image_url, double x, double y, 
+    public void importKMZ(String name, String image_url, double x, double y, 
             double z, double rotationX, double rotationY, double rotationZ, 
-            double scale){
+            double scale) throws Exception{
         
         BufferedImage img = null;
         
         try {
             img = ImageIO.read(new File(image_url));
         } catch (IOException ex) {
-            Logger.getLogger(GUIObserver.class.getName()).log(Level.INFO, 
+            LOGGER.log(Level.INFO, 
                     "Cannot read image file");
         }
         
-        if(!importer.importToServer(name, image_url, x,y,z, 
-                rotationX, rotationY, 
-                rotationZ, scale)){
+        if(!importer.importToServer(name)){
             LOGGER.warning("Import to server failed.");
-            return false;
+            throw new ServerCommException();
         }
         
         long id = importer.getLastID();
         if(id == -1){
             LOGGER.warning("No id was generated!");
-            return false;
+            throw new ServerCommException();
         }
         
         //Remember: z and y are reversed
         Vector3f translate = new Vector3f((float)x, (float)z, (float)y);
-        if(!ac.sc.translate(id, translate)){
-            LOGGER.warning("TRANalslla");
+        Vector3f rotate = new Vector3f((float)rotationX, (float)rotationZ,
+                (float)rotationY);
+        
+        try{
+            ac.sc.translate(id, translate);
+        }catch(ServerCommException e){
             ac.ltm.addTranslation(id, translate);
         }
         
-        Vector3f rotate = new Vector3f((float)rotationX, (float)rotationZ,
-                (float)rotationY);
-        if(!ac.sc.rotate(id, rotate)){
-            LOGGER.warning("TRANalslla2");
+        try{
+            ac.sc.rotate(id, rotate);
+        }catch(ServerCommException e){
             ac.ltm.addRotation(id, rotate);
         }
             
-        if(!ac.sc.scale(id, (float)scale)){
-            
-            LOGGER.warning("TRANalslla3");
+        try{
+            ac.sc.scale(id, (float)scale);
+        }catch(ServerCommException e){
             ac.ltm.addScale(id, (float) scale);
         }
         
-        
-        return true;
     }
 
     /*public void importConflictCopy(long id) {

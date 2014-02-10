@@ -10,7 +10,7 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IDa
  * @author Patrick
  *
  */
-public class UpdateManager {
+public class ServerEventManager {
     
     private DummyAdapterController ac = null;
     private IAdapterObserver dui = null;
@@ -21,7 +21,7 @@ public class UpdateManager {
      * 
      * @param ac: the adapter controller instance.
      */
-    public UpdateManager(DummyAdapterController ac){
+    public ServerEventManager(DummyAdapterController ac){
         this.ac = ac;
     }
     

@@ -4,10 +4,10 @@ import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.GUIObse
 
 public interface Command {
     
-    public void execute(GUIObserverInterface goi);
+    public void execute(GUIObserverInterface goi) throws Exception;
     
-    public void undo(GUIObserverInterface goi);
+    public void undo(GUIObserverInterface goi) throws Exception;
     
-    public void redo(GUIObserverInterface goi);
+    public void redo(GUIObserverInterface goi) throws Exception;
 
 }

@@ -2,6 +2,8 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.gui;
 
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.GUIObserverInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IDataToGUI;
@@ -56,7 +58,11 @@ public class AdapterCommunication implements IAdapterCommunication{
     public void setObjectRemoval(ArrayList<Long> ids){
         Command command = new Delete(ids);
         undoList.add(command);
-        command.execute(goi);
+        try {
+            command.execute(goi);
+        } catch (Exception ex) {
+            Logger.getLogger(AdapterCommunication.class.getName()).log(Level.WARNING, null, ex);
+        }
         redoList.clear();
     }
     
@@ -75,7 +81,11 @@ public class AdapterCommunication implements IAdapterCommunication{
         
         Command command = new TranslateXY(ids, coordinates_old, coordinates);
         undoList.add(command);
-        command.execute(goi);
+        try {
+            command.execute(goi);
+        } catch (Exception ex) {
+            Logger.getLogger(AdapterCommunication.class.getName()).log(Level.WARNING, null, ex);
+        }
         redoList.clear();
     }
     
@@ -88,7 +98,11 @@ public class AdapterCommunication implements IAdapterCommunication{
     public void setPasteUpdate(ArrayList<Long> ids, ArrayList<Point> coordinates) {
         Command command = new Paste(ids, coordinates);
         undoList.add(command);
-        command.execute(goi);
+        try {
+            command.execute(goi);
+        } catch (Exception ex) {
+            Logger.getLogger(AdapterCommunication.class.getName()).log(Level.WARNING, null, ex);
+        }
         redoList.clear();
     }
 
@@ -111,7 +125,11 @@ public class AdapterCommunication implements IAdapterCommunication{
         Command command = new Rotate(ids, coordinates_old, rotation_old, 
                 coordinates, rotation);
         undoList.add(command);
-        command.execute(goi);
+        try {
+            command.execute(goi);
+        } catch (Exception ex) {
+            Logger.getLogger(AdapterCommunication.class.getName()).log(Level.WARNING, null, ex);
+        }
         redoList.clear();
     }
 
@@ -134,18 +152,31 @@ public class AdapterCommunication implements IAdapterCommunication{
         Command command = new Scale(ids, coordinates_old, scale_old, 
                 coordinates, scale);
         undoList.add(command);
-        command.execute(goi);
+        try {
+            command.execute(goi);
+        } catch (Exception ex) {
+            Logger.getLogger(AdapterCommunication.class.getName()).log(Level.WARNING, null, ex);
+        }
         redoList.clear();
     }
 
     @Override
     public int[] loadKMZ(String url) {
-        return goi.loadKMZ(url);
+        try {
+            return goi.loadKMZ(url);
+        } catch (Exception ex) {
+            Logger.getLogger(AdapterCommunication.class.getName()).log(Level.WARNING, null, ex);
+            return null;
+        }
     }
     
     @Override
     public boolean importCheckName(String moduleName, String server){
-        return goi.importCheckName(moduleName, server);
+        try {
+            return goi.importCheckName(moduleName, server);
+        } catch (Exception ex) {
+            return false;
+        }
     }
 
     @Override
@@ -158,13 +189,17 @@ public class AdapterCommunication implements IAdapterCommunication{
             double z, double rotationX, double rotationY, double rotationZ,
             double scale) {
         
-        boolean ret_val = goi.importKMZ(name, image_url, x,y,z, rotationX, 
-                rotationY, rotationZ, scale);
-        
-        //Import does not need all the baggage in order to undo/redo
-        if(ret_val)
+        try {
+            goi.importKMZ(name, image_url, x,y,z, rotationX, 
+                    rotationY, rotationZ, scale);
+            
+            //Import does not need all the baggage in order to undo/redo
             undoList.add(new Import());
-        return ret_val;
+            return true;
+        } catch (Exception ex) {
+            Logger.getLogger(AdapterCommunication.class.getName()).log(Level.WARNING, null, ex);
+            return false;
+        }
     }
 
     /*
@@ -188,8 +223,13 @@ public class AdapterCommunication implements IAdapterCommunication{
         
         Command command = undoList.get(undoList.size()-1);
         undoList.remove(undoList.size()-1);
-        command.undo(goi);
         redoList.add(command);
+        try {
+            command.undo(goi);
+        } catch (Exception ex) {
+            Logger.getLogger(AdapterCommunication.class.getName()).log(Level.WARNING, null, ex);
+            undo();
+        }
     }
 
     @Override
@@ -199,7 +239,12 @@ public class AdapterCommunication implements IAdapterCommunication{
 
         Command command = redoList.get(redoList.size()-1);
         redoList.remove(redoList.size()-1);
-        command.redo(goi);
         undoList.add(command);
+        try {
+            command.redo(goi);
+        } catch (Exception ex) {
+            Logger.getLogger(AdapterCommunication.class.getName()).log(Level.SEVERE, null, ex);
+            redo();
+        }
     }
 }

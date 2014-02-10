@@ -11,7 +11,7 @@ import org.jdesktop.wonderland.client.login.ServerSessionManager;
 
 /**
  * Gets every object currently on the server and sends the data from the object
- * to the UpdateManager. This is used to build the world, when
+ to the ServerEventManager. This is used to build the world, when
  * it is not empty.
  * 
  * @author Patrick
@@ -19,7 +19,7 @@ import org.jdesktop.wonderland.client.login.ServerSessionManager;
  */
 public class WorldBuilder {
     
-    private UpdateManager sua = null;
+    private ServerEventManager sua = null;
     private WonderlandAdapterController ac = null;
     
     private ArrayList<Cell> cells = null;
@@ -32,7 +32,7 @@ public class WorldBuilder {
      * @param ac a adapterController instance.
      * @param sua a serverUpdate instance.
      */
-    public WorldBuilder( WonderlandAdapterController ac, UpdateManager sua){
+    public WorldBuilder( WonderlandAdapterController ac, ServerEventManager sua){
         this.sua = sua;
         this.ac = ac;
         cells = new ArrayList<Cell>();
@@ -90,6 +90,6 @@ public class WorldBuilder {
     
     private void createDataObject(Cell cell){
                 
-        sua.createObject(cell);
+        sua.creationEvent(cell);
     }
 }

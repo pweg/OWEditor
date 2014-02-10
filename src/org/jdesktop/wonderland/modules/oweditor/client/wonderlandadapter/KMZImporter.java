@@ -1,7 +1,19 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * Project Wonderland
+ *
+ * Copyright (c) 2004-2010, Sun Microsystems, Inc., All Rights Reserved
+ *
+ * Redistributions in source code form must reproduce the above
+ * copyright and this condition.
+ *
+ * The contents of this file are subject to the GNU General Public
+ * License, Version 2 (the "License"); you may not use this file
+ * except in compliance with the License. A copy of the License is
+ * available at http://www.opensource.org/licenses/gpl-license.php.
+ *
+ * Sun designates this particular file as subject to the "Classpath" 
+ * exception as provided by Sun in the License file that accompanied 
+ * this code.
  */
 
 package org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter;
@@ -21,10 +33,8 @@ import org.jdesktop.mtgame.Entity;
 import org.jdesktop.mtgame.RenderComponent;
 import org.jdesktop.mtgame.RenderManager;
 import org.jdesktop.mtgame.WorldManager;
-import org.jdesktop.wonderland.client.cell.CellEditChannelConnection;
 import org.jdesktop.wonderland.client.cell.utils.CellCreationException;
 import org.jdesktop.wonderland.client.cell.utils.CellUtils;
-import org.jdesktop.wonderland.client.comms.WonderlandSession;
 import org.jdesktop.wonderland.client.jme.ClientContextJME;
 import org.jdesktop.wonderland.client.jme.artimport.DeployedModel;
 import org.jdesktop.wonderland.client.jme.artimport.ImportSettings;
@@ -35,7 +45,6 @@ import org.jdesktop.wonderland.client.login.LoginManager;
 import org.jdesktop.wonderland.client.login.ServerSessionManager;
 import org.jdesktop.wonderland.client.modules.ModuleUtils;
 import org.jdesktop.wonderland.common.FileUtils;
-import org.jdesktop.wonderland.common.cell.CellEditConnectionType;
 import org.jdesktop.wonderland.common.cell.CellID;
 import org.jdesktop.wonderland.common.login.AuthenticationInfo;
 import org.jdesktop.wonderland.common.modules.ModuleInfo;
@@ -44,8 +53,9 @@ import org.jdesktop.wonderland.common.modules.ModuleUploader;
 import org.jdesktop.wonderland.common.modules.utils.ModuleJarWriter;
 
 /**
- *
- * @author Patrick
+ * This class is fairly similar to the art importer, but is a little bit 
+ * modified. The main purpose is to import a kmz file and build a 
+ * module out of it.
  */
 public class KMZImporter {
     
@@ -60,6 +70,10 @@ public class KMZImporter {
     private ServerSessionManager targetServer = null;
     private CellID lastCellID = null;
     
+    /**
+     * Imports a kmz model. The model is stored here for later usage.
+     * @param url The url of the model.
+     */
     public void importKMZ(String url){
         
         try{
@@ -74,13 +88,13 @@ public class KMZImporter {
         }
     }
     
-        /**
-     * Load model from file
+    /**
+     * Loads the model from a file
      * 
-     * @param origFile
+     * @param settings The import settings for the model.
      */
      
-    ImportedModel loadModel(ImportSettings settings) throws IOException {
+    private ImportedModel loadModel(ImportSettings settings) throws IOException {
         rootBG = new Node();
 
         URL url = settings.getModelURL();
@@ -129,23 +143,34 @@ public class KMZImporter {
         wm.addEntity(entity);
         loadedModel.setEntity(entity);
 
-//        findTextures(modelBG);
+//      findTextures(modelBG);
 
         return loadedModel;
     }
     
-    public int[] getModelSize(CoordinateTranslator translator){
+    /**
+     * Returns the size of the latet model imported.
+     * 
+     * @return The models size as bounding volume.
+     */
+    public BoundingVolume getModelSize(){
         
         if(importedModel == null){
             LOGGER.log(Level.SEVERE, "No model was previously imported!");
             return null;
         }
         
-        BoundingVolume bounds = importedModel.getModelBG().getWorldBound();
-        return translator.transformSize(bounds);
+        return importedModel.getModelBG().getWorldBound();
     }
 
-    boolean checkName(String moduleName, String serverName) {
+    /**
+     * Checks the given module name for a conflict.
+     * 
+     * @param moduleName The name of the module.
+     * @param serverName The server, where the module will be saved.
+     * @return True, if the name already exsists, false otherwise.
+     */
+    public boolean checkName(String moduleName, String serverName) {
         Collection<ServerSessionManager> servers = LoginManager.getAll();
         targetServer = null;
         
@@ -175,10 +200,14 @@ public class KMZImporter {
         return false;
     }
 
-    public boolean importToServer(String name, String image_url, 
-            double x, double y, double z, 
-            double rotationX, double rotationY, double rotationZ, 
-            double scale) {
+    /**
+     * Builds a new module, uploads it to the server and builds a cell
+     * out of the module.
+     * 
+     * @param name The name of the new module.
+     * @return 
+     */
+    public boolean importToServer(String name) {
         
         
         if(targetServer == null){
@@ -204,6 +233,11 @@ public class KMZImporter {
          
     }
     
+    /**
+     * Creates a module and uploads it to the server.
+     * 
+     * @return 
+     */
     private boolean deployToServer(){
         
         final ArrayList<DeployedModel> deploymentInfo = new ArrayList();
@@ -246,11 +280,11 @@ public class KMZImporter {
         }
 
         // Now create the cells for the new content
-        WonderlandSession session =
+        /*WonderlandSession session =
                 LoginManager.getPrimary().getPrimarySession();
         CellEditChannelConnection connection =
                (CellEditChannelConnection) session.getConnection(
-               CellEditConnectionType.CLIENT_TYPE);
+               CellEditConnectionType.CLIENT_TYPE);*/
         for (DeployedModel info : deploymentInfo) {
             try {
                 lastCellID = CellUtils.createCell(info.getCellServerState());
@@ -270,6 +304,13 @@ public class KMZImporter {
         return true;
     }
     
+    /**
+     * Creates a module out of the last stored model.
+     * 
+     * @param deploymentInfo A list were the deployment info will be written.
+     * @param targetDir The modelfile.
+     * @return  The created module.
+     */
     private File createModuleJar(
             ArrayList<DeployedModel> deploymentInfo, File targetDir) {
 
@@ -328,15 +369,22 @@ public class KMZImporter {
         }
 
         return moduleJar;
+    }  
 
-}  
-
+    /**
+     * Returns the id, which was given to the last created cell.
+     * 
+     * @return The id as long.
+     */
     public long getLastID() {
         if(lastCellID == null)
             return -1;
         return Long.valueOf(lastCellID.toString());
     }
 
+    /**
+     * Removes the model and deletes the client side visualization of it.
+     */
     public void clearModel() {
         try{
             WorldManager wm = ClientContextJME.getWorldManager();

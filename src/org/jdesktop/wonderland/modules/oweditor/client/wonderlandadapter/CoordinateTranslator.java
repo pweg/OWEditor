@@ -30,6 +30,10 @@ public class CoordinateTranslator implements CoordinateTranslatorInterface{
     private static final Logger LOGGER =
             Logger.getLogger(WorldBuilder.class.getName());
 
+    /*
+    * Transforms wonderland coordinates into gui coordinates. Is used
+    * in the data package.
+    */
     @Override
     public Point transformCoordinatesInt(float x, float y, 
             float width, float height) {        
@@ -39,6 +43,9 @@ public class CoordinateTranslator implements CoordinateTranslatorInterface{
         return new Point(x_int, y_int);
     }
     
+    /*
+    * Like transformBack, but without a cell. Is used in the data package.
+    */
     @Override
     public Point2D.Double transformCoordinatesBack(float x, float y, 
             float width, float height) {
@@ -47,13 +54,16 @@ public class CoordinateTranslator implements CoordinateTranslatorInterface{
         
         return new Point2D.Double(x_double, y_double);
     }
+    
     /**
+     * Transforms the gui coordinates from a cell to the wonderland
+     * coordinates.
      * 
-     * @param cell
-     * @param x
-     * @param y
-     * @param z
-     * @return 
+     * @param cell The cell.
+     * @param x The x coordinate of the GUI.
+     * @param y The y coordinate of the GUI, which is the z wonderland coordinate.
+     * @param z The z coordinate of the GUI, which is the y wonderland coordiante.
+     * @return The transformed coordinates as vector.
      */
     public Vector3f transformCoordinatesBack(Cell cell, float x, float y, float z){
         
@@ -83,6 +93,14 @@ public class CoordinateTranslator implements CoordinateTranslatorInterface{
         return vector;
     }
     
+    /**
+     * Transforms the size of cell bounds into gui sizes.
+     * 
+     * @param bounds The bounds to be transformed.
+     * @return An integer array, containing the gui bounds:
+     * [0]: width.
+     * [1]: height.
+     */
     public int[] transformSize(BoundingVolume bounds){
         
         int[] ret_val = new int[2];
@@ -110,10 +128,6 @@ public class CoordinateTranslator implements CoordinateTranslatorInterface{
         }
         return null;
     }
-    
-    public Vector3f transformVector(Vector3f coords){
-        return new Vector3f(coords.x, coords.z, coords.y);
-    }
 
     @Override
     public double transformXBack(double x) {
@@ -135,46 +149,27 @@ public class CoordinateTranslator implements CoordinateTranslatorInterface{
         return (int)Math.round(height * globalScale);
     }
 
-    public double getScale() {
-        return globalScale;
-    }
-
+    @Override
     public double getRotation(IDataObject object) {
         return -object.getRotationY();
     }
     
-    public Quaternion setRotation(Cell cell, double rotation){
+    /**
+     * Creates a new vector for rotation. This method should be used, after
+     * receiving a standard gui rotation command
+     * (NOT rotations done via properties!). This method takes the new rotation
+     * and adds it to an already existing vector at the right place.
+     * 
+     * @param rotation The rotation of a cell.
+     * @param newRotation The new rotation value to be set for the y axis.
+     * @return A new vector, with the added and transforemd new rotation value.
+     */
+    public Vector3f createRotation(Vector3f rotation, double newRotation){
         
-        CellTransform transform = cell.getLocalTransform();
-        
-        Quaternion current_rot = transform.getRotation(null);
-        float[] angles = current_rot.toAngles(new float[3]);
-        
-        float rotationX = angles[0];
-        float rotationZ = angles[2];
-        float rotationY = (float) Math.toRadians(-rotation);
-        
-        return new Quaternion(new float[] { rotationX, rotationY, rotationZ });
+        float rotationY = (float) Math.toRadians(-newRotation);
+        return new Vector3f(rotation.x, rotationY, rotation.z );
     }
     
-    /**
-     * This is used, when the adapter internal classes have to make a
-     * rotation. This is needed, because otherwise, the values would
-     * be wrong.
-     * 
-     * @param cell The cell to rotate
-     * @param rotation The rotation vector.
-     * @return Returns a quaternion containing the rotation.
-     */
-    protected Quaternion setStandardRotation(Cell cell, Vector3f rotation){
-        
-        float rotationX = (float) Math.toRadians(rotation.x);
-        float rotationZ = (float) Math.toRadians(rotation.z);
-        float rotationY = (float) Math.toRadians(rotation.y);
-        
-        return new Quaternion(new float[] { rotationX, rotationY, rotationZ });
-    }
-
     @Override
     public double getScale(double scale) {
         return scale;

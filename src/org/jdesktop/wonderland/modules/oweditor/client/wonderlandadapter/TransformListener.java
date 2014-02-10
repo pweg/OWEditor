@@ -13,14 +13,14 @@ import org.jdesktop.wonderland.client.cell.TransformChangeListener;
  */
 public class TransformListener implements TransformChangeListener{
     
-    private UpdateManager sua = null;
+    private ServerEventManager sua = null;
     
-    public TransformListener(UpdateManager sua){
+    public TransformListener(ServerEventManager sua){
        this.sua = sua;
     }
     
     public void transformChanged(Cell cell, ChangeSource source) {
-        sua.serverTransformEvent(cell);
+        sua.transformEvent(cell);
     }
     
 }

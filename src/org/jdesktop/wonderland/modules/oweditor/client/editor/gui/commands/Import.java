@@ -14,17 +14,17 @@ public class Import implements Command{
     }
 
     @Override
-    public void execute(GUIObserverInterface goi) {
+    public void execute(GUIObserverInterface goi)  throws Exception{
         
     }
 
     @Override
-    public void undo(GUIObserverInterface goi) {
+    public void undo(GUIObserverInterface goi)  throws Exception{
         goi.undoObjectCreation();
     }
 
     @Override
-    public void redo(GUIObserverInterface goi) {
+    public void redo(GUIObserverInterface goi)  throws Exception{
         goi.redoObjectCreation();
     }
 

@@ -19,22 +19,48 @@ public interface GUIObserverInterface {
      * @param id the object id.
      * @param x the x coordinate, the object is moved to.
      * @param y the y coordinate, the object is moved to.
+     * @throws java.lang.Exception
      */
-    public void notifyTranslationXY(long id, int x, int y);
+    public void notifyTranslationXY(long id, int x, int y) throws Exception;
     
+    /**
+     * Notifies a simple rotation, which means a rotation around
+     * the y axis. This is the rotation done directly in the 
+     * 2d environment.
+     * 
+     * @param id the object id.
+     * @param x the x coordinate, the object is moved to.
+     * @param y the y coordinate, the object is moved to.
+     * @param rotation the rotation of the object.
+     * @throws java.lang.Exception
+     */
+    public void notifyRotation(long id, int x, int y, double rotation) throws Exception;
+
+    /**
+     * Notifies adapter for object scaling.
+     * 
+     * @param id the object id.
+     * @param x the x coordinate, the object is moved to.
+     * @param y the y coordinate, the object is moved to.
+     * @param scale the new scale.
+     * @throws java.lang.Exception
+     */
+    public void notifyScaling(long id, int x, int y, double scale) throws Exception;
     /**
      * Deletes an object.
      * 
      * @param id The id of the object.
+     * @throws java.lang.Exception
      */
-    public void notifyRemoval(long id);
+    public void notifyRemoval(long id) throws Exception;
     
     /**
      * Undos object removal.
      * 
      * @param id The id of the deleted object.
+     * @throws java.lang.Exception
      */
-    public void undoRemoval(long id);
+    public void undoRemoval(long id) throws Exception;
     
     /**
      * Notifies a copy command, which makes a backup
@@ -52,42 +78,23 @@ public interface GUIObserverInterface {
      * @param id The id of the object, which should be copied.
      * @param x The x coordinate of the new object.
      * @param y The y coordinate of the new object.
+     * @throws java.lang.Exception
      */
-    public void notifyPaste(long id, int x, int y);
+    public void notifyPaste(long id, int x, int y) throws Exception;
     
     /**
      * Undoes creational actions, which generate a new
      * object, like the paste, or import command.
+     * @throws java.lang.Exception
      */
-    public void undoObjectCreation();
+    public void undoObjectCreation() throws Exception;
 
     /**
      * Redoes creational actions, which generate a new
      * object, like the paste, or import command.
+     * @throws java.lang.Exception
      */
-    public void redoObjectCreation();
-
-    /**
-     * Notifies a simple rotation, which means a rotation around
-     * the y axis. This is the rotation done directly in the 
-     * 2d environment.
-     * 
-     * @param id the object id.
-     * @param x the x coordinate, the object is moved to.
-     * @param y the y coordinate, the object is moved to.
-     * @param rotation the rotation of the object.
-     */
-    public void notifyRotation(long id, int x, int y, double rotation);
-
-    /**
-     * Notifies adapter for object scaling.
-     * 
-     * @param id the object id.
-     * @param x the x coordinate, the object is moved to.
-     * @param y the y coordinate, the object is moved to.
-     * @param scale the new scale.
-     */
-    public void notifyScaling(long id, int x, int y, double scale);
+    public void redoObjectCreation() throws Exception;
 
 
     /**
@@ -98,8 +105,9 @@ public interface GUIObserverInterface {
      * @return The object bounds in integer format.
      * int[0] should be the xExtend 
      * int[1] should be the zExtend (which is y in ow editor)
+     * @throws java.lang.Exception
      */
-    public int[] loadKMZ(String url);
+    public int[] loadKMZ(String url) throws Exception;
     
     /**
      * Checks for module name conflict. Returns true
@@ -108,8 +116,9 @@ public interface GUIObserverInterface {
      * @param moduleName The name, which should be checked.
      * @param server The name of the selected server.
      * @return True, if the name already exists, false otherwise.
+     * @throws java.lang.Exception
      */
-    public boolean importCheckName(String moduleName, String server);
+    public boolean importCheckName(String moduleName, String server) throws Exception;
 
     /**
      * Imports the laded KMZ file and creates a new module for
@@ -127,10 +136,11 @@ public interface GUIObserverInterface {
      * 
      * @return Return true, if importing was a success,
      * false otherwise.
+     * @throws java.lang.Exception
      */
-    public boolean importKMZ(String name, String image_url, double x, double y,
+    public void importKMZ(String name, String image_url, double x, double y,
             double z, double rotationX, double rotationY, double rotationZ,
-            double scale);
+            double scale) throws Exception;
 
     public void cancelImport();
 

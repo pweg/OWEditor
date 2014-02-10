@@ -20,17 +20,17 @@ public class TranslateXY implements Command{
     }
 
     @Override
-    public void execute(GUIObserverInterface goi) {
+    public void execute(GUIObserverInterface goi)  throws Exception{
         translate(goi, coordsNew);
     }
 
     @Override
-    public void undo(GUIObserverInterface goi) {
+    public void undo(GUIObserverInterface goi)  throws Exception{
         translate(goi, coordsOld);
     }
 
     @Override
-    public void redo(GUIObserverInterface goi) {
+    public void redo(GUIObserverInterface goi)  throws Exception{
         execute(goi);        
     }
     
@@ -40,17 +40,29 @@ public class TranslateXY implements Command{
      * @param goi A guiobserverinterface instance.
      * @param coords A list of coordinates.
      */
-    private void translate(GUIObserverInterface goi, ArrayList<Point> coords){
+    private void translate(GUIObserverInterface goi, ArrayList<Point> coords)
+        throws Exception{
+        int failcount = 0;
+        
         try{
             for(int i=0;i < ids.size();i++){
                 Long id = ids.get(i);
                 Point p = coords.get(i);
                 
-                goi.notifyTranslationXY(id, p.x, p.y);
+                try{
+                    goi.notifyTranslationXY(id, p.x, p.y);
+                }catch(Exception e){
+                    failcount++;
+                }
             }
         }catch(Exception e){
             System.err.println("Translate command: list size dont match");
+            throw e;
         }
+        
+        //the command only failed, when every operation failed!
+        if(failcount == ids.size())
+            throw new CommandException();
     }
 
 }

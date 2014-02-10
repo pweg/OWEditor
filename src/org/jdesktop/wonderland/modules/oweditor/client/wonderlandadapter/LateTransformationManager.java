@@ -8,6 +8,7 @@ package org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter;
 
 import com.jme.math.Vector3f;
 import java.util.HashMap;
+import java.util.logging.Level;
 
 /**
  * This class is used when transformations are not possible, or
@@ -151,10 +152,10 @@ public class LateTransformationManager {
     public boolean invokeLateTransform(ServerCommunication server, long id, 
             String name){
         
-        boolean b = lateTransform(server, id, name);
-        b = b || lateTransform(server, id);
-        
-        return b; 
+        if(getTranslation(name) != null)
+            return lateTransform(server, id, name);
+        else
+            return lateTransform(server, id); 
     }
     
     /**
@@ -170,12 +171,14 @@ public class LateTransformationManager {
         Vector3f lateTranslation = getTranslation(name);
         
         if(lateTranslation != null){
-            if(!server.translate(id, lateTranslation)){
-                 return false;
-            }else{
+            try{
+                server.translate(id, lateTranslation);
                 removeTranslate(id);
                 return true;
+            }catch(ServerCommException e){
+                return false;
             }
+            
         }
         return false;
     }
@@ -196,26 +199,30 @@ public class LateTransformationManager {
         boolean b = true;
         
         if(lateTranslation != null){
-            if(!server.translate(id, lateTranslation)){
-                 b = false;
-            }else{
+            try{
+                server.translate(id, lateTranslation);
                 removeTranslate(id);
+
+            }catch(ServerCommException e){
+                b = false;
             }
         }
         if(lateRotation != null){
-            if(!server.rotate(id, lateRotation)){
-                 b = false;
-            }else{
+            try{
+                server.rotate(id, lateRotation);
                 removeRotate(id);
+            }catch(ServerCommException e){
+                b = false;
             }
         }
         
         if(lateScale != -1){
-            if(!server.scale(id, lateScale)){
+            try{
+            server.scale(id, lateScale);
                  b = false;
-            }else{
-                //lateTranslation = ac.ct.transformVector(lateTranslation);
                 removeScale(id);
+            }catch(ServerCommException e){
+                b = false;
             }
         }
         return b;

@@ -28,17 +28,17 @@ public class Rotate implements Command{
     }
 
     @Override
-    public void execute(GUIObserverInterface goi) {
+    public void execute(GUIObserverInterface goi)  throws Exception{
         rotate(goi, coordsNew, rotationNew);
     }
 
     @Override
-    public void undo(GUIObserverInterface goi) {
+    public void undo(GUIObserverInterface goi)  throws Exception{
         rotate(goi, coordsOld, rotationOld);
     }
 
     @Override
-    public void redo(GUIObserverInterface goi) {
+    public void redo(GUIObserverInterface goi)  throws Exception{
         execute(goi);
     }
 
@@ -50,18 +50,29 @@ public class Rotate implements Command{
      * @param rotation A list of rotation values.
      */
     private void rotate(GUIObserverInterface goi, ArrayList<Point> coords,
-            ArrayList<Double> rotation){
+            ArrayList<Double> rotation) throws Exception{
+        int failcount = 0;
+        
         try{
             for(int i=0;i < ids.size();i++){
                 Long id = ids.get(i);
                 Point p = coords.get(i);
                 double rot = rotation.get(i);
                 
-                goi.notifyRotation(id, p.x, p.y, rot);
+                try{
+                    goi.notifyRotation(id, p.x, p.y, rot);
+                }catch(Exception e){
+                    failcount++;
+                }
             }
         }catch(Exception e){
             System.err.println("Rotate command: list size dont match");
+            throw e;
         }
+        
+        //the command only failed, when every operation failed!
+        if(failcount == ids.size())
+            throw new CommandException();
     }
 
 }

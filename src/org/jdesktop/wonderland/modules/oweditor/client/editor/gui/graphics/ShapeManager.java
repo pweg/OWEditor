@@ -158,7 +158,7 @@ public class ShapeManager {
                 
                 Shape shape = shape_obj.getTransformedShape();
                 
-                if(shape.contains(p)) {
+                if(shape != null && shape.contains(p)) {
                     object = shape_obj;
                     break;
                 }

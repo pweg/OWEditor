@@ -10,7 +10,7 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IDa
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IDataToGUI;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.ITransformedObject;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.IDataObjectObserver;
-import org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter.GUIObserver;
+import org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter.GUIEventManager;
 
 /**
  * Stores, manages anobject creates objectata objects. 
@@ -21,7 +21,7 @@ import org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter.GUIObse
 public class DataObjectManager {
     
     private static final Logger LOGGER =
-            Logger.getLogger(GUIObserver.class.getName());
+            Logger.getLogger(GUIEventManager.class.getName());
         
     private DataController dc = null;
     private IDataObjectObserver domo = null;

@@ -10,7 +10,7 @@ public class Paste implements Command{
     ArrayList<Long> ids;
     ArrayList<Point> coords;
     
-    public Paste(ArrayList<Long> ids, ArrayList<Point> coords){
+    public Paste(ArrayList<Long> ids, ArrayList<Point> coords) {
         this.ids = ids;
         this.coords = coords;
 
@@ -20,29 +20,62 @@ public class Paste implements Command{
     }
 
     @Override
-    public void execute(GUIObserverInterface goi) {
+    public void execute(GUIObserverInterface goi)  throws Exception{
+        
+        int failcount = 0;
         
         try{
             for(int i=0; i<ids.size();i++){
                 Long id = ids.get(i);
                 Point p = coords.get(i);
-                goi.notifyPaste(id, p.x, p.y);
+                try{
+                    goi.notifyPaste(id, p.x, p.y);
+                }catch(Exception e){
+                    failcount++;
+                }
             }
         }catch(Exception e){
             System.err.println("Paste command: list size dont match");
+            throw e;
         }
+        
+        //the command only failed, when every operation failed!
+        if(failcount == ids.size())
+            throw new CommandException();
     }
 
     @Override
-    public void undo(GUIObserverInterface goi) {
-        for(long id: ids)
-            goi.undoObjectCreation();
+    public void undo(GUIObserverInterface goi)  throws Exception{
+        int failcount = 0;
+        
+        for(long id: ids){
+            try{
+                goi.undoObjectCreation();
+            }catch(Exception e){
+                failcount++;
+            }
+        }
+        
+        //the command only failed, when every operation failed!
+        if(failcount == ids.size())
+            throw new CommandException();
     }
 
     @Override
-    public void redo(GUIObserverInterface goi) {
-        for(long id: ids)
-            goi.redoObjectCreation();
+    public void redo(GUIObserverInterface goi)  throws Exception{
+        int failcount = 0;
+        
+        for(long id: ids){
+            try{
+                goi.redoObjectCreation();
+            }catch(Exception e){
+                failcount++;
+            }
+        }
+        
+        //the command only failed, when every operation failed!
+        if(failcount == ids.size())
+            throw new CommandException();
     }
     
 

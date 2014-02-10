@@ -17,7 +17,7 @@ import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.GUIObse
  * @author Patrick
  *
  */
-public class GUIObserver implements GUIObserverInterface{
+public class GUIEventManager implements GUIObserverInterface{
     
     private DummyAdapterController ac = null;
     private static final ResourceBundle BUNDLE = ResourceBundle.getBundle(
@@ -35,7 +35,7 @@ public class GUIObserver implements GUIObserverInterface{
      * 
      * @param ac a adpater controller instance.
      */
-    public GUIObserver(DummyAdapterController ac){
+    public GUIEventManager(DummyAdapterController ac){
         this.ac = ac;
         
         bounds[0] = (float) 1.0;
@@ -43,11 +43,11 @@ public class GUIObserver implements GUIObserverInterface{
     }
 
     @Override
-    public void notifyTranslationXY(long id, int x, int y) {
+    public void notifyTranslationXY(long id, int x, int y) throws Exception{
 
         ServerObject object = ac.server.getObject(id);
         if(object == null)
-            return ;
+            throw new Exception();
 
         Vector3D p = ac.ct.transformCoordinatesBack(x, y, 0, 0);
         
@@ -58,12 +58,12 @@ public class GUIObserver implements GUIObserverInterface{
     }
 
     @Override
-    public void notifyRemoval(long id) {
+    public void notifyRemoval(long id) throws Exception{
         ac.da.serverRemovalEvent(id);
     }
     
     @Override
-    public void undoRemoval(long id){
+    public void undoRemoval(long id) throws Exception{
         ac.da.createObject(ac.server.getObject(id));
     }
 
@@ -83,11 +83,11 @@ public class GUIObserver implements GUIObserverInterface{
     }
 
     @Override
-    public void notifyPaste(long id, int x, int y) {
+    public void notifyPaste(long id, int x, int y) throws Exception{
         
         ServerObject o = ac.server.getObject(id);
         if(o == null)
-            return;
+            throw new Exception();
         String name = BUNDLE.getString("CopyName")+o.name;
         
         Vector3D p = ac.ct.transformCoordinatesBack(x, y, 0, 0);
@@ -100,31 +100,31 @@ public class GUIObserver implements GUIObserverInterface{
     }
 
     @Override
-    public void undoObjectCreation(){
+    public void undoObjectCreation() throws Exception{
         long id = ac.bom.getCreationUndoID();
 
         if(id == -1)
-            return;
+            throw new Exception();
         
         notifyRemoval(id);
     }
     
     @Override
-    public void redoObjectCreation(){
+    public void redoObjectCreation() throws Exception{
         long id = ac.bom.getCreationRedoID();
         
         if(id == -1)
-            return;
+            throw new Exception();
         
         ac.da.createObject(ac.server.getObject(id));
     }
 
     @Override
-    public void notifyRotation(long id, int x, int y, double rotation) {
+    public void notifyRotation(long id, int x, int y, double rotation) throws Exception{
         ServerObject object = ac.server.getObject(id);
         
         if(object == null)
-            return ;
+            throw new Exception();
    
         object.rotationX = rotation;
         notifyTranslationXY(id, x,y);
@@ -132,11 +132,11 @@ public class GUIObserver implements GUIObserverInterface{
     }
 
     @Override
-    public void notifyScaling(long id, int x, int y, double scale) {
+    public void notifyScaling(long id, int x, int y, double scale) throws Exception{
         ServerObject object = ac.server.getObject(id);
         
         if(object == null)
-            return ;
+            throw new Exception();
         
         object.scale = scale;        
         notifyTranslationXY(id, x,y);
@@ -144,7 +144,7 @@ public class GUIObserver implements GUIObserverInterface{
     }
 
     @Override
-    public int[] loadKMZ(String url) {
+    public int[] loadKMZ(String url) throws Exception{
         /*
          * unfortunately reading a kmz is difficult, so the
          * dummy adapter returns just the same sizes.
@@ -159,9 +159,9 @@ public class GUIObserver implements GUIObserverInterface{
     }
 
     @Override
-    public boolean importKMZ(String name, String image_url, double x, double y,
+    public void importKMZ(String name, String image_url, double x, double y,
             double z, double rotationX, double rotationY, double rotationZ,
-            double scale) {
+            double scale) throws Exception{
         
         ServerObject object = ac.server.getObject(name);
         BufferedImage img = null;
@@ -177,8 +177,6 @@ public class GUIObserver implements GUIObserverInterface{
             save = new ServerObject(-1, (float)x, (float)y, (float)z, rotationX, 
             rotationY, rotationZ, scale,  (float)bounds[0], (float)bounds[1],  name,
             img);
-            
-            return true;
         }else{
 
             ServerObject tmp = ac.server.createObject((float)x, (float)y, (float)z, 
@@ -186,7 +184,7 @@ public class GUIObserver implements GUIObserverInterface{
                 (float)bounds[0], (float)bounds[1], name, false, img);
             ac.bom.addCreatedID(tmp.id);
             ac.da.createObject(tmp);
-            return false;
+            throw new Exception();
         }
     }
 

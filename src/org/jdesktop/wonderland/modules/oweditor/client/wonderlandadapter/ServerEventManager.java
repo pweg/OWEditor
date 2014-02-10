@@ -21,7 +21,7 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IAd
  * @author Patrick
  *
  */
-public class UpdateManager {
+public class ServerEventManager {
     
     private WonderlandAdapterController ac = null;
     private IAdapterObserver dui = null;
@@ -29,7 +29,7 @@ public class UpdateManager {
     private ComponentChangeListener componentListener = null;
     
     private static final Logger LOGGER =
-            Logger.getLogger(GUIObserver.class.getName());
+            Logger.getLogger(GUIEventManager.class.getName());
 
     
     /**
@@ -37,7 +37,7 @@ public class UpdateManager {
      * 
      * @param ac: the adapter controller instance.
      */
-    public UpdateManager(WonderlandAdapterController ac){
+    public ServerEventManager(WonderlandAdapterController ac){
         this.ac = ac;
         
         componentListener = new ComponentChangeListener() {
@@ -60,7 +60,7 @@ public class UpdateManager {
      * 
      * @param cell the cell.
      */
-    public void serverTransformEvent(Cell cell){
+    public void transformEvent(Cell cell){
         
         if(dui == null){
             LOGGER.warning("DataInterface is not in the adapter");
@@ -88,13 +88,21 @@ public class UpdateManager {
      * 
      * @param dui a dataUpdate instance.
      */
-    public void setDataUpdateInterface(IAdapterObserver dui) {
+    public void registerDataInterface(IAdapterObserver dui) {
         this.dui = dui;
     }
     
-    public void serverRemovalEvent(Cell cell){
-        long id = CellInfoReader.getID(cell);
+    /**
+     * Is called, when a cell is removed on the server. Forwards the 
+     * removal event to data.
+     * 
+     * @param cell The cell to remove.
+     */
+    public void removalEvent(Cell cell){
+        //create backup of the cell.
+        ac.bm.addCell(cell);
         
+        long id = CellInfoReader.getID(cell);
         dui.notifyRemoval(id);
     }
     
@@ -105,7 +113,7 @@ public class UpdateManager {
      * 
      * @param cell the cell to create
      */
-    public void createObject(Cell cell){
+    public void creationEvent(Cell cell){
         
         cell.addTransformChangeListener(ac.tl);
         
@@ -126,66 +134,12 @@ public class UpdateManager {
             if (response instanceof ErrorMessage) {
                 LOGGER.warning("ERROR Movable component creation"+response);
             }
-        }        
+        }       
         
-        
-        /*Vector3fInfo coordinates = CellInfoReader.getCoordinates(cell);
-        
-        Vector3f rotation = CellInfoReader.getRotation(cell);
-        float scale = CellInfoReader.getScale(cell);*/
-        
-        /**
-         * This is used for translating copied cells, after they are created.
-         * This is not the best solution, because Wonderland does not create
-         * the possibility to copy cells to a specific location.
-         */
-        //boolean b = true;
-        /*if(ac.bm.translationContainsKey(name)){
-            
-            Vector3f new_pos = ac.bm.getTranslation(name);
-            
-            BackupObject backup = ac.bm.getBackup(name);
-            if(backup != null){//transformed coordinates
-            
-                 Vector3f tmp = ac.ct.transformCoordinatesBack(cell, new_pos.x, new_pos.y, new_pos.z);
-                 tmp = ac.ct.transformVector(tmp);
-                
-            
-                coordinates.set(tmp);
-            
-                rotation = backup.getRotation();
-                /*
-                * When problems arise, due to the absence of the movable component,
-                * a listener is created, for the purpose to translate the copied cell.
-                *
-                if(!ac.sc.translate(id, (int) new_pos.x, (int)new_pos.y)){
-                    LOGGER.warning("TRANSLATE FALSE");
-                    //cell.addComponentChangeListener(componentListener);
-                    b = false;
-                }else{
-                    //rotation = backup.getRotation();
-                    //scale = backup.getScale();
-                    LOGGER.warning("I DONT KNOW WHAT THIS DOES");
-                    ac.sc.rotate(id, rotation);
-                    ac.bm.removeTranslation(name);
-                }
-            }else{//Untransformed coordinates.
-                /*new_pos = ac.ct.transformVector(new_pos);
-                coordinates.set(new_pos);
-                
-                if(!ac.sc.translate(id, new_pos.x, new_pos.y, new_pos.z)){
-                    LOGGER.warning("TRANSLATE FALSE");
-                    cell.addComponentChangeListener(componentListener);
-                }else{
-                    ac.bm.removeTranslation(name);
-                }*
+        if(ac.ltm.containsCell(id, name)){
+            if(!ac.ltm.invokeLateTransform(ac.sc, id, name)){
+                cell.addComponentChangeListener(componentListener);
             }
-        }*/
-        
-        if((!ac.ltm.invokeLateTransform(ac.sc, id, name) && 
-                ac.ltm.containsCell(id, name))){//  !b)
-            cell.addComponentChangeListener(componentListener);
-            LOGGER.warning("LATE TRANSFORM FAILED");
         }
         
         Vector3fInfo coordinates = CellInfoReader.getCoordinates(cell);
@@ -223,23 +177,26 @@ public class UpdateManager {
         
     }
     
+    /**
+     * Is called through a cell compoment listener. This is needed,
+     * when the cell needs transformation, but the movable component
+     * was not created yet.
+     * 
+     * @param cell The cell to transform.
+     */
     private void movableComponentCreated(Cell cell){
         
         String name = cell.getName();
         long id = CellInfoReader.getID(cell);
-        /*
-        if(ac.bm.translationContainsKey(name)){
-            Vector3f p = ac.bm.getTranslation(name);
-            ac.sc.translate(id, (int) p.x, (int) p.y);
-            
-            BackupObject backup = ac.bm.getBackup(name);
-            ac.sc.rotate(id, backup.getRotation());
-            
-            ac.bm.removeTranslation(name);
-        }*/
+        
         ac.ltm.invokeLateTransform(ac.sc, id, name);
     }
 
+    /**
+     * Forwards the serverlist to the data package.
+     * 
+     * @param serverList A string arry containing the server.
+     */
     void setServerList(String[] serverList) {
         dui.setServerList(serverList);
     }

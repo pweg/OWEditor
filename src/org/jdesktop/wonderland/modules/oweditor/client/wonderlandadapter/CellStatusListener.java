@@ -14,9 +14,9 @@ import org.jdesktop.wonderland.common.cell.CellStatus;
  */
 public class CellStatusListener implements CellStatusChangeListener{
     
-    private UpdateManager sua = null;    
+    private ServerEventManager sua = null;    
     
-    public CellStatusListener(UpdateManager sua){
+    public CellStatusListener(ServerEventManager sua){
        this.sua = sua;
     }
 
@@ -32,10 +32,10 @@ public class CellStatusListener implements CellStatusChangeListener{
     public void cellStatusChanged(Cell cell, CellStatus status) {
         
         if(status.equals(CellStatus.DISK)){
-            sua.serverRemovalEvent(cell);
+            sua.removalEvent(cell);
         }
         else if(status.equals(CellStatus.VISIBLE)){
-            sua.createObject(cell);
+            sua.creationEvent(cell);
         }
     }
     

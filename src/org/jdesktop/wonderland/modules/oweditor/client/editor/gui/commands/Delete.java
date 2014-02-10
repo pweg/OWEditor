@@ -17,20 +17,41 @@ public class Delete implements Command{
     }
 
     @Override
-    public void execute(GUIObserverInterface goi) {
-        for(Long id : ids)
-            goi.notifyRemoval(id);
-    }
-
-    @Override
-    public void undo(GUIObserverInterface goi) {
-        for(Long id : ids)
-            goi.undoRemoval(id);
+    public void execute(GUIObserverInterface goi)  throws Exception{
+        int failcount = 0;
         
+        for(Long id : ids){
+            try{
+                goi.notifyRemoval(id);
+            }catch(Exception e){
+                failcount++;
+            }
+        }
+        
+        //the command only failed, when every operation failed!
+        if(failcount == ids.size())
+            throw new CommandException();
     }
 
     @Override
-    public void redo(GUIObserverInterface goi) {
+    public void undo(GUIObserverInterface goi)  throws Exception{
+        int failcount = 0;
+        
+        for(Long id : ids){
+            try{
+                goi.undoRemoval(id);
+            }catch(Exception e){
+                failcount++;
+            }
+        }
+        
+        //the command only failed, when every operation failed!
+        if(failcount == ids.size())
+            throw new CommandException();
+    }
+
+    @Override
+    public void redo(GUIObserverInterface goi)  throws Exception{
         execute(goi);
     }
 
