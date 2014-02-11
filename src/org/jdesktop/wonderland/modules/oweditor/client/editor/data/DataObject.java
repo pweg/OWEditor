@@ -48,7 +48,7 @@ public class DataObject implements IDataObject{
      * @param height the objects height.
      * @param name the objects name.
      */
-    public DataObject(long id, int x, int y, int z, double rotationX, 
+    public DataObject(long id, float x, float y, float z, double rotationX, 
             double rotationY, double rotationZ, double scale, int width, 
             int height, String name){
         this.id = id;

@@ -1,5 +1,6 @@
 package org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces;
 
+import com.jme.math.Vector3f;
 import java.awt.Point;
 import java.awt.geom.Point2D;
 
@@ -33,23 +34,6 @@ public interface CoordinateTranslatorInterface {
      */
     public Point2D.Double transformCoordinatesBack(float x, float y, float width, float height);
     
-    /**
-     * Transforms just the x coordinate back to
-     * virtual world coordinates.
-     * 
-     * @param x The x coordinate.
-     * @return The transformed coordinate.
-     */
-    public double transformXBack(double x);
-    
-    /**
-     * Transforms just the y coordinate back to
-     * virtual world coordinates.
-     * 
-     * @param y The y coordinate.
-     * @return The transformed coordinate.
-     */
-    public double transformYBack(double y);
     
     /**
      * Transforms the width into

@@ -24,7 +24,7 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IAd
 public class ServerEventManager {
     
     private WonderlandAdapterController ac = null;
-    private IAdapterObserver dui = null;
+    private ArrayList<IAdapterObserver> observers = null;
     
     private ComponentChangeListener componentListener = null;
     
@@ -39,6 +39,7 @@ public class ServerEventManager {
      */
     public ServerEventManager(WonderlandAdapterController ac){
         this.ac = ac;
+        observers = new ArrayList<IAdapterObserver>();
         
         componentListener = new ComponentChangeListener() {
             public void componentChanged(Cell cell, 
@@ -62,11 +63,6 @@ public class ServerEventManager {
      */
     public void transformEvent(Cell cell){
         
-        if(dui == null){
-            LOGGER.warning("DataInterface is not in the adapter");
-            return;
-        }
-        
         Vector3fInfo vector = CellInfoReader.getCoordinates(cell);
         Vector3f rotation = CellInfoReader.getRotation(cell); 
         float scale = CellInfoReader.getScale(cell);
@@ -77,19 +73,21 @@ public class ServerEventManager {
         
         long id = CellInfoReader.getID(cell);
         
-        dui.notifyScaling(id,(double) scale); 
-        dui.notifyTranslation(id , x, y, z); 
-        dui.notifyRotation(id, rotation.x, rotation.y, rotation.z);
+        for(IAdapterObserver observer : observers){
+            observer.notifyScaling(id,(double) scale); 
+            observer.notifyTranslation(id , x, y, z); 
+            observer.notifyRotation(id, rotation.x, rotation.y, rotation.z);
+        }
     }
 
     /**
      * Sets a dataUpdateInterface instance in order to transmit changes
      * and new objects to the data package.
      * 
-     * @param dui a dataUpdate instance.
+     * @param observer a adapter observer instance.
      */
-    public void registerDataInterface(IAdapterObserver dui) {
-        this.dui = dui;
+    public void registerDataInterface(IAdapterObserver observer) {
+        observers.add(observer);
     }
     
     /**
@@ -103,7 +101,8 @@ public class ServerEventManager {
         ac.bm.addCell(cell);
         
         long id = CellInfoReader.getID(cell);
-        dui.notifyRemoval(id);
+        for(IAdapterObserver observer : observers)
+            observer.notifyRemoval(id);
     }
     
     /**
@@ -116,9 +115,6 @@ public class ServerEventManager {
     public void creationEvent(Cell cell){
         
         cell.addTransformChangeListener(ac.tl);
-        
-        if(dui == null)
-            return;
         
         String name = cell.getName();
         long id = CellInfoReader.getID(cell);
@@ -146,34 +142,36 @@ public class ServerEventManager {
         Vector3f rotation = CellInfoReader.getRotation(cell);
         float scale = CellInfoReader.getScale(cell);
         
-        IDataObject object= dui.createEmptyObject();
-        
-        float x = coordinates.x;
-        float y = coordinates.y;
-        float z = coordinates.z;
-        
-        float height = coordinates.height;
-        float width = coordinates.width;
-        
-        
-        object.setID(id);
-        object.setCoordinates(x, y, z);
-        object.setRotationX(rotation.x);
-        object.setRotationY(rotation.y);
-        object.setRotationZ(rotation.z);
-        object.setScale(scale);
-        object.setWidth(width);
-        object.setHeight(height);
-        object.setName(name);
-        
-        if(cell instanceof AvatarCell){
-            object.setType(IDataObject.AVATAR);
-            object.setWidth(AdapterSettings.avatarSizeX);
-            object.setHeight(AdapterSettings.avatarSizeY);
+        for(IAdapterObserver observer : observers){
+            IDataObject object= observer.createEmptyObject();
+
+            float x = coordinates.x;
+            float y = coordinates.y;
+            float z = coordinates.z;
+
+            float height = coordinates.height;
+            float width = coordinates.width;
+
+
+            object.setID(id);
+            object.setCoordinates(x, y, z);
+            object.setRotationX(rotation.x);
+            object.setRotationY(rotation.y);
+            object.setRotationZ(rotation.z);
+            object.setScale(scale);
+            object.setWidth(width);
+            object.setHeight(height);
+            object.setName(name);
+
+            if(cell instanceof AvatarCell){
+                object.setType(IDataObject.AVATAR);
+                object.setWidth(AdapterSettings.avatarSizeX);
+                object.setHeight(AdapterSettings.avatarSizeY);
+            }
+
+            object.setName(name);
+            observer.notifyObjectCreation(object);
         }
-        
-        object.setName(name);
-        dui.notifyObjectCreation(object);
         
     }
     
@@ -198,7 +196,8 @@ public class ServerEventManager {
      * @param serverList A string arry containing the server.
      */
     void setServerList(String[] serverList) {
-        dui.setServerList(serverList);
+        for(IAdapterObserver observer : observers)
+            observer.setServerList(serverList);
     }
 
 }

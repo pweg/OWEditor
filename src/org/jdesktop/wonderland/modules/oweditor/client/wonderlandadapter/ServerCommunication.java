@@ -53,9 +53,14 @@ public class ServerCommunication {
             LOGGER.log(Level.WARNING, "Unable to find Cell cache for session {0}", ac.sm.getSession());
             throw new ServerCommException();
         }
+        
         CellID cellid = new CellID(id);
         Cell cell = cache.getCell(cellid);
         
+        //Do not remove this, because this can shake up the 
+        //gui event manager, when creating a cell, because
+        //it will throw an exception, which will reach the gui,
+        //which is not desireable.
         if(cell == null)
             throw new ServerCommException();
         
@@ -68,52 +73,6 @@ public class ServerCommunication {
         }else{
             throw new ServerCommException();
         }
-        
-    }
-    
-    /**
-     * Removes a given cell.
-     * 
-     * @param id The id of the cell to remove.
-     * @throws org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter.ServerCommException
-     */
-    public void remove(long id) throws ServerCommException{
-        
-        CellCache cache = ac.sm.getCellCache();
-        
-        if (cache == null) {
-            LOGGER.log(Level.WARNING, "Unable to find Cell cache for session {0}", ac.sm.getSession());
-            throw new ServerCommException();
-        }
-        
-        CellID cellid = new CellID(id);
-        Cell cell = cache.getCell(cellid);
-        if(cell == null)
-            throw new ServerCommException();
-        
-        CellUtils.deleteCell(cell);
-    }
-    
-    /**
-     * Copies a cell.
-     * 
-     * @param cell The cell to copy.
-     * @param name The name of the new cell.
-     * @throws org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter.ServerCommException
-     */
-    public void paste(Cell cell, String name) throws ServerCommException{
-        WonderlandSession session = ac.sm.getSession();
-        
-           
-        String message = MessageFormat.format(name, cell.getName());
-           
-        CellEditChannelConnection connection = 
-                (CellEditChannelConnection) session.getConnection(
-                CellEditConnectionType.CLIENT_TYPE);
-        CellDuplicateMessage msg =
-                new CellDuplicateMessage(cell.getCellID(), message);
-        connection.send(msg);
-
     }
     
     /**
@@ -127,13 +86,19 @@ public class ServerCommunication {
     public void rotate(long id, Vector3f rotation) throws ServerCommException{
         
         CellCache cache = ac.sm.getCellCache();
-        /*if (cache == null) {
+
+        if (cache == null) {
             LOGGER.log(Level.WARNING, "Unable to find Cell cache for session {0}", ac.sm.getSession());
-            return false;
-        }*/
+            throw new ServerCommException();
+        }
         
         CellID cellid = new CellID(id);
         Cell cell = cache.getCell(cellid);
+                
+        //Do not remove this, because this can shake up the 
+        //gui event manager, when creating a cell, because
+        //it will throw an exception, which will reach the gui,
+        //which is not desireable.
         if(cell == null)
             throw new ServerCommException();
         
@@ -166,12 +131,16 @@ public class ServerCommunication {
             LOGGER.log(Level.WARNING, "Unable to find Cell cache for session {0}", ac.sm.getSession());
             throw new ServerCommException();
         }
+        
         CellID cellid = new CellID(id);
         Cell cell = cache.getCell(cellid);
         
-        /*
+        //Do not remove this, because this can shake up the 
+        //gui event manager, when creating a cell, because
+        //it will throw an exception, which will reach the gui,
+        //which is not desireable.
         if(cell == null)
-            return false;*/
+            throw new ServerCommException();
         
         MovableComponent movableComponent = cell.getComponent(MovableComponent.class);
         
@@ -182,6 +151,50 @@ public class ServerCommunication {
         }else{
             throw new ServerCommException();
         }
+    }
+    
+    /**
+     * Removes a given cell.
+     * 
+     * @param id The id of the cell to remove.
+     * @throws org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter.ServerCommException
+     */
+    public void remove(long id) throws ServerCommException{
+        
+        CellCache cache = ac.sm.getCellCache();
+        
+        if (cache == null) {
+            LOGGER.log(Level.WARNING, "Unable to find Cell cache for session {0}", ac.sm.getSession());
+            throw new ServerCommException();
+        }
+        
+        CellID cellid = new CellID(id);
+        Cell cell = cache.getCell(cellid);
+        
+        if(cell == null)
+            throw new ServerCommException();
+        
+        CellUtils.deleteCell(cell);
+    }
+    
+    /**
+     * Copies a cell.
+     * 
+     * @param cell The cell to copy.
+     * @param name The name of the new cell.
+     * @throws org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter.ServerCommException
+     */
+    public void paste(Cell cell, String name) throws ServerCommException{
+        WonderlandSession session = ac.sm.getSession();
+        
+        String message = MessageFormat.format(name, cell.getName());
+           
+        CellEditChannelConnection connection = 
+                (CellEditChannelConnection) session.getConnection(
+                CellEditConnectionType.CLIENT_TYPE);
+        CellDuplicateMessage msg =
+                new CellDuplicateMessage(cell.getCellID(), message);
+        connection.send(msg);
     }
     
 }

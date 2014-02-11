@@ -2,15 +2,14 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.data;
 
 import java.awt.Point;
 import java.awt.geom.Point2D;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.logging.Logger;
 
 import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.CoordinateTranslatorInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IDataObject;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IDataToGUI;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.ITransformedObject;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.IDataObjectObserver;
-import org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter.GUIEventManager;
 
 /**
  * Stores, manages anobject creates objectata objects. 
@@ -21,10 +20,10 @@ import org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter.GUIEven
 public class DataObjectManager {
     
     private static final Logger LOGGER =
-            Logger.getLogger(GUIEventManager.class.getName());
+            Logger.getLogger(DataObjectManager.class.getName());
         
     private DataController dc = null;
-    private IDataObjectObserver domo = null;
+    private ArrayList<IDataObjectObserver> observers = null;
     private CoordinateTranslatorInterface ct = null;
     
     private LinkedHashMap<Long, DataObject> data = null;
@@ -36,6 +35,7 @@ public class DataObjectManager {
      */
     public DataObjectManager(DataController d){
         dc = d;
+        observers = new ArrayList<IDataObjectObserver>();
         data = new LinkedHashMap<Long, DataObject>();
     }
     
@@ -51,37 +51,27 @@ public class DataObjectManager {
         if(dataObject instanceof DataObject){
             data.put(id, (DataObject) dataObject);
             
-            float x = dataObject.getXf();
-            float y = dataObject.getYf();
-            float widthf = dataObject.getWidthf();
-            float heightf = dataObject.getHeightf();
-            float scale = (float)dataObject.getScale();
+            ITransformedObject t = createTransformedObject((DataObject) dataObject);
+            if(t == null)
+                return;
             
-            Point p = ct.transformCoordinatesInt(x, y, widthf* scale, heightf* scale);
-            int width = ct.transformWidth(widthf);
-            int height = ct.transformHeight(heightf);
+            checkDimensionChange(t);
             
-
-            dc.em.setX(p.x, width);
-            dc.em.setY(p.y, height);
-            
-            TransformedObject t = new TransformedObject(id, p.x, p.y, width, height,
-                    dataObject.getScale(), ct.getRotation(dataObject), dataObject.getName(),
-                    dataObject.getType(), dataObject.getImage());
-            
-            domo.notifyCreation(t);
+            for(IDataObjectObserver observer : observers)
+                observer.notifyCreation(t);
         }
     }
     
     public void removeObject(long id){
         data.remove(id);
-        domo.notifyRemoval(id);
+        for(IDataObjectObserver observer : observers)
+            observer.notifyRemoval(id);
     }
     
     public void updateTranslation(long id, float x, float y, float z){
         DataObject object = data.get(id);
         
-        if(object == null)
+        if(object == null || ct == null)
             return;
            
        float scale = (float)object.getScale();
@@ -94,23 +84,29 @@ public class DataObjectManager {
                object.getHeightf()*old_scale);
        
        
-       boolean new_coords = false;
+       boolean new_coords = x != object.getX() || y != object.getY();
        
-       if(p.x != p_old.x){
-           dc.em.setX(p.x, ct.transformWidth(object.getWidthf()));
+       /*
+       * Looks for dimension change of the world.
+       *
+       if(){
+           //dc.em.setX(p.x, ct.transformWidth(object.getWidthf()));
            new_coords = true;
        }
        if(p.y != p_old.y){
-           dc.em.setY(p.y, ct.transformHeight(object.getHeightf()));
+           //dc.em.setY(p.y, ct.transformHeight(object.getHeightf()));
            new_coords = true;
-       }
+       }*/
           
        if(!new_coords){
            return;
        }
        
        object.setCoordinates(x, y, z);
-       domo.notifyTranslation(id, p.x, p.y);
+       checkDimensionChange(createTransformedObject(object));
+       
+       for(IDataObjectObserver observer : observers)
+            observer.notifyTranslation(id, p.x, p.y);
     }
 
     public IDataObject getObject(long id){
@@ -118,7 +114,6 @@ public class DataObjectManager {
     }
     
     public ITransformedObject getTransformedObject(long id){
-
         return createTransformedObject(data.get(id));
     }
     
@@ -129,6 +124,9 @@ public class DataObjectManager {
         float heightf = object.getHeightf();
         float scale = (float)object.getScale();
         
+        if(ct == null)
+            return null;
+        
         Point p = ct.transformCoordinatesInt(x, y, widthf* scale, heightf* scale);
         int width = ct.transformWidth(widthf);
         int height = ct.transformHeight(heightf);
@@ -137,6 +135,21 @@ public class DataObjectManager {
                 object.getScale(), ct.getRotation(object), object.getName(),
                 object.getType(), object.getImage());
         return t;
+    }
+    
+    /**
+     * Forwards coordinates and size of an transformed object,
+     * to the environment manager, which has the task of calculating
+     * the world bounds.
+     * 
+     * @param t  A transformed object instance.
+     */
+    private void checkDimensionChange(ITransformedObject t){
+        if(t == null)
+            return;
+        
+        dc.em.setX(t.getX(), (int) Math.round(t.getWidth()*t.getScale()));
+        dc.em.setY(t.getY(), (int) Math.round(t.getHeight()*t.getScale()));
     }
 
     public float getZ(long id) {
@@ -161,12 +174,17 @@ public class DataObjectManager {
      * Registers an observer for the objectata manager.
      * Note: There can only be one observer registereobject at a time.
      * 
-     * @param domo the observer instance.
+     * @param observer the observer instance.
      */
-    public void registerObserver(IDataObjectObserver domo) {
-        this.domo = domo;
+    public void registerObserver(IDataObjectObserver observer) {
+        observers.add(observer);
     }
     
+    /**
+     * Registers a coordinate translator instance.
+     * 
+     * @param ct The translator.
+     */
     public void registerCoordinateTranslator(CoordinateTranslatorInterface ct){
         this.ct = ct;
     }
@@ -176,7 +194,7 @@ public class DataObjectManager {
         
         DataObject d = data.get(id);
         
-        if(d == null)
+        if(d == null || ct == null) 
             return;
             
         double rotation = ct.getRotation(d);
@@ -185,14 +203,17 @@ public class DataObjectManager {
         d.setRotationZ(rotationZ);
         double rotation_new = ct.getRotation(d);
        
-        if(rotation != rotation_new)
-            domo.notifyRotation(id, rotation_new);
+        if(rotation != rotation_new){
+            for(IDataObjectObserver observer : observers)
+                observer.notifyRotation(id, rotation_new);
+            checkDimensionChange(createTransformedObject(d));
+        }
     }
 
     public void updateScale(long id, double scale) {
         DataObject d = data.get(id);
         
-        if(d == null)
+        if(d == null || ct == null)
             return;
         
         scale = ct.getScale(scale);
@@ -200,22 +221,38 @@ public class DataObjectManager {
         
         if(scale != old_scale){
             d.setScale(scale);
-            domo.notifyScaling(id, scale);
+            for(IDataObjectObserver observer : observers)
+                observer.notifyScaling(id, scale);
+            
+            checkDimensionChange(createTransformedObject(d));
         }
-        
-        
     }
 
+    /**
+     * Transforms gui coordinates back into virtual world coordinates.
+     * This should be used for stand alone coordinates, not for 
+     * shape coordinates.
+     * 
+     * @param coordinates The gui coordinates.
+     * @return The world coordinates.
+     */
     public Point2D.Double transformCoordsBack(Point coordinates) {
-
-        double x = ct.transformXBack(coordinates.x);
-        double y = ct.transformYBack(coordinates.y);
-        
-        return new Point2D.Double(x, y);
+        return transformCoordsBack(coordinates, 0,0);
     }
 
+    /**
+     * Transforms gui coordinates back into virtual world coordinates.
+     * This should be used for shape coordinates.
+     * 
+     * @param coordinates The gui coordinates.
+     * @param width The gui width of an object.
+     * @param height The gui height of an object.
+     * @return The world coordinates.
+     */
     public Point2D.Double transformCoordsBack(Point coordinates, int width, int height) {
-
+        if(ct == null)
+            return null;
+        
         Point2D.Double point = ct.transformCoordinatesBack((float)coordinates.x,
                 (float)coordinates.y, (float)width, (float)height);
         return point;

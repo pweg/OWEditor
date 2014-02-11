@@ -1,6 +1,8 @@
 
 package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.frames;
 
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -11,6 +13,7 @@ import java.util.logging.Logger;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JProgressBar;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -48,6 +51,11 @@ public class ImportFrame extends javax.swing.JFrame {
     private String[] serverList = null;
     //if a modell was already loaded, it has to be deleted.
     private boolean modelLoaded = false;
+    
+    private Color errorColor = Color.red;
+    private Color normalColor = Color.black;
+    
+    private Font normalFont = null;
             
     /**
      * Creates new form NewJFrame
@@ -82,16 +90,16 @@ public class ImportFrame extends javax.swing.JFrame {
         
         jPanel1 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
+        yLabel = new javax.swing.JLabel();
+        zLabel = new javax.swing.JLabel();
         locationFieldY = new javax.swing.JFormattedTextField(doubleFormat);
         locationFieldZ = new javax.swing.JFormattedTextField(doubleFormat);
         locationButton = new javax.swing.JButton();
-        jLabel4 = new javax.swing.JLabel();
+        xLabel = new javax.swing.JLabel();
         locationFieldX = new javax.swing.JFormattedTextField(doubleFormat);
         jPanel3 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
+        modelNameLabel = new javax.swing.JLabel();
         nameField = new javax.swing.JTextField();
         modelField = new javax.swing.JTextField();
         moduleNameField = new javax.swing.JTextField();
@@ -102,9 +110,9 @@ public class ImportFrame extends javax.swing.JFrame {
         image = new ImagePanel();
         jPanel4 = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
-        jLabel9 = new javax.swing.JLabel();
-        jLabel10 = new javax.swing.JLabel();
+        rotXLabel = new javax.swing.JLabel();
+        rotYLabel = new javax.swing.JLabel();
+        rotZLabel = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
         
         if(serverList == null)
@@ -116,8 +124,8 @@ public class ImportFrame extends javax.swing.JFrame {
         rotationFieldY = new javax.swing.JFormattedTextField(doubleFormat);
         rotationFieldZ = new javax.swing.JFormattedTextField(doubleFormat);
         jPanel5 = new javax.swing.JPanel();
-        jLabel11 = new javax.swing.JLabel();
-        jLabel13 = new javax.swing.JLabel();
+        scaleLabel = new javax.swing.JLabel();
+        moduleNameLabel = new javax.swing.JLabel();
         scaleField = new javax.swing.JFormattedTextField(doubleFormat);
         okButton = new javax.swing.JButton();
         cancelButton = new javax.swing.JButton();
@@ -127,9 +135,9 @@ public class ImportFrame extends javax.swing.JFrame {
 
         jLabel3.setText(BUNDLE.getString("ImportLocation"));
 
-        jLabel5.setText("Y:");
+        yLabel.setText("Y:");
 
-        jLabel6.setText("Z:");
+        zLabel.setText("Z:");
 
         locationButton.setText(BUNDLE.getString("ImportLocButton"));
         locationButton.addActionListener(new java.awt.event.ActionListener() {
@@ -138,7 +146,7 @@ public class ImportFrame extends javax.swing.JFrame {
             }
         });
 
-        jLabel4.setText("X:");
+        xLabel.setText("X:");
         locationFieldX.setText("0");
         locationFieldY.setText("0");
         locationFieldZ.setText("0");
@@ -152,9 +160,9 @@ public class ImportFrame extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel6)
-                            .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING))
+                            .addComponent(zLabel)
+                            .addComponent(yLabel, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(xLabel, javax.swing.GroupLayout.Alignment.TRAILING))
                         .addGap(20, 20, 20)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(locationFieldY)
@@ -179,15 +187,15 @@ public class ImportFrame extends javax.swing.JFrame {
                 .addComponent(jLabel3)
                 .addGap(15, 15, 15)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
+                    .addComponent(xLabel)
                     .addComponent(locationFieldX, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
+                    .addComponent(yLabel)
                     .addComponent(locationFieldY, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel6)
+                    .addComponent(zLabel)
                     .addComponent(locationFieldZ, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(20, 20, 20)
                 .addComponent(locationButton)
@@ -201,11 +209,11 @@ public class ImportFrame extends javax.swing.JFrame {
         jLabel1.setText(BUNDLE.getString("ImportModel"));
         jLabel1.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
 
-        jLabel2.setText(BUNDLE.getString("ImportModelName"));
-        jLabel2.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        modelNameLabel.setText(BUNDLE.getString("ImportModelName"));
+        modelNameLabel.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
         
-        jLabel13.setText(BUNDLE.getString("ImportModuleName"));
-        jLabel13.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        moduleNameLabel.setText(BUNDLE.getString("ImportModuleName"));
+        moduleNameLabel.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
         jLabel14.setText(BUNDLE.getString("ImportServer"));
         jLabel14.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
 
@@ -266,10 +274,10 @@ public class ImportFrame extends javax.swing.JFrame {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(modelNameLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(moduleNameLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel14, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -310,11 +318,11 @@ public class ImportFrame extends javax.swing.JFrame {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel2)
+                            .addComponent(modelNameLabel)
                             .addComponent(nameField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(40, 40, 40)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel13)
+                            .addComponent(moduleNameLabel)
                             .addComponent(moduleNameField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(10,10,10)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -332,11 +340,11 @@ public class ImportFrame extends javax.swing.JFrame {
 
         jLabel7.setText(BUNDLE.getString("ImportRotation"));
 
-        jLabel8.setText("X:");
+        rotXLabel.setText("X:");
 
-        jLabel9.setText("Y:");
+        rotYLabel.setText("Y:");
 
-        jLabel10.setText("Z:");
+        rotZLabel.setText("Z:");
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -350,9 +358,9 @@ public class ImportFrame extends javax.swing.JFrame {
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGap(45, 45, 45)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel10)
-                            .addComponent(jLabel9)
-                            .addComponent(jLabel8))
+                            .addComponent(rotZLabel)
+                            .addComponent(rotYLabel)
+                            .addComponent(rotXLabel))
                         .addGap(50, 50, 50)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addComponent(rotationFieldY, javax.swing.GroupLayout.Alignment.LEADING)
@@ -370,15 +378,15 @@ public class ImportFrame extends javax.swing.JFrame {
                 .addComponent(jLabel7)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel8)
+                    .addComponent(rotXLabel)
                     .addComponent(rotationFieldX, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel9)
+                    .addComponent(rotYLabel)
                     .addComponent(rotationFieldY, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel10)
+                    .addComponent(rotZLabel)
                     .addComponent(rotationFieldZ, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -387,7 +395,7 @@ public class ImportFrame extends javax.swing.JFrame {
 
         jPanel5.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
-        jLabel11.setText(BUNDLE.getString("ImportScale"));
+        scaleLabel.setText(BUNDLE.getString("ImportScale"));
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -395,7 +403,7 @@ public class ImportFrame extends javax.swing.JFrame {
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel11)
+                .addComponent(scaleLabel)
                 .addGap(27, 27, 27)
                 .addComponent(scaleField, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(61, Short.MAX_VALUE))
@@ -405,7 +413,7 @@ public class ImportFrame extends javax.swing.JFrame {
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel11)
+                    .addComponent(scaleLabel)
                     .addComponent(scaleField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -563,7 +571,7 @@ public class ImportFrame extends javax.swing.JFrame {
         } 
     }                                           
 
-    private void represButtonActionPerformed(java.awt.event.ActionEvent evt) {                                             
+    private void represButtonActionPerformed(java.awt.event.ActionEvent evt) {
         
         JFileChooser chooser = new JFileChooser(new File (lastDirRep));
         FileNameExtensionFilter filter = new FileNameExtensionFilter(
@@ -615,23 +623,13 @@ public class ImportFrame extends javax.swing.JFrame {
         } 
     }                                         
 
-    private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {  
+    private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {     
+        resetLabels(); 
         
         String image_url = imgField.getText();
         String name = nameField.getText();
         String module_name = moduleNameField.getText();
         String server_name = server.getSelectedItem().toString();
-        
-        
-        if(name.equals("")){
-            showError(BUNDLE.getString("NoNameError"), 
-                    BUNDLE.getString("NoNameErrorTitle"));
-            return;
-        }else if(module_name.equals("")){
-            showError(BUNDLE.getString("NoNameError"), 
-                    BUNDLE.getString("NoNameErrorTitle"));
-            return;
-        }
 
         double x = 0;
         double y = 0;
@@ -641,36 +639,67 @@ public class ImportFrame extends javax.swing.JFrame {
         double rot_z = 0;
         double scale = 1;
         
+        boolean error = false;
+        
+        if(name.equals("")){
+            setLabelError(modelNameLabel);
+            error = true;
+        }
+        
+        if(module_name.equals("")){
+            setLabelError(moduleNameLabel);
+            error = true;
+        }
+        
         try{
             x = Double.valueOf(locationFieldX.getText().replace(",", "."));
         }catch(Exception ex){
-            LOGGER.warning("COULD NOT X BLar");
+            setLabelError(xLabel);
+            error = true;
         }
         try{
             y = Double.valueOf(locationFieldY.getText().replace(",", "."));
         }catch(Exception ex){
-            }
+            setLabelError(yLabel);
+            error = true;
+        }
         try{
             z = Double.valueOf(locationFieldZ.getText().replace(",", "."));
         }catch(Exception ex){
+            setLabelError(zLabel);
+            error = true;
         }
         
         try{
             rot_x = Double.valueOf(rotationFieldX.getText().replace(",", "."));
         }catch(Exception ex){
+            setLabelError(rotXLabel);
+            error = true;
         }
         try{
             rot_y = Double.valueOf(rotationFieldY.getText().replace(",", "."));
         }catch(Exception ex){
+            setLabelError(rotYLabel);
+            error = true;
         }
         try{
             rot_z = Double.valueOf(rotationFieldZ.getText().replace(",", "."));
         }catch(Exception ex){
+            setLabelError(rotZLabel);
+            error = true;
         }
         try{
             scale = Double.valueOf(scaleField.getText().replace(",", "."));
         }catch(Exception ex){
-        }           
+            setLabelError(scaleLabel);
+            error = true;
+        }      
+        
+        if(error){
+            showError("Bitte fehlende dinger einbauen", 
+                    "FEHler");
+            return;
+        }
        
         
         //progressBar.setVisible(true); //progressBar.setVisible(false);
@@ -713,10 +742,17 @@ public class ImportFrame extends javax.swing.JFrame {
     
     @Override
     public void setVisible(boolean b) {
-        super.setVisible(b);
-        
-        if(isVisible() && b)
+
+        //check visibility before super. This is done to not delete everything
+        //when the window is just out of focus.
+        if(isVisible() && b){
+            super.setVisible(b);    
             return;
+        }
+        
+        super.setVisible(b);    
+        resetLabels();
+        
         
         //working means, the choose location button was hit.
         if(b && working){
@@ -758,6 +794,7 @@ public class ImportFrame extends javax.swing.JFrame {
     }
     
     private void reset(){
+        
         locationFieldX.setText("0");
         locationFieldY.setText("0");
         locationFieldZ.setText("0");
@@ -770,6 +807,36 @@ public class ImportFrame extends javax.swing.JFrame {
     private void showError(String text, String title){
         JOptionPane.showMessageDialog(this,
                 text, title, JOptionPane.ERROR_MESSAGE);
+    }
+    
+    private void setLabelError(JLabel label){
+        Font font = label.getFont();
+        
+        if(normalFont == null)
+            normalFont = font;
+        
+        Font boldFont = new Font(font.getFontName(), Font.BOLD, font.getSize());
+        label.setFont(boldFont);
+        label.setForeground(errorColor);
+    }
+    
+    private void resetLabels(){
+        if(normalFont == null)
+            return;
+        setLabelNormal(xLabel);
+        setLabelNormal(yLabel);
+        setLabelNormal(zLabel);
+        setLabelNormal(rotXLabel);
+        setLabelNormal(rotYLabel);
+        setLabelNormal(rotZLabel);
+        setLabelNormal(scaleLabel);
+        setLabelNormal(modelNameLabel);
+        setLabelNormal(moduleNameLabel);
+    }
+    
+    private void setLabelNormal(JLabel label){
+        label.setFont(normalFont);
+        label.setForeground(normalColor);
     }
 
     /**
@@ -793,18 +860,18 @@ public class ImportFrame extends javax.swing.JFrame {
     private javax.swing.JButton modelButton;
     private javax.swing.JTextField modelField;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel rotZLabel;
+    private javax.swing.JLabel scaleLabel;
     private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel13;
-    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel moduleNameLabel;
+    private javax.swing.JLabel modelNameLabel;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel xLabel;
+    private javax.swing.JLabel yLabel;
+    private javax.swing.JLabel zLabel;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
+    private javax.swing.JLabel rotXLabel;
+    private javax.swing.JLabel rotYLabel;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;

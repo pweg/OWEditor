@@ -1,5 +1,6 @@
 package org.jdesktop.wonderland.modules.oweditor.client.dummyadapter;
 
+import com.jme.math.Vector3f;
 import java.awt.Point;
 import java.awt.geom.Point2D;
 
@@ -59,14 +60,6 @@ public class CoordinateTranslator implements CoordinateTranslatorInterface{
     @Override
     public double getRotation(IDataObject object) {
         return object.getRotationX();
-    }
-
-    public double transformXBack(double x) {
-        return x/globalScale;
-    }
-
-    public double transformYBack(double y) {
-        return y/globalScale;
     }
     
 

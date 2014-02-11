@@ -49,13 +49,13 @@ public class GUIEventManager implements GUIObserverInterface{
         
         if (cache == null) {
             LOGGER.log(Level.WARNING, "Unable to find Cell cache for session {0}", ac.sm.getSession());
-            throw new ServerCommException();
+            throw new GUIEventException();
         }
         CellID cellid = new CellID(id);
         Cell cell = cache.getCell(cellid);
         
         if(cell == null)
-            throw new ServerCommException();
+            throw new GUIEventException();
         
         Vector3fInfo coords = CellInfoReader.getCoordinates(cell);
         
@@ -76,29 +76,19 @@ public class GUIEventManager implements GUIObserverInterface{
         Cell cell = cache.getCell(cellid);
         Vector3f cell_rot = CellInfoReader.getRotation(cell);
         cell_rot = ac.ct.createRotation(cell_rot, rotation);
-        try {
-            ac.sc.rotate(id, cell_rot);
-        } catch (ServerCommException ex) {
-            Logger.getLogger(GUIEventManager.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        
+        ac.sc.rotate(id, cell_rot);
     }
 
     @Override
     public void notifyScaling(long id, int x, int y, double scale) throws Exception{
-        try{
         ac.sc.scale(id,(float) scale);
         notifyTranslationXY(id,x,y);
-        }catch(ServerCommException e){
-        }
     }
     
     @Override
     public void notifyRemoval(long id) throws Exception{
-        try {
-            ac.sc.remove(id);
-        } catch (ServerCommException ex) {
-            Logger.getLogger(GUIEventManager.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        ac.sc.remove(id);
     }
 
     @Override
@@ -117,7 +107,7 @@ public class GUIEventManager implements GUIObserverInterface{
         
         if (cache == null) {
             LOGGER.log(Level.WARNING, "Unable to find Cell cache for session {0}", ac.sm.getSession());
-            throw new ServerCommException();
+            throw new GUIEventException();
         }
         
         CellID cellid = new CellID(id);
@@ -127,7 +117,7 @@ public class GUIEventManager implements GUIObserverInterface{
             cell = ac.bm.getCell(id);
         }
         if(cell == null){
-            throw new ServerCommException();
+            throw new GUIEventException();
         }
         
         Vector3f coordinates = CellInfoReader.getCoordinates(cell);
@@ -150,7 +140,6 @@ public class GUIEventManager implements GUIObserverInterface{
 
     @Override
     public void undoRemoval(long id) throws Exception{
-        
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -186,19 +175,18 @@ public class GUIEventManager implements GUIObserverInterface{
         try {
             img = ImageIO.read(new File(image_url));
         } catch (IOException ex) {
-            LOGGER.log(Level.INFO, 
-                    "Cannot read image file");
+            LOGGER.log(Level.INFO, "Cannot read image file");
         }
         
         if(!importer.importToServer(name)){
             LOGGER.warning("Import to server failed.");
-            throw new ServerCommException();
+            throw new GUIEventException();
         }
         
         long id = importer.getLastID();
         if(id == -1){
             LOGGER.warning("No id was generated!");
-            throw new ServerCommException();
+            throw new GUIEventException();
         }
         
         //Remember: z and y are reversed

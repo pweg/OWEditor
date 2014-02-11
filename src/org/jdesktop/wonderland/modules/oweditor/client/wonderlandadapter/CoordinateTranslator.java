@@ -9,13 +9,12 @@ package org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter;
 import com.jme.bounding.BoundingBox;
 import com.jme.bounding.BoundingSphere;
 import com.jme.bounding.BoundingVolume;
-import com.jme.math.Quaternion;
 import com.jme.math.Vector3f;
 import java.awt.Point;
 import java.awt.geom.Point2D;
+import java.util.Vector;
 import java.util.logging.Logger;
 import org.jdesktop.wonderland.client.cell.Cell;
-import org.jdesktop.wonderland.common.cell.CellTransform;
 import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.CoordinateTranslatorInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IDataObject;
 
@@ -130,16 +129,6 @@ public class CoordinateTranslator implements CoordinateTranslatorInterface{
     }
 
     @Override
-    public double transformXBack(double x) {
-        return x/globalScale;
-    }
-
-    @Override
-    public double transformYBack(double y) {
-        return y/globalScale;
-    }
-
-    @Override
     public int transformWidth(float width) {
         return (int)Math.round(width * globalScale);
     }
@@ -168,6 +157,21 @@ public class CoordinateTranslator implements CoordinateTranslatorInterface{
         
         float rotationY = (float) Math.toRadians(-newRotation);
         return new Vector3f(rotation.x, rotationY, rotation.z );
+    }
+    
+    /**
+     * Transforms a rotation vector given by the GUI into a vector
+     * used by wonderland.
+     * 
+     * @param rotation The gui rotation to transform.
+     * @return The wonderland rotation.
+     */
+    public Vector3f transformRotationBack(Vector3f rotation){
+        float y = rotation.z;
+        float z = rotation.y;
+        rotation.y = y;
+        rotation.z = z;
+        return rotation;
     }
     
     @Override
