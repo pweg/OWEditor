@@ -64,7 +64,7 @@ public class KMZImporter {
     
     private ImportedModel importedModel = null;
     private Node rootBG;
-    private TransformProcessorComponent transformProcessor = null;
+    private KMZTransformProcessorComponent transformProcessor = null;
     
     private String moduleName = "";
     private ServerSessionManager targetServer = null;
@@ -136,8 +136,8 @@ public class KMZImporter {
         entity.addComponent(RenderComponent.class, scene);
 
         scene.setLightingEnabled(loadedModel.getImportSettings().isLightingEnabled());
-        transformProcessor = new TransformProcessorComponent(wm, modelBG, rootBG);
-        entity.addComponent(TransformProcessorComponent.class,
+        transformProcessor = new KMZTransformProcessorComponent(wm, modelBG, rootBG);
+        entity.addComponent(KMZTransformProcessorComponent.class,
                 transformProcessor);
 
         wm.addEntity(entity);

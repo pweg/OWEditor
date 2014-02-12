@@ -7,6 +7,7 @@
 package org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter;
 
 import com.jme.math.Vector3f;
+import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.logging.Level;
 
@@ -22,12 +23,14 @@ public class LateTransformationManager {
     private HashMap<String, Vector3f> copyTranslation = null;
     private HashMap<Long, Vector3f> rotationMap = null;
     private HashMap<Long, Float> scaleMap = null;
+    private HashMap<Long, BufferedImage> imageMap = null;
     
     public LateTransformationManager(){
         translationMap = new HashMap<Long, Vector3f>();
         rotationMap = new HashMap<Long, Vector3f>();
         scaleMap = new HashMap<Long, Float>();
         copyTranslation  = new HashMap<String, Vector3f>();
+        imageMap = new HashMap<Long, BufferedImage>();
     }
     
     /**
@@ -158,6 +161,21 @@ public class LateTransformationManager {
             return lateTransform(server, id); 
     }
     
+    public boolean invokeLateImage(ServerCommunication server,long id){
+        
+        BufferedImage img = imageMap.get(id);
+        
+        if(img == null)
+            return true;
+        
+        try{
+            server.addImage(id, img);
+        }catch(Exception e){
+            return false;
+        }
+        return true;
+    }
+    
     /**
      * Does a translation, if the name was stored before. 
      * 
@@ -227,6 +245,10 @@ public class LateTransformationManager {
         }
         return b;
         
+    }
+
+    void addImage(long id, BufferedImage img) {
+        imageMap.put(id, img);
     }
     
 }

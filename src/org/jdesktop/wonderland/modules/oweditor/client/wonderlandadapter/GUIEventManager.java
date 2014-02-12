@@ -70,7 +70,7 @@ public class GUIEventManager implements GUIObserverInterface{
         CellCache cache = ac.sm.getCellCache();
         if (cache == null) {
             LOGGER.log(Level.WARNING, "Unable to find Cell cache for session {0}", ac.sm.getSession());
-            return;
+            throw new GUIEventException();
         }
         CellID cellid = new CellID(id);
         Cell cell = cache.getCell(cellid);
@@ -210,6 +210,14 @@ public class GUIEventManager implements GUIObserverInterface{
             ac.sc.scale(id, (float)scale);
         }catch(ServerCommException e){
             ac.ltm.addScale(id, (float) scale);
+        }
+        
+        if(img != null){
+            try{
+                ac.sc.addImage(id, img);
+            }catch(ServerCommException e){
+                ac.ltm.addImage(id, img);
+            }
         }
         
     }

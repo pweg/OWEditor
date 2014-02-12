@@ -1,6 +1,7 @@
 package org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter;
 
 import com.jme.math.Vector3f;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 import org.jdesktop.wonderland.client.cell.Cell;
@@ -13,6 +14,7 @@ import org.jdesktop.wonderland.common.messages.ErrorMessage;
 import org.jdesktop.wonderland.common.messages.ResponseMessage;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IDataObject;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IAdapterObserver;
+import org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter.imagecomponent.ImageCellComponent;
 
 /**
  * This class is used for updating the data package, when
@@ -48,6 +50,11 @@ public class ServerEventManager {
                 if (type == ComponentChangeListener.ChangeType.ADDED && 
                         component instanceof MovableComponent) {  
                     movableComponentCreated(cell);  
+                }
+                else if(type == ComponentChangeListener.ChangeType.ADDED && 
+                        component instanceof ImageCellComponent){
+                    LOGGER.warning("IMAGE COMPONTENT CREATED");
+                    imageComponentCreated(cell);
                 }
             }
         };
@@ -115,6 +122,7 @@ public class ServerEventManager {
     public void creationEvent(Cell cell){
         
         cell.addTransformChangeListener(ac.tl);
+        cell.addComponentChangeListener(componentListener);
         
         String name = cell.getName();
         long id = CellInfoReader.getID(cell);
@@ -134,9 +142,9 @@ public class ServerEventManager {
         
         if(ac.ltm.containsCell(id, name)){
             if(!ac.ltm.invokeLateTransform(ac.sc, id, name)){
-                cell.addComponentChangeListener(componentListener);
             }
         }
+        ac.ltm.invokeLateImage(ac.sc, id);
         
         Vector3fInfo coordinates = CellInfoReader.getCoordinates(cell);
         Vector3f rotation = CellInfoReader.getRotation(cell);
@@ -189,13 +197,27 @@ public class ServerEventManager {
         
         ac.ltm.invokeLateTransform(ac.sc, id, name);
     }
+    
+    public void imageComponentCreated(Cell cell){
+        long id = CellInfoReader.getID(cell);
+        
+        BufferedImage img = 
+                cell.getComponent(ImageCellComponent.class).getImage();
+        
+        if(img == null){
+            LOGGER.warning("IMAGE IS NULL");
+            ac.ltm.invokeLateImage(ac.sc, id);
+        }
+        else
+            LOGGER.warning("IMAGE IS NOT NULL");
+    }
 
     /**
      * Forwards the serverlist to the data package.
      * 
      * @param serverList A string arry containing the server.
      */
-    void setServerList(String[] serverList) {
+    public void setServerList(String[] serverList) {
         for(IAdapterObserver observer : observers)
             observer.setServerList(serverList);
     }

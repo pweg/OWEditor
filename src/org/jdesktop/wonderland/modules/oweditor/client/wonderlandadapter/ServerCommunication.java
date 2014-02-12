@@ -8,11 +8,13 @@ package org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter;
 
 import com.jme.math.Quaternion;
 import com.jme.math.Vector3f;
+import java.awt.image.BufferedImage;
 import java.text.MessageFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.jdesktop.wonderland.client.cell.Cell;
 import org.jdesktop.wonderland.client.cell.CellCache;
+import org.jdesktop.wonderland.client.cell.CellComponent;
 import org.jdesktop.wonderland.client.cell.CellEditChannelConnection;
 import org.jdesktop.wonderland.client.cell.MovableComponent;
 import org.jdesktop.wonderland.client.cell.utils.CellUtils;
@@ -21,6 +23,8 @@ import org.jdesktop.wonderland.common.cell.CellEditConnectionType;
 import org.jdesktop.wonderland.common.cell.CellID;
 import org.jdesktop.wonderland.common.cell.CellTransform;
 import org.jdesktop.wonderland.common.cell.messages.CellDuplicateMessage;
+import org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter.imagecomponent.ImageCellComponent;
+import org.jdesktop.wonderland.modules.oweditor.common.ImageCellComponentClientState;
 
 /**
  * This class is used for outgoing communication with the server.
@@ -195,6 +199,43 @@ public class ServerCommunication {
         CellDuplicateMessage msg =
                 new CellDuplicateMessage(cell.getCellID(), message);
         connection.send(msg);
+    }
+    
+    private void addImageComponent(Cell cell) throws ServerCommException{        
+        if(cell == null)
+            throw new ServerCommException();
+        
+        CellComponent component = new ImageCellComponent(cell);
+        cell.addComponent(component);
+    }
+
+    void addImage(long id, BufferedImage img) throws ServerCommException{
+        CellCache cache = ac.sm.getCellCache();
+        
+        if (cache == null) {
+            LOGGER.log(Level.WARNING, "Unable to find Cell cache for session {0}", ac.sm.getSession());
+            throw new ServerCommException();
+        }
+        
+        CellID cellid = new CellID(id);
+        Cell cell = cache.getCell(cellid);
+        
+        //Do not remove this, because this can shake up the 
+        //gui event manager, when creating a cell, because
+        //it will throw an exception, which will reach the gui,
+        //which is not desireable.
+        if(cell == null)
+            throw new ServerCommException();
+        
+        ImageCellComponent imageComponent = cell.getComponent(ImageCellComponent.class);
+        
+        if(imageComponent == null){
+            addImageComponent(cell);
+        }else{
+            ImageCellComponentClientState state = new ImageCellComponentClientState();
+            state.setImage(img);
+            imageComponent.setClientState(state);
+        }
     }
     
 }

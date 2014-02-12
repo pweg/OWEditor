@@ -29,7 +29,7 @@ import org.jdesktop.mtgame.WorldManager;
  *
  * @author paulby
  */
-public class TransformProcessorComponent extends ProcessorComponent {
+public class KMZTransformProcessorComponent extends ProcessorComponent {
 
 
         private Matrix3f rotation;
@@ -40,7 +40,7 @@ public class TransformProcessorComponent extends ProcessorComponent {
         private WorldManager worldManager;
         private boolean updatePending = false;
         
-        public TransformProcessorComponent(WorldManager worldManager, Node modelBG, Node rootBG) {
+        public KMZTransformProcessorComponent(WorldManager worldManager, Node modelBG, Node rootBG) {
             this.modelBG = modelBG;
             this.rootBG = rootBG;
             this.worldManager = worldManager;
