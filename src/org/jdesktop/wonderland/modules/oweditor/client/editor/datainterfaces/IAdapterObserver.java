@@ -1,5 +1,6 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces;
 
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 /**
@@ -71,6 +72,14 @@ public interface IAdapterObserver {
      * @param scale The new scale of the object.
      */
     public void notifyScaling(long id, double scale);
+    
+    /**
+     * Notifies the event, when a representation image is created, or changed.
+     * 
+     * @param id The id of the object.
+     * @param img The new BufferedImage.
+     */
+    public void notifyImageChange(long id, BufferedImage img);
     
 
 }

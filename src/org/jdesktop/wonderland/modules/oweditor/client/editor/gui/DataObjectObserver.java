@@ -1,5 +1,6 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.gui;
 
+import java.awt.image.BufferedImage;
 import java.util.logging.Logger;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.ITransformedObject;
@@ -62,6 +63,12 @@ public class DataObjectObserver implements
     @Override
     public void notifyScaling(long id, double scale) {
         gc.window.updateShapeScale(id, scale);
+        gc.window.repaint();
+    }
+
+    @Override
+    public void notifyImageChange(long id, BufferedImage img) {
+        gc.window.updateImage(id, img);
         gc.window.repaint();
     }
 

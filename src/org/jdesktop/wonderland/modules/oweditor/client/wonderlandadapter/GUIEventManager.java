@@ -211,14 +211,14 @@ public class GUIEventManager implements GUIObserverInterface{
         }catch(ServerCommException e){
             ac.ltm.addScale(id, (float) scale);
         }
-        
-        if(img != null){
+        ac.ltm.addImage(id, img);
+        /*if(img != null){
             try{
                 ac.sc.addImage(id, img);
             }catch(ServerCommException e){
-                ac.ltm.addImage(id, img);
+                
             }
-        }
+        }*/
         
     }
 

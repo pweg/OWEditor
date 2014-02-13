@@ -7,6 +7,7 @@
 package org.jdesktop.wonderland.modules.oweditor.common;
 
 import java.awt.image.BufferedImage;
+import java.util.logging.Logger;
 import org.jdesktop.wonderland.common.cell.state.CellComponentClientState;
 
 /**
@@ -14,6 +15,9 @@ import org.jdesktop.wonderland.common.cell.state.CellComponentClientState;
  * @author Patrick
  */
 public class ImageCellComponentClientState extends CellComponentClientState {
+    
+     private static final Logger LOGGER =
+            Logger.getLogger(ImageCellComponentClientState.class.getName());
 
     // The text of the tooltip
     private BufferedImage img = null;
@@ -37,6 +41,7 @@ public class ImageCellComponentClientState extends CellComponentClientState {
      * @param img The tooltip text
      */
     public void setImage(BufferedImage img) {
+        LOGGER.warning("buffered image change");
         this.img = img;
     }
     

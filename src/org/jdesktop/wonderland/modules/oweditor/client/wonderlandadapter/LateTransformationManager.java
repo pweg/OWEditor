@@ -10,6 +10,7 @@ import com.jme.math.Vector3f;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * This class is used when transformations are not possible, or
@@ -142,6 +143,10 @@ public class LateTransformationManager {
                 || scaleMap.containsKey(id);
     }
     
+    public boolean containsImage(long id){
+        return imageMap.containsKey(id);
+    }
+    
     /**
      * Invokes a tranfsormation, if the name, or the id was added
      * before.
@@ -164,15 +169,19 @@ public class LateTransformationManager {
     public boolean invokeLateImage(ServerCommunication server,long id){
         
         BufferedImage img = imageMap.get(id);
+        Logger.getLogger(LateTransformationManager.class.getName()).warning("IMAGE MAP "+ imageMap.size()+ " " + id);
         
         if(img == null)
             return true;
         
         try{
-            server.addImage(id, img);
+            if(server.addImage(id, img))
+                imageMap.remove(id);
         }catch(Exception e){
             return false;
         }
+        Logger.getLogger(LateTransformationManager.class.getName()).warning("IMAGE MAP2 "+ imageMap.size());
+       
         return true;
     }
     

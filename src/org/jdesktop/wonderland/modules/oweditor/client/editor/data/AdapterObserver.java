@@ -1,5 +1,6 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.data;
 
+import java.awt.image.BufferedImage;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IDataObject;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IAdapterObserver;
 
@@ -59,6 +60,11 @@ public class AdapterObserver implements IAdapterObserver{
     @Override
     public void notifyScaling(long id, double scale) {
         dm.updateScale(id, scale);
+    }
+    
+    @Override
+    public void notifyImageChange(long id, BufferedImage img){
+        dm.updateImage(id, img);
     }
 
 

@@ -24,7 +24,7 @@ import org.jdesktop.wonderland.common.cell.state.CellComponentServerState;
 import org.jdesktop.wonderland.modules.oweditor.common.ImageCellComponentServerState;
 
 /**
- * The Cell Component Factory for the Tooltip Cell Component.
+ * The Cell Component Factory for the Image Cell Component.
  * 
  * @author Jordan Slott <jslott@dev.java.net>
  */
@@ -44,15 +44,15 @@ public class ImageCellComponentFactory implements CellComponentFactorySPI {
     /**
      * {@inheritDoc}
      */
-    public <T extends CellComponentServerState> T getDefaultCellComponentServerState() {
-        ImageCellComponentServerState state = new ImageCellComponentServerState();
-        return (T) state;
+    public String getDescription() {
+        return BUNDLE.getString("Image_Cell_Component_Description");
     }
 
     /**
      * {@inheritDoc}
      */
-    public String getDescription() {
-        return BUNDLE.getString("Image_Cell_Component_Description");
+    public <T extends CellComponentServerState> T getDefaultCellComponentServerState() {
+        ImageCellComponentServerState state = new ImageCellComponentServerState();
+        return (T) state;
     }
 }

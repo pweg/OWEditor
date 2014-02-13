@@ -2,6 +2,7 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.data;
 
 import java.awt.Point;
 import java.awt.geom.Point2D;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.logging.Logger;
@@ -9,6 +10,7 @@ import java.util.logging.Logger;
 import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.CoordinateTranslatorInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IDataObject;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.ITransformedObject;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.GraphicController;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.IDataObjectObserver;
 
 /**
@@ -256,6 +258,19 @@ public class DataObjectManager {
         Point2D.Double point = ct.transformCoordinatesBack((float)coordinates.x,
                 (float)coordinates.y, (float)width, (float)height);
         return point;
+    }
+
+    void updateImage(long id, BufferedImage img) {
+        DataObject d = data.get(id);
+        if(d == null)
+            return;
+        
+        d.setImage(img);
+        
+        for(IDataObjectObserver observer : observers){
+            observer.notifyImageChange(id, img);
+        }
+        
     }
 
 }

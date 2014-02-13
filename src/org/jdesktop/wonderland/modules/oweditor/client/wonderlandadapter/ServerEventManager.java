@@ -4,6 +4,7 @@ import com.jme.math.Vector3f;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.logging.Logger;
+import javax.xml.bind.Marshaller;
 import org.jdesktop.wonderland.client.cell.Cell;
 import org.jdesktop.wonderland.client.cell.CellComponent;
 import org.jdesktop.wonderland.client.cell.ComponentChangeListener;
@@ -15,6 +16,7 @@ import org.jdesktop.wonderland.common.messages.ResponseMessage;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IDataObject;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IAdapterObserver;
 import org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter.imagecomponent.ImageCellComponent;
+import org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter.imagecomponent.ImageChangeListener;
 
 /**
  * This class is used for updating the data package, when
@@ -29,6 +31,7 @@ public class ServerEventManager {
     private ArrayList<IAdapterObserver> observers = null;
     
     private ComponentChangeListener componentListener = null;
+    private ImageChangeListener imageListener = null;
     
     private static final Logger LOGGER =
             Logger.getLogger(GUIEventManager.class.getName());
@@ -58,6 +61,8 @@ public class ServerEventManager {
                 }
             }
         };
+        
+        imageListener = new ImageListener();
     }
     
     /**
@@ -138,13 +143,30 @@ public class ServerEventManager {
             if (response instanceof ErrorMessage) {
                 LOGGER.warning("ERROR Movable component creation"+response);
             }
-        }       
+        }  
+        LOGGER.warning("Object creation " + id);     
         
+        /*
+        * do late transform before reading cell data in order to get
+        * the changes imideately.
+        */
         if(ac.ltm.containsCell(id, name)){
-            if(!ac.ltm.invokeLateTransform(ac.sc, id, name)){
-            }
+            ac.ltm.invokeLateTransform(ac.sc, id, name);
         }
-        ac.ltm.invokeLateImage(ac.sc, id);
+        
+        if(ac.ltm.containsImage(id)){
+            ac.ltm.invokeLateImage(ac.sc, id);
+        }
+        
+        BufferedImage img = null;
+        
+        ImageCellComponent imageComponent = cell.getComponent(ImageCellComponent.class);
+            
+        if(imageComponent != null){
+            //LOGGER.warning(imageComponent.getImage());
+            img = imageComponent.getImage();
+        }
+        
         
         Vector3fInfo coordinates = CellInfoReader.getCoordinates(cell);
         Vector3f rotation = CellInfoReader.getRotation(cell);
@@ -170,6 +192,7 @@ public class ServerEventManager {
             object.setWidth(width);
             object.setHeight(height);
             object.setName(name);
+            object.setImage(img);
 
             if(cell instanceof AvatarCell){
                 object.setType(IDataObject.AVATAR);
@@ -180,6 +203,8 @@ public class ServerEventManager {
             object.setName(name);
             observer.notifyObjectCreation(object);
         }
+        
+        
         
     }
     
@@ -201,16 +226,25 @@ public class ServerEventManager {
     public void imageComponentCreated(Cell cell){
         long id = CellInfoReader.getID(cell);
         
-        BufferedImage img = 
-                cell.getComponent(ImageCellComponent.class).getImage();
+        ImageCellComponent imageComponent = 
+                cell.getComponent(ImageCellComponent.class);
+        
+        if(imageComponent == null){
+            return;
+        }
+        
+        imageComponent.registerChangeListener(imageListener);
+        BufferedImage img = imageComponent.getImage();                
         
         if(img == null){
             LOGGER.warning("IMAGE IS NULL");
             ac.ltm.invokeLateImage(ac.sc, id);
         }
-        else
+        else{
             LOGGER.warning("IMAGE IS NOT NULL");
+        }
     }
+    
 
     /**
      * Forwards the serverlist to the data package.
@@ -220,6 +254,23 @@ public class ServerEventManager {
     public void setServerList(String[] serverList) {
         for(IAdapterObserver observer : observers)
             observer.setServerList(serverList);
+    }
+    
+    class ImageListener extends Marshaller.Listener implements ImageChangeListener{
+
+        public void imageChanged(BufferedImage img, Cell cell) {
+           long id = CellInfoReader.getID(cell);
+                
+               for(IAdapterObserver observer : observers){
+                    LOGGER.warning("image change" + img);
+                    observer.notifyImageChange(id, img);
+               }
+                
+               if(img == null)
+                   LOGGER.warning("LISTENER IMG == NULL");
+               else
+                   LOGGER.warning("LISTENER IMG != NULL");
+        }
     }
 
 }

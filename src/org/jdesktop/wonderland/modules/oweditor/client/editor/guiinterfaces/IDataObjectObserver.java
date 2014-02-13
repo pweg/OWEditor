@@ -1,5 +1,6 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces;
 
+import java.awt.image.BufferedImage;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.ITransformedObject;
 
 
@@ -30,4 +31,6 @@ public interface IDataObjectObserver {
     public void notifyRotation(long id, double rotation);
 
     public void notifyScaling(long id, double scale);
+
+    public void notifyImageChange(long id, BufferedImage img);
 }

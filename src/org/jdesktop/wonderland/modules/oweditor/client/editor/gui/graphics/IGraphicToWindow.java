@@ -3,6 +3,7 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.geom.AffineTransform;
+import java.awt.image.BufferedImage;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.ITransformedObject;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.IWindowToGraphic;
@@ -122,5 +123,13 @@ public interface IGraphicToWindow {
      * @return Point containing the coordinates.
      */
     public Point getDraggingCoords();
+
+    /**
+     * Updates the representation image of a specific shape.
+     * 
+     * @param id The id of the shape.
+     * @param img The new image.
+     */
+    public void updateShapeImage(long id, BufferedImage img);
 
 }

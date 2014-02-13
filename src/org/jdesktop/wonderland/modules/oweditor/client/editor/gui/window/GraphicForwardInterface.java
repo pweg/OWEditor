@@ -1,5 +1,6 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window;
 
+import java.awt.image.BufferedImage;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.ITransformedObject;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.IGraphicToInput;
 
@@ -26,4 +27,6 @@ public interface GraphicForwardInterface {
     public void updateShapeRotation(long id, double rotation);
 
     public void updateShapeScale(long id, double scale);
+    
+    public void updateImage(long id, BufferedImage img);
 }

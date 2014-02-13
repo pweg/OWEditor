@@ -7,6 +7,8 @@
 package org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter.imagecomponent;
 
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.logging.Logger;
 import org.jdesktop.wonderland.client.cell.Cell;
 import org.jdesktop.wonderland.client.cell.CellComponent;
 import org.jdesktop.wonderland.common.cell.state.CellComponentClientState;
@@ -20,6 +22,11 @@ public class ImageCellComponent extends CellComponent {
 
     // The image of the component.
     private BufferedImage img = null;
+    private Cell cell = null;
+    
+    private ArrayList<ImageChangeListener> listenerList = null; 
+     private static final Logger LOGGER =
+            Logger.getLogger(ImageCellComponentClientState.class.getName());
 
     /**
      * Constructor, takes the Cell associated with the Cell Component.
@@ -28,6 +35,8 @@ public class ImageCellComponent extends CellComponent {
      */
     public ImageCellComponent(Cell cell) {
         super(cell);
+        this.cell = cell;
+        listenerList = new ArrayList<ImageChangeListener>();
     }
 
     /**
@@ -35,8 +44,17 @@ public class ImageCellComponent extends CellComponent {
      */
     @Override
     public void setClientState(CellComponentClientState clientState) {
+        LOGGER.warning("client STATE set");
         super.setClientState(clientState);
         img = ((ImageCellComponentClientState) clientState).getImage();
+        
+        for(ImageChangeListener listener : listenerList){
+            listener.imageChanged(img, cell);
+        }
+    }
+    
+    public void registerChangeListener(ImageChangeListener listener){
+        listenerList.add(listener);
     }
 
     /**

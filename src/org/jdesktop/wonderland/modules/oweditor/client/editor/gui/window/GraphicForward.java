@@ -1,5 +1,6 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window;
 
+import java.awt.image.BufferedImage;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.ITransformedObject;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.IAdapterCommunication;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.IGraphicToWindow;
@@ -63,5 +64,10 @@ public class GraphicForward implements GraphicForwardInterface{
     
     protected IGraphicToWindow getInterface(){
         return graphic;
+    }
+    
+    @Override
+    public void updateImage(long id, BufferedImage img) {
+        graphic.updateShapeImage(id, img);
     }
 }

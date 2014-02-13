@@ -8,6 +8,7 @@ package org.jdesktop.wonderland.modules.oweditor.server;
 
 import org.jdesktop.wonderland.modules.oweditor.common.ImageCellComponentServerState;
 import java.awt.image.BufferedImage;
+import java.util.logging.Logger;
 import org.jdesktop.wonderland.common.cell.ClientCapabilities;
 import org.jdesktop.wonderland.common.cell.state.CellComponentClientState;
 import org.jdesktop.wonderland.common.cell.state.CellComponentServerState;
@@ -24,6 +25,9 @@ public class ImageCellComponentMO extends CellComponentMO {
 
     private BufferedImage img = null;
     
+     private static final Logger LOGGER =
+            Logger.getLogger(ImageCellComponentServerState.class.getName());
+    
     public ImageCellComponentMO(CellMO cell) {
         super(cell);
     }
@@ -34,7 +38,7 @@ public class ImageCellComponentMO extends CellComponentMO {
     @Override
     protected String getClientClass() {
         return "org.jdesktop.wonderland.modules.oweditor.client" +
-               ".ImageCellComponent";
+               ".wonderlandadapter.imagecomponent.ImageCellComponent";
     }
 
     /**
@@ -45,6 +49,7 @@ public class ImageCellComponentMO extends CellComponentMO {
             CellComponentClientState state, WonderlandClientID clientID,
             ClientCapabilities capabilities) {
 
+            LOGGER.warning("MO GETCLIENTSTATE");
         if (state == null) {
             state = new ImageCellComponentClientState();
         }
@@ -59,6 +64,7 @@ public class ImageCellComponentMO extends CellComponentMO {
     public CellComponentServerState getServerState(
             CellComponentServerState state) {
         
+            LOGGER.warning("MO GETSERVERSTATE");
         if (state == null) {
             state = new ImageCellComponentServerState();
         }
@@ -71,7 +77,9 @@ public class ImageCellComponentMO extends CellComponentMO {
      */
     @Override
     public void setServerState(CellComponentServerState state) {
+        LOGGER.warning("MO set serverstate");
         super.setServerState(state);
         img = ((ImageCellComponentServerState) state).getImage();
     }
+    
 }
