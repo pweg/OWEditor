@@ -9,11 +9,15 @@ package org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter;
 import com.jme.math.Quaternion;
 import com.jme.math.Vector3f;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.imageio.ImageIO;
+import javax.xml.bind.DatatypeConverter;
 import org.jdesktop.wonderland.client.cell.Cell;
 import org.jdesktop.wonderland.client.cell.CellCache;
 import org.jdesktop.wonderland.client.cell.CellEditChannelConnection;
@@ -289,7 +293,22 @@ public class ServerCommunication {
             
             if(compState != null){
                 LOGGER.warning("state not null");
-                ((ImageCellComponentServerState) compState).setImage(img);
+                
+                if(img != null){
+                    try {
+                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                        ImageIO.write(img, "jpg", baos);
+                        baos.flush();
+                        byte[] bimg = baos.toByteArray();
+                        baos.close();
+                        ((ImageCellComponentServerState) compState).setImage(DatatypeConverter.printBase64Binary(bimg));
+                     } catch (IOException ex) {
+                         Logger.getLogger(ImageCellComponentServerState.class.getName()).log(Level.SEVERE, null, ex);
+                     } catch (Exception e){
+                         Logger.getLogger(ImageCellComponentServerState.class.getName()).log(Level.SEVERE, "Something went wrong",e);
+                     }
+                }else
+                    ((ImageCellComponentServerState) compState).setImage(null);
                 
                 Set<CellComponentServerState> compStateSet = new HashSet();
                 compStateSet.add(compState);

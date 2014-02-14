@@ -17,19 +17,23 @@
  */
 package org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter.imagecomponent;
 
-import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.xml.bind.DatatypeConverter;
 import org.jdesktop.wonderland.client.cell.properties.CellPropertiesEditor;
 import org.jdesktop.wonderland.client.cell.properties.annotation.PropertiesFactory;
 import org.jdesktop.wonderland.client.cell.properties.spi.PropertiesFactorySPI;
@@ -105,7 +109,20 @@ public class ImageCellComponentProperties extends JPanel
                     (ImageCellComponentServerState) compState;
 
             // Store away the tooltip text and update the GUI
-            img = tss.getImage();
+            String imgStr = tss.getImage();
+            
+            if(imgStr != null || !imgStr.equals("")){
+                try {
+                    byte[] bimg = DatatypeConverter.parseBase64Binary(imgStr);
+                   InputStream in = new ByteArrayInputStream(bimg);
+                   img = ImageIO.read(in);
+                   in.close();
+                } catch (IOException ex) {
+                    img = null;
+                    Logger.getLogger(ImageCellComponentServerState.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            
             String text = "";
             if(img != null)
                 text = "Image is stored ("+
@@ -129,12 +146,95 @@ public class ImageCellComponentProperties extends JPanel
      * @inheritDoc()
      */
     public void apply() {
+       LOGGER.warning("properties 1");
+       CellServerState state = editor.getCellServerState();
+       
+       if(state == null){
+           LOGGER.warning("No cell server state");
+           return;
+       }
+       
+       LOGGER.warning("properties 2");
+       CellComponentServerState compState = state.getComponentServerState(
+                ImageCellComponentServerState.class);
+       
+       if(compState == null){
+           LOGGER.warning("Image Component server state == null");
+           return;
+       }
+
+        // Update the image in the component server state
+       if(img != null){
+            try {
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                ImageIO.write(img, "jpg", baos);
+                baos.flush();
+                byte[] bimg = baos.toByteArray();
+                baos.close();
+                ((ImageCellComponentServerState) compState).setImage(
+                        DatatypeConverter.printBase64Binary(bimg));
+                
+                 // Tell the Cell editor that this property sheet is "dirty"
+                editor.addToUpdateList(compState);
+                LOGGER.warning("properties 3");
+                editor.setPanelDirty(ImageCellComponentProperties.class,
+                    false);
+             } catch (IOException ex) {
+                 Logger.getLogger(ImageCellComponentServerState.class.getName()).log(Level.SEVERE, null, ex);
+             } catch (Exception e){
+                 Logger.getLogger(ImageCellComponentServerState.class.getName()).log(Level.SEVERE, "Something went wrong",e);
+             }
+        }else
+            ((ImageCellComponentServerState) compState).setImage(null);
+        
+       
     }
 
     /**
      * @inheritDoc()
      */
     public void restore() {
+    }
+    public void represButtonActionPerformed(java.awt.event.ActionEvent evt){
+        
+        JFileChooser chooser = new JFileChooser(new File (lastDirRep));
+        FileNameExtensionFilter filter = new FileNameExtensionFilter(
+                "JPG", "jpg", "jpeg", "JPEG");
+        FileNameExtensionFilter filter2 = new FileNameExtensionFilter(
+                "GIF", "gif", "GIF");
+        FileNameExtensionFilter filter3 = new FileNameExtensionFilter(
+                "PNG", "png", "PNG");
+        FileNameExtensionFilter filter4 = new FileNameExtensionFilter(
+                "BMP", "bmp", "BMP");
+        chooser.removeChoosableFileFilter(chooser.getAcceptAllFileFilter());
+        chooser.addChoosableFileFilter(filter);
+        chooser.addChoosableFileFilter(filter2);
+        chooser.addChoosableFileFilter(filter3);
+        chooser.addChoosableFileFilter(filter4);
+        int returnVal = chooser.showOpenDialog(this);
+        
+        if(returnVal == JFileChooser.APPROVE_OPTION) {
+            File file = chooser.getSelectedFile();
+            
+            //String name = file.getName();
+            String path = file.getAbsolutePath();
+            lastDirRep = file.getParent();
+            
+            try {
+                img = ImageIO.read(new File(path));
+                repaint();
+                imgField.setText(path);
+                
+                if (editor != null ) {
+                    editor.setPanelDirty(ImageCellComponentProperties.class,
+                            true);
+                }
+                
+            } catch (IOException e) {
+                showError(BUNDLE.getString("ImageError"),BUNDLE.getString("ImageErrorTitle"));
+            }
+
+        } 
     }
 
     /** This method is called from within the constructor to
@@ -231,51 +331,7 @@ public class ImageCellComponentProperties extends JPanel
         add(imagePanel);
     }// </editor-fold>        
     
-    public void represButtonActionPerformed(java.awt.event.ActionEvent evt){
-        
-        JFileChooser chooser = new JFileChooser(new File (lastDirRep));
-        FileNameExtensionFilter filter = new FileNameExtensionFilter(
-                "JPG", "jpg", "jpeg", "JPEG");
-        FileNameExtensionFilter filter2 = new FileNameExtensionFilter(
-                "GIF", "gif", "GIF");
-        FileNameExtensionFilter filter3 = new FileNameExtensionFilter(
-                "PNG", "png", "PNG");
-        FileNameExtensionFilter filter4 = new FileNameExtensionFilter(
-                "BMP", "bmp", "BMP");
-        chooser.removeChoosableFileFilter(chooser.getAcceptAllFileFilter());
-        chooser.addChoosableFileFilter(filter);
-        chooser.addChoosableFileFilter(filter2);
-        chooser.addChoosableFileFilter(filter3);
-        chooser.addChoosableFileFilter(filter4);
-        int returnVal = chooser.showOpenDialog(this);
-        
-        if(returnVal == JFileChooser.APPROVE_OPTION) {
-            File file = chooser.getSelectedFile();
-            
-            //String name = file.getName();
-            String path = file.getAbsolutePath();
-            lastDirRep = file.getParent();
-            
-            //split url
-            /*String[] tokens = name.split("\\.(?=[^\\.]+$)");
-            
-            if(tokens[0] == null || tokens[tokens.length-1] == null){
-                showError(BUNDLE.getString("FileReadError"),
-                        BUNDLE.getString("FileReadErrorTitle"));
-                return;
-            }*/
-            
-            try {
-                img = ImageIO.read(new File(path));
-                repaint();
-                imgField.setText(path);
-                
-            } catch (IOException e) {
-                showError(BUNDLE.getString("ImageError"),BUNDLE.getString("ImageErrorTitle"));
-            }
-
-        } 
-    }
+    
     
     public void paint(Graphics g) {
         super.paint(g);
