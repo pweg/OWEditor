@@ -8,18 +8,12 @@ package org.jdesktop.wonderland.modules.oweditor.server;
 
 import org.jdesktop.wonderland.modules.oweditor.common.ImageCellComponentServerState;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.imageio.ImageIO;
-import javax.xml.bind.DatatypeConverter;
 import org.jdesktop.wonderland.common.cell.ClientCapabilities;
 import org.jdesktop.wonderland.common.cell.state.CellComponentClientState;
 import org.jdesktop.wonderland.common.cell.state.CellComponentServerState;
 import org.jdesktop.wonderland.modules.oweditor.common.ImageCellComponentClientState;
+import org.jdesktop.wonderland.modules.oweditor.common.ImageTranslator;
 import org.jdesktop.wonderland.server.cell.CellComponentMO;
 import org.jdesktop.wonderland.server.cell.CellMO;
 import org.jdesktop.wonderland.server.comms.WonderlandClientID;
@@ -78,25 +72,9 @@ public class ImageCellComponentMO extends CellComponentMO {
             state = new ImageCellComponentServerState();
             LOGGER.warning("MO No serverstate2");
         }
-        if(img != null){
-            try {
-                LOGGER.warning("MO transform1");
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                LOGGER.warning("MO transform2");
-                ImageIO.write(img, "jpg", baos);
-                baos.flush();
-                LOGGER.warning("MO transform3");
-                byte[] bimg = baos.toByteArray();
-                
-                LOGGER.warning("MO transform4");
-                baos.close();
-                ((ImageCellComponentServerState) state).setImage(
-                        DatatypeConverter.printBase64Binary(bimg));
-             } catch (IOException ex) {
-                 Logger.getLogger(ImageCellComponentServerState.class.getName()).log(Level.SEVERE, null, ex);
-             } catch (Exception e){
-                 Logger.getLogger(ImageCellComponentServerState.class.getName()).log(Level.SEVERE, "Something went wrong",e);
-             }
+        if(img != null && state != null){
+           String imgStr = ImageTranslator.ImageToString(img);
+           ((ImageCellComponentServerState) state).setImage(imgStr);
         }
         LOGGER.warning("MO GETSERVERSTATE 2");
         return super.getServerState(state);
@@ -111,23 +89,7 @@ public class ImageCellComponentMO extends CellComponentMO {
         super.setServerState(state);
         
         String imgStr = ((ImageCellComponentServerState) state).getImage();
-        
-        if(imgStr == null || imgStr.equals("")){
-            img = null;
-            return;
-        }
-        
-        byte[] bimg = DatatypeConverter.parseBase64Binary(imgStr);
-        if(bimg != null){
-            try {
-               String b = "";
-               InputStream in = new ByteArrayInputStream(bimg);
-               img = ImageIO.read(in);
-               in.close();
-            } catch (IOException ex) {
-                Logger.getLogger(ImageCellComponentServerState.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
+        img = ImageTranslator.StringToImage(imgStr);
     }
     
 }

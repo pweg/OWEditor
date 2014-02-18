@@ -6,24 +6,10 @@
 
 package org.jdesktop.wonderland.modules.oweditor.common;
 
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
-import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.imageio.ImageIO;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
-import javax.xml.bind.annotation.adapters.HexBinaryAdapter;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import org.jdesktop.wonderland.common.cell.state.CellComponentServerState;
 import org.jdesktop.wonderland.common.cell.state.annotation.ServerState;
 
@@ -45,7 +31,7 @@ public class ImageCellComponentServerState extends CellComponentServerState {
             Logger.getLogger(ImageCellComponentServerState.class.getName());
     
 
-    @XmlElement(name = "rep_image")
+    @XmlElement(name = "repImage")
     private String img;
 
     /** Default constructor is needed for JAXB */

@@ -40,6 +40,7 @@ import org.jdesktop.wonderland.client.cell.properties.spi.PropertiesFactorySPI;
 import org.jdesktop.wonderland.common.cell.state.CellComponentServerState;
 import org.jdesktop.wonderland.common.cell.state.CellServerState;
 import org.jdesktop.wonderland.modules.oweditor.common.ImageCellComponentServerState;
+import org.jdesktop.wonderland.modules.oweditor.common.ImageTranslator;
 
 /**
  * The property sheet for the Tooltip Cell Component.
@@ -99,29 +100,25 @@ public class ImageCellComponentProperties extends JPanel
 
         // Fetch the tooltip component state from the Cell server state.
         CellServerState state = editor.getCellServerState();
+        
+        if(state == null)
+            return;
+        
         CellComponentServerState compState = state.getComponentServerState(
                 ImageCellComponentServerState.class);
+        
+        if(compState == null)
+            return;
 
         // If there is a tooltip component server state (there should be), then
         // populate its values in the GUI.
-        if (state != null) {
+        
             ImageCellComponentServerState tss =
                     (ImageCellComponentServerState) compState;
 
             // Store away the tooltip text and update the GUI
             String imgStr = tss.getImage();
-            
-            if(imgStr != null || !imgStr.equals("")){
-                try {
-                    byte[] bimg = DatatypeConverter.parseBase64Binary(imgStr);
-                   InputStream in = new ByteArrayInputStream(bimg);
-                   img = ImageIO.read(in);
-                   in.close();
-                } catch (IOException ex) {
-                    img = null;
-                    Logger.getLogger(ImageCellComponentServerState.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
+            img = ImageTranslator.StringToImage(imgStr);
             
             String text = "";
             if(img != null)
@@ -132,7 +129,7 @@ public class ImageCellComponentProperties extends JPanel
                 text = "No image stored.";
             
             imageTextArea.setText(text);
-        }
+        
     }
 
     /**
@@ -166,26 +163,19 @@ public class ImageCellComponentProperties extends JPanel
         // Update the image in the component server state
        if(img != null){
             try {
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                ImageIO.write(img, "jpg", baos);
-                baos.flush();
-                byte[] bimg = baos.toByteArray();
-                baos.close();
-                ((ImageCellComponentServerState) compState).setImage(
-                        DatatypeConverter.printBase64Binary(bimg));
+                String imgStr = ImageTranslator.ImageToString(img);
+                ((ImageCellComponentServerState) compState).setImage(imgStr);
                 
-                 // Tell the Cell editor that this property sheet is "dirty"
-                editor.addToUpdateList(compState);
-                LOGGER.warning("properties 3");
-                editor.setPanelDirty(ImageCellComponentProperties.class,
-                    false);
-             } catch (IOException ex) {
-                 Logger.getLogger(ImageCellComponentServerState.class.getName()).log(Level.SEVERE, null, ex);
+                /*editor.setPanelDirty(ImageCellComponentProperties.class,
+                    false);*/
              } catch (Exception e){
                  Logger.getLogger(ImageCellComponentServerState.class.getName()).log(Level.SEVERE, "Something went wrong",e);
              }
         }else
-            ((ImageCellComponentServerState) compState).setImage(null);
+            ((ImageCellComponentServerState) compState).setImage("");
+       
+       editor.addToUpdateList(compState);
+       LOGGER.warning("properties 3");
         
        
     }
