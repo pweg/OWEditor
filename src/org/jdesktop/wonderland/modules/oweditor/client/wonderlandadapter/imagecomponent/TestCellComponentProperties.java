@@ -128,11 +128,12 @@ public class TestCellComponentProperties extends JPanel
                 imageInfo.setText("No image url stored");
                 return;
             }
+            File file = new File(originalImageURL);
             
             
             try {
                 //AssetURI c = new AssetURI(originalImageURL);
-                image = ImageIO.read(new File((originalImageURL)));
+                image = ImageIO.read(file);
                 
                 if(image != null){
                     imageInfo.setText("Image present "+image.getWidth() + "x"+
@@ -145,7 +146,7 @@ public class TestCellComponentProperties extends JPanel
             }
             
             if(image == null){
-                LOGGER.warning("File not null");
+                LOGGER.warning("File not null" + file.getName() + " " + file.length());
             }
             
             //image = ImageTranslator.StringToImage(originalImageURL);

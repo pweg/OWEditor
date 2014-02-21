@@ -10,7 +10,6 @@ import java.util.logging.Logger;
 import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.CoordinateTranslatorInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IDataObject;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.ITransformedObject;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.GraphicController;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.IDataObjectObserver;
 
 /**

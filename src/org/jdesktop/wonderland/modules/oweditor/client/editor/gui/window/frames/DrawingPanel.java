@@ -25,8 +25,7 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.GUISettings;
  * @author Patrick
  *
  */
-public class DrawingPanel extends JPanel implements ChangeListener, 
-                                IDrawingPanel {  
+public class DrawingPanel extends JPanel implements ChangeListener, IDrawingPanel {  
 
     private static final long serialVersionUID = 1L;
     private RenderingHints hints;  

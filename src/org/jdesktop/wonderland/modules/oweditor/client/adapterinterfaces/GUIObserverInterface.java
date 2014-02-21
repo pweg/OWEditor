@@ -84,17 +84,26 @@ public interface GUIObserverInterface {
     
     /**
      * Undoes creational actions, which generate a new
-     * object, like the paste, or import command.
+     * object, like the paste, or import command, if there was 
+     * no id given back.
      * @throws java.lang.Exception
      */
     public void undoObjectCreation() throws Exception;
 
     /**
      * Redoes creational actions, which generate a new
-     * object, like the paste, or import command.
+     * object, like the paste, or import command, if there was no
+     * id given back.
      * @throws java.lang.Exception
      */
     public void redoObjectCreation() throws Exception;
+    
+    /**
+     * Undoes the deletion of an object.
+     * @param id The id of the object.
+     * @throws java.lang.Exception 
+     */
+    public void undoDeletion(long id) throws Exception;
 
 
     /**
@@ -134,29 +143,13 @@ public interface GUIObserverInterface {
      * @param rotationZ The z rotation of the new model.
      * @param scale The scale of the new model.
      * 
-     * @return Return true, if importing was a success,
-     * false otherwise.
+     * @return Return the id of the new object, or -1 if something failed.
      * @throws java.lang.Exception
      */
-    public void importKMZ(String name, String image_url, double x, double y,
+    public long importKMZ(String name, String image_url, double x, double y,
             double z, double rotationX, double rotationY, double rotationZ,
             double scale) throws Exception;
 
     public void cancelImport();
-
-    /**
-     * Used during a conflict resolution. Copies an
-     * existing module.
-     * 
-     * @param id The id of the module, which will be copied.
-     *
-    public void importConflictCopy(long id);
-  
-    /**
-     * Overwrites a module during conflict resolution.
-     * 
-     * @param id The id of the module, which will be overwritten.
-     *
-    public void importConflictOverwrite(long id);*/
 
 }

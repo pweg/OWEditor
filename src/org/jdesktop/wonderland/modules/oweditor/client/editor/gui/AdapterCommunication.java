@@ -190,11 +190,14 @@ public class AdapterCommunication implements IAdapterCommunication{
             double scale) {
         
         try {
-            goi.importKMZ(name, image_url, x,y,z, rotationX, 
+            long id = goi.importKMZ(name, image_url, x,y,z, rotationX, 
                     rotationY, rotationZ, scale);
             
             //Import does not need all the baggage in order to undo/redo
-            undoList.add(new Import());
+            Import imp = new Import();
+            imp.setID(id);
+            
+            undoList.add(imp);
             return true;
         } catch (Exception ex) {
             Logger.getLogger(AdapterCommunication.class.getName()).log(Level.WARNING, null, ex);

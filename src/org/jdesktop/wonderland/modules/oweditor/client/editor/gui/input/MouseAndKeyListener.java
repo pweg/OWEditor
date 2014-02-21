@@ -101,7 +101,9 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
                  if(mode == NOMODE || mode == PASTE)
                      ic.graphic.cleanHelpingShapes();
                  strategy = new mlPanStrategy(ic.window);
-                 strategy.mousePressed(p);
+                 //mlPanStrategy needs the panel coordinates in order to
+                 //work properly.
+                 strategy.mousePressed(e.getPoint());
              }else{
                  clear();
                  
@@ -155,6 +157,11 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
         if(strategy == null){
             return;
         }
+        //mlPanStrategy needs the panel coordinates in order to
+        //work properly.
+        if(strategy instanceof mlPanStrategy)
+            p = e.getPoint();
+        
         strategy.mouseDragged(p);
         ic.window.repaint();  
     }

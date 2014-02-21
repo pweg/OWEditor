@@ -502,6 +502,7 @@ public class ImportFrame extends javax.swing.JFrame {
         
         double rotation = Double.valueOf(rotationFieldX.getText());
         double scale = Double.valueOf(scaleField.getText());
+        fc.mainframe.toFront();
         fc.window.chooseLocation(boundsX, boundsY, rotation, scale);
     }                                               
 

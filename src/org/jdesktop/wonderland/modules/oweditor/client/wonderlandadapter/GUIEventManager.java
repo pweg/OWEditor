@@ -166,7 +166,7 @@ public class GUIEventManager implements GUIObserverInterface{
     }
 
     @Override
-    public void importKMZ(String name, String image_url, double x, double y, 
+    public long importKMZ(String name, String image_url, double x, double y, 
             double z, double rotationX, double rotationY, double rotationZ, 
             double scale) throws Exception{
         
@@ -194,6 +194,7 @@ public class GUIEventManager implements GUIObserverInterface{
         Vector3f rotate = new Vector3f((float)rotationX, (float)rotationZ,
                 (float)rotationY);
         
+        ac.ltm.addImage(id, img);
         try{
             ac.sc.translate(id, translate);
         }catch(ServerCommException e){
@@ -211,14 +212,8 @@ public class GUIEventManager implements GUIObserverInterface{
         }catch(ServerCommException e){
             ac.ltm.addScale(id, (float) scale);
         }
-        ac.ltm.addImage(id, img);
-        /*if(img != null){
-            try{
-                ac.sc.addImage(id, img);
-            }catch(ServerCommException e){
-                
-            }
-        }*/
+        
+        return id;
         
     }
 
@@ -230,7 +225,13 @@ public class GUIEventManager implements GUIObserverInterface{
         importer.deployToServer();
     }*/
 
+    @Override
     public void cancelImport() {
         importer.clearModel();
+    }
+
+    @Override
+    public void undoDeletion(long id) throws Exception {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

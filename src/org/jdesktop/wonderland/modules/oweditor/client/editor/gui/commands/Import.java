@@ -9,6 +9,7 @@ public class Import implements Command{
     private double x, y, z;
     private double rotationX, rotationY, rotationZ;
     private double scale;*/
+    private long id = -1;
     
     public Import(){
     }
@@ -20,12 +21,23 @@ public class Import implements Command{
 
     @Override
     public void undo(GUIObserverInterface goi)  throws Exception{
-        goi.undoObjectCreation();
+        if(id != -1){
+            goi.notifyRemoval(id);
+        }else{
+            goi.undoObjectCreation();
+        }
     }
 
     @Override
     public void redo(GUIObserverInterface goi)  throws Exception{
-        goi.redoObjectCreation();
+        if(id != -1)
+            goi.undoRemoval(id);
+        else
+            goi.redoObjectCreation();
+    }
+
+    public void setID(long id) {
+        this.id = id;
     }
 
 }

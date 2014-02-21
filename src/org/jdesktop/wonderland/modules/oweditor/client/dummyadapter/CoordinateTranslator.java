@@ -1,6 +1,5 @@
 package org.jdesktop.wonderland.modules.oweditor.client.dummyadapter;
 
-import com.jme.math.Vector3f;
 import java.awt.Point;
 import java.awt.geom.Point2D;
 

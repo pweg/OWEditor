@@ -24,7 +24,6 @@ public class GUIEventManager implements GUIObserverInterface{
             "org/jdesktop/wonderland/modules/oweditor/client/resources/Bundle");
     
     //This server object is used for import conflict resolution
-    private ServerObject save = null;
     
     //dummy bounds for new objects
     private float[] bounds = new float[2];
@@ -159,11 +158,10 @@ public class GUIEventManager implements GUIObserverInterface{
     }
 
     @Override
-    public void importKMZ(String name, String image_url, double x, double y,
+    public long importKMZ(String name, String image_url, double x, double y,
             double z, double rotationX, double rotationY, double rotationZ,
             double scale) throws Exception{
         
-        ServerObject object = ac.server.getObject(name);
         BufferedImage img = null;
         
         try {
@@ -172,60 +170,28 @@ public class GUIEventManager implements GUIObserverInterface{
         } catch (IOException e) {
             System.err.println("Reading image was not possible");
         }
-        
-        if(object != null){
-            save = new ServerObject(-1, (float)x, (float)y, (float)z, rotationX, 
-            rotationY, rotationZ, scale,  (float)bounds[0], (float)bounds[1],  name,
-            img);
-        }else{
 
-            ServerObject tmp = ac.server.createObject((float)x, (float)y, (float)z, 
-                rotationX, rotationY, rotationZ, scale, 
-                (float)bounds[0], (float)bounds[1], name, false, img);
-            ac.bom.addCreatedID(tmp.id);
-            ac.da.createObject(tmp);
-            throw new Exception();
-        }
-    }
-
-    /*
-    @Override
-    public void importConflictCopy(long id) {
+        ServerObject tmp = ac.server.createObject((float)x, (float)y, (float)z, 
+            rotationX, rotationY, rotationZ, scale, 
+            (float)bounds[0], (float)bounds[1], name, false, img);
+        ac.bom.addCreatedID(tmp.id);
+        ac.da.createObject(tmp);
         
-       
-        ServerObject o = ac.server.getObject(id);
-        
-        if(o == null)
-            return;
-        
-        String name = BUNDLE.getString("CopyName")+o.name;
-        ServerObject clone = ac.server.copyObject(id, name);
-        clone.x=(float) save.x;
-        clone.y=(float) save.y;
-        clone.z=(float) save.z;
-        clone.rotationX=save.rotationX;
-        clone.rotationY=save.rotationY;
-        clone.rotationZ=save.rotationZ;
-        clone.scale=save.scale;
-        clone.image=save.image;
-        ac.bom.addCreatedID(clone.id);
-        ac.da.createObject(clone);
-    }
+        return tmp.id;
+    }    
 
     @Override
-    public void importConflictOverwrite(long id) {
-        //No modules are used in this dummy server,
-        //so simple copy hast to suffice.
-        
-        importConflictCopy(id);
-        
-    }*/
-
     public boolean importCheckName(String moduleName, String server) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    @Override
     public void cancelImport() {
+        //There is nothing to do here.
+    }
+
+    @Override
+    public void undoDeletion(long id) throws Exception {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

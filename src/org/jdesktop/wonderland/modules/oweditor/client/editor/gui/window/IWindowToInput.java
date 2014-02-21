@@ -44,6 +44,7 @@ public interface IWindowToInput {
 
     /**
      * Forwards the scrollRectToVisible() message to the drawing panel.
+     * This is used for dragging the viewport.
      * 
      * @param rect a visible rectangle
      */

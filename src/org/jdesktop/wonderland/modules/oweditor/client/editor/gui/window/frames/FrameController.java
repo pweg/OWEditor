@@ -99,8 +99,6 @@ public class FrameController implements IFrame{
         drawingPan.repaint();
     }
 
-
-
     @Override
     public IDrawingPanel getDrawingPan() {
         return drawingPan;
