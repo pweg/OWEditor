@@ -26,7 +26,7 @@ import org.jdesktop.wonderland.common.cell.state.CellComponentClientState;
  */
 public class TestCellComponentClientState extends CellComponentClientState {
 
-    // The text of the tooltip
+    // The image path
     private String image;
 
     /** Default constructor */
@@ -34,18 +34,18 @@ public class TestCellComponentClientState extends CellComponentClientState {
     }
 
     /**
-     * Returns the tooltip text.
+     * Returns the image path.
      *
-     * @return The tooltip text
+     * @return The image path
      */
     public String getImage() {
         return image;
     }
 
     /**
-     * Sets the tooltip text.
+     * Sets the image path.
      *
-     * @param text The tooltip text
+     * @param image The image path
      */
     public void setImage(String image) {
         this.image = image;

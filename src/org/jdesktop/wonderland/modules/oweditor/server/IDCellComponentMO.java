@@ -1,39 +1,30 @@
-/**
- * Project Wonderland
- *
- * Copyright (c) 2004-2010, Sun Microsystems, Inc., All Rights Reserved
- *
- * Redistributions in source code form must reproduce the above
- * copyright and this condition.
- *
- * The contents of this file are subject to the GNU General Public
- * License, Version 2 (the "License"); you may not use this file
- * except in compliance with the License. A copy of the License is
- * available at http://www.opensource.org/licenses/gpl-license.php.
- *
- * Sun designates this particular file as subject to the "Classpath"
- * exception as provided by Sun in the License file that accompanied
- * this code.
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
  */
+
 package org.jdesktop.wonderland.modules.oweditor.server;
 
 import org.jdesktop.wonderland.common.cell.ClientCapabilities;
 import org.jdesktop.wonderland.common.cell.state.CellComponentClientState;
 import org.jdesktop.wonderland.common.cell.state.CellComponentServerState;
-import org.jdesktop.wonderland.modules.oweditor.common.TestCellComponentClientState;
-import org.jdesktop.wonderland.modules.oweditor.common.TestCellComponentServerState;
+import org.jdesktop.wonderland.modules.oweditor.common.IDCellComponentClientState;
+import org.jdesktop.wonderland.modules.oweditor.common.IDCellComponentServerState;
 import org.jdesktop.wonderland.server.cell.CellComponentMO;
 import org.jdesktop.wonderland.server.cell.CellMO;
 import org.jdesktop.wonderland.server.comms.WonderlandClientID;
 
 /**
- * The server-side Test Cell Component.
- *
+ *  This cell component is used for undo/redo. It contains the original
+ * id of the cell, after it was deleted.
+ * 
+ * @author Patrick
  */
-public class TestCellComponentMO extends CellComponentMO {
+public class IDCellComponentMO extends CellComponentMO {
 
-    // The image
-    private String image = null;
+    // The id
+    private long id = -1;
 
     
     /**
@@ -41,7 +32,7 @@ public class TestCellComponentMO extends CellComponentMO {
      *
      * @param cell The CellMO associated with this component
      */
-    public TestCellComponentMO(CellMO cell) {
+    public IDCellComponentMO(CellMO cell) {
         super(cell);
     }
 
@@ -51,7 +42,7 @@ public class TestCellComponentMO extends CellComponentMO {
     @Override
     protected String getClientClass() {
         return "org.jdesktop.wonderland.modules.oweditor.client" +
-               ".wonderlandadapter.components.TestCellComponent";
+               ".wonderlandadapter.components.IDCellComponent";
     }
 
     /**
@@ -63,9 +54,9 @@ public class TestCellComponentMO extends CellComponentMO {
             ClientCapabilities capabilities) {
 
         if (state == null) {
-            state = new TestCellComponentClientState();
+            state = new IDCellComponentClientState();
         }
-        ((TestCellComponentClientState) state).setImage(image);
+        ((IDCellComponentClientState) state).setID(id);
         return super.getClientState(state, clientID, capabilities);
     }
 
@@ -77,9 +68,9 @@ public class TestCellComponentMO extends CellComponentMO {
             CellComponentServerState state) {
         
         if (state == null) {
-            state = new TestCellComponentServerState();
+            state = new IDCellComponentServerState();
         }
-        ((TestCellComponentServerState) state).setImage(image);
+        ((IDCellComponentServerState) state).setID(id);
         return super.getServerState(state);
     }
 
@@ -89,6 +80,6 @@ public class TestCellComponentMO extends CellComponentMO {
     @Override
     public void setServerState(CellComponentServerState state) {
         super.setServerState(state);
-        image = ((TestCellComponentServerState) state).getImage();
+        id = ((IDCellComponentServerState) state).getID();
     }
 }

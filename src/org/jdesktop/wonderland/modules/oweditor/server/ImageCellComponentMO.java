@@ -39,7 +39,7 @@ public class ImageCellComponentMO extends CellComponentMO {
     @Override
     protected String getClientClass() {
         return "org.jdesktop.wonderland.modules.oweditor.client" +
-               ".wonderlandadapter.imagecomponent.ImageCellComponent";
+               ".wonderlandadapter.components.ImageCellComponent";
     }
 
     /**

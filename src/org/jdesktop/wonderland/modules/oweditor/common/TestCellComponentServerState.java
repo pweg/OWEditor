@@ -33,7 +33,7 @@ import org.jdesktop.wonderland.common.cell.state.annotation.ServerState;
 @ServerState
 public class TestCellComponentServerState extends CellComponentServerState {
 
-    // The image of the tooltip
+    // The image path
     @XmlElement(name = "image")
     private String image = null;
 
@@ -48,9 +48,9 @@ public class TestCellComponentServerState extends CellComponentServerState {
     }
 
     /**
-     * Returns the image as string.
+     * Returns the image path.
      *
-     * @return The image
+     * @return The image path
      */
     @XmlTransient
     public String getImage() {
@@ -58,9 +58,9 @@ public class TestCellComponentServerState extends CellComponentServerState {
     }
 
     /**
-     * Sets the image as string.
+     * Sets the image path.
      *
-     * @param image The image
+     * @param image The image path
      */
     public void setImage(String image) {
         this.image = image;
