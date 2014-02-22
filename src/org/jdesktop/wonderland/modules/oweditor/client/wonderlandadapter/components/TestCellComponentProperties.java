@@ -35,12 +35,8 @@ import org.jdesktop.wonderland.client.cell.properties.annotation.PropertiesFacto
 import org.jdesktop.wonderland.client.cell.properties.spi.PropertiesFactorySPI;
 import org.jdesktop.wonderland.client.content.ContentImportManager;
 import org.jdesktop.wonderland.client.jme.content.AbstractContentImporter;
-import org.jdesktop.wonderland.common.AssetURI;
-import org.jdesktop.wonderland.common.FileUtils;
 import org.jdesktop.wonderland.common.cell.state.CellComponentServerState;
 import org.jdesktop.wonderland.common.cell.state.CellServerState;
-import org.jdesktop.wonderland.modules.oweditor.common.ImageCellComponentClientState;
-import org.jdesktop.wonderland.modules.oweditor.common.ImageTranslator;
 import org.jdesktop.wonderland.modules.oweditor.common.TestCellComponentServerState;
 
 /**

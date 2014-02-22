@@ -43,7 +43,7 @@ public class IDCellComponent extends CellComponent {
      * 
      * @return The id
      */
-    public long getImage() {
+    public long getID() {
         return id;
     }
 }

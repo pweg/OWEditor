@@ -15,6 +15,7 @@ import org.jdesktop.wonderland.common.messages.ErrorMessage;
 import org.jdesktop.wonderland.common.messages.ResponseMessage;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IDataObject;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IAdapterObserver;
+import org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter.components.IDCellComponent;
 import org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter.components.ImageCellComponent;
 import org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter.components.ImageChangeListener;
 
@@ -84,6 +85,7 @@ public class ServerEventManager {
         float z =  vector.z;
         
         long id = CellInfoReader.getID(cell);
+        id = ac.bm.getOriginalID(id);
         
         for(IAdapterObserver observer : observers){
             observer.notifyScaling(id,(double) scale); 
@@ -113,6 +115,7 @@ public class ServerEventManager {
         ac.bm.addCell(cell);
         
         long id = CellInfoReader.getID(cell);
+        id = ac.bm.getOriginalID(id);
         for(IAdapterObserver observer : observers)
             observer.notifyRemoval(id);
     }
@@ -158,13 +161,30 @@ public class ServerEventManager {
             ac.ltm.invokeLateImage(ac.sc, id);
         }
         
+        if(ac.ltm.containsID(name)){
+            ac.ltm.invokeLateID(ac.sc, name, id);
+        }
+        
         BufferedImage img = null;
         
         ImageCellComponent imageComponent = cell.getComponent(ImageCellComponent.class);
             
         if(imageComponent != null){
-            //LOGGER.warning(imageComponent.getImage());
+            //LOGGER.warning(imageComponent.getID());
             img = imageComponent.getImage();
+        }
+        
+        IDCellComponent idComponent = cell.getComponent(IDCellComponent.class);
+        
+        if(idComponent != null){
+            long oldid = idComponent.getID();
+            
+            if(ac.bm.containsOriginalID(oldid)){
+                id = oldid;
+            }
+            
+            ac.bm.addOriginalCell(id, cell);
+            LOGGER.warning("CURRENT ID "+id);
         }
         
         
@@ -219,12 +239,14 @@ public class ServerEventManager {
         
         String name = cell.getName();
         long id = CellInfoReader.getID(cell);
+        //id = ac.bm.getOriginalID(id);
         
         ac.ltm.invokeLateTransform(ac.sc, id, name);
     }
     
     public void imageComponentCreated(Cell cell){
         long id = CellInfoReader.getID(cell);
+        id = ac.bm.getOriginalID(id);
         
         ImageCellComponent imageComponent = 
                 cell.getComponent(ImageCellComponent.class);
@@ -259,7 +281,8 @@ public class ServerEventManager {
     class ImageListener extends Marshaller.Listener implements ImageChangeListener{
 
         public void imageChanged(BufferedImage img, Cell cell) {
-           long id = CellInfoReader.getID(cell);
+            long id = CellInfoReader.getID(cell);
+            id = ac.bm.getOriginalID(id);
                 
                for(IAdapterObserver observer : observers){
                     LOGGER.warning("image change" + img);
@@ -272,5 +295,6 @@ public class ServerEventManager {
                    LOGGER.warning("LISTENER IMG != NULL");
         }
     }
+    
 
 }

@@ -45,14 +45,8 @@ public class GUIEventManager implements GUIObserverInterface{
 
     @Override
     public void notifyTranslationXY(long id, int x, int y ) throws Exception{
-        CellCache cache = ac.sm.getCellCache();
-        
-        if (cache == null) {
-            LOGGER.log(Level.WARNING, "Unable to find Cell cache for session {0}", ac.sm.getSession());
-            throw new GUIEventException();
-        }
-        CellID cellid = new CellID(id);
-        Cell cell = cache.getCell(cellid);
+        id = ac.bm.getActiveID(id);
+        Cell cell = getCell(id);
         
         if(cell == null)
             throw new GUIEventException();
@@ -67,13 +61,9 @@ public class GUIEventManager implements GUIObserverInterface{
     public void notifyRotation(long id, int x, int y, double rotation) throws Exception{
         notifyTranslationXY(id,x,y);
         
-        CellCache cache = ac.sm.getCellCache();
-        if (cache == null) {
-            LOGGER.log(Level.WARNING, "Unable to find Cell cache for session {0}", ac.sm.getSession());
-            throw new GUIEventException();
-        }
-        CellID cellid = new CellID(id);
-        Cell cell = cache.getCell(cellid);
+        id = ac.bm.getActiveID(id);
+        Cell cell = getCell(id);
+        
         Vector3f cell_rot = CellInfoReader.getRotation(cell);
         cell_rot = ac.ct.createRotation(cell_rot, rotation);
         
@@ -82,12 +72,14 @@ public class GUIEventManager implements GUIObserverInterface{
 
     @Override
     public void notifyScaling(long id, int x, int y, double scale) throws Exception{
+        id = ac.bm.getActiveID(id);
         ac.sc.scale(id,(float) scale);
         notifyTranslationXY(id,x,y);
     }
     
     @Override
     public void notifyRemoval(long id) throws Exception{
+        id = ac.bm.getActiveID(id);
         ac.sc.remove(id);
     }
 
@@ -97,12 +89,14 @@ public class GUIEventManager implements GUIObserverInterface{
         ac.bm.clearCopy();
         
         for(long id : object_ids){
+            id = ac.bm.getActiveID(id);
             ac.bm.addCopy(id);
         }
     }
 
     @Override
     public void notifyPaste(long id, int x, int y) throws Exception{
+        id = ac.bm.getActiveID(id);
         CellCache cache = ac.sm.getCellCache();
         
         if (cache == null) {
@@ -134,13 +128,35 @@ public class GUIEventManager implements GUIObserverInterface{
         //Do not change order of this, or this could lead to some problems
         //if the server is faster than the addTranslation command.
         ac.ltm.addTranslation(name, coordinates);
-        ac.sc.paste(cell, name);
-        
+        ac.sc.paste(cell, name);        
     }
 
     @Override
     public void undoRemoval(long id) throws Exception{
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Cell cell = ac.bm.getActiveCell(id);
+        
+        if(cell == null)
+                ac.bm.getCell(id);
+        
+        if(cell == null){
+            LOGGER.warning("UNDO REMVOAL FAILED");
+            throw new GUIEventException();
+        }
+        
+        Vector3f coordinates = CellInfoReader.getCoordinates(cell);
+        String name = cell.getName() + ac.sm.getSession().getID()+"_"+id;
+        
+        float y = coordinates.z;
+        float z = coordinates.y;
+        
+        //swap coordinates in order to not get mixed up later.
+        coordinates.y = y;
+        coordinates.z = z;
+        
+        ac.ltm.addTranslation(name, coordinates);
+        ac.ltm.addID(name, id);
+        
+        ac.sc.paste(cell, name);
     }
 
     @Override
@@ -233,5 +249,24 @@ public class GUIEventManager implements GUIObserverInterface{
     @Override
     public void undoDeletion(long id) throws Exception {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    private Cell getCell(long id) throws Exception{
+        
+        LOGGER.warning("CELL "+ id);
+        CellCache cache = ac.sm.getCellCache();
+        
+        if (cache == null) {
+            LOGGER.log(Level.WARNING, "Unable to find Cell cache for session {0}", ac.sm.getSession());
+            throw new GUIEventException();
+        }
+        CellID cellid = new CellID(id);
+        Cell cell = cache.getCell(cellid);
+        
+        if(cell == null){
+            throw new GUIEventException();
+        }
+        return cell;
+        
     }
 }
