@@ -3,6 +3,7 @@ package org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter;
 import com.jme.math.Vector3f;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.bind.Marshaller;
 import org.jdesktop.wonderland.client.cell.Cell;
@@ -18,6 +19,7 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IAd
 import org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter.components.IDCellComponent;
 import org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter.components.ImageCellComponent;
 import org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter.components.ImageChangeListener;
+import org.jdesktop.wonderland.modules.oweditor.common.IDCellComponentServerState;
 
 /**
  * This class is used for updating the data package, when
@@ -116,6 +118,8 @@ public class ServerEventManager {
         
         long id = CellInfoReader.getID(cell);
         id = ac.bm.getOriginalID(id);
+        ac.bm.setActive(id, false);
+        
         for(IAdapterObserver observer : observers)
             observer.notifyRemoval(id);
     }
@@ -147,7 +151,7 @@ public class ServerEventManager {
                 LOGGER.warning("ERROR Movable component creation"+response);
             }
         }  
-        LOGGER.warning("Object creation " + id);     
+        //LOGGER.warning("Object creation " + id);     
         
         /*
         * do late transform before reading cell data in order to get
@@ -179,12 +183,18 @@ public class ServerEventManager {
         if(idComponent != null){
             long oldid = idComponent.getID();
             
-            if(ac.bm.containsOriginalID(oldid)){
+            if(!ac.bm.isActive(oldid) && oldid != -1){
                 id = oldid;
+
+                ac.bm.addOriginalCell(id, cell);
+                LOGGER.warning("CURRENT ID "+id);
+            }else{
+                try {
+                    ac.sc.deleteComponent(id, IDCellComponentServerState.class);
+                } catch (Exception ex) {
+                    LOGGER.log(Level.SEVERE, null, ex);
+                }
             }
-            
-            ac.bm.addOriginalCell(id, cell);
-            LOGGER.warning("CURRENT ID "+id);
         }
         
         

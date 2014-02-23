@@ -97,13 +97,6 @@ public interface GUIObserverInterface {
      * @throws java.lang.Exception
      */
     public void redoObjectCreation() throws Exception;
-    
-    /**
-     * Undoes the deletion of an object.
-     * @param id The id of the object.
-     * @throws java.lang.Exception 
-     */
-    public void undoDeletion(long id) throws Exception;
 
 
     /**

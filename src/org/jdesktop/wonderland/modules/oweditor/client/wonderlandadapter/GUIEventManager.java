@@ -133,6 +133,10 @@ public class GUIEventManager implements GUIObserverInterface{
 
     @Override
     public void undoRemoval(long id) throws Exception{
+        
+        if(ac.bm.isActive(id))
+            throw new GUIEventException();
+        
         Cell cell = ac.bm.getActiveCell(id);
         
         if(cell == null)
@@ -244,11 +248,6 @@ public class GUIEventManager implements GUIObserverInterface{
     @Override
     public void cancelImport() {
         importer.clearModel();
-    }
-
-    @Override
-    public void undoDeletion(long id) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
     private Cell getCell(long id) throws Exception{
