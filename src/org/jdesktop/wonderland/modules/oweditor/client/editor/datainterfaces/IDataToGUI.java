@@ -2,7 +2,6 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces;
 
 import java.awt.Point;
 import java.awt.geom.Point2D;
-import java.util.ArrayList;
 
 /**
  * An interface used between the data and gui package.

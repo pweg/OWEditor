@@ -204,7 +204,7 @@ public interface IGraphicToInput {
      * Looks, if a point p is surrounded by a shape.
      * 
      * @param p the point in question
-     * @return true, if the point is in a shape, else
+     * @return true, if the point is in a shape, false
      * otherwise.
      */
     public boolean isMouseInObject(Point p);

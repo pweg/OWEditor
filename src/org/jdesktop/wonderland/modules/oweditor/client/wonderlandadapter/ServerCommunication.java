@@ -420,8 +420,8 @@ public class ServerCommunication {
             throw new ServerCommException();
         
         IDCellComponent idComponent = cell.getComponent(IDCellComponent.class);
-        
         if(idComponent == null){
+            LOGGER.warning("ID component == null");
             addComponent(cell, IDCellComponent.class);
         }
         CellServerState state = fetchCellServerState(cell);
@@ -439,7 +439,6 @@ public class ServerCommunication {
                 
             Set<CellComponentServerState> compStateSet = new HashSet();
             compStateSet.add(compState);
-                        
             CellServerStateUpdateMessage msg = new CellServerStateUpdateMessage(
                 cell.getCellID(), state, compStateSet);
              
@@ -462,6 +461,10 @@ public class ServerCommunication {
     }
     
     public void addComponent(Cell cell, Class componentClass) throws ServerCommException{
+        
+        if(cell.getComponent(componentClass) != null)
+            return;
+        LOGGER.warning("ADDING COMPONENT");
         CellComponentServerState state = idspi.getDefaultCellComponentServerState();
             CellServerComponentMessage message =
             CellServerComponentMessage.newAddMessage(cell.getCellID(), state);
@@ -487,6 +490,7 @@ public class ServerCommunication {
                         ((ErrorMessage) response).getErrorCause());
                 throw new ServerCommException();
             }
+        LOGGER.warning("ADDING COMPONENT2");
         
     }
     

@@ -83,8 +83,6 @@ public class BackupManager {
         
         Cell cell = lastActiveID.get(originalID).cell;
         return CellInfoReader.getID(cell);
-        
-        
     }
     
     public Cell getActiveCell(long originalID){        

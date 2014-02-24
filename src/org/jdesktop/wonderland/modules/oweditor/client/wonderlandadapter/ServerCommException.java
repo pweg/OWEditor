@@ -11,5 +11,7 @@ package org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter;
  * @author Patrick
  */
 public class ServerCommException extends Exception{
+
+    private static final long serialVersionUID = 4003;
     
 }

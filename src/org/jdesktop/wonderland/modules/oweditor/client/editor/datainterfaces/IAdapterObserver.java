@@ -1,7 +1,6 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces;
 
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
 
 /**
  * This interface is used between the data and the adapter package.

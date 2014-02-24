@@ -25,7 +25,6 @@ public class LateTransformationManager {
     private HashMap<Long, Vector3f> rotationMap = null;
     private HashMap<Long, Float> scaleMap = null;
     private HashMap<Long, BufferedImage> imageMap = null;
-    private HashMap<String, Long> idMap = null;
     
     public LateTransformationManager(){
         translationMap = new HashMap<Long, Vector3f>();
@@ -33,7 +32,6 @@ public class LateTransformationManager {
         scaleMap = new HashMap<Long, Float>();
         copyTranslation  = new HashMap<String, Vector3f>();
         imageMap = new HashMap<Long, BufferedImage>();
-        idMap = new HashMap<String, Long>();
     }
     
     /**
@@ -266,30 +264,6 @@ public class LateTransformationManager {
      */
     public void addImage(long id, BufferedImage img) {
         imageMap.put(id, img);
-    }
-    
-    /**
-     * Adds an original id, which has to be added to a cell later.
-     * 
-     * @param name The cells name.
-     * @param id The original id.
-     */
-    public void addID(String name, long id){
-        idMap.put(name, id);
-    }
-    
-    public boolean containsID(String name){
-        return idMap.containsKey(name);
-    }
-    
-    public void invokeLateID(ServerCommunication server, String name, long id){
-        try {
-            server.addIDComponent(id, idMap.get(name));
-            idMap.remove(name);
-        } catch (ServerCommException ex) {
-            Logger.getLogger(LateTransformationManager.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
     }
     
 }

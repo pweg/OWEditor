@@ -62,12 +62,7 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
              if(e.getButton() ==  MouseEvent.BUTTON1){
                  if(mode == NOMODE){//translate
                      if(ic.graphic.isMouseInObject(p)){
-                         
-                         //creates the dragging shapes
-                         ic.graphic.translateIntialize(p);
-                         
-                         strategy = new mlTranslateDragStrategy(ic);
-                         strategy.mousePressed(p);
+                         ic.graphic.selectionSwitch(p, false);
                      }else{//selection rectangle
                          ic.graphic.clearCurSelection();
                          strategy = new mlSelectionRectStrategy(ic);
@@ -126,6 +121,32 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
             ic.window.repaint();  
         }
      }
+
+    public void mouseDragged(MouseEvent e) {
+        Point p = ic.window.revertBack(e.getPoint());
+        
+        ic.window.paintMouseCoords(p.x, p.y);
+        writeShapeName(p);
+        
+        if(strategy == null){//translation of objects
+            if(ic.graphic.isMouseInObject(p)){
+                
+                //creates the dragging shapes
+                ic.graphic.translateIntialize(p);
+                
+                strategy = new mlTranslateDragStrategy(ic);
+                strategy.mousePressed(p);
+            }else
+                return;
+        }
+        //mlPanStrategy needs the panel coordinates in order to
+        //work properly.
+        if(strategy instanceof mlPanStrategy)
+            p = e.getPoint();
+        
+        strategy.mouseDragged(p);
+        ic.window.repaint();  
+    }
     
     @Override
     public void mouseWheelMoved( MouseWheelEvent e )
@@ -145,24 +166,6 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
         ic.window.changeScale(GUISettings.ZOOMSPEED * -(double)e.getWheelRotation());
         
         clearShapeName();
-        ic.window.repaint();  
-    }
-
-    public void mouseDragged(MouseEvent e) {
-        Point p = ic.window.revertBack(e.getPoint());
-        
-        ic.window.paintMouseCoords(p.x, p.y);
-        writeShapeName(p);
-        
-        if(strategy == null){
-            return;
-        }
-        //mlPanStrategy needs the panel coordinates in order to
-        //work properly.
-        if(strategy instanceof mlPanStrategy)
-            p = e.getPoint();
-        
-        strategy.mouseDragged(p);
         ic.window.repaint();  
     }
     

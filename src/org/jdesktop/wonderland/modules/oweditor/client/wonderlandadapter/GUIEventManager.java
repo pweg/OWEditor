@@ -13,6 +13,7 @@ import org.jdesktop.wonderland.client.cell.Cell;
 import org.jdesktop.wonderland.client.cell.CellCache;
 import org.jdesktop.wonderland.common.cell.CellID;
 import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.GUIObserverInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter.components.IDCellComponent;
 
 /**
  * This class is used to make updates the client makes in
@@ -79,8 +80,15 @@ public class GUIEventManager implements GUIObserverInterface{
     
     @Override
     public void notifyRemoval(long id) throws Exception{
-        id = ac.bm.getActiveID(id);
-        ac.sc.remove(id);
+        long curid = ac.bm.getActiveID(id);
+        //tires to add an id component, in case the cell gets restored.
+        try{
+            ac.sc.addIDComponent(curid, id);
+        }catch(Exception e){
+            LOGGER.warning("ID component not created for " + id);
+        }
+        
+        ac.sc.remove(curid);
     }
 
     @Override
@@ -134,8 +142,11 @@ public class GUIEventManager implements GUIObserverInterface{
     @Override
     public void undoRemoval(long id) throws Exception{
         
-        if(ac.bm.isActive(id))
+        //if the object currently exists, no udno removal is necessary.
+        if(ac.bm.isActive(id)){
+            LOGGER.warning("UNDOING active removal");
             throw new GUIEventException();
+        }
         
         Cell cell = ac.bm.getActiveCell(id);
         
@@ -148,7 +159,8 @@ public class GUIEventManager implements GUIObserverInterface{
         }
         
         Vector3f coordinates = CellInfoReader.getCoordinates(cell);
-        String name = cell.getName() + ac.sm.getSession().getID()+"_"+id;
+        String name = cell.getName() ;
+        name = ac.cnm.createUndoName(name);
         
         float y = coordinates.z;
         float z = coordinates.y;
@@ -157,9 +169,7 @@ public class GUIEventManager implements GUIObserverInterface{
         coordinates.y = y;
         coordinates.z = z;
         
-        ac.ltm.addTranslation(name, coordinates);
-        ac.ltm.addID(name, id);
-        
+        ac.ltm.addTranslation(name, coordinates);        
         ac.sc.paste(cell, name);
     }
 
@@ -233,17 +243,8 @@ public class GUIEventManager implements GUIObserverInterface{
             ac.ltm.addScale(id, (float) scale);
         }
         
-        return id;
-        
+        return id;        
     }
-
-    /*public void importConflictCopy(long id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    public void importConflictOverwrite(long id) {
-        importer.deployToServer();
-    }*/
 
     @Override
     public void cancelImport() {
@@ -251,8 +252,6 @@ public class GUIEventManager implements GUIObserverInterface{
     }
     
     private Cell getCell(long id) throws Exception{
-        
-        LOGGER.warning("CELL "+ id);
         CellCache cache = ac.sm.getCellCache();
         
         if (cache == null) {

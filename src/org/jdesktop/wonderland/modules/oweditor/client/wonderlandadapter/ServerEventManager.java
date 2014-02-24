@@ -1,6 +1,7 @@
 package org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter;
 
 import com.jme.math.Vector3f;
+import java.awt.event.ComponentListener;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -157,16 +158,16 @@ public class ServerEventManager {
         * do late transform before reading cell data in order to get
         * the changes imideately.
         */
+        
+        /*if(ac.ltm.containsID(name)){
+            ac.ltm.invokeLateID(ac.sc, name, id);
+        }*/
         if(ac.ltm.containsCell(id, name)){
             ac.ltm.invokeLateTransform(ac.sc, id, name);
         }
         
         if(ac.ltm.containsImage(id)){
             ac.ltm.invokeLateImage(ac.sc, id);
-        }
-        
-        if(ac.ltm.containsID(name)){
-            ac.ltm.invokeLateID(ac.sc, name, id);
         }
         
         BufferedImage img = null;
@@ -182,12 +183,12 @@ public class ServerEventManager {
         
         if(idComponent != null){
             long oldid = idComponent.getID();
+            LOGGER.warning("old id" + oldid);
             
             if(!ac.bm.isActive(oldid) && oldid != -1){
                 id = oldid;
 
                 ac.bm.addOriginalCell(id, cell);
-                LOGGER.warning("CURRENT ID "+id);
             }else{
                 try {
                     ac.sc.deleteComponent(id, IDCellComponentServerState.class);
@@ -195,6 +196,8 @@ public class ServerEventManager {
                     LOGGER.log(Level.SEVERE, null, ex);
                 }
             }
+            
+            LOGGER.warning("cur id" + id);
         }
         
         
@@ -232,10 +235,7 @@ public class ServerEventManager {
 
             object.setName(name);
             observer.notifyObjectCreation(object);
-        }
-        
-        
-        
+        }        
     }
     
     /**

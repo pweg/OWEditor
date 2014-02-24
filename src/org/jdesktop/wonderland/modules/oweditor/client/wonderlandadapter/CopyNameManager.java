@@ -21,6 +21,8 @@ public class CopyNameManager {
     
     private LinkedHashMap<Long, Integer> copies = null;
     
+    private String undoString = "_|IDcomMI$$ING|";
+    
     public CopyNameManager(){
         copies = new LinkedHashMap<Long, Integer>();
     }
@@ -48,6 +50,18 @@ public class CopyNameManager {
         
         name = BUNDLE.getString("CopyName")+ name+"_"+count+"ID"+session.getID()+"_"+id;
         return name;
+    }
+    
+    public String createUndoName(String name){
+        return name + undoString;
+    }
+    
+    public boolean isUndoName( String name){
+        
+        if(name.contains(undoString))
+            return true;
+        else 
+            return false;
     }
     
     /**

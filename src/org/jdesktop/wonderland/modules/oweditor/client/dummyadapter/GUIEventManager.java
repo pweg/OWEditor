@@ -43,7 +43,6 @@ public class GUIEventManager implements GUIObserverInterface{
 
     @Override
     public void notifyTranslationXY(long id, int x, int y) throws Exception{
-
         ServerObject object = ac.server.getObject(id);
         if(object == null)
             throw new Exception();
