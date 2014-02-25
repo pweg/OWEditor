@@ -64,6 +64,9 @@ public class DataObjectManager {
     }
     
     public void removeObject(long id){
+        if(data.get(id) == null)
+            return;
+        
         data.remove(id);
         for(IDataObjectObserver observer : observers)
             observer.notifyRemoval(id);

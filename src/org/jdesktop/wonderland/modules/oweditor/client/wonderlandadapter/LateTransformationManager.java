@@ -9,7 +9,6 @@ package org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter;
 import com.jme.math.Vector3f;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**

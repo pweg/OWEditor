@@ -21,7 +21,7 @@ public class CopyNameManager {
     
     private LinkedHashMap<Long, Integer> copies = null;
     
-    private String undoString = "_|IDcomMI$$ING|";
+    private String separator = "|";
     
     public CopyNameManager(){
         copies = new LinkedHashMap<Long, Integer>();
@@ -30,13 +30,13 @@ public class CopyNameManager {
     /**
      * Creates a copy name for the late translation, which 
      * should be changed later.
-     * @param sm a SessionManager instance.
+     * 
+     * @param session a Wonderland session.
      * @param id The cell id of the cell to copy.
      * @param name The name of the cell to copy.
      * @return The name for the copied cell.
      */
-    public String createCopyName(SessionManager sm, long id, String name){
-        WonderlandSession session = sm.getSession();
+    public String createCopyName(WonderlandSession session, long id, String name){
         
         String count = "1";
            
@@ -48,20 +48,13 @@ public class CopyNameManager {
             copies.put(id, 1);
         }
         
-        name = BUNDLE.getString("CopyName")+ name+"_"+count+"ID"+session.getID()+"_"+id;
+        name = BUNDLE.getString("CopyName")+ name+"_"+count+separator
+                +"ID"+session.getID()+"_"+id;
         return name;
     }
     
-    public String createUndoName(String name){
-        return name + undoString;
-    }
-    
-    public boolean isUndoName( String name){
-        
-        if(name.contains(undoString))
-            return true;
-        else 
-            return false;
+    public String createUndoName(WonderlandSession session, long id, String name){
+        return name + separator+"ID"+ session.getID()+"_"+id;
     }
     
     /**
@@ -71,20 +64,12 @@ public class CopyNameManager {
      */
     public String getRealName(String name){
         
-        int index = name.lastIndexOf("_");
+        int index = name.lastIndexOf(separator);
         
         if(index == -1)
             return name;
         
-        String new_name = name.substring(0,index);
-        index = new_name.lastIndexOf("_");
-        
-        if(index == -1)
-            return name;
-        
-        new_name = new_name.substring(0,index);
-        
-        return new_name;
+        return name.substring(0,index);
     }
     
     

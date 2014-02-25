@@ -1,7 +1,6 @@
 package org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter;
 
 import com.jme.math.Vector3f;
-import java.awt.event.ComponentListener;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -152,22 +151,33 @@ public class ServerEventManager {
                 LOGGER.warning("ERROR Movable component creation"+response);
             }
         }  
-        //LOGGER.warning("Object creation " + id);     
         
         /*
         * do late transform before reading cell data in order to get
         * the changes imideately.
         */
-        
-        /*if(ac.ltm.containsID(name)){
-            ac.ltm.invokeLateID(ac.sc, name, id);
-        }*/
-        if(ac.ltm.containsCell(id, name)){
-            ac.ltm.invokeLateTransform(ac.sc, id, name);
-        }
-        
         if(ac.ltm.containsImage(id)){
             ac.ltm.invokeLateImage(ac.sc, id);
+        }
+        
+        String oldName="";
+        if(ac.ltm.containsCell(id, name)){
+            //copied names
+            if(ac.ltm.containsCell(name)){
+                ac.bm.addNewCopyID(id, name);
+                LOGGER.warning("ADDED COPY ID "+ id);
+            }
+            ac.ltm.invokeLateTransform(ac.sc, id, name);
+            try {
+                String realName = ac.cnm.getRealName(name);
+                if(!realName.equals(name)){
+                    ac.sc.changeName(id, realName);
+                    oldName = name;
+                    name = realName;
+                }
+            } catch (ServerCommException ex) {
+                LOGGER.log(Level.SEVERE, "Could not change name back.", ex);
+            }
         }
         
         BufferedImage img = null;
@@ -189,6 +199,19 @@ public class ServerEventManager {
                 id = oldid;
 
                 ac.bm.addOriginalCell(id, cell);
+            }else if (ac.bm.isActive(oldid)){
+                try {
+                    if(ac.bm.isOnWhiteList(oldName))
+                        ac.sc.deleteComponent(id, IDCellComponentServerState.class);
+                    else{
+                        ac.sc.remove(id);
+                        return;
+                    }
+                } catch (ServerCommException ex) {
+                    LOGGER.log(Level.WARNING,"Could not delete cell with the same "
+                    + "original id, which is already used. Current ID:"
+                    + id + ", original id "+oldid, ex);
+                }
             }else{
                 try {
                     ac.sc.deleteComponent(id, IDCellComponentServerState.class);
@@ -199,7 +222,6 @@ public class ServerEventManager {
             
             LOGGER.warning("cur id" + id);
         }
-        
         
         Vector3fInfo coordinates = CellInfoReader.getCoordinates(cell);
         Vector3f rotation = CellInfoReader.getRotation(cell);

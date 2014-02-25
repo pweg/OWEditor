@@ -48,6 +48,7 @@ public class IDCellComponentProperties extends JPanel
     public IDCellComponentProperties() {
         // Initialize the GUI
         initComponents();
+        warningField.setText(BUNDLE.getString("ID_Cell_Component_Warning"));
     }
 
     /**
@@ -122,14 +123,20 @@ public class IDCellComponentProperties extends JPanel
 
         jLabel1 = new javax.swing.JLabel();
         idField = new javax.swing.JTextField();
+        warningField = new javax.swing.JTextArea();
 
         jLabel1.setText("ID:");
 
         idField.setEditable(false);
-        idField.setAutoscrolls(false);
         idField.setEnabled(false);
         idField.setFocusable(false);
-
+        warningField.setEnabled(false);
+        warningField.setEditable(false);
+        warningField.setColumns(20);
+        warningField.setRows(5);
+        warningField.setLineWrap(true);
+        warningField.setWrapStyleWord(true);
+        
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -138,7 +145,9 @@ public class IDCellComponentProperties extends JPanel
                 .addContainerGap()
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(idField, javax.swing.GroupLayout.PREFERRED_SIZE, 294, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup()
+                .addComponent(idField, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(warningField, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(62, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -148,13 +157,14 @@ public class IDCellComponentProperties extends JPanel
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(idField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(warningField)
                 .addContainerGap(269, Short.MAX_VALUE))
         );
-    }// </editor-fold>    
-//GEN-END:initComponents
+    }// </editor-fold>//GEN-END:initComponents
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField idField;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JTextArea warningField;
     // End of variables declaration//GEN-END:variables
 }

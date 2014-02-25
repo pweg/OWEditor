@@ -127,7 +127,7 @@ public class GUIEventManager implements GUIObserverInterface{
         coordinates.y = y;
         
         String name = cell.getName();
-        name = ac.cnm.createCopyName(ac.sm, id, name);
+        name = ac.cnm.createCopyName(ac.sm.getSession(), id, name);
         
         Vector3fInfo coords = CellInfoReader.getCoordinates(cell);
         coordinates = ac.ct.transformCoordinatesBack(cell, (float)x, 
@@ -136,6 +136,7 @@ public class GUIEventManager implements GUIObserverInterface{
         //Do not change order of this, or this could lead to some problems
         //if the server is faster than the addTranslation command.
         ac.ltm.addTranslation(name, coordinates);
+        ac.bm.addCopyWhiteList(name);
         ac.sc.paste(cell, name);        
     }
 
@@ -160,7 +161,8 @@ public class GUIEventManager implements GUIObserverInterface{
         
         Vector3f coordinates = CellInfoReader.getCoordinates(cell);
         String name = cell.getName() ;
-        name = ac.cnm.createUndoName(name);
+        name = ac.cnm.createUndoName(ac.sm.getSession(), id, name);
+        LOGGER.warning("UNDO REMOVAL: y "+ coordinates.y + " z " +coordinates.z);
         
         float y = coordinates.z;
         float z = coordinates.y;
@@ -175,12 +177,23 @@ public class GUIEventManager implements GUIObserverInterface{
 
     @Override
     public void undoObjectCreation() throws Exception{
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        long id = ac.bm.getUndoID();
+        LOGGER.warning("UNDOING UNDO ID " +id);
+        
+        if(id == -1)
+            throw new ServerCommException();
+        notifyRemoval(id);
     }
 
     @Override
     public void redoObjectCreation() throws Exception{
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        long id = ac.bm.getRedoID();
+        LOGGER.warning("Redoing undo id" + id);
+        
+        if(id == -1)
+            throw new ServerCommException();
+        
+        undoRemoval(id);
     }
 
     @Override
