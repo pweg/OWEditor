@@ -19,7 +19,10 @@ package org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter.compon
 
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -34,9 +37,18 @@ import org.jdesktop.wonderland.client.cell.properties.CellPropertiesEditor;
 import org.jdesktop.wonderland.client.cell.properties.annotation.PropertiesFactory;
 import org.jdesktop.wonderland.client.cell.properties.spi.PropertiesFactorySPI;
 import org.jdesktop.wonderland.client.content.ContentImportManager;
-import org.jdesktop.wonderland.client.jme.content.AbstractContentImporter;
+import org.jdesktop.wonderland.client.login.LoginManager;
+import org.jdesktop.wonderland.client.login.ServerSessionManager;
 import org.jdesktop.wonderland.common.cell.state.CellComponentServerState;
 import org.jdesktop.wonderland.common.cell.state.CellServerState;
+import org.jdesktop.wonderland.modules.contentrepo.client.ContentRepositoryRegistry;
+import org.jdesktop.wonderland.modules.contentrepo.client.ui.modules.ArtContentCollection;
+import org.jdesktop.wonderland.modules.contentrepo.client.ui.modules.ModuleContentCollection;
+import org.jdesktop.wonderland.modules.contentrepo.client.ui.modules.ModuleRootContentCollection;
+import org.jdesktop.wonderland.modules.contentrepo.common.ContentCollection;
+import org.jdesktop.wonderland.modules.contentrepo.common.ContentNode;
+import org.jdesktop.wonderland.modules.contentrepo.common.ContentRepositoryException;
+import org.jdesktop.wonderland.modules.contentrepo.common.ContentResource;
 import org.jdesktop.wonderland.modules.oweditor.common.TestCellComponentServerState;
 
 /**
@@ -62,6 +74,8 @@ public class TestCellComponentProperties extends JPanel
     private String newImageURL = null;
     private BufferedImage image = null;
     private ContentImportManager cim = null;
+    
+    private String imgString = "img_";
     
     
     private String lastDirRep = "";
@@ -124,29 +138,32 @@ public class TestCellComponentProperties extends JPanel
                 imageInfo.setText("No image url stored");
                 return;
             }
-            File file = new File(originalImageURL);
-            
             
             try {
-                //AssetURI c = new AssetURI(originalImageURL);
-                image = ImageIO.read(file);
+                ContentNode fileNode = getFileRoot(originalImageURL);
+                //InputStream is = ((ContentResource) fileNode).getInputStream();
+                //image = ImageIO.read(is);
+                //is.close();
                 
-                if(image != null){
-                    imageInfo.setText("Image present "+image.getWidth() + "x"+
-                        image.getHeight());
-                }else{
-                    imageInfo.setText("Image not present");
-                }
-            } catch (IOException ex) {
-                Logger.getLogger(TestCellComponentProperties.class.getName()).log(Level.SEVERE, null, ex);
+                if(fileNode != null){
+                 LOGGER.warning("not null "+ fileNode.getName());
             }
+                
+                
+               // InputStream is = ((ContentResource) fileNode).getInputStream();
+                //image = ImageIO.read(is);
+            } catch (ContentRepositoryException ex) {
+                LOGGER.log(Level.SEVERE, "Problem getting the file root", ex);
+            } //catch (IOException ex) {
+               // LOGGER.log(Level.SEVERE, "could not read input stream", ex);
+           // }
+            
             
             if(image == null){
-                LOGGER.warning("File not null" + file.getName() + " " + file.length());
-            }
-            
-            //image = ImageTranslator.StringToImage(originalImageURL);
-            
+                LOGGER.warning("Image is null");
+            }else{
+                imageInfo.setText(originalImageURL);
+            }      
             
         }
     }
@@ -345,7 +362,7 @@ public class TestCellComponentProperties extends JPanel
                 
                 newImageURL = uploadContent(chooser.getSelectedFile());
                 
-                LOGGER.warning(newImageURL);
+                LOGGER.warning("New URL IS "+ newImageURL);
                 //newImage = "Glgal";
                 
                 if (editor != null ) {
@@ -360,25 +377,114 @@ public class TestCellComponentProperties extends JPanel
     }//GEN-LAST:event_fileButtonActionPerformed
     
     
-    public String uploadContent(File inputFile) throws IOException {
+    /*public String uploadContent(File inputFile) throws IOException {
         
-        String extension = "";
+        String name = "";
 
         int i = inputFile.getName().lastIndexOf('.');
         if (i > 0) {
-            extension = inputFile.getName().substring(i+1);
+            name = inputFile.getName().substring(i+1);
             
         }
-        LOGGER.warning(extension + " "  + inputFile.getName());
+        LOGGER.warning(name + " "  + inputFile.getName());
         
         final AbstractContentImporter importer = 
-                (AbstractContentImporter) cim.getContentImporter(extension, true);
+                (AbstractContentImporter) cim.getContentImporter(name, true);
         if (importer == null) {
             LOGGER.severe("No importer found for " + inputFile.getName());
             throw new IOException("No importer found for " + inputFile.getName());
         }
         return importer.uploadContent(inputFile);
+    }*/
+    
+    public String uploadContent(File file) throws IOException{
+        String name = imgString + file.getName();
+        
+        try {
+            ContentNode fileNode = getFileRoot(name);
+            
+            if(fileNode == null){
+                LOGGER.warning("FILE NODE == 0");
+                return null;
+            }
+            
+            if(fileNode instanceof ContentResource){
+                InputStream is = new FileInputStream(file);
+
+                ((ContentResource) fileNode).put(is);
+                is.close();
+                
+                
+            }else {
+                LOGGER.warning("Could not instanciate file root");
+            }
+        } catch (ContentRepositoryException ex) {
+            LOGGER.log(Level.SEVERE, "Could not get to file root", ex);
+        }
+        LOGGER.warning(name + " "  + file.getName());
+        return name;
     }
+    
+    /**
+     * Returns the root directory for all PDF files, pdf/ under the user's
+     * WebDav directory.
+     * @param filename The name, the file should have on the server.
+     * @return The content collection
+     * @throws org.jdesktop.wonderland.modules.contentrepo.common.ContentRepositoryException
+     */
+    public ContentNode getFileRoot(String filename) throws ContentRepositoryException {
+
+        // Fetch the user's root using the current primary server. It should
+        // be ok to use the primary server at this point
+        ContentRepositoryRegistry r = ContentRepositoryRegistry.getInstance();
+        ServerSessionManager session = LoginManager.getPrimary();
+
+        // Try to find the pdf/ directory if it exists, otherwise, create it
+        ContentCollection root = r.getRepository(session).getSystemRoot();
+        
+        if(root instanceof ArtContentCollection){
+            LOGGER.warning("ARt");
+        }else if (root instanceof ModuleContentCollection){
+            LOGGER.warning("Module");
+        }else if (root instanceof ModuleRootContentCollection){
+            LOGGER.warning("module root");
+        }
+        
+        LOGGER.warning("Can write: "+root.canWrite());
+        
+        for( ContentNode n : root.getChildren()){
+            LOGGER.warning(n.getName());
+            if(n instanceof ContentResource)
+                LOGGER.warning("Resource");
+            else if (n instanceof ContentCollection)
+                LOGGER.warning("Collection");
+        }
+        
+        ContentNode imgRoot = root.getChild("img");
+        if (imgRoot == null) {
+            LOGGER.warning("IMG root is null");
+                imgRoot = root.createChild("img", ContentNode.Type.COLLECTION);
+        }
+        if(imgRoot == null)
+            return null;
+        
+        if(imgRoot instanceof ContentCollection){
+            LOGGER.warning("img root is collection");
+        }else if (imgRoot instanceof ContentResource)
+            LOGGER.warning("img root is resource");
+        
+        
+        
+        ContentNode node = root.getChild(filename);
+        if (node == null) {
+            node = (ContentNode) root.createChild(filename, ContentNode.Type.RESOURCE);
+        } else if (!(node instanceof ContentResource)) {
+            node.getParent().removeChild(filename);
+            node = (ContentNode) root.createChild(filename, ContentNode.Type.RESOURCE);
+        }
+        return node;
+    }
+    
     
     public File downloadContent(String url){
         return null;
