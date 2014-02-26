@@ -49,4 +49,10 @@ public class WindowToMenu implements IWindowToMenu{
         wc.repaint();
     }
 
+    @Override
+    public void selectAllShapes() {
+        wc.graphic.selectAllShapes();
+        wc.repaint();
+    }
+
 }

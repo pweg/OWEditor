@@ -42,12 +42,28 @@ public class UndoBar extends JToolBar{
         undo.setFocusable(false);
         redo.setFocusable(false);
     }
+    
+    public void setUndoEnabled(boolean b){
+        undo.setEnabled(b);
+    }
+    
+    public void setRedoEnabled(boolean b){
+        redo.setEnabled(b);
+    }
 
     private void undo(ActionEvent evt) {
+        undo.setEnabled(false);
+        redo.setEnabled(false);
         frame.window.undo();
+        undo.setEnabled(true);
+        redo.setEnabled(true);
     }
     private void redo(ActionEvent evt) {
+        undo.setEnabled(false);
+        redo.setEnabled(false);
         frame.window.redo();
+        undo.setEnabled(true);
+        redo.setEnabled(true);
      }
 
 }

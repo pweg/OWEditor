@@ -12,10 +12,10 @@ import java.util.ResourceBundle;
 import java.util.logging.Logger;
 
 import javax.imageio.ImageIO;
+import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JProgressBar;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.GUISettings;
@@ -45,7 +45,6 @@ public class ImportFrame extends javax.swing.JFrame {
     private int boundsX = 0;
     private int boundsY = 0;
     private boolean working = false;
-    private JProgressBar progressBar = null;
     private NumberFormat doubleFormat = null;
     
     private String[] serverList = null;
@@ -56,6 +55,7 @@ public class ImportFrame extends javax.swing.JFrame {
     private Color normalColor = Color.black;
     
     private Font normalFont = null;
+    private JDialog loadingDialog = null;
             
     /**
      * Creates new form NewJFrame
@@ -68,11 +68,8 @@ public class ImportFrame extends javax.swing.JFrame {
         this.fc = fc;
         
         initComponents();
+        loadingDialog = new LoadingDialog(this);
         reset();
-        
-        progressBar = new JProgressBar();
-        progressBar.setIndeterminate(false);
-        progressBar.setVisible(false);
         
         
     }
@@ -553,9 +550,10 @@ public class ImportFrame extends javax.swing.JFrame {
                 moduleNameField.setText(tokens[0]);
             }
             
-            //progressBar.setVisible(true);
+            loadingDialog.setVisible(true);
+            loadingDialog.setLocationRelativeTo(this);
             int[] bounds = fc.window.loadKMZ(path);
-            //progressBar.setVisible(false);
+            loadingDialog.setVisible(false);
                 
             //if bounds are wrong or null
             if(bounds == null || bounds.length<2){
@@ -703,8 +701,6 @@ public class ImportFrame extends javax.swing.JFrame {
         }
        
         
-        //progressBar.setVisible(true); //progressBar.setVisible(false);
-        
         if(fc.window.importCheckName(module_name, server_name)){
             Object[] options = {BUNDLE.getString("Overwrite"),
                     BUNDLE.getString("Cancel")};
@@ -721,9 +717,13 @@ public class ImportFrame extends javax.swing.JFrame {
                 return;
             }
         }
-        
-         boolean ret_val = fc.window.importKMZ(name, image_url, x, y, z, 
+
+        loadingDialog.setVisible(true);
+        loadingDialog.setLocationRelativeTo(this);
+        this.setEnabled(false);
+        boolean ret_val = fc.window.importKMZ(name, image_url, x, y, z, 
                  rot_x, rot_y, rot_z, scale);
+        loadingDialog.setVisible(false);
          
          if(!ret_val)
              showError("Could not import.", "Import Error");
@@ -751,7 +751,8 @@ public class ImportFrame extends javax.swing.JFrame {
             return;
         }
         
-        super.setVisible(b);    
+        super.setVisible(b);   
+        setLocationRelativeTo(fc.mainframe);
         resetLabels();
         
         

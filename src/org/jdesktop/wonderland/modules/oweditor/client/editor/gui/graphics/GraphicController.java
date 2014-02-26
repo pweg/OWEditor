@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.ITransformedObject;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.DraggingObject;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.ShapeObject;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.IWindowToGraphic;
 
 public class GraphicController implements IGraphicToWindow{
@@ -151,6 +152,13 @@ public class GraphicController implements IGraphicToWindow{
     @Override
     public void updateShapeImage(long id, BufferedImage img) {
         sm.getShape(id).setImage(img);
+    }
+
+    @Override
+    public void selectAllShapes() {
+        ArrayList<ShapeObject> shapes = sm.getShapes();
+        for(ShapeObject shape : shapes)
+            ssm.setSelected(shape, true);
     }
 
 }

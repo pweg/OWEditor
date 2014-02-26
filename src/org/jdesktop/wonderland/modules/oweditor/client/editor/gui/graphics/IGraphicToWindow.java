@@ -132,4 +132,9 @@ public interface IGraphicToWindow {
      */
     public void updateShapeImage(long id, BufferedImage img);
 
+    /**
+     * Selects all existing shapes.
+     */
+    public void selectAllShapes();
+
 }

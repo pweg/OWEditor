@@ -40,12 +40,20 @@ public class MenuController implements IMenu{
         //get the strings for the submenus.
         String menuFile = BUNDLE.getString("MenuFile");
         String menuEdit = BUNDLE.getString("MenuEdit");
-        String menuInsert = BUNDLE.getString("MenuImport");
+        String menuImport = BUNDLE.getString("MenuImport");
         
         //create the functions
         final Callable<Void> newItem = new Callable<Void>() {
             public Void call(){
                 function();
+                return null;
+            }
+        };
+        
+        final Callable<Void> selectAll = new Callable<Void>(){
+            public Void call(){
+                window.selectAllShapes();
+                setItemsEnabledSelection(true);
                 return null;
             }
         };
@@ -98,12 +106,20 @@ public class MenuController implements IMenu{
         /*
          * Top menu items.
          */
+        //file menu
         topBuilder.addItem(menuFile, "New", newItem, KeyStroke.getKeyStroke(
                 KeyEvent.VK_N, ActionEvent.CTRL_MASK), false);
+        
+        //edit menu
+        topBuilder.addItem(menuEdit, 
+                BUNDLE.getString("MenuSelectAll"), selectAll, 
+                KeyStroke.getKeyStroke(
+                KeyEvent.VK_A, ActionEvent.CTRL_MASK), 
+                false);
         topBuilder.addItem(menuEdit, 
                 BUNDLE.getString("MenuCopy"), copy, 
                 KeyStroke.getKeyStroke(
-                KeyEvent.VK_C, ActionEvent.CTRL_MASK), false);
+                KeyEvent.VK_C, ActionEvent.CTRL_MASK), true);
         topBuilder.addItem(menuEdit, 
                 BUNDLE.getString("MenuCut"), cut, 
                 KeyStroke.getKeyStroke(
@@ -116,7 +132,9 @@ public class MenuController implements IMenu{
                 BUNDLE.getString("MenuRotate"), rotate, null, false);
         topBuilder.addItem(menuEdit, 
                 BUNDLE.getString("MenuScale"), scale, null, false);
-        topBuilder.addItem(menuInsert, 
+        
+        //import menu
+        topBuilder.addItem(menuImport, 
                 BUNDLE.getString("MenuAddKMZ"), addkmz, null, false);
         
         /*
