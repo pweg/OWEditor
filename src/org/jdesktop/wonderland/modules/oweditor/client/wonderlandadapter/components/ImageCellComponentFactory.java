@@ -24,7 +24,7 @@ import org.jdesktop.wonderland.common.cell.state.CellComponentServerState;
 import org.jdesktop.wonderland.modules.oweditor.common.ImageCellComponentServerState;
 
 /**
- * The Cell Component Factory for the Image Cell Component.
+ * The Cell Component Factory for the Test Cell Component.
  * 
  * @author Jordan Slott <jslott@dev.java.net>
  */
@@ -50,6 +50,7 @@ public class ImageCellComponentFactory implements CellComponentFactorySPI {
 
     /**
      * {@inheritDoc}
+     * @param <>> The Serverstate
      */
     public <T extends CellComponentServerState> T getDefaultCellComponentServerState() {
         ImageCellComponentServerState state = new ImageCellComponentServerState();

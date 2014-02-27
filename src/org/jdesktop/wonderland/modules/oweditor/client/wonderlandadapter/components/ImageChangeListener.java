@@ -15,6 +15,6 @@ import org.jdesktop.wonderland.client.cell.Cell;
  */
 public interface ImageChangeListener{
 
-    public void imageChanged(BufferedImage img, Cell cell);
+    public void imageChanged(String img, String dir, Cell cell);
     
 }

@@ -1,32 +1,41 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * Project Wonderland
+ *
+ * Copyright (c) 2004-2010, Sun Microsystems, Inc., All Rights Reserved
+ *
+ * Redistributions in source code form must reproduce the above
+ * copyright and this condition.
+ *
+ * The contents of this file are subject to the GNU General Public
+ * License, Version 2 (the "License"); you may not use this file
+ * except in compliance with the License. A copy of the License is
+ * available at http://www.opensource.org/licenses/gpl-license.php.
+ *
+ * Sun designates this particular file as subject to the "Classpath"
+ * exception as provided by Sun in the License file that accompanied
+ * this code.
  */
-
 package org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter.components;
 
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-import java.util.logging.Logger;
 import org.jdesktop.wonderland.client.cell.Cell;
 import org.jdesktop.wonderland.client.cell.CellComponent;
 import org.jdesktop.wonderland.common.cell.state.CellComponentClientState;
 import org.jdesktop.wonderland.modules.oweditor.common.ImageCellComponentClientState;
 
 /**
- *
- * @author Patrick
+ * Client-side Test Cell Component.
+ * 
+ * @author Jordan Slott <jslott@dev.java.net>
  */
 public class ImageCellComponent extends CellComponent {
 
-    // The image of the component.
-    private BufferedImage img = null;
-    private Cell cell = null;
+    // The image.
+    private String image = null;
+    private String dir = null;
     
+    private Cell cell = null;    
     private ArrayList<ImageChangeListener> listenerList = null; 
-     private static final Logger LOGGER =
-            Logger.getLogger(ImageCellComponentClientState.class.getName());
 
     /**
      * Constructor, takes the Cell associated with the Cell Component.
@@ -35,6 +44,7 @@ public class ImageCellComponent extends CellComponent {
      */
     public ImageCellComponent(Cell cell) {
         super(cell);
+        
         this.cell = cell;
         listenerList = new ArrayList<ImageChangeListener>();
     }
@@ -44,25 +54,39 @@ public class ImageCellComponent extends CellComponent {
      */
     @Override
     public void setClientState(CellComponentClientState clientState) {
-        LOGGER.warning("client STATE set");
         super.setClientState(clientState);
-        img = ((ImageCellComponentClientState) clientState).getImage();
+        image = ((ImageCellComponentClientState) clientState).getImage();
+        dir = ((ImageCellComponentClientState) clientState).getDir();
         
         for(ImageChangeListener listener : listenerList){
-            listener.imageChanged(img, cell);
+            listener.imageChanged(image, dir, cell);
         }
-    }
-    
-    public void registerChangeListener(ImageChangeListener listener){
-        listenerList.add(listener);
     }
 
     /**
-     * Returns the Image.
+     * Returns the image name.
      * 
-     * @return The buffered image.
+     * @return The image name
      */
-    public BufferedImage getImage() {
-        return img;
+    public String getImage() {
+        return image;
+    }
+    
+    /**
+     * Returns the image directory.
+     * 
+     * @return The directory
+     */
+    public String getDir(){
+        return dir;
+    }
+    
+    /**
+     * Registers a image change listener.
+     * 
+     * @param listener The listener
+     */
+    public void registerChangeListener(ImageChangeListener listener){
+        listenerList.add(listener);
     }
 }

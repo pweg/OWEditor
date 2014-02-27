@@ -1,48 +1,73 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * Project Wonderland
+ *
+ * Copyright (c) 2004-2010, Sun Microsystems, Inc., All Rights Reserved
+ *
+ * Redistributions in source code form must reproduce the above
+ * copyright and this condition.
+ *
+ * The contents of this file are subject to the GNU General Public
+ * License, Version 2 (the "License"); you may not use this file
+ * except in compliance with the License. A copy of the License is
+ * available at http://www.opensource.org/licenses/gpl-license.php.
+ *
+ * Sun designates this particular file as subject to the "Classpath"
+ * exception as provided by Sun in the License file that accompanied
+ * this code.
  */
-
 package org.jdesktop.wonderland.modules.oweditor.common;
 
-import java.awt.image.BufferedImage;
-import java.util.logging.Logger;
 import org.jdesktop.wonderland.common.cell.state.CellComponentClientState;
 
 /**
+ * Client state for Test Cell Component.
  *
- * @author Patrick
+ * @author Jordan Slott <jslott@dev.java.net>
  */
 public class ImageCellComponentClientState extends CellComponentClientState {
-    
-     private static final Logger LOGGER =
-            Logger.getLogger(ImageCellComponentClientState.class.getName());
 
-    // The text of the tooltip
-    private BufferedImage img = null;
+    // The image path
+    private String image;
+    private String dir;
 
     /** Default constructor */
     public ImageCellComponentClientState() {
     }
 
     /**
-     * Returns the stored image.
+     * Returns the image name.
      *
-     * @return The image.
+     * @return The image name.
      */
-    public BufferedImage getImage() {
-        return img;
+    public String getImage() {
+        return image;
+    }
+    
+    /**
+     * Returns the image directory.
+     * 
+     * @return The directory.
+     */
+    public String getDir(){
+        return dir;
     }
 
     /**
-     * Sets the image.
+     * Sets the image name.
      *
-     * @param img The tooltip text
+     * @param image The image name.
      */
-    public void setImage(BufferedImage img) {
-        LOGGER.warning("buffered image change");
-        this.img = img;
+    public void setImage(String image) {
+        this.image = image;
     }
     
+    /**
+     * Sets the image directory.
+     * 
+     * @param dir The directory
+     */
+    public void setDir(String dir){
+        this.dir = dir;
+    }
 }
+

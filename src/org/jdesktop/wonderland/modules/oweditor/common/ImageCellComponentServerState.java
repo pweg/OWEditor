@@ -1,12 +1,23 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * Project Wonderland
+ *
+ * Copyright (c) 2004-2010, Sun Microsystems, Inc., All Rights Reserved
+ *
+ * Redistributions in source code form must reproduce the above
+ * copyright and this condition.
+ *
+ * The contents of this file are subject to the GNU General Public
+ * License, Version 2 (the "License"); you may not use this file
+ * except in compliance with the License. A copy of the License is
+ * available at http://www.opensource.org/licenses/gpl-license.php.
+ *
+ * Sun designates this particular file as subject to the "Classpath"
+ * exception as provided by Sun in the License file that accompanied
+ * this code.
  */
 
 package org.jdesktop.wonderland.modules.oweditor.common;
 
-import java.util.logging.Logger;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -14,76 +25,66 @@ import org.jdesktop.wonderland.common.cell.state.CellComponentServerState;
 import org.jdesktop.wonderland.common.cell.state.annotation.ServerState;
 
 /**
+ * Server state for Test Cell Component.
  *
- * @author Patrick
+ * @author Jordan Slott <jslott@dev.java.net>
  */
-@XmlRootElement(name="image-cell-component")
+@XmlRootElement(name="test-cell-component")
 @ServerState
 public class ImageCellComponentServerState extends CellComponentServerState {
 
-    /*@XmlElement(name = "text")
-    private String text = null;
-
-    @XmlElement(name = "timeout")
-    private int timeout = -1;*/
+    // The image path
+    @XmlElement(name = "image")
+    private String image = null;
     
-     private static final Logger LOGGER =
-            Logger.getLogger(ImageCellComponentServerState.class.getName());
-    
+    @XmlElement(name = "directory")
+    private String dir = null;
 
-    @XmlElement(name = "repImage")
-    private String img;
-
-    /** Default constructor is needed for JAXB */
+    /** Default constructor */
     public ImageCellComponentServerState() {
-        img = "";
     }
 
     @Override
     public String getServerComponentClassName() {
-        return "org.jdesktop.wonderland.modules.oweditor.server.ImageCellComponentMO";
+        return "org.jdesktop.wonderland.modules.oweditor.server" +
+               ".TestCellComponentMO";
     }
-    
-    public void setImage(String img){
-        LOGGER.warning("SERVERSTATE set image IN STATE");
-        this.img = img;
-        if(img != null)
-            LOGGER.warning("SERVERVSTATE set image not null");
-    }
-    
+
+    /**
+     * Returns the image name.
+     *
+     * @return The image name
+     */
     @XmlTransient
-    public String getImage(){
-        LOGGER.warning("SERVERSTATE GET IMAGE");
-        return img;
+    public String getImage() {
+        return image;
     }
     
-    /*public static class RepImage implements Serializable {
+    /**
+     * Returns the image directory.
+     * 
+     * @return The directory 
+     */
+    @XmlTransient
+    public String getDir(){
+        return dir;
+    }
 
-        /* The x dimension or radius of the bounds *
-        public BufferedImage img = null;
-
-        /** Default constructor *
-        public RepImage() {
-        }
-
-        public RepImage(BufferedImage img) {
-            this.img = img;
-        }
-        
-        public void writeObject(ObjectOutputStream out) throws IOException {
-            out.defaultWriteObject();
-            if(img != null)
-                ImageIO.write(img, "png", out); // png is lossless
-        }
-
-        public void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
-            in.defaultReadObject();
-            img = ImageIO.read(in);
-        }
-    }*/
-
-    /*@XmlTransient public String getText() { return text; }
-    public void setText(String text) { this.text = text; }
-    @XmlTransient public int getTimeout() { return timeout; }
-    public void setTimeout(int timeout) { this.timeout = timeout; }*/
+    /**
+     * Sets the image name.
+     *
+     * @param image The image name
+     */
+    public void setImage(String image) {
+        this.image = image;
+    }
+    
+    /**
+     * Sets the image directory.
+     * 
+     * @param dir The directory.
+     */
+    public void setDir(String dir){
+        this.dir = dir;
+    }
 }

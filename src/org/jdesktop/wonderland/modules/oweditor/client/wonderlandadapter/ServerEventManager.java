@@ -186,7 +186,7 @@ public class ServerEventManager {
             
         if(imageComponent != null){
             //LOGGER.warning(imageComponent.getID());
-            img = imageComponent.getImage();
+            //img = imageComponent.getImage();
         }
         
         IDCellComponent idComponent = cell.getComponent(IDCellComponent.class);
@@ -288,7 +288,7 @@ public class ServerEventManager {
         }
         
         imageComponent.registerChangeListener(imageListener);
-        BufferedImage img = imageComponent.getImage();                
+        /*BufferedImage img = imageComponent.getImage();                
         
         if(img == null){
             LOGGER.warning("IMAGE IS NULL");
@@ -296,7 +296,7 @@ public class ServerEventManager {
         }
         else{
             LOGGER.warning("IMAGE IS NOT NULL");
-        }
+        }*/
     }
     
 
@@ -312,13 +312,13 @@ public class ServerEventManager {
     
     class ImageListener extends Marshaller.Listener implements ImageChangeListener{
 
-        public void imageChanged(BufferedImage img, Cell cell) {
+        public void imageChanged(String img,String dir, Cell cell) {
             long id = CellInfoReader.getID(cell);
             id = ac.bm.getOriginalID(id);
                 
                for(IAdapterObserver observer : observers){
                     LOGGER.warning("image change" + img);
-                    observer.notifyImageChange(id, img);
+                    //observer.notifyImageChange(id, img);
                }
                 
                if(img == null)

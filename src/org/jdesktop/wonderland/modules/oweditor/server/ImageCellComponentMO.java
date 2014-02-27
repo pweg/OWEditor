@@ -1,82 +1,91 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * Project Wonderland
+ *
+ * Copyright (c) 2004-2010, Sun Microsystems, Inc., All Rights Reserved
+ *
+ * Redistributions in source code form must reproduce the above
+ * copyright and this condition.
+ *
+ * The contents of this file are subject to the GNU General Public
+ * License, Version 2 (the "License"); you may not use this file
+ * except in compliance with the License. A copy of the License is
+ * available at http://www.opensource.org/licenses/gpl-license.php.
+ *
+ * Sun designates this particular file as subject to the "Classpath"
+ * exception as provided by Sun in the License file that accompanied
+ * this code.
  */
-
 package org.jdesktop.wonderland.modules.oweditor.server;
 
-import org.jdesktop.wonderland.modules.oweditor.common.ImageCellComponentServerState;
-import java.awt.image.BufferedImage;
-import java.util.logging.Logger;
 import org.jdesktop.wonderland.common.cell.ClientCapabilities;
 import org.jdesktop.wonderland.common.cell.state.CellComponentClientState;
 import org.jdesktop.wonderland.common.cell.state.CellComponentServerState;
 import org.jdesktop.wonderland.modules.oweditor.common.ImageCellComponentClientState;
-import org.jdesktop.wonderland.modules.oweditor.common.ImageTranslator;
+import org.jdesktop.wonderland.modules.oweditor.common.ImageCellComponentServerState;
 import org.jdesktop.wonderland.server.cell.CellComponentMO;
 import org.jdesktop.wonderland.server.cell.CellMO;
 import org.jdesktop.wonderland.server.comms.WonderlandClientID;
 
 /**
+ * The server-side Test Cell Component.
  *
- * @author Patrick
  */
 public class ImageCellComponentMO extends CellComponentMO {
 
-    private BufferedImage img = null;
+    // The image
+    private String image = null;
+    private String dir = null;
+
     
-     private static final Logger LOGGER =
-            Logger.getLogger(ImageCellComponentServerState.class.getName());
-    
+    /**
+     * Constructor, takes the CellMO associated with the Cell Component.
+     *
+     * @param cell The CellMO associated with this component
+     */
     public ImageCellComponentMO(CellMO cell) {
         super(cell);
     }
 
     /**
      * {@inheritDoc}
+     * @return The client class
      */
     @Override
     protected String getClientClass() {
         return "org.jdesktop.wonderland.modules.oweditor.client" +
-               ".wonderlandadapter.components.ImageCellComponent";
+               ".wonderlandadapter.components.TestCellComponent";
     }
 
     /**
      * {@inheritDoc}
+     * @return ClientState
      */
     @Override
     public CellComponentClientState getClientState(
             CellComponentClientState state, WonderlandClientID clientID,
             ClientCapabilities capabilities) {
 
-            LOGGER.warning("MO GETCLIENTSTATE");
         if (state == null) {
             state = new ImageCellComponentClientState();
-            LOGGER.warning("client state created");
         }
-        ((ImageCellComponentClientState) state).setImage(img);
+        ((ImageCellComponentClientState) state).setImage(image);
+        ((ImageCellComponentClientState) state).setDir(dir);
         return super.getClientState(state, clientID, capabilities);
     }
 
     /**
      * {@inheritDoc}
+     * @return ServerState
      */
     @Override
     public CellComponentServerState getServerState(
             CellComponentServerState state) {
         
-            LOGGER.warning("MO GETSERVERSTATE");
         if (state == null) {
-            LOGGER.warning("MO No serverstate1");
             state = new ImageCellComponentServerState();
-            LOGGER.warning("MO No serverstate2");
         }
-        if(img != null && state != null){
-           String imgStr = ImageTranslator.ImageToString(img);
-           ((ImageCellComponentServerState) state).setImage(imgStr);
-        }
-        LOGGER.warning("MO GETSERVERSTATE 2");
+        ((ImageCellComponentServerState) state).setImage(image);
+        ((ImageCellComponentServerState) state).setDir(dir);
         return super.getServerState(state);
     }
 
@@ -85,11 +94,8 @@ public class ImageCellComponentMO extends CellComponentMO {
      */
     @Override
     public void setServerState(CellComponentServerState state) {
-        LOGGER.warning("MO set serverstate");
         super.setServerState(state);
-        
-        String imgStr = ((ImageCellComponentServerState) state).getImage();
-        img = ImageTranslator.StringToImage(imgStr);
+        image = ((ImageCellComponentServerState) state).getImage();
+        dir = ((ImageCellComponentServerState) state).getDir();
     }
-    
 }
