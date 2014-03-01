@@ -50,7 +50,7 @@ public class ImageCellComponentFactory implements CellComponentFactorySPI {
 
     /**
      * {@inheritDoc}
-     * @param <>> The Serverstate
+     * @param The Serverstate
      */
     public <T extends CellComponentServerState> T getDefaultCellComponentServerState() {
         ImageCellComponentServerState state = new ImageCellComponentServerState();

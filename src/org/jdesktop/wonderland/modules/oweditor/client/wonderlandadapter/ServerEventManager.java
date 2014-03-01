@@ -185,8 +185,23 @@ public class ServerEventManager {
         ImageCellComponent imageComponent = cell.getComponent(ImageCellComponent.class);
             
         if(imageComponent != null){
-            //LOGGER.warning(imageComponent.getID());
-            //img = imageComponent.getImage();
+            LOGGER.warning("image component is not null");
+            String imgName = imageComponent.getImage();
+            String imgDir = imageComponent.getDir();
+            
+            if(imgName != null && imgDir != null){
+                try {
+                    img = ac.fm.downloadImage(imgName, imgDir);
+                } catch (Exception ex) {
+                    LOGGER.log(Level.SEVERE, "Could not get image", ex);
+
+                    try {
+                        ac.sc.deleteComponent(id, ImageCellComponent.class);
+                    } catch (ServerCommException ex1) {
+                        LOGGER.log(Level.SEVERE, "Could not delete image component", ex1);
+                    }
+                }
+            }
         }
         
         IDCellComponent idComponent = cell.getComponent(IDCellComponent.class);
@@ -276,10 +291,7 @@ public class ServerEventManager {
         ac.ltm.invokeLateTransform(ac.sc, id, name);
     }
     
-    public void imageComponentCreated(Cell cell){
-        long id = CellInfoReader.getID(cell);
-        id = ac.bm.getOriginalID(id);
-        
+    public void imageComponentCreated(Cell cell){        
         ImageCellComponent imageComponent = 
                 cell.getComponent(ImageCellComponent.class);
         
@@ -288,15 +300,15 @@ public class ServerEventManager {
         }
         
         imageComponent.registerChangeListener(imageListener);
-        /*BufferedImage img = imageComponent.getImage();                
+        String imgName = imageComponent.getImage();
+        String imgDir = imageComponent.getDir();
         
-        if(img == null){
+        if(imgName == null || imgDir == null){
             LOGGER.warning("IMAGE IS NULL");
-            ac.ltm.invokeLateImage(ac.sc, id);
+            //ac.ltm.invokeLateImage(ac.sc, id);
+            return;
         }
-        else{
-            LOGGER.warning("IMAGE IS NOT NULL");
-        }*/
+        imageChangedEvent(imgName, imgDir, cell);        
     }
     
 
@@ -310,21 +322,33 @@ public class ServerEventManager {
             observer.setServerList(serverList);
     }
     
+    public void imageChangedEvent(String imgName, String imgDir, Cell cell){
+        long original_id = CellInfoReader.getID(cell);
+        long id = ac.bm.getOriginalID(original_id);
+        
+        BufferedImage img = null;
+        
+        try{
+            img = ac.fm.downloadImage(imgName, imgDir);
+        }catch(Exception e){
+            img = null;
+            try {
+                ac.sc.deleteComponent(original_id, ImageCellComponent.class);
+            } catch (ServerCommException ex) {
+                LOGGER.log(Level.SEVERE, "Could not delete image component", ex);
+            }
+        }
+        
+        for(IAdapterObserver observer : observers){
+            observer.notifyImageChange(id, img);
+        }
+        LOGGER.warning("IMAGE IS NOT NULL");
+    }
+    
     class ImageListener extends Marshaller.Listener implements ImageChangeListener{
 
-        public void imageChanged(String img,String dir, Cell cell) {
-            long id = CellInfoReader.getID(cell);
-            id = ac.bm.getOriginalID(id);
-                
-               for(IAdapterObserver observer : observers){
-                    LOGGER.warning("image change" + img);
-                    //observer.notifyImageChange(id, img);
-               }
-                
-               if(img == null)
-                   LOGGER.warning("LISTENER IMG == NULL");
-               else
-                   LOGGER.warning("LISTENER IMG != NULL");
+        public void imageChanged(String img, String dir, Cell cell) {
+            imageChangedEvent(img, dir, cell);
         }
     }
     

@@ -24,7 +24,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -38,18 +37,11 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import org.jdesktop.wonderland.client.cell.properties.CellPropertiesEditor;
 import org.jdesktop.wonderland.client.cell.properties.annotation.PropertiesFactory;
 import org.jdesktop.wonderland.client.cell.properties.spi.PropertiesFactorySPI;
-import org.jdesktop.wonderland.client.content.ContentExportManager;
-import org.jdesktop.wonderland.client.content.ContentImportManager;
-import org.jdesktop.wonderland.client.jme.content.AbstractContentImporter;
 import org.jdesktop.wonderland.client.login.LoginManager;
 import org.jdesktop.wonderland.client.login.ServerSessionManager;
 import org.jdesktop.wonderland.common.cell.state.CellComponentServerState;
 import org.jdesktop.wonderland.common.cell.state.CellServerState;
-import org.jdesktop.wonderland.modules.contentrepo.client.ContentRepository;
 import org.jdesktop.wonderland.modules.contentrepo.client.ContentRepositoryRegistry;
-import org.jdesktop.wonderland.modules.contentrepo.client.ui.modules.ArtContentCollection;
-import org.jdesktop.wonderland.modules.contentrepo.client.ui.modules.ModuleContentCollection;
-import org.jdesktop.wonderland.modules.contentrepo.client.ui.modules.ModuleRootContentCollection;
 import org.jdesktop.wonderland.modules.contentrepo.common.ContentCollection;
 import org.jdesktop.wonderland.modules.contentrepo.common.ContentNode;
 import org.jdesktop.wonderland.modules.contentrepo.common.ContentRepositoryException;
@@ -82,8 +74,6 @@ public class ImageCellComponentProperties extends JPanel
     private BufferedImage image = null;
     
     private String imgString = "img";
-    
-    
     private String lastDirRep = "";
     
     /** Creates new form TestComponentProperties */
@@ -101,7 +91,7 @@ public class ImageCellComponentProperties extends JPanel
      * @inheritDoc()
      */
     public String getDisplayName() {
-        return "Test_Cell_Component";
+        return BUNDLE.getString("Image_Cell_Component");
     }
 
     /**
@@ -151,18 +141,10 @@ public class ImageCellComponentProperties extends JPanel
                     imageInfo.setText("No image was found");
                     return;
                 }
-                if(fileNode instanceof ContentResource){
-                    LOGGER.warning("is instance of resource");
-                }
                 
                 InputStream is = ((ContentResource) fileNode).getInputStream();
                 image = ImageIO.read(is);
-                is.close();
-                
-                if(fileNode != null){
-                 LOGGER.warning("not null "+ fileNode.getName());
-            }
-                
+                is.close();                
                 
                // InputStream is = ((ContentResource) fileNode).getInputStream();
                 //image = ImageIO.read(is);
@@ -173,13 +155,10 @@ public class ImageCellComponentProperties extends JPanel
             }
             
             
-            if(image == null){
-                LOGGER.warning("Image is null");
-            }else{
+            if(image != null){
                 imageInfo.setText(originalImageName);
                 repaint();
             }      
-            
         }
     }
 

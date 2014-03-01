@@ -8,16 +8,13 @@ package org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter;
 
 import com.jme.math.Quaternion;
 import com.jme.math.Vector3f;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.imageio.ImageIO;
-import javax.xml.bind.DatatypeConverter;
 import org.jdesktop.wonderland.client.cell.Cell;
 import org.jdesktop.wonderland.client.cell.CellCache;
 import org.jdesktop.wonderland.client.cell.CellEditChannelConnection;
@@ -247,7 +244,15 @@ public class ServerCommunication {
         connection.send(msg);
     }
     
-    public boolean addImage(long id, BufferedImage img) throws ServerCommException{
+    /**
+     * Adds a image component to a cell.
+     * 
+     * @param id The id of the cell.
+     * @param img The image file.
+     * @return true on success, false if the image component was not ready.
+     * @throws ServerCommException 
+     */
+    public boolean addImage(long id, File img) throws ServerCommException{
         CellCache cache = ac.sm.getCellCache();
         
         if (cache == null) {
@@ -268,60 +273,60 @@ public class ServerCommunication {
         ImageCellComponent imageComponent = cell.getComponent(ImageCellComponent.class);
         
         if(imageComponent == null){
-            addComponent(cell, ImageCellComponent.class);
+            addComponent(cell, ImageCellComponent.class, imagespi);
         }
-            LOGGER.warning("set image1");
-            CellServerState state = fetchCellServerState(cell);
+        
+        CellServerState state = fetchCellServerState(cell);
             
-            if(state == null){
-                LOGGER.warning("state null");
+        if(state == null){
+            LOGGER.warning("Cell Server State is null");
+            throw new ServerCommException();
+        }
+        
+        CellComponentServerState imgState = state.getComponentServerState(
+            ImageCellComponentServerState.class);
+            
+        if(imgState != null){
+                
+            if(img != null){
+                try {
+                    FileInfo info = new FileInfo();
+                    ac.fm.uploadImage(img, info);
+                        
+                    ((ImageCellComponentServerState) imgState).setImage(
+                        info.fileName);
+                    ((ImageCellComponentServerState) imgState).setDir(
+                        info.fileDir);
+                    
+
+                    HashSet<CellComponentServerState> compStateSet = new HashSet();
+                    compStateSet.add(imgState);
+                    sendServerUpdateState(cell, state, compStateSet);
+                 } catch (IOException ex) {
+                     LOGGER.log(Level.SEVERE, null, ex);
+                     throw new ServerCommException();
+                 } catch (Exception e){
+                     LOGGER.log(Level.SEVERE, null, e);
+                     throw new ServerCommException();
+                 }
+            }else{
+                LOGGER.warning("Image file is null");
                 throw new ServerCommException();
             }
-            
-                LOGGER.warning("fetching statre");
-            CellComponentServerState compState = state.getComponentServerState(
-                ImageCellComponentServerState.class);
-                LOGGER.warning("state fetched");
-            
-            if(compState != null){
-                LOGGER.warning("state not null");
-                
-                if(img != null){
-                    try {
-                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                        ImageIO.write(img, "jpg", baos);
-                        baos.flush();
-                        byte[] bimg = baos.toByteArray();
-                        baos.close();
-                        ((ImageCellComponentServerState) compState).setImage(DatatypeConverter.printBase64Binary(bimg));
-                     } catch (IOException ex) {
-                         Logger.getLogger(ImageCellComponentServerState.class.getName()).log(Level.SEVERE, null, ex);
-                     } catch (Exception e){
-                         Logger.getLogger(ImageCellComponentServerState.class.getName()).log(Level.SEVERE, "Something went wrong",e);
-                     }
-                }else
-                    ((ImageCellComponentServerState) compState).setImage(null);
-                
-                Set<CellComponentServerState> compStateSet = new HashSet();
-                compStateSet.add(compState);
-                        
-                
-                CellServerStateUpdateMessage msg = new CellServerStateUpdateMessage(
-                    cell.getCellID(), state, compStateSet);
-                
-                ResponseMessage response = cell.sendCellMessageAndWait(msg);
-                
-                if (response instanceof ErrorMessage) {
-            
-                    ErrorMessage em = (ErrorMessage) response;
-                    LOGGER.log(Level.WARNING, "Error updating cell: " +
-                            em.getErrorMessage(), em.getErrorCause());
-                }else
-                    LOGGER.warning("IMAGE SERVER SUCCESS");
-            }
-            return true;
+        }else{
+            return false;
+        }
+        return true;
     }
     
+    /**
+     * Adds an ID component to a cell. This is used for undo/redo.
+     * 
+     * @param cellID The current id of the cell, which should get 
+     * the component.
+     * @param origID The original id, the cell had before its first deletion.
+     * @throws ServerCommException 
+     */
     public void addIDComponent(long cellID, long origID) throws ServerCommException{
         CellCache cache = ac.sm.getCellCache();
         
@@ -342,7 +347,7 @@ public class ServerCommunication {
         
         IDCellComponent idComponent = cell.getComponent(IDCellComponent.class);
         if(idComponent == null){
-            addComponent(cell, IDCellComponent.class);
+            addComponent(cell, IDCellComponent.class, idspi);
         }
         CellServerState state = fetchCellServerState(cell);
             
@@ -356,8 +361,17 @@ public class ServerCommunication {
         if(compState != null){
                 
             ((IDCellComponentServerState) compState).setID(origID);
-                
-            Set<CellComponentServerState> compStateSet = new HashSet();
+            HashSet<CellComponentServerState> compStateSet = new HashSet();
+            compStateSet.add(compState);
+            sendServerUpdateState(cell, state, compStateSet);
+        }
+    }
+    
+ 
+    /*private void updateState(Cell cell, CellServerState state, 
+            CellComponentServerState compState) throws ServerCommException{
+        
+        Set<CellComponentServerState> compStateSet = new HashSet();
             compStateSet.add(compState);
             CellServerStateUpdateMessage msg = new CellServerStateUpdateMessage(
                 cell.getCellID(), state, compStateSet);
@@ -376,16 +390,56 @@ public class ServerCommunication {
                 ErrorMessage em = (ErrorMessage) response;
                 LOGGER.log(Level.WARNING, "Error updating cell: " +
                         em.getErrorMessage(), em.getErrorCause());
+                throw new ServerCommException();
             }
+    }*/
+    
+     /**
+     * Updates the cell compononts for a given cell
+     * 
+     * @param cell The cell to update.
+     * @param state The cell server state.
+     * @param compStateSet The component states, which should be updated.
+     * @throws ServerCommException 
+     */
+    private void sendServerUpdateState(Cell cell, CellServerState state, 
+            HashSet<CellComponentServerState> compStateSet) throws ServerCommException{
+        CellServerStateUpdateMessage msg = new CellServerStateUpdateMessage(
+            cell.getCellID(), state, compStateSet);
+             
+        ResponseMessage response = cell.sendCellMessageAndWait(msg);
+            
+        if(response == null){
+            LOGGER.warning("Received a null reply from cell with id " +
+                    cell.getCellID() + " with name " +
+                    cell.getName() + " setting component state.");
+           throw new ServerCommException();
+        }
+               
+        if (response instanceof ErrorMessage) {
+            
+            ErrorMessage em = (ErrorMessage) response;
+            LOGGER.log(Level.WARNING, "Error updating cell: " +
+                    em.getErrorMessage(), em.getErrorCause());
+            throw new ServerCommException();
         }
     }
     
-    public void addComponent(Cell cell, Class componentClass) throws ServerCommException{
+    /**
+     * Adds a component to a given cell.
+     * 
+     * @param cell The cell which should get the component.
+     * @param componentClass The component class.
+     * @param factory The component factory.
+     * @throws ServerCommException 
+     */
+    private void addComponent(Cell cell, Class componentClass, 
+            CellComponentFactorySPI factory) throws ServerCommException{
         
         if(cell.getComponent(componentClass) != null)
             return;
         
-        CellComponentServerState state = idspi.getDefaultCellComponentServerState();
+        CellComponentServerState state = factory.getDefaultCellComponentServerState();
         CellServerComponentMessage message =
             CellServerComponentMessage.newAddMessage(cell.getCellID(), state);
             
@@ -402,6 +456,7 @@ public class ServerCommunication {
         if (response instanceof CellServerComponentResponseMessage) {
             // If successful, add the component to the GUI by refreshing the
             // Cell that is selected.
+            LOGGER.warning("Component successfully created");
         }
         else if (response instanceof ErrorMessage) {
             // Log an error. Eventually we should display a dialog
@@ -416,8 +471,8 @@ public class ServerCommunication {
      * Deletes a component of a certein type from the cell.
      * 
      * @param id The id of the cell.
-     * @param componentClass The components class which should be deleted.
-     * @throws Exception 
+     * @param componentClass The components class which should be deleted. 
+     * @throws org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter.ServerCommException 
      */
     public void deleteComponent(long id, Class componentClass) throws ServerCommException{
         CellCache cache = ac.sm.getCellCache();
@@ -461,8 +516,6 @@ public class ServerCommunication {
         }
     }
     
-    
-    
      /**
      * Asks the server for the server state of the cell; returns null upon
      * error.
@@ -501,26 +554,5 @@ public class ServerCommunication {
         return state;
     }
     
-    private void sendServerUpdateState(Cell cell, CellServerState state, 
-            HashSet compStateSet) throws ServerCommException{
-        CellServerStateUpdateMessage msg = new CellServerStateUpdateMessage(
-            cell.getCellID(), state, compStateSet);
-             
-        ResponseMessage response = cell.sendCellMessageAndWait(msg);
-            
-        if(response == null){
-            LOGGER.warning("Received a null reply from cell with id " +
-                    cell.getCellID() + " with name " +
-                    cell.getName() + " setting component state.");
-           throw new ServerCommException();
-        }
-               
-        if (response instanceof ErrorMessage) {
-            
-            ErrorMessage em = (ErrorMessage) response;
-            LOGGER.log(Level.WARNING, "Error updating cell: " +
-                    em.getErrorMessage(), em.getErrorCause());
-        }
-    }
     
 }

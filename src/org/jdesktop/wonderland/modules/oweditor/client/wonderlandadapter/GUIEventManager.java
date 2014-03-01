@@ -1,19 +1,15 @@
 package org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter;
 
 import com.jme.math.Vector3f;
-import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.imageio.ImageIO;
 import org.jdesktop.wonderland.client.cell.Cell;
 import org.jdesktop.wonderland.client.cell.CellCache;
 import org.jdesktop.wonderland.common.cell.CellID;
 import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.GUIObserverInterface;
-import org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter.components.IDCellComponent;
 
 /**
  * This class is used to make updates the client makes in
@@ -213,13 +209,7 @@ public class GUIEventManager implements GUIObserverInterface{
             double z, double rotationX, double rotationY, double rotationZ, 
             double scale) throws Exception{
         
-        BufferedImage img = null;
-        
-        try {
-            img = ImageIO.read(new File(image_url));
-        } catch (IOException ex) {
-            LOGGER.log(Level.INFO, "Cannot read image file");
-        }
+        File img = new File(image_url);
         
         if(!importer.importToServer(name)){
             LOGGER.warning("Import to server failed.");
@@ -237,7 +227,9 @@ public class GUIEventManager implements GUIObserverInterface{
         Vector3f rotate = new Vector3f((float)rotationX, (float)rotationZ,
                 (float)rotationY);
         
-        ac.ltm.addImage(id, img);
+        if(img != null)
+            ac.ltm.addImage(id, img);
+        
         try{
             ac.sc.translate(id, translate);
         }catch(ServerCommException e){

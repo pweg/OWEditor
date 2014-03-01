@@ -13,7 +13,7 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IAd
  */
 public class WonderlandAdapterController implements AdapterControllerMainControllerInterface{
     
-    
+    protected FileManager fm = null;
     protected GUIEventManager go = null;
     protected CoordinateTranslator ct = null;
     protected ServerEventManager um = null;
@@ -41,6 +41,7 @@ public class WonderlandAdapterController implements AdapterControllerMainControl
         csl = new CellStatusListener(um);
         sm = new SessionManager();
         bm = new BackupManager(sm);
+        fm = new FileManager();
         CellManager.getCellManager().addCellStatusChangeListener(csl);
     }
 

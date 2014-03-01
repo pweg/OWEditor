@@ -7,7 +7,7 @@
 package org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter;
 
 import com.jme.math.Vector3f;
-import java.awt.image.BufferedImage;
+import java.io.File;
 import java.util.HashMap;
 import java.util.logging.Logger;
 
@@ -23,14 +23,14 @@ public class LateTransformationManager {
     private HashMap<String, Vector3f> copyTranslation = null;
     private HashMap<Long, Vector3f> rotationMap = null;
     private HashMap<Long, Float> scaleMap = null;
-    private HashMap<Long, BufferedImage> imageMap = null;
+    private HashMap<Long, File> imageMap = null;
     
     public LateTransformationManager(){
         translationMap = new HashMap<Long, Vector3f>();
         rotationMap = new HashMap<Long, Vector3f>();
         scaleMap = new HashMap<Long, Float>();
         copyTranslation  = new HashMap<String, Vector3f>();
-        imageMap = new HashMap<Long, BufferedImage>();
+        imageMap = new HashMap<Long, File>();
     }
     
     /**
@@ -166,8 +166,9 @@ public class LateTransformationManager {
     }
     
     public boolean invokeLateImage(ServerCommunication server,long id){
+        Logger.getLogger(LateTransformationManager.class.getName()).warning("late image invokation");
         
-        BufferedImage img = imageMap.get(id);
+        File img = imageMap.get(id);
         Logger.getLogger(LateTransformationManager.class.getName()).warning("IMAGE MAP "+ imageMap.size()+ " " + id);
         
         if(img == null)
@@ -261,7 +262,7 @@ public class LateTransformationManager {
      * @param id The cells id.
      * @param img The image.
      */
-    public void addImage(long id, BufferedImage img) {
+    public void addImage(long id, File img) {
         imageMap.put(id, img);
     }
     

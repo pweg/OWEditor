@@ -26,7 +26,7 @@ public class IDCellComponentFactory implements CellComponentFactorySPI {
      * {@inheritDoc}
      */
     public String getDisplayName() {
-        return "ID cell comp";
+        return BUNDLE.getString("ID_Cell_Component");
     }
 
     /**

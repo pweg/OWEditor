@@ -6,7 +6,6 @@
 
 package org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter.components;
 
-import java.awt.image.BufferedImage;
 import org.jdesktop.wonderland.client.cell.Cell;
 
 /**

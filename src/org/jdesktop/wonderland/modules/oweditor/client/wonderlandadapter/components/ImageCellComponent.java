@@ -44,7 +44,6 @@ public class ImageCellComponent extends CellComponent {
      */
     public ImageCellComponent(Cell cell) {
         super(cell);
-        
         this.cell = cell;
         listenerList = new ArrayList<ImageChangeListener>();
     }

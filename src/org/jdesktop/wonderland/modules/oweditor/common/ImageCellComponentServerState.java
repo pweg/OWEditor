@@ -29,7 +29,7 @@ import org.jdesktop.wonderland.common.cell.state.annotation.ServerState;
  *
  * @author Jordan Slott <jslott@dev.java.net>
  */
-@XmlRootElement(name="test-cell-component")
+@XmlRootElement(name="image-cell-component")
 @ServerState
 public class ImageCellComponentServerState extends CellComponentServerState {
 
@@ -47,7 +47,7 @@ public class ImageCellComponentServerState extends CellComponentServerState {
     @Override
     public String getServerComponentClassName() {
         return "org.jdesktop.wonderland.modules.oweditor.server" +
-               ".TestCellComponentMO";
+               ".ImageCellComponentMO";
     }
 
     /**
