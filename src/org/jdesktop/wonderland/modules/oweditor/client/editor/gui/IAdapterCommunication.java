@@ -131,5 +131,7 @@ public interface IAdapterCommunication {
     public void undo();
     
     public void redo();
+
+    public boolean imageExists(String name);
     
 }

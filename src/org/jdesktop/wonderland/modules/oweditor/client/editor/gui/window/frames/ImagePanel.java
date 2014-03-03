@@ -9,10 +9,7 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.GUISettings;
 
 
 public class ImagePanel extends JPanel{
-
-    /**
-     * 
-     */
+    
     private static final long serialVersionUID = 1L;
     private static final int MARGIN = GUISettings.IMGMARGINPANEL;
     
@@ -26,6 +23,7 @@ public class ImagePanel extends JPanel{
         this.img = img;
     }
     
+    @Override
     public void paint(Graphics g) {
         super.paint(g);
         if(img != null){

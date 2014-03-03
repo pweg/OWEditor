@@ -84,5 +84,9 @@ public class WindowToFrame implements IWindowToFrame{
         return dm.getServerList();
     }
 
+    public boolean imageExists(String name) {
+        return wc.adapter.imageExists(name);
+    }
+
 
 }

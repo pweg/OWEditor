@@ -250,4 +250,8 @@ public class AdapterCommunication implements IAdapterCommunication{
             redo();
         }
     }
+
+    public boolean imageExists(String name) {
+        return goi.imageFileExists(name);
+    }
 }

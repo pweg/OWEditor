@@ -2,10 +2,12 @@ package org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter;
 
 import com.jme.math.Vector3f;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import org.jdesktop.wonderland.client.cell.Cell;
 import org.jdesktop.wonderland.client.cell.CellCache;
 import org.jdesktop.wonderland.common.cell.CellID;
@@ -209,7 +211,6 @@ public class GUIEventManager implements GUIObserverInterface{
             double z, double rotationX, double rotationY, double rotationZ, 
             double scale) throws Exception{
         
-        File img = new File(image_url);
         
         if(!importer.importToServer(name)){
             LOGGER.warning("Import to server failed.");
@@ -227,8 +228,14 @@ public class GUIEventManager implements GUIObserverInterface{
         Vector3f rotate = new Vector3f((float)rotationX, (float)rotationZ,
                 (float)rotationY);
         
-        if(img != null)
-            ac.ltm.addImage(id, img);
+        if(image_url != null && !image_url.equals("")){
+            try{
+                File img = new File(image_url);
+                ImageIO.read(img);
+                ac.ltm.addImage(id, img);
+            } catch (IOException e) {
+            }
+        }
         
         try{
             ac.sc.translate(id, translate);
@@ -271,5 +278,9 @@ public class GUIEventManager implements GUIObserverInterface{
         }
         return cell;
         
+    }
+
+    public boolean imageFileExists(String name) {
+        return ac.fm.imageFileExists(name);
     }
 }

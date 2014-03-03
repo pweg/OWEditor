@@ -62,21 +62,6 @@ public interface IWindowToFrame {
             double scale);
 
     /**
-     * Used during a conflict resolution. Copies an
-     * existing model.
-     * 
-     * @param id The id of the model, which will be copied.
-     *
-    public void importConflictCopy(long id);
-
-    /**
-     * Overwrites a module during conflict resolution.
-     * 
-     * @param id The id of the model, which will be copied.
-     *
-    public void importConflictOverwrite(long id);*/
-
-    /**
      * Draws all the shapes.
      * 
      * @param g2 A graphics2d instance.
@@ -84,11 +69,29 @@ public interface IWindowToFrame {
      */
     public void drawShapes(Graphics2D g2, AffineTransform at);
 
-
+    /**
+     * Initiates an undo.
+     */
     public void undo();
     
+    /**
+     * Initiates a redo.
+     */
     public void redo();
 
+    /**
+     * Returns the serverlist.
+     * 
+     * @return  A string array containing all server.
+     */
     public String[] getServerList();
+
+    /**
+     * Searches, if an image with the name exists on the servern.
+     * 
+     * @param name The name of the image file.
+     * @return True, if it exists, false otherwise.
+     */
+    public boolean imageExists(String name);
 
 }

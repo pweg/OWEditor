@@ -33,6 +33,9 @@ public class MainFrame extends JFrame {
 
     /**
      * Creates a new Window frame instance and sets it up.
+     * 
+     * @param mainScrollPanel The main scroll panel.
+     * @param frame The frame controller.
      */
     public MainFrame(JScrollPane mainScrollPanel, FrameController frame){
         

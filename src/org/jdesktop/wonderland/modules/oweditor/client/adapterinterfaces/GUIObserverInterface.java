@@ -121,6 +121,14 @@ public interface GUIObserverInterface {
      * @throws java.lang.Exception
      */
     public boolean importCheckName(String moduleName, String server) throws Exception;
+    
+    /**
+     * Checks if an image file already exists.
+     * 
+     * @param name The name of the image.
+     * @return True, if the image already exists, false otherwise.
+     */
+    public boolean imageFileExists(String name);
 
     /**
      * Imports the laded KMZ file and creates a new module for

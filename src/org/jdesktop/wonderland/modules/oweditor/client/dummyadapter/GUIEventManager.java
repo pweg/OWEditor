@@ -188,4 +188,8 @@ public class GUIEventManager implements GUIObserverInterface{
     public void cancelImport() {
         //There is nothing to do here.
     }
+
+    public boolean imageFileExists(String name) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }
