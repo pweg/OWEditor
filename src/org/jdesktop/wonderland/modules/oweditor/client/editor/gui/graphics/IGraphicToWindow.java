@@ -8,6 +8,12 @@ import java.awt.image.BufferedImage;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.ITransformedObject;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.IWindowToGraphic;
 
+/**
+ * Interface for the window package.
+ * 
+ * @author Patrick
+ *
+ */
 public interface IGraphicToWindow {
     
     /**

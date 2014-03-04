@@ -128,7 +128,7 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
         ic.window.paintMouseCoords(p.x, p.y);
         writeShapeName(p);
         
-        if(strategy == null){//translation of objects
+        if(strategy == null && mode == NOMODE){
             if(ic.graphic.isMouseInObject(p)){
                 
                 //creates the dragging shapes
@@ -138,10 +138,12 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
                 strategy.mousePressed(p);
             }else
                 return;
+        }else if (strategy == null){
+            return;
         }
         //mlPanStrategy needs the panel coordinates in order to
         //work properly.
-        if(strategy instanceof mlPanStrategy)
+        else if(strategy instanceof mlPanStrategy)
             p = e.getPoint();
         
         strategy.mouseDragged(p);

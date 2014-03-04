@@ -34,6 +34,7 @@ public final class LoadingDialog extends JDialog{
         
         initComponents();
         setLocationRelativeTo(frame);
+        setVisible(false);
     }
     
     private void initComponents(){

@@ -271,6 +271,12 @@ public class ShapeManager {
         shape.setScale(dataObject.getScale());
     }
     
+    /**
+     * Renames a given shape.
+     * 
+     * @param id The id of the shape.
+     * @param name The new name.
+     */
     public void renameShape(long id, String name){
         ShapeObject shape = getShape(id);
         shape.setName(name);
@@ -286,31 +292,41 @@ public class ShapeManager {
         long id = dataObject.getID();
         int x = dataObject.getX();
         int y = dataObject.getY();
+        double z = dataObject.getZf();
         int width = dataObject.getWidth();
         int height = dataObject.getHeight();
         String name = dataObject.getName();
         double rotation = dataObject.getRotation();
         double scale = dataObject.getScale();
         BufferedImage img = dataObject.getImage();
-        
-        if(name.length() > 20){
-            name = name.substring(0, 18)+ "...";
-        }
+
         if(dataObject.getType() == IDataObject.AVATAR){
             ShapeObject shape = factory.createShapeObject(ShapeFactory.AVATAR, 
-                    x, y, width, height, id, name, rotation, scale, img);
+                    x, y, z, width, height, id, name, rotation, scale, img);
             writeLock.lock();
-            try {
+            try {             
                 avatarShapes.add(shape);
             } finally {
                 writeLock.unlock();
             }
         }else{
             ShapeObject shape = factory.createShapeObject(ShapeFactory.RECTANGLE, 
-                    x, y, width, height, id, name, rotation, scale, img);
+                    x, y, z, width, height, id, name, rotation, scale, img);
             writeLock.lock();
             try {
-                shapes.add(shape);
+                boolean found = false;
+
+                //This is for an initial z sorted list.
+                //Could be done with a better algorithm though.
+                for(int i=0; i<shapes.size();i++){
+                    if(shapes.get(i).getZ() >= z){
+                        shapes.add(i, shape);
+                        found = true;
+                        break;                        
+                    }
+                }
+                if(!found)
+                    shapes.add(shape);
             } finally {
                 writeLock.unlock();
             }

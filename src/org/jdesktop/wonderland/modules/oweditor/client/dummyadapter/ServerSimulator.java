@@ -89,7 +89,7 @@ public class ServerSimulator {
                 (float)1.80, (float)1.80, 
                 "Block 3", false);
         createObject( 
-                (float)0.0, (float)0.0, (float)0.0, 
+                (float)0.0, (float)0.0, (float)4.0, 
                 0, 20,90,
                 1, 
                 (float)1.00, (float)2.00, 
@@ -102,11 +102,18 @@ public class ServerSimulator {
                 "Block2", false);
 
         createObject(
-                (float)-2.9455893, (float)0.7263716,(float)1.000591, 
+                (float)-2.9455893, (float)0.7263716,(float)2.000591, 
                 0, 0,0,
                 1, 
                 (float)0.50, (float)2.00, 
-                "Block2", false);
+                "verylongnamehasthisblockfortestingBlock2", false);
+        
+        /*createObject(
+                -20,-10,0,
+                30,45,45,10,
+                (float)5, (float)1,
+                "Testblock", false );*/
+        
         
         
         /*

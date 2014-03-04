@@ -8,6 +8,13 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shape
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.ITransformationBorder;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.IWindowToGraphic;
 
+/**
+ * package internal mediator, which controls the 
+ * communication between the classes.
+ * 
+ * @author Patrick
+ *
+ */
 public interface IInternalMediator {
     
     /**

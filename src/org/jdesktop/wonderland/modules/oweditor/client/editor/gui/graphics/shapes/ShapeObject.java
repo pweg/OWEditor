@@ -12,6 +12,14 @@ import java.awt.image.BufferedImage;
  *
  */
 public abstract class ShapeObject extends SimpleShapeObject{
+    
+
+    /**
+     * Returns the z coordinate.
+     * 
+     * @return The z coordinate.
+     */
+    public abstract double getZ();
 
     /**
      * Returns the shape id.
@@ -70,19 +78,45 @@ public abstract class ShapeObject extends SimpleShapeObject{
     /**
      * Returns true, if the shapes name is abbreviated,
      * false otherwise.
+     * 
      * @return true, if the name is abbreviated,
      * false otherwise.
      */
     public abstract boolean isNameAbbreviated();
     
+    /**
+     * Returns the rotation.
+     * 
+     * @return The rotation.
+     */
     public abstract double getRotation();
     
+    /**
+     * Returns the scale.
+     * 
+     * @return The scale.
+     */
     public abstract double getScale();
     
+    /**
+     * Copies a given object.
+     * 
+     * @return A shape object.
+     */
     public abstract ShapeObject clone();
     
+    /**
+     * Sets the rotation.
+     * 
+     * @param rotation The rotation.
+     */
     public abstract void setRotation(double rotation);
     
+    /**
+     * Sets the scale
+     * 
+     * @param scale The scale.
+     */
     public abstract void setScale(double scale);
     
     /**
@@ -95,6 +129,11 @@ public abstract class ShapeObject extends SimpleShapeObject{
      */
     public abstract void set(int x, int y, int width, int height);
 
+    /**
+     * Sets the representational image.
+     * 
+     * @param img The image.
+     */
     public abstract void setImage(BufferedImage img);
     
     

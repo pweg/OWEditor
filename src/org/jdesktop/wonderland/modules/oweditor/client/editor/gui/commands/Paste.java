@@ -2,6 +2,7 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.commands;
 
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.GUIObserverInterface;
 
@@ -48,12 +49,13 @@ public class Paste implements Command{
     public void undo(GUIObserverInterface goi)  throws Exception{
         int failcount = 0;
         
-        for(long id: ids){
+        for (Iterator<Long> iterator = ids.iterator(); iterator.hasNext();) {
             try{
                 goi.undoObjectCreation();
             }catch(Exception e){
                 failcount++;
             }
+            iterator.next();
         }
         
         //the command only failed, when every operation failed!
@@ -65,12 +67,13 @@ public class Paste implements Command{
     public void redo(GUIObserverInterface goi)  throws Exception{
         int failcount = 0;
         
-        for(long id: ids){
+        for (Iterator<Long> iterator = ids.iterator(); iterator.hasNext();) {
             try{
                 goi.redoObjectCreation();
             }catch(Exception e){
                 failcount++;
             }
+            iterator.next();
         }
         
         //the command only failed, when every operation failed!

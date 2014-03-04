@@ -38,6 +38,8 @@ public class ShapeRectangle extends ShapeObject{
     private double rotation = 0;
     private double scale = 0;
     
+    public double z = 0;
+    
     private BufferedImage img = null;
     
     //These variables are used to determine, where the name of the object should be.
@@ -56,18 +58,19 @@ public class ShapeRectangle extends ShapeObject{
      * @param name the name of the shape.
      * @param img the representational image.
      */
-    public ShapeRectangle(int x, int y, int width, int height, long id, String name,
+    public ShapeRectangle(int x, int y, double z,
+            int width, int height, long id, String name,
             double rotation, double scale, BufferedImage img){
         
         if(scale == 0)
             scale = 1;
-        
         originalShape = new Rectangle (x, y, width, height);
         this.name = name;
         this.id = id;
         this.rotation = rotation;
         this.scale = scale;
         this.img = img;
+        this.z = z;
     }
     
     @Override
@@ -99,8 +102,11 @@ public class ShapeRectangle extends ShapeObject{
         //changes color when selected.
         if(isSelected){
             g.setPaint(GUISettings.SELECTIONCOLOR);
-            g.draw(printShape); 
+        }else{
+            g.setPaint(GUISettings.OBJECTNAMECOLOR);
         }
+        g.draw(printShape); 
+        
         paintImage(g, at);
     }
     
@@ -289,6 +295,11 @@ public class ShapeRectangle extends ShapeObject{
     }
     
     @Override
+    public double getZ(){
+        return z;
+    }
+    
+    @Override
     public int getWidth() {
         return originalShape.width;
     }
@@ -327,7 +338,7 @@ public class ShapeRectangle extends ShapeObject{
 
     @Override
     public ShapeObject clone() {
-        ShapeObject shape = new ShapeRectangle(originalShape.x, originalShape.y, 
+        ShapeObject shape = new ShapeRectangle(originalShape.x, originalShape.y, z,
                 originalShape.width, originalShape.height, id, name, rotation, scale, img);
         return shape;
     }

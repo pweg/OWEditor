@@ -29,6 +29,13 @@ public interface ITransformedObject {
      * @return the y coordinate.
      */
     public int getY();
+
+    /**
+     * Returns the z coordinate of the object in double.
+     * 
+     * @return the z coordinate.
+     */
+    public float getZf();
     
     /**
      * Returns the rotation of the object.
@@ -88,5 +95,6 @@ public interface ITransformedObject {
      * is stored.
      */
     public BufferedImage getImage();
+
 
 }

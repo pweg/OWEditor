@@ -32,6 +32,8 @@ public class ShapeEllipse extends ShapeObject{
     private double rotation = 0;
     private double scale = 0;
     
+    private double z = 0;
+    
     //These variables are used to determine, where the name of the object should be.
     private int nameBoundsX = GUISettings.NAMEPOSITIONINX;
     private int nameBoundsAbove = GUISettings.NAMEPOSITIONINY;
@@ -48,7 +50,8 @@ public class ShapeEllipse extends ShapeObject{
      * @param id the shape id.
      * @param name the name of the shape.
      */
-    public ShapeEllipse(int x, int y, int width, int height, long id, String name,
+    public ShapeEllipse(int x, int y, double z, int width,
+            int height, long id, String name,
             double rotation, double scale, BufferedImage img){
         
         originalShape = new Rectangle (x, y, width, height);
@@ -57,6 +60,7 @@ public class ShapeEllipse extends ShapeObject{
         this.rotation = rotation;
         this.scale = scale;
         this.img = img;
+        this.z = z;
     }
     
     @Override
@@ -194,6 +198,11 @@ public class ShapeEllipse extends ShapeObject{
     @Override
     public int getY() {
         return originalShape.y;
+    }
+    
+    @Override
+    public double getZ(){
+        return z;
     }
     
     @Override

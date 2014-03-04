@@ -9,6 +9,7 @@ public class TransformedObject implements ITransformedObject{
 
     private int x = 0;
     private int y = 0;
+    private float z = 0;
     private int width = 0;
     private int height = 0;
     private String name = "";
@@ -19,12 +20,13 @@ public class TransformedObject implements ITransformedObject{
     private byte type = IDataObject.RECTANGLE;
     private BufferedImage img = null;
     
-    public TransformedObject(long id, int x, int y, int width, int height,
+    public TransformedObject(long id, int x, int y, float z, int width, int height,
             double scale, double rotation, String name, byte type, 
             BufferedImage img){
         this.id = id;
         this.x = x;
         this.y = y;
+        this.z = z;
         this.rotation = rotation;
         this.scale = scale;
         this.width = width;
@@ -43,6 +45,11 @@ public class TransformedObject implements ITransformedObject{
     @Override
     public int getY() {
         return y;
+    }
+    
+    @Override
+    public float getZf(){
+        return z;
     }
 
     @Override

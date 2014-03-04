@@ -66,6 +66,11 @@ public class Avatar extends ShapeObject{
     public int getY() {
         return (int)originalShape.getY();
     }
+    
+    @Override
+    public double getZ(){
+        return 0;
+    }
 
     @Override
     public int getWidth() {

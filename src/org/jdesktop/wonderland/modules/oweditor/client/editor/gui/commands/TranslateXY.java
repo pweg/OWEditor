@@ -2,10 +2,8 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.commands;
 
 import java.awt.Point;
 import java.util.ArrayList;
-import java.util.logging.Logger;
 
 import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.GUIObserverInterface;
-import org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter.GUIEventManager;
 
 public class TranslateXY implements Command{
 

@@ -43,6 +43,7 @@ public class WindowToFrame implements IWindowToFrame{
         wc.graphic.createDraggingRect(width, height, 0, 0, rotation, scale);
         
         stateInput state = new stateImport(wc, dm);
+        
         state.setBounds(width, height);
         wc.inputInterface.setState(state);
         

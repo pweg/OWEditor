@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ResourceBundle;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.logging.Logger;
 
 import javax.imageio.ImageIO;
@@ -549,6 +551,7 @@ public class ImportFrame extends javax.swing.JFrame {
                 moduleNameField.setText(tokens[0]);
             }
             
+            loadingDialog = new LoadingDialog(this);
             //a new thread is created because loading blocks
             //the frame thread.
             new Thread(){
@@ -568,12 +571,16 @@ public class ImportFrame extends javax.swing.JFrame {
                     okButton.setEnabled(true);
                     locationButton.setEnabled(true);
                     modelLoaded = true;
+                    
+                    //wait for loading dialog to be ready.
+                    while(!loadingDialog.isVisible()){
+                        yield();
+                    }
                     loadingDialog.dispose();
                     
                 }
             
             }.start();
-            loadingDialog = new LoadingDialog(this);
             loadingDialog.setLocationRelativeTo(this);
             loadingDialog.setVisible(true);
             
@@ -753,25 +760,34 @@ public class ImportFrame extends javax.swing.JFrame {
         final double rot_zf = rot_z;
         final double scalef = scale;
 
+        loadingDialog = new LoadingDialog(this);
+        
         new Thread(){
                 @Override
                 public void run(){
                     boolean ret_val = fc.window.importKMZ(name, image_url_fin, 
                             xf, yf, zf, 
                              rot_xf, rot_yf, rot_zf, scalef);
+                    
+                    //wait for loading dialog to be ready.
+                    while(!loadingDialog.isVisible()){
+                        yield();
+                    }
+                    
                     loadingDialog.dispose();
 
-                     if(!ret_val)
+                     if(!ret_val){
                          showError("Could not import.", "Import Error");
+                         return;
+                     }
 
                     working = false;
                     setVisible(false);
                 }
         }.start();
         
-        loadingDialog = new LoadingDialog(this);
-        loadingDialog.setLocationRelativeTo(this);
         loadingDialog.setVisible(true);
+        loadingDialog.setLocationRelativeTo(this);
     } 
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {
