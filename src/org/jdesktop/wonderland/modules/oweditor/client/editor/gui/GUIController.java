@@ -52,6 +52,7 @@ public class GUIController implements IGUIController{
     
     private void registerInterfaces(){
         window.registerInputInterface(input.getFrameInterface());
+        ac.registerWindow(window);
         
         input.registerGraphicInterface(window.getGraphicInputInterface());
         input.registerFrameInterface(window.getInputInterface());

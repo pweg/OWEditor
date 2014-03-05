@@ -7,6 +7,11 @@ import javax.swing.JToolBar;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.frames.FrameController;
 
+/**
+ * This toolbar is used for the undo and redo actions.
+ * 
+ * @author Patrick
+ */
 public class UndoBar extends JToolBar{
     
     /**
@@ -39,6 +44,8 @@ public class UndoBar extends JToolBar{
         
         this.add(undo);
         this.add(redo);
+        redo.setEnabled(false);
+        undo.setEnabled(false);
         undo.setFocusable(false);
         redo.setFocusable(false);
     }
@@ -52,18 +59,10 @@ public class UndoBar extends JToolBar{
     }
 
     private void undo(ActionEvent evt) {
-        undo.setEnabled(false);
-        redo.setEnabled(false);
         frame.window.undo();
-        undo.setEnabled(true);
-        redo.setEnabled(true);
     }
     private void redo(ActionEvent evt) {
-        undo.setEnabled(false);
-        redo.setEnabled(false);
         frame.window.redo();
-        undo.setEnabled(true);
-        redo.setEnabled(true);
      }
 
 }

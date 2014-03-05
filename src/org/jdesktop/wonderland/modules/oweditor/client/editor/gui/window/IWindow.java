@@ -112,7 +112,21 @@ public interface IWindow extends GraphicForwardInterface{
      */
     public void registerDataManager(IDataToGUI dm);
 
+    /**
+     * Sets the undo option enabled/disabled.
+     * 
+     * @param b If true, undo is enabled, if false
+     * undo is disabled.
+     */
+    public void setUndoEnabled(boolean b);
 
+    /**
+     * Sets the redo option enabled/disabled.
+     * 
+     * @param b If true, redo is enabled, if false
+     * redo is disabled.
+     */
+    public void setRedoEnabled(boolean b);
     
 
 }

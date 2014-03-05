@@ -97,4 +97,14 @@ public class Window extends GraphicForward implements IWindow {
         this.frame = frame;
     }
 
+    @Override
+    public void setUndoEnabled(boolean b) {
+      this.frame.setUndoEnabled(b);
+    }
+
+    @Override
+    public void setRedoEnabled(boolean b) {
+        this.frame.setRedoEnabled(b);
+    }
+
 }

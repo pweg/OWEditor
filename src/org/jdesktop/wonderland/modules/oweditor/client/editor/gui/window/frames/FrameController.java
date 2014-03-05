@@ -114,6 +114,17 @@ public class FrameController implements IFrame{
         return mainframe.getBottomToolBar();
     }
 
+    @Override
+    public void setUndoEnabled(boolean b) {
+        mainframe.undoBar.setUndoEnabled(b);
+    }
+
+    @Override
+    public void setRedoEnabled(boolean b) {
+        mainframe.undoBar.setRedoEnabled(b);
+        
+    }
+
 
 
 }

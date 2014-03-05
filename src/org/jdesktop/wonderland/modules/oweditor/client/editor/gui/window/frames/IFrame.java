@@ -111,4 +111,20 @@ public interface IFrame {
      */
     public BottomToolBar getBottomToolBar();
 
+    /**
+     * Enables/disables the undo option.
+     * 
+     * @param b If true, the undo bar is enabled,
+     * if false it is disabled.
+     */
+    public void setUndoEnabled(boolean b);
+   
+    /**
+     * Enables/disables the redo option.
+     * 
+     * @param b If true, the redo bar is enabled,
+     * if false it is disabled.
+     */
+    public void setRedoEnabled(boolean b);
+
 }

@@ -15,6 +15,7 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.commands.Rotat
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.commands.Scale;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.commands.Import;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.commands.TranslateXY;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.IWindow;
 
 /**
  * This class is used to forward events from the gui to the 
@@ -26,6 +27,7 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.commands.Trans
 public class AdapterCommunication implements IAdapterCommunication{
 
     private GUIObserverInterface goi = null;
+    private IWindow window = null;
     private ArrayList<Command> undoList = null;
     private ArrayList<Command> redoList = null;
     private IDataToGUI dm;
@@ -54,6 +56,15 @@ public class AdapterCommunication implements IAdapterCommunication{
         this.dm = dm;
     }
     
+    /**
+     * Registers a window instance.
+     * 
+     * @param window The instance.
+     */
+    public void registerWindow(IWindow window){
+        this.window = window;
+    }
+    
     @Override
     public void setObjectRemoval(ArrayList<Long> ids){
         Command command = new Delete(ids);
@@ -64,6 +75,8 @@ public class AdapterCommunication implements IAdapterCommunication{
             Logger.getLogger(AdapterCommunication.class.getName()).log(Level.WARNING, null, ex);
         }
         redoList.clear();
+        window.setUndoEnabled(true);
+        window.setRedoEnabled(false);
     }
     
     @Override
@@ -87,6 +100,8 @@ public class AdapterCommunication implements IAdapterCommunication{
             Logger.getLogger(AdapterCommunication.class.getName()).log(Level.WARNING, null, ex);
         }
         redoList.clear();
+        window.setUndoEnabled(true);
+        window.setRedoEnabled(false);
     }
     
     @Override
@@ -104,6 +119,8 @@ public class AdapterCommunication implements IAdapterCommunication{
             Logger.getLogger(AdapterCommunication.class.getName()).log(Level.WARNING, null, ex);
         }
         redoList.clear();
+        window.setUndoEnabled(true);
+        window.setRedoEnabled(false);
     }
 
     @Override
@@ -131,6 +148,8 @@ public class AdapterCommunication implements IAdapterCommunication{
             Logger.getLogger(AdapterCommunication.class.getName()).log(Level.WARNING, null, ex);
         }
         redoList.clear();
+        window.setUndoEnabled(true);
+        window.setRedoEnabled(false);
     }
 
     @Override
@@ -158,6 +177,8 @@ public class AdapterCommunication implements IAdapterCommunication{
             Logger.getLogger(AdapterCommunication.class.getName()).log(Level.WARNING, null, ex);
         }
         redoList.clear();
+        window.setUndoEnabled(true);
+        window.setRedoEnabled(false);
     }
 
     @Override
@@ -198,6 +219,9 @@ public class AdapterCommunication implements IAdapterCommunication{
             imp.setID(id);
             
             undoList.add(imp);
+            redoList.clear();
+            window.setUndoEnabled(true);
+            window.setRedoEnabled(false);
             return true;
         } catch (Exception ex) {
             Logger.getLogger(AdapterCommunication.class.getName()).log(Level.WARNING, null, ex);
@@ -226,7 +250,14 @@ public class AdapterCommunication implements IAdapterCommunication{
         
         Command command = undoList.get(undoList.size()-1);
         undoList.remove(undoList.size()-1);
+        
+        if(undoList.size() <= 0){
+            window.setUndoEnabled(false);
+        }
+        
         redoList.add(command);
+        window.setRedoEnabled(true);
+        
         try {
             command.undo(goi);
         } catch (Exception ex) {
@@ -242,6 +273,11 @@ public class AdapterCommunication implements IAdapterCommunication{
 
         Command command = redoList.get(redoList.size()-1);
         redoList.remove(redoList.size()-1);
+
+        if(redoList.size() <= 0){
+            window.setRedoEnabled(false);
+        }
+        window.setUndoEnabled(true);
         undoList.add(command);
         try {
             command.redo(goi);
