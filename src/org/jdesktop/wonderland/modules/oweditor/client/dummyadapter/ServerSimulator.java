@@ -105,7 +105,7 @@ public class ServerSimulator {
                 (float)-2.9455893, (float)0.7263716,(float)2.000591, 
                 0, 0,0,
                 1, 
-                (float)0.50, (float)2.00, 
+                (float)500, (float)2000, 
                 "verylongnamehasthisblockfortestingBlock2", false);
         
         /*createObject(

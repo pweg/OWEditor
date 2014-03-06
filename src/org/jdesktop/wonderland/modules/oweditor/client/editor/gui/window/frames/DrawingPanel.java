@@ -39,6 +39,8 @@ public class DrawingPanel extends JPanel implements ChangeListener, IDrawingPane
     private final Lock readLock = lock.readLock();
     private final Lock writeLock = lock.writeLock();
     
+    private double zoomSpeed = 1;
+    
     /*
      * These two translation integers are used to 
      * center the image. For example, when negative 
@@ -95,8 +97,22 @@ public class DrawingPanel extends JPanel implements ChangeListener, IDrawingPane
             return;
         }
     
-        scale += toAdd;
-        scale = Math.max(0.01, scale);
+        double newScale = scale + (toAdd*zoomSpeed);
+        
+        if(newScale <= (zoomSpeed/5)){
+            System.out.println("if");
+            zoomSpeed = zoomSpeed/10;
+            System.out.println(newScale);
+        }else if(newScale>= zoomSpeed*10 && zoomSpeed < 1){
+            zoomSpeed = zoomSpeed*10;
+        }
+        
+        scale = scale + (toAdd*zoomSpeed);
+        
+        System.out.println("____");
+        
+        //scale += toAdd;
+        //scale = Math.max(toAdd, scale);
         writeLock.unlock();
 
         repaint();  
