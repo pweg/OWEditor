@@ -142,5 +142,14 @@ public interface IGraphicToWindow {
      * Selects all existing shapes.
      */
     public void selectAllShapes();
+    
+    /**
+     * Sends a shape to the background or the foreground.
+     * 
+     * @param id The id of the shape.
+     * @param b If true, the shape becomes background,
+     * if false, it becomes foreground.
+     */
+    public void setBackground(boolean b);
 
 }

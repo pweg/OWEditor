@@ -93,8 +93,7 @@ public class ShapeEllipse extends ShapeObject{
         g.draw(at.createTransformedShape(originalShape)); 
     }
 
-    @Override
-    public void paintName(Graphics2D g, AffineTransform at) {
+    private void paintName(Graphics2D g, AffineTransform at) {
 
 
         g.setPaint(nameColor); 
@@ -260,6 +259,12 @@ public class ShapeEllipse extends ShapeObject{
     @Override
     public void setImage(BufferedImage img) {
         this.img = img;
+    }
+
+    @Override
+    public void setColor(Paint color) {
+        // TODO Auto-generated method stub
+        
     }
 
 }

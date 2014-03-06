@@ -7,12 +7,14 @@ import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.ListIterator;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.logging.Logger;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IDataObject;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.ITransformedObject;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.GUISettings;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.DraggingObject;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.ShapeEllipse;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.ShapeObject;
@@ -38,6 +40,7 @@ public class ShapeManager {
     private ShapeFactory factory = null;
     
     private ArrayList<ShapeObject> shapes = null;
+    private ArrayList<ShapeObject> background = null;
     private ArrayList<ShapeObject> avatarShapes = null;
     private ArrayList<DraggingObject> draggingShapes = null;
         
@@ -66,6 +69,7 @@ public class ShapeManager {
         factory = new ShapeFactory(smi);
         
         shapes = new ArrayList<ShapeObject>();
+        background = new ArrayList<ShapeObject>();
         avatarShapes = new ArrayList<ShapeObject>();
         draggingShapes = new ArrayList<DraggingObject>();
         
@@ -79,6 +83,10 @@ public class ShapeManager {
      */
     public ArrayList<ShapeObject> getShapes(){
         return shapes;
+    }
+    
+    public ArrayList<ShapeObject> getBGShapes(){
+        return background;
     }
     
     /**
@@ -118,6 +126,20 @@ public class ShapeManager {
             readLock.unlock();
         }
         
+        if(object != null)
+            return object;
+        
+        readLock.lock();
+        try {
+            for(ShapeObject shape : background){
+                if(shape.getID() == id){
+                    object = shape;
+                    break;
+                }
+            }
+        } finally {
+            readLock.unlock();
+        }
         return object;
     }
     
@@ -169,6 +191,38 @@ public class ShapeManager {
         
         return object; 
     }
+
+    
+    /**
+     * Searches for a background shape object, which surrounds a given point.
+     * 
+     * @param p the point in question.
+     * @return ShapeObject, if a shape was found, otherwise null. 
+     */
+    public ShapeObject getBGShapeSurroundingPoint(Point p){
+        
+        ShapeObject object = null;
+        
+        readLock.lock();
+        try {
+            ListIterator<ShapeObject> li = background.listIterator(background.size());
+
+            
+            while(li.hasPrevious()){
+                ShapeObject shape_obj = li.previous();
+                Shape shape =  shape_obj.getTransformedShape();
+                
+                if(shape != null && shape.contains(p)) {
+                    object = shape_obj;
+                    break;
+                }
+            }
+        } finally {
+            readLock.unlock();
+        }
+        
+        return object; 
+    }
     
     /**
      * Draws all shapes saved in the ShapeManager.
@@ -188,6 +242,10 @@ public class ShapeManager {
         
         readLock.lock();
         try {
+            for(ShapeObject shape : background){
+                shape.paintOriginal(g2, at);
+            }
+            
             for(ShapeObject shape : shapes){
                 if(shape.isSelected())
                     selected.add(shape);
@@ -200,10 +258,6 @@ public class ShapeManager {
 
             for(ShapeObject shape : avatarShapes){
                 shape.paintOriginal(g2, at);
-            }
-
-            for(ShapeObject shape : shapes){  
-                shape.paintName(g2, at);
             }
         } finally {
             readLock.unlock();
@@ -232,16 +286,32 @@ public class ShapeManager {
      */
     public void removeShape(long id){
         
+        boolean found = false;
+        
         writeLock.lock();
         try {
             for(ShapeObject s : shapes){
                 if(s.getID() == id){
                     shapes.remove(s);
+                    found = true;
                     break;
                 }
             }
         } finally {
             writeLock.unlock();
+        }
+        
+        if(!found){
+            try {
+                for(ShapeObject s : background){
+                    if(s.getID() == id){
+                        shapes.remove(s);
+                        break;
+                    }
+                }
+            } finally {
+                writeLock.unlock();
+            }
         }
     }
 
@@ -312,24 +382,35 @@ public class ShapeManager {
         }else{
             ShapeObject shape = factory.createShapeObject(ShapeFactory.RECTANGLE, 
                     x, y, z, width, height, id, name, rotation, scale, img);
-            writeLock.lock();
-            try {
-                boolean found = false;
+            addShape(shape);
+        }
+    }
+    
+    /**
+     * Adds the shape in z order to the shapes list.
+     * 
+     * @param shape The shape to add.
+     */
+    public void addShape(ShapeObject shape){
+        double z = shape.getZ();
+        
+        writeLock.lock();
+        try {
+            boolean found = false;
 
-                //This is for an initial z sorted list.
-                //Could be done with a better algorithm though.
-                for(int i=0; i<shapes.size();i++){
-                    if(shapes.get(i).getZ() >= z){
-                        shapes.add(i, shape);
-                        found = true;
-                        break;                        
-                    }
+            //This is for an initial z sorted list.
+            //Could be done with a better algorithm though.
+            for(int i=0; i<shapes.size();i++){
+                if(shapes.get(i).getZ() >= z){
+                    shapes.add(i, shape);
+                    found = true;
+                    break;                        
                 }
-                if(!found)
-                    shapes.add(shape);
-            } finally {
-                writeLock.unlock();
             }
+            if(!found)
+                shapes.add(shape);
+        } finally {
+            writeLock.unlock();
         }
     }
     
@@ -526,6 +607,46 @@ public class ShapeManager {
         else{
             nameToolTip = null;
             return true;
+        }
+    }
+    
+    private void removeBackground(long id){
+        
+        for(int i = 0;i < background.size(); i++){
+            if(background.get(i).getID() == id){
+                background.remove(i);
+                return;
+            }
+        }
+    }
+    
+    /**
+     * Sends a shape to the background or the foreground.
+     * 
+     * @param id The id of the shape.
+     * @param b If true, the shape becomes background,
+     * if false, it becomes foreground.
+     */
+    public void setBackground(long id, boolean b){
+        
+        if(b){
+            ShapeObject shape = getShape(id);
+            
+            if(shape == null)
+                return;
+
+            shape.setColor(GUISettings.BGOBJECTCOLOR);
+            removeShape(id);
+            background.add(shape);
+        }else{
+            ShapeObject shape = getShape(id);
+            
+            if(shape == null)
+                return;
+
+            shape.setColor(GUISettings.OBJECTCOLOR);
+            removeBackground(id);
+            addShape(shape);
         }
     }
     

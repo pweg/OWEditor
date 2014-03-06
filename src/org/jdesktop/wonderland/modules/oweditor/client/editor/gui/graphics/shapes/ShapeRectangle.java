@@ -28,18 +28,21 @@ public class ShapeRectangle extends ShapeObject{
     private Shape scaledShape = null;
     private Shape transformedShape = null;
     private Shape printShape = null;
+    
     private long id = -1;
     private boolean isSelected = false;
+    
     private Paint color = GUISettings.OBJECTCOLOR;
     private Paint nameColor = GUISettings.OBJECTNAMECOLOR;
+    
     private String name = "";
     private String printName = "";
     private boolean nameWrapp = false;
+    
     private double rotation = 0;
     private double scale = 0;
     
     public double z = 0;
-    
     private BufferedImage img = null;
     
     //These variables are used to determine, where the name of the object should be.
@@ -102,15 +105,21 @@ public class ShapeRectangle extends ShapeObject{
         //changes color when selected.
         if(isSelected){
             g.setPaint(GUISettings.SELECTIONCOLOR);
-        }else{
+        }else if(color.equals(GUISettings.BGOBJECTCOLOR)){
+            g.setPaint(GUISettings.BGBORDERCOLOR);
+        }else
+        {
             g.setPaint(GUISettings.OBJECTNAMECOLOR);
         }
         g.draw(printShape); 
         
-        paintImage(g, at);
+        if(!color.equals(GUISettings.BGOBJECTCOLOR)){
+            paintImage(g, at);
+            paintName(g,at);
+        }
     }
     
-    public void paintImage(Graphics2D g, AffineTransform at){
+    private void paintImage(Graphics2D g, AffineTransform at){
         if(img == null)
             return;
         
@@ -170,9 +179,17 @@ public class ShapeRectangle extends ShapeObject{
         g.setComposite(cur_comp);
 
     }
-    
-    @Override
-    public void paintName(Graphics2D g, AffineTransform at) {
+
+    /**
+     * Paints the name of the object. This is not implemented in the
+     * normal paint function, because the names have to be painted
+     * later, in order to see them, if another object is blocking the view.
+     * 
+     * @param g the graphics2d instance.
+     * @param at the affine transformation.
+     * @param scale
+     */
+    private void paintName(Graphics2D g, AffineTransform at) {
         g.setPaint(nameColor); 
         
         double scale = at.getScaleX();
@@ -357,6 +374,11 @@ public class ShapeRectangle extends ShapeObject{
     @Override
     public void setImage(BufferedImage img){
         this.img = img;
+    }
+
+    @Override
+    public void setColor(Paint color) {
+        this.color = color;
     }
 
 

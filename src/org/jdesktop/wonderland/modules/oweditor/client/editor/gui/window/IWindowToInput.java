@@ -98,5 +98,14 @@ public interface IWindowToInput {
      */
     public void translateFinish();
 
+    /**
+     * Sets the to background option of the popup menu
+     * visible.
+     * 
+     * @param b if true, the option to background is shown,
+     * if false, the to foreground option is shown.
+     */
+    public void setToBGVisible(boolean b);
+
 
 }

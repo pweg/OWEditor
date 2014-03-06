@@ -11,6 +11,13 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shape
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.ShapeObject;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.IWindowToGraphic;
 
+/**
+ * The graphic controller, which creates the graphics classes.
+ * It also implements the window interface.
+ * 
+ * @author Patrick
+ *
+ */
 public class GraphicController implements IGraphicToWindow{
 
 
@@ -159,6 +166,16 @@ public class GraphicController implements IGraphicToWindow{
         ArrayList<ShapeObject> shapes = sm.getShapes();
         for(ShapeObject shape : shapes)
             ssm.setSelected(shape, true);
+    }
+
+    @Override
+    public void setBackground(boolean b) {
+        ArrayList<ShapeObject> shapes = ssm.getSelection();
+        
+        for(ShapeObject shape : shapes)
+            sm.setBackground(shape.getID(), b);
+
+        ssm.clearCurSelection();
     }
 
 }

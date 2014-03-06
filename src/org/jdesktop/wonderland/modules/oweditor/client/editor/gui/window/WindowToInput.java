@@ -91,4 +91,9 @@ public class WindowToInput implements IWindowToInput {
         
     }
 
+    @Override
+    public void setToBGVisible(boolean b) {
+       wc.menu.setToBackgroundVisible(b);
+    }
+
 }

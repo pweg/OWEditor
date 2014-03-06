@@ -41,8 +41,7 @@ public class Avatar extends ShapeObject{
         g.fill(at.createTransformedShape(originalShape));
     }
     
-    @Override
-    public void paintName(Graphics2D g, AffineTransform at) {
+    private void paintName(Graphics2D g, AffineTransform at) {
         // Could be implemented, when avatar names should be shown.
         
     }
@@ -147,6 +146,12 @@ public class Avatar extends ShapeObject{
 
     @Override
     public void setImage(BufferedImage img) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void setColor(Paint color) {
         // TODO Auto-generated method stub
         
     }

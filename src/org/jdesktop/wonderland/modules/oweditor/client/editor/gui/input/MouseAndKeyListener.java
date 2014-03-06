@@ -112,12 +112,8 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
 
         Point p = e.getPoint();
         
-        if (e.getButton() ==  MouseEvent.BUTTON3 && mode <= PASTE){
-            ic.graphic.selectionSwitch(ic.window.revertBack(p), false);
-            ic.window.selectionChange(ic.graphic.isShapeSelected());
-            
-            strategy = new mlPopupStrategy(ic);
-            strategy.mousePressed(p);
+        if (e.getButton() ==  MouseEvent.BUTTON3 && mode <= PASTE){            
+            new mlPopupStrategy(ic).mousePressed(p);
             ic.window.repaint();  
         }
      }

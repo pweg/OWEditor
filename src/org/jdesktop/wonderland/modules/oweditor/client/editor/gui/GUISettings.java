@@ -18,6 +18,8 @@ public class GUISettings {
      * BGCOLOR: color of the background.
      * OBJECTCOLOR: color of a shape.
      * OBJECTNAMECOLOR: color of the objects name.
+     * BGOBJECTCOLOR: color of a shape which is in the background.
+     * BGBORDERCOLOR: color of a shape border which is in the background.
      * AVATARCOLOR: color of an avatar shape.
      * DRAGGINGCOLOR: color of the shapes, when dragged.
      * COLLISIONCOLOR: shape color when a collision is detected.
@@ -27,6 +29,8 @@ public class GUISettings {
      */
     public static Paint BGCOLOR = Color.white;
     public static Paint OBJECTCOLOR = Color.gray;
+    public static Paint BGOBJECTCOLOR = new Color(232,232,232);
+    public static Paint BGBORDERCOLOR = Color.LIGHT_GRAY;
     public static Paint OBJECTNAMECOLOR = Color.black;
     public static Paint AVATARCOLOR = Color.LIGHT_GRAY;
     public static Paint DRAGGINGCOLOR = Color.lightGray;

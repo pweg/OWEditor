@@ -7,10 +7,6 @@ import java.awt.Point;
  * This mouse event strategy is used, when a selection rectangle
  * should be painted.
  * 
- * If the normal behavior of the strategy should be created, so
- * that it just selects, not selection swap, graphic.clearCurSelection()
- * should be  called bevore.
- * 
  * @author Patrick
  *
  */

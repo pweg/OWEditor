@@ -30,6 +30,7 @@ public class MenuController implements IMenu{
         itemManager = new JItemManager();
         
         createMenu();
+        itemManager.setToBackgroundVisible(true);
     }
     
     /**
@@ -54,6 +55,20 @@ public class MenuController implements IMenu{
             public Void call(){
                 window.selectAllShapes();
                 setItemsEnabledSelection(true);
+                return null;
+            }
+        };
+        
+        final Callable<Void> background = new Callable<Void>() {
+            public Void call(){
+                window.setBackground(true);
+                return null;
+            }
+        };
+        
+        final Callable<Void> foreground = new Callable<Void>() {
+            public Void call(){
+                window.setBackground(false);
                 return null;
             }
         };
@@ -141,9 +156,15 @@ public class MenuController implements IMenu{
          * Popup menu items
          */
         popupBuilder.addItem(null, 
+                BUNDLE.getString("MenuToBackground"), background, 
+                null, false);        
+        popupBuilder.addItem(null, 
+                BUNDLE.getString("MenuToForeground"), foreground, 
+                null, false);
+        popupBuilder.addItem(null, 
                 BUNDLE.getString("MenuCopy"), copy, 
                 KeyStroke.getKeyStroke(
-                KeyEvent.VK_C, ActionEvent.CTRL_MASK), false);
+                KeyEvent.VK_C, ActionEvent.CTRL_MASK), true);
         popupBuilder.addItem(null, 
                 BUNDLE.getString("MenuCut"), cut, 
                 KeyStroke.getKeyStroke(
@@ -208,6 +229,11 @@ public class MenuController implements IMenu{
     @Override
     public void registerWindowInterface(IWindowToMenu window) {
         this.window  = window;
+    }
+
+    @Override
+    public void setToBackgroundVisible(boolean b) {
+        itemManager.setToBackgroundVisible(b);
     }
 
 }

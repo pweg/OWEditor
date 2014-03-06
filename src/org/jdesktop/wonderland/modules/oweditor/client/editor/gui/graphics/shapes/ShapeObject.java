@@ -1,7 +1,6 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes;
 
-import java.awt.Graphics2D;
-import java.awt.geom.AffineTransform;
+import java.awt.Paint;
 import java.awt.image.BufferedImage;
 
 /**
@@ -56,17 +55,6 @@ public abstract class ShapeObject extends SimpleShapeObject{
      * @param name the new name
      */
     public abstract void setName(String name);
-    
-    /**
-     * Paints the name of the object. This is not implemented in the
-     * normal paint function, because the names have to be painted
-     * later, in order to see them, if another object is blocking the view.
-     * 
-     * @param g the graphics2d instance.
-     * @param at the affine transformation.
-     * @param scale
-     */
-    public abstract void paintName(Graphics2D g, AffineTransform at);
         
     /**
      * Returns the shapes name.
@@ -135,6 +123,13 @@ public abstract class ShapeObject extends SimpleShapeObject{
      * @param img The image.
      */
     public abstract void setImage(BufferedImage img);
+    
+    /**
+     * Sets the color of the shape.
+     * 
+     * @param color The color
+     */
+    public abstract void setColor(Paint color);
     
     
 

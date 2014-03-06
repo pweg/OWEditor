@@ -55,4 +55,10 @@ public class WindowToMenu implements IWindowToMenu{
         wc.repaint();
     }
 
+    @Override
+    public void setBackground(boolean b) {
+        wc.graphic.setBackground(b);
+        wc.repaint();
+    }
+
 }

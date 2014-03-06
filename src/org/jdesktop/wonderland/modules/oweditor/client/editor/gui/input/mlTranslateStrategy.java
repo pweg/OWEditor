@@ -4,8 +4,9 @@ import java.awt.Point;
 
 /**
  * This strategy is used for normal translation, without dragging the mouse.
- * It has two modes, the first is for translation, which is called
- * through frames of the window package. The second is for paste translation.
+ * It has two modes, the first is for translation, which is done for
+ * normal translation behavoir. The second is for paste translation.
+ * 
  * @author Patrick
  *
  */
