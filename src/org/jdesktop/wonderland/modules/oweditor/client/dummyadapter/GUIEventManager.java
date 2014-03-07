@@ -165,8 +165,7 @@ public class GUIEventManager implements GUIObserverInterface{
         
         if(image_url != null){
             try {
-                img = ImageIO.read(new File(image_url));
-                
+                img = ImageIO.read(new File(image_url));                
             } catch (IOException e) {
                 System.err.println("Reading image was not possible");
             }
@@ -192,6 +191,7 @@ public class GUIEventManager implements GUIObserverInterface{
     }
 
     public boolean imageFileExists(String name) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return false;
+        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

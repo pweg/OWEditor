@@ -113,4 +113,9 @@ public class GUISettings {
      */
     public static Font COORDFONT = new Font(GUISettings.OBJECTNAMEFONTTYPE, Font.PLAIN, 12); 
     public static Color COORDCOLOR = Color.gray;
+    
+    /*
+     * The color for image selection (aka the image button)
+     */
+    public static Color IMAGESELECT = new Color(0.64f, 0.78f, 0.93f, 0.4f);
 }

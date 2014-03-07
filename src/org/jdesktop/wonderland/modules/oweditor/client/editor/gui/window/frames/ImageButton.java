@@ -1,22 +1,27 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.frames;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
+import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.JToggleButton;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.GUISettings;
 
 
-public class ImagePanel extends JPanel{
+public class ImageButton extends JToggleButton{
     
     private static final long serialVersionUID = 1L;
     private static final int MARGIN = GUISettings.IMGMARGINPANEL;
     
     private BufferedImage img = null;
+    //private Color bgColor = null;
     
-    public ImagePanel(){
+    public ImageButton(){
         super();
+        setContentAreaFilled(false);
     }
     
     public void setImage(BufferedImage img){
@@ -26,6 +31,7 @@ public class ImagePanel extends JPanel{
     @Override
     public void paint(Graphics g) {
         super.paint(g);
+        
         if(img != null){
             
             //Calculate the right width proportional to the panel
@@ -60,6 +66,10 @@ public class ImagePanel extends JPanel{
             y=Math.max(y+MARGIN, 0);
             
             g.drawImage(img,x,y,iwidth, iheight, null);
+        }
+        if(this.isSelected()){
+            g.setColor(GUISettings.IMAGESELECT);
+            g.fillRect(0, 0, getWidth(), getHeight());
         }
     }
     
