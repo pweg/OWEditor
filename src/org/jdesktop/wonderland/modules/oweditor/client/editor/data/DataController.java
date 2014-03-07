@@ -2,6 +2,8 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.data;
 
 import java.awt.Point;
 import java.awt.geom.Point2D;
+import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.CoordinateTranslatorInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IAdapterObserver;
@@ -11,6 +13,7 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IDa
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.ITransformedObject;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.IDataObjectObserver;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.IEnvironmentObserver;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.IUserObserver;
 
 /**
  * This is the main data controller class, which is used to 
@@ -25,12 +28,14 @@ public class DataController implements IDataToMainController,
     protected AdapterObserver du = null;
     protected DataObjectManager dm = null;
     protected EnvironmentManager em = null;
+    protected UserDataManager ud = null;
     
     public DataController(){
     }
     
     @Override
     public void initialize() {
+        ud = new UserDataManager();
         em = new EnvironmentManager();
         dm = new DataObjectManager(this);
         du = new AdapterObserver(dm, em);
@@ -87,6 +92,21 @@ public class DataController implements IDataToMainController,
 
     public String[] getServerList() {
         return em.getServerList();
+    }
+
+    @Override
+    public ArrayList<BufferedImage> getImgLibrary() {
+        return null;
+    }
+
+    @Override
+    public void registerUserObserver(IUserObserver observer) {
+        ud.registerObserver(observer);
+    }
+
+    @Override
+    public void removeUserObserver(IUserObserver observer) {
+        ud.removeObserver(observer);
     }
 
 

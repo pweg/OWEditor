@@ -100,16 +100,12 @@ public class DrawingPanel extends JPanel implements ChangeListener, IDrawingPane
         double newScale = scale + (toAdd*zoomSpeed);
         
         if(newScale <= (zoomSpeed/5)){
-            System.out.println("if");
             zoomSpeed = zoomSpeed/10;
-            System.out.println(newScale);
         }else if(newScale>= zoomSpeed*10 && zoomSpeed < 1){
             zoomSpeed = zoomSpeed*10;
         }
         
         scale = scale + (toAdd*zoomSpeed);
-        
-        System.out.println("____");
         
         //scale += toAdd;
         //scale = Math.max(toAdd, scale);

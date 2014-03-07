@@ -24,7 +24,6 @@ public class GUIController implements IGUIController{
     protected IWindow window = null;
     protected IInput input = null;
     
-    private IDataToGUI dmi = null;
     private AdapterCommunication ac = null;
     
     public GUIController(){
@@ -67,7 +66,8 @@ public class GUIController implements IGUIController{
 
     @Override
     public void registerDataManager(IDataToGUI dm) {
-        dmi = dm;
+        dm.registerDataObjectObserver(domo);
+        dm.registerEnvironmentObserver(eo);
         ac.registerDataManager(dm);
         window.registerDataManager(dm);
     }

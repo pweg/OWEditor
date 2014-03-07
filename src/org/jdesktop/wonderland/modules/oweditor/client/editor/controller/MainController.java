@@ -47,6 +47,7 @@ public class MainController implements MainControllerDataInterface,
         
         data = new DataController();
         
+        //switch to create the right adapter.
         switch(adaptertype){
             case 0: 
                 adapter = new DummyAdapterController();
@@ -62,14 +63,16 @@ public class MainController implements MainControllerDataInterface,
         data.initialize();
         adapter.initialize();
 
+        //register interfaces to the parts.
         gui.registerDataManager(data.getDataManagerInterface());
-        gui.registerGUIObserver(adapter.getClientUpdateInterface());
-        
-        data.registerDataObjectObserver(gui.getDataObjectObserver());
-        data.registerEnvironmentObserver(gui.getEnvironmentObserver());
+        adapter.registerDataUpdateInterface(data.getDataUpdateInterface());  
         data.registerCoordinateTranslator(adapter.getCoordinateTranslator());
         
-        adapter.registerDataUpdateInterface(data.getDataUpdateInterface());         
+        //this needs to be done here, because the adapter does not
+        //get an interface for the gui.
+        gui.registerGUIObserver(adapter.getClientUpdateInterface());
+        
+        //Starts building the world.      
         adapter.getCurrentWorld();
     
     }    

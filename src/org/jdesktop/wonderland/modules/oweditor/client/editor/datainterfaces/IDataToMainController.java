@@ -1,8 +1,6 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces;
 
 import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.CoordinateTranslatorInterface;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.IDataObjectObserver;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.IEnvironmentObserver;
 
 /**
  * An interface used between the data and the controller package.
@@ -30,24 +28,12 @@ public interface IDataToMainController {
      * @return a DataManagerInterface.
      */
     public IDataToGUI getDataManagerInterface();
-        
-    /**
-     * Registers an observer for the data object manager, which informs
-     * the gui on object creation and object changes.
-     * 
-     * @param domo the observer, which observes the data manager.
-     */
-    public void registerDataObjectObserver(IDataObjectObserver domo);
     
     /**
-     * Registers an observer for the environment manager, which informs 
-     * the gui on environmental changes, such as new widths/heights and
-     * offsets.
+     * Registers a coordinate translator instance from the adapter.
      * 
-     * @param en the observer, which observes the environment manager.
+     * @param ct The coordinate translator.
      */
-    public void registerEnvironmentObserver(IEnvironmentObserver en);
-    
     public void registerCoordinateTranslator(CoordinateTranslatorInterface ct);
 
 }
