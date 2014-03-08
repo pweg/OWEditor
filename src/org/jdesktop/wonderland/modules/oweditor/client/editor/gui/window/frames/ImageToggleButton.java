@@ -4,17 +4,17 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.util.ResourceBundle;
 
-import javax.swing.JButton;
+import javax.swing.JToggleButton;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.GUISettings;
 
 /**
- * This class implements a button, which shows an image that could be set.
+ * This class implements a toggle button, which shows an image
  * 
  * @author Patrick
  *
  */
-public class ImageButton extends JButton{
+public class ImageToggleButton extends JToggleButton{
     
     private static final long serialVersionUID = 1L;
     private static final int MARGIN = GUISettings.IMGMARGINPANEL;
@@ -24,12 +24,9 @@ public class ImageButton extends JButton{
     private static final ResourceBundle BUNDLE = ResourceBundle.getBundle(
             "org/jdesktop/wonderland/modules/oweditor/client/resources/Bundle");
     
-    public ImageButton(){
+    public ImageToggleButton(BufferedImage img){
         super(BUNDLE.getString("NoImage"));
         setContentAreaFilled(false);
-    }
-    
-    public void setImage(BufferedImage img){
         this.img = img;
     }
     
@@ -72,9 +69,10 @@ public class ImageButton extends JButton{
             
             g.drawImage(img,x,y,iwidth, iheight, null);
         }
-        if(this.model.isPressed()){
+        if(this.isSelected()){
             g.setColor(GUISettings.IMAGESELECT);
             g.fillRect(0, 0, getWidth(), getHeight());
+            this.setSelected(false);
         }
     }
     

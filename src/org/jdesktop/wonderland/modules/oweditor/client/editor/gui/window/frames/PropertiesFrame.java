@@ -3,23 +3,14 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.frames
 
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ResourceBundle;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 import java.util.logging.Logger;
 
-import javax.imageio.ImageIO;
-import javax.swing.JDialog;
-import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
-import javax.swing.filechooser.FileNameExtensionFilter;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.GUISettings;
 
@@ -35,7 +26,6 @@ public class PropertiesFrame extends javax.swing.JFrame {
     private static final Logger LOGGER =
             Logger.getLogger(PropertiesFrame.class.getName());
     
-
     private static final ResourceBundle BUNDLE = ResourceBundle.getBundle(
             "org/jdesktop/wonderland/modules/oweditor/client/resources/Bundle");
 
@@ -173,6 +163,12 @@ public class PropertiesFrame extends javax.swing.JFrame {
         jLabel1.setText(BUNDLE.getString("Name"));
 
         jLabel3.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+
+        image.addActionListener(new java.awt.event.ActionListener(){
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                imageButtonActionPerformed(evt);
+            }
+        });
         
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel3Layout);
@@ -365,14 +361,18 @@ public class PropertiesFrame extends javax.swing.JFrame {
 
 
         setLocation(GUISettings.FRAMEPOSX, GUISettings.FRAMEPOSY);  
-        setTitle(BUNDLE.getString("ImportTitle"));
+        setTitle(BUNDLE.getString("MenuProperties"));
         setDefaultCloseOperation(HIDE_ON_CLOSE);
         setResizable(false);
         pack();
     }// </editor-fold>                        
                  
     private void imageButtonActionPerformed(java.awt.event.ActionEvent evt){
+        //fc.setImageSelectionVisible(true);
         
+        ImageSelectionFrame selection = new ImageSelectionFrame();
+        selection.setLocationRelativeTo(this);
+        selection.setVisible(true);
     }
 
     private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {     
@@ -380,7 +380,6 @@ public class PropertiesFrame extends javax.swing.JFrame {
     } 
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {
-        resetButtonActionPerformed(evt);
         setVisible(false);
     } 
 
