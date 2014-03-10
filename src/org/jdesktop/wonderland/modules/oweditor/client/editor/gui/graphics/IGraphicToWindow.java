@@ -4,6 +4,7 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.ITransformedObject;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.IWindowToGraphic;
@@ -151,5 +152,12 @@ public interface IGraphicToWindow {
      * if false, it becomes foreground.
      */
     public void setBackground(boolean b);
+
+    /**
+     * Returns the ids of all selected shapes.
+     * 
+     * @return The ids in an array list.
+     */
+    public ArrayList<Long> getSelectedShapes();
 
 }

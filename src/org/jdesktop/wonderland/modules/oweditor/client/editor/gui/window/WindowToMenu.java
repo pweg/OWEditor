@@ -61,4 +61,9 @@ public class WindowToMenu implements IWindowToMenu{
         wc.repaint();
     }
 
+    @Override
+    public void setPropertiesVisible(boolean b) {
+       wc.frame.setPropertiesVisible(b);
+    }
+
 }

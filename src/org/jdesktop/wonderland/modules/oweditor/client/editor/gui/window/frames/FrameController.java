@@ -19,6 +19,7 @@ public class FrameController implements IFrame{
     protected MainFrame mainframe = null;
     protected JScrollPane mainScrollPanel = null;
     protected ImageSelectionFrame imageSelection = null;
+    protected PropertiesFrame properties = null;
     
     public FrameController(){
         buildMainFrame();
@@ -125,10 +126,34 @@ public class FrameController implements IFrame{
         mainframe.undoBar.setRedoEnabled(b);
         
     }
+
+    @Override
+    public void setPropertiesVisible(boolean b) {
+        if(properties == null)
+            properties = new PropertiesFrame(this);
+        
+        properties.setVisible(b);
+    }
     
+    public ImageSelectionFrame getImageSelectionFrame(){
+        if(imageSelection == null){
+            imageSelection = new ImageSelectionFrame(this);
+            imageSelection.setImageLib(window.getImgLib());
+        }
+        
+        return imageSelection;
+    }
+    
+    /**
+     * This 
+     * 
+     * @param b
+     */
     public void setImageSelectionVisible(boolean b){
-        if(imageSelection == null)
-            imageSelection = new ImageSelectionFrame();
+        if(imageSelection == null){
+            imageSelection = new ImageSelectionFrame(this);
+            imageSelection.setImageLib(window.getImgLib());
+        }
         
         imageSelection.setVisible(b);
     }

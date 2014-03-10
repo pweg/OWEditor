@@ -1,8 +1,14 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.frames;
 
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
+
+import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IImage;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -18,17 +24,29 @@ public class ImageSelectionFrame extends javax.swing.JFrame {
     
     private static final ResourceBundle BUNDLE = ResourceBundle.getBundle(
             "org/jdesktop/wonderland/modules/oweditor/client/resources/Bundle");
+
+    private FrameController fc = null;
     
-    ArrayList<BufferedImage> imgs = null;
+    private ArrayList<IImage> imgs = null;
+    private ArrayList<ImageToggleButton> buttons = null;
+    
+    private int original = -1;
+    private int active = -1;
+
 
     /**
      * Creates new form ImageSelectionFrame
      */
-    public ImageSelectionFrame() {
+    public ImageSelectionFrame(FrameController fc) {
+        this.fc  = fc;
+        
         initComponents();
         
-        imgs = new ArrayList<BufferedImage>();
+        imgs = new ArrayList<IImage>(); 
+        buttons = new ArrayList<ImageToggleButton>();
+
     }
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -39,7 +57,8 @@ public class ImageSelectionFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
     private void initComponents() {
 
-        imagePanel = new javax.swing.JScrollPane();
+        imagePanel = new javax.swing.JPanel(new GridBagLayout());
+        imageScrllPanel = new javax.swing.JScrollPane(imagePanel);
         okButton = new javax.swing.JButton();
         cancelButton = new javax.swing.JButton();
         importButton = new javax.swing.JButton();
@@ -47,15 +66,25 @@ public class ImageSelectionFrame extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         okButton.setText(BUNDLE.getString("OK"));
+        okButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                okActionPerformed(evt);
+            }
+        });
 
         cancelButton.setText(BUNDLE.getString("Cancel"));
         cancelButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                cancelActionPerformed(evt);
             }
         });
 
         importButton.setText(BUNDLE.getString("ImageAdd"));
+        importButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                importActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -71,14 +100,17 @@ public class ImageSelectionFrame extends javax.swing.JFrame {
                         .addComponent(cancelButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(okButton, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(imagePanel))
+                    .addComponent(imageScrllPanel))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(imagePanel, javax.swing.GroupLayout.PREFERRED_SIZE, 347, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(imageScrllPanel, 
+                        347, 
+                        javax.swing.GroupLayout.PREFERRED_SIZE, 
+                        javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(okButton)
@@ -89,13 +121,128 @@ public class ImageSelectionFrame extends javax.swing.JFrame {
 
         setTitle(BUNDLE.getString("ImageSelect"));
         setDefaultCloseOperation(HIDE_ON_CLOSE);
+        //this.setResizable(false);
 
         pack();
-    }// </editor-fold>                        
+    }// </editor-fold>      
+    
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+    /**
+     * Builds the image panel with the images that were stored
+     * previously.
+     */
+    private void buildImagePanel() {
+        imagePanel.removeAll();
+        GridBagConstraints c = new GridBagConstraints();
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridwidth = 1;
+        c.gridheight = 1;
+        c.weightx = 1;
+        c.weighty = 1;
+
+        int x=0;
+        int y=0;
+        int count = 0;
+        
+        ActionListener action = new ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                selectActionPerformed(evt);
+            }
+        };
+        
+        for(IImage img : imgs){
+            c.gridx = x;
+            c.gridy = y;
+            ImageToggleButton button = new ImageToggleButton(img.getImage());
+            button.setPreferredSize(new Dimension(
+                    imageScrllPanel.getWidth()/3, 
+                    imageScrllPanel.getHeight()/3));
+            button.setName(Integer.toString(count));
+            button.addActionListener(action);
+            buttons.add(button);
+            
+            imagePanel.add(button, c);
+            x++;
+            count++;
+            if(x >= 3){
+                y++;
+                x=0;
+            }
+        }        
+    }
+
+    private void cancelActionPerformed(java.awt.event.ActionEvent evt) {  
+        active = original;
+        this.setVisible(false);
+    }    
+
+    private void okActionPerformed(java.awt.event.ActionEvent evt) {                                         
+        this.setVisible(false);
+    }   
+
+    private void importActionPerformed(java.awt.event.ActionEvent evt) {                                         
         // TODO add your handling code here:
-    }                                        
+    } 
+    
+    private void selectActionPerformed(java.awt.event.ActionEvent evt) {         
+        Object src = evt.getSource();             
+        
+        if(src instanceof ImageToggleButton){
+            ImageToggleButton button = (ImageToggleButton) src;
+            try{            
+                int current = Integer.valueOf(button.getName());
+                if(active != -1 && active < buttons.size() &&
+                        current != active)
+                        buttons.get(active).setSelected(false);   
+                
+                //This has to be done in order to let the user
+                //unselect the image, if he wants to.
+                if(button.isSelected())
+                    active = current;
+                else
+                    active = -1;
+                
+            }catch(Exception e){
+                active = -1;
+            }
+        }
+    } 
+    
+    
+    public BufferedImage getSelectedImage(){
+        if(active == -1 || active >= imgs.size())
+            return null;
+        
+        return (imgs.get(active)).getImage();
+    }
+    
+    private void reset(){
+        for(ImageToggleButton button : buttons){
+            button.setSelected(false);
+        }
+        if(original == -1 || original >= buttons.size())
+            return;
+        buttons.get(original).setSelected(true);
+    }
+    
+    /**
+     * Sets the image library.
+     * 
+     * @param imgs The image library as array list.
+     */
+    public void setImageLib(ArrayList<IImage> imgs){
+        this.imgs = imgs;
+        buildImagePanel();
+    }
+    
+    @Override
+    public void setVisible(boolean b){
+        if(b){
+            original = active;
+            reset();
+        }
+        super.setVisible(b);
+    }
 
     
 
@@ -103,7 +250,8 @@ public class ImageSelectionFrame extends javax.swing.JFrame {
     private javax.swing.JButton okButton;
     private javax.swing.JButton cancelButton;
     private javax.swing.JButton importButton;
-    private javax.swing.JScrollPane imagePanel;
+    private javax.swing.JScrollPane imageScrllPanel;
+    private javax.swing.JPanel imagePanel;
     // End of variables declaration                   
 }
 

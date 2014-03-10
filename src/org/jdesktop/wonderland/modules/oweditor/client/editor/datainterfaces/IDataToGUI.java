@@ -2,7 +2,6 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces;
 
 import java.awt.Point;
 import java.awt.geom.Point2D;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.IDataObjectObserver;
@@ -80,7 +79,7 @@ public interface IDataToGUI {
      * 
      * @return An arraylist containing buffered images.
      */
-    public ArrayList<BufferedImage> getImgLibrary();
+    public ArrayList<IImage> getImgLibrary();
 
     /**
      * Registers an observer for the data object manager, which informs

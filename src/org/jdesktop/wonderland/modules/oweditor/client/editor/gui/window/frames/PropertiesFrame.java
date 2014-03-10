@@ -3,8 +3,11 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.frames
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
 
@@ -39,6 +42,7 @@ public class PropertiesFrame extends javax.swing.JFrame {
     
     //font for the labels.
     private Font normalFont = null;
+    private ArrayList<Long> ids = null;
             
     /**
      * Creates new properties frame.
@@ -47,6 +51,7 @@ public class PropertiesFrame extends javax.swing.JFrame {
      */
     public PropertiesFrame(FrameController fc) {
         this.fc = fc;
+        ids = new ArrayList<Long>();
         
         initComponents();
         reset();
@@ -355,7 +360,7 @@ public class PropertiesFrame extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         
-        tabbedPane.addTab("Tab 1", null, jPanel5,
+        tabbedPane.addTab(BUNDLE.getString("PropertiesGeneral"), null, jPanel5,
                 "Does nothing");
         getContentPane().add(tabbedPane);
 
@@ -368,11 +373,36 @@ public class PropertiesFrame extends javax.swing.JFrame {
     }// </editor-fold>                        
                  
     private void imageButtonActionPerformed(java.awt.event.ActionEvent evt){
-        //fc.setImageSelectionVisible(true);
+        ImageSelectionFrame frame = fc.getImageSelectionFrame();
+        frame.setLocationRelativeTo(this);
         
-        ImageSelectionFrame selection = new ImageSelectionFrame();
-        selection.setLocationRelativeTo(this);
-        selection.setVisible(true);
+        frame.addComponentListener(new ComponentListener() {
+
+            @Override
+            public void componentResized(ComponentEvent e) {
+                // TODO Auto-generated method stub
+                
+            }
+
+            @Override
+            public void componentMoved(ComponentEvent e) {
+                // TODO Auto-generated method stub
+                
+            }
+
+            @Override
+            public void componentShown(ComponentEvent e) {
+                // TODO Auto-generated method stub
+                
+            }
+
+            @Override
+            public void componentHidden(ComponentEvent e) {
+                image.setImage(fc.imageSelection.getSelectedImage());
+            }
+
+        });
+        frame.setVisible(true);
     }
 
     private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {     
@@ -385,7 +415,32 @@ public class PropertiesFrame extends javax.swing.JFrame {
 
     private void resetButtonActionPerformed(java.awt.event.ActionEvent evt) {                                         
         reset();
-    }         
+    }   
+    
+    @Override
+    public void setVisible(boolean b){
+        fc.mainframe.setEnabled(!b);
+        if(!b){
+            fc.setImageSelectionVisible(b);
+        }else{
+            ids = fc.window.getSelectedIDs();
+            if(ids == null)
+                return;
+            
+            if(ids.size()>1){
+                locationFieldX.setEnabled(false);
+                locationFieldY.setEnabled(false);
+                locationFieldZ.setEnabled(false);
+                nameField.setEnabled(false);
+            }else{
+                locationFieldX.setEnabled(true);
+                locationFieldY.setEnabled(true);
+                locationFieldZ.setEnabled(true);
+                nameField.setEnabled(true);
+            }
+        }
+        super.setVisible(b);
+    }
     
     /**
      * Resets the form. Means it sets all field values to zero.
@@ -451,10 +506,6 @@ public class PropertiesFrame extends javax.swing.JFrame {
     private void setLabelColorStandard(JLabel label){
         label.setFont(normalFont);
         label.setForeground(normalColor);
-    }
-    
-    public static void main(String[] args){
-        (new PropertiesFrame(null)).setVisible(true);
     }
 
     // Variables declaration - do not modify                     

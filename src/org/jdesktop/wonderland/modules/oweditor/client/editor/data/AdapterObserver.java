@@ -14,6 +14,7 @@ public class AdapterObserver implements IAdapterObserver{
     
     private DataObjectManager dm = null;
     private EnvironmentManager em = null;
+    private UserDataManager um = null;
 
     /**
      * Creates a new dataUpdate instance.
@@ -22,9 +23,11 @@ public class AdapterObserver implements IAdapterObserver{
      * when updates are made.
      * @param em a environmentManager instance.
      */
-    public AdapterObserver(DataObjectManager dm, EnvironmentManager em) {
+    public AdapterObserver(DataObjectManager dm, EnvironmentManager em,
+            UserDataManager um) {
         this.dm = dm;
         this.em = em;
+        this.um = um;
     }
     
     @Override
@@ -65,6 +68,11 @@ public class AdapterObserver implements IAdapterObserver{
     @Override
     public void notifyImageChange(long id, BufferedImage img){
         dm.updateImage(id, img);
+    }
+
+    @Override
+    public void updateImgLib(BufferedImage img, String name) {
+        um.addNewImage(img, name);
     }
 
 

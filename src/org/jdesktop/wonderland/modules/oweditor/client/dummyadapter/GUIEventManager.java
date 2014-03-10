@@ -52,17 +52,17 @@ public class GUIEventManager implements GUIObserverInterface{
         object.x = p.x;
         object.y = p.y;      
         
-        ac.da.serverTranslationChangeEvent(id);
+        ac.sem.serverTranslationChangeEvent(id);
     }
 
     @Override
     public void notifyRemoval(long id) throws Exception{
-        ac.da.serverRemovalEvent(id);
+        ac.sem.serverRemovalEvent(id);
     }
     
     @Override
     public void undoRemoval(long id) throws Exception{
-        ac.da.createObject(ac.server.getObject(id));
+        ac.sem.createObject(ac.server.getObject(id));
     }
 
     @Override
@@ -94,7 +94,7 @@ public class GUIEventManager implements GUIObserverInterface{
         
         ServerObject clone = ac.server.copyObject(id, name);
         ac.bom.addCreatedID(clone.id);
-        ac.da.serverCopyEvent(clone);
+        ac.sem.serverCopyEvent(clone);
     }
 
     @Override
@@ -114,7 +114,7 @@ public class GUIEventManager implements GUIObserverInterface{
         if(id == -1)
             throw new Exception();
         
-        ac.da.createObject(ac.server.getObject(id));
+        ac.sem.createObject(ac.server.getObject(id));
     }
 
     @Override
@@ -126,7 +126,7 @@ public class GUIEventManager implements GUIObserverInterface{
    
         object.rotationX = rotation;
         notifyTranslationXY(id, x,y);
-        ac.da.serverRotationEvent(id);
+        ac.sem.serverRotationEvent(id);
     }
 
     @Override
@@ -138,7 +138,7 @@ public class GUIEventManager implements GUIObserverInterface{
         
         object.scale = scale;        
         notifyTranslationXY(id, x,y);
-        ac.da.serverScalingEvent(id);
+        ac.sem.serverScalingEvent(id);
     }
 
     @Override
@@ -175,7 +175,7 @@ public class GUIEventManager implements GUIObserverInterface{
             rotationX, rotationY, rotationZ, scale, 
             (float)bounds[0], (float)bounds[1], name, false, img);
         ac.bom.addCreatedID(tmp.id);
-        ac.da.createObject(tmp);
+        ac.sem.createObject(tmp);
         
         return tmp.id;
     }    

@@ -127,4 +127,12 @@ public interface IFrame {
      */
     public void setRedoEnabled(boolean b);
 
+    /**
+     * Shows the properties frame.
+     * 
+     * @param b If true, the frame will be shown,
+     * if false it will be hidden.
+     */
+    public void setPropertiesVisible(boolean b);
+
 }

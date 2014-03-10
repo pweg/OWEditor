@@ -12,9 +12,11 @@ package org.jdesktop.wonderland.modules.oweditor.client.dummyadapter;
  */
 public class AdapterSettings {
     
-    public static int initalScale = 50;
+    public static int INITIAL_SCALE = 50;
 
-    public static float avatarSizeX = 0.5f;
-    public static float avatarSizeY = 0.5f;
+    public static float AVATARSIZEX = 0.5f;
+    public static float AVATARSIZEY = 0.5f;
+    
+    public static String IMAGEDIR = "testimages";
     
 }

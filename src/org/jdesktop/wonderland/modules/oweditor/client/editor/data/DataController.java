@@ -2,7 +2,6 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.data;
 
 import java.awt.Point;
 import java.awt.geom.Point2D;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.CoordinateTranslatorInterface;
@@ -10,6 +9,7 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IAd
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IDataObject;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IDataToGUI;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IDataToMainController;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IImage;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.ITransformedObject;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.IDataObjectObserver;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.IEnvironmentObserver;
@@ -28,17 +28,17 @@ public class DataController implements IDataToMainController,
     protected AdapterObserver du = null;
     protected DataObjectManager dm = null;
     protected EnvironmentManager em = null;
-    protected UserDataManager ud = null;
+    protected UserDataManager um = null;
     
     public DataController(){
     }
     
     @Override
     public void initialize() {
-        ud = new UserDataManager();
+        um = new UserDataManager();
         em = new EnvironmentManager();
         dm = new DataObjectManager(this);
-        du = new AdapterObserver(dm, em);
+        du = new AdapterObserver(dm, em, um);
         
     }
 
@@ -95,18 +95,18 @@ public class DataController implements IDataToMainController,
     }
 
     @Override
-    public ArrayList<BufferedImage> getImgLibrary() {
-        return null;
+    public ArrayList<IImage> getImgLibrary() {
+        return um.getImgLib();
     }
 
     @Override
     public void registerUserObserver(IUserObserver observer) {
-        ud.registerObserver(observer);
+        um.registerObserver(observer);
     }
 
     @Override
     public void removeUserObserver(IUserObserver observer) {
-        ud.removeObserver(observer);
+        um.removeObserver(observer);
     }
 
 

@@ -2,6 +2,9 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window;
 
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
+import java.util.ArrayList;
+
+import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IImage;
 
 public interface IWindowToFrame {
     
@@ -93,5 +96,19 @@ public interface IWindowToFrame {
      * @return True, if it exists, false otherwise.
      */
     public boolean imageExists(String name);
+
+    /**
+     * Returns the ids of all selected objects.
+     * 
+     * @return The ids in an array list.
+     */
+    public ArrayList<Long> getSelectedIDs();
+
+    /**
+     * Returns the users image library.
+     * 
+     * @return Images in an array list.
+     */
+    public ArrayList<IImage> getImgLib();
 
 }

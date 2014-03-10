@@ -178,4 +178,15 @@ public class GraphicController implements IGraphicToWindow{
         ssm.clearCurSelection();
     }
 
+    @Override
+    public ArrayList<Long> getSelectedShapes() {
+        ArrayList<Long> ids = new ArrayList<Long>();
+        ArrayList<ShapeObject> shapes = ssm.getSelection();
+        
+        for(ShapeObject shape : shapes){
+            ids.add(shape.getID());
+        }
+        return ids;
+    }
+
 }

@@ -46,7 +46,7 @@ public class MenuController implements IMenu{
         //create the functions
         final Callable<Void> newItem = new Callable<Void>() {
             public Void call(){
-                function();
+                window.setPropertiesVisible(true);
                 return null;
             }
         };
@@ -186,10 +186,6 @@ public class MenuController implements IMenu{
         itemManager.setPopupItems(popupBuilder.getMenuItems());
         itemManager.setItemsEnabledSelection(false);
         itemManager.setItemsEnabledCopy(false);
-    }
-    
-    private void function(){
-        System.out.println("not implemented");
     }
 
     @Override

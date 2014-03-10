@@ -69,10 +69,10 @@ public class ImageToggleButton extends JToggleButton{
             
             g.drawImage(img,x,y,iwidth, iheight, null);
         }
+        
         if(this.isSelected()){
             g.setColor(GUISettings.IMAGESELECT);
             g.fillRect(0, 0, getWidth(), getHeight());
-            this.setSelected(false);
         }
     }
     

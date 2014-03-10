@@ -79,6 +79,14 @@ public interface IAdapterObserver {
      * @param img The new BufferedImage.
      */
     public void notifyImageChange(long id, BufferedImage img);
+
+    /**
+     * Updates the image library of the user.
+     * 
+     * @param img A new image.
+     * @param name 
+     */
+    public void updateImgLib(BufferedImage img, String name);
     
 
 }

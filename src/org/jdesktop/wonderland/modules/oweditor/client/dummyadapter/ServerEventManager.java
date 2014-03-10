@@ -1,5 +1,7 @@
 package org.jdesktop.wonderland.modules.oweditor.client.dummyadapter;
 
+import java.awt.image.BufferedImage;
+
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IAdapterObserver;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IDataObject;
 
@@ -70,8 +72,8 @@ public class ServerEventManager {
         
         if(sObject.isAvatar){
             object.setType(IDataObject.AVATAR);
-            object.setWidth(AdapterSettings.avatarSizeX);
-            object.setHeight(AdapterSettings.avatarSizeY);
+            object.setWidth(AdapterSettings.AVATARSIZEX);
+            object.setHeight(AdapterSettings.AVATARSIZEY);
         }else{
             object.setWidth(sObject.width);
             object.setHeight(sObject.height);
@@ -153,6 +155,16 @@ public class ServerEventManager {
 
     public void setServerList(String[] servers) {
         dui.setServerList(servers); 
+    }
+
+    /**
+     * Updates the image library of the user.
+     * 
+     * @param img A new image.
+     * @param name 
+     */
+    public void updateImgLib(BufferedImage img, String name) {
+        dui.updateImgLib(img, name);
     }
 
 }

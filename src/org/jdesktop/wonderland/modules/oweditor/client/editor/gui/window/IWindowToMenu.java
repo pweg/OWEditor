@@ -45,4 +45,12 @@ public interface IWindowToMenu {
      */
     public void setBackground(boolean b);
 
+    /**
+     * Sets the properties frame visible.
+     * 
+     * @param b If true, the frame becomes visible,
+     * if false it will be hidden.
+     */
+    public void setPropertiesVisible(boolean b);
+
 }

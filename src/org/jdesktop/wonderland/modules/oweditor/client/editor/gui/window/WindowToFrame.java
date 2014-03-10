@@ -2,7 +2,10 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window;
 
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
+import java.util.ArrayList;
+
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IDataToGUI;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IImage;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.input.IInputToWindow;
 
 public class WindowToFrame implements IWindowToFrame{
@@ -87,6 +90,16 @@ public class WindowToFrame implements IWindowToFrame{
 
     public boolean imageExists(String name) {
         return wc.adapter.imageExists(name);
+    }
+
+    @Override
+    public ArrayList<Long> getSelectedIDs() {
+        return wc.graphic.getSelectedShapes();
+    }
+
+    @Override
+    public ArrayList<IImage> getImgLib() {
+        return dm.getImgLibrary();
     }
 
 
