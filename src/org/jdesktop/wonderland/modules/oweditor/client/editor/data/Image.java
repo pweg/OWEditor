@@ -8,10 +8,12 @@ public  class Image implements IImage{
     
     private BufferedImage img = null;
     private String name = null;
+    private String path = null;
     
-    public Image(String name, BufferedImage img){
+    public Image(String name, BufferedImage img, String path){
         this.name = name;
         this.img = img;
+        this.path = path;
     }
 
     @Override
@@ -22,6 +24,11 @@ public  class Image implements IImage{
     @Override
     public String getName() {
         return name;
+    }
+
+    @Override
+    public String getPath() {
+        return path;
     }
     
 }

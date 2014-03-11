@@ -3,6 +3,7 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.data;
 import java.awt.image.BufferedImage;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IDataObject;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IImage;
 
 /**
  * This class houses all necessary data of an virtual world item.
@@ -23,7 +24,7 @@ public class DataObject implements IDataObject{
     private float height = 0;
     private String name = "";
     private byte type = IDataObject.RECTANGLE;
-    private BufferedImage img = null;
+    private IImage img = null;
     
     /**
      * Creates an empty object instance.
@@ -233,11 +234,16 @@ public class DataObject implements IDataObject{
     }
     
     @Override
-    public void setImage(BufferedImage img){
-        this.img = img;
+    public void setImage(BufferedImage img, String name, String path){
+        if(name == null)
+            name = "";
+        if(path == null)
+            path = "";
+        
+        this.img = new Image(name, img, path);
     }
     
-    public BufferedImage getImage(){
+    public IImage getImgClass(){
         return img;
     }
 

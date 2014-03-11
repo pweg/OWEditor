@@ -368,7 +368,7 @@ public class ShapeManager {
         String name = dataObject.getName();
         double rotation = dataObject.getRotation();
         double scale = dataObject.getScale();
-        BufferedImage img = dataObject.getImage();
+        BufferedImage img = dataObject.getImgClass().getImage();
 
         if(dataObject.getType() == IDataObject.AVATAR){
             ShapeObject shape = factory.createShapeObject(ShapeFactory.AVATAR, 

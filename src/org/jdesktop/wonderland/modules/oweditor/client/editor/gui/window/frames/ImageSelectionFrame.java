@@ -5,8 +5,15 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
+
+import javax.imageio.ImageIO;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IImage;
 
@@ -32,6 +39,8 @@ public class ImageSelectionFrame extends javax.swing.JFrame {
     
     private int original = -1;
     private int active = -1;
+    
+    private String lastDir = "";
 
 
     /**
@@ -180,8 +189,45 @@ public class ImageSelectionFrame extends javax.swing.JFrame {
         this.setVisible(false);
     }   
 
-    private void importActionPerformed(java.awt.event.ActionEvent evt) {                                         
-        // TODO add your handling code here:
+    private void importActionPerformed(java.awt.event.ActionEvent evt) {  
+        
+        JFileChooser chooser = new JFileChooser(new File (lastDir));
+        FileNameExtensionFilter filter = new FileNameExtensionFilter(
+                "JPG", "jpg", "jpeg", "JPEG");
+        FileNameExtensionFilter filter2 = new FileNameExtensionFilter(
+                "GIF", "gif", "GIF");
+        FileNameExtensionFilter filter3 = new FileNameExtensionFilter(
+                "PNG", "png", "PNG");
+        FileNameExtensionFilter filter4 = new FileNameExtensionFilter(
+                "BMP", "bmp", "BMP");
+        chooser.removeChoosableFileFilter(chooser.getAcceptAllFileFilter());
+        chooser.addChoosableFileFilter(filter);
+        chooser.addChoosableFileFilter(filter2);
+        chooser.addChoosableFileFilter(filter3);
+        chooser.addChoosableFileFilter(filter4);
+        chooser.setMultiSelectionEnabled(true);
+        
+        int returnVal = chooser.showOpenDialog(this);
+        
+        if(returnVal == JFileChooser.APPROVE_OPTION) {
+            File[] files = chooser.getSelectedFiles();
+            
+            for(File file : files){
+
+                String path = file.getAbsolutePath();
+                lastDir = file.getParent();
+                
+                try {
+                    BufferedImage img = null;
+                    img = ImageIO.read(new File(path));
+                    fc.window.uploadImage(path);
+                    
+                } catch (IOException e) {
+                    showError(BUNDLE.getString("ImageError"),BUNDLE.getString("ImageErrorTitle"));
+                }
+            }
+            setImageLib(fc.window.getImgLib());
+        }
     } 
     
     private void selectActionPerformed(java.awt.event.ActionEvent evt) {         
@@ -209,11 +255,11 @@ public class ImageSelectionFrame extends javax.swing.JFrame {
     } 
     
     
-    public BufferedImage getSelectedImage(){
+    public IImage getSelectedImage(){
         if(active == -1 || active >= imgs.size())
             return null;
         
-        return (imgs.get(active)).getImage();
+        return imgs.get(active);
     }
     
     private void reset(){
@@ -242,6 +288,16 @@ public class ImageSelectionFrame extends javax.swing.JFrame {
             reset();
         }
         super.setVisible(b);
+    }
+    /**
+     * Shows an error message.
+     * 
+     * @param text The text of the message.
+     * @param title The title.
+     */
+    private void showError(String text, String title){
+        JOptionPane.showMessageDialog(this,
+                text, title, JOptionPane.ERROR_MESSAGE);
     }
 
     

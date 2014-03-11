@@ -77,9 +77,20 @@ public interface IAdapterObserver {
      * 
      * @param id The id of the object.
      * @param img The new BufferedImage.
+     * @param name The name of the new image.
+     * @param path The user directory of the new image.
      */
-    public void notifyImageChange(long id, BufferedImage img);
+    public void notifyImageChange(long id, BufferedImage img, String name,
+            String path);
 
+    /**
+     * Sets up the name of the users directory.
+     * 
+     * @param dir The directory where the user stores his
+     * image data.
+     */
+    public void setUserDir(String dir);
+    
     /**
      * Updates the image library of the user.
      * 

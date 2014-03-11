@@ -4,6 +4,7 @@ import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
 
+import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IDataObject;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IImage;
 
 public interface IWindowToFrame {
@@ -110,5 +111,20 @@ public interface IWindowToFrame {
      * @return Images in an array list.
      */
     public ArrayList<IImage> getImgLib();
+
+    /**
+     * Gets an object from the data package.
+     * 
+     * @param id The id of the object.
+     * @return The data object.
+     */
+    public IDataObject getDataObject(long id);
+
+    /**
+     * Uploads a image to the server.
+     * 
+     * @param imgUrl The url of the image.
+     */
+    public void uploadImage(String imgUrl);
 
 }

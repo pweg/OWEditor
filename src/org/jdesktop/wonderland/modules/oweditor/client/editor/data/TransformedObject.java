@@ -1,8 +1,7 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.data;
 
-import java.awt.image.BufferedImage;
-
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IDataObject;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IImage;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.ITransformedObject;
 
 public class TransformedObject implements ITransformedObject{
@@ -18,11 +17,11 @@ public class TransformedObject implements ITransformedObject{
     private double rotation = 0;
     private long id = 0;
     private byte type = IDataObject.RECTANGLE;
-    private BufferedImage img = null;
+    private IImage img = null;
     
     public TransformedObject(long id, int x, int y, float z, int width, int height,
             double scale, double rotation, String name, byte type, 
-            BufferedImage img){
+            IImage img){
         this.id = id;
         this.x = x;
         this.y = y;
@@ -89,7 +88,7 @@ public class TransformedObject implements ITransformedObject{
     }
     
     @Override
-    public BufferedImage getImage(){
+    public IImage getImgClass(){
         return img;
     }
 

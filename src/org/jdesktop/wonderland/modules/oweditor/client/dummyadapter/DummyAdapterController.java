@@ -58,6 +58,8 @@ public class DummyAdapterController implements AdapterControllerMainControllerIn
 
     @Override
     public void getCurrentWorld() {
+        
+        sem.setUserDir();
 
         for(ImageClass img : getImgLib(new File(AdapterSettings.IMAGEDIR)))
             sem.updateImgLib(img.img, img.name);

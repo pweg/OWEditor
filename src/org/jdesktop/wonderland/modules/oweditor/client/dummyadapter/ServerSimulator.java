@@ -151,10 +151,11 @@ public class ServerSimulator {
             float width, float height, 
             String name,
             boolean isAvatar, 
-            BufferedImage image){
+            BufferedImage image,
+            String imgName){
         ServerObject o = new ServerObject(currentID, x, y, z, rotationX, 
                 rotationY, rotationZ,
-                scale, width, height, name, image);
+                scale, width, height, name, image, imgName);
 
         o.rotationY = rotationY;
         o.rotationZ = rotationZ;

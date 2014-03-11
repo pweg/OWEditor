@@ -178,7 +178,9 @@ public interface IDataObject extends ITransformedObject{
      * Sets the representation image of the object.
      * 
      * @param img A buffered image.
+     * @param name The name of the image.
+     * @param path The user dir of the image.
      */
-    void setImage(BufferedImage img);
+    void setImage(BufferedImage img, String name, String path);
 
 }

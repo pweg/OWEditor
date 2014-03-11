@@ -15,6 +15,8 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
 
+import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IDataObject;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IImage;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.GUISettings;
 
 /**
@@ -42,7 +44,10 @@ public class PropertiesFrame extends javax.swing.JFrame {
     
     //font for the labels.
     private Font normalFont = null;
-    private ArrayList<Long> ids = null;
+    private ArrayList<IDataObject> objects = null;
+    
+    private String imgName = null;
+    private String imgPath = null;
             
     /**
      * Creates new properties frame.
@@ -51,7 +56,7 @@ public class PropertiesFrame extends javax.swing.JFrame {
      */
     public PropertiesFrame(FrameController fc) {
         this.fc = fc;
-        ids = new ArrayList<Long>();
+        objects = new ArrayList<IDataObject>();
         
         initComponents();
         reset();
@@ -111,6 +116,10 @@ public class PropertiesFrame extends javax.swing.JFrame {
         locationFieldX.setText("0");
         locationFieldY.setText("0");
         locationFieldZ.setText("0");
+        rotationFieldX.setText("0");
+        rotationFieldY.setText("0");
+        rotationFieldZ.setText("0");
+        scaleField.setText("1");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -398,7 +407,14 @@ public class PropertiesFrame extends javax.swing.JFrame {
 
             @Override
             public void componentHidden(ComponentEvent e) {
-                image.setImage(fc.imageSelection.getSelectedImage());
+                IImage img = fc.imageSelection.getSelectedImage();
+                fc.imageSelection.removeComponentListener(this);
+                
+                if(img == null)
+                    return;
+                
+                image.setImage(img.getImage());
+                imgName = img.getName();
             }
 
         });
@@ -413,7 +429,7 @@ public class PropertiesFrame extends javax.swing.JFrame {
         setVisible(false);
     } 
 
-    private void resetButtonActionPerformed(java.awt.event.ActionEvent evt) {                                         
+    private void resetButtonActionPerformed(java.awt.event.ActionEvent evt) {   
         reset();
     }   
     
@@ -421,32 +437,135 @@ public class PropertiesFrame extends javax.swing.JFrame {
     public void setVisible(boolean b){
         fc.mainframe.setEnabled(!b);
         if(!b){
+            objects.clear();
             fc.setImageSelectionVisible(b);
+            image.setImage(null);
+            
+            locationFieldX.setText("0");
+            locationFieldY.setText("0");
+            locationFieldZ.setText("0");
+            rotationFieldX.setText("0");
+            rotationFieldY.setText("0");
+            rotationFieldZ.setText("0");
+            scaleField.setText("1");
         }else{
-            ids = fc.window.getSelectedIDs();
+            ArrayList<Long> ids = fc.window.getSelectedIDs();
             if(ids == null)
                 return;
             
-            if(ids.size()>1){
-                locationFieldX.setEnabled(false);
-                locationFieldY.setEnabled(false);
-                locationFieldZ.setEnabled(false);
-                nameField.setEnabled(false);
-            }else{
-                locationFieldX.setEnabled(true);
-                locationFieldY.setEnabled(true);
-                locationFieldZ.setEnabled(true);
-                nameField.setEnabled(true);
+            for(long id : ids){
+                IDataObject object = fc.window.getDataObject(id);
+                objects.add(object);
             }
+            setObjects();
+            setImage();
+            
+            
         }
         super.setVisible(b);
+    }
+    
+    private void setObjects(){
+        
+        for(IDataObject object : objects){
+        
+            locationFieldX.setText(Float.toString(object.getXf()));
+            locationFieldY.setText(Float.toString(object.getYf()));
+            locationFieldZ.setText(Float.toString(object.getZf()));
+            nameField.setText(object.getName());
+    
+            String rotX = Double.toString(object.getRotationX());
+            String rotY = Double.toString(object.getRotationY());
+            String rotZ = Double.toString(object.getRotationZ());
+            String scale = Double.toString(object.getScale());
+            
+            if(!rotationFieldX.getText().equals("0") && !rotationFieldX.getText().equals(rotX))
+                rotationFieldX.setText("bla");
+            else
+                rotationFieldX.setText(rotX);
+            
+            if(!rotationFieldY.getText().equals("0") && !rotationFieldY.getText().equals(rotY))
+                rotationFieldY.setText("bla");
+            else
+                rotationFieldY.setText(rotY);
+            
+            if(!rotationFieldZ.getText().equals("0") && !rotationFieldZ.getText().equals(rotZ))
+                rotationFieldZ.setText("bla");
+            else
+                rotationFieldZ.setText(rotZ);
+            
+            if(!scaleField.getText().equals("1") && !scaleField.getText().equals(scale))
+                scaleField.setText("bla");
+            else
+                scaleField.setText(scale);
+        }
+        
+        if(objects.size()>1){
+            locationFieldX.setText("");
+            locationFieldY.setText("");
+            locationFieldZ.setText("");
+            nameField.setText("");
+            locationFieldX.setEnabled(false);
+            locationFieldY.setEnabled(false);
+            locationFieldZ.setEnabled(false);
+            nameField.setEnabled(false);
+        }else{
+            locationFieldX.setEnabled(true);
+            locationFieldY.setEnabled(true);
+            locationFieldZ.setEnabled(true);
+            nameField.setEnabled(true);
+        }
+    }
+    
+    private void setImage(){
+        if(objects.size() <= 0)
+            return;
+
+        IImage img = objects.get(0).getImgClass();
+        boolean different = false;
+        
+        for(IDataObject object : objects){
+            IImage i = object.getImgClass();
+            
+            if(img == null)
+                System.out.println("is null i");
+            if(i == null)
+                System.out.println("is null img");
+            
+            if((img == null && i != null) || 
+                   (img != null && i == null)){
+                different = true;
+                break;
+            }else if (img != null && i != null){ 
+                
+                if(!i.getName().equals(img.getName()) ||
+                        !i.getPath().equals(img.getPath())){
+                    different = true;
+                    break;
+                }
+            }
+                
+        }
+        
+        if(!different){
+            if(img != null){
+                imgName = img.getName();
+                imgPath  = img.getPath();
+                image.setImage(img.getImage());
+            }else{
+                image.setImage(null);
+            }
+        }else{
+            image.setText(BUNDLE.getString("DifferentImages"));
+        }
+        
+        image.repaint();
     }
     
     /**
      * Resets the form. Means it sets all field values to zero.
      */
     private void reset(){
-        
         locationFieldX.setText("0");
         locationFieldY.setText("0");
         locationFieldZ.setText("0");
@@ -454,6 +573,9 @@ public class PropertiesFrame extends javax.swing.JFrame {
         rotationFieldY.setText("0");
         rotationFieldZ.setText("0");
         scaleField.setText("1");
+        
+        setObjects();
+        setImage();
     }
     
     /**

@@ -162,10 +162,13 @@ public class GUIEventManager implements GUIObserverInterface{
             double scale) throws Exception{
         
         BufferedImage img = null;
+        String imgName = "";
         
         if(image_url != null){
             try {
-                img = ImageIO.read(new File(image_url));                
+                File imgFile = new File(image_url);
+                img = ImageIO.read(imgFile);
+                imgName = imgFile.getName();
             } catch (IOException e) {
                 System.err.println("Reading image was not possible");
             }
@@ -173,7 +176,7 @@ public class GUIEventManager implements GUIObserverInterface{
 
         ServerObject tmp = ac.server.createObject((float)x, (float)y, (float)z, 
             rotationX, rotationY, rotationZ, scale, 
-            (float)bounds[0], (float)bounds[1], name, false, img);
+            (float)bounds[0], (float)bounds[1], name, false, img, imgName);
         ac.bom.addCreatedID(tmp.id);
         ac.sem.createObject(tmp);
         
@@ -193,5 +196,24 @@ public class GUIEventManager implements GUIObserverInterface{
     public boolean imageFileExists(String name) {
         return false;
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void uploadImage(String imageUrl) {
+        
+        BufferedImage img = null;
+        String imgName = "";
+        
+        if(imageUrl != null){
+            try {
+                File imgFile = new File(imageUrl);
+                img = ImageIO.read(imgFile);
+                imgName = imgFile.getName();
+            } catch (IOException e) {
+                System.err.println("Reading image was not possible");
+            }
+        }
+        if(img != null)
+            ac.sem.updateImgLib(img, imgName);
     }
 }

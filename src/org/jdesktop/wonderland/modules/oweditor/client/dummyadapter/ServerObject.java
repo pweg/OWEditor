@@ -27,6 +27,7 @@ public class ServerObject {
     protected String name = "";
     protected boolean isAvatar = false;
     protected BufferedImage image = null;
+    protected String imgName = null;
     
     ServerObject(long id, float x, float y, float z, double rotationX, 
             double rotationY, double rotationZ,
@@ -47,7 +48,7 @@ public class ServerObject {
     ServerObject(long id, float x, float y, float z, double rotationX, 
             double rotationY, double rotationZ,
             double scale, float width, float height, String name,
-            BufferedImage image){
+            BufferedImage image, String imgName){
         this.x = x;
         this.y = y;
         this.z = z;
@@ -60,12 +61,14 @@ public class ServerObject {
         this.height = height;
         this.width = width;
         this.image = image;
+        this.imgName = imgName;
     }
     
     public ServerObject clone(){
         return new ServerObject(this.id, this.x,this.y,this.z, this.rotationX,
                 this.rotationY, this.rotationZ,
-                this.scale, this.width, this.height, this.name, this.image);
+                this.scale, this.width, this.height, this.name, this.image,
+                this.imgName);
     }
     
 

@@ -4,6 +4,7 @@ import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
 
+import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IDataObject;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IDataToGUI;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IImage;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.input.IInputToWindow;
@@ -100,6 +101,16 @@ public class WindowToFrame implements IWindowToFrame{
     @Override
     public ArrayList<IImage> getImgLib() {
         return dm.getImgLibrary();
+    }
+
+    @Override
+    public IDataObject getDataObject(long id) {
+        return dm.getObject(id);
+    }
+
+    @Override
+    public void uploadImage(String imgUrl) {
+        wc.adapter.uploadImage(imgUrl);
     }
 
 

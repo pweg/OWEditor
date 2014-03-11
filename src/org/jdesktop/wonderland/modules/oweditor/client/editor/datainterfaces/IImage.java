@@ -17,5 +17,12 @@ public interface IImage {
      * @return The name.
      */
     public String getName();
-
+    
+    /**
+     * Returns the user directory were the image is stored.
+     * 
+     * @return The Path.
+     */
+    public String getPath();
+    
 }

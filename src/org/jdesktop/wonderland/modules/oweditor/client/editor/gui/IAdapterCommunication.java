@@ -128,10 +128,28 @@ public interface IAdapterCommunication {
      *
     public void importConflictOverwrite(long id);*/
 
+    /**
+     * Does an undo action.
+     */
     public void undo();
     
+    /**
+     * Does a redo action.
+     */
     public void redo();
 
+    /**
+     * TODO currently not used yet.
+     *      * @param name
+     * @return
+     */
     public boolean imageExists(String name);
+
+    /**
+     * Uploads an image to the Server.
+     * 
+     * @param imgUrl The image url.
+     */
+    public void uploadImage(String imgUrl);
     
 }

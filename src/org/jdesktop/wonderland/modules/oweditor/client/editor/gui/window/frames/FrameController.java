@@ -135,6 +135,11 @@ public class FrameController implements IFrame{
         properties.setVisible(b);
     }
     
+    /**
+     * Returns the image selection frame.
+     * 
+     * @return The image selection frame.
+     */
     public ImageSelectionFrame getImageSelectionFrame(){
         if(imageSelection == null){
             imageSelection = new ImageSelectionFrame(this);
@@ -145,9 +150,11 @@ public class FrameController implements IFrame{
     }
     
     /**
-     * This 
+     * This sets the image selection frame visible or 
+     * hides it.
      * 
-     * @param b
+     * @param b If true, the frame will be shown, if false
+     * the frame will be hidden.
      */
     public void setImageSelectionVisible(boolean b){
         if(imageSelection == null){

@@ -151,6 +151,17 @@ public interface GUIObserverInterface {
             double z, double rotationX, double rotationY, double rotationZ,
             double scale) throws Exception;
 
+    /**
+     * Cancels the import, which removes the uploaded tmp object.
+     */
     public void cancelImport();
+    
+    /**
+     * Uploads an image to the server.
+     * 
+     * @param filePath The path of the image.
+     */
+    public void uploadImage(String imageUrl);
+    
 
 }

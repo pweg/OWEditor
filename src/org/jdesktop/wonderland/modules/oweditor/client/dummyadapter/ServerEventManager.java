@@ -68,7 +68,7 @@ public class ServerEventManager {
         object.setRotationZ(sObject.rotationZ);
         object.setScale(scale);
         object.setName(name);
-        object.setImage(sObject.image);
+        object.setImage(sObject.image, sObject.imgName, "nopath");
         
         if(sObject.isAvatar){
             object.setType(IDataObject.AVATAR);
@@ -155,6 +155,10 @@ public class ServerEventManager {
 
     public void setServerList(String[] servers) {
         dui.setServerList(servers); 
+    }
+    
+    public void setUserDir(){
+        dui.setUserDir("NoDir");
     }
 
     /**

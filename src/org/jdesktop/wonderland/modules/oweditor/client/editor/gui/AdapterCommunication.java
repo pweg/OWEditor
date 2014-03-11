@@ -290,4 +290,9 @@ public class AdapterCommunication implements IAdapterCommunication{
     public boolean imageExists(String name) {
         return goi.imageFileExists(name);
     }
+
+    @Override
+    public void uploadImage(String imgUrl) {
+        goi.uploadImage(imgUrl);
+    }
 }

@@ -94,7 +94,7 @@ public interface ITransformedObject {
      * @return A buffered image, or null, if no image 
      * is stored.
      */
-    public BufferedImage getImage();
+    public IImage getImgClass();
 
 
 }

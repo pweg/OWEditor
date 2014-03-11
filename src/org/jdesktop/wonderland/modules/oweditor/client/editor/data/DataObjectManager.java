@@ -172,7 +172,7 @@ public class DataObjectManager {
         TransformedObject t = new TransformedObject(object.getID(), p.x, p.y, 
                 object.getZf(), width, height,
                 object.getScale(), ct.getRotation(object), object.getName(),
-                object.getType(), object.getImage());
+                object.getType(), object.getImgClass());
         return t;
     }
     
@@ -338,13 +338,15 @@ public class DataObjectManager {
      * 
      * @param id The id of the object.
      * @param img The new image. It may also be null, to delete it.
+     * @param imgName The name of the image.
+     * @param path The path of the image.
      */
-    void updateImage(long id, BufferedImage img) {
+    void updateImage(long id, BufferedImage img, String imgName, String path) {
         DataObject d = data.get(id);
         if(d == null)
             return;
         
-        d.setImage(img);
+        d.setImage(img, imgName, path);
         
         for(IDataObjectObserver observer : observers){
             observer.notifyImageChange(id, img);
