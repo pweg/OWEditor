@@ -55,6 +55,21 @@ public class GUIEventManager implements GUIObserverInterface{
         ac.sem.serverTranslationChangeEvent(id);
     }
 
+
+    @Override
+    public void notifyTranslation(Long id, double x, double y, double z)
+            throws Exception {
+        ServerObject object = ac.server.getObject(id);
+        if(object == null)
+            throw new Exception();
+        
+        object.x = (float)x;
+        object.y = (float)y;
+        object.z = (float)z;
+        
+        ac.sem.serverTranslationChangeEvent(id);
+    }
+
     @Override
     public void notifyRemoval(long id) throws Exception{
         ac.sem.serverRemovalEvent(id);
@@ -117,28 +132,58 @@ public class GUIEventManager implements GUIObserverInterface{
         ac.sem.createObject(ac.server.getObject(id));
     }
 
+
     @Override
-    public void notifyRotation(long id, int x, int y, double rotation) throws Exception{
+    public void notifyRotation(long id, double rot_x, double rot_y, double rot_z)
+            throws Exception {
+        
         ServerObject object = ac.server.getObject(id);
         
         if(object == null)
             throw new Exception();
-   
-        object.rotationX = rotation;
-        notifyTranslationXY(id, x,y);
+        object.rotationX = rot_x;
+        object.rotationY = rot_y;
+        object.rotationZ = rot_z;
+        
         ac.sem.serverRotationEvent(id);
+        
     }
 
     @Override
-    public void notifyScaling(long id, int x, int y, double scale) throws Exception{
+    public void notifyScaling(long id, double scale) throws Exception {
         ServerObject object = ac.server.getObject(id);
         
         if(object == null)
             throw new Exception();
         
-        object.scale = scale;        
-        notifyTranslationXY(id, x,y);
+        object.scale = scale;
         ac.sem.serverScalingEvent(id);
+    }
+    @Override
+    public void notifyImageChange(long id, String dir, String name) throws Exception{
+        ServerObject object = ac.server.getObject(id);
+        
+        if(object == null)
+            throw new Exception();
+        
+        BufferedImage img = ac.im.getImage(dir, name);
+        
+        ac.sem.serverImageChangeEvent(id, img, dir, name);
+        
+        
+    }
+
+    @Override
+    public void notifyNameChange(Long id, String name) throws Exception{
+        ServerObject object = ac.server.getObject(id);
+        
+        if(object == null)
+            throw new Exception();
+        
+        object.name = name;
+        
+        ac.sem.serverNameChange(id);
+        
     }
 
     @Override
@@ -209,6 +254,7 @@ public class GUIEventManager implements GUIObserverInterface{
                 File imgFile = new File(imageUrl);
                 img = ImageIO.read(imgFile);
                 imgName = imgFile.getName();
+                ac.im.addImage(AdapterSettings.IMAGEDIR, imgName, img);
             } catch (IOException e) {
                 System.err.println("Reading image was not possible");
             }
@@ -216,4 +262,5 @@ public class GUIEventManager implements GUIObserverInterface{
         if(img != null)
             ac.sem.updateImgLib(img, imgName);
     }
+
 }

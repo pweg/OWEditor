@@ -1,27 +1,24 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.commands;
 
-import java.awt.Point;
 import java.util.ArrayList;
 
 import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.GUIObserverInterface;
 
 /**
- * This is a translation, which only translates x and y. This is 
- * used by the editors normal translate option, where the user 
- * moves a 2d shape. The coordinates are from the editor, which 
- * need to be transformed by the adapter.
+ * This is a normal translation, which translates x, y and z with
+ * the original coordinates, used by the virtual world.
  * 
  * @author Patrick
  *
  */
-public class TranslateXY implements Command{
+public class TranslateFloat implements Command{
 
     ArrayList<Long> ids;
-    ArrayList<Point> coordsOld;
-    ArrayList<Point> coordsNew;
+    ArrayList<Vector3D> coordsOld;
+    ArrayList<Vector3D> coordsNew;
     
-    public TranslateXY(ArrayList<Long> ids, ArrayList<Point> coordsOld,
-            ArrayList<Point> coordsNew){
+    public TranslateFloat(ArrayList<Long> ids, ArrayList<Vector3D> coordsOld,
+            ArrayList<Vector3D> coordsNew){
         this.ids = ids;
         this.coordsOld = coordsOld;
         this.coordsNew = coordsNew;
@@ -49,17 +46,17 @@ public class TranslateXY implements Command{
      * @param goi A guiobserverinterface instance.
      * @param coords A list of coordinates.
      */
-    private void translate(GUIObserverInterface goi, ArrayList<Point> coords)
+    private void translate(GUIObserverInterface goi, ArrayList<Vector3D> coords)
         throws Exception{
         int failcount = 0;
         
         try{
             for(int i=0;i < ids.size();i++){
                 Long id = ids.get(i);
-                Point p = coords.get(i);
+                Vector3D p = coords.get(i);
                 
                 try{
-                    goi.notifyTranslationXY(id, p.x, p.y);
+                    goi.notifyTranslation(id, p.x, p.y, p.z);
                 }catch(Exception e){
                     failcount++;
                 }

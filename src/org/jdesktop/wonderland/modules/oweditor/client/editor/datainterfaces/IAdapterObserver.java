@@ -71,6 +71,14 @@ public interface IAdapterObserver {
      * @param scale The new scale of the object.
      */
     public void notifyScaling(long id, double scale);
+
+    /**
+     * Notifies a name change event.
+     * 
+     * @param id The id of the object.
+     * @param name The new name.
+     */
+    public void notifyNameChange(Long id, String name);
     
     /**
      * Notifies the event, when a representation image is created, or changed.
@@ -78,10 +86,10 @@ public interface IAdapterObserver {
      * @param id The id of the object.
      * @param img The new BufferedImage.
      * @param name The name of the new image.
-     * @param path The user directory of the new image.
+     * @param dir The user directory of the new image.
      */
     public void notifyImageChange(long id, BufferedImage img, String name,
-            String path);
+            String dir);
 
     /**
      * Sets up the name of the users directory.
@@ -98,6 +106,8 @@ public interface IAdapterObserver {
      * @param name 
      */
     public void updateImgLib(BufferedImage img, String name);
+
+
     
 
 }

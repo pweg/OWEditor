@@ -33,4 +33,6 @@ public interface IDataObjectObserver {
     public void notifyScaling(long id, double scale);
 
     public void notifyImageChange(long id, BufferedImage img);
+
+    public void notifyNameChange(Long id, String name);
 }

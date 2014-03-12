@@ -44,10 +44,20 @@ public class PropertiesFrame extends javax.swing.JFrame {
     
     //font for the labels.
     private Font normalFont = null;
+    
     private ArrayList<IDataObject> objects = null;
     
     private String imgName = null;
-    private String imgPath = null;
+    
+    private String initialX = null;
+    private String initialY = null;
+    private String initialZ = null;
+    private String initialRotX = null;
+    private String initialRotY = null;
+    private String initialRotZ = null;
+    private String initialScale = null;
+    private String initialName = null;
+    private String initialImg = null;
             
     /**
      * Creates new properties frame.
@@ -421,7 +431,153 @@ public class PropertiesFrame extends javax.swing.JFrame {
         frame.setVisible(true);
     }
 
-    private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {     
+    private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {  
+        
+        ArrayList<Long> ids = new ArrayList<Long>();
+        ArrayList<String> names = null; 
+        ArrayList<Float> coordsX = null; 
+        ArrayList<Float> coordsY = null; 
+        ArrayList<Float> coordsZ = null; 
+        ArrayList<Double> rotX = null; 
+        ArrayList<Double> rotY = null; 
+        ArrayList<Double> rotZ = null; 
+        ArrayList<Double> scaleList = null; 
+        ArrayList<String> img_name = null;
+        
+
+        String name = nameField.getText();
+        String xs = locationFieldX.getText();
+        String ys = locationFieldY.getText();
+        String zs = locationFieldZ.getText();
+        String rot_xs = rotationFieldX.getText();
+        String rot_ys = rotationFieldY.getText();
+        String rot_zs = rotationFieldZ.getText();
+        String scales = scaleField.getText(); 
+        
+        if(!initialName.equals(name))
+            names = new ArrayList<String>(); 
+        if(!initialX.equals(xs) || !initialY.equals(ys) ||
+                !initialZ.equals(zs)){
+            coordsX = new ArrayList<Float>(); 
+            coordsY = new ArrayList<Float>(); 
+            coordsZ = new ArrayList<Float>(); 
+        }
+        
+        if(!initialRotX.equals(rot_xs) || !initialRotY.equals(rot_ys) ||
+                !initialRotZ.equals(rot_zs)){
+            rotX = new ArrayList<Double>(); 
+            rotY = new ArrayList<Double>(); 
+            rotZ = new ArrayList<Double>(); 
+        }
+        if(!initialScale.equals(scales))
+            scaleList = new ArrayList<Double>(); 
+        if((initialImg == null && img_name != null) 
+                || (img_name != null && img_name.equals(initialImg)))
+            img_name = new ArrayList<String>(); 
+        
+        if(names == null && coordsX == null && coordsY == null &&
+                coordsZ == null && rotX == null && rotY == null &&
+                rotZ == null && scaleList == null && img_name == null){
+            setVisible(false);
+            return;      
+        }
+        
+        float x = -1;
+        float y = -1;
+        float z = -1;
+        double rot_x = -1;
+        double rot_y = -1;
+        double rot_z = -1;
+        double scale = -1;
+        
+        try{
+            x = Float.parseFloat(xs);
+        }catch(Exception e){
+            
+        }
+        try{
+            y = Float.parseFloat(ys);
+        }catch(Exception e){
+            
+        }
+        try{
+            z = Float.parseFloat(zs);
+        }catch(Exception e){
+            
+        }
+        try{
+            rot_x = Double.parseDouble(rot_xs);
+        }catch(Exception e){
+            
+        }
+        try{
+            rot_y = Double.parseDouble(rot_ys);
+        }catch(Exception e){
+            
+        }
+        try{
+            rot_z = Double.parseDouble(rot_zs);
+        }catch(Exception e){
+            
+        }
+        try{
+            scale = Double.parseDouble(scales);  
+        }catch(Exception e){
+            
+        } 
+        
+        for(IDataObject o : objects){
+            ids.add(o.getID());
+            
+            if(names != null)
+                names.add(name);
+            if(coordsX != null){
+                if(x != -1)
+                    coordsX.add(x);
+                else
+                    coordsX.add(o.getXf());
+            }
+            if(coordsY != null){
+                if(y != -1)
+                    coordsY.add(y);
+                else
+                    coordsY.add(o.getYf());
+            }
+            if(coordsZ != null){
+                if(z != -1)
+                    coordsZ.add(z);
+                else
+                    coordsZ.add(o.getZf());
+            }
+            if(rotX != null){
+                if(x != -1)
+                    rotX.add(rot_x);
+                else
+                    rotX.add(o.getRotationX());
+            }
+            if(rotY != null){
+                if(y != -1)
+                    rotY.add(rot_y);
+                else
+                    rotY.add(o.getRotationY());
+            }
+            if(rotZ != null){
+                if(z != -1)
+                    rotZ.add(rot_z);
+                else
+                    rotZ.add(o.getRotationZ());
+            }
+            if(scaleList != null){
+                if(scale != -1)
+                    scaleList.add(scale);
+                else
+                    scaleList.add(o.getScale());
+            }
+        }
+        
+        fc.window.setProperties(ids, names, coordsX, coordsY, coordsZ, 
+                rotX, rotY, rotZ, scaleList, img_name);
+        setVisible(false);
         
     } 
 
@@ -458,14 +614,15 @@ public class PropertiesFrame extends javax.swing.JFrame {
                 objects.add(object);
             }
             setObjects();
-            setImage();
-            
+            setImage();            
             
         }
         super.setVisible(b);
     }
     
     private void setObjects(){
+        
+        initialImg = "";
         
         for(IDataObject object : objects){
         
@@ -498,7 +655,25 @@ public class PropertiesFrame extends javax.swing.JFrame {
                 scaleField.setText("bla");
             else
                 scaleField.setText(scale);
+
+            if(initialImg != null){
+                String imgName = object.getImgClass().getName();
+                
+                if(initialImg.equals(""))
+                    initialImg = imgName;
+                else if(initialImg.equals(imgName))
+                    initialImg = null;
+            }
         }
+        
+        initialX = locationFieldX.getText();
+        initialY = locationFieldY.getText();
+        initialZ = locationFieldZ.getText();
+        initialRotX = rotationFieldX.getText();
+        initialRotY = rotationFieldY.getText();
+        initialRotZ = rotationFieldZ.getText();
+        initialScale = scaleField.getText();
+        initialName = nameField.getText();
         
         if(objects.size()>1){
             locationFieldX.setText("");
@@ -550,7 +725,6 @@ public class PropertiesFrame extends javax.swing.JFrame {
         if(!different){
             if(img != null){
                 imgName = img.getName();
-                imgPath  = img.getPath();
                 image.setImage(img.getImage());
             }else{
                 image.setImage(null);

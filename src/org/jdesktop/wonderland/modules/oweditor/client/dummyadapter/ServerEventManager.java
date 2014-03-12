@@ -139,6 +139,21 @@ public class ServerEventManager {
         dui.notifyRotation(id, so.rotationX, so.rotationY ,so.rotationZ);
     }
 
+
+    public void serverNameChange(Long id) {
+        if(dui == null){
+            System.out.println("DataInterface is not in the adapter");
+            return;
+        }
+        
+        ServerObject so = ac.server.getObject(id);
+        
+        if(so == null)
+            return;
+        
+        dui.notifyNameChange(id, so.name);
+    }
+
     public void serverScalingEvent(long id) {
         if(dui == null){
             System.out.println("DataInterface is not in the adapter");
@@ -169,6 +184,11 @@ public class ServerEventManager {
      */
     public void updateImgLib(BufferedImage img, String name) {
         dui.updateImgLib(img, name);
+    }
+
+    public void serverImageChangeEvent(long id, BufferedImage img, String dir,
+            String name) {
+        dui.notifyImageChange(id, img, name, dir);
     }
 
 }

@@ -333,6 +333,18 @@ public class DataObjectManager {
         return point;
     }
 
+    public void updateName(Long id, String name) {
+        DataObject d = data.get(id);
+        if(d == null)
+            return;
+        
+        d.setName(name);
+        
+        for(IDataObjectObserver observer : observers){
+            observer.notifyNameChange(id, name);
+        }
+    }
+
     /**
      * Updates the image of an object.
      * 

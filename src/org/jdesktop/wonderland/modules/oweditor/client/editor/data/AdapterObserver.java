@@ -64,6 +64,11 @@ public class AdapterObserver implements IAdapterObserver{
     public void notifyScaling(long id, double scale) {
         dm.updateScale(id, scale);
     }
+
+    @Override
+    public void notifyNameChange(Long id, String name) {
+        dm.updateName(id, name);
+    }
     
     @Override
     public void notifyImageChange(long id, BufferedImage img, String name, String path){
@@ -79,6 +84,7 @@ public class AdapterObserver implements IAdapterObserver{
     public void updateImgLib(BufferedImage img, String name) {
         um.addNewImage(img, name);
     }
+
 
 
 }

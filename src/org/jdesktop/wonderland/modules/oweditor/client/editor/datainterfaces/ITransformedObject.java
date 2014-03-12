@@ -1,6 +1,5 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces;
 
-import java.awt.image.BufferedImage;
 
 /**
  * This interface is used for updates for the GUI, which are
@@ -31,7 +30,7 @@ public interface ITransformedObject {
     public int getY();
 
     /**
-     * Returns the z coordinate of the object in double.
+     * Returns the z coordinate of the object in float.
      * 
      * @return the z coordinate.
      */

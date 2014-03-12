@@ -6,15 +6,22 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.GUIObserverInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IDataObject;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IDataToGUI;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.ITransformedObject;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.commands.Command;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.commands.Delete;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.commands.Paste;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.commands.SetProperties;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.commands.Rotate;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.commands.RotateTranslate;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.commands.Scale;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.commands.ScaleTranslate;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.commands.Import;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.commands.SetImage;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.commands.TranslateFloat;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.commands.TranslateXY;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.commands.Vector3D;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.IWindow;
 
 /**
@@ -68,15 +75,7 @@ public class AdapterCommunication implements IAdapterCommunication{
     @Override
     public void setObjectRemoval(ArrayList<Long> ids){
         Command command = new Delete(ids);
-        undoList.add(command);
-        try {
-            command.execute(goi);
-        } catch (Exception ex) {
-            Logger.getLogger(AdapterCommunication.class.getName()).log(Level.WARNING, null, ex);
-        }
-        redoList.clear();
-        window.setUndoEnabled(true);
-        window.setRedoEnabled(false);
+        executeCom(command);
     }
     
     @Override
@@ -93,15 +92,7 @@ public class AdapterCommunication implements IAdapterCommunication{
         }
         
         Command command = new TranslateXY(ids, coordinates_old, coordinates);
-        undoList.add(command);
-        try {
-            command.execute(goi);
-        } catch (Exception ex) {
-            Logger.getLogger(AdapterCommunication.class.getName()).log(Level.WARNING, null, ex);
-        }
-        redoList.clear();
-        window.setUndoEnabled(true);
-        window.setRedoEnabled(false);
+        executeCom(command);
     }
     
     @Override
@@ -112,15 +103,7 @@ public class AdapterCommunication implements IAdapterCommunication{
     @Override
     public void setPasteUpdate(ArrayList<Long> ids, ArrayList<Point> coordinates) {
         Command command = new Paste(ids, coordinates);
-        undoList.add(command);
-        try {
-            command.execute(goi);
-        } catch (Exception ex) {
-            Logger.getLogger(AdapterCommunication.class.getName()).log(Level.WARNING, null, ex);
-        }
-        redoList.clear();
-        window.setUndoEnabled(true);
-        window.setRedoEnabled(false);
+        executeCom(command);
     }
 
     @Override
@@ -131,25 +114,25 @@ public class AdapterCommunication implements IAdapterCommunication{
             return;
         
         ArrayList<Point> coordinates_old = new ArrayList<Point>();
-        ArrayList<Double> rotation_old = new ArrayList<Double>();
+        ArrayList<Vector3D> rotation_old = new ArrayList<Vector3D>();
+        ArrayList<Vector3D> rotation_new = new ArrayList<Vector3D>();
         
-        for(long id : ids){
-            ITransformedObject o = dm.getTransformedObject(id);
-            coordinates_old.add(new Point(o.getX(), o.getY()));
-            rotation_old.add(o.getRotation());
+        for(int i = 0; i<ids.size();i++){
+            long id = ids.get(i);
+            
+            IDataObject o = dm.getObject(id);
+            ITransformedObject t = dm.getTransformedObject(id);
+            coordinates_old.add(new Point(t.getX(), t.getY()));
+            
+            rotation_old.add(new Vector3D(o.getRotationX(), o.getRotationY(),
+                    o.getRotationZ()));
+            rotation_new.add(new Vector3D(rotation.get(i), o.getRotationY(),
+                    o.getRotationZ()));
         }
         
-        Command command = new Rotate(ids, coordinates_old, rotation_old, 
-                coordinates, rotation);
-        undoList.add(command);
-        try {
-            command.execute(goi);
-        } catch (Exception ex) {
-            Logger.getLogger(AdapterCommunication.class.getName()).log(Level.WARNING, null, ex);
-        }
-        redoList.clear();
-        window.setUndoEnabled(true);
-        window.setRedoEnabled(false);
+        Command command = new RotateTranslate(ids, coordinates_old, rotation_old, 
+                coordinates, rotation_new);
+        executeCom(command);
     }
 
     @Override
@@ -168,17 +151,9 @@ public class AdapterCommunication implements IAdapterCommunication{
             scale_old.add(o.getScale());
         }
         
-        Command command = new Scale(ids, coordinates_old, scale_old, 
+        Command command = new ScaleTranslate(ids, coordinates_old, scale_old, 
                 coordinates, scale);
-        undoList.add(command);
-        try {
-            command.execute(goi);
-        } catch (Exception ex) {
-            Logger.getLogger(AdapterCommunication.class.getName()).log(Level.WARNING, null, ex);
-        }
-        redoList.clear();
-        window.setUndoEnabled(true);
-        window.setRedoEnabled(false);
+        executeCom(command);
     }
 
     @Override
@@ -218,30 +193,146 @@ public class AdapterCommunication implements IAdapterCommunication{
             Import imp = new Import();
             imp.setID(id);
             
-            undoList.add(imp);
-            redoList.clear();
-            window.setUndoEnabled(true);
-            window.setRedoEnabled(false);
+            executeCom(imp);
             return true;
         } catch (Exception ex) {
             Logger.getLogger(AdapterCommunication.class.getName()).log(Level.WARNING, null, ex);
             return false;
         }
     }
-
-    /*
+    
     @Override
-    public void importConflictCopy(long id) {
-        undoList.add(new Import());
-        goi.importConflictCopy(id);
+    public void setProperties(ArrayList<Long> ids, ArrayList<String> names,
+            ArrayList<Float> coordsX, ArrayList<Float> coordsY, ArrayList<Float> coordsZ,
+            ArrayList<Double> rotX, ArrayList<Double> rotY, ArrayList<Double> rotZ,
+            ArrayList<Double> scale, ArrayList<String> imgName){
+        
+        String userDir = dm.getUserImgDir();
+
+        ArrayList<Vector3D> coords_old = new ArrayList<Vector3D>();
+        ArrayList<Vector3D> coords_new = new ArrayList<Vector3D>();
+        ArrayList<Vector3D> rot_old = new ArrayList<Vector3D>();
+        ArrayList<Vector3D> rot_new = new ArrayList<Vector3D>();
+        ArrayList<Double> scale_old = new ArrayList<Double>();
+        ArrayList<Double> scale_new = scale;
+        ArrayList<String> img_name_old =  new ArrayList<String>();
+        ArrayList<String> img_path_old =  new ArrayList<String>();
+        ArrayList<String> img_path_new =  new ArrayList<String>();
+        
+        if(coordsX == null && coordsY == null && coordsZ == null){
+            coords_new = null;
+        }
+        
+        if(rotX == null && rotY == null && rotZ == null){
+            rot_new = null;
+        }
+        for(int i=0;i< ids.size();i++){
+            long id = ids.get(i);
+            IDataObject o = dm.getObject(id);
+
+            float x = o.getXf();            
+            float y = o.getYf();            
+            float z = o.getZf();
+            
+            coords_old.add(new Vector3D(x, y, z));
+            
+            if(coords_new != null){
+                if(coordsX != null && i<coordsX.size()){
+                    x = coordsX.get(i);
+                }
+                
+                if(coordsY != null && i<coordsY.size()){
+                    y = coordsY.get(i);
+                }
+                
+                if(coordsZ != null && i<coordsZ.size()){
+                    z = coordsZ.get(i);
+                }
+                coords_new.add(new Vector3D(x,y,z));
+            }
+
+            double rot_x = o.getRotationX();            
+            double rot_y = o.getRotationY();            
+            double rot_z = o.getRotationZ();
+            
+            rot_old.add(new Vector3D(rot_x, rot_y, rot_z));
+            
+            if(rot_new != null){
+                if(rotX != null && i<rotX.size()){
+                    rot_x = rotX.get(i);
+                }
+                
+                if(rotY != null && i<rotY.size()){
+                    rot_y = rotY.get(i);
+                }
+                
+                if(rotZ != null && i<rotZ.size()){
+                    rot_z = rotZ.get(i);
+                }
+                rot_new.add(new Vector3D(rot_x,rot_y,rot_z));
+            }
+            
+            if(imgName != null){
+                img_name_old.add(o.getImgClass().getName());
+                img_path_old.add(o.getImgClass().getPath());
+                img_path_new.add(userDir);
+            }
+            
+            double scale_object = o.getScale();
+            scale_old.add(scale_object);
+        }
+        Command translateCom = null;
+        if(coords_new != null){
+            translateCom = new TranslateFloat(ids, coords_old, coords_new);
+        }
+        Command rotateCom = null;
+        if(rot_new != null){
+            rotateCom = new Rotate(ids, rot_old, rot_new);
+        }
+        Command scaleCom = null;
+        if(scale_new != null){
+            scaleCom = new Scale(ids, scale_old, scale_new);
+        }
+        Command imgCom = null;
+        if(imgName != null){
+            imgCom = new SetImage(ids, img_name_old, img_path_old, imgName,
+                    img_path_new);
+        }
+        
+        Command command = new SetProperties(translateCom, rotateCom, scaleCom, imgCom, null);
+         
+        executeCom(command);
         
     }
 
     @Override
-    public void importConflictOverwrite() {
-        undoList.add(new Import());
-        goi.importConflictOverwrite(id);
-    }*/
+    public boolean imageExists(String name) {
+        return goi.imageFileExists(name);
+    }
+
+    @Override
+    public void uploadImage(String imgUrl) {
+        goi.uploadImage(imgUrl);
+    }
+
+    /**
+     * Executes a command.
+     * 
+     * @param command The command to execute.
+     */
+    private void executeCom(Command command){
+        
+        undoList.add(command);
+        
+        try {
+            command.execute(goi);
+        } catch (Exception ex) {
+            Logger.getLogger(AdapterCommunication.class.getName()).log(Level.WARNING, null, ex);
+        }
+        redoList.clear();
+        window.setUndoEnabled(true);
+        window.setRedoEnabled(false);
+    }
 
     @Override
     public void undo() {
@@ -286,13 +377,6 @@ public class AdapterCommunication implements IAdapterCommunication{
             redo();
         }
     }
-
-    public boolean imageExists(String name) {
-        return goi.imageFileExists(name);
-    }
-
-    @Override
-    public void uploadImage(String imgUrl) {
-        goi.uploadImage(imgUrl);
-    }
+    
+    
 }

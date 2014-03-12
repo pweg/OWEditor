@@ -109,5 +109,10 @@ public class DataController implements IDataToMainController,
         um.removeObserver(observer);
     }
 
+    @Override
+    public String getUserImgDir() {
+        return um.getUserDir();
+    }
+
 
 }

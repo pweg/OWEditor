@@ -70,7 +70,7 @@ public class GUIEventManager implements GUIObserverInterface{
     }
 
     @Override
-    public void notifyScaling(long id, int x, int y, double scale) throws Exception{
+    public void notifyScaling2(long id, int x, int y, double scale) throws Exception{
         id = ac.bm.getActiveID(id);
         ac.sc.scale(id,(float) scale);
         notifyTranslationXY(id,x,y);

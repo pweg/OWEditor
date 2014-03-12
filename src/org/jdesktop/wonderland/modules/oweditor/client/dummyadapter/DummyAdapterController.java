@@ -25,6 +25,7 @@ public class DummyAdapterController implements AdapterControllerMainControllerIn
     protected ServerSimulator server = null;
     protected CoordinateTranslator ct = null;
     protected BackupManager bom = null;
+    protected ImageManager im = null;
     
     public DummyAdapterController(){
         
@@ -37,6 +38,7 @@ public class DummyAdapterController implements AdapterControllerMainControllerIn
         server = new ServerSimulator();
         ct = new CoordinateTranslator();
         bom = new BackupManager();
+        im = new ImageManager();
         
         registerComponents();
     }
@@ -61,8 +63,10 @@ public class DummyAdapterController implements AdapterControllerMainControllerIn
         
         sem.setUserDir();
 
-        for(ImageClass img : getImgLib(new File(AdapterSettings.IMAGEDIR)))
+        for(ImageClass img : getImgLib(new File(AdapterSettings.IMAGEDIR))){
+            im.addImage(AdapterSettings.IMAGEDIR, img.name, img.img);
             sem.updateImgLib(img.img, img.name);
+        }
         
         WorldBuilder builder = new WorldBuilder(this, sem);
         builder.build();

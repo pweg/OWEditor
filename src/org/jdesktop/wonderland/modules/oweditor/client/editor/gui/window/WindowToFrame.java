@@ -113,5 +113,16 @@ public class WindowToFrame implements IWindowToFrame{
         wc.adapter.uploadImage(imgUrl);
     }
 
+    @Override
+    public void setProperties(ArrayList<Long> ids, ArrayList<String> names,
+            ArrayList<Float> coordsX, ArrayList<Float> coordsY,
+            ArrayList<Float> coordsZ, ArrayList<Double> rotX,
+            ArrayList<Double> rotY, ArrayList<Double> rotZ,
+            ArrayList<Double> scale, ArrayList<String> imgName) {
+        wc.adapter.setProperties(ids, names, coordsX, coordsY, coordsZ, 
+                rotX, rotY, rotZ, scale, imgName);
+        
+    }
+
 
 }

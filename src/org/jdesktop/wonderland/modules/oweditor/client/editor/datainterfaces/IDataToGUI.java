@@ -80,6 +80,13 @@ public interface IDataToGUI {
      * @return An arraylist containing buffered images.
      */
     public ArrayList<IImage> getImgLibrary();
+    
+    /**
+     * Returns the users image library directory.
+     * 
+     * @return The directory.
+     */
+    public String getUserImgDir();
 
     /**
      * Registers an observer for the data object manager, which informs

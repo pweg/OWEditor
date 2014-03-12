@@ -14,7 +14,10 @@ public interface GUIObserverInterface {
     /**
      * Makes a translation update for an object. When only 
      * one coordinate changes, all other coordinates have to be
-     * set as well.
+     * set as well. This method should be called when a graphical
+     * translation is made (like the user moves the shapes in the editor).
+     * This translation takes editor intern coordinates, which are then
+     * transformed by the adapter.
      * 
      * @param id the object id.
      * @param x the x coordinate, the object is moved to.
@@ -24,28 +27,38 @@ public interface GUIObserverInterface {
     public void notifyTranslationXY(long id, int x, int y) throws Exception;
     
     /**
-     * Notifies a simple rotation, which means a rotation around
-     * the y axis. This is the rotation done directly in the 
-     * 2d environment.
+     * Makes a translation update for an object. Unlike the XY translation, this
+     * method uses virtual world coordinates, which WILL NOT BE TRANSFORMED.
      * 
-     * @param id the object id.
-     * @param x the x coordinate, the object is moved to.
-     * @param y the y coordinate, the object is moved to.
-     * @param rotation the rotation of the object.
+     * @param id
+     * @param x
+     * @param y
+     * @param z
      * @throws java.lang.Exception
      */
-    public void notifyRotation(long id, int x, int y, double rotation) throws Exception;
+    public void notifyTranslation(Long id, double x, double y, double z) throws Exception;
+    
+    /**
+     * Notifies a simple rotation, which means a rotation around
+     * the y axis in Open wonderland.
+     * 
+     * @param id the object id.
+     * @param rot_x the rotation in the x axis of the object.
+     * @param rot_y the rotation in the y axis of the object.
+     * @param rot_z the rotation in the z axis of the object.
+     * @throws java.lang.Exception
+     */
+    public void notifyRotation(long id, double rot_x, double rot_y, double rot_z) throws Exception;
 
     /**
      * Notifies adapter for object scaling.
      * 
      * @param id the object id.
-     * @param x the x coordinate, the object is moved to.
-     * @param y the y coordinate, the object is moved to.
      * @param scale the new scale.
      * @throws java.lang.Exception
      */
-    public void notifyScaling(long id, int x, int y, double scale) throws Exception;
+    public void notifyScaling(long id, double scale) throws Exception;
+    
     /**
      * Deletes an object.
      * 
@@ -81,6 +94,24 @@ public interface GUIObserverInterface {
      * @throws java.lang.Exception
      */
     public void notifyPaste(long id, int x, int y) throws Exception;
+    /**
+     * Notifies a change of the representational image.
+     * 
+     * @param id The id of the object, where the image should be changed.
+     * @param dir The directory of the image.
+     * @param name The name of the image.
+     */
+    public void notifyImageChange(long id, String dir, String name) 
+        throws Exception;
+
+    /**
+     * Notifies a change of an object name.
+     * 
+     * @param id The id of the object.
+     * @param name The new name of the object.
+     * @throws Exception 
+     */
+    public void notifyNameChange(Long id, String name) throws Exception;
     
     /**
      * Undoes creational actions, which generate a new
@@ -162,6 +193,8 @@ public interface GUIObserverInterface {
      * @param filePath The path of the image.
      */
     public void uploadImage(String imageUrl);
+
+
     
 
 }

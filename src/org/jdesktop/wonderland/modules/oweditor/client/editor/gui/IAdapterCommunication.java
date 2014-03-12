@@ -151,5 +151,27 @@ public interface IAdapterCommunication {
      * @param imgUrl The image url.
      */
     public void uploadImage(String imgUrl);
+
+    /**
+     * Sets all properties of selected objects. If 
+     * specific properties should not be set, pass null
+     * for the variable.
+     * 
+     * @param ids The ids of the objects to change.
+     * @param names The new names of the objects.
+     * @param coordsX The new x coordinates.
+     * @param coordsY The new y coordinates.
+     * @param coordsZ The new z coordinates.
+     * @param rotX The new x rotation.
+     * @param rotY The new y rotation.
+     * @param rotZ The new z rotation.
+     * @param scale The new scale.
+     * @param imgName The new image name.
+     */
+    void setProperties(ArrayList<Long> ids, ArrayList<String> names,
+            ArrayList<Float> coordsX, ArrayList<Float> coordsY,
+            ArrayList<Float> coordsZ, ArrayList<Double> rotX,
+            ArrayList<Double> rotY, ArrayList<Double> rotZ,
+            ArrayList<Double> scale, ArrayList<String> imgName);
     
 }

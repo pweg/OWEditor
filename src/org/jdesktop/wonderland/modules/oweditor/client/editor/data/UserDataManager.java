@@ -77,6 +77,10 @@ public class UserDataManager {
         for(IUserObserver observer : observers)
             observer.notifyImageChange();
     }
+
+    public String getUserDir() {
+        return userDir;
+    }
     
    
 
