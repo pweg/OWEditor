@@ -45,31 +45,25 @@ public interface IWindow extends GraphicForwardInterface{
      */
     public void registerInputInterface(IInputToWindow input);
     
+    /**
+     * Returns the interface for the input package.
+     * 
+     * @return The interface.
+     */
     public IWindowToInput getInputInterface();
+    
     /**
      * This repaints ONLY the drawing panel, nothing else.
      */
     public void repaint();
     
+    /**
+     * Sets the window visible.
+     * 
+     * @param visibility True = visible, false = not visible.
+     */
     public void setVisible(boolean visibility);
     
-    /**
-     * Returns the translation value in x direction.
-     * This translation value is used to move the whole 2d graph away
-     * from the minus coordinates, to fit in the 0,0 coordinates of the shapes,
-     * which do not allow for minus coordinates.
-     * 
-     * @return the value of the graph translation.
-     */
-    /**
-     * Returns the translation value in y direction.
-     * This translation value is used to move the whole 2d graph away
-     * from the minus coordinates, to fit in the 0,0 coordinates of the shapes,
-     * which do not allow for minus coordinates.
-     * 
-     * @return the value of the graph translation.
-     */
-
     /**
      * This sets a new width for the world represented in the 
      * drawing panel

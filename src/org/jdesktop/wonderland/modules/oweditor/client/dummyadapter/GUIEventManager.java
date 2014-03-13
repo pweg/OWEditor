@@ -202,21 +202,14 @@ public class GUIEventManager implements GUIObserverInterface{
     }
 
     @Override
-    public long importKMZ(String name, String image_url, double x, double y,
+    public long importKMZ(String name, String imgName, double x, double y,
             double z, double rotationX, double rotationY, double rotationZ,
             double scale) throws Exception{
         
         BufferedImage img = null;
-        String imgName = "";
         
-        if(image_url != null){
-            try {
-                File imgFile = new File(image_url);
-                img = ImageIO.read(imgFile);
-                imgName = imgFile.getName();
-            } catch (IOException e) {
-                System.err.println("Reading image was not possible");
-            }
+        if(imgName != null){
+            img = ac.im.getImage(AdapterSettings.IMAGEDIR, imgName);
         }
 
         ServerObject tmp = ac.server.createObject((float)x, (float)y, (float)z, 
@@ -239,8 +232,7 @@ public class GUIEventManager implements GUIObserverInterface{
     }
 
     public boolean imageFileExists(String name) {
-        return false;
-        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return ac.im.imageExists(AdapterSettings.IMAGEDIR, name);
     }
 
     @Override

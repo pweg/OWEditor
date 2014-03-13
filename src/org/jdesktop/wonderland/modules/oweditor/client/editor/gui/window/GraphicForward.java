@@ -70,4 +70,9 @@ public class GraphicForward implements GraphicForwardInterface{
     public void updateImage(long id, BufferedImage img) {
         graphic.updateShapeImage(id, img);
     }
+
+    @Override
+    public void updateName(Long id, String name) {
+        graphic.updateShapeName(id, name);
+    }
 }

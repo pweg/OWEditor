@@ -24,6 +24,8 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IIm
  */
 
 /**
+ * This is the image selection frame, where users can select an image, 
+ * which represents the item they currently modify.
  *
  * @author Patrick
  */
@@ -44,7 +46,9 @@ public class ImageSelectionFrame extends javax.swing.JFrame {
 
 
     /**
-     * Creates new form ImageSelectionFrame
+     * Creates new ImageSelectionFrame
+     * 
+     * @param fc The frame controller.
      */
     public ImageSelectionFrame(FrameController fc) {
         this.fc  = fc;
@@ -55,7 +59,6 @@ public class ImageSelectionFrame extends javax.swing.JFrame {
         buttons = new ArrayList<ImageToggleButton>();
 
     }
-
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -142,6 +145,9 @@ public class ImageSelectionFrame extends javax.swing.JFrame {
      */
     private void buildImagePanel() {
         imagePanel.removeAll();
+        buttons.clear();
+        
+        //parameters for the gridbag layout
         GridBagConstraints c = new GridBagConstraints();
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridwidth = 1;
@@ -159,6 +165,7 @@ public class ImageSelectionFrame extends javax.swing.JFrame {
             }
         };
         
+        //Creates the image buttons.
         for(IImage img : imgs){
             c.gridx = x;
             c.gridy = y;
@@ -166,6 +173,7 @@ public class ImageSelectionFrame extends javax.swing.JFrame {
             button.setPreferredSize(new Dimension(
                     imageScrllPanel.getWidth()/3, 
                     imageScrllPanel.getHeight()/3));
+            
             button.setName(Integer.toString(count));
             button.addActionListener(action);
             buttons.add(button);
@@ -177,7 +185,7 @@ public class ImageSelectionFrame extends javax.swing.JFrame {
                 y++;
                 x=0;
             }
-        }        
+        }  
     }
 
     private void cancelActionPerformed(java.awt.event.ActionEvent evt) {  
@@ -213,23 +221,65 @@ public class ImageSelectionFrame extends javax.swing.JFrame {
             File[] files = chooser.getSelectedFiles();
             
             for(File file : files){
-
-                String path = file.getAbsolutePath();
-                lastDir = file.getParent();
                 
-                try {
-                    BufferedImage img = null;
-                    img = ImageIO.read(new File(path));
-                    fc.window.uploadImage(path);
+                //check for image name conflicts.
+                if(fc.window.imageExists(file.getName())){
+                    Object[] options = {BUNDLE.getString("Overwrite"),
+                            BUNDLE.getString("Cancel")};
+                    int ret2 = JOptionPane.showOptionDialog(this,
+                        BUNDLE.getString("ImageConflictError"),
+                        BUNDLE.getString("ConflictErrorTitle"),
+                        JOptionPane.YES_NO_CANCEL_OPTION,
+                        JOptionPane.QUESTION_MESSAGE,
+                        null,
+                        options,
+                        options[1]);
                     
-                } catch (IOException e) {
-                    showError(BUNDLE.getString("ImageError"),BUNDLE.getString("ImageErrorTitle"));
+                    //overwrite
+                    if(ret2!=1){
+                        readIn(file);
+                    }
+                }else{
+                    readIn(file);
                 }
             }
             setImageLib(fc.window.getImgLib());
         }
+        imageScrllPanel.revalidate();
+        imageScrllPanel.repaint();
+        
+        //if a button was selected previously, select it again.
+        if(active >= 0)
+            buttons.get(active).setSelected(true);
     } 
     
+    /**
+     * Reads an image file and uploads it to the server.
+     * 
+     * @param file The image file
+     */
+    private void readIn(File file){
+
+        String path = file.getAbsolutePath();
+        lastDir = file.getParent();
+        
+        try {
+            //Read the image in case it might be unable 
+            //for read in.
+            BufferedImage img = null;
+            img = ImageIO.read(new File(path));
+            fc.window.uploadImage(path);
+            
+        } catch (IOException e) {
+            showError(BUNDLE.getString("ImageError"),BUNDLE.getString("ImageErrorTitle"));
+        }
+    }
+    
+    /**
+     * Image button press event.
+     * 
+     * @param evt
+     */
     private void selectActionPerformed(java.awt.event.ActionEvent evt) {         
         Object src = evt.getSource();             
         
@@ -237,10 +287,14 @@ public class ImageSelectionFrame extends javax.swing.JFrame {
             ImageToggleButton button = (ImageToggleButton) src;
             try{            
                 int current = Integer.valueOf(button.getName());
-                if(active != -1 && active < buttons.size() &&
-                        current != active)
-                        buttons.get(active).setSelected(false);   
                 
+                //this is for the toggle option: only one
+                //button should be active
+                if(active != -1 && active < buttons.size() &&
+                        current != active){
+                    buttons.get(active).setSelected(false); 
+                }
+                                
                 //This has to be done in order to let the user
                 //unselect the image, if he wants to.
                 if(button.isSelected())
@@ -254,7 +308,30 @@ public class ImageSelectionFrame extends javax.swing.JFrame {
         }
     } 
     
+    /**
+     * Sets the image with the name as active.
+     * If no image is found, none will be selected
+     * 
+     * @param name The name of an image.
+     */
+    public void setActive(String name){
+        active = -1;
+        
+        for(int i = 0; i< imgs.size();i++){
+            IImage image = imgs.get(i);
+            if(image.getName().equals(name)){
+                active = i;
+                break;
+            }
+        }
+    }
     
+    /**
+     * Returns the selected image. If no image was selected,
+     * it returns null.
+     * 
+     * @return The image.
+     */
     public IImage getSelectedImage(){
         if(active == -1 || active >= imgs.size())
             return null;
@@ -262,6 +339,9 @@ public class ImageSelectionFrame extends javax.swing.JFrame {
         return imgs.get(active);
     }
     
+    /**
+     * Resets all buttons, except the currently active one.
+     */
     private void reset(){
         for(ImageToggleButton button : buttons){
             button.setSelected(false);
@@ -289,6 +369,7 @@ public class ImageSelectionFrame extends javax.swing.JFrame {
         }
         super.setVisible(b);
     }
+    
     /**
      * Shows an error message.
      * 
@@ -299,8 +380,6 @@ public class ImageSelectionFrame extends javax.swing.JFrame {
         JOptionPane.showMessageDialog(this,
                 text, title, JOptionPane.ERROR_MESSAGE);
     }
-
-    
 
     // Variables declaration - do not modify                     
     private javax.swing.JButton okButton;

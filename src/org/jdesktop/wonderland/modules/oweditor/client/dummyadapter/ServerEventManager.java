@@ -173,7 +173,7 @@ public class ServerEventManager {
     }
     
     public void setUserDir(){
-        dui.setUserDir("NoDir");
+        dui.setUserDir(AdapterSettings.IMAGEDIR);
     }
 
     /**

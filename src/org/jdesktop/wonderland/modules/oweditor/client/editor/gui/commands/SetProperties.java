@@ -11,24 +11,28 @@ public class SetProperties implements Command{
     /**
      * Creates a new properties changed command.
      * 
+     * @param rename All rename commands.
      * @param translation All translation commands.
      * @param rotation All rotation commands.
      * @param scale All scale commands.
      * @param setImage All set image commands.
      * @param furtherCommands All further commands.
      */
-    public SetProperties(Command translation, Command rotation,
+    public SetProperties(Command rename, Command translation, Command rotation, 
             Command scale, Command setImage, ArrayList<Command> furtherCommands){
         
         commands = new ArrayList<Command>();
         
+        if(rename != null)
+            commands.add(rename);
+        
         //rotation needs to be done first, then translation and then scaling!
-        if(rotation != null)
-            commands.add(rotation);
-        if(translation != null)
-            commands.add(translation);
         if(scale != null)
             commands.add(scale);
+        if(translation != null)
+            commands.add(translation);
+        if(rotation != null)
+            commands.add(rotation);
         if(setImage != null)
             commands.add(setImage);
         if(furtherCommands != null)

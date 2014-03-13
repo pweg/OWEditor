@@ -72,4 +72,10 @@ public class DataObjectObserver implements
         gc.window.repaint();
     }
 
+    @Override
+    public void notifyNameChange(Long id, String name) {
+        gc.window.updateName(id, name);
+        gc.window.repaint();
+    }
+
 }

@@ -394,6 +394,7 @@ public class PropertiesFrame extends javax.swing.JFrame {
     private void imageButtonActionPerformed(java.awt.event.ActionEvent evt){
         ImageSelectionFrame frame = fc.getImageSelectionFrame();
         frame.setLocationRelativeTo(this);
+        frame.setActive(imgName);
         
         frame.addComponentListener(new ComponentListener() {
 
@@ -415,16 +416,21 @@ public class PropertiesFrame extends javax.swing.JFrame {
                 
             }
 
+            /**
+             * Gets the image from the image selection frame.
+             */
             @Override
             public void componentHidden(ComponentEvent e) {
                 IImage img = fc.imageSelection.getSelectedImage();
                 fc.imageSelection.removeComponentListener(this);
                 
-                if(img == null)
-                    return;
-                
-                image.setImage(img.getImage());
-                imgName = img.getName();
+                if(img == null){
+                    image.setImage(null);
+                    imgName = null;
+                }else{
+                    image.setImage(img.getImage());
+                    imgName = img.getName();
+                }
             }
 
         });
@@ -443,7 +449,6 @@ public class PropertiesFrame extends javax.swing.JFrame {
         ArrayList<Double> rotZ = null; 
         ArrayList<Double> scaleList = null; 
         ArrayList<String> img_name = null;
-        
 
         String name = nameField.getText();
         String xs = locationFieldX.getText();
@@ -454,7 +459,8 @@ public class PropertiesFrame extends javax.swing.JFrame {
         String rot_zs = rotationFieldZ.getText();
         String scales = scaleField.getText(); 
         
-        if(!initialName.equals(name))
+        //look for changes.
+        if(objects.size() == 1 && !initialName.equals(name))
             names = new ArrayList<String>(); 
         if(!initialX.equals(xs) || !initialY.equals(ys) ||
                 !initialZ.equals(zs)){
@@ -462,7 +468,6 @@ public class PropertiesFrame extends javax.swing.JFrame {
             coordsY = new ArrayList<Float>(); 
             coordsZ = new ArrayList<Float>(); 
         }
-        
         if(!initialRotX.equals(rot_xs) || !initialRotY.equals(rot_ys) ||
                 !initialRotZ.equals(rot_zs)){
             rotX = new ArrayList<Double>(); 
@@ -471,10 +476,14 @@ public class PropertiesFrame extends javax.swing.JFrame {
         }
         if(!initialScale.equals(scales))
             scaleList = new ArrayList<Double>(); 
-        if((initialImg == null && img_name != null) 
-                || (img_name != null && img_name.equals(initialImg)))
+
+        if((initialImg == null && imgName != null)  || 
+                (initialImg != null && imgName == null)
+                || (imgName != null && !imgName.equals(initialImg))){
             img_name = new ArrayList<String>(); 
+        }
         
+        //do nothing on no changes.
         if(names == null && coordsX == null && coordsY == null &&
                 coordsZ == null && rotX == null && rotY == null &&
                 rotZ == null && scaleList == null && img_name == null){
@@ -490,6 +499,7 @@ public class PropertiesFrame extends javax.swing.JFrame {
         double rot_z = -1;
         double scale = -1;
         
+        //parse strings from the fields.
         try{
             x = Float.parseFloat(xs);
         }catch(Exception e){
@@ -526,6 +536,7 @@ public class PropertiesFrame extends javax.swing.JFrame {
             
         } 
         
+        //fill the lists which are not null with data.
         for(IDataObject o : objects){
             ids.add(o.getID());
             
@@ -550,19 +561,19 @@ public class PropertiesFrame extends javax.swing.JFrame {
                     coordsZ.add(o.getZf());
             }
             if(rotX != null){
-                if(x != -1)
+                if(rot_x != -1)
                     rotX.add(rot_x);
                 else
                     rotX.add(o.getRotationX());
             }
             if(rotY != null){
-                if(y != -1)
+                if(rot_y != -1)
                     rotY.add(rot_y);
                 else
                     rotY.add(o.getRotationY());
             }
             if(rotZ != null){
-                if(z != -1)
+                if(rot_z != -1)
                     rotZ.add(rot_z);
                 else
                     rotZ.add(o.getRotationZ());
@@ -573,6 +584,8 @@ public class PropertiesFrame extends javax.swing.JFrame {
                 else
                     scaleList.add(o.getScale());
             }
+            if(img_name != null)
+                img_name.add(imgName);
         }
         
         fc.window.setProperties(ids, names, coordsX, coordsY, coordsZ, 
@@ -620,6 +633,9 @@ public class PropertiesFrame extends javax.swing.JFrame {
         super.setVisible(b);
     }
     
+    /**
+     * Fills the fields with data.
+     */
     private void setObjects(){
         
         initialImg = "";
@@ -636,23 +652,24 @@ public class PropertiesFrame extends javax.swing.JFrame {
             String rotZ = Double.toString(object.getRotationZ());
             String scale = Double.toString(object.getScale());
             
+            //if more items are selected, check if they are different.
             if(!rotationFieldX.getText().equals("0") && !rotationFieldX.getText().equals(rotX))
-                rotationFieldX.setText("bla");
+                rotationFieldX.setText(BUNDLE.getString("DifferentValues"));
             else
                 rotationFieldX.setText(rotX);
             
             if(!rotationFieldY.getText().equals("0") && !rotationFieldY.getText().equals(rotY))
-                rotationFieldY.setText("bla");
+                rotationFieldY.setText(BUNDLE.getString("DifferentValues"));
             else
                 rotationFieldY.setText(rotY);
             
             if(!rotationFieldZ.getText().equals("0") && !rotationFieldZ.getText().equals(rotZ))
-                rotationFieldZ.setText("bla");
+                rotationFieldZ.setText(BUNDLE.getString("DifferentValues"));
             else
                 rotationFieldZ.setText(rotZ);
             
             if(!scaleField.getText().equals("1") && !scaleField.getText().equals(scale))
-                scaleField.setText("bla");
+                scaleField.setText(BUNDLE.getString("DifferentValues"));
             else
                 scaleField.setText(scale);
 
@@ -675,6 +692,8 @@ public class PropertiesFrame extends javax.swing.JFrame {
         initialScale = scaleField.getText();
         initialName = nameField.getText();
         
+        //lock specific fields, if there are more than one
+        //item selected.
         if(objects.size()>1){
             locationFieldX.setText("");
             locationFieldY.setText("");
@@ -692,6 +711,9 @@ public class PropertiesFrame extends javax.swing.JFrame {
         }
     }
     
+    /**
+     * Sets up the image of the image button.
+     */
     private void setImage(){
         if(objects.size() <= 0)
             return;
@@ -699,13 +721,9 @@ public class PropertiesFrame extends javax.swing.JFrame {
         IImage img = objects.get(0).getImgClass();
         boolean different = false;
         
+        //check for different images.
         for(IDataObject object : objects){
             IImage i = object.getImgClass();
-            
-            if(img == null)
-                System.out.println("is null i");
-            if(i == null)
-                System.out.println("is null img");
             
             if((img == null && i != null) || 
                    (img != null && i == null)){
@@ -718,8 +736,7 @@ public class PropertiesFrame extends javax.swing.JFrame {
                     different = true;
                     break;
                 }
-            }
-                
+            } 
         }
         
         if(!different){

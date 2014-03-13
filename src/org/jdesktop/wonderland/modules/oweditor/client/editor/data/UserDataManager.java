@@ -72,6 +72,13 @@ public class UserDataManager {
             return;
         }
         
+        for(int i=0; i<imageLib.size(); i++){
+            if(imageLib.get(i).getName().equals(name)){
+                imageLib.remove(i);
+                break;
+            }
+        }
+        
         imageLib.add(new Image(name, img, userDir));
         
         for(IUserObserver observer : observers)

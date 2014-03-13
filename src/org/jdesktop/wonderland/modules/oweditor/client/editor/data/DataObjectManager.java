@@ -357,7 +357,7 @@ public class DataObjectManager {
         DataObject d = data.get(id);
         if(d == null)
             return;
-        
+
         d.setImage(img, imgName, path);
         
         for(IDataObjectObserver observer : observers){

@@ -166,7 +166,7 @@ public interface GUIObserverInterface {
      * the model.
      * 
      * @param name The name of the new model
-     * @param image_url The url of the image representation
+     * @param imgName The name of the image representation.
      * @param x The x coordinate of the new model.
      * @param y The y coordinate of the new model.
      * @param z The z coordinate of the new model.
@@ -178,7 +178,7 @@ public interface GUIObserverInterface {
      * @return Return the id of the new object, or -1 if something failed.
      * @throws java.lang.Exception
      */
-    public long importKMZ(String name, String image_url, double x, double y,
+    public long importKMZ(String name, String imgName, double x, double y,
             double z, double rotationX, double rotationY, double rotationZ,
             double scale) throws Exception;
 

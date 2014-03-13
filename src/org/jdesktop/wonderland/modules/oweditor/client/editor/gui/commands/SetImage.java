@@ -49,13 +49,16 @@ public class SetImage implements Command{
         try{
             for(int i=0;i < ids.size();i++){
                 Long id = ids.get(i);
-                String dir = dirs.get(i);
-                String name = names.get(i);
-                try{
-                    goi.notifyImageChange(id, dir, name);
-                }catch(Exception e){
-                    failcount++;
-                }
+                    if(dirs != null){
+                    String dir = dirs.get(i);
+                    String name = names.get(i);
+                    try{
+                        goi.notifyImageChange(id, dir, name);
+                    }catch(Exception e){
+                        failcount++;
+                    }
+                }else
+                    goi.notifyImageChange(id, null,null);
             }
         }catch(Exception e){
             System.err.println("Scale command: list size dont match");

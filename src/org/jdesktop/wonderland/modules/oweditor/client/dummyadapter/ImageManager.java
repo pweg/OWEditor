@@ -20,7 +20,6 @@ public class ImageManager {
     
     public void addImage(String path, String name, BufferedImage img){
         LinkedHashMap<String, BufferedImage> map = null;
-        
         if(imgs.containsKey(path))
             imgs.get(path).put(name, img);
         else{
@@ -33,7 +32,6 @@ public class ImageManager {
     public BufferedImage getImage(String path, String name){
         if(!imgs.containsKey(path))
             return null;
-        
         return imgs.get(path).get(name);
     }
 

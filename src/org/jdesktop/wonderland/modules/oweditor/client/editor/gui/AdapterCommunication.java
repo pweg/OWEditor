@@ -12,6 +12,7 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.ITr
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.commands.Command;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.commands.Delete;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.commands.Paste;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.commands.SetName;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.commands.SetProperties;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.commands.Rotate;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.commands.RotateTranslate;
@@ -209,6 +210,7 @@ public class AdapterCommunication implements IAdapterCommunication{
         
         String userDir = dm.getUserImgDir();
 
+        ArrayList<String> names_old = new ArrayList<String>();
         ArrayList<Vector3D> coords_old = new ArrayList<Vector3D>();
         ArrayList<Vector3D> coords_new = new ArrayList<Vector3D>();
         ArrayList<Vector3D> rot_old = new ArrayList<Vector3D>();
@@ -235,6 +237,9 @@ public class AdapterCommunication implements IAdapterCommunication{
             float z = o.getZf();
             
             coords_old.add(new Vector3D(x, y, z));
+            
+            if(names != null)
+                names_old.add(o.getName());
             
             if(coords_new != null){
                 if(coordsX != null && i<coordsX.size()){
@@ -293,13 +298,20 @@ public class AdapterCommunication implements IAdapterCommunication{
         if(scale_new != null){
             scaleCom = new Scale(ids, scale_old, scale_new);
         }
+        
+        Command nameCom = null;
+        if(names != null){
+            nameCom = new SetName(ids, names_old, names);
+        }
+        
         Command imgCom = null;
         if(imgName != null){
             imgCom = new SetImage(ids, img_name_old, img_path_old, imgName,
                     img_path_new);
         }
         
-        Command command = new SetProperties(translateCom, rotateCom, scaleCom, imgCom, null);
+        Command command = new SetProperties(nameCom,
+                translateCom, rotateCom, scaleCom, imgCom, null);
          
         executeCom(command);
         
