@@ -6,6 +6,7 @@ import java.awt.Font;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -81,13 +82,18 @@ public class PropertiesFrame extends javax.swing.JFrame {
     private void initComponents() {
         doubleFormat = new DecimalFormat("0.#####");
         doubleFormat.setGroupingUsed(false);
+
+        DecimalFormatSymbols custom=new DecimalFormatSymbols();
+        custom.setDecimalSeparator('.');
+        ((DecimalFormat) doubleFormat).setDecimalFormatSymbols(custom);
+        
         JTabbedPane tabbedPane = new JTabbedPane();
         
         nameField = new javax.swing.JTextField();        
         image = new ImageButton();
         jPanel1 = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
+        nameLabel = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         yLabel = new javax.swing.JLabel();
         zLabel = new javax.swing.JLabel();
@@ -184,7 +190,7 @@ public class PropertiesFrame extends javax.swing.JFrame {
 
         jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         
-        jLabel1.setText(BUNDLE.getString("Name"));
+        nameLabel.setText(BUNDLE.getString("Name"));
 
         jLabel3.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
 
@@ -202,7 +208,7 @@ public class PropertiesFrame extends javax.swing.JFrame {
                 .addGroup(jPanel3Layout.createSequentialGroup()
                     .addContainerGap()
                     .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(nameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
                     )
                     .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addComponent(nameField, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -221,7 +227,7 @@ public class PropertiesFrame extends javax.swing.JFrame {
             .addGroup(jPanel3Layout.createSequentialGroup()
                     .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
+                    .addComponent(nameLabel)
                     .addComponent(nameField)
                     .addComponent(image, 150, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)   
                 )
@@ -438,6 +444,7 @@ public class PropertiesFrame extends javax.swing.JFrame {
     }
 
     private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {  
+        resetLabelColor();
         
         ArrayList<Long> ids = new ArrayList<Long>();
         ArrayList<String> names = null; 
@@ -498,43 +505,64 @@ public class PropertiesFrame extends javax.swing.JFrame {
         double rot_y = -1;
         double rot_z = -1;
         double scale = -1;
+
+        
+        boolean error = false;
+        
+        if(name.equals("")){
+            setLabelColorError(nameLabel);
+            error = true;
+        }
         
         //parse strings from the fields.
         try{
             x = Float.parseFloat(xs);
         }catch(Exception e){
-            
+            setLabelColorError(xLabel);
+            error = true;
         }
         try{
             y = Float.parseFloat(ys);
         }catch(Exception e){
-            
+            setLabelColorError(yLabel);
+            error = true;
         }
         try{
             z = Float.parseFloat(zs);
         }catch(Exception e){
-            
+            setLabelColorError(zLabel);
+            error = true;
         }
         try{
             rot_x = Double.parseDouble(rot_xs);
         }catch(Exception e){
-            
+            setLabelColorError(rotXLabel);
+            error = true;
         }
         try{
             rot_y = Double.parseDouble(rot_ys);
         }catch(Exception e){
-            
+            setLabelColorError(rotYLabel);
+            error = true;
         }
         try{
             rot_z = Double.parseDouble(rot_zs);
         }catch(Exception e){
-            
+            setLabelColorError(rotZLabel);
+            error = true;
         }
         try{
             scale = Double.parseDouble(scales);  
         }catch(Exception e){
-            
-        } 
+            setLabelColorError(scaleLabel);
+            error = true;
+        }
+        
+        if(error){
+            showError(BUNDLE.getString("ImportMissingError"), 
+                    BUNDLE.getString("ImportMissingErrorTitle"));
+            return;
+        }  
         
         //fill the lists which are not null with data.
         for(IDataObject o : objects){
@@ -627,8 +655,8 @@ public class PropertiesFrame extends javax.swing.JFrame {
                 objects.add(object);
             }
             setObjects();
-            setImage();            
-            
+            setImage();   
+            resetLabelColor();     
         }
         super.setVisible(b);
     }
@@ -802,6 +830,7 @@ public class PropertiesFrame extends javax.swing.JFrame {
     private void resetLabelColor(){
         if(normalFont == null)
             return;
+        setLabelColorStandard(nameLabel);
         setLabelColorStandard(xLabel);
         setLabelColorStandard(yLabel);
         setLabelColorStandard(zLabel);
@@ -826,7 +855,7 @@ public class PropertiesFrame extends javax.swing.JFrame {
     private javax.swing.JButton cancelButton;
     private javax.swing.JButton okButton;
     private javax.swing.JButton resetButton;
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel nameLabel;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;

@@ -1,7 +1,18 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.frames;
 
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.awt.dnd.DnDConstants;
+import java.awt.dnd.DropTarget;
+import java.awt.dnd.DropTargetDragEvent;
+import java.awt.dnd.DropTargetDropEvent;
+import java.awt.dnd.DropTargetEvent;
+import java.awt.dnd.DropTargetListener;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseWheelListener;
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
 
 import javax.swing.JMenuBar;
 import javax.swing.JScrollPane;
@@ -29,6 +40,8 @@ public class FrameController implements IFrame{
         drawingPan = new DrawingPanel(this);
         mainScrollPanel = new JScrollPane(drawingPan);
         mainScrollPanel.setWheelScrollingEnabled(false);
+        
+        new DropTarget(drawingPan, new DropListener());
 
 
         mainframe = new MainFrame(mainScrollPanel, this);
@@ -44,6 +57,7 @@ public class FrameController implements IFrame{
         
         if(importFrame == null){
             importFrame = new ImportFrame(this, window.getServerList());
+            new DropTarget(importFrame, new DropListener());
         }
         importFrame.setVisible(true);
     }
@@ -164,7 +178,49 @@ public class FrameController implements IFrame{
         
         imageSelection.setVisible(b);
     }
+    
+    class DropListener implements DropTargetListener{
 
+        @Override
+        public void dragEnter(DropTargetDragEvent dtde) {}
 
+        @Override
+        public void dragOver(DropTargetDragEvent dtde) {}
 
+        @Override
+        public void dropActionChanged(DropTargetDragEvent dtde) {}
+
+        @Override
+        public void dragExit(DropTargetEvent dte) {}
+
+        @SuppressWarnings("unchecked")
+        @Override
+        public void drop(DropTargetDropEvent evt) {
+            evt.acceptDrop(DnDConstants.ACTION_COPY);
+            List<File> droppedFiles = null;
+                
+            try {
+                droppedFiles = (List<File>) evt
+                        .getTransferable().getTransferData(
+                                DataFlavor.javaFileListFlavor);
+                System.out.println(droppedFiles.size());
+                    
+                if(droppedFiles.size() > 1)
+                    return;
+                    
+                for (File file : droppedFiles) {
+                    showImportFrame();
+                    importFrame.loadModel(file);
+                }
+                    
+            } catch (UnsupportedFlavorException e) {
+                // TODO Auto-generated catch block
+               e.printStackTrace();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+    }
 }
+

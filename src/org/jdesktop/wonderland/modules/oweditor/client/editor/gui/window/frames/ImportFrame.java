@@ -8,6 +8,7 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.io.File;
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
@@ -38,7 +39,6 @@ public class ImportFrame extends javax.swing.JFrame {
             "org/jdesktop/wonderland/modules/oweditor/client/resources/Bundle");
 
     private String lastDirModel = "";
-    private String lastDirRep = "";
     private FrameController fc = null;
     
     private int boundsX = 0;
@@ -83,6 +83,11 @@ public class ImportFrame extends javax.swing.JFrame {
     private void initComponents() {
         doubleFormat = new DecimalFormat("0.#####");
         doubleFormat.setGroupingUsed(false);
+
+        DecimalFormatSymbols custom=new DecimalFormatSymbols();
+        custom.setDecimalSeparator('.');
+        ((DecimalFormat) doubleFormat).setDecimalFormatSymbols(custom);
+        
         modelButton = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
@@ -532,115 +537,77 @@ public class ImportFrame extends javax.swing.JFrame {
         chooser.setFileFilter(filter);
         int returnVal = chooser.showOpenDialog(this);
         
-        if(returnVal == JFileChooser.APPROVE_OPTION) {
-                        
+        if(returnVal == JFileChooser.APPROVE_OPTION) {                        
             File file = chooser.getSelectedFile();
-            
-            String name = file.getName();
-            final String path = file.getAbsolutePath();
-            lastDirModel = file.getParent();
-            
-            if(lastDirRep.equals("")){
-                lastDirRep = lastDirModel;
-            }
-            modelField.setText(path);
-            
-            //split url
-            String[] tokens = name.split("\\.(?=[^\\.]+$)");
-            
-            if(tokens[0] == null || tokens[tokens.length-1] == null){
-                showError(BUNDLE.getString("FileReadError"),
-                        BUNDLE.getString("FileReadErrorTitle"));
-                return;
-            }
-            
-            //set name, if nothing has been entered already
-            if(nameField.getText().equals("")){
-                nameField.setText(tokens[0]);
-            }
-            if(moduleNameField.getText().equals("")){
-                moduleNameField.setText(tokens[0]);
-            }
-            
-            loadingDialog = new LoadingDialog(this);
-            //a new thread is created because loading blocks
-            //the frame thread.
-            new Thread(){
-                @Override
-                public void run(){
-                    int[] bounds = fc.window.loadKMZ(path);
-                    
-                    if(bounds == null || bounds.length<2){
-                        showError(BUNDLE.getString("ImportWrongBounds"),
-                                BUNDLE.getString("ImportWrongBoundsTitle"));
-                        loadingDialog.dispose();
-                        return;
-                    }
-
-                    boundsX = bounds[0];
-                    boundsY = bounds[1];
-                    okButton.setEnabled(true);
-                    locationButton.setEnabled(true);
-                    modelLoaded = true;
-                    
-                    //wait for loading dialog to be ready.
-                    while(!loadingDialog.isVisible()){
-                        yield();
-                    }
-                    loadingDialog.dispose();
-                    
-                }
-            
-            }.start();
-            loadingDialog.setLocationRelativeTo(this);
-            loadingDialog.setVisible(true);
-            
-        } 
-    }                                           
-
-    /*private void represButtonActionPerformed(java.awt.event.ActionEvent evt) {
+            loadModel(file);
+        }             
+    }  
+    
+    public void loadModel(File file){
+        String name = file.getName();
+        final String path = file.getAbsolutePath();
         
-        JFileChooser chooser = new JFileChooser(new File (lastDirRep));
-        FileNameExtensionFilter filter = new FileNameExtensionFilter(
-                "JPG", "jpg", "jpeg", "JPEG");
-        FileNameExtensionFilter filter2 = new FileNameExtensionFilter(
-                "GIF", "gif", "GIF");
-        FileNameExtensionFilter filter3 = new FileNameExtensionFilter(
-                "PNG", "png", "PNG");
-        FileNameExtensionFilter filter4 = new FileNameExtensionFilter(
-                "BMP", "bmp", "BMP");
-        chooser.removeChoosableFileFilter(chooser.getAcceptAllFileFilter());
-        chooser.addChoosableFileFilter(filter);
-        chooser.addChoosableFileFilter(filter2);
-        chooser.addChoosableFileFilter(filter3);
-        chooser.addChoosableFileFilter(filter4);
-        int returnVal = chooser.showOpenDialog(this);
         
-        if(returnVal == JFileChooser.APPROVE_OPTION) {
-            File file = chooser.getSelectedFile();
-            
-            //String name = file.getName();
-            String path = file.getAbsolutePath();
-            lastDirRep = file.getParent();
-            
-            if(lastDirModel.equals("")){
-                lastDirModel = lastDirRep;
-            }
-            
-            try {
-                BufferedImage img = null;
-                img = ImageIO.read(new File(path));
-                image.setImage(img);
-                image.repaint();
-                imgField.setText(path);
+        //split url, to get the name without the file type
+        String[] tokens = name.split("\\.(?=[^\\.]+$)");
+        
+        //if something with the file is wrong
+        if(tokens[0] == null || tokens[tokens.length-1] == null){
+            showError(BUNDLE.getString("FileReadError"),
+                    BUNDLE.getString("FileReadErrorTitle"));
+            return;
+        }
+        
+        if(!tokens[tokens.length-1].equals("kmz")){
+            showError("kein kmz","no kmz");
+            return;
+        }
+        
+        modelField.setText(path);
+        lastDirModel = file.getParent();
+        
+        //set name, if nothing has been entered already
+        if(nameField.getText().equals("")){
+            nameField.setText(tokens[0]);
+        }
+        if(moduleNameField.getText().equals("")){
+            moduleNameField.setText(tokens[0]);
+        }
+        
+        loadingDialog = new LoadingDialog(this);
+        //a new thread is created because loading blocks
+        //the frame thread.
+        new Thread(){
+            @Override
+            public void run(){
+                int[] bounds = fc.window.loadKMZ(path);
                 
-            } catch (IOException e) {
-                showError(BUNDLE.getString("ImageError"),BUNDLE.getString("ImageErrorTitle"));
-                imgField.setText("");
-            }
+                if(bounds == null || bounds.length<2){
+                    showError(BUNDLE.getString("ImportWrongBounds"),
+                            BUNDLE.getString("ImportWrongBoundsTitle"));
+                    loadingDialog.dispose();
+                    return;
+                }
 
-        } 
-    }     */                                    
+                boundsX = bounds[0];
+                boundsY = bounds[1];
+                okButton.setEnabled(true);
+                locationButton.setEnabled(true);
+                modelLoaded = true;
+                
+                //wait for loading dialog to be ready.
+                while(!loadingDialog.isVisible()){
+                    yield();
+                }
+                loadingDialog.dispose();
+                
+            }
+        
+        }.start();
+        loadingDialog.setLocationRelativeTo(this);
+        loadingDialog.setVisible(true);
+        
+    }                               
 
     private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {     
         resetLabelColor(); 

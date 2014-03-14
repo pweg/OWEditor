@@ -3,11 +3,20 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.frames
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.awt.dnd.DnDConstants;
+import java.awt.dnd.DropTarget;
+import java.awt.dnd.DropTargetDragEvent;
+import java.awt.dnd.DropTargetDropEvent;
+import java.awt.dnd.DropTargetEvent;
+import java.awt.dnd.DropTargetListener;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import javax.imageio.ImageIO;
@@ -136,6 +145,52 @@ public class ImageSelectionFrame extends javax.swing.JFrame {
         //this.setResizable(false);
 
         pack();
+        new DropTarget(this, new DropTargetListener(){
+
+            @Override
+            public void dragEnter(DropTargetDragEvent dtde) {}
+
+            @Override
+            public void dragOver(DropTargetDragEvent dtde) {}
+
+            @Override
+            public void dropActionChanged(DropTargetDragEvent dtde) {}
+
+            @Override
+            public void dragExit(DropTargetEvent dte) {}
+
+            @SuppressWarnings("unchecked")
+            @Override
+            public void drop(DropTargetDropEvent evt) {
+                evt.acceptDrop(DnDConstants.ACTION_COPY);
+                List<File> droppedFiles = null;
+                
+                try {
+                    droppedFiles = (List<File>) evt
+                            .getTransferable().getTransferData(
+                                    DataFlavor.javaFileListFlavor);
+
+                    for (File file : droppedFiles) {
+                        readIn(file);
+                    }
+                    setImageLib(fc.window.getImgLib());
+                    imageScrllPanel.revalidate();
+                    imageScrllPanel.repaint();
+                
+                    //if a button was selected previously, select it again.
+                    if(active >= 0)
+                        buttons.get(active).setSelected(true);
+                    
+                } catch (UnsupportedFlavorException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+                
+            }
+        });
     }// </editor-fold>      
     
 
@@ -221,27 +276,7 @@ public class ImageSelectionFrame extends javax.swing.JFrame {
             File[] files = chooser.getSelectedFiles();
             
             for(File file : files){
-                
-                //check for image name conflicts.
-                if(fc.window.imageExists(file.getName())){
-                    Object[] options = {BUNDLE.getString("Overwrite"),
-                            BUNDLE.getString("Cancel")};
-                    int ret2 = JOptionPane.showOptionDialog(this,
-                        BUNDLE.getString("ImageConflictError"),
-                        BUNDLE.getString("ConflictErrorTitle"),
-                        JOptionPane.YES_NO_CANCEL_OPTION,
-                        JOptionPane.QUESTION_MESSAGE,
-                        null,
-                        options,
-                        options[1]);
-                    
-                    //overwrite
-                    if(ret2!=1){
-                        readIn(file);
-                    }
-                }else{
-                    readIn(file);
-                }
+                readIn(file);
             }
             setImageLib(fc.window.getImgLib());
         }
@@ -260,6 +295,25 @@ public class ImageSelectionFrame extends javax.swing.JFrame {
      */
     private void readIn(File file){
 
+        //check for image name conflicts.
+        if(fc.window.imageExists(file.getName())){
+            Object[] options = {BUNDLE.getString("Overwrite"),
+                    BUNDLE.getString("Cancel")};
+            int ret2 = JOptionPane.showOptionDialog(this,
+                BUNDLE.getString("ImageConflictError"),
+                BUNDLE.getString("ConflictErrorTitle"),
+                JOptionPane.YES_NO_CANCEL_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                options,
+                options[1]);
+            
+            //overwrite
+            if(ret2==1){
+                return;
+            }
+        }
+
         String path = file.getAbsolutePath();
         lastDir = file.getParent();
         
@@ -268,6 +322,11 @@ public class ImageSelectionFrame extends javax.swing.JFrame {
             //for read in.
             BufferedImage img = null;
             img = ImageIO.read(new File(path));
+            
+            //if file was not an image, return.
+            if(img == null)
+                return;
+            
             fc.window.uploadImage(path);
             
         } catch (IOException e) {
