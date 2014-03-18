@@ -1,10 +1,15 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.commands;
 
 import java.util.ArrayList;
+import java.util.logging.Logger;
 
 import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.GUIObserverInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.AdapterCommunication;
 
 public class SetImage implements Command{
+    
+     private static final Logger LOGGER =
+            Logger.getLogger(SetImage.class.getName());
     
     private ArrayList<Long> ids = null;
     private ArrayList<String> oldName = null;
@@ -17,7 +22,7 @@ public class SetImage implements Command{
             ArrayList<String> newName, ArrayList<String> newDir){
         this.ids = ids;
         this.oldName = oldName;
-        this.oldName = oldDir;
+        this.oldDir = oldDir;
         this.newName = newName;
         this.newDir = newDir;
         
@@ -27,8 +32,7 @@ public class SetImage implements Command{
 
     @Override
     public void execute(GUIObserverInterface goi) throws Exception {
-        setImage(goi, newDir, newName);
-        
+        setImage(goi, newDir, newName);        
     }
 
     @Override
@@ -50,8 +54,8 @@ public class SetImage implements Command{
             for(int i=0;i < ids.size();i++){
                 Long id = ids.get(i);
                     if(dirs != null){
-                    String dir = dirs.get(i);
-                    String name = names.get(i);
+                        String dir = dirs.get(i);
+                        String name = names.get(i);
                     try{
                         goi.notifyImageChange(id, dir, name);
                     }catch(Exception e){

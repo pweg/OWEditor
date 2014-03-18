@@ -37,6 +37,7 @@ import org.jdesktop.wonderland.common.cell.state.PositionComponentServerState;
 import org.jdesktop.wonderland.common.messages.ErrorMessage;
 import org.jdesktop.wonderland.common.messages.OKMessage;
 import org.jdesktop.wonderland.common.messages.ResponseMessage;
+import org.jdesktop.wonderland.modules.contentrepo.common.ContentRepositoryException;
 import org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter.components.IDCellComponent;
 import org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter.components.IDCellComponentFactory;
 import org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter.components.ImageCellComponent;
@@ -244,14 +245,29 @@ public class ServerCommunication {
     }
     
     /**
-     * Adds a image component to a cell.
+     * Uploads an image.
      * 
-     * @param id The id of the cell.
      * @param img The image file.
-     * @return true on success, false if the image component was not ready.
      * @throws ServerCommException 
      */
-    public boolean addImage(long id, File img) throws ServerCommException{
+    public void uploadImage(File img) throws ServerCommException{
+        try {
+            ac.fm.uploadImage(img, null);
+        } catch (Exception ex) {
+            Logger.getLogger(ServerCommunication.class.getName()).log(Level.SEVERE, null, ex);
+            throw new ServerCommException();
+        }
+    }
+    
+    /**
+     * Changes the image of a cell
+     * @param id
+     * @param imgName
+     * @param dir
+     * @return
+     * @throws ServerCommException 
+     */
+    public boolean changeImage(long id, String imgName, String dir) throws ServerCommException{
         CellCache cache = ac.sm.getCellCache();
         
         if (cache == null) {
@@ -286,32 +302,21 @@ public class ServerCommunication {
             ImageCellComponentServerState.class);
             
         if(imgState != null){
-                
-            if(img != null){
                 try {
-                    FileInfo info = new FileInfo();
-                    ac.fm.uploadImage(img, info);
                         
                     ((ImageCellComponentServerState) imgState).setImage(
-                        info.fileName);
+                        imgName);
                     ((ImageCellComponentServerState) imgState).setDir(
-                        info.fileDir);
+                        dir);
                     
-
                     HashSet<CellComponentServerState> compStateSet = new HashSet();
                     compStateSet.add(imgState);
                     sendServerUpdateState(cell, state, compStateSet);
-                 } catch (IOException ex) {
-                     LOGGER.log(Level.SEVERE, null, ex);
-                     throw new ServerCommException();
-                 } catch (Exception e){
+                 } catch (ServerCommException e) {
                      LOGGER.log(Level.SEVERE, null, e);
                      throw new ServerCommException();
-                 }
-            }else{
-                LOGGER.warning("Image file is null");
-                throw new ServerCommException();
             }
+            
         }else{
             return false;
         }
@@ -341,8 +346,10 @@ public class ServerCommunication {
         //gui event manager, when creating a cell, because
         //it will throw an exception, which will reach the gui,
         //which is not desireable.
-        if(cell == null)
+        if(cell == null){
+            LOGGER.warning("No cell found for given id " +cellid);
             throw new ServerCommException();
+        }
         
         IDCellComponent idComponent = cell.getComponent(IDCellComponent.class);
         if(idComponent == null){

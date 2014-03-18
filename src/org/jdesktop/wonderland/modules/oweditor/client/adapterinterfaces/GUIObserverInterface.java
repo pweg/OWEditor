@@ -100,6 +100,7 @@ public interface GUIObserverInterface {
      * @param id The id of the object, where the image should be changed.
      * @param dir The directory of the image.
      * @param name The name of the image.
+     * @throws java.lang.Exception
      */
     public void notifyImageChange(long id, String dir, String name) 
         throws Exception;
@@ -190,9 +191,10 @@ public interface GUIObserverInterface {
     /**
      * Uploads an image to the server.
      * 
-     * @param filePath The path of the image.
+     * @param imageUrl The path of the image.
+     * @throws java.lang.Exception
      */
-    public void uploadImage(String imageUrl);
+    public void uploadImage(String imageUrl) throws Exception;
 
 
     

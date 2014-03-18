@@ -509,29 +509,32 @@ public class PropertiesFrame extends javax.swing.JFrame {
         
         boolean error = false;
         
-        if(name.equals("")){
-            setLabelColorError(nameLabel);
-            error = true;
-        }
-        
-        //parse strings from the fields.
-        try{
-            x = Float.parseFloat(xs);
-        }catch(Exception e){
-            setLabelColorError(xLabel);
-            error = true;
-        }
-        try{
-            y = Float.parseFloat(ys);
-        }catch(Exception e){
-            setLabelColorError(yLabel);
-            error = true;
-        }
-        try{
-            z = Float.parseFloat(zs);
-        }catch(Exception e){
-            setLabelColorError(zLabel);
-            error = true;
+        //check name and position only if one object is selected.
+        if(objects.size() == 1){
+            if(name.equals("")){
+                setLabelColorError(nameLabel);
+                error = true;
+            }
+
+            //parse strings from the fields.
+            try{
+                x = Float.parseFloat(xs);
+            }catch(Exception e){
+                setLabelColorError(xLabel);
+                error = true;
+            }
+            try{
+                y = Float.parseFloat(ys);
+            }catch(Exception e){
+                setLabelColorError(yLabel);
+                error = true;
+            }
+            try{
+                z = Float.parseFloat(zs);
+            }catch(Exception e){
+                setLabelColorError(zLabel);
+                error = true;
+            }
         }
         try{
             rot_x = Double.parseDouble(rot_xs);

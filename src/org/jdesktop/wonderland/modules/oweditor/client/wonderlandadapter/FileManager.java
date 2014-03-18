@@ -11,6 +11,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -21,6 +23,7 @@ import org.jdesktop.wonderland.modules.contentrepo.common.ContentCollection;
 import org.jdesktop.wonderland.modules.contentrepo.common.ContentNode;
 import org.jdesktop.wonderland.modules.contentrepo.common.ContentRepositoryException;
 import org.jdesktop.wonderland.modules.contentrepo.common.ContentResource;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IImage;
 import org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter.components.ImageCellComponentProperties;
 
 /**
@@ -29,8 +32,6 @@ import org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter.compone
  */
 
 public class FileManager {
-    
-    
     
      private static final Logger LOGGER =
             Logger.getLogger(ImageCellComponentProperties.class.getName());
@@ -81,7 +82,9 @@ public class FileManager {
     public void uploadFile(File file, FileInfo info, 
             String dir)throws Exception{
         String fileName = file.getName();
-        info.fileName = fileName;
+        
+        if(info != null)
+            info.fileName = fileName;
         
         ContentResource fileNode = getOwnFile(fileName, dir);
             
@@ -96,7 +99,8 @@ public class FileManager {
         fileNode.put(is);
         is.close();
             
-        info.fileDir = fileNode.getParent().getParent().getName();
+        if(info != null)
+            info.fileDir = fileNode.getParent().getParent().getName();
     }
     
     /**
@@ -247,6 +251,89 @@ public class FileManager {
             return null;
         }
         return (ContentResource) node;
+    }
+    
+    /**
+     * Returns the user main directory.
+     * @return The name of the user directory. 
+     * @throws ContentRepositoryException 
+     */
+    public String getUserDir() throws ContentRepositoryException{
+        ContentRepositoryRegistry r = ContentRepositoryRegistry.getInstance();
+        ServerSessionManager session = LoginManager.getPrimary();
+
+        // Try to find the pdf/ directory if it exists, otherwise, create it
+        ContentCollection root = r.getRepository(session).getUserRoot();
+        
+        return root.getName();
+    }
+    
+    public ArrayList<ImageClass> getUserLib() throws ContentRepositoryException{
+        
+        
+        ContentRepositoryRegistry r = ContentRepositoryRegistry.getInstance();
+        ServerSessionManager session = LoginManager.getPrimary();
+
+        // Try to find the pdf/ directory if it exists, otherwise, create it
+        ContentCollection root = r.getRepository(session).getUserRoot();
+        
+        ContentCollection directory = 
+                (ContentCollection)root.getChild(imgRootName);
+        
+         if (directory == null) {
+            LOGGER.warning("IMG root is null");
+            throw new ContentRepositoryException();
+        }else if(!(directory instanceof ContentCollection)){
+            LOGGER.warning("IMG root is not a content collection");
+            throw new ContentRepositoryException();
+        }
+        
+        return readUserLib(directory);
+    }
+    
+    /**
+     * Iterative method to read the user's library. Reads the directory
+     * and all subdirectories.
+     * 
+     * @param directory The directory to read.
+     * @return An arraylist containing all images in the given
+     * directory and subdirectory.
+     * @throws ContentRepositoryException 
+     */
+    private ArrayList<ImageClass> readUserLib(ContentCollection directory) 
+            throws ContentRepositoryException{
+        ArrayList<ImageClass> imgs = new ArrayList<ImageClass>();
+        
+        
+        for(ContentNode node : directory.getChildren()){
+            if(node instanceof ContentCollection){
+                imgs.addAll(readUserLib((ContentCollection)node));
+            }else if(node instanceof ContentResource){
+                try {
+                    InputStream is = ((ContentResource) node).getInputStream();
+                    BufferedImage img = ImageIO.read(is);
+                    is.close(); 
+                    if(img != null)
+                        imgs.add(new ImageClass(img, node.getName()));
+                } catch (IOException ex) {
+                    Logger.getLogger(FileManager.class.getName()).log(Level.SEVERE, null, ex);
+                } 
+            }
+        }
+        return imgs;
+    }
+
+    /**
+     * Inner class for storing the image it its name.
+     */
+    protected class ImageClass{
+        protected BufferedImage img = null;
+        protected String  name = null;
+        
+        public ImageClass(BufferedImage img, String name){
+            this.img = img;
+            this.name = name;
+        }
     }
     
 }

@@ -33,6 +33,9 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.IWindow
  *
  */
 public class AdapterCommunication implements IAdapterCommunication{
+    
+     private static final Logger LOGGER =
+            Logger.getLogger(AdapterCommunication.class.getName());
 
     private GUIObserverInterface goi = null;
     private IWindow window = null;
@@ -323,8 +326,12 @@ public class AdapterCommunication implements IAdapterCommunication{
     }
 
     @Override
-    public void uploadImage(String imgUrl) {
-        goi.uploadImage(imgUrl);
+    public void uploadImage(String imgUrl){
+        try {
+            goi.uploadImage(imgUrl);
+        } catch (Exception ex) {
+            Logger.getLogger(AdapterCommunication.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**

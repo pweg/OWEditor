@@ -5,6 +5,7 @@ import java.awt.image.BufferedImage;
 import java.util.ResourceBundle;
 
 import javax.swing.JButton;
+import javax.swing.UIManager;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.GUISettings;
 

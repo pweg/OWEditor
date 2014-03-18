@@ -1,6 +1,7 @@
 package org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter;
 
 import com.jme.math.Vector3f;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -14,7 +15,7 @@ import org.jdesktop.wonderland.common.cell.CellID;
 import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.GUIObserverInterface;
 
 /**
- * This class is used to make updates the client makes in
+ * This class is used to receive updates the client does in
  * the GUI and forwards it to the server. 
  * 
  * @author Patrick
@@ -56,7 +57,25 @@ public class GUIEventManager implements GUIObserverInterface{
         ac.sc.translate(id, translation);
     }
     
+
+    public void notifyTranslation(Long id, double x, double y, double z) throws Exception {
+        id = ac.bm.getActiveID(id);
+        Vector3f translation = new Vector3f((float) x,(float) z,(float) y);
+        ac.sc.translate(id, translation);
+    }
+    
     @Override
+    public void notifyRotation(long id, double rot_x, double rot_y, double rot_z) throws Exception {      
+        id = ac.bm.getActiveID(id);
+        Vector3f cell_rot = new Vector3f((float) Math.toRadians(-rot_y),
+                (float) Math.toRadians(-rot_x),
+                (float) Math.toRadians(-rot_z));
+        ac.sc.rotate(id, cell_rot);
+        
+        //ac.ct.createRotation(Vector3f.ZERO, rot_z)
+    }
+    
+    /*@Override
     public void notifyRotation(long id, int x, int y, double rotation) throws Exception{
         notifyTranslationXY(id,x,y);
         
@@ -67,14 +86,22 @@ public class GUIEventManager implements GUIObserverInterface{
         cell_rot = ac.ct.createRotation(cell_rot, rotation);
         
         ac.sc.rotate(id, cell_rot);
+    }*/
+    
+    
+
+    public void notifyScaling(long id, double scale) throws Exception {
+        id = ac.bm.getActiveID(id);
+        ac.sc.scale(id,(float) scale);
     }
 
+    /*
     @Override
     public void notifyScaling2(long id, int x, int y, double scale) throws Exception{
         id = ac.bm.getActiveID(id);
         ac.sc.scale(id,(float) scale);
         notifyTranslationXY(id,x,y);
-    }
+    }*/
     
     @Override
     public void notifyRemoval(long id) throws Exception{
@@ -207,7 +234,7 @@ public class GUIEventManager implements GUIObserverInterface{
     }
 
     @Override
-    public long importKMZ(String name, String image_url, double x, double y, 
+    public long importKMZ(String name, String imageName, double x, double y, 
             double z, double rotationX, double rotationY, double rotationZ, 
             double scale) throws Exception{
         
@@ -228,13 +255,8 @@ public class GUIEventManager implements GUIObserverInterface{
         Vector3f rotate = new Vector3f((float)rotationX, (float)rotationZ,
                 (float)rotationY);
         
-        if(image_url != null && !image_url.equals("")){
-            try{
-                File img = new File(image_url);
-                ImageIO.read(img);
-                ac.ltm.addImage(id, img);
-            } catch (IOException e) {
-            }
+        if(imageName != null && !imageName.equals("")){
+            ac.ltm.addImage(id, imageName);
         }
         
         try{
@@ -280,7 +302,37 @@ public class GUIEventManager implements GUIObserverInterface{
         
     }
 
+    @Override
     public boolean imageFileExists(String name) {
         return ac.fm.imageFileExists(name);
+    }
+    
+    @Override
+    public void notifyImageChange(long id, String dir, String name) throws Exception {
+        id = ac.bm.getActiveID(id);
+         ac.sc.changeImage(id, name, dir);
+    }
+
+    @Override
+    public void notifyNameChange(Long id, String name) throws Exception {
+        ac.sc.changeName(id, name);
+    }
+
+    @Override
+    public void uploadImage(String imageUrl) throws Exception{
+        if(imageUrl != null && !imageUrl.equals("")){
+            try{
+                File imgFile = new File(imageUrl);
+                BufferedImage img = ImageIO.read(imgFile);
+                FileInfo info = new FileInfo();
+                ac.fm.uploadImage(imgFile, info);
+                ac.sem.updateUserLib(img, info.fileName);
+            } catch (IOException e) {
+                throw new ServerCommException();
+            } catch (Exception ex) {
+                Logger.getLogger(GUIEventManager.class.getName()).log(Level.SEVERE, null, ex);
+                throw new ServerCommException();
+            }
+        }
     }
 }

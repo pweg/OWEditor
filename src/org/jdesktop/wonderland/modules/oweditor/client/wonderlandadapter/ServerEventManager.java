@@ -14,6 +14,7 @@ import org.jdesktop.wonderland.client.cell.view.AvatarCell;
 import org.jdesktop.wonderland.common.cell.messages.CellServerComponentMessage;
 import org.jdesktop.wonderland.common.messages.ErrorMessage;
 import org.jdesktop.wonderland.common.messages.ResponseMessage;
+import org.jdesktop.wonderland.modules.contentrepo.common.ContentRepositoryException;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IDataObject;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IAdapterObserver;
 import org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter.components.IDCellComponent;
@@ -96,7 +97,7 @@ public class ServerEventManager {
         for(IAdapterObserver observer : observers){
             observer.notifyScaling(id,(double) scale); 
             observer.notifyTranslation(id , x, y, z); 
-            observer.notifyRotation(id, rotation.x, rotation.y, rotation.z);
+            observer.notifyRotation(id, rotation.y, rotation.x, rotation.z);
         }
     }
 
@@ -175,7 +176,11 @@ public class ServerEventManager {
         
         //adds an image component
         if(ac.ltm.containsImage(id)){
-            ac.ltm.invokeLateImage(ac.sc, id);
+            try {
+                ac.ltm.invokeLateImage(ac.sc, id, ac.fm.getUserDir());
+            } catch (ContentRepositoryException ex) {
+                Logger.getLogger(ServerEventManager.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         
         //does transformation (used when copying cells)
@@ -201,10 +206,12 @@ public class ServerEventManager {
         //gets the image
         BufferedImage img = null;
         ImageCellComponent imageComponent = cell.getComponent(ImageCellComponent.class);
+        String imgName = null;
+        String imgDir = null;
             
         if(imageComponent != null){
-            String imgName = imageComponent.getImage();
-            String imgDir = imageComponent.getDir();
+            imgName = imageComponent.getImage();
+            imgDir = imageComponent.getDir();
             imageComponent.registerChangeListener(imageListener);
             img = getImage(id, imgName, imgDir);
             
@@ -273,14 +280,14 @@ public class ServerEventManager {
 
             object.setID(id);
             object.setCoordinates(x, y, z);
-            object.setRotationX(rotation.x);
-            object.setRotationY(rotation.y);
+            object.setRotationX(rotation.y);
+            object.setRotationY(rotation.x);
             object.setRotationZ(rotation.z);
             object.setScale(scale);
             object.setWidth(width);
             object.setHeight(height);
             object.setName(name);
-            object.setImage(img);
+            object.setImage(img, imgName, imgDir);
 
             if(cell instanceof AvatarCell){
                 object.setType(IDataObject.AVATAR);
@@ -338,7 +345,7 @@ public class ServerEventManager {
         BufferedImage img = getImage(original_id, imgName, imgDir);
         
         for(IAdapterObserver observer : observers){
-            observer.notifyImageChange(id, img);
+            observer.notifyImageChange(id, img, imgName, imgDir);
         }
         LOGGER.warning("IMAGE IS NOT NULL");
     }
@@ -367,7 +374,7 @@ public class ServerEventManager {
                 for(long lid : ids){
                     for(IAdapterObserver observer : observers){
                         long lid_orig = ac.bm.getOriginalID(lid);
-                        observer.notifyImageChange(lid_orig, img);
+                        observer.notifyImageChange(lid_orig, img, imgName, imgDir);
                     }
                 }
             }
@@ -375,6 +382,26 @@ public class ServerEventManager {
             imgMonitor.putID(imgName, imgDir, id);
         }
         return img;
+    }
+    
+    public void setUserDir(String dir){
+        for(IAdapterObserver observer : observers){
+            observer.setUserDir(dir);
+        }
+    }
+    
+    public void updateUserLib(BufferedImage img, String imgName){
+        for(IAdapterObserver observer : observers){
+            observer.updateImgLib(img, imgName);
+        }
+    }
+
+    void setImageLib(ArrayList<FileManager.ImageClass> userLib) {
+        for(FileManager.ImageClass img : userLib){
+            for(IAdapterObserver observer : observers){
+                observer.updateImgLib(img.img, img.name);
+            }
+        }
     }
     
     class ImageListener extends Marshaller.Listener implements ImageChangeListener{

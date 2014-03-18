@@ -1,10 +1,13 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.frames;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.util.ResourceBundle;
 
 import javax.swing.JToggleButton;
+import javax.swing.UIManager;
+import javax.swing.border.LineBorder;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.GUISettings;
 
