@@ -145,7 +145,7 @@ public class Avatar extends ShapeObject{
     }
 
     @Override
-    public void setImage(BufferedImage img) {
+    public void setImage(String name, String dir) {
         // TODO Auto-generated method stub
         
     }

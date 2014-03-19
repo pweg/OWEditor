@@ -15,6 +15,7 @@ import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.GUISettings;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.IInternalMediator;
 
 /**
  * A class for standard rectangles. The rectangles are used as a 
@@ -43,7 +44,12 @@ public class ShapeRectangle extends ShapeObject{
     private double scale = 0;
     
     public double z = 0;
-    private BufferedImage img = null;
+    //private BufferedImage img = null;
+    private String imgName = "";
+    private String imgDir = "";
+    
+    private IInternalMediator smi = null;
+    
     
     //These variables are used to determine, where the name of the object should be.
     private int nameBoundsX = GUISettings.NAMEPOSITIONINX;
@@ -63,7 +69,8 @@ public class ShapeRectangle extends ShapeObject{
      */
     public ShapeRectangle(int x, int y, double z,
             int width, int height, long id, String name,
-            double rotation, double scale, BufferedImage img){
+            double rotation, double scale, String imgName, 
+            String imgDir, IInternalMediator smi){
         
         if(scale == 0)
             scale = 1;
@@ -72,8 +79,10 @@ public class ShapeRectangle extends ShapeObject{
         this.id = id;
         this.rotation = rotation;
         this.scale = scale;
-        this.img = img;
+        this.imgDir = imgDir;
+        this.imgName = imgName;
         this.z = z;
+        this.smi = smi;
     }
     
     @Override
@@ -120,6 +129,8 @@ public class ShapeRectangle extends ShapeObject{
     }
     
     private void paintImage(Graphics2D g, AffineTransform at){
+        BufferedImage img = smi.getImage(imgName, imgDir);
+        
         if(img == null)
             return;
         
@@ -356,7 +367,8 @@ public class ShapeRectangle extends ShapeObject{
     @Override
     public ShapeObject clone() {
         ShapeObject shape = new ShapeRectangle(originalShape.x, originalShape.y, z,
-                originalShape.width, originalShape.height, id, name, rotation, scale, img);
+                originalShape.width, originalShape.height, id, name, rotation, scale, imgName,
+                imgDir, smi);
         return shape;
     }
 
@@ -372,8 +384,9 @@ public class ShapeRectangle extends ShapeObject{
     }
     
     @Override
-    public void setImage(BufferedImage img){
-        this.img = img;
+    public void setImage(String imgName, String dir){
+        this.imgName = imgName;
+        this.imgDir = dir;
     }
 
     @Override

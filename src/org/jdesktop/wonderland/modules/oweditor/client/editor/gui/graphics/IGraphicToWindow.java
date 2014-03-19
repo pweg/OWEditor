@@ -137,7 +137,7 @@ public interface IGraphicToWindow {
      * @param id The id of the shape.
      * @param img The new image.
      */
-    public void updateShapeImage(long id, BufferedImage img);
+    public void updateShapeImage(long id, String imgName, String dir);
 
     /**
      * Selects all existing shapes.

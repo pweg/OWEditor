@@ -1,4 +1,4 @@
-package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window;
+package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.frames.toolbar;
 
 import java.awt.Dimension;
 

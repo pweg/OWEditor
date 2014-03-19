@@ -81,8 +81,8 @@ public class AdapterObserver implements IAdapterObserver{
     }
 
     @Override
-    public void updateImgLib(BufferedImage img, String name) {
-        um.addNewImage(img, name);
+    public void updateImgLib(BufferedImage img, String name, String dir) {
+        um.addImage(img, name, dir);
     }
 
 

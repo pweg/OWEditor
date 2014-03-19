@@ -24,12 +24,19 @@ public class Window extends GraphicForward implements IWindow {
     private WindowController fc = null;
     private IFrame frame = null;
     
-    
-    
     public Window(IAdapterCommunication adapter){
         super(adapter);
         this.fc = new WindowController(adapter, this);
-        
+    }
+
+    public void registerFrameInterface(IFrame frame) {
+        this.frame = frame;
+    }
+
+    @Override
+    public void registerDataManager(IDataToGUI dm) {
+        fc.registerDataManager(dm);
+        fc.graphicInterface.registerDataManager(dm);
     }
     
     @Override
@@ -86,15 +93,6 @@ public class Window extends GraphicForward implements IWindow {
     @Override
     public IWindowToInput getInputInterface() {
         return fc.inputInterface;
-    }
-
-    @Override
-    public void registerDataManager(IDataToGUI dm) {
-        fc.registerDataManager(dm);
-    }
-
-    public void registerFrameInterface(IFrame frame) {
-        this.frame = frame;
     }
 
     @Override

@@ -472,6 +472,9 @@ public class ImportFrame extends javax.swing.JFrame {
         frame.setLocationRelativeTo(this);
         frame.setActive(imgName);
         
+        /*
+         * Listener for when the image selection frame is closed.
+         */
         frame.addComponentListener(new ComponentListener() {
 
             @Override
@@ -721,7 +724,7 @@ public class ImportFrame extends javax.swing.JFrame {
         new Thread(){
                 @Override
                 public void run(){
-                    boolean ret_val = fc.window.importKMZ(name, imgName, 
+                    boolean ret_val = fc.window.importKMZ(name, module_name, imgName, 
                             xf, yf, zf, 
                              rot_xf, rot_yf, rot_zf, scalef);
                     

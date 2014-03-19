@@ -105,7 +105,7 @@ public interface IAdapterObserver {
      * @param img A new image.
      * @param name 
      */
-    public void updateImgLib(BufferedImage img, String name);
+    public void updateImgLib(BufferedImage img, String name, String dir);
 
 
     

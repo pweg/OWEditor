@@ -204,18 +204,22 @@ public class KMZImporter {
      * Builds a new module, uploads it to the server and builds a cell
      * out of the module.
      * 
-     * @param name The name of the new module.
+     * @param module_name The name of the new module.
+     * @param name The name of the object.
      * @return 
      */
-    public boolean importToServer(String name) {
-        
+    public boolean importToServer(String module_name, String name) {
         
         if(targetServer == null){
             LOGGER.log(Level.SEVERE, "No target server was selected!");
             return false;
         }
         
-        moduleName = name;
+        if(importedModel == null || module_name == null || module_name.equals("")){
+            LOGGER.log(Level.SEVERE, "Imported Model == null or module name wrong" + module_name);
+            return false;
+        }
+        moduleName = module_name;
         importedModel.setWonderlandName(name);
         
         /*

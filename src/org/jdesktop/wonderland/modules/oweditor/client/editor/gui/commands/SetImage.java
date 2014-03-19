@@ -4,12 +4,8 @@ import java.util.ArrayList;
 import java.util.logging.Logger;
 
 import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.GUIObserverInterface;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.AdapterCommunication;
 
 public class SetImage implements Command{
-    
-     private static final Logger LOGGER =
-            Logger.getLogger(SetImage.class.getName());
     
     private ArrayList<Long> ids = null;
     private ArrayList<String> oldName = null;

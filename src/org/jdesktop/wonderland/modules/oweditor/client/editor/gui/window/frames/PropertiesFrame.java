@@ -80,7 +80,7 @@ public class PropertiesFrame extends javax.swing.JFrame {
      */
     // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
     private void initComponents() {
-        doubleFormat = new DecimalFormat("0.#####");
+        doubleFormat = new DecimalFormat("0.00");
         doubleFormat.setGroupingUsed(false);
 
         DecimalFormatSymbols custom=new DecimalFormatSymbols();
@@ -402,24 +402,25 @@ public class PropertiesFrame extends javax.swing.JFrame {
         frame.setLocationRelativeTo(this);
         frame.setActive(imgName);
         
+        /*
+         * Add a listener for when the image selection frame is
+         * closed.
+         */
         frame.addComponentListener(new ComponentListener() {
 
             @Override
             public void componentResized(ComponentEvent e) {
                 // TODO Auto-generated method stub
-                
             }
 
             @Override
             public void componentMoved(ComponentEvent e) {
                 // TODO Auto-generated method stub
-                
             }
 
             @Override
             public void componentShown(ComponentEvent e) {
                 // TODO Auto-generated method stub
-                
             }
 
             /**
@@ -519,46 +520,60 @@ public class PropertiesFrame extends javax.swing.JFrame {
             //parse strings from the fields.
             try{
                 x = Float.parseFloat(xs);
-            }catch(Exception e){
+            }catch(NumberFormatException e){
                 setLabelColorError(xLabel);
                 error = true;
             }
             try{
                 y = Float.parseFloat(ys);
-            }catch(Exception e){
+            }catch(NumberFormatException e){
                 setLabelColorError(yLabel);
                 error = true;
             }
             try{
                 z = Float.parseFloat(zs);
-            }catch(Exception e){
+            }catch(NumberFormatException e){
                 setLabelColorError(zLabel);
                 error = true;
             }
         }
-        try{
-            rot_x = Double.parseDouble(rot_xs);
-        }catch(Exception e){
-            setLabelColorError(rotXLabel);
-            error = true;
+        //check other objects only, if either one is selected, or
+        //different values is not set on multiple objects.
+        if((objects.size() > 1 && !rot_xs.equals(BUNDLE.getString("DifferentValues")))
+                || objects.size() == 1){
+            try{
+                rot_x = Double.parseDouble(rot_xs);
+            }catch(NumberFormatException e){
+                setLabelColorError(rotXLabel);
+                error = true;
+            }
         }
-        try{
-            rot_y = Double.parseDouble(rot_ys);
-        }catch(Exception e){
-            setLabelColorError(rotYLabel);
-            error = true;
+        if((objects.size() > 1 && !rot_ys.equals(BUNDLE.getString("DifferentValues")))
+            || objects.size() == 1){
+            try{
+                rot_y = Double.parseDouble(rot_ys);
+            }catch(NumberFormatException e){
+                setLabelColorError(rotYLabel);
+                error = true;
+            }
         }
-        try{
-            rot_z = Double.parseDouble(rot_zs);
-        }catch(Exception e){
-            setLabelColorError(rotZLabel);
-            error = true;
+        if((objects.size() > 1 && !rot_zs.equals(BUNDLE.getString("DifferentValues")))
+            || objects.size() == 1){
+            try{
+                rot_z = Double.parseDouble(rot_zs);
+            }catch(NumberFormatException e){
+                setLabelColorError(rotZLabel);
+                error = true;
+            }
         }
-        try{
-            scale = Double.parseDouble(scales);  
-        }catch(Exception e){
-            setLabelColorError(scaleLabel);
-            error = true;
+        if((objects.size() > 1 && !scales.equals(BUNDLE.getString("DifferentValues")))
+                || objects.size() == 1){
+            try{
+                scale = Double.parseDouble(scales);  
+            }catch(NumberFormatException e){
+                setLabelColorError(scaleLabel);
+                error = true;
+            }
         }
         
         if(error){
@@ -673,33 +688,33 @@ public class PropertiesFrame extends javax.swing.JFrame {
         
         for(IDataObject object : objects){
         
-            locationFieldX.setText(Float.toString(object.getXf()));
-            locationFieldY.setText(Float.toString(object.getYf()));
-            locationFieldZ.setText(Float.toString(object.getZf()));
+            locationFieldX.setText(doubleFormat.format(object.getXf()));
+            locationFieldY.setText(doubleFormat.format(object.getYf()));
+            locationFieldZ.setText(doubleFormat.format(object.getZf()));
             nameField.setText(object.getName());
     
-            String rotX = Double.toString(object.getRotationX());
-            String rotY = Double.toString(object.getRotationY());
-            String rotZ = Double.toString(object.getRotationZ());
-            String scale = Double.toString(object.getScale());
+            String rotX = doubleFormat.format(object.getRotationX());
+            String rotY = doubleFormat.format(object.getRotationY());
+            String rotZ = doubleFormat.format(object.getRotationZ());
+            String scale = doubleFormat.format(object.getScale());
             
             //if more items are selected, check if they are different.
-            if(!rotationFieldX.getText().equals("0") && !rotationFieldX.getText().equals(rotX))
+            if(!rotationFieldX.getText().equals("0.00") && !rotationFieldX.getText().equals(rotX))
                 rotationFieldX.setText(BUNDLE.getString("DifferentValues"));
             else
                 rotationFieldX.setText(rotX);
             
-            if(!rotationFieldY.getText().equals("0") && !rotationFieldY.getText().equals(rotY))
+            if(!rotationFieldY.getText().equals("0.00") && !rotationFieldY.getText().equals(rotY))
                 rotationFieldY.setText(BUNDLE.getString("DifferentValues"));
             else
                 rotationFieldY.setText(rotY);
             
-            if(!rotationFieldZ.getText().equals("0") && !rotationFieldZ.getText().equals(rotZ))
+            if(!rotationFieldZ.getText().equals("0.00") && !rotationFieldZ.getText().equals(rotZ))
                 rotationFieldZ.setText(BUNDLE.getString("DifferentValues"));
             else
                 rotationFieldZ.setText(rotZ);
             
-            if(!scaleField.getText().equals("1") && !scaleField.getText().equals(scale))
+            if(!scaleField.getText().equals("1.00") && !scaleField.getText().equals(scale))
                 scaleField.setText(BUNDLE.getString("DifferentValues"));
             else
                 scaleField.setText(scale);
@@ -763,7 +778,7 @@ public class PropertiesFrame extends javax.swing.JFrame {
             }else if (img != null && i != null){ 
                 
                 if(!i.getName().equals(img.getName()) ||
-                        !i.getPath().equals(img.getPath())){
+                        !i.getDir().equals(img.getDir())){
                     different = true;
                     break;
                 }
@@ -788,13 +803,13 @@ public class PropertiesFrame extends javax.swing.JFrame {
      * Resets the form. Means it sets all field values to zero.
      */
     private void reset(){
-        locationFieldX.setText("0");
-        locationFieldY.setText("0");
-        locationFieldZ.setText("0");
-        rotationFieldX.setText("0");
-        rotationFieldY.setText("0");
-        rotationFieldZ.setText("0");
-        scaleField.setText("1");
+        locationFieldX.setText("0.00");
+        locationFieldY.setText("0.00");
+        locationFieldZ.setText("0.00");
+        rotationFieldX.setText("0.00");
+        rotationFieldY.setText("0.00");
+        rotationFieldZ.setText("0.00");
+        scaleField.setText("1.00");
         
         setObjects();
         setImage();

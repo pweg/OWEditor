@@ -1,6 +1,5 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window;
 
-import java.awt.image.BufferedImage;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.ITransformedObject;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.IGraphicToInput;
 
@@ -76,7 +75,7 @@ public interface GraphicForwardInterface {
      * @param id The id of the shape.
      * @param img The image.
      */
-    public void updateImage(long id, BufferedImage img);
+    public void updateImage(long id, String imgName, String dir);
 
     /**
      * Updates the name of an object.

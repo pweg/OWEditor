@@ -6,8 +6,8 @@ import java.awt.event.MouseWheelListener;
 import javax.swing.JMenuBar;
 import javax.swing.event.MouseInputAdapter;
 
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.BottomToolBar;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.IWindowToFrame;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.frames.toolbar.BottomToolBar;
 
 public interface IFrame {
     

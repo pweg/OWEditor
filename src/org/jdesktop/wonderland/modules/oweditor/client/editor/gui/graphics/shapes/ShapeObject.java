@@ -122,7 +122,7 @@ public abstract class ShapeObject extends SimpleShapeObject{
      * 
      * @param img The image.
      */
-    public abstract void setImage(BufferedImage img);
+    public abstract void setImage(String imgName, String dir);
     
     /**
      * Sets the color of the shape.

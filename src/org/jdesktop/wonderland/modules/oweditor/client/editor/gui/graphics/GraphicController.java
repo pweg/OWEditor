@@ -157,8 +157,8 @@ public class GraphicController implements IGraphicToWindow{
     }
 
     @Override
-    public void updateShapeImage(long id, BufferedImage img) {
-        sm.getShape(id).setImage(img);
+    public void updateShapeImage(long id, String imgName, String dir) {
+        sm.getShape(id).setImage(imgName, dir);
     }
 
     @Override

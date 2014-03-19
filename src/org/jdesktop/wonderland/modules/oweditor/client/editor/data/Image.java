@@ -8,12 +8,12 @@ public  class Image implements IImage{
     
     private BufferedImage img = null;
     private String name = null;
-    private String path = null;
+    private String dir = null;
     
-    public Image(String name, BufferedImage img, String path){
+    public Image(String name, BufferedImage img, String dir){
         this.name = name;
         this.img = img;
-        this.path = path;
+        this.dir = dir;
     }
 
     @Override
@@ -27,8 +27,8 @@ public  class Image implements IImage{
     }
 
     @Override
-    public String getPath() {
-        return path;
+    public String getDir() {
+        return dir;
     }
     
 }

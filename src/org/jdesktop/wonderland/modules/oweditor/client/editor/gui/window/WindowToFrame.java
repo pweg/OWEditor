@@ -9,6 +9,12 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IDa
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IImage;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.input.IInputToWindow;
 
+/**
+ * The interface implementation for the frame package.
+ * 
+ * @author Patrick
+ *
+ */
 public class WindowToFrame implements IWindowToFrame{
 
     public WindowController wc = null;
@@ -34,10 +40,11 @@ public class WindowToFrame implements IWindowToFrame{
     }
 
     @Override
-    public boolean importKMZ(String name, String image_url, double x, double y,
+    public boolean importKMZ(String name, String module_name, 
+            String image_url, double x, double y,
             double z, double rotationX, double rotationY, double rotationZ,
             double scale) {
-        return wc.adapter.importKMZ(name, image_url, x, y, z,
+        return wc.adapter.importKMZ(name, module_name, image_url, x, y, z,
                 rotationX, rotationY, rotationZ, scale);
     }
 
@@ -123,6 +130,4 @@ public class WindowToFrame implements IWindowToFrame{
                 rotX, rotY, rotZ, scale, imgName);
         
     }
-
-
 }

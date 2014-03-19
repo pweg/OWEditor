@@ -5,7 +5,6 @@ import java.awt.image.BufferedImage;
 import java.util.ResourceBundle;
 
 import javax.swing.JButton;
-import javax.swing.UIManager;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.GUISettings;
 
@@ -30,6 +29,11 @@ public class ImageButton extends JButton{
         setContentAreaFilled(false);
     }
     
+    /**
+     * Sets the image of the button.
+     * 
+     * @param img The image.
+     */
     public void setImage(BufferedImage img){
         this.img = img;
     }

@@ -183,7 +183,7 @@ public class ServerEventManager {
      * @param name 
      */
     public void updateImgLib(BufferedImage img, String name) {
-        dui.updateImgLib(img, name);
+        dui.updateImgLib(img, name, AdapterSettings.IMAGEDIR);
     }
 
     public void serverImageChangeEvent(long id, BufferedImage img, String dir,

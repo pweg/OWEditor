@@ -193,7 +193,6 @@ public class ImageSelectionFrame extends javax.swing.JFrame {
         });
     }// </editor-fold>      
     
-
     /**
      * Builds the image panel with the images that were stored
      * previously.

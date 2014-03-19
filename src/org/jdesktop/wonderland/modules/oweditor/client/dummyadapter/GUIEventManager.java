@@ -202,7 +202,8 @@ public class GUIEventManager implements GUIObserverInterface{
     }
 
     @Override
-    public long importKMZ(String name, String imgName, double x, double y,
+    public long importKMZ(String name, String module_name, 
+            String imgName, double x, double y,
             double z, double rotationX, double rotationY, double rotationZ,
             double scale) throws Exception{
         

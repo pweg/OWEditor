@@ -18,9 +18,15 @@ import javax.swing.JMenuBar;
 import javax.swing.JScrollPane;
 import javax.swing.event.MouseInputAdapter;
 
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.BottomToolBar;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.IWindowToFrame;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.frames.toolbar.BottomToolBar;
 
+/**
+ * Controller for the frame package.
+ * 
+ * @author Patrick
+ *
+ */
 public class FrameController implements IFrame{
     
     public ImportFrame importFrame = null;
@@ -36,6 +42,9 @@ public class FrameController implements IFrame{
         buildMainFrame();
     }
     
+    /**
+     * Builds the mainframe.
+     */
     private void buildMainFrame(){
         drawingPan = new DrawingPanel(this);
         mainScrollPanel = new JScrollPane(drawingPan);
@@ -179,6 +188,13 @@ public class FrameController implements IFrame{
         imageSelection.setVisible(b);
     }
     
+    /**
+     * Inner drop listener, for kmz files to be recognized, when
+     * drawn into the main panel
+     * 
+     * @author Patrick
+     *
+     */
     class DropListener implements DropTargetListener{
 
         @Override
@@ -203,7 +219,6 @@ public class FrameController implements IFrame{
                 droppedFiles = (List<File>) evt
                         .getTransferable().getTransferData(
                                 DataFlavor.javaFileListFlavor);
-                System.out.println(droppedFiles.size());
                     
                 if(droppedFiles.size() > 1)
                     return;

@@ -234,12 +234,13 @@ public class GUIEventManager implements GUIObserverInterface{
     }
 
     @Override
-    public long importKMZ(String name, String imageName, double x, double y, 
+    public long importKMZ(String name, String module_name, 
+            String imageName, double x, double y, 
             double z, double rotationX, double rotationY, double rotationZ, 
             double scale) throws Exception{
         
         
-        if(!importer.importToServer(name)){
+        if(!importer.importToServer(module_name, name)){
             LOGGER.warning("Import to server failed.");
             throw new GUIEventException();
         }

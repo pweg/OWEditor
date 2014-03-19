@@ -67,8 +67,8 @@ public class DataObjectObserver implements
     }
 
     @Override
-    public void notifyImageChange(long id, BufferedImage img) {
-        gc.window.updateImage(id, img);
+    public void notifyImageChange(long id, String imgName, String dir) {
+        gc.window.updateImage(id, imgName, dir);
         gc.window.repaint();
     }
 

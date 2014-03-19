@@ -23,6 +23,6 @@ public interface IImage {
      * 
      * @return The Path.
      */
-    public String getPath();
+    public String getDir();
     
 }

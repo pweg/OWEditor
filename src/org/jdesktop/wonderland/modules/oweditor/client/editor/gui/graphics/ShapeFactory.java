@@ -51,18 +51,18 @@ public class ShapeFactory {
      * @return The created shape.
      */
     public ShapeObject createShapeObject(int type, int x, int y, double z, int width, int height, 
-            long id, String name, double rotation, double scale, BufferedImage img){
+            long id, String name, double rotation, double scale, String imgName,
+            String imgDir){
         
         switch(type){
             case AVATAR:
                 return new Avatar(id, x,y,width, height);
             case RECTANGLE:
                 return new ShapeRectangle(x,y,z,
-                        width, height, id, name, rotation, scale, img);
+                        width, height, id, name, rotation, scale, imgName, imgDir, smi);
             case CIRCLE:
                 return new ShapeEllipse(x,y,z,
-                        width,height, id, name, rotation, scale, img);
-            
+                        width,height, id, name, rotation, scale, imgName, imgDir, smi);
             default:
                 throw new IllegalArgumentException(
                     "Unknown type");

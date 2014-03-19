@@ -5,7 +5,6 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.ListIterator;
 import java.util.concurrent.locks.Lock;
@@ -16,12 +15,12 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IDa
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.ITransformedObject;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.GUISettings;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.DraggingObject;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.IToolTip;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.ITransformationBorder;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.ShapeEllipse;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.ShapeObject;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.ShapeRectangle;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.SimpleShapeObject;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.IToolTip;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.ITransformationBorder;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.stateDraggingShape;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.stateTransformedEdge;
 import org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter.WorldBuilder;
@@ -368,11 +367,13 @@ public class ShapeManager {
         String name = dataObject.getName();
         double rotation = dataObject.getRotation();
         double scale = dataObject.getScale();
-        BufferedImage img = dataObject.getImgClass().getImage();
+        String imgName = dataObject.getImgClass().getName();
+        String imgDir = dataObject.getImgClass().getDir();
 
         if(dataObject.getType() == IDataObject.AVATAR){
             ShapeObject shape = factory.createShapeObject(ShapeFactory.AVATAR, 
-                    x, y, z, width, height, id, name, rotation, scale, img);
+                    x, y, z, width, height, id, name, rotation, scale, imgName,
+                    imgDir);
             writeLock.lock();
             try {             
                 avatarShapes.add(shape);
@@ -381,7 +382,8 @@ public class ShapeManager {
             }
         }else{
             ShapeObject shape = factory.createShapeObject(ShapeFactory.RECTANGLE, 
-                    x, y, z, width, height, id, name, rotation, scale, img);
+                    x, y, z, width, height, id, name, rotation, scale, imgName,
+                    imgDir);
             addShape(shape);
         }
     }

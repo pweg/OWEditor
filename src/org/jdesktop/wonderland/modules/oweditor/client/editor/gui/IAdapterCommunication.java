@@ -97,6 +97,7 @@ public interface IAdapterCommunication {
      * Calls the adapter to import the pre-loaded model.
      * 
      * @param name The name of the new model
+     * @param module_name The name of the module.
      * @param image_url The url of the image representation
      * @param x The x coordinate of the new model.
      * @param y The y coordinate of the new model.
@@ -109,7 +110,8 @@ public interface IAdapterCommunication {
      * @return Return true, if creation is possible, false,
      * if there was an error.
      */
-    public boolean importKMZ(String name, String image_url, double x, double y,
+    public boolean importKMZ(String name, String module_name,
+            String image_url, double x, double y,
             double z, double rotationX, double rotationY, double rotationZ,
             double scale);
 

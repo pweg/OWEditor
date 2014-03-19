@@ -9,7 +9,6 @@ package org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter;
 import com.jme.math.Quaternion;
 import com.jme.math.Vector3f;
 import java.io.File;
-import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.HashSet;
 import java.util.logging.Level;
@@ -37,7 +36,6 @@ import org.jdesktop.wonderland.common.cell.state.PositionComponentServerState;
 import org.jdesktop.wonderland.common.messages.ErrorMessage;
 import org.jdesktop.wonderland.common.messages.OKMessage;
 import org.jdesktop.wonderland.common.messages.ResponseMessage;
-import org.jdesktop.wonderland.modules.contentrepo.common.ContentRepositoryException;
 import org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter.components.IDCellComponent;
 import org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter.components.IDCellComponentFactory;
 import org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter.components.ImageCellComponent;
@@ -89,7 +87,7 @@ public class ServerCommunication {
         //it will throw an exception, which will reach the gui,
         //which is not desireable.
         if(cell == null){
-            LOGGER.warning("CELL == NULL");
+            LOGGER.warning("Translation: CELL == NULL");
             throw new ServerCommException();
         }
         

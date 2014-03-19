@@ -12,6 +12,7 @@ import java.util.logging.Logger;
 
 import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.CoordinateTranslatorInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IDataObject;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IImage;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.ITransformedObject;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.IDataObjectObserver;
 
@@ -60,6 +61,9 @@ public class DataObjectManager {
                 return;
             
             checkDimensionChange(t);
+            
+            IImage img = dataObject.getImgClass();
+            dc.um.addImage(img.getImage(), img.getName(), img.getDir());
             
             for(IDataObjectObserver observer : observers)
                 observer.notifyCreation(t);
@@ -351,17 +355,19 @@ public class DataObjectManager {
      * @param id The id of the object.
      * @param img The new image. It may also be null, to delete it.
      * @param imgName The name of the image.
-     * @param path The path of the image.
+     * @param dir The users directory of the image.
      */
-    void updateImage(long id, BufferedImage img, String imgName, String path) {
+    public void updateImage(long id, BufferedImage img, String imgName, String dir) {
         DataObject d = data.get(id);
         if(d == null)
             return;
 
-        d.setImage(img, imgName, path);
+        dc.um.addImage(img, imgName, dir);
+        
+        d.setImage(img, imgName, dir);
         
         for(IDataObjectObserver observer : observers){
-            observer.notifyImageChange(id, img);
+            observer.notifyImageChange(id, imgName, dir);
         }
     }
 

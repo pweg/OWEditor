@@ -5,6 +5,13 @@ import java.awt.geom.Point2D;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IDataToGUI;
 
+/**
+ * Sets the import state, which is done during the select position
+ * of the import frame.
+ * 
+ * @author Patrick
+ *
+ */
 public class stateImport implements stateInput{
     
     private WindowController wc = null;

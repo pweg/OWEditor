@@ -185,12 +185,13 @@ public class AdapterCommunication implements IAdapterCommunication{
     }
 
     @Override
-    public boolean importKMZ(String name, String image_url, double x, double y,
+    public boolean importKMZ(String name, String module_name,
+            String image_url, double x, double y,
             double z, double rotationX, double rotationY, double rotationZ,
             double scale) {
         
         try {
-            long id = goi.importKMZ(name, image_url, x,y,z, rotationX, 
+            long id = goi.importKMZ(name, module_name, image_url, x,y,z, rotationX, 
                     rotationY, rotationZ, scale);
             
             //Import does not need all the baggage in order to undo/redo
@@ -282,7 +283,7 @@ public class AdapterCommunication implements IAdapterCommunication{
             
             if(imgName != null){
                 img_name_old.add(o.getImgClass().getName());
-                img_path_old.add(o.getImgClass().getPath());
+                img_path_old.add(o.getImgClass().getDir());
                 img_path_new.add(userDir);
             }
             

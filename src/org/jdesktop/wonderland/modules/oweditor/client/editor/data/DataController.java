@@ -2,6 +2,7 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.data;
 
 import java.awt.Point;
 import java.awt.geom.Point2D;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.CoordinateTranslatorInterface;
@@ -112,6 +113,11 @@ public class DataController implements IDataToMainController,
     @Override
     public String getUserImgDir() {
         return um.getUserDir();
+    }
+
+    @Override
+    public BufferedImage getImage(String name, String dir) {
+        return um.getImage(name, dir);
     }
 
 

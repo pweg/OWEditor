@@ -9,12 +9,13 @@ import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.GUISettings;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.BottomToolBar;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.frames.toolbar.BottomToolBar;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.frames.toolbar.UndoBar;
 
 /**
  * This is the main window of the editor.
  * It holds the JScrollpane, which houses the drawing panel.
+ * 
  * @author Patrick
  *
  */
@@ -24,8 +25,6 @@ public class MainFrame extends JFrame {
     
     private static final ResourceBundle BUNDLE = ResourceBundle.getBundle(
             "org/jdesktop/wonderland/modules/oweditor/client/resources/Bundle");
-
-
     
     protected BottomToolBar bottomBar = null;
     protected UndoBar undoBar = null;
@@ -59,6 +58,11 @@ public class MainFrame extends JFrame {
         this.requestFocus();
     }
     
+    /**
+     * Returns the bottom tool bar.
+     * 
+     * @return The tool bar.
+     */
     public BottomToolBar getBottomToolBar(){
         return bottomBar;
     }

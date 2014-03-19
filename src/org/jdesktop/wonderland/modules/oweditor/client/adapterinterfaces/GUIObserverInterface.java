@@ -179,7 +179,8 @@ public interface GUIObserverInterface {
      * @return Return the id of the new object, or -1 if something failed.
      * @throws java.lang.Exception
      */
-    public long importKMZ(String name, String imgName, double x, double y,
+    public long importKMZ(String name, String module_name,
+            String imgName, double x, double y,
             double z, double rotationX, double rotationY, double rotationZ,
             double scale) throws Exception;
 

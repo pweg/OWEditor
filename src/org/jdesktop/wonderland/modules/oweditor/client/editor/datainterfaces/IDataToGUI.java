@@ -2,6 +2,7 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces;
 
 import java.awt.Point;
 import java.awt.geom.Point2D;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.IDataObjectObserver;
@@ -118,5 +119,14 @@ public interface IDataToGUI {
      * @param observer The observer.
      */
     public void removeUserObserver(IUserObserver observer);
+    
+    /**
+     * Searches for an image in the user data manager.
+     * 
+     * @param name The name of the image.
+     * @param dir The directory of the image.
+     * @return Null, if the image does not exist, otherwise the image.
+     */
+    public BufferedImage getImage(String name, String dir);
     
 }

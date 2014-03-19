@@ -12,6 +12,7 @@ import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.GUISettings;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.IInternalMediator;
 
 /**
  * A class for standard rectangles. 
@@ -39,6 +40,7 @@ public class ShapeEllipse extends ShapeObject{
     private int nameBoundsAbove = GUISettings.NAMEPOSITIONINY;
     
     private BufferedImage img = null;
+    private IInternalMediator smi = null;
     
     /**
      * Creates a new ObjectRectangle shape instance.
@@ -52,14 +54,15 @@ public class ShapeEllipse extends ShapeObject{
      */
     public ShapeEllipse(int x, int y, double z, int width,
             int height, long id, String name,
-            double rotation, double scale, BufferedImage img){
+            double rotation, double scale, String imgName, 
+            String imgDir, IInternalMediator smi){
         
         originalShape = new Rectangle (x, y, width, height);
         this.name = name;
         this.id = id;
         this.rotation = rotation;
         this.scale = scale;
-        this.img = img;
+        this.smi = smi;
         this.z = z;
     }
     
@@ -257,8 +260,8 @@ public class ShapeEllipse extends ShapeObject{
     }
 
     @Override
-    public void setImage(BufferedImage img) {
-        this.img = img;
+    public void setImage(String imgName, String dir) {
+        //this.img = img;
     }
 
     @Override
