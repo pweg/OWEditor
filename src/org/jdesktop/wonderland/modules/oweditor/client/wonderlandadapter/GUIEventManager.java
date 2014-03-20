@@ -71,37 +71,12 @@ public class GUIEventManager implements GUIObserverInterface{
                 (float) Math.toRadians(-rot_x),
                 (float) Math.toRadians(-rot_z));
         ac.sc.rotate(id, cell_rot);
-        
-        //ac.ct.createRotation(Vector3f.ZERO, rot_z)
     }
-    
-    /*@Override
-    public void notifyRotation(long id, int x, int y, double rotation) throws Exception{
-        notifyTranslationXY(id,x,y);
-        
-        id = ac.bm.getActiveID(id);
-        Cell cell = getCell(id);
-        
-        Vector3f cell_rot = CellInfoReader.getRotation(cell);
-        cell_rot = ac.ct.createRotation(cell_rot, rotation);
-        
-        ac.sc.rotate(id, cell_rot);
-    }*/
-    
-    
 
     public void notifyScaling(long id, double scale) throws Exception {
         id = ac.bm.getActiveID(id);
         ac.sc.scale(id,(float) scale);
     }
-
-    /*
-    @Override
-    public void notifyScaling2(long id, int x, int y, double scale) throws Exception{
-        id = ac.bm.getActiveID(id);
-        ac.sc.scale(id,(float) scale);
-        notifyTranslationXY(id,x,y);
-    }*/
     
     @Override
     public void notifyRemoval(long id) throws Exception{
@@ -112,7 +87,6 @@ public class GUIEventManager implements GUIObserverInterface{
         }catch(Exception e){
             LOGGER.warning("ID component not created for " + id);
         }
-        
         ac.sc.remove(curid);
     }
 
@@ -187,7 +161,6 @@ public class GUIEventManager implements GUIObserverInterface{
         Vector3f coordinates = CellInfoReader.getCoordinates(cell);
         String name = cell.getName() ;
         name = ac.cnm.createUndoName(ac.sm.getSession(), id, name);
-        LOGGER.warning("UNDO REMOVAL: y "+ coordinates.y + " z " +coordinates.z);
         
         float y = coordinates.z;
         float z = coordinates.y;
@@ -203,7 +176,6 @@ public class GUIEventManager implements GUIObserverInterface{
     @Override
     public void undoObjectCreation() throws Exception{
         long id = ac.bm.getUndoID();
-        LOGGER.warning("UNDOING UNDO ID " +id);
         
         if(id == -1)
             throw new ServerCommException();
@@ -213,7 +185,6 @@ public class GUIEventManager implements GUIObserverInterface{
     @Override
     public void redoObjectCreation() throws Exception{
         long id = ac.bm.getRedoID();
-        LOGGER.warning("Redoing undo id" + id);
         
         if(id == -1)
             throw new ServerCommException();
@@ -300,7 +271,6 @@ public class GUIEventManager implements GUIObserverInterface{
             throw new GUIEventException();
         }
         return cell;
-        
     }
 
     @Override

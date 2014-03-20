@@ -31,9 +31,10 @@ public class ImageCellComponent extends CellComponent {
     // The image.
     private String image = null;
     private String dir = null;
+    private String name = null;
     
     private Cell cell = null;    
-    private ArrayList<ImageChangeListener> listenerList = null; 
+    private ArrayList<CellChangeListener> listenerList = null; 
 
     /**
      * Constructor, takes the Cell associated with the Cell Component.
@@ -43,7 +44,8 @@ public class ImageCellComponent extends CellComponent {
     public ImageCellComponent(Cell cell) {
         super(cell);
         this.cell = cell;
-        listenerList = new ArrayList<ImageChangeListener>();
+        this.name = cell.getName();
+        listenerList = new ArrayList<CellChangeListener>();
     }
 
     /**
@@ -52,12 +54,19 @@ public class ImageCellComponent extends CellComponent {
     @Override
     public void setClientState(CellComponentClientState clientState) {
         super.setClientState(clientState);
-        image = ((ImageCellComponentClientState) clientState).getImage();
-        dir = ((ImageCellComponentClientState) clientState).getDir();
+        String image = ((ImageCellComponentClientState) clientState).getImage();
+        String dir = ((ImageCellComponentClientState) clientState).getDir();
         
-        for(ImageChangeListener listener : listenerList){
-            listener.imageChanged(image, dir, cell);
+        for(CellChangeListener listener : listenerList){
+            if(!image.equals(this.image) || !dir.equals(this.dir))
+                listener.imageChanged(image, dir, cell);
+            if(!cell.getName().equals(name)){
+                listener.nameChanged(cell);
+            }
         }
+        this.image = image;
+        this.dir = dir;
+        this.name = name;
     }
 
     /**
@@ -83,7 +92,7 @@ public class ImageCellComponent extends CellComponent {
      * 
      * @param listener The listener
      */
-    public void registerChangeListener(ImageChangeListener listener){
+    public void registerChangeListener(CellChangeListener listener){
         listenerList.add(listener);
     }
 }

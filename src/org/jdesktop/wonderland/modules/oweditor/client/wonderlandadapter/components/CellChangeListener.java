@@ -13,7 +13,7 @@ import org.jdesktop.wonderland.client.cell.Cell;
  * 
  * @author Patrick
  */
-public interface ImageChangeListener{
+public interface CellChangeListener{
 
     /**
      * Is called when an image of a cell is changed.
@@ -23,5 +23,12 @@ public interface ImageChangeListener{
      * @param cell The cell which has received a new image.
      */
     public void imageChanged(String img, String dir, Cell cell);
+    
+    /**
+     * Is called when the name of a cell is changed.
+     * 
+     * @param cell  The cell.
+     */
+    public void nameChanged(Cell cell);
     
 }

@@ -62,6 +62,10 @@ public class FileManager {
              throws Exception{
          
          InputStream is = downloadFile(fileName, fileDir, imgRootName);
+         
+         if(is == null)
+             return null;
+         
          BufferedImage image = ImageIO.read(is);
          is.close();         
          return image;
@@ -112,6 +116,10 @@ public class FileManager {
      */
     public InputStream downloadFile(String fileName, String dir, 
             String userDir) throws Exception{
+        
+        if(fileName == null || dir == null || userDir == null ||
+                fileName.equals("") || dir.equals("") || userDir.equals(""))
+            return null;
         
           ContentNode fileNode = getForeignFile(fileName, dir,
                         userDir);
@@ -233,6 +241,7 @@ public class FileManager {
             String userDir)throws ContentRepositoryException{
          // Fetch the user's root using the current primary server. It should
         // be ok to use the primary server at this point
+        
         ContentRepositoryRegistry r = ContentRepositoryRegistry.getInstance();
         ServerSessionManager session = LoginManager.getPrimary();
 

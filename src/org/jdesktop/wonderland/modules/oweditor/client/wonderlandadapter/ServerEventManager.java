@@ -19,7 +19,7 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IDa
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IAdapterObserver;
 import org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter.components.IDCellComponent;
 import org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter.components.ImageCellComponent;
-import org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter.components.ImageChangeListener;
+import org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter.components.CellChangeListener;
 import org.jdesktop.wonderland.modules.oweditor.common.IDCellComponentServerState;
 
 /**
@@ -35,7 +35,7 @@ public class ServerEventManager {
     private ArrayList<IAdapterObserver> observers = null;
     
     private ComponentChangeListener componentListener = null;
-    private ImageChangeListener imageListener = null;
+    private CellChangeListener imageListener = null;
     
     private ImageMonitor imgMonitor = null;
     
@@ -64,13 +64,13 @@ public class ServerEventManager {
                 }
                 else if(type == ComponentChangeListener.ChangeType.ADDED && 
                         component instanceof ImageCellComponent){
-                    LOGGER.warning("IMAGE COMPONTENT CREATED");
+                    //LOGGER.warning("IMAGE COMPONTENT CREATED");
                     imageComponentCreated(cell);
                 }
             }
         };
         
-        imageListener = new ImageListener();
+        imageListener = new ChangeListener();
     }
     
     /**
@@ -266,8 +266,6 @@ public class ServerEventManager {
                     LOGGER.log(Level.SEVERE, null, ex);
                 }
             }
-            
-            LOGGER.warning("cur id" + id);
         }
         
         Vector3fInfo coordinates = CellInfoReader.getCoordinates(cell);
@@ -363,7 +361,6 @@ public class ServerEventManager {
         
         for(IAdapterObserver observer : observers){
             observer.notifyImageChange(id, img, imgName, imgDir);
-            observer.notifyNameChange(id, cell.getName());
         }
     }
     
@@ -450,10 +447,19 @@ public class ServerEventManager {
     /**
      * Inner class for the image change listener.
      */
-    class ImageListener extends Marshaller.Listener implements ImageChangeListener{
+    class ChangeListener extends Marshaller.Listener implements CellChangeListener{
 
         public void imageChanged(String img, String dir, Cell cell) {
             imageChangedEvent(img, dir, cell);
+        }
+
+        public void nameChanged(Cell cell) {
+            long id = CellInfoReader.getID(cell);
+            id = ac.bm.getOriginalID(id);
+            
+            for(IAdapterObserver observer : observers){
+                observer.notifyNameChange(id, cell.getName());
+            }
         }
     }
     

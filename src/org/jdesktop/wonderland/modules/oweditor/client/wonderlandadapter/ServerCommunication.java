@@ -460,7 +460,7 @@ public class ServerCommunication {
         if (response instanceof CellServerComponentResponseMessage) {
             // If successful, add the component to the GUI by refreshing the
             // Cell that is selected.
-            LOGGER.warning("Component successfully created");
+            //LOGGER.warning("Component successfully created");
         }
         else if (response instanceof ErrorMessage) {
             // Log an error. Eventually we should display a dialog
