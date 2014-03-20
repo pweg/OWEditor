@@ -12,7 +12,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -23,7 +22,6 @@ import org.jdesktop.wonderland.modules.contentrepo.common.ContentCollection;
 import org.jdesktop.wonderland.modules.contentrepo.common.ContentNode;
 import org.jdesktop.wonderland.modules.contentrepo.common.ContentRepositoryException;
 import org.jdesktop.wonderland.modules.contentrepo.common.ContentResource;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IImage;
 import org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter.components.ImageCellComponentProperties;
 
 /**
@@ -314,7 +312,7 @@ public class FileManager {
                     BufferedImage img = ImageIO.read(is);
                     is.close(); 
                     if(img != null)
-                        imgs.add(new ImageClass(img, node.getName()));
+                        imgs.add(new ImageClass(img, node.getName(), getUserDir()));
                 } catch (IOException ex) {
                     Logger.getLogger(FileManager.class.getName()).log(Level.SEVERE, null, ex);
                 } 
@@ -329,10 +327,12 @@ public class FileManager {
     protected class ImageClass{
         protected BufferedImage img = null;
         protected String  name = null;
+        protected String dir = null;
         
-        public ImageClass(BufferedImage img, String name){
+        public ImageClass(BufferedImage img, String name, String dir){
             this.img = img;
             this.name = name;
+            this.dir = dir;
         }
     }
     

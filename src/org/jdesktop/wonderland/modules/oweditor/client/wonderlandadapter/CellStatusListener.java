@@ -4,6 +4,7 @@
  */
 package org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter;
 
+import java.util.logging.Logger;
 import org.jdesktop.wonderland.client.cell.Cell;
 import org.jdesktop.wonderland.client.cell.CellStatusChangeListener;
 import org.jdesktop.wonderland.common.cell.CellStatus;
@@ -13,6 +14,8 @@ import org.jdesktop.wonderland.common.cell.CellStatus;
  * @author Patrick
  */
 public class CellStatusListener implements CellStatusChangeListener{
+    private static final Logger LOGGER =
+            Logger.getLogger(CellStatusListener.class.getName());
     
     private ServerEventManager sua = null;    
     
@@ -30,7 +33,6 @@ public class CellStatusListener implements CellStatusChangeListener{
     }*/
 
     public void cellStatusChanged(Cell cell, CellStatus status) {
-        
         if(status.equals(CellStatus.DISK)){
             sua.removalEvent(cell);
         }

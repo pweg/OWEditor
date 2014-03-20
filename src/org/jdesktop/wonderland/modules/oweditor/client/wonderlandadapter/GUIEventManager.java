@@ -316,6 +316,7 @@ public class GUIEventManager implements GUIObserverInterface{
 
     @Override
     public void notifyNameChange(Long id, String name) throws Exception {
+        id = ac.bm.getActiveID(id);
         ac.sc.changeName(id, name);
     }
 
@@ -327,7 +328,7 @@ public class GUIEventManager implements GUIObserverInterface{
                 BufferedImage img = ImageIO.read(imgFile);
                 FileInfo info = new FileInfo();
                 ac.fm.uploadImage(imgFile, info);
-                ac.sem.updateUserLib(img, info.fileName);
+                ac.sem.updateUserLib(img, info.fileName, ac.fm.getUserDir());
             } catch (IOException e) {
                 throw new ServerCommException();
             } catch (Exception ex) {

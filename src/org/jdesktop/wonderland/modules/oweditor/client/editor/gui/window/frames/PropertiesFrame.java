@@ -656,13 +656,13 @@ public class PropertiesFrame extends javax.swing.JFrame {
             fc.setImageSelectionVisible(b);
             image.setImage(null);
             
-            locationFieldX.setText("0");
-            locationFieldY.setText("0");
-            locationFieldZ.setText("0");
-            rotationFieldX.setText("0");
-            rotationFieldY.setText("0");
-            rotationFieldZ.setText("0");
-            scaleField.setText("1");
+            locationFieldX.setText("0.00");
+            locationFieldY.setText("0.00");
+            locationFieldZ.setText("0.00");
+            rotationFieldX.setText("0.00");
+            rotationFieldY.setText("0.00");
+            rotationFieldZ.setText("0.00");
+            scaleField.setText("1.00");
         }else{
             ArrayList<Long> ids = fc.window.getSelectedIDs();
             if(ids == null)

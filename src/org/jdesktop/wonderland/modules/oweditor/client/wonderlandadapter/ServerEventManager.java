@@ -214,6 +214,13 @@ public class ServerEventManager {
             imgDir = imageComponent.getDir();
             imageComponent.registerChangeListener(imageListener);
             img = getImage(id, imgName, imgDir);
+        }else{
+            try {
+                ac.sc.changeImage(id, "", "");
+                
+            } catch (ServerCommException ex) {
+                Logger.getLogger(ServerEventManager.class.getName()).log(Level.SEVERE, null, ex);
+            }
             
         }
         
@@ -316,8 +323,12 @@ public class ServerEventManager {
         ac.ltm.invokeLateTransform(ac.sc, id, name);
     }
     
-    private void imageComponentCreated(Cell cell){       
-        LOGGER.warning("IMAGE COMPONENT CREATED");
+    /**
+     * Is called when the image component is created.
+     * 
+     * @param cell The cell.
+     */
+    private void imageComponentCreated(Cell cell){      
         ImageCellComponent imageComponent = 
                 cell.getComponent(ImageCellComponent.class);
         
@@ -337,7 +348,13 @@ public class ServerEventManager {
         //imageChangedEvent(imgName, imgDir, cell);        
     }
     
-    
+    /**
+     * Is called, when an image is changed.
+     * 
+     * @param imgName The new name of the image.
+     * @param imgDir The new user directory of the image.
+     * @param cell  The cell where the image is changed.
+     */
     private void imageChangedEvent(String imgName, String imgDir, Cell cell){
         long original_id = CellInfoReader.getID(cell);
         long id = ac.bm.getOriginalID(original_id);
@@ -346,10 +363,19 @@ public class ServerEventManager {
         
         for(IAdapterObserver observer : observers){
             observer.notifyImageChange(id, img, imgName, imgDir);
+            observer.notifyNameChange(id, cell.getName());
         }
-        LOGGER.warning("IMAGE IS NOT NULL");
     }
     
+    /**
+     * Returns an image for a specific id, name and directory. Also notifies
+     * other images, whith the same image that a change was done.
+     * 
+     * @param id The cell id.
+     * @param imgName The name of the image.
+     * @param imgDir The directory of the image.
+     * @return The image.
+     */
     private BufferedImage getImage(long id, String imgName, String imgDir){
         BufferedImage img = null;
         
@@ -359,11 +385,11 @@ public class ServerEventManager {
                 img = ac.fm.downloadImage(imgName, imgDir);
             } catch (Exception ex) {
                 LOGGER.log(Level.SEVERE, "Could not get image", ex);
-                try {
+                /*try {
                     ac.sc.deleteComponent(id, ImageCellComponent.class);
                 } catch (ServerCommException ex1) {
                     LOGGER.log(Level.SEVERE, "Could not delete image component", ex1);
-                }
+                }*/
             }
             
             //checks if other cells have the same image. This is to
@@ -384,26 +410,46 @@ public class ServerEventManager {
         return img;
     }
     
+    /**
+     * Sets the directory of the current user.
+     * 
+     * @param dir The user directory.
+     */
     public void setUserDir(String dir){
         for(IAdapterObserver observer : observers){
             observer.setUserDir(dir);
         }
     }
     
-    public void updateUserLib(BufferedImage img, String imgName){
+    /**
+     * Updates the user image library with a new image.
+     * 
+     * @param img The image.
+     * @param imgName The image name.
+     * @param dir  The image user directory.
+     */
+    public void updateUserLib(BufferedImage img, String imgName, String dir){
         for(IAdapterObserver observer : observers){
-            observer.updateImgLib(img, imgName);
+            observer.updateImgLib(img, imgName, dir);
         }
     }
 
+    /**
+     * Sets the user library.
+     * 
+     * @param userLib The user library.
+     */
     void setImageLib(ArrayList<FileManager.ImageClass> userLib) {
         for(FileManager.ImageClass img : userLib){
             for(IAdapterObserver observer : observers){
-                observer.updateImgLib(img.img, img.name);
+                observer.updateImgLib(img.img, img.name, img.dir);
             }
         }
     }
     
+    /**
+     * Inner class for the image change listener.
+     */
     class ImageListener extends Marshaller.Listener implements ImageChangeListener{
 
         public void imageChanged(String img, String dir, Cell cell) {
