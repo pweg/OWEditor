@@ -4,6 +4,7 @@ import java.awt.image.BufferedImage;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IDataObject;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IImage;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IRights;
 
 /**
  * This class houses all necessary data of an virtual world item.
@@ -245,6 +246,12 @@ public class DataObject implements IDataObject{
     
     public IImage getImgClass(){
         return img;
+    }
+
+    @Override
+    public IRights getRights() {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 

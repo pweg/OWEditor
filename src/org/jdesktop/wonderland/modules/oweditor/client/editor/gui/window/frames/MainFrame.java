@@ -52,7 +52,8 @@ public class MainFrame extends JFrame {
                 
         //f.getContentPane().add(app.getControl(), "Last");  
         setSize(GUISettings.MAINWIDTH, GUISettings.MAINHEIGHT);  
-        setLocation(GUISettings.MAINPOSX, GUISettings.MAINPOSY);  
+        
+        setLocationRelativeTo(null);
         setTitle(BUNDLE.getString("FrameTitle"));
         setVisible(false); 
         this.requestFocus();

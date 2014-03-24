@@ -181,6 +181,13 @@ public interface IDataObject extends ITransformedObject{
      * @param name The name of the image.
      * @param path The user dir of the image.
      */
-    void setImage(BufferedImage img, String name, String path);
+    public void setImage(BufferedImage img, String name, String path);
+    
+    /**
+     * Returns the rights interface of the object.
+     * 
+     * @return The rights.
+     */
+    public IRights getRights();
 
 }

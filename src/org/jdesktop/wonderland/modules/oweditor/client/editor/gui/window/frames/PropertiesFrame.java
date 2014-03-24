@@ -46,7 +46,7 @@ public class PropertiesFrame extends javax.swing.JFrame {
     //font for the labels.
     private Font normalFont = null;
     
-    private ArrayList<IDataObject> objects = null;
+    protected ArrayList<IDataObject> objects = null;
     
     private String imgName = null;
     
@@ -59,6 +59,9 @@ public class PropertiesFrame extends javax.swing.JFrame {
     private String initialScale = null;
     private String initialName = null;
     private String initialImg = null;
+    
+    private JTabbedPane tabbedPane = null;
+    private PropertiesRightsPane rightsPane = null;
             
     /**
      * Creates new properties frame.
@@ -80,6 +83,9 @@ public class PropertiesFrame extends javax.swing.JFrame {
      */
     // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
     private void initComponents() {
+        
+        rightsPane = new PropertiesRightsPane(this);
+        
         doubleFormat = new DecimalFormat("0.00");
         doubleFormat.setGroupingUsed(false);
 
@@ -87,7 +93,7 @@ public class PropertiesFrame extends javax.swing.JFrame {
         custom.setDecimalSeparator('.');
         ((DecimalFormat) doubleFormat).setDecimalFormatSymbols(custom);
         
-        JTabbedPane tabbedPane = new JTabbedPane();
+        tabbedPane = new JTabbedPane();
         
         nameField = new javax.swing.JTextField();        
         image = new ImageButton();
@@ -386,8 +392,10 @@ public class PropertiesFrame extends javax.swing.JFrame {
         );
         
         tabbedPane.addTab(BUNDLE.getString("PropertiesGeneral"), null, jPanel5,
-                "Does nothing");
+                BUNDLE.getString("PropertiesGeneralInfo"));
         getContentPane().add(tabbedPane);
+        tabbedPane.addTab(BUNDLE.getString("PropertiesRights"), null, rightsPane, 
+                BUNDLE.getString("PropertiesRightsInfo"));
 
 
         setLocation(GUISettings.FRAMEPOSX, GUISettings.FRAMEPOSY);  
@@ -444,7 +452,7 @@ public class PropertiesFrame extends javax.swing.JFrame {
         frame.setVisible(true);
     }
 
-    private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {  
+    protected void okButtonActionPerformed(java.awt.event.ActionEvent evt) {  
         resetLabelColor();
         
         ArrayList<Long> ids = new ArrayList<Long>();
@@ -506,7 +514,6 @@ public class PropertiesFrame extends javax.swing.JFrame {
         double rot_y = -1;
         double rot_z = -1;
         double scale = -1;
-
         
         boolean error = false;
         
@@ -640,7 +647,7 @@ public class PropertiesFrame extends javax.swing.JFrame {
         
     } 
 
-    private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {
+    protected void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {
         setVisible(false);
     } 
 
@@ -664,6 +671,7 @@ public class PropertiesFrame extends javax.swing.JFrame {
             rotationFieldZ.setText("0.00");
             scaleField.setText("1.00");
         }else{
+            tabbedPane.setSelectedIndex(0);
             ArrayList<Long> ids = fc.window.getSelectedIDs();
             if(ids == null)
                 return;
@@ -672,9 +680,10 @@ public class PropertiesFrame extends javax.swing.JFrame {
                 IDataObject object = fc.window.getDataObject(id);
                 objects.add(object);
             }
+            rightsPane.setObjects();
             setObjects();
             setImage();   
-            resetLabelColor();     
+            resetLabelColor();  
         }
         super.setVisible(b);
     }
