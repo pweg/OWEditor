@@ -135,4 +135,11 @@ public interface IFrame {
      */
     public void setPropertiesVisible(boolean b);
 
+    /**
+     * Is used, when a rights component is created.
+     * 
+     * @param id The object id.
+     */
+    public void updateRightsComponent(long id);
+
 }

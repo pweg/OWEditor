@@ -9,6 +9,7 @@ import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.GUIObse
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IDataObject;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IDataToGUI;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.ITransformedObject;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.commands.AddComponent;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.commands.Command;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.commands.Delete;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.commands.Paste;
@@ -205,6 +206,13 @@ public class AdapterCommunication implements IAdapterCommunication{
             return false;
         }
     }
+
+
+    @Override
+    public void addRightsComponent(ArrayList<Long> ids) {
+        AddComponent com = new AddComponent(ids, GUIObserverInterface.RIGHTSCOMPONENT);
+        executeCom(com);
+    }
     
     @Override
     public void setProperties(ArrayList<Long> ids, ArrayList<String> names,
@@ -334,6 +342,7 @@ public class AdapterCommunication implements IAdapterCommunication{
             Logger.getLogger(AdapterCommunication.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
 
     /**
      * Executes a command.

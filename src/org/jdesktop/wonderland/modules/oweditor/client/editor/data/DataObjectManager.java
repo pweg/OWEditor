@@ -371,4 +371,26 @@ public class DataObjectManager {
         }
     }
 
+    public void rightComponentCreation(long id) {
+        DataObject d = data.get(id);
+        if(d == null)
+            return;
+        
+        d.rightComponentCreated();
+        
+        for(IDataObjectObserver observer : observers){
+            observer.notifyRightComponentCreated(id);
+        }
+        
+    }
+
+    public void rightComponentRemoval(long id) {
+
+        DataObject d = data.get(id);
+        if(d == null)
+            return;
+        
+        d.rightComponentRemoved();
+    }
+
 }

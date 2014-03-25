@@ -26,7 +26,9 @@ public class DataObject implements IDataObject{
     private float height = 0;
     private String name = "";
     private byte type = IDataObject.RECTANGLE;
+    
     private IImage img = null;
+    private ArrayList<IRights> rights = null;
     
     /**
      * Creates an empty object instance.
@@ -250,9 +252,34 @@ public class DataObject implements IDataObject{
     }
 
     @Override
-    public ArrayList<IRights> getRights() {
-        return null;
+    public void addRights(String type, String name, boolean isOwner,
+            boolean permitSubObjects, boolean permitAbilityChange,
+            boolean permitMove, boolean permitView, boolean isEditable,
+            boolean isEverybody) {
+        if(rights == null)
+            rights = new ArrayList<IRights>();
+        IRights right = new Rights(type, name, isOwner, 
+                permitSubObjects, permitAbilityChange,
+                permitMove, permitView, isEditable,
+                isEverybody);
+        rights.add(right);
+        
     }
+    
+    public void rightComponentCreated(){
+        if(rights == null)
+            rights = new ArrayList<IRights>();
+    }
+    
+    public void rightComponentRemoved(){
+        rights = null;
+    }
+
+    @Override
+    public ArrayList<IRights> getRights() {
+        return rights;
+    }
+
 
 
 }

@@ -35,13 +35,14 @@ public class PropertiesFrame extends javax.swing.JFrame {
     private static final ResourceBundle BUNDLE = ResourceBundle.getBundle(
             "org/jdesktop/wonderland/modules/oweditor/client/resources/Bundle");
 
-    private FrameController fc = null;
+    protected FrameController fc = null;
     
     private NumberFormat doubleFormat = null;
     
     //color for the labels.
     private final Color errorColor = Color.red;
     private final Color normalColor = Color.black;
+    private final Color disabledColor = Color.gray;
     
     //font for the labels.
     private Font normalFont = null;
@@ -61,7 +62,7 @@ public class PropertiesFrame extends javax.swing.JFrame {
     private String initialImg = null;
     
     private JTabbedPane tabbedPane = null;
-    private PropertiesRightsPane rightsPane = null;
+    protected PropertiesRightsPane rightsPane = null;
             
     /**
      * Creates new properties frame.
@@ -758,11 +759,19 @@ public class PropertiesFrame extends javax.swing.JFrame {
             locationFieldY.setEnabled(false);
             locationFieldZ.setEnabled(false);
             nameField.setEnabled(false);
+            setLabelColorStandard(xLabel, disabledColor);
+            setLabelColorStandard(yLabel, disabledColor);
+            setLabelColorStandard(zLabel, disabledColor);
+            setLabelColorStandard(nameLabel, disabledColor);
         }else{
             locationFieldX.setEnabled(true);
             locationFieldY.setEnabled(true);
             locationFieldZ.setEnabled(true);
             nameField.setEnabled(true);
+            setLabelColorStandard(xLabel, normalColor);
+            setLabelColorStandard(yLabel, normalColor);
+            setLabelColorStandard(zLabel, normalColor);
+            setLabelColorStandard(nameLabel, normalColor);
         }
     }
     
@@ -795,6 +804,7 @@ public class PropertiesFrame extends javax.swing.JFrame {
         }
         
         if(!different){
+            image.setText(BUNDLE.getString("NoImage"));
             if(img != null){
                 imgName = img.getName();
                 image.setImage(img.getImage());
@@ -857,14 +867,14 @@ public class PropertiesFrame extends javax.swing.JFrame {
     private void resetLabelColor(){
         if(normalFont == null)
             return;
-        setLabelColorStandard(nameLabel);
-        setLabelColorStandard(xLabel);
-        setLabelColorStandard(yLabel);
-        setLabelColorStandard(zLabel);
-        setLabelColorStandard(rotXLabel);
-        setLabelColorStandard(rotYLabel);
-        setLabelColorStandard(rotZLabel);
-        setLabelColorStandard(scaleLabel);
+        setLabelColorStandard(nameLabel, normalColor);
+        setLabelColorStandard(xLabel, normalColor);
+        setLabelColorStandard(yLabel, normalColor);
+        setLabelColorStandard(zLabel, normalColor);
+        setLabelColorStandard(rotXLabel, normalColor);
+        setLabelColorStandard(rotYLabel, normalColor);
+        setLabelColorStandard(rotZLabel, normalColor);
+        setLabelColorStandard(scaleLabel, normalColor);
     }
     
     /**
@@ -872,9 +882,10 @@ public class PropertiesFrame extends javax.swing.JFrame {
      * 
      * @param label The label.
      */
-    private void setLabelColorStandard(JLabel label){
-        label.setFont(normalFont);
-        label.setForeground(normalColor);
+    private void setLabelColorStandard(JLabel label, Color color){
+        if(normalFont != null)
+            label.setFont(normalFont);
+        label.setForeground(color);
     }
 
     // Variables declaration - do not modify                     

@@ -121,6 +121,13 @@ public interface IWindow extends GraphicForwardInterface{
      * redo is disabled.
      */
     public void setRedoEnabled(boolean b);
+
+    /**
+     * Updates for created rights.
+     * 
+     * @param id The object id.
+     */
+    public void updateRightsComponent(long id);
     
 
 }

@@ -158,8 +158,12 @@ public class PropertiesRightsPane extends JPanel {
         // TODO add your handling code here:
     }                                        
 
-    private void addComponentActionPerformed(java.awt.event.ActionEvent evt) {                                         
-        // TODO add your handling code here:
+    private void addComponentActionPerformed(java.awt.event.ActionEvent evt) {  
+        ArrayList<Long> ids = new ArrayList<Long>();
+        
+        for(IDataObject object : frame.objects)
+            ids.add(object.getID());
+        frame.fc.window.addRightsComponent(ids);
     } 
     private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {                                         
         frame.okButtonActionPerformed(evt);
@@ -174,9 +178,6 @@ public class PropertiesRightsPane extends JPanel {
 
     public void setObjects() {
         permTableModel.clear();
-        permTableModel.addEntry("bla", "STRING", false, false, true, true, false);
-        permTableModel.addEntry("bla", "STRING", false, false, true, true, false);
-        permTableModel.addEntry("bla", "STRING", false, false, true, true, false);
         
         int countRights = 0;
         
@@ -187,7 +188,20 @@ public class PropertiesRightsPane extends JPanel {
             
             if(rights != null){
                 countRights++;
-                allRights.addAll(rights);
+                
+                //set does seem to have duplicates, therefore
+                //removing it the old way.
+                for(IRights right : rights){
+                    boolean found = false;
+                    for(IRights r : allRights)
+                        if(r.equals(right)){
+                            found = true;
+                            break;
+                        }
+                        
+                    if(!found)    
+                        allRights.add(right);
+                }
             }
         }
         
@@ -207,10 +221,13 @@ public class PropertiesRightsPane extends JPanel {
             int count = frame.objects.size();
             
             for(IDataObject object : frame.objects){
-                for(IRights orights : object.getRights()){
-                    if(rights.equals(orights)){
-                        count--;
-                        break;
+                ArrayList<IRights> orights = object.getRights();
+                if(orights != null){
+                    for(IRights oright : object.getRights()){
+                        if(rights.equals(oright)){
+                            count--;
+                            break;
+                        }
                     }
                 }
             }
@@ -218,7 +235,8 @@ public class PropertiesRightsPane extends JPanel {
                 permTableModel.addEntry(rights.getType(), 
                         rights.getName(), rights.getOwner(), 
                         rights.getPermAddSubObjects(), rights.getPermChangeAbilities(),
-                        rights.getPermMove(), rights.getPermView());
+                        rights.getPermMove(), rights.getPermView(), rights.isEditable(),
+                        rights.isEverybody());
             }
         }
     }
@@ -245,6 +263,8 @@ public class PropertiesRightsPane extends JPanel {
             protected boolean changeAbilities;
             protected boolean move;
             protected boolean view;
+            protected boolean isEditable;
+            protected boolean isEverybody;
         }
         
         private ArrayList<Entry> rightsList = new ArrayList<Entry>();
@@ -276,7 +296,8 @@ public class PropertiesRightsPane extends JPanel {
         
         public void addEntry(String type, String name, boolean owner, 
                 boolean addSubObjects, boolean changeAbilities,
-                boolean move, boolean view){
+                boolean move, boolean view, boolean editable, boolean
+                isEverybody){
             Entry entry = new Entry();
             entry.name = name;
             entry.type = type;
@@ -285,6 +306,8 @@ public class PropertiesRightsPane extends JPanel {
             entry.changeAbilities = changeAbilities;
             entry.move = move;
             entry.view = view;
+            entry.isEditable = editable;
+            entry.isEverybody = isEverybody;
             rightsList.add(entry);
             
             this.fireTableRowsInserted(rightsList.size() - 1,
@@ -335,13 +358,24 @@ public class PropertiesRightsPane extends JPanel {
 
         @Override
         public boolean isCellEditable(int rowIndex, int columnIndex) {
-            return true;
+            if(rowIndex >= rightsList.size())
+                throw new IllegalStateException("Unknown row " + rowIndex);
+            
+            Entry entry = rightsList.get(rowIndex);
+            if(entry.isEverybody && entry.isEditable){
+                if(columnIndex == 0 || columnIndex == 1)
+                    return false;
+                else
+                    return true;
+            }else{
+                return entry.isEditable;
+            }
         }
         
         @Override
         public Object getValueAt(int rowIndex, int columnIndex) {
             if(rowIndex>=rightsList.size())
-                return null;
+                throw new IllegalStateException("Unknown row " + rowIndex);
             
             Entry entry = rightsList.get(rowIndex);
             switch (columnIndex) {
@@ -368,7 +402,7 @@ public class PropertiesRightsPane extends JPanel {
         public void setValueAt(Object value, int rowIndex, int columnIndex) {
             
             if(rowIndex>= rightsList.size())
-                return;
+                throw new IllegalStateException("Unknown row " + rowIndex);
             
             Entry entry = rightsList.get(rowIndex);
             

@@ -107,6 +107,20 @@ public interface IAdapterObserver {
      */
     public void updateImgLib(BufferedImage img, String name, String dir);
 
+    /**
+     * Notifies for a rights component creation.
+     * 
+     * @param id The id.
+     */
+    public void notifyRightComponentCreation(long id);
+
+    /**
+     * Notifies for a rights removal.
+     * 
+     * @param id The id.
+     */
+    public void notifyRightComponentRemoval(long id);
+
 
     
 

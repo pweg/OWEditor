@@ -85,6 +85,16 @@ public class AdapterObserver implements IAdapterObserver{
         um.addImage(img, name, dir);
     }
 
+    @Override
+    public void notifyRightComponentCreation(long id) {
+        dm.rightComponentCreation(id);        
+    }
+
+    @Override
+    public void notifyRightComponentRemoval(long id) {
+        dm.rightComponentRemoval(id);
+    }
+
 
 
 }

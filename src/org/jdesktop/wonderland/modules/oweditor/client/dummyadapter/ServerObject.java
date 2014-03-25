@@ -1,6 +1,7 @@
 package org.jdesktop.wonderland.modules.oweditor.client.dummyadapter;
 
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 /**
  * A simple server object class for testing purposes.
@@ -29,6 +30,8 @@ public class ServerObject {
     protected BufferedImage image = null;
     protected String imgName = null;
     
+    protected ArrayList<Rights> rights = null;
+    
     ServerObject(long id, float x, float y, float z, double rotationX, 
             double rotationY, double rotationZ,
             double scale, float width, float height, String name){
@@ -43,6 +46,7 @@ public class ServerObject {
         this.name = name;    
         this.height = height;
         this.width = width;
+        this.rights = new ArrayList<Rights>();
     }
     
     ServerObject(long id, float x, float y, float z, double rotationX, 
@@ -62,6 +66,7 @@ public class ServerObject {
         this.width = width;
         this.image = image;
         this.imgName = imgName;
+        this.rights = new ArrayList<Rights>();
     }
     
     public ServerObject clone(){

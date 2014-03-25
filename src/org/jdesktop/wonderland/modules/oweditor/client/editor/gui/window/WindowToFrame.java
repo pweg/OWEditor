@@ -130,4 +130,9 @@ public class WindowToFrame implements IWindowToFrame{
                 rotX, rotY, rotZ, scale, imgName);
         
     }
+
+    @Override
+    public void addRightsComponent(ArrayList<Long> ids) {
+        wc.adapter.addRightsComponent(ids);
+    }
 }

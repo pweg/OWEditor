@@ -256,4 +256,23 @@ public class GUIEventManager implements GUIObserverInterface{
             ac.sem.updateImgLib(img, imgName);
     }
 
+    @Override
+    public void notifyComponentCreation(long id, byte component) {
+        switch(component){
+            case 1:
+                ac.sem.addRightsComponent(id);
+                break;
+        }
+        
+    }
+
+    @Override
+    public void notifyComponentRemoval(long id, byte component) {
+        switch(component){
+            case 1:
+                ac.sem.removeRightsComponent(id);
+                break;
+        }
+    }
+
 }

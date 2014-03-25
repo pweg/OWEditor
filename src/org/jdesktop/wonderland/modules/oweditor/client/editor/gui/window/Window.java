@@ -105,4 +105,9 @@ public class Window extends GraphicForward implements IWindow {
         this.frame.setRedoEnabled(b);
     }
 
+    @Override
+    public void updateRightsComponent(long id) {
+        this.frame.updateRightsComponent(id);
+    }
+
 }

@@ -185,6 +185,26 @@ public interface IDataObject extends ITransformedObject{
     public void setImage(BufferedImage img, String name, String path);
     
     /**
+     * Adds one right entry to the object. 
+     * 
+     * @param type The right type (User/UserGroup).
+     * @param name The name of the user/usergroup.
+     * @param isOwner Whether this user has ownership.
+     * @param permitSubObjects Whether this user is permitted to add/change
+     *        sub objects.
+     * @param permitAbilityChange Whether this user is permitted to change
+     *        abilities.
+     * @param permitMove Whether this user is permitted to move the object.
+     * @param permitView Whether this user is permitted to view the object.
+     * @param isEditable Whether this entry should be editable.
+     * @param isEverybody Whether this is an everybody entry.
+     */
+    public void addRights(String type, String name, boolean isOwner,
+            boolean permitSubObjects, boolean permitAbilityChange, 
+            boolean permitMove, boolean permitView,
+            boolean isEditable, boolean isEverybody);
+    
+    /**
      * Returns the rights interface of the object.
      * 
      * @return The rights.

@@ -170,10 +170,17 @@ public interface IAdapterCommunication {
      * @param scale The new scale.
      * @param imgName The new image name.
      */
-    void setProperties(ArrayList<Long> ids, ArrayList<String> names,
+    public void setProperties(ArrayList<Long> ids, ArrayList<String> names,
             ArrayList<Float> coordsX, ArrayList<Float> coordsY,
             ArrayList<Float> coordsZ, ArrayList<Double> rotX,
             ArrayList<Double> rotY, ArrayList<Double> rotZ,
             ArrayList<Double> scale, ArrayList<String> imgName);
+
+    /**
+     * Adds the rights component to the ids.
+     * 
+     * @param ids The ids.
+     */
+    public void addRightsComponent(ArrayList<Long> ids);
     
 }

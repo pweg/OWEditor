@@ -79,6 +79,18 @@ public class ServerEventManager {
             object.setHeight(sObject.height);
         }
         
+        for(Rights rights : sObject.rights){
+            
+            object.addRights(rights.getType(), 
+                    rights.getName(), rights.getOwner(), 
+                    rights.getPermAddSubObjects(),
+                    rights.getPermChangeAbilities(),
+                    rights.getPermMove(),
+                    rights.getPermView(),
+                    rights.isEditable(),
+                    rights.isEverybody());
+        }
+        
         object.setName(name);
 
         dui.notifyObjectCreation(object);
@@ -189,6 +201,13 @@ public class ServerEventManager {
     public void serverImageChangeEvent(long id, BufferedImage img, String dir,
             String name) {
         dui.notifyImageChange(id, img, name, dir);
+    }
+
+    public void addRightsComponent(long id) {
+        dui.notifyRightComponentCreation(id);
+    }
+    public void removeRightsComponent(long id) {
+        dui.notifyRightComponentRemoval(id);
     }
 
 }

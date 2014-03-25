@@ -237,5 +237,12 @@ public class FrameController implements IFrame{
             }
         }
     }
+
+    @Override
+    public void updateRightsComponent(long id) {
+        if(properties.isVisible()){
+            properties.rightsPane.setObjects();
+        }
+    }
 }
 

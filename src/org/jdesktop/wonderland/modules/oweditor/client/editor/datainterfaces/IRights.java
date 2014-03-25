@@ -62,4 +62,18 @@ public interface IRights {
      */
     public boolean getPermView();
 
+    /**
+     * Returns whether the entry is editable or not.
+     * 
+     * @return True, if it is editable, false otherwise.
+     */
+    public boolean isEditable();
+
+    /**
+     * Returns whether this entry is a everybody entry or not.
+     * 
+     * @return True, if it is an everybody entry, false otherwise.
+     */
+    public boolean isEverybody();
+
 }

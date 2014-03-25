@@ -12,6 +12,12 @@ import java.util.ArrayList;
 public interface GUIObserverInterface {
     
     /**
+     * Different component types, for adding new components.
+     */
+    //This component is used for the rights, aka the OWL security component.
+    public byte RIGHTSCOMPONENT = 1;
+    
+    /**
      * Makes a translation update for an object. When only 
      * one coordinate changes, all other coordinates have to be
      * set as well. This method should be called when a graphical
@@ -197,7 +203,21 @@ public interface GUIObserverInterface {
      */
     public void uploadImage(String imageUrl) throws Exception;
 
-
+    /**
+     * Creates a new component for an object.
+     * 
+     * @param id The object id.
+     * @param component The byte code for the component.
+     */
+    public void notifyComponentCreation(long id, byte component);
+    
+    /**
+     * Removes a new component for an object.
+     * 
+     * @param id The object id.
+     * @param component The byte code for the component.
+     */
+    public void notifyComponentRemoval(long id, byte component);
     
 
 }

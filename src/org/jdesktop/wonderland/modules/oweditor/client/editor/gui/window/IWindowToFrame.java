@@ -153,4 +153,11 @@ public interface IWindowToFrame {
             ArrayList<Double> rotX, ArrayList<Double> rotY, ArrayList<Double> rotZ,
             ArrayList<Double> scale, ArrayList<String> imgName);
 
+    /**
+     * Adds a right component to the given ids.
+     * 
+     * @param ids The ids.
+     */
+    public void addRightsComponent(ArrayList<Long> ids);
+
 }
