@@ -197,7 +197,7 @@ public class TransformationBorder extends SimpleShapeObject implements ITransfor
      * 
      * @param main The main rectangle as a shape instance, where the 
      * tiny rectangles will sit.
-     * @param list The list, where the rectangles will be saved.
+     * @param rights The list, where the rectangles will be saved.
      */
     private ArrayList<Shape> setTinyRectangle(Shape main){
         ArrayList<Shape> list = new ArrayList<Shape>();

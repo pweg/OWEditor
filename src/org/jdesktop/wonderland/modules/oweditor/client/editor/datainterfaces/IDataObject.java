@@ -1,6 +1,7 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces;
 
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 public interface IDataObject extends ITransformedObject{
 
@@ -188,6 +189,6 @@ public interface IDataObject extends ITransformedObject{
      * 
      * @return The rights.
      */
-    public IRights getRights();
+    public ArrayList<IRights> getRights();
 
 }

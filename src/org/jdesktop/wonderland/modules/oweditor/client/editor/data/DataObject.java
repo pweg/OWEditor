@@ -1,6 +1,7 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.data;
 
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IDataObject;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IImage;
@@ -249,8 +250,7 @@ public class DataObject implements IDataObject{
     }
 
     @Override
-    public IRights getRights() {
-        // TODO Auto-generated method stub
+    public ArrayList<IRights> getRights() {
         return null;
     }
 
