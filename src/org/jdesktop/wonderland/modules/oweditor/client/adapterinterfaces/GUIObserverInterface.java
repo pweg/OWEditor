@@ -231,7 +231,8 @@ public interface GUIObserverInterface {
      * @param newMove The permission to move objects.
      * @param newView The permission to view objects.
      */
-    public void setRight(long id, String type, String name,
+    public void setRight(long id, String oldType, String oldName,
+            String type, String name,
             boolean owner, boolean addSubObjects,
             boolean changeAbilities, boolean move, boolean view);
 

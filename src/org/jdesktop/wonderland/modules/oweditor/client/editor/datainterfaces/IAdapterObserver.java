@@ -122,6 +122,34 @@ public interface IAdapterObserver {
     public void notifyRightComponentRemoval(long id);
 
 
+    /**
+     * Notifies a rights change event.
+     * 
+     * @param id The object id
+     * @param type The rights type
+     * @param name The rights name
+     * @param owner The ownership of the object.
+     * @param addSubObjects The permission to add sub objects.
+     * @param changeAbilities The permission to change abilities.
+     * @param move The permission to move the object.
+     * @param view The permission to view the object.
+     */
+    public void notifyRightsChange(long id, String oldType, String oldName,
+            String type, String name,
+            boolean owner, boolean addSubObjects, boolean changeAbilities,
+            boolean move, boolean view);
+
+
+    /**
+     * Removes one right entry.
+     * 
+     * @param id The object id
+     * @param type The rights type
+     * @param name The rights name.
+     */
+    public void notifyRightsRemoval(long id, String type, String name);
+
+
     
 
 }

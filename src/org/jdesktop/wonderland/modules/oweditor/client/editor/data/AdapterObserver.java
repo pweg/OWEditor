@@ -95,6 +95,21 @@ public class AdapterObserver implements IAdapterObserver{
         dm.rightComponentRemoval(id);
     }
 
+    @Override
+    public void notifyRightsChange(long id, String oldType,
+            String oldName, String type, String name,
+            boolean owner, boolean addSubObjects, boolean changeAbilities,
+            boolean move, boolean view) {
+        dm.rightChange(id, oldType, oldName, 
+                type,name, owner, addSubObjects, changeAbilities,
+                move, view);        
+    }
+
+    @Override
+    public void notifyRightsRemoval(long id, String type, String name) {
+        dm.removeRight(id, type, name);
+    }
+
 
 
 }

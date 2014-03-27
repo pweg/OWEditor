@@ -2,6 +2,8 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.frames
 
 public class PermissionTableEntry implements IPermissionTableEntry{
 
+    protected String oldName;
+    protected String oldType;
     protected String name;
     protected String type;
     protected boolean owner;
@@ -14,14 +16,13 @@ public class PermissionTableEntry implements IPermissionTableEntry{
     protected boolean toRemove = false;
     protected boolean isNew = false;
     
-    public PermissionTableEntry(){
-    }
-    
     public PermissionTableEntry(String type, String name, boolean owner, 
             boolean addSubObjects, boolean changeAbilities,
             boolean move, boolean view, boolean editable, boolean
             isEverybody){
 
+        this.oldName = name;
+        this.oldType = type;
         this.name = name;
         this.type = type;
         this.owner = owner;
@@ -31,9 +32,8 @@ public class PermissionTableEntry implements IPermissionTableEntry{
         this.view = view;
         this.isEditable = editable;
         this.isEverybody = isEverybody;
-        
     }
-    
+
     @Override
     public boolean equals(Object o){
         if(!(o instanceof PermissionTableEntry))
@@ -95,6 +95,16 @@ public class PermissionTableEntry implements IPermissionTableEntry{
     @Override
     public boolean getToRemove() {
         return toRemove;
+    }
+
+    @Override
+    public String getOldName() {
+        return oldName;
+    }
+
+    @Override
+    public String getOldType() {
+        return oldType;
     }
 
 }

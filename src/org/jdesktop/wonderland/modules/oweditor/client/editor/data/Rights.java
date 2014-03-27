@@ -29,6 +29,20 @@ public class Rights implements IRights{
         this.isEverybody = isEverybody;
     }
 
+
+    @Override
+    public void set(String type, String name, boolean owner,
+            boolean addSubObjects, boolean changeAbilities, boolean move,
+            boolean view) {
+        this.type = type;
+        this.name = name;
+        this.isOwner = owner;
+        this.permitSubObjects = addSubObjects;
+        this.permitAbilityChange = changeAbilities;
+        this.permitMove = move;
+        this.permitView = view;
+    }
+
     @Override
     public String getType() {
         return type;

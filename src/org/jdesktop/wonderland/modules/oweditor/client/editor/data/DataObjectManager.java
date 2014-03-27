@@ -393,4 +393,27 @@ public class DataObjectManager {
         d.rightComponentRemoved();
     }
 
+    public void rightChange(long id, String oldType, String oldName,
+            String type, String name, boolean owner,
+            boolean addSubObjects, boolean changeAbilities, boolean move,
+            boolean view) {
+
+        DataObject d = data.get(id);
+        if(d == null)
+            return;
+        
+        d.setRight(oldType, oldName, type,
+                name, owner, addSubObjects, changeAbilities, move,
+                view);
+        
+    }
+
+    public void removeRight(long id, String type, String name) {
+        DataObject d = data.get(id);
+        if(d == null)
+            return;
+        
+        d.removeRight(type, name);
+    }
+
 }

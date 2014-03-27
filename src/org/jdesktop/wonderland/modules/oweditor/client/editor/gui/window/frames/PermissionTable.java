@@ -47,16 +47,9 @@ public class PermissionTable extends AbstractTableModel{
             isEverybody){
         
         
-        PermissionTableEntry entry = new PermissionTableEntry();
-        entry.name = name;
-        entry.type = type;
-        entry.owner = owner;
-        entry.addSubObjects = addSubObjects;
-        entry.changeAbilities = changeAbilities;
-        entry.move = move;
-        entry.view = view;
-        entry.isEditable = editable;
-        entry.isEverybody = isEverybody;
+        PermissionTableEntry entry = new PermissionTableEntry(type,
+                name, owner, addSubObjects, changeAbilities,
+                move, view, editable, isEverybody);
         entry.isNew = true;
         rightsList.add(entry);
         
@@ -89,6 +82,10 @@ public class PermissionTable extends AbstractTableModel{
     public void removeEntry(int index){
         
         if(index == -1)
+            return;
+        
+        if(!rightsList.get(index).isEditable ||
+                rightsList.get(index).isEverybody)
             return;
         
         rightsList.remove(index);
@@ -191,6 +188,7 @@ public class PermissionTable extends AbstractTableModel{
             case 0:
                 if(isEntry((String) value, (String) getValueAt(rowIndex,1))){
                     setValueAt("",rowIndex, 1);
+                    System.out.println("if");
                 }
                 entry.type = (String) value;
                 fireTableCellUpdated(rowIndex, columnIndex);

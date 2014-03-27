@@ -352,8 +352,8 @@ public class AdapterCommunication implements IAdapterCommunication{
         
         IDataObject o = dm.getObject(ids.get(0));
         
-        String name = action.getName();
-        String type = action.getType();
+        String name = action.getOldName();
+        String type = action.getOldType();
         
         //only one right has to be saved, because the panel only
         //shows similar rights.

@@ -55,7 +55,8 @@ public class SetRights implements Command{
     public void execute(GUIObserverInterface goi) throws Exception {
         for(long id : ids){
             if(!toRemove)
-                goi.setRight(id, newType, newName, newOwner, newAddSubObjects,
+                goi.setRight(id, oldType, oldName, 
+                        newType, newName, newOwner, newAddSubObjects,
                         newChangeAbilities, newMove, newView);
             else
                 goi.removeRight(id, oldType, oldName);
@@ -68,7 +69,8 @@ public class SetRights implements Command{
             if(oldName == null)
                 goi.removeRight(id, newType, newName);
             else
-                goi.setRight(id, oldType, oldName, oldOwner, oldAddSubObjects,
+                goi.setRight(id, newType, newName,
+                        oldType, oldName, oldOwner, oldAddSubObjects,
                         oldChangeAbilities, oldMove, oldView); 
         }
         

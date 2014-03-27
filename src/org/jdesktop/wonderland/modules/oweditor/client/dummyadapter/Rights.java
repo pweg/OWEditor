@@ -1,8 +1,7 @@
 package org.jdesktop.wonderland.modules.oweditor.client.dummyadapter;
 
-import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IRights;
 
-public class Rights implements IRights{
+public class Rights{
     
     private String type = null;
     private String name = null;
@@ -29,49 +28,52 @@ public class Rights implements IRights{
         this.isEverybody = isEverybody;
     }
 
-    @Override
     public String getType() {
         return type;
     }
 
-    @Override
     public String getName() {
         return name;
     }
 
-    @Override
     public boolean getOwner() {
         return isOwner;
     }
 
-    @Override
     public boolean getPermChangeAbilities() {
         return permitAbilityChange;
     }
 
-    @Override
     public boolean getPermAddSubObjects() {
         return permitSubObjects;
     }
 
-    @Override
     public boolean getPermMove() {
         return permitMove;
     }
 
-    @Override
     public boolean getPermView() {
         return permitView;
     }
 
-    @Override
     public boolean isEditable() {
         return isEditable;
     }
 
-    @Override
     public boolean isEverybody() {
         return isEverybody;
+    }
+    
+    public void set(String type, String name, boolean owner,
+            boolean addSubObjects, boolean changeAbilities, boolean move,
+            boolean view) {
+        this.type = type;
+        this.name = name;
+        this.isOwner = owner;
+        this.permitSubObjects = addSubObjects;
+        this.permitAbilityChange = changeAbilities;
+        this.permitMove = move;
+        this.permitView = view;
     }
     
 

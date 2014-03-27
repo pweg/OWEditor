@@ -243,9 +243,10 @@ public class PropertiesRightsPane extends JPanel {
                 if(right.equals(right2)){
                     match = true;
                     break;
-                }else if(right.getName().equals(right2.getName()) &&
-                        right.getType().equals(right2.getType())){
+                }else if(right.oldName.equals(right2.oldName) &&
+                        right.oldType.equals(right2.oldType)){
                     found = true;
+                    right = right2;
                     break;
                 }
             }
@@ -254,6 +255,9 @@ public class PropertiesRightsPane extends JPanel {
                 i--;
             }else if(!found){
                 right.toRemove = true;
+            }else if(found){
+                checkList.remove(i);
+                checkList.add(i, right);
             }
             
         }

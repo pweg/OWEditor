@@ -2,6 +2,10 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces;
 
 public interface IRights {
     
+    public void set(String type, String name, boolean owner,
+            boolean addSubObjects, boolean changeAbilities, boolean move,
+            boolean view);
+    
     /**
      * Returns the type of rights owner, aka 
      * user, usergroup, or everybody.

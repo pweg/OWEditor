@@ -18,4 +18,8 @@ public interface IPermissionTableEntry {
     
     public boolean getToRemove();
 
+    public String getOldName();
+
+    public String getOldType();
+
 }
