@@ -211,4 +211,12 @@ public interface IDataObject extends ITransformedObject{
      */
     public ArrayList<IRights> getRights();
 
+    /**
+     * Returns a specific right setting.
+     *  
+     * @param name The name of the right.
+     * @param type The type of the right.
+     */
+    public IRights getRight(String name, String type);
+
 }

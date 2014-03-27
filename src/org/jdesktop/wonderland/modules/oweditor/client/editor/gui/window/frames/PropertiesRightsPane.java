@@ -15,7 +15,6 @@ import java.util.Set;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
-import javax.swing.table.AbstractTableModel;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IDataObject;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IRights;
@@ -152,10 +151,12 @@ public class PropertiesRightsPane extends JPanel {
     }// </editor-fold>                        
 
     private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {                                         
-        // TODO add your handling code here:
+        permTableModel.addEntry("User", "", false, false, 
+                false, true, true, true, false);
     } 
     private void removeButtonActionPerformed(java.awt.event.ActionEvent evt) {                                         
-        // TODO add your handling code here:
+        int curRow = permTable.getSelectedRow();
+        permTableModel.removeEntry(curRow);
     }                                        
 
     private void addComponentActionPerformed(java.awt.event.ActionEvent evt) {  
@@ -165,15 +166,100 @@ public class PropertiesRightsPane extends JPanel {
             ids.add(object.getID());
         frame.fc.window.addRightsComponent(ids);
     } 
+    
     private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {                                         
         frame.okButtonActionPerformed(evt);
     } 
+    
+/*
+    public ArrayList<PermissionTableEntry> getFurtherActions() {
+        return permTableModel.getEntries();
+    }*/
+    
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {                                         
         frame.cancelButtonActionPerformed(evt);
     } 
     private void resetButtonActionPerformed(java.awt.event.ActionEvent evt) {                                         
-        // TODO add your handling code here:
+        setObjects();
     } 
+    
+
+    public ArrayList<PermissionTableEntry> getChanged() {
+        
+        Set<IRights> allRights = new HashSet<IRights>();
+        
+        for(IDataObject object : frame.objects){
+            ArrayList<IRights> rights = object.getRights();
+            
+            if(rights != null){
+                
+                //set does seem to have duplicates, therefore
+                //removing it the old way.
+                for(IRights right : rights){
+                    boolean found = false;
+                    for(IRights r : allRights)
+                        if(r.equals(right)){
+                            found = true;
+                            break;
+                        }
+                        
+                    if(!found)    
+                        allRights.add(right);
+                }
+            }
+        }
+        ArrayList<PermissionTableEntry> checkList = 
+                new ArrayList<PermissionTableEntry>();
+        
+        //remove rights that are not in every item.
+        for(IRights rights : allRights){
+            int count = frame.objects.size();
+            
+            for(IDataObject object : frame.objects){
+                ArrayList<IRights> orights = object.getRights();
+                if(orights != null){
+                    for(IRights oright : object.getRights()){
+                        if(rights.equals(oright)){
+                            count--;
+                            break;
+                        }
+                    }
+                }
+            }
+            if(count == 0){
+                checkList.add(new PermissionTableEntry(rights.getType(), 
+                        rights.getName(), rights.getOwner(), 
+                        rights.getPermAddSubObjects(), rights.getPermChangeAbilities(),
+                        rights.getPermMove(), rights.getPermView(), rights.isEditable(),
+                        rights.isEverybody()));
+            }
+        }
+        
+        for(int i = 0; i<checkList.size(); i++){
+            PermissionTableEntry right = checkList.get(i);
+            boolean match = false;
+            boolean found = false;
+            for(PermissionTableEntry right2 : permTableModel.getEntries()){
+                if(right.equals(right2)){
+                    match = true;
+                    break;
+                }else if(right.getName().equals(right2.getName()) &&
+                        right.getType().equals(right2.getType())){
+                    found = true;
+                    break;
+                }
+            }
+            if(match){
+                checkList.remove(i);
+                i--;
+            }else if(!found){
+                right.toRemove = true;
+            }
+            
+        }
+        checkList.addAll(permTableModel.getNewEntries());
+        return checkList;
+    }
 
 
     public void setObjects() {
@@ -239,6 +325,8 @@ public class PropertiesRightsPane extends JPanel {
                         rights.isEverybody());
             }
         }
+        //just to remove the isNew boolean for these entries.
+        permTableModel.getNewEntries();
     }
 
     // Variables declaration - do not modify                     
@@ -252,193 +340,7 @@ public class PropertiesRightsPane extends JPanel {
     private javax.swing.JTable permTable;
     private PermissionTable permTableModel = new PermissionTable();
     // End of variables declaration  
+
+
     
-    class PermissionTable extends AbstractTableModel{
-        
-        class Entry{
-            protected String name;
-            protected String type;
-            protected boolean owner;
-            protected boolean addSubObjects;
-            protected boolean changeAbilities;
-            protected boolean move;
-            protected boolean view;
-            protected boolean isEditable;
-            protected boolean isEverybody;
-        }
-        
-        private ArrayList<Entry> rightsList = new ArrayList<Entry>();
-        
-        public PermissionTable(){
-        }
-            
-        @Override
-        public Class<?> getColumnClass(int column) {
-            switch (column) {
-                case 0:
-                    return String.class;
-                case 1:
-                    return String.class;
-                case 2:
-                    return Boolean.class;
-                case 3:
-                    return Boolean.class;
-                case 4:
-                    return Boolean.class;
-                case 5:
-                    return Boolean.class;
-                case 6:
-                    return Boolean.class;
-                default:
-                    throw new IllegalStateException("Unknown column " + column);
-            }
-        }
-        
-        public void addEntry(String type, String name, boolean owner, 
-                boolean addSubObjects, boolean changeAbilities,
-                boolean move, boolean view, boolean editable, boolean
-                isEverybody){
-            Entry entry = new Entry();
-            entry.name = name;
-            entry.type = type;
-            entry.owner = owner;
-            entry.addSubObjects = addSubObjects;
-            entry.changeAbilities = changeAbilities;
-            entry.move = move;
-            entry.view = view;
-            entry.isEditable = editable;
-            entry.isEverybody = isEverybody;
-            rightsList.add(entry);
-            
-            this.fireTableRowsInserted(rightsList.size() - 1,
-                    rightsList.size() - 1);
-        }
-        
-        public void clear() {
-            int size = rightsList.size();
-
-            rightsList.clear();
-
-            fireTableRowsDeleted(0, size);
-            fireTableDataChanged();
-        }
-
-
-        @Override
-        public String getColumnName(int column) {
-            switch (column) {
-                case 0:
-                    return BUNDLE.getString("RightsType");
-                case 1:
-                    return BUNDLE.getString("RightsName");
-                case 2:
-                    return BUNDLE.getString("RightsOwner");
-                case 3:
-                    return BUNDLE.getString("RightsPermSubObject");
-                case 4:
-                    return BUNDLE.getString("RightsPermAbilities");
-                case 5:
-                    return BUNDLE.getString("RightsPermMove");
-                case 6:
-                    return BUNDLE.getString("RightsPermView");
-                default:
-                    throw new IllegalStateException("Unknown column " + column);
-            }
-        }
-            
-        @Override
-        public int getRowCount() {
-            return rightsList.size();
-        }
-        
-        @Override
-        public int getColumnCount() {
-            return 7;
-        }
-
-        @Override
-        public boolean isCellEditable(int rowIndex, int columnIndex) {
-            if(rowIndex >= rightsList.size())
-                throw new IllegalStateException("Unknown row " + rowIndex);
-            
-            Entry entry = rightsList.get(rowIndex);
-            if(entry.isEverybody && entry.isEditable){
-                if(columnIndex == 0 || columnIndex == 1)
-                    return false;
-                else
-                    return true;
-            }else{
-                return entry.isEditable;
-            }
-        }
-        
-        @Override
-        public Object getValueAt(int rowIndex, int columnIndex) {
-            if(rowIndex>=rightsList.size())
-                throw new IllegalStateException("Unknown row " + rowIndex);
-            
-            Entry entry = rightsList.get(rowIndex);
-            switch (columnIndex) {
-                case 0:
-                    return entry.type;
-                case 1:
-                    return entry.name;
-                case 2:
-                    return entry.owner;
-                case 3:
-                    return entry.addSubObjects;
-                case 4:
-                    return entry.changeAbilities;
-                case 5:
-                    return entry.move;
-                case 6:
-                    return entry.view;
-                default:
-                    throw new IllegalStateException("Unknown column " + columnIndex);
-            }
-        }
-
-        @Override
-        public void setValueAt(Object value, int rowIndex, int columnIndex) {
-            
-            if(rowIndex>= rightsList.size())
-                throw new IllegalStateException("Unknown row " + rowIndex);
-            
-            Entry entry = rightsList.get(rowIndex);
-            
-            switch (columnIndex) {
-                case 0:
-                    entry.type = (String) value;
-                    fireTableCellUpdated(rowIndex, columnIndex);
-                    return;
-                case 1:
-                    entry.name = (String) value;
-                    fireTableCellUpdated(rowIndex, columnIndex);
-                    return;
-                case 2:
-                    entry.owner = (boolean) value;
-                    fireTableCellUpdated(rowIndex, columnIndex);
-                    return;
-                case 3:
-                    entry.addSubObjects = (boolean) value;
-                    fireTableCellUpdated(rowIndex, columnIndex);
-                    return;
-                case 4:
-                    entry.changeAbilities = (boolean) value;
-                    fireTableCellUpdated(rowIndex, columnIndex);
-                    return;
-                case 5:
-                    entry.move = (boolean) value;
-                    fireTableCellUpdated(rowIndex, columnIndex);
-                    return;
-                case 6:
-                    entry.view = (boolean) value;
-                    fireTableCellUpdated(rowIndex, columnIndex);
-                    return;
-                default:
-                    throw new IllegalStateException("Column " + columnIndex +
-                            " not editable.");
-            }
-        }
-    }
 }

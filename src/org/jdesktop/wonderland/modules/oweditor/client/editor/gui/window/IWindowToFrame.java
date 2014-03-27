@@ -151,7 +151,8 @@ public interface IWindowToFrame {
     public void setProperties(ArrayList<Long> ids, ArrayList<String> names,
             ArrayList<Float> coordsX, ArrayList<Float> coordsY, ArrayList<Float> coordsZ,
             ArrayList<Double> rotX, ArrayList<Double> rotY, ArrayList<Double> rotZ,
-            ArrayList<Double> scale, ArrayList<String> imgName);
+            ArrayList<Double> scale, ArrayList<String> imgName,
+            ArrayList<Object> furtherActions);
 
     /**
      * Adds a right component to the given ids.

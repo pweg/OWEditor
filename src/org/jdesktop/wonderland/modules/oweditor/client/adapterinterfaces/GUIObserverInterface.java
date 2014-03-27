@@ -218,6 +218,31 @@ public interface GUIObserverInterface {
      * @param component The byte code for the component.
      */
     public void notifyComponentRemoval(long id, byte component);
+
+    /**
+     * Sets a specific right for a specific id.
+     * 
+     * @param id The object id.
+     * @param newType The right type
+     * @param newName The right name.
+     * @param newOwner The ownership.
+     * @param newAddSubObjects The permission to add new sub objects.
+     * @param newChangeAbilities The permission to change abilities.
+     * @param newMove The permission to move objects.
+     * @param newView The permission to view objects.
+     */
+    public void setRight(long id, String type, String name,
+            boolean owner, boolean addSubObjects,
+            boolean changeAbilities, boolean move, boolean view);
+
+    /**
+     * Removes a specific right.
+     * 
+     * @param id The object id.
+     * @param type The type of the right.
+     * @param name The name of the right.
+     */
+    public void removeRight(long id, String type, String name);
     
 
 }

@@ -125,9 +125,10 @@ public class WindowToFrame implements IWindowToFrame{
             ArrayList<Float> coordsX, ArrayList<Float> coordsY,
             ArrayList<Float> coordsZ, ArrayList<Double> rotX,
             ArrayList<Double> rotY, ArrayList<Double> rotZ,
-            ArrayList<Double> scale, ArrayList<String> imgName) {
+            ArrayList<Double> scale, ArrayList<String> imgName,
+            ArrayList<Object> furtherActions) {
         wc.adapter.setProperties(ids, names, coordsX, coordsY, coordsZ, 
-                rotX, rotY, rotZ, scale, imgName);
+                rotX, rotY, rotZ, scale, imgName, furtherActions);
         
     }
 

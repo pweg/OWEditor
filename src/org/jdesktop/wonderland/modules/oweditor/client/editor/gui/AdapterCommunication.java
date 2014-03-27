@@ -8,6 +8,7 @@ import java.util.logging.Logger;
 import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.GUIObserverInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IDataObject;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IDataToGUI;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IRights;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.ITransformedObject;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.commands.AddComponent;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.commands.Command;
@@ -21,10 +22,12 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.commands.Scale
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.commands.ScaleTranslate;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.commands.Import;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.commands.SetImage;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.commands.SetRights;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.commands.TranslateFloat;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.commands.TranslateXY;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.commands.Vector3D;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.IWindow;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.frames.IPermissionTableEntry;
 
 /**
  * This class is used to forward events from the gui to the 
@@ -218,7 +221,8 @@ public class AdapterCommunication implements IAdapterCommunication{
     public void setProperties(ArrayList<Long> ids, ArrayList<String> names,
             ArrayList<Float> coordsX, ArrayList<Float> coordsY, ArrayList<Float> coordsZ,
             ArrayList<Double> rotX, ArrayList<Double> rotY, ArrayList<Double> rotZ,
-            ArrayList<Double> scale, ArrayList<String> imgName){
+            ArrayList<Double> scale, ArrayList<String> imgName, 
+            ArrayList<Object> furtherActions){
         
         String userDir = dm.getUserImgDir();
 
@@ -322,11 +326,55 @@ public class AdapterCommunication implements IAdapterCommunication{
                     img_path_new);
         }
         
+        ArrayList<Command> furtherComs = new ArrayList<Command>();
+        for(Object action : furtherActions){
+            if(action instanceof IPermissionTableEntry){
+                Command rights = createRightsCom(ids, (IPermissionTableEntry) action);
+                if(rights != null)
+                    furtherComs.add(rights);
+            }
+        }
+        
         Command command = new SetProperties(nameCom,
-                translateCom, rotateCom, scaleCom, imgCom, null);
+                translateCom, rotateCom, scaleCom, imgCom, furtherComs);
          
         executeCom(command);
+    }
+    
+    
+    
+
+    private Command createRightsCom(ArrayList<Long> ids,
+            IPermissionTableEntry action) {
         
+        if(ids == null || ids.size() == 0)
+            return null;
+        
+        IDataObject o = dm.getObject(ids.get(0));
+        
+        String name = action.getName();
+        String type = action.getType();
+        
+        //only one right has to be saved, because the panel only
+        //shows similar rights.
+        IRights right = o.getRight(name, type);
+        
+        Command com = null;
+        if(right == null){
+            com = new SetRights(ids, null, null, false,false,false,false,false,
+                   action.getType(),  action.getName(), action.getOwner(),
+                   action.getPermSubObjects(), action.getPermAbilityChange(),
+                   action.getPermMove(), action.getPermView(), action.getToRemove());
+        }
+        else
+            com = new SetRights(ids, right.getType(), right.getName(), right.getOwner(),
+                    right.getPermAddSubObjects(), right.getPermChangeAbilities(),
+                    right.getPermMove(),
+                    right.getPermView(), action.getType(),  action.getName(), action.getOwner(),
+                    action.getPermSubObjects(), action.getPermAbilityChange(),
+                    action.getPermMove(), action.getPermView(), action.getToRemove());
+            
+        return com;
     }
 
     @Override

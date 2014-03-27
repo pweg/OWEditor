@@ -174,7 +174,8 @@ public interface IAdapterCommunication {
             ArrayList<Float> coordsX, ArrayList<Float> coordsY,
             ArrayList<Float> coordsZ, ArrayList<Double> rotX,
             ArrayList<Double> rotY, ArrayList<Double> rotZ,
-            ArrayList<Double> scale, ArrayList<String> imgName);
+            ArrayList<Double> scale, ArrayList<String> imgName,
+            ArrayList<Object> furtherActions);
 
     /**
      * Adds the rights component to the ids.

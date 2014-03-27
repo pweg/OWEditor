@@ -280,6 +280,17 @@ public class DataObject implements IDataObject{
         return rights;
     }
 
+    @Override
+    public IRights getRight(String name, String type) {
+        for(IRights right : rights){
+            if(right.getName().equals(name) &&
+                    right.getType().equals(type)){
+                return right;
+            }
+        }
+        return null;
+    }
+
 
 
 }

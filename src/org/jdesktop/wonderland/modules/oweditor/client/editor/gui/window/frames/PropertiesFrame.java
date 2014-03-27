@@ -500,10 +500,13 @@ public class PropertiesFrame extends javax.swing.JFrame {
             img_name = new ArrayList<String>(); 
         }
         
+        ArrayList<PermissionTableEntry> rights = rightsPane.getChanged();
+        
         //do nothing on no changes.
         if(names == null && coordsX == null && coordsY == null &&
                 coordsZ == null && rotX == null && rotY == null &&
-                rotZ == null && scaleList == null && img_name == null){
+                rotZ == null && scaleList == null && img_name == null &&
+                rights.size() == 0){
             setVisible(false);
             return;      
         }
@@ -641,9 +644,14 @@ public class PropertiesFrame extends javax.swing.JFrame {
             if(img_name != null)
                 img_name.add(imgName);
         }
+
+        ArrayList<Object> list = new ArrayList<Object>();
+        list.addAll(rights);
         
         fc.window.setProperties(ids, names, coordsX, coordsY, coordsZ, 
-                rotX, rotY, rotZ, scaleList, img_name);
+                rotX, rotY, rotZ, scaleList, img_name, list);
+        
+        
         setVisible(false);
         
     } 

@@ -275,4 +275,16 @@ public class GUIEventManager implements GUIObserverInterface{
         }
     }
 
+    @Override
+    public void setRight(long id, String type, String name, boolean owner,
+            boolean addSubObjects, boolean changeAbilities, boolean move,
+            boolean view) {
+        System.out.println("set rights " + name);
+    }
+
+    @Override
+    public void removeRight(long id, String type, String name) {
+        System.out.println("remove rights " + name);
+    }
+
 }
