@@ -79,7 +79,8 @@ public class ServerSimulator {
                 180, 0,0,
                 1, 
                 (float)1.00, (float)1.00, 
-                "12", true);
+                "CIRCLE 12", true);
+        so.isCircle = true;
         so = createObject(
                 (float)-7.0,(float)-10.0, (float)-1.0,  
                 0, 0,0,
@@ -94,6 +95,13 @@ public class ServerSimulator {
                 true,false));
         so.rights.add(new Rights("User", "U2", true, false,false,true,false,
                 true,false));
+        so = createObject(
+                (float)-20, (float)2.0,(float)0.0,  
+                0, 180,355,
+                1.3, 
+                (float)1.80, (float)1.80, 
+                "Circle long name long", false);
+        so.isCircle = true;
         so = createObject(
                 (float)-20, (float)2.0,(float)0.0,  
                 0, 180,355,

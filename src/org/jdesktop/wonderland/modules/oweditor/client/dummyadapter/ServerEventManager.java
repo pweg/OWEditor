@@ -79,6 +79,10 @@ public class ServerEventManager {
             object.setHeight(sObject.height);
         }
         
+        if(sObject.isCircle){
+            object.setType(IDataObject.CIRCLE);
+        }
+        
         for(Rights rights : sObject.rights){
             
             object.addRights(rights.getType(), 

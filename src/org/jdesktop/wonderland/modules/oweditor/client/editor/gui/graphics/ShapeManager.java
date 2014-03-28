@@ -380,10 +380,15 @@ public class ShapeManager {
             } finally {
                 writeLock.unlock();
             }
-        }else{
+        }else if (dataObject.getType() == IDataObject.RECTANGLE){
             ShapeObject shape = factory.createShapeObject(ShapeFactory.RECTANGLE, 
                     x, y, z, width, height, id, name, rotation, scale, imgName,
                     imgDir);
+            addShape(shape);
+        }else if (dataObject.getType() == IDataObject.CIRCLE){
+            ShapeObject shape = factory.createShapeObject(ShapeFactory.CIRCLE, 
+                x, y, z, width, height, id, name, rotation, scale, imgName,
+                imgDir);
             addShape(shape);
         }
     }

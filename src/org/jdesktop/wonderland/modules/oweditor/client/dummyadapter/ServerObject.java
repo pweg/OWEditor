@@ -27,6 +27,7 @@ public class ServerObject {
     protected long id = 0;
     protected String name = "";
     protected boolean isAvatar = false;
+    protected boolean isCircle = false;
     protected BufferedImage image = null;
     protected String imgName = null;
     

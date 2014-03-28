@@ -53,7 +53,6 @@ public class ShapeFactory {
     public ShapeObject createShapeObject(int type, int x, int y, double z, int width, int height, 
             long id, String name, double rotation, double scale, String imgName,
             String imgDir){
-        
         switch(type){
             case AVATAR:
                 return new Avatar(id, x,y,width, height);
