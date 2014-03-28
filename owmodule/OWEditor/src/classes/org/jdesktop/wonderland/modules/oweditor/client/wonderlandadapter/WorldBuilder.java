@@ -54,10 +54,11 @@ public class WorldBuilder {
         
         Collection<Cell> rootCells = cache.getRootCells();
         for (Cell rootCell : rootCells) {
-            iterateChilds(rootCell, false);
+            iterateChilds(rootCell);
         }
         
         for(Cell cell : cells){
+            LOGGER.warning(cell.getName());
             createDataObject(cell);
         }
     }
@@ -76,14 +77,14 @@ public class WorldBuilder {
         sua.setServerList(serverList);
     }
     
-    private void iterateChilds(Cell cell, boolean b){
+    private void iterateChilds(Cell cell){
+        cells.add(cell);
         
         Collection<Cell> childs = cell.getChildren();
-        cells.add(cell);
    
         for(Cell child : childs)
         {
-            iterateChilds(child, true);
+            iterateChilds(child);
         }
         
     }

@@ -208,33 +208,38 @@ public interface GUIObserverInterface {
      * 
      * @param id The object id.
      * @param component The byte code for the component.
+     * @throws java.lang.Exception
      */
-    public void notifyComponentCreation(long id, byte component);
+    public void notifyComponentCreation(long id, byte component) throws Exception;
     
     /**
      * Removes a new component for an object.
      * 
      * @param id The object id.
      * @param component The byte code for the component.
+     * @throws java.lang.Exception
      */
-    public void notifyComponentRemoval(long id, byte component);
+    public void notifyComponentRemoval(long id, byte component) throws Exception;
 
     /**
      * Sets a specific right for a specific id.
      * 
      * @param id The object id.
-     * @param newType The right type
-     * @param newName The right name.
-     * @param newOwner The ownership.
-     * @param newAddSubObjects The permission to add new sub objects.
-     * @param newChangeAbilities The permission to change abilities.
-     * @param newMove The permission to move objects.
-     * @param newView The permission to view objects.
+     * @param oldType The old right type.
+     * @param oldName The old right name
+     * @param type The right type
+     * @param name The right name.
+     * @param owner The ownership.
+     * @param addSubObjects The permission to add new sub objects.
+     * @param changeAbilities The permission to change abilities.
+     * @param move The permission to move objects.
+     * @param view The permission to view objects.
+     * @throws java.lang.Exception
      */
     public void setRight(long id, String oldType, String oldName,
             String type, String name,
             boolean owner, boolean addSubObjects,
-            boolean changeAbilities, boolean move, boolean view);
+            boolean changeAbilities, boolean move, boolean view) throws Exception;
 
     /**
      * Removes a specific right.
@@ -242,8 +247,9 @@ public interface GUIObserverInterface {
      * @param id The object id.
      * @param type The type of the right.
      * @param name The name of the right.
+     * @throws java.lang.Exception
      */
-    public void removeRight(long id, String type, String name);
+    public void removeRight(long id, String type, String name) throws Exception;
     
 
 }

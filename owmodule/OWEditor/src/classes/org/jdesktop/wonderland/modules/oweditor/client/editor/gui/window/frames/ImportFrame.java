@@ -3,32 +3,32 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.frames
 
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.image.BufferedImage;
+import java.awt.event.ActionEvent;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.io.File;
-import java.io.IOException;
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
 
-import javax.imageio.ImageIO;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IImage;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.GUISettings;
 
 /**
- *
+ * This frame is used for importing kmz models.
+ * 
  * @author Patrick
  */
 public class ImportFrame extends javax.swing.JFrame {
 
-    /**
-     * 
-     */
     private static final long serialVersionUID = 1L;
     
     private static final Logger LOGGER =
@@ -39,7 +39,6 @@ public class ImportFrame extends javax.swing.JFrame {
             "org/jdesktop/wonderland/modules/oweditor/client/resources/Bundle");
 
     private String lastDirModel = "";
-    private String lastDirRep = "";
     private FrameController fc = null;
     
     private int boundsX = 0;
@@ -51,10 +50,14 @@ public class ImportFrame extends javax.swing.JFrame {
     //if a modell was already loaded, it has to be deleted.
     private boolean modelLoaded = false;
     
-    private Color errorColor = Color.red;
-    private Color normalColor = Color.black;
+    //color for the labels.
+    private final Color errorColor = Color.red;
+    private final Color normalColor = Color.black;
+    private String imgName = null;
     
+    //font for the labels.
     private Font normalFont = null;
+    
     private JDialog loadingDialog = null;
             
     /**
@@ -68,12 +71,8 @@ public class ImportFrame extends javax.swing.JFrame {
         this.fc = fc;
         
         initComponents();
-        loadingDialog = new LoadingDialog(this);
         reset();
-        
-        
     }
-
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -84,9 +83,14 @@ public class ImportFrame extends javax.swing.JFrame {
     private void initComponents() {
         doubleFormat = new DecimalFormat("0.#####");
         doubleFormat.setGroupingUsed(false);
+
+        DecimalFormatSymbols custom=new DecimalFormatSymbols();
+        custom.setDecimalSeparator('.');
+        ((DecimalFormat) doubleFormat).setDecimalFormatSymbols(custom);
         
+        modelButton = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
-        jLabel3 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
         yLabel = new javax.swing.JLabel();
         zLabel = new javax.swing.JLabel();
         locationFieldY = new javax.swing.JFormattedTextField(doubleFormat);
@@ -100,17 +104,13 @@ public class ImportFrame extends javax.swing.JFrame {
         nameField = new javax.swing.JTextField();
         modelField = new javax.swing.JTextField();
         moduleNameField = new javax.swing.JTextField();
-        modelButton = new javax.swing.JButton();
-        jLabel12 = new javax.swing.JLabel();
-        imgField = new javax.swing.JTextField();
-        imgButton = new javax.swing.JButton();
-        image = new ImagePanel();
+        image = new ImageButton();
         jPanel4 = new javax.swing.JPanel();
-        jLabel7 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
         rotXLabel = new javax.swing.JLabel();
         rotYLabel = new javax.swing.JLabel();
         rotZLabel = new javax.swing.JLabel();
-        jLabel14 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
         
         if(serverList == null)
             server = new javax.swing.JComboBox<String>();
@@ -130,7 +130,7 @@ public class ImportFrame extends javax.swing.JFrame {
 
         jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
-        jLabel3.setText(BUNDLE.getString("ImportLocation"));
+        jLabel2.setText(BUNDLE.getString("Location"));
 
         yLabel.setText("Y:");
 
@@ -171,7 +171,7 @@ public class ImportFrame extends javax.swing.JFrame {
                 .addContainerGap(45, Short.MAX_VALUE))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -181,7 +181,7 @@ public class ImportFrame extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel3)
+                .addComponent(jLabel2)
                 .addGap(15, 15, 15)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(xLabel)
@@ -206,13 +206,13 @@ public class ImportFrame extends javax.swing.JFrame {
         jLabel1.setText(BUNDLE.getString("ImportModel"));
         jLabel1.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
 
-        modelNameLabel.setText(BUNDLE.getString("ImportModelName"));
+        modelNameLabel.setText(BUNDLE.getString("Name"));
         modelNameLabel.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
         
         moduleNameLabel.setText(BUNDLE.getString("ImportModuleName"));
         moduleNameLabel.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        jLabel14.setText(BUNDLE.getString("ImportServer"));
-        jLabel14.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        jLabel5.setText(BUNDLE.getString("ImportServer"));
+        jLabel5.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
 
         nameField.setToolTipText("");
 
@@ -232,26 +232,13 @@ public class ImportFrame extends javax.swing.JFrame {
             }
         });
 
-        jLabel12.setText(BUNDLE.getString("ImportRep"));
-        jLabel12.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-
-        imgField.setEditable(false);
-        imgField.setToolTipText(BUNDLE.getString("ImportRepTooltipp"));
-        imgField.setEnabled(false);
-        imgField.addActionListener(new java.awt.event.ActionListener() {
+        image.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                represFieldActionPerformed(evt);
+                imgButtonActionPerformed(evt);
             }
         });
 
-        imgButton.setText(BUNDLE.getString("Select"));
-        imgButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                represButtonActionPerformed(evt);
-            }
-        });
-
-        image.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        //image.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
         javax.swing.GroupLayout ImageLayout = new javax.swing.GroupLayout(image);
         image.setLayout(ImageLayout);
@@ -273,15 +260,10 @@ public class ImportFrame extends javax.swing.JFrame {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(modelNameLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(moduleNameLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel14, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(imgField)
-                        .addGap(10, 10, 10)
-                        .addComponent(imgButton, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(modelField)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -290,7 +272,7 @@ public class ImportFrame extends javax.swing.JFrame {
                         .addComponent(nameField, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
                         //.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGap(25,25,25)
-                        .addComponent(image, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(image, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addComponent(moduleNameField)
                         .addComponent(server))
                 .addContainerGap())
@@ -307,11 +289,6 @@ public class ImportFrame extends javax.swing.JFrame {
                         .addComponent(modelButton))
                     .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel12)
-                    .addComponent(imgField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(imgButton))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -323,7 +300,7 @@ public class ImportFrame extends javax.swing.JFrame {
                             .addComponent(moduleNameField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(10,10,10)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel14)
+                            .addComponent(jLabel5)
                             .addComponent(server, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(10, 10, 10))
                     .addComponent(image, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -335,7 +312,7 @@ public class ImportFrame extends javax.swing.JFrame {
 
         jPanel4.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
-        jLabel7.setText(BUNDLE.getString("ImportRotation"));
+        jLabel3.setText(BUNDLE.getString("Rotation"));
 
         rotXLabel.setText("X:");
 
@@ -351,7 +328,7 @@ public class ImportFrame extends javax.swing.JFrame {
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGap(45, 45, 45)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -372,7 +349,7 @@ public class ImportFrame extends javax.swing.JFrame {
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel7)
+                .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(rotXLabel)
@@ -392,7 +369,7 @@ public class ImportFrame extends javax.swing.JFrame {
 
         jPanel5.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
-        scaleLabel.setText(BUNDLE.getString("ImportScale"));
+        scaleLabel.setText(BUNDLE.getString("Scale"));
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -490,6 +467,52 @@ public class ImportFrame extends javax.swing.JFrame {
         pack();
     }// </editor-fold>                        
 
+    protected void imgButtonActionPerformed(ActionEvent evt) {
+        ImageSelectionFrame frame = fc.getImageSelectionFrame();
+        frame.setLocationRelativeTo(this);
+        frame.setActive(imgName);
+        
+        /*
+         * Listener for when the image selection frame is closed.
+         */
+        frame.addComponentListener(new ComponentListener() {
+
+            @Override
+            public void componentResized(ComponentEvent e) {
+                // TODO Auto-generated method stub
+                
+            }
+
+            @Override
+            public void componentMoved(ComponentEvent e) {
+                // TODO Auto-generated method stub
+                
+            }
+
+            @Override
+            public void componentShown(ComponentEvent e) {
+                // TODO Auto-generated method stub
+                
+            }
+
+            @Override
+            public void componentHidden(ComponentEvent e) {
+                IImage img = fc.imageSelection.getSelectedImage();
+                fc.imageSelection.removeComponentListener(this);
+                
+                if(img == null){
+                    image.setImage(null);
+                    imgName = null;
+                }else{
+                    image.setImage(img.getImage());
+                    imgName = img.getName();
+                }
+            }
+
+        });
+        frame.setVisible(true);
+    }
+
     private void locationButtonActionPerformed(java.awt.event.ActionEvent evt) { 
         working = true;
         
@@ -505,12 +528,8 @@ public class ImportFrame extends javax.swing.JFrame {
 
     private void modelFieldActionPerformed(java.awt.event.ActionEvent evt) {                                          
         modelButtonActionPerformed(evt);
-    }                                             
-
-    private void represFieldActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        represButtonActionPerformed(evt);
-    }                                            
-
+    }          
+    
     private void modelButtonActionPerformed(java.awt.event.ActionEvent evt) {                                             
         
         JFileChooser chooser = new JFileChooser();
@@ -521,114 +540,85 @@ public class ImportFrame extends javax.swing.JFrame {
         chooser.setFileFilter(filter);
         int returnVal = chooser.showOpenDialog(this);
         
-        if(returnVal == JFileChooser.APPROVE_OPTION) {
+        if(returnVal == JFileChooser.APPROVE_OPTION) {                        
             File file = chooser.getSelectedFile();
-            
-            String name = file.getName();
-            String path = file.getAbsolutePath();
-            lastDirModel = file.getParent();
-            
-            if(lastDirRep.equals("")){
-                lastDirRep = lastDirModel;
-            }
-            modelField.setText(path);
-            
-            //split url
-            String[] tokens = name.split("\\.(?=[^\\.]+$)");
-            
-            if(tokens[0] == null || tokens[tokens.length-1] == null){
-                showError(BUNDLE.getString("FileReadError"),
-                        BUNDLE.getString("FileReadErrorTitle"));
-                return;
-            }
-            
-            //set name, if nothing has been entered already
-            if(nameField.getText().equals("")){
-                nameField.setText(tokens[0]);
-            }
-            if(moduleNameField.getText().equals("")){
-                moduleNameField.setText(tokens[0]);
-            }
-            
-            loadingDialog.setVisible(true);
-            loadingDialog.setLocationRelativeTo(this);
-            int[] bounds = fc.window.loadKMZ(path);
-            loadingDialog.setVisible(false);
-                
-            //if bounds are wrong or null
-            if(bounds == null || bounds.length<2){
-                showError(BUNDLE.getString("ImportWrongBounds"),
-                        BUNDLE.getString("ImportWrongBoundsTitle"));
-                return;
-            }
-
-            this.boundsX = bounds[0];
-            this.boundsY = bounds[1];
-            okButton.setEnabled(true);
-            locationButton.setEnabled(true);
-            modelLoaded = true;
-        } 
-    }                                           
-
-    private void represButtonActionPerformed(java.awt.event.ActionEvent evt) {
+            loadModel(file);
+        }             
+    }  
+    
+    public void loadModel(File file){
+        String name = file.getName();
+        final String path = file.getAbsolutePath();
         
-        JFileChooser chooser = new JFileChooser(new File (lastDirRep));
-        FileNameExtensionFilter filter = new FileNameExtensionFilter(
-                "JPG", "jpg", "jpeg", "JPEG");
-        FileNameExtensionFilter filter2 = new FileNameExtensionFilter(
-                "GIF", "gif", "GIF");
-        FileNameExtensionFilter filter3 = new FileNameExtensionFilter(
-                "PNG", "png", "PNG");
-        FileNameExtensionFilter filter4 = new FileNameExtensionFilter(
-                "BMP", "bmp", "BMP");
-        chooser.removeChoosableFileFilter(chooser.getAcceptAllFileFilter());
-        chooser.addChoosableFileFilter(filter);
-        chooser.addChoosableFileFilter(filter2);
-        chooser.addChoosableFileFilter(filter3);
-        chooser.addChoosableFileFilter(filter4);
-        int returnVal = chooser.showOpenDialog(this);
         
-        if(returnVal == JFileChooser.APPROVE_OPTION) {
-            File file = chooser.getSelectedFile();
-            
-            //String name = file.getName();
-            String path = file.getAbsolutePath();
-            lastDirRep = file.getParent();
-            
-            if(lastDirModel.equals("")){
-                lastDirModel = lastDirRep;
-            }
-            
-            //split url
-            /*String[] tokens = name.split("\\.(?=[^\\.]+$)");
-            
-            if(tokens[0] == null || tokens[tokens.length-1] == null){
-                showError(BUNDLE.getString("FileReadError"),
-                        BUNDLE.getString("FileReadErrorTitle"));
-                return;
-            }*/
-            
-            BufferedImage img = null;
-            try {
-                img = ImageIO.read(new File(path));
-                image.setImage(img);
-                image.repaint();
-                imgField.setText(path);
+        //split url, to get the name without the file type
+        String[] tokens = name.split("\\.(?=[^\\.]+$)");
+        
+        //if something with the file is wrong
+        if(tokens[0] == null || tokens[tokens.length-1] == null){
+            showError(BUNDLE.getString("FileReadError"),
+                    BUNDLE.getString("FileReadErrorTitle"));
+            return;
+        }
+        
+        if(!tokens[tokens.length-1].equals("kmz")){
+            showError("kein kmz","no kmz");
+            return;
+        }
+        
+        modelField.setText(path);
+        lastDirModel = file.getParent();
+        
+        //set name, if nothing has been entered already
+        if(nameField.getText().equals("")){
+            nameField.setText(tokens[0]);
+        }
+        if(moduleNameField.getText().equals("")){
+            moduleNameField.setText(tokens[0]);
+        }
+        
+        loadingDialog = new LoadingDialog(this);
+        //a new thread is created because loading blocks
+        //the frame thread.
+        new Thread(){
+            @Override
+            public void run(){
+                int[] bounds = fc.window.loadKMZ(path);
                 
-            } catch (IOException e) {
-                showError(BUNDLE.getString("ImageError"),BUNDLE.getString("ImageErrorTitle"));
-            }
+                if(bounds == null || bounds.length<2){
+                    showError(BUNDLE.getString("ImportWrongBounds"),
+                            BUNDLE.getString("ImportWrongBoundsTitle"));
+                    loadingDialog.dispose();
+                    return;
+                }
 
-        } 
-    }                                         
+                boundsX = bounds[0];
+                boundsY = bounds[1];
+                okButton.setEnabled(true);
+                locationButton.setEnabled(true);
+                modelLoaded = true;
+                
+                //wait for loading dialog to be ready.
+                while(!loadingDialog.isVisible()){
+                    yield();
+                }
+                loadingDialog.dispose();
+                
+            }
+        
+        }.start();
+        loadingDialog.setLocationRelativeTo(this);
+        loadingDialog.setVisible(true);
+        
+    }                               
 
     private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {     
-        resetLabels(); 
+        resetLabelColor(); 
         
-        String image_url = imgField.getText();
-        String name = nameField.getText();
-        String module_name = moduleNameField.getText();
-        String server_name = server.getSelectedItem().toString();
+        
+        final String name = nameField.getText();
+        final String module_name = moduleNameField.getText();
+        final String server_name = server.getSelectedItem().toString();
 
         double x = 0;
         double y = 0;
@@ -641,71 +631,71 @@ public class ImportFrame extends javax.swing.JFrame {
         boolean error = false;
         
         if(name.equals("")){
-            setLabelError(modelNameLabel);
+            setLabelColorError(modelNameLabel);
             error = true;
         }
         
         if(module_name.equals("")){
-            setLabelError(moduleNameLabel);
+            setLabelColorError(moduleNameLabel);
             error = true;
         }
         
         try{
             x = Double.valueOf(locationFieldX.getText().replace(",", "."));
         }catch(Exception ex){
-            setLabelError(xLabel);
+            setLabelColorError(xLabel);
             error = true;
         }
         try{
             y = Double.valueOf(locationFieldY.getText().replace(",", "."));
         }catch(Exception ex){
-            setLabelError(yLabel);
+            setLabelColorError(yLabel);
             error = true;
         }
         try{
             z = Double.valueOf(locationFieldZ.getText().replace(",", "."));
         }catch(Exception ex){
-            setLabelError(zLabel);
+            setLabelColorError(zLabel);
             error = true;
         }
         
         try{
             rot_x = Double.valueOf(rotationFieldX.getText().replace(",", "."));
         }catch(Exception ex){
-            setLabelError(rotXLabel);
+            setLabelColorError(rotXLabel);
             error = true;
         }
         try{
             rot_y = Double.valueOf(rotationFieldY.getText().replace(",", "."));
         }catch(Exception ex){
-            setLabelError(rotYLabel);
+            setLabelColorError(rotYLabel);
             error = true;
         }
         try{
             rot_z = Double.valueOf(rotationFieldZ.getText().replace(",", "."));
         }catch(Exception ex){
-            setLabelError(rotZLabel);
+            setLabelColorError(rotZLabel);
             error = true;
         }
         try{
             scale = Double.valueOf(scaleField.getText().replace(",", "."));
         }catch(Exception ex){
-            setLabelError(scaleLabel);
+            setLabelColorError(scaleLabel);
             error = true;
         }      
         
         if(error){
-            showError("Bitte fehlende dinger einbauen", 
-                    "FEHler");
+            showError(BUNDLE.getString("ImportMissingError"), 
+                    BUNDLE.getString("ImportMissingErrorTitle"));
             return;
-        }
+        }  
        
-        
+        //check for module name conflicts.
         if(fc.window.importCheckName(module_name, server_name)){
             Object[] options = {BUNDLE.getString("Overwrite"),
                     BUNDLE.getString("Cancel")};
             int ret2 = JOptionPane.showOptionDialog(this,
-                BUNDLE.getString("ConflictError"),
+                BUNDLE.getString("ModuleConflictError"),
                 BUNDLE.getString("ConflictErrorTitle"),
                 JOptionPane.YES_NO_CANCEL_OPTION,
                 JOptionPane.QUESTION_MESSAGE,
@@ -717,19 +707,46 @@ public class ImportFrame extends javax.swing.JFrame {
                 return;
             }
         }
+        
+        //
+        
+        //make everything final for the thread.
+        final double xf = x;
+        final double yf = y;
+        final double zf = z;
+        final double rot_xf = rot_x;
+        final double rot_yf = rot_y;
+        final double rot_zf = rot_z;
+        final double scalef = scale;
 
+        loadingDialog = new LoadingDialog(this);
+        
+        new Thread(){
+                @Override
+                public void run(){
+                    boolean ret_val = fc.window.importKMZ(name, module_name, imgName, 
+                            xf, yf, zf, 
+                             rot_xf, rot_yf, rot_zf, scalef);
+                    
+                    //wait for loading dialog to be ready.
+                    while(!loadingDialog.isVisible()){
+                        yield();
+                    }
+                    
+                    loadingDialog.dispose();
+
+                     if(!ret_val){
+                         showError("Could not import.", "Import Error");
+                         return;
+                     }
+
+                    working = false;
+                    setVisible(false);
+                }
+        }.start();
+        
         loadingDialog.setVisible(true);
         loadingDialog.setLocationRelativeTo(this);
-        this.setEnabled(false);
-        boolean ret_val = fc.window.importKMZ(name, image_url, x, y, z, 
-                 rot_x, rot_y, rot_z, scale);
-        loadingDialog.setVisible(false);
-         
-         if(!ret_val)
-             showError("Could not import.", "Import Error");
-       
-        working = false;
-        setVisible(false);
     } 
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {
@@ -753,7 +770,7 @@ public class ImportFrame extends javax.swing.JFrame {
         
         super.setVisible(b);   
         setLocationRelativeTo(fc.mainframe);
-        resetLabels();
+        resetLabelColor();
         
         
         //working means, the choose location button was hit.
@@ -773,7 +790,6 @@ public class ImportFrame extends javax.swing.JFrame {
             }
             
             modelField.setText("");
-            imgField.setText("");
             nameField.setText("");
             moduleNameField.setText("");
             image.setImage(null);
@@ -788,6 +804,12 @@ public class ImportFrame extends javax.swing.JFrame {
         }
     }                
 
+    /**
+     * Sets values into the location fields.
+     * 
+     * @param x The x coordinate.
+     * @param y The y coordinate.
+     */
     public void setLocation(double x, double y) {
         //formatting the string in order to look nice
         //and to not change the textfield size.
@@ -795,6 +817,9 @@ public class ImportFrame extends javax.swing.JFrame {
         locationFieldY.setText(doubleFormat.format(y).replace(",", "."));
     }
     
+    /**
+     * Resets the form. Means it sets all field values to zero.
+     */
     private void reset(){
         
         locationFieldX.setText("0");
@@ -806,12 +831,23 @@ public class ImportFrame extends javax.swing.JFrame {
         scaleField.setText("1");
     }
     
+    /**
+     * Shows an error message.
+     * 
+     * @param text The text of the message.
+     * @param title The title.
+     */
     private void showError(String text, String title){
         JOptionPane.showMessageDialog(this,
                 text, title, JOptionPane.ERROR_MESSAGE);
     }
     
-    private void setLabelError(JLabel label){
+    /**
+     * Sets the color of one label to the error color (usually red).
+     * 
+     * @param label The label.
+     */
+    private void setLabelColorError(JLabel label){
         Font font = label.getFont();
         
         if(normalFont == null)
@@ -822,69 +858,63 @@ public class ImportFrame extends javax.swing.JFrame {
         label.setForeground(errorColor);
     }
     
-    private void resetLabels(){
+    /**
+     * Resets the color for every label to standard (usually black).
+     */
+    private void resetLabelColor(){
         if(normalFont == null)
             return;
-        setLabelNormal(xLabel);
-        setLabelNormal(yLabel);
-        setLabelNormal(zLabel);
-        setLabelNormal(rotXLabel);
-        setLabelNormal(rotYLabel);
-        setLabelNormal(rotZLabel);
-        setLabelNormal(scaleLabel);
-        setLabelNormal(modelNameLabel);
-        setLabelNormal(moduleNameLabel);
+        setLabelColorStandard(xLabel);
+        setLabelColorStandard(yLabel);
+        setLabelColorStandard(zLabel);
+        setLabelColorStandard(rotXLabel);
+        setLabelColorStandard(rotYLabel);
+        setLabelColorStandard(rotZLabel);
+        setLabelColorStandard(scaleLabel);
+        setLabelColorStandard(modelNameLabel);
+        setLabelColorStandard(moduleNameLabel);
     }
     
-    private void setLabelNormal(JLabel label){
+    /**
+     * Sets one label to standard color.
+     * 
+     * @param label The label.
+     */
+    private void setLabelColorStandard(JLabel label){
         label.setFont(normalFont);
         label.setForeground(normalColor);
     }
 
-    /**
-     * @param args the command line arguments
-     */
-    /*public static void main(String args[]) {
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new ImportFrame().setVisible(true);
-            }
-        });
-    }*/
-
     // Variables declaration - do not modify                     
-    private ImagePanel image;
+    private ImageButton image;
     private javax.swing.JButton cancelButton;
     private javax.swing.JButton okButton;
     private javax.swing.JButton resetButton;
     private javax.swing.JButton locationButton;
-    private javax.swing.JButton imgButton;
     private javax.swing.JButton modelButton;
     private javax.swing.JTextField modelField;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel rotZLabel;
-    private javax.swing.JLabel scaleLabel;
-    private javax.swing.JLabel jLabel12;
+    private javax.swing.JTextField nameField;
+    private javax.swing.JTextField moduleNameField;
     private javax.swing.JLabel moduleNameLabel;
     private javax.swing.JLabel modelNameLabel;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel xLabel;
     private javax.swing.JLabel yLabel;
     private javax.swing.JLabel zLabel;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel rotXLabel;
     private javax.swing.JLabel rotYLabel;
+    private javax.swing.JLabel rotZLabel;
+    private javax.swing.JLabel scaleLabel;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
-    private javax.swing.JLabel jLabel14;
     private javax.swing.JFormattedTextField locationFieldX;
     private javax.swing.JFormattedTextField locationFieldY;
     private javax.swing.JFormattedTextField locationFieldZ;
-    private javax.swing.JTextField nameField;
-    private javax.swing.JTextField moduleNameField;
-    private javax.swing.JTextField imgField;
     private javax.swing.JFormattedTextField rotationFieldX;
     private javax.swing.JFormattedTextField rotationFieldY;
     private javax.swing.JFormattedTextField rotationFieldZ;

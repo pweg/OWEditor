@@ -2,6 +2,14 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.commands;
 
 import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.GUIObserverInterface;
 
+/**
+ * The import command is only a hollow command, because deleted
+ * data will be stored in the backup manager in the adapter part,
+ * therefore no needless baggage has to be stored here.
+ * 
+ * @author Patrick
+ *
+ */
 public class Import implements Command{
     
     /*private String name;

@@ -1,8 +1,11 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.data;
 
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IDataObject;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IImage;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IRights;
 
 /**
  * This class houses all necessary data of an virtual world item.
@@ -23,7 +26,9 @@ public class DataObject implements IDataObject{
     private float height = 0;
     private String name = "";
     private byte type = IDataObject.RECTANGLE;
-    private BufferedImage img = null;
+    
+    private IImage img = null;
+    private ArrayList<IRights> rights = null;
     
     /**
      * Creates an empty object instance.
@@ -233,12 +238,81 @@ public class DataObject implements IDataObject{
     }
     
     @Override
-    public void setImage(BufferedImage img){
-        this.img = img;
+    public void setImage(BufferedImage img, String name, String path){
+        if(name == null)
+            name = "";
+        if(path == null)
+            path = "";
+        
+        this.img = new Image(name, img, path);
     }
     
-    public BufferedImage getImage(){
+    public IImage getImgClass(){
         return img;
+    }
+
+    @Override
+    public void addRights(String type, String name, boolean isOwner,
+            boolean permitSubObjects, boolean permitAbilityChange,
+            boolean permitMove, boolean permitView, boolean isEditable,
+            boolean isEverybody) {
+        if(rights == null)
+            rights = new ArrayList<IRights>();
+        IRights right = new Rights(type, name, isOwner, 
+                permitSubObjects, permitAbilityChange,
+                permitMove, permitView, isEditable,
+                isEverybody);
+        rights.add(right);
+        
+    }
+    
+    public void rightComponentCreated(){
+        if(rights == null)
+            rights = new ArrayList<IRights>();
+    }
+    
+    public void rightComponentRemoved(){
+        rights = null;
+    }
+
+    @Override
+    public ArrayList<IRights> getRights() {
+        return rights;
+    }
+
+    @Override
+    public IRights getRight(String name, String type) {
+        for(IRights right : rights){
+            if(right.getName().equals(name) &&
+                    right.getType().equals(type)){
+                return right;
+            }
+        }
+        return null;
+    }
+
+    public void setRight(String oldType, String oldName,
+            String type, String name, boolean owner,
+            boolean addSubObjects, boolean changeAbilities, boolean move,
+            boolean view) {
+        IRights right = getRight(oldName, oldType);
+        if(right != null){
+            right.set(type, name, owner, addSubObjects, changeAbilities, move, view);
+        }else{
+            addRights(type, name, owner, addSubObjects, changeAbilities, move, view,true,false);
+        }
+    }
+
+
+    public void removeRight(String type, String name){
+        
+        for(IRights right : rights){
+            if(right.getName().equals(name) &&
+                    right.getType().equals(type)){
+                rights.remove(right);
+                return;
+            }
+        }
     }
 
 }

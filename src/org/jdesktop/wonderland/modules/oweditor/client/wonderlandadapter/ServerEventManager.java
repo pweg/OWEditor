@@ -21,6 +21,7 @@ import org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter.compone
 import org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter.components.ImageCellComponent;
 import org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter.components.CellChangeListener;
 import org.jdesktop.wonderland.modules.oweditor.common.IDCellComponentServerState;
+import org.jdesktop.wonderland.modules.security.client.SecurityQueryComponent;
 
 /**
  * This class is used for updating the data package, when
@@ -66,6 +67,12 @@ public class ServerEventManager {
                         component instanceof ImageCellComponent){
                     //LOGGER.warning("IMAGE COMPONTENT CREATED");
                     imageComponentCreated(cell);
+                }else if(type == ComponentChangeListener.ChangeType.ADDED &&
+                        component instanceof SecurityQueryComponent){
+                    securtyComponentCreated(cell);
+                }else if(type == ComponentChangeListener.ChangeType.REMOVED &&
+                        component instanceof SecurityQueryComponent){
+                    securtyComponentRemoved(cell);
                 }
             }
         };
@@ -302,7 +309,15 @@ public class ServerEventManager {
 
             object.setName(name);
             observer.notifyObjectCreation(object);
-        }        
+        } 
+        
+        SecurityQueryComponent secComp =
+                cell.getComponent(SecurityQueryComponent.class);
+        if(secComp != null){
+            for(IAdapterObserver observer : observers){
+                observer.notifyRightComponentCreation(id);
+            }
+        }
     }
     
     /**
@@ -334,16 +349,25 @@ public class ServerEventManager {
             return;
         }
         
-        imageComponent.registerChangeListener(imageListener);
-        /*String imgName = imageComponent.getImage();
-        String imgDir = imageComponent.getDir();
+        imageComponent.registerChangeListener(imageListener);      
+    }
+    
+    private void securtyComponentCreated(Cell cell){
+        long id = CellInfoReader.getID(cell);
+        id = ac.bm.getOriginalID(id);
         
-        if(imgName == null || imgDir == null){
-            LOGGER.warning("IMAGE IS NULL");
-            //ac.ltm.invokeLateImage(ac.sc, id);
-            return;
-        }*/
-        //imageChangedEvent(imgName, imgDir, cell);        
+        for(IAdapterObserver observer : observers){
+            observer.notifyRightComponentCreation(id);
+        }
+    }
+    
+    private void securtyComponentRemoved(Cell cell){
+        long id = CellInfoReader.getID(cell);
+        id = ac.bm.getOriginalID(id);
+        
+        for(IAdapterObserver observer : observers){
+            observer.notifyRightComponentRemoval(id);
+        }
     }
     
     /**

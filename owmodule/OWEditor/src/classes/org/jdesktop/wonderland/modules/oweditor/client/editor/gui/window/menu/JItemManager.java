@@ -22,6 +22,7 @@ public class JItemManager {
     private static final boolean ROTATESELECTED = true;
     private static final boolean SCALESELECTED = true;
     private static final boolean PROPERTIESSELECTED = true; 
+    private static final boolean TOBACKSELECTED = true; 
     
     private static final boolean PASTECOPYEXIST = true;
 
@@ -31,6 +32,8 @@ public class JItemManager {
     private static String ROTATE = BUNDLE.getString("MenuRotate");
     private static String SCALE = BUNDLE.getString("MenuScale");
     private static String PROPERTIES = BUNDLE.getString("MenuProperties");
+    private static String TOBACK = BUNDLE.getString("MenuToBackground");
+    private static String TOFORE = BUNDLE.getString("MenuToForeground");
     
     private HashMap<String, JMenuItem> topItems;
     private HashMap<String, JMenuItem> popupItems;
@@ -56,12 +59,13 @@ public class JItemManager {
             //topItems.get(PROPERTIES).setEnabled(selected && PROPERTIESSELECTED);
         }
 
-        if(topItems != null){
+        if(popupItems != null){
             popupItems.get(COPY).setEnabled(selected && COPYSELECTED);
             popupItems.get(CUT).setEnabled(selected && CUTSELECTED);
             popupItems.get(ROTATE).setEnabled(selected && ROTATESELECTED);
             popupItems.get(SCALE).setEnabled(selected && SCALESELECTED);
             popupItems.get(PROPERTIES).setEnabled(selected && PROPERTIESSELECTED);
+            popupItems.get(TOBACK).setEnabled(selected && TOBACKSELECTED);
         }
     }
     
@@ -71,8 +75,15 @@ public class JItemManager {
             topItems.get(PASTE).setEnabled(copyShapesExist && PASTECOPYEXIST);
         }
 
-        if(topItems != null){            
+        if(popupItems != null){            
             popupItems.get(PASTE).setEnabled(copyShapesExist && PASTECOPYEXIST);
+        }
+    }
+    
+    public void setToBackgroundVisible(boolean b){
+        if(popupItems != null){
+            popupItems.get(TOBACK).setVisible(b);
+            popupItems.get(TOFORE).setVisible(!b);
         }
     }
 

@@ -42,6 +42,8 @@ import org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter.compone
 import org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter.components.ImageCellComponentFactory;
 import org.jdesktop.wonderland.modules.oweditor.common.IDCellComponentServerState;
 import org.jdesktop.wonderland.modules.oweditor.common.ImageCellComponentServerState;
+import org.jdesktop.wonderland.modules.security.client.SecurityComponentFactory;
+import org.jdesktop.wonderland.modules.security.client.SecurityQueryComponent;
 
 /**
  * This class is used for outgoing communication with the server.
@@ -56,12 +58,14 @@ public class ServerCommunication {
     private WonderlandAdapterController ac = null;
     private CellComponentFactorySPI imagespi = null;
     private CellComponentFactorySPI idspi = null;
+    private CellComponentFactorySPI securityspi = null;
     
     
     public ServerCommunication(WonderlandAdapterController ac){
         this.ac = ac;
         imagespi = new ImageCellComponentFactory();
         idspi = new IDCellComponentFactory();
+        securityspi = new SecurityComponentFactory();
     }
     
     /**
@@ -371,32 +375,30 @@ public class ServerCommunication {
         }
     }
     
- 
-    /*private void updateState(Cell cell, CellServerState state, 
-            CellComponentServerState compState) throws ServerCommException{
+    void addRightsComponent(long id) throws ServerCommException{
+        CellCache cache = ac.sm.getCellCache();
         
-        Set<CellComponentServerState> compStateSet = new HashSet();
-            compStateSet.add(compState);
-            CellServerStateUpdateMessage msg = new CellServerStateUpdateMessage(
-                cell.getCellID(), state, compStateSet);
-             
-            ResponseMessage response = cell.sendCellMessageAndWait(msg);
-            
-            if(response == null){
-                LOGGER.warning("Received a null reply from cell with id " +
-                        cell.getCellID() + " with name " +
-                        cell.getName() + " setting component state.");
-                throw new ServerCommException();
-            }
-               
-            if (response instanceof ErrorMessage) {
-            
-                ErrorMessage em = (ErrorMessage) response;
-                LOGGER.log(Level.WARNING, "Error updating cell: " +
-                        em.getErrorMessage(), em.getErrorCause());
-                throw new ServerCommException();
-            }
-    }*/
+        if (cache == null) {
+            LOGGER.log(Level.WARNING, "Unable to find Cell cache for session {0}", ac.sm.getSession());
+            throw new ServerCommException();
+        }
+        
+        CellID cellid = new CellID(id);
+        Cell cell = cache.getCell(cellid);
+        
+        //Do not remove this, because this can shake up the 
+        //gui event manager, when creating a cell, because
+        //it will throw an exception, which will reach the gui,
+        //which is not desireable.
+        if(cell == null){
+            LOGGER.warning("No cell found for given id " +cellid);
+            throw new ServerCommException();
+        }
+        SecurityQueryComponent idComponent = cell.getComponent(SecurityQueryComponent.class);
+        if(idComponent == null){
+            addComponent(cell, SecurityQueryComponent.class, securityspi);
+        }
+    }
     
      /**
      * Updates the cell compononts for a given cell
@@ -428,6 +430,8 @@ public class ServerCommunication {
             throw new ServerCommException();
         }
     }
+    
+
     
     /**
      * Adds a component to a given cell.

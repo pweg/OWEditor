@@ -6,14 +6,12 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
-import java.awt.geom.NoninvertibleTransformException;
-import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.GUISettings;
 
 /**
- * This is the class for the border sorounding the selection, when using
+ * This is the class for the border surrounding the selection, when using
  * rotation or scaling.
  * 
  * @author Patrick
@@ -38,10 +36,15 @@ public class TransformationBorder extends SimpleShapeObject implements ITransfor
     private byte currentClickedCode = 0;
     
     private Paint color = GUISettings.SURROUNDINGBORDERCOLOR;
-    
-    private int tinySize = GUISettings.SURROUNDINGBORDEREDGESSIZE;
+
+    //these are the sizes for the tiny corner shapes and the rotation
+    //center.
+    private int tinySizeX = GUISettings.SURROUNDINGBORDEREDGESSIZE;
+    private int tinySizeY = GUISettings.SURROUNDINGBORDEREDGESSIZE;
+    private int tinySizeHalfX = 0;
+    private int tinySizeHalfY = 0;
+
     private int margin = GUISettings.SURROUNDINGBORDERMARGIN;
-    private int tinySizeHalf = 0;
     private byte mode = 0;
     
     private double rotation = 0;
@@ -65,9 +68,11 @@ public class TransformationBorder extends SimpleShapeObject implements ITransfor
         //AffineTransform transform = new AffineTransform();
         //transform.scale(initialScaleX, initialScaleY);
         
-        
-        tinySizeHalf = (int) Math.round(tinySize/2);
-        tinySize = (int) Math.round(tinySize);
+        //calculate tiny half sizes for later use.
+        tinySizeHalfX = (int) Math.round((tinySizeX/2)/initialScaleX);
+        tinySizeHalfY = (int) Math.round((tinySizeY/2)/initialScaleY);
+        tinySizeX = (int) Math.round(tinySizeX/initialScaleX);
+        tinySizeY = (int) Math.round(tinySizeY/initialScaleY);
 
         tinyShapes = new ArrayList<Shape>();
         transformedTinyShapes = new ArrayList<Shape>();
@@ -75,10 +80,9 @@ public class TransformationBorder extends SimpleShapeObject implements ITransfor
         int center_x = (int) Math.round(x+(width/2));
         int center_y = (int) Math.round(y+(height/2));
         
-        originalCenter = new Rectangle(center_x-(int)Math.round(tinySizeHalf/initialScaleX),
-                center_y-(int)Math.round(tinySizeHalf/initialScaleY),
-                (int) Math.round(tinySize/initialScaleX),
-                (int) Math.round(tinySize/initialScaleY));    
+        originalCenter = new Rectangle(center_x-tinySizeHalfX,
+                center_y-tinySizeHalfY,
+                tinySizeX,tinySizeY);    
         //rotationCenter = transform.createTransformedShape(rotationCenter);
         //rotationCenter = scaleShape(rotationCenter, initialScaleX, initialScaleY);
 
@@ -128,7 +132,7 @@ public class TransformationBorder extends SimpleShapeObject implements ITransfor
                 Shape transformedRect = ShapeUtilities.rotateShape(r, 
                         rotation, rotationX, rotationY);
                 transformedRect = at.createTransformedShape(transformedRect);
-                transformedRect = scaleShapeCenter(transformedRect, at.getScaleX(), at.getScaleY());
+                //transformedRect = scaleShapeCenter(transformedRect, at.getScaleX(), at.getScaleY());
                 transformedTinyShapes.add(transformedRect);
             }
         }
@@ -160,7 +164,7 @@ public class TransformationBorder extends SimpleShapeObject implements ITransfor
      * @param scaleY The scale y value.
      * @return The scaled shape.
      */
-    private Shape scaleShapeCenter(Shape shape, double scaleX, double scaleY){
+    /*private Shape scaleShapeCenter(Shape shape, double scaleX, double scaleY){
         Rectangle2D bounds = shape.getBounds2D();
         AffineTransform af = AffineTransform.getTranslateInstance(0 - bounds.getX(), 
                 0 - bounds.getY());
@@ -185,8 +189,7 @@ public class TransformationBorder extends SimpleShapeObject implements ITransfor
             e.printStackTrace();
         }
         return shape;
-        
-    }
+    }*/
     
     /**
      * Creates the four tiny rectangles that are at the corners of a
@@ -194,7 +197,7 @@ public class TransformationBorder extends SimpleShapeObject implements ITransfor
      * 
      * @param main The main rectangle as a shape instance, where the 
      * tiny rectangles will sit.
-     * @param list The list, where the rectangles will be saved.
+     * @param rights The list, where the rectangles will be saved.
      */
     private ArrayList<Shape> setTinyRectangle(Shape main){
         ArrayList<Shape> list = new ArrayList<Shape>();
@@ -208,19 +211,20 @@ public class TransformationBorder extends SimpleShapeObject implements ITransfor
         AffineTransform transform = new AffineTransform();
         transform.scale(initialScaleX, initialScaleY);
         
-        Shape tiny = new Rectangle(x-tinySizeHalf,y-tinySizeHalf,tinySize,tinySize);
+        Shape tiny = new Rectangle(x-tinySizeHalfX,y-tinySizeHalfY,
+                tinySizeX,tinySizeY);
         list.add(tiny);
         
-        Shape tiny2 = new Rectangle(x+width+-tinySizeHalf,y-tinySizeHalf,
-                tinySize,tinySize);
+        Shape tiny2 = new Rectangle(x+width+-tinySizeHalfX,y-tinySizeHalfY,
+                tinySizeX,tinySizeY);
         list.add(tiny2);
         
-        Shape tiny3 = new Rectangle(x-tinySizeHalf,y+height+
-                -tinySizeHalf,tinySize,tinySize);
+        Shape tiny3 = new Rectangle(x-tinySizeHalfX,y+height+
+                -tinySizeHalfY,tinySizeX,tinySizeY);
         list.add(tiny3);
         
-        Shape tiny4 = new Rectangle(x+width-tinySizeHalf,
-                y+height-tinySizeHalf,tinySize,tinySize);
+        Shape tiny4 = new Rectangle(x+width-tinySizeHalfX,
+                y+height-tinySizeHalfY,tinySizeX,tinySizeY);
         list.add(tiny4);
         
         return list;
@@ -285,7 +289,7 @@ public class TransformationBorder extends SimpleShapeObject implements ITransfor
 
     @Override
     public byte checkShapes(Point p) {
-        
+
         if(originalCenter.contains(p)){
             return TransformationBorder.INROTATIONCENTER;
         }

@@ -2,11 +2,18 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.commands;
 
 import java.awt.Point;
 import java.util.ArrayList;
-import java.util.logging.Logger;
 
 import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.GUIObserverInterface;
-import org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter.GUIEventManager;
 
+/**
+ * This is a translation, which only translates x and y. This is 
+ * used by the editors normal translate option, where the user 
+ * moves a 2d shape. The coordinates are from the editor, which 
+ * need to be transformed by the adapter.
+ * 
+ * @author Patrick
+ *
+ */
 public class TranslateXY implements Command{
 
     ArrayList<Long> ids;

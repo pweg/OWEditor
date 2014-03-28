@@ -23,14 +23,14 @@ public class LateTransformationManager {
     private HashMap<String, Vector3f> copyTranslation = null;
     private HashMap<Long, Vector3f> rotationMap = null;
     private HashMap<Long, Float> scaleMap = null;
-    private HashMap<Long, File> imageMap = null;
+    private HashMap<Long, String> imageMap = null;
     
     public LateTransformationManager(){
         translationMap = new HashMap<Long, Vector3f>();
         rotationMap = new HashMap<Long, Vector3f>();
         scaleMap = new HashMap<Long, Float>();
         copyTranslation  = new HashMap<String, Vector3f>();
-        imageMap = new HashMap<Long, File>();
+        imageMap = new HashMap<Long, String>();
     }
     
     /**
@@ -165,17 +165,17 @@ public class LateTransformationManager {
             return lateTransform(server, id); 
     }
     
-    public boolean invokeLateImage(ServerCommunication server,long id){
+    public boolean invokeLateImage(ServerCommunication server,long id, String dir){
         Logger.getLogger(LateTransformationManager.class.getName()).warning("late image invokation");
         
-        File img = imageMap.get(id);
+        String img = imageMap.get(id);
         Logger.getLogger(LateTransformationManager.class.getName()).warning("IMAGE MAP "+ imageMap.size()+ " " + id);
         
         if(img == null)
             return true;
         
         try{
-            if(server.addImage(id, img))
+            if(server.changeImage(id, img, dir))
                 imageMap.remove(id);
         }catch(Exception e){
             return false;
@@ -262,8 +262,8 @@ public class LateTransformationManager {
      * @param id The cells id.
      * @param img The image.
      */
-    public void addImage(long id, File img) {
-        imageMap.put(id, img);
+    public void addImage(long id, String imgName) {
+        imageMap.put(id, imgName);
     }
     
 }

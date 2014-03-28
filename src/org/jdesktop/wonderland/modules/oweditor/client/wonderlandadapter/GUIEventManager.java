@@ -307,4 +307,25 @@ public class GUIEventManager implements GUIObserverInterface{
             }
         }
     }
+
+    @Override
+    public void notifyComponentCreation(long id, byte component) throws Exception{
+        id = ac.bm.getActiveID(id);
+         
+        if(component == GUIObserverInterface.RIGHTSCOMPONENT){
+            ac.sc.addRightsComponent(id);
+        }
+    }
+
+    public void notifyComponentRemoval(long id, byte component) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public void setRight(long id, String oldType, String oldName, String type, String name, boolean owner, boolean addSubObjects, boolean changeAbilities, boolean move, boolean view) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public void removeRight(long id, String type, String name) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 }

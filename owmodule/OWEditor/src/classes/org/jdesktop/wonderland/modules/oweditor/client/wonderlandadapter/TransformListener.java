@@ -4,6 +4,7 @@
  */
 package org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter;
 
+import java.util.logging.Logger;
 import org.jdesktop.wonderland.client.cell.Cell;
 import org.jdesktop.wonderland.client.cell.TransformChangeListener;
 
@@ -14,6 +15,8 @@ import org.jdesktop.wonderland.client.cell.TransformChangeListener;
 public class TransformListener implements TransformChangeListener{
     
     private ServerEventManager sua = null;
+    private static final Logger LOGGER =
+            Logger.getLogger(TransformListener.class.getName());
     
     public TransformListener(ServerEventManager sua){
        this.sua = sua;

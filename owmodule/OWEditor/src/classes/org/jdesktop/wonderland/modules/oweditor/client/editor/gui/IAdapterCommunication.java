@@ -97,6 +97,7 @@ public interface IAdapterCommunication {
      * Calls the adapter to import the pre-loaded model.
      * 
      * @param name The name of the new model
+     * @param module_name The name of the module.
      * @param image_url The url of the image representation
      * @param x The x coordinate of the new model.
      * @param y The y coordinate of the new model.
@@ -109,7 +110,8 @@ public interface IAdapterCommunication {
      * @return Return true, if creation is possible, false,
      * if there was an error.
      */
-    public boolean importKMZ(String name, String image_url, double x, double y,
+    public boolean importKMZ(String name, String module_name,
+            String image_url, double x, double y,
             double z, double rotationX, double rotationY, double rotationZ,
             double scale);
 
@@ -128,8 +130,58 @@ public interface IAdapterCommunication {
      *
     public void importConflictOverwrite(long id);*/
 
+    /**
+     * Does an undo action.
+     */
     public void undo();
     
+    /**
+     * Does a redo action.
+     */
     public void redo();
+
+    /**
+     * TODO currently not used yet.
+     *      * @param name
+     * @return
+     */
+    public boolean imageExists(String name);
+
+    /**
+     * Uploads an image to the Server.
+     * 
+     * @param imgUrl The image url.
+     */
+    public void uploadImage(String imgUrl);
+
+    /**
+     * Sets all properties of selected objects. If 
+     * specific properties should not be set, pass null
+     * for the variable.
+     * 
+     * @param ids The ids of the objects to change.
+     * @param names The new names of the objects.
+     * @param coordsX The new x coordinates.
+     * @param coordsY The new y coordinates.
+     * @param coordsZ The new z coordinates.
+     * @param rotX The new x rotation.
+     * @param rotY The new y rotation.
+     * @param rotZ The new z rotation.
+     * @param scale The new scale.
+     * @param imgName The new image name.
+     */
+    public void setProperties(ArrayList<Long> ids, ArrayList<String> names,
+            ArrayList<Float> coordsX, ArrayList<Float> coordsY,
+            ArrayList<Float> coordsZ, ArrayList<Double> rotX,
+            ArrayList<Double> rotY, ArrayList<Double> rotZ,
+            ArrayList<Double> scale, ArrayList<String> imgName,
+            ArrayList<Object> furtherActions);
+
+    /**
+     * Adds the rights component to the ids.
+     * 
+     * @param ids The ids.
+     */
+    public void addRightsComponent(ArrayList<Long> ids);
     
 }

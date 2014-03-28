@@ -9,7 +9,6 @@ package org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter;
 import com.jme.math.Quaternion;
 import com.jme.math.Vector3f;
 import java.io.File;
-import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.HashSet;
 import java.util.logging.Level;
@@ -43,6 +42,8 @@ import org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter.compone
 import org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter.components.ImageCellComponentFactory;
 import org.jdesktop.wonderland.modules.oweditor.common.IDCellComponentServerState;
 import org.jdesktop.wonderland.modules.oweditor.common.ImageCellComponentServerState;
+import org.jdesktop.wonderland.modules.security.client.SecurityComponentFactory;
+import org.jdesktop.wonderland.modules.security.client.SecurityQueryComponent;
 
 /**
  * This class is used for outgoing communication with the server.
@@ -57,12 +58,14 @@ public class ServerCommunication {
     private WonderlandAdapterController ac = null;
     private CellComponentFactorySPI imagespi = null;
     private CellComponentFactorySPI idspi = null;
+    private CellComponentFactorySPI securityspi = null;
     
     
     public ServerCommunication(WonderlandAdapterController ac){
         this.ac = ac;
         imagespi = new ImageCellComponentFactory();
         idspi = new IDCellComponentFactory();
+        securityspi = new SecurityComponentFactory();
     }
     
     /**
@@ -88,7 +91,7 @@ public class ServerCommunication {
         //it will throw an exception, which will reach the gui,
         //which is not desireable.
         if(cell == null){
-            LOGGER.warning("CELL == NULL");
+            LOGGER.warning("Translation: CELL == NULL");
             throw new ServerCommException();
         }
         
@@ -244,14 +247,29 @@ public class ServerCommunication {
     }
     
     /**
-     * Adds a image component to a cell.
+     * Uploads an image.
      * 
-     * @param id The id of the cell.
      * @param img The image file.
-     * @return true on success, false if the image component was not ready.
      * @throws ServerCommException 
      */
-    public boolean addImage(long id, File img) throws ServerCommException{
+    public void uploadImage(File img) throws ServerCommException{
+        try {
+            ac.fm.uploadImage(img, null);
+        } catch (Exception ex) {
+            Logger.getLogger(ServerCommunication.class.getName()).log(Level.SEVERE, null, ex);
+            throw new ServerCommException();
+        }
+    }
+    
+    /**
+     * Changes the image of a cell
+     * @param id
+     * @param imgName
+     * @param dir
+     * @return
+     * @throws ServerCommException 
+     */
+    public boolean changeImage(long id, String imgName, String dir) throws ServerCommException{
         CellCache cache = ac.sm.getCellCache();
         
         if (cache == null) {
@@ -286,32 +304,21 @@ public class ServerCommunication {
             ImageCellComponentServerState.class);
             
         if(imgState != null){
-                
-            if(img != null){
                 try {
-                    FileInfo info = new FileInfo();
-                    ac.fm.uploadImage(img, info);
                         
                     ((ImageCellComponentServerState) imgState).setImage(
-                        info.fileName);
+                        imgName);
                     ((ImageCellComponentServerState) imgState).setDir(
-                        info.fileDir);
+                        dir);
                     
-
                     HashSet<CellComponentServerState> compStateSet = new HashSet();
                     compStateSet.add(imgState);
                     sendServerUpdateState(cell, state, compStateSet);
-                 } catch (IOException ex) {
-                     LOGGER.log(Level.SEVERE, null, ex);
-                     throw new ServerCommException();
-                 } catch (Exception e){
+                 } catch (ServerCommException e) {
                      LOGGER.log(Level.SEVERE, null, e);
                      throw new ServerCommException();
-                 }
-            }else{
-                LOGGER.warning("Image file is null");
-                throw new ServerCommException();
             }
+            
         }else{
             return false;
         }
@@ -341,8 +348,10 @@ public class ServerCommunication {
         //gui event manager, when creating a cell, because
         //it will throw an exception, which will reach the gui,
         //which is not desireable.
-        if(cell == null)
+        if(cell == null){
+            LOGGER.warning("No cell found for given id " +cellid);
             throw new ServerCommException();
+        }
         
         IDCellComponent idComponent = cell.getComponent(IDCellComponent.class);
         if(idComponent == null){
@@ -366,32 +375,30 @@ public class ServerCommunication {
         }
     }
     
- 
-    /*private void updateState(Cell cell, CellServerState state, 
-            CellComponentServerState compState) throws ServerCommException{
+    void addRightsComponent(long id) throws ServerCommException{
+        CellCache cache = ac.sm.getCellCache();
         
-        Set<CellComponentServerState> compStateSet = new HashSet();
-            compStateSet.add(compState);
-            CellServerStateUpdateMessage msg = new CellServerStateUpdateMessage(
-                cell.getCellID(), state, compStateSet);
-             
-            ResponseMessage response = cell.sendCellMessageAndWait(msg);
-            
-            if(response == null){
-                LOGGER.warning("Received a null reply from cell with id " +
-                        cell.getCellID() + " with name " +
-                        cell.getName() + " setting component state.");
-                throw new ServerCommException();
-            }
-               
-            if (response instanceof ErrorMessage) {
-            
-                ErrorMessage em = (ErrorMessage) response;
-                LOGGER.log(Level.WARNING, "Error updating cell: " +
-                        em.getErrorMessage(), em.getErrorCause());
-                throw new ServerCommException();
-            }
-    }*/
+        if (cache == null) {
+            LOGGER.log(Level.WARNING, "Unable to find Cell cache for session {0}", ac.sm.getSession());
+            throw new ServerCommException();
+        }
+        
+        CellID cellid = new CellID(id);
+        Cell cell = cache.getCell(cellid);
+        
+        //Do not remove this, because this can shake up the 
+        //gui event manager, when creating a cell, because
+        //it will throw an exception, which will reach the gui,
+        //which is not desireable.
+        if(cell == null){
+            LOGGER.warning("No cell found for given id " +cellid);
+            throw new ServerCommException();
+        }
+        SecurityQueryComponent idComponent = cell.getComponent(SecurityQueryComponent.class);
+        if(idComponent == null){
+            addComponent(cell, SecurityQueryComponent.class, securityspi);
+        }
+    }
     
      /**
      * Updates the cell compononts for a given cell
@@ -424,6 +431,8 @@ public class ServerCommunication {
         }
     }
     
+
+    
     /**
      * Adds a component to a given cell.
      * 
@@ -455,7 +464,7 @@ public class ServerCommunication {
         if (response instanceof CellServerComponentResponseMessage) {
             // If successful, add the component to the GUI by refreshing the
             // Cell that is selected.
-            LOGGER.warning("Component successfully created");
+            //LOGGER.warning("Component successfully created");
         }
         else if (response instanceof ErrorMessage) {
             // Log an error. Eventually we should display a dialog

@@ -1,5 +1,6 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics;
 
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.DraggingObject;
@@ -13,7 +14,7 @@ public class InternalMediator implements IInternalMediator{
     private ShapeManager sm = null;
     private SelectionManager ssm = null;
     private TranslationManager stm = null;
-    private IWindowToGraphic frame = null;
+    private IWindowToGraphic window = null;
     
     public InternalMediator() {
     }
@@ -51,7 +52,7 @@ public class InternalMediator implements IInternalMediator{
 
     @Override
     public void repaint() {
-        frame.repaint();
+        window.repaint();
     }
 
     @Override
@@ -66,7 +67,7 @@ public class InternalMediator implements IInternalMediator{
 
     @Override
     public void setObjectRemoval(ArrayList<Long> ids) {
-        frame.setObjectRemoval(ids);
+        window.setObjectRemoval(ids);
     }
 
     @Override
@@ -97,7 +98,12 @@ public class InternalMediator implements IInternalMediator{
     @Override
     public void registerWindowInterface(
             IWindowToGraphic frameInterface) {
-        this.frame = frameInterface;
+        this.window = frameInterface;
+    }
+
+    @Override
+    public BufferedImage getImage(String name, String dir) {
+        return window.getImage(name, dir);
     }
     
     

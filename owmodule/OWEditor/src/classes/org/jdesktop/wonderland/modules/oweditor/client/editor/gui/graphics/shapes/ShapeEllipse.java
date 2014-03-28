@@ -12,6 +12,7 @@ import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.GUISettings;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.IInternalMediator;
 
 /**
  * A class for standard rectangles. 
@@ -32,11 +33,14 @@ public class ShapeEllipse extends ShapeObject{
     private double rotation = 0;
     private double scale = 0;
     
+    private double z = 0;
+    
     //These variables are used to determine, where the name of the object should be.
     private int nameBoundsX = GUISettings.NAMEPOSITIONINX;
     private int nameBoundsAbove = GUISettings.NAMEPOSITIONINY;
     
     private BufferedImage img = null;
+    private IInternalMediator smi = null;
     
     /**
      * Creates a new ObjectRectangle shape instance.
@@ -48,15 +52,18 @@ public class ShapeEllipse extends ShapeObject{
      * @param id the shape id.
      * @param name the name of the shape.
      */
-    public ShapeEllipse(int x, int y, int width, int height, long id, String name,
-            double rotation, double scale, BufferedImage img){
+    public ShapeEllipse(int x, int y, double z, int width,
+            int height, long id, String name,
+            double rotation, double scale, String imgName, 
+            String imgDir, IInternalMediator smi){
         
         originalShape = new Rectangle (x, y, width, height);
         this.name = name;
         this.id = id;
         this.rotation = rotation;
         this.scale = scale;
-        this.img = img;
+        this.smi = smi;
+        this.z = z;
     }
     
     @Override
@@ -89,8 +96,7 @@ public class ShapeEllipse extends ShapeObject{
         g.draw(at.createTransformedShape(originalShape)); 
     }
 
-    @Override
-    public void paintName(Graphics2D g, AffineTransform at) {
+    private void paintName(Graphics2D g, AffineTransform at) {
 
 
         g.setPaint(nameColor); 
@@ -197,6 +203,11 @@ public class ShapeEllipse extends ShapeObject{
     }
     
     @Override
+    public double getZ(){
+        return z;
+    }
+    
+    @Override
     public int getWidth() {
         return originalShape.width;
     }
@@ -249,8 +260,14 @@ public class ShapeEllipse extends ShapeObject{
     }
 
     @Override
-    public void setImage(BufferedImage img) {
-        this.img = img;
+    public void setImage(String imgName, String dir) {
+        //this.img = img;
+    }
+
+    @Override
+    public void setColor(Paint color) {
+        // TODO Auto-generated method stub
+        
     }
 
 }

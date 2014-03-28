@@ -71,14 +71,85 @@ public interface IAdapterObserver {
      * @param scale The new scale of the object.
      */
     public void notifyScaling(long id, double scale);
+
+    /**
+     * Notifies a name change event.
+     * 
+     * @param id The id of the object.
+     * @param name The new name.
+     */
+    public void notifyNameChange(Long id, String name);
     
     /**
      * Notifies the event, when a representation image is created, or changed.
      * 
      * @param id The id of the object.
      * @param img The new BufferedImage.
+     * @param name The name of the new image.
+     * @param dir The user directory of the new image.
      */
-    public void notifyImageChange(long id, BufferedImage img);
+    public void notifyImageChange(long id, BufferedImage img, String name,
+            String dir);
+
+    /**
+     * Sets up the name of the users directory.
+     * 
+     * @param dir The directory where the user stores his
+     * image data.
+     */
+    public void setUserDir(String dir);
+    
+    /**
+     * Updates the image library of the user.
+     * 
+     * @param img A new image.
+     * @param name 
+     */
+    public void updateImgLib(BufferedImage img, String name, String dir);
+
+    /**
+     * Notifies for a rights component creation.
+     * 
+     * @param id The id.
+     */
+    public void notifyRightComponentCreation(long id);
+
+    /**
+     * Notifies for a rights removal.
+     * 
+     * @param id The id.
+     */
+    public void notifyRightComponentRemoval(long id);
+
+
+    /**
+     * Notifies a rights change event.
+     * 
+     * @param id The object id
+     * @param type The rights type
+     * @param name The rights name
+     * @param owner The ownership of the object.
+     * @param addSubObjects The permission to add sub objects.
+     * @param changeAbilities The permission to change abilities.
+     * @param move The permission to move the object.
+     * @param view The permission to view the object.
+     */
+    public void notifyRightsChange(long id, String oldType, String oldName,
+            String type, String name,
+            boolean owner, boolean addSubObjects, boolean changeAbilities,
+            boolean move, boolean view);
+
+
+    /**
+     * Removes one right entry.
+     * 
+     * @param id The object id
+     * @param type The rights type
+     * @param name The rights name.
+     */
+    public void notifyRightsRemoval(long id, String type, String name);
+
+
     
 
 }

@@ -49,12 +49,6 @@ public class DataObjectObserver implements
     }
 
     @Override
-    public void notifyChange(long id, int x, int y, String name) {
-        gc.window.updateShape(id, x, y, name);
-        gc.window.repaint();  
-    }
-
-    @Override
     public void notifyRotation(long id, double rotation) {
         gc.window.updateShapeRotation(id, rotation);
         gc.window.repaint();
@@ -67,9 +61,20 @@ public class DataObjectObserver implements
     }
 
     @Override
-    public void notifyImageChange(long id, BufferedImage img) {
-        gc.window.updateImage(id, img);
+    public void notifyImageChange(long id, String imgName, String dir) {
+        gc.window.updateImage(id, imgName, dir);
         gc.window.repaint();
+    }
+
+    @Override
+    public void notifyNameChange(long id, String name) {
+        gc.window.updateName(id, name);
+        gc.window.repaint();
+    }
+
+    @Override
+    public void notifyRightComponentCreated(long id) {
+        gc.window.updateRightsComponent(id);
     }
 
 }

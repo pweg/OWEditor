@@ -11,6 +11,7 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shape
  * This class handles the pick up and drag feature for shapes,
  * as well as their selection and forwards changes for key presses
  * to the ShapeManager.
+ * 
  * @author Patrick
  *
  */

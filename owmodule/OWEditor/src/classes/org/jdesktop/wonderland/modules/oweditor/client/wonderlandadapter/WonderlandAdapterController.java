@@ -1,6 +1,9 @@
 package org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.jdesktop.wonderland.client.cell.CellManager;
+import org.jdesktop.wonderland.modules.contentrepo.common.ContentRepositoryException;
 import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.AdapterControllerMainControllerInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.CoordinateTranslatorInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.GUIObserverInterface;
@@ -16,7 +19,7 @@ public class WonderlandAdapterController implements AdapterControllerMainControl
     protected FileManager fm = null;
     protected GUIEventManager go = null;
     protected CoordinateTranslator ct = null;
-    protected ServerEventManager um = null;
+    protected ServerEventManager sem = null;
     protected TransformListener tl = null;
     protected CellStatusListener csl = null;
     protected BackupManager bm = null;
@@ -35,10 +38,10 @@ public class WonderlandAdapterController implements AdapterControllerMainControl
         ltm = new LateTransformationManager();
         ct = new CoordinateTranslator();
         go = new GUIEventManager(this);
-        um = new ServerEventManager(this);
+        sem = new ServerEventManager(this);
         sc = new ServerCommunication(this);
-        tl = new TransformListener(um);
-        csl = new CellStatusListener(um);
+        tl = new TransformListener(sem);
+        csl = new CellStatusListener(sem);
         sm = new SessionManager();
         bm = new BackupManager(sm);
         fm = new FileManager();
@@ -47,7 +50,7 @@ public class WonderlandAdapterController implements AdapterControllerMainControl
 
     @Override
     public void registerDataUpdateInterface(IAdapterObserver i) {
-       um.registerDataInterface(i);
+       sem.registerDataInterface(i);
         
     }
 
@@ -58,7 +61,14 @@ public class WonderlandAdapterController implements AdapterControllerMainControl
 
     @Override
     public void getCurrentWorld() {
-        WorldBuilder builder = new WorldBuilder(this, um);
+        try {
+            sem.setUserDir(fm.getUserDir());
+            sem.setImageLib(fm.getUserLib());
+        } catch (ContentRepositoryException ex) {
+            Logger.getLogger(WonderlandAdapterController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        WorldBuilder builder = new WorldBuilder(this, sem);
         builder.build();
     }
 

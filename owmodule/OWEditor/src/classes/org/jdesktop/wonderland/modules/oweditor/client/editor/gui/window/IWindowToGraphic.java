@@ -1,6 +1,7 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window;
 
 import java.awt.Point;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 
@@ -75,6 +76,16 @@ public interface IWindowToGraphic {
      */
     public void setScaleUpdate(ArrayList<Long> ids, ArrayList<Point> coordinates, 
             ArrayList<Double> scale);
+
+    /**
+     * Searches for an image.
+     *  
+     * @param name The name of the image.
+     * @param dir The users directory of the image.
+     * @return The image, or null if it was not found.
+     */
+    public BufferedImage getImage(String name, String dir);
+
     
 
 }

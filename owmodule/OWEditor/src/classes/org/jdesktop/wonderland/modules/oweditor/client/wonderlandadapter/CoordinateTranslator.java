@@ -140,38 +140,7 @@ public class CoordinateTranslator implements CoordinateTranslatorInterface{
 
     @Override
     public double getRotation(IDataObject object) {
-        return -object.getRotationY();
-    }
-    
-    /**
-     * Creates a new vector for rotation. This method should be used, after
-     * receiving a standard gui rotation command
-     * (NOT rotations done via properties!). This method takes the new rotation
-     * and adds it to an already existing vector at the right place.
-     * 
-     * @param rotation The rotation of a cell.
-     * @param newRotation The new rotation value to be set for the y axis.
-     * @return A new vector, with the added and transforemd new rotation value.
-     */
-    public Vector3f createRotation(Vector3f rotation, double newRotation){
-        
-        float rotationY = (float) Math.toRadians(-newRotation);
-        return new Vector3f(rotation.x, rotationY, rotation.z );
-    }
-    
-    /**
-     * Transforms a rotation vector given by the GUI into a vector
-     * used by wonderland.
-     * 
-     * @param rotation The gui rotation to transform.
-     * @return The wonderland rotation.
-     */
-    public Vector3f transformRotationBack(Vector3f rotation){
-        float y = rotation.z;
-        float z = rotation.y;
-        rotation.y = y;
-        rotation.z = z;
-        return rotation;
+        return -object.getRotationX();
     }
     
     @Override

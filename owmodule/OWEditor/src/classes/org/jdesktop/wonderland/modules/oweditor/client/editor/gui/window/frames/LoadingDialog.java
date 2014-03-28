@@ -11,20 +11,28 @@ import javax.swing.JPanel;
 import javax.swing.JRootPane;
 import javax.swing.border.EtchedBorder;
 
-public class LoadingDialog extends JDialog{
-    private static final long serialVersionUID = 1L;
+/**
+ * This is a dialog that should be shown, when loading.
+ * Unfortunately it is not possible to make it appear in wonderland 
+ * propperly, if it is not modal. So this frame blocks every frame thread
+ * that is used to start it, which means it also blocks the thread of the 
+ * frame, which does not allow further work in the frame. Therefore,
+ * a new thread has to be constructed before this dialog is shown, in order
+ * to do work.
+ * 
+ * @author Patrick
+ */
+public final class LoadingDialog extends JDialog{
+    private static final long serialVersionUID = 1000L;
     
     private static final ResourceBundle BUNDLE = ResourceBundle.getBundle(
             "org/jdesktop/wonderland/modules/oweditor/client/resources/Bundle");
-    
-    private JFrame parent = null;
-    
+        
     public LoadingDialog(JFrame frame){
-        super(frame, BUNDLE.getString("Dialog_Loading"));
-        parent = frame;
+        //super(BUNDLE.getString("Dialog_Loading"));
+        super(frame, BUNDLE.getString("Dialog_Loading"), true);
         
         initComponents();
-        setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
         setLocationRelativeTo(frame);
         setVisible(false);
     }
@@ -47,15 +55,6 @@ public class LoadingDialog extends JDialog{
         pan.setBorder(javax.swing.BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
         
         add(pan);
-    }
-    
-    @Override
-    public void setVisible(boolean b){
-        if(b)
-            parent.setEnabled(false);
-        else
-            parent.setEnabled(true);
-        super.setVisible(b);
     }
 
 }

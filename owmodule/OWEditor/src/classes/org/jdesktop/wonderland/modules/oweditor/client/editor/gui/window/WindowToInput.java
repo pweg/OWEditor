@@ -8,6 +8,12 @@ import java.awt.Rectangle;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.frames.IDrawingPanel;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.menu.IMenu;
 
+/**
+ * The interface implementation for the input package.
+ * 
+ * @author Patrick
+ *
+ */
 public class WindowToInput implements IWindowToInput {
 
     private WindowController wc = null;    
@@ -88,7 +94,11 @@ public class WindowToInput implements IWindowToInput {
         //This is build just, if other parts also need translation.
         if(state != null)
             state.finished();
-        
+    }
+
+    @Override
+    public void setToBGVisible(boolean b) {
+       wc.menu.setToBackgroundVisible(b);
     }
 
 }

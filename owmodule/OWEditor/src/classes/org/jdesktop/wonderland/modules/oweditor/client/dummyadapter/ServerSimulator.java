@@ -52,61 +52,80 @@ public class ServerSimulator {
         Sphere Block2, 1.00001 2.9455893 1.0000591 1.7263716
         */
         
-
-        createObject( 
+        ServerObject so = null;
+        so = createObject( 
                 (float)0.0, (float)3.4142137,(float)1.0000589, 
                 42, 150,58,
                 1, 
                 (float)1.00, (float)4.00, 
                 "Block1", false);
-        createObject( 
+        so = createObject( 
                 (float)-9.0, (float)3.4142137,(float)1.0000589, 
                 10, 15,10,
                 1.3, 
                 (float)3.00, (float)3.00, 
                 "5", false);
-        createObject(
+        so = createObject(
                 (float)-8.178859,  (float)-5.4412746, (float)0.060006, 
                 90, 50,10,
                 0.8, 
                 (float)2.00, (float)0.20, "Virtuelles Telefon", false);
-        createObject( 
+        so.rights.add(new Rights("User", "U1", true, true,true,true,true,
+                false,false));
+        so.rights.add(new Rights("Everybody", "everybody", true, true,true,true,true,
+                true,true));
+        so = createObject( 
                 (float)-4.331105,  (float)-12.422435, (float)1.4452857,
                 180, 0,0,
                 1, 
                 (float)1.00, (float)1.00, 
                 "12", true);
-        createObject(
+        so = createObject(
                 (float)-7.0,(float)-10.0, (float)-1.0,  
                 0, 0,0,
                 1, 
                 (float)1.00, (float)1.00, 
                 "Audiorekorder", false);
-        createObject(
+        so.rights.add(new Rights("User", "U1", true, true,true,true,true,
+                false,false));
+        so.rights.add(new Rights("Everybody", "everybody", true, true,true,true,true,
+                true,true));
+        so.rights.add(new Rights("UserGroup", "G1", true, true,true,true,true,
+                true,false));
+        so.rights.add(new Rights("User", "U2", true, false,false,true,false,
+                true,false));
+        so = createObject(
                 (float)-20, (float)2.0,(float)0.0,  
                 0, 180,355,
                 1.3, 
                 (float)1.80, (float)1.80, 
                 "Block 3", false);
-        createObject( 
-                (float)0.0, (float)0.0, (float)0.0, 
+        so = createObject( 
+                (float)0.0, (float)0.0, (float)4.0, 
                 0, 20,90,
                 1, 
                 (float)1.00, (float)2.00, 
                 "nothing", false);
-        createObject(
+        so = createObject(
                 (float)2.9455893, (float)1.7263716,(float)1.000591,  
                 0,10,20, 
                 1, 
                 (float)3.00, (float)3.00, 
                 "Block2", false);
 
-        createObject(
-                (float)-2.9455893, (float)0.7263716,(float)1.000591, 
+        so = createObject(
+                (float)-2.9455893, (float)0.7263716,(float)2.000591, 
                 0, 0,0,
                 1, 
-                (float)0.50, (float)2.00, 
-                "Block2", false);
+                (float)500, (float)2000, 
+                "verylongnamehasthisblockfortestingBlock2", false);
+        
+        /*createObject(
+                -20,-10,0,
+                30,45,45,10,
+                (float)5, (float)1,
+                "Testblock", false );*/
+        
         
         
         /*
@@ -144,10 +163,11 @@ public class ServerSimulator {
             float width, float height, 
             String name,
             boolean isAvatar, 
-            BufferedImage image){
+            BufferedImage image,
+            String imgName){
         ServerObject o = new ServerObject(currentID, x, y, z, rotationX, 
                 rotationY, rotationZ,
-                scale, width, height, name, image);
+                scale, width, height, name, image, imgName);
 
         o.rotationY = rotationY;
         o.rotationZ = rotationZ;

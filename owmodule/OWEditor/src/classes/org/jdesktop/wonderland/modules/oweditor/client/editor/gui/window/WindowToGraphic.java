@@ -1,20 +1,31 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window;
 
 import java.awt.Point;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
+import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IDataToGUI;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.IAdapterCommunication;
 
-
+/**
+ * The interface implementation for the graphic package.
+ * 
+ * @author Patrick
+ *
+ */
 public class WindowToGraphic implements IWindowToGraphic{
     
-
+    private IDataToGUI dm = null;
     private IAdapterCommunication adapter = null;
     private WindowController wc = null;
     
     public WindowToGraphic(WindowController wc, IAdapterCommunication adapter){
         this.adapter = adapter;
         this.wc = wc;
+    }
+
+    public void registerDataManager(IDataToGUI dm) {
+        this.dm = dm;
     }
 
     @Override
@@ -55,5 +66,10 @@ public class WindowToGraphic implements IWindowToGraphic{
             ArrayList<Point> coordinates, 
             ArrayList<Double> scale) {
         adapter.setScaleUpdate(ids, coordinates, scale);
+    }
+
+    @Override
+    public BufferedImage getImage(String name, String dir) {
+        return dm.getImage(name, dir);
     }
 }

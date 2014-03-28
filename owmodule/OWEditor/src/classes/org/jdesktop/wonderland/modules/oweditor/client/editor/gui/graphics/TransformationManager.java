@@ -8,8 +8,8 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shape
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.ITransformationBorder;
 
 /**
- * This class is used for transforming shapes, like 
- * rotation and scaling.
+ * This class is used for transforming shapes (other
+ * than translations), like rotation and scaling.
  * 
  * @author Patrick
  *

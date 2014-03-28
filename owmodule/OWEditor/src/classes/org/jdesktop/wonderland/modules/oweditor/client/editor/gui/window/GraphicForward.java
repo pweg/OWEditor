@@ -1,10 +1,9 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window;
 
-import java.awt.image.BufferedImage;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.ITransformedObject;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.IAdapterCommunication;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.IGraphicToWindow;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.IGraphicToInput;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.IGraphicToWindow;
 
 /**
  * Implements the frameGraphicInterface, which forwards 
@@ -67,7 +66,12 @@ public class GraphicForward implements GraphicForwardInterface{
     }
     
     @Override
-    public void updateImage(long id, BufferedImage img) {
-        graphic.updateShapeImage(id, img);
+    public void updateImage(long id, String imgName, String dir) {
+        graphic.updateShapeImage(id, imgName, dir);
+    }
+
+    @Override
+    public void updateName(Long id, String name) {
+        graphic.updateShapeName(id, name);
     }
 }

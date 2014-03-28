@@ -6,8 +6,8 @@ import java.awt.event.MouseWheelListener;
 import javax.swing.JMenuBar;
 import javax.swing.event.MouseInputAdapter;
 
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.BottomToolBar;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.IWindowToFrame;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.frames.toolbar.BottomToolBar;
 
 public interface IFrame {
     
@@ -110,5 +110,36 @@ public interface IFrame {
      * @return A toolbar instance.
      */
     public BottomToolBar getBottomToolBar();
+
+    /**
+     * Enables/disables the undo option.
+     * 
+     * @param b If true, the undo bar is enabled,
+     * if false it is disabled.
+     */
+    public void setUndoEnabled(boolean b);
+   
+    /**
+     * Enables/disables the redo option.
+     * 
+     * @param b If true, the redo bar is enabled,
+     * if false it is disabled.
+     */
+    public void setRedoEnabled(boolean b);
+
+    /**
+     * Shows the properties frame.
+     * 
+     * @param b If true, the frame will be shown,
+     * if false it will be hidden.
+     */
+    public void setPropertiesVisible(boolean b);
+
+    /**
+     * Is used, when a rights component is created.
+     * 
+     * @param id The object id.
+     */
+    public void updateRightsComponent(long id);
 
 }

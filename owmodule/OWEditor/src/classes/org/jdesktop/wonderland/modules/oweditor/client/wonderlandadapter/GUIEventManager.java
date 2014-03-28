@@ -1,18 +1,21 @@
 package org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter;
 
 import com.jme.math.Vector3f;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import org.jdesktop.wonderland.client.cell.Cell;
 import org.jdesktop.wonderland.client.cell.CellCache;
 import org.jdesktop.wonderland.common.cell.CellID;
 import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.GUIObserverInterface;
 
 /**
- * This class is used to make updates the client makes in
+ * This class is used to receive updates the client does in
  * the GUI and forwards it to the server. 
  * 
  * @author Patrick
@@ -54,24 +57,25 @@ public class GUIEventManager implements GUIObserverInterface{
         ac.sc.translate(id, translation);
     }
     
-    @Override
-    public void notifyRotation(long id, int x, int y, double rotation) throws Exception{
-        notifyTranslationXY(id,x,y);
-        
+
+    public void notifyTranslation(Long id, double x, double y, double z) throws Exception {
         id = ac.bm.getActiveID(id);
-        Cell cell = getCell(id);
-        
-        Vector3f cell_rot = CellInfoReader.getRotation(cell);
-        cell_rot = ac.ct.createRotation(cell_rot, rotation);
-        
+        Vector3f translation = new Vector3f((float) x,(float) z,(float) y);
+        ac.sc.translate(id, translation);
+    }
+    
+    @Override
+    public void notifyRotation(long id, double rot_x, double rot_y, double rot_z) throws Exception {      
+        id = ac.bm.getActiveID(id);
+        Vector3f cell_rot = new Vector3f((float) Math.toRadians(-rot_y),
+                (float) Math.toRadians(-rot_x),
+                (float) Math.toRadians(-rot_z));
         ac.sc.rotate(id, cell_rot);
     }
 
-    @Override
-    public void notifyScaling(long id, int x, int y, double scale) throws Exception{
+    public void notifyScaling(long id, double scale) throws Exception {
         id = ac.bm.getActiveID(id);
         ac.sc.scale(id,(float) scale);
-        notifyTranslationXY(id,x,y);
     }
     
     @Override
@@ -83,7 +87,6 @@ public class GUIEventManager implements GUIObserverInterface{
         }catch(Exception e){
             LOGGER.warning("ID component not created for " + id);
         }
-        
         ac.sc.remove(curid);
     }
 
@@ -158,7 +161,6 @@ public class GUIEventManager implements GUIObserverInterface{
         Vector3f coordinates = CellInfoReader.getCoordinates(cell);
         String name = cell.getName() ;
         name = ac.cnm.createUndoName(ac.sm.getSession(), id, name);
-        LOGGER.warning("UNDO REMOVAL: y "+ coordinates.y + " z " +coordinates.z);
         
         float y = coordinates.z;
         float z = coordinates.y;
@@ -174,7 +176,6 @@ public class GUIEventManager implements GUIObserverInterface{
     @Override
     public void undoObjectCreation() throws Exception{
         long id = ac.bm.getUndoID();
-        LOGGER.warning("UNDOING UNDO ID " +id);
         
         if(id == -1)
             throw new ServerCommException();
@@ -184,7 +185,6 @@ public class GUIEventManager implements GUIObserverInterface{
     @Override
     public void redoObjectCreation() throws Exception{
         long id = ac.bm.getRedoID();
-        LOGGER.warning("Redoing undo id" + id);
         
         if(id == -1)
             throw new ServerCommException();
@@ -205,13 +205,13 @@ public class GUIEventManager implements GUIObserverInterface{
     }
 
     @Override
-    public long importKMZ(String name, String image_url, double x, double y, 
+    public long importKMZ(String name, String module_name, 
+            String imageName, double x, double y, 
             double z, double rotationX, double rotationY, double rotationZ, 
             double scale) throws Exception{
         
-        File img = new File(image_url);
         
-        if(!importer.importToServer(name)){
+        if(!importer.importToServer(module_name, name)){
             LOGGER.warning("Import to server failed.");
             throw new GUIEventException();
         }
@@ -227,8 +227,9 @@ public class GUIEventManager implements GUIObserverInterface{
         Vector3f rotate = new Vector3f((float)rotationX, (float)rotationZ,
                 (float)rotationY);
         
-        if(img != null)
-            ac.ltm.addImage(id, img);
+        if(imageName != null && !imageName.equals("")){
+            ac.ltm.addImage(id, imageName);
+        }
         
         try{
             ac.sc.translate(id, translate);
@@ -270,6 +271,61 @@ public class GUIEventManager implements GUIObserverInterface{
             throw new GUIEventException();
         }
         return cell;
-        
+    }
+
+    @Override
+    public boolean imageFileExists(String name) {
+        return ac.fm.imageFileExists(name);
+    }
+    
+    @Override
+    public void notifyImageChange(long id, String dir, String name) throws Exception {
+        id = ac.bm.getActiveID(id);
+         ac.sc.changeImage(id, name, dir);
+    }
+
+    @Override
+    public void notifyNameChange(Long id, String name) throws Exception {
+        id = ac.bm.getActiveID(id);
+        ac.sc.changeName(id, name);
+    }
+
+    @Override
+    public void uploadImage(String imageUrl) throws Exception{
+        if(imageUrl != null && !imageUrl.equals("")){
+            try{
+                File imgFile = new File(imageUrl);
+                BufferedImage img = ImageIO.read(imgFile);
+                FileInfo info = new FileInfo();
+                ac.fm.uploadImage(imgFile, info);
+                ac.sem.updateUserLib(img, info.fileName, ac.fm.getUserDir());
+            } catch (IOException e) {
+                throw new ServerCommException();
+            } catch (Exception ex) {
+                Logger.getLogger(GUIEventManager.class.getName()).log(Level.SEVERE, null, ex);
+                throw new ServerCommException();
+            }
+        }
+    }
+
+    @Override
+    public void notifyComponentCreation(long id, byte component) throws Exception{
+        id = ac.bm.getActiveID(id);
+         
+        if(component == GUIObserverInterface.RIGHTSCOMPONENT){
+            ac.sc.addRightsComponent(id);
+        }
+    }
+
+    public void notifyComponentRemoval(long id, byte component) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public void setRight(long id, String oldType, String oldName, String type, String name, boolean owner, boolean addSubObjects, boolean changeAbilities, boolean move, boolean view) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public void removeRight(long id, String type, String name) {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }

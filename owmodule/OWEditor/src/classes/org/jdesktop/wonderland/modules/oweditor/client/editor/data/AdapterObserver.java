@@ -14,6 +14,7 @@ public class AdapterObserver implements IAdapterObserver{
     
     private DataObjectManager dm = null;
     private EnvironmentManager em = null;
+    private UserDataManager um = null;
 
     /**
      * Creates a new dataUpdate instance.
@@ -22,9 +23,11 @@ public class AdapterObserver implements IAdapterObserver{
      * when updates are made.
      * @param em a environmentManager instance.
      */
-    public AdapterObserver(DataObjectManager dm, EnvironmentManager em) {
+    public AdapterObserver(DataObjectManager dm, EnvironmentManager em,
+            UserDataManager um) {
         this.dm = dm;
         this.em = em;
+        this.um = um;
     }
     
     @Override
@@ -61,11 +64,52 @@ public class AdapterObserver implements IAdapterObserver{
     public void notifyScaling(long id, double scale) {
         dm.updateScale(id, scale);
     }
+
+    @Override
+    public void notifyNameChange(Long id, String name) {
+        dm.updateName(id, name);
+    }
     
     @Override
-    public void notifyImageChange(long id, BufferedImage img){
-        dm.updateImage(id, img);
+    public void notifyImageChange(long id, BufferedImage img, String name, String path){
+        dm.updateImage(id, img, name, path);
     }
+
+    @Override
+    public void setUserDir(String dir) {
+        um.setUserDir(dir);
+    }
+
+    @Override
+    public void updateImgLib(BufferedImage img, String name, String dir) {
+        um.addImage(img, name, dir);
+    }
+
+    @Override
+    public void notifyRightComponentCreation(long id) {
+        dm.rightComponentCreation(id);        
+    }
+
+    @Override
+    public void notifyRightComponentRemoval(long id) {
+        dm.rightComponentRemoval(id);
+    }
+
+    @Override
+    public void notifyRightsChange(long id, String oldType,
+            String oldName, String type, String name,
+            boolean owner, boolean addSubObjects, boolean changeAbilities,
+            boolean move, boolean view) {
+        dm.rightChange(id, oldType, oldName, 
+                type,name, owner, addSubObjects, changeAbilities,
+                move, view);        
+    }
+
+    @Override
+    public void notifyRightsRemoval(long id, String type, String name) {
+        dm.removeRight(id, type, name);
+    }
+
 
 
 }

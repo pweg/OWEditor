@@ -37,7 +37,7 @@ public class GUIEventManager implements GUIObserverInterface{
     public GUIEventManager(DummyAdapterController ac){
         this.ac = ac;
         
-        bounds[0] = (float) 1.0;
+        bounds[0] = (float) 2.0;
         bounds[1] = (float) 1.0;
     }
 
@@ -52,17 +52,32 @@ public class GUIEventManager implements GUIObserverInterface{
         object.x = p.x;
         object.y = p.y;      
         
-        ac.da.serverTranslationChangeEvent(id);
+        ac.sem.serverTranslationChangeEvent(id);
+    }
+
+
+    @Override
+    public void notifyTranslation(Long id, double x, double y, double z)
+            throws Exception {
+        ServerObject object = ac.server.getObject(id);
+        if(object == null)
+            throw new Exception();
+        
+        object.x = (float)x;
+        object.y = (float)y;
+        object.z = (float)z;
+        
+        ac.sem.serverTranslationChangeEvent(id);
     }
 
     @Override
     public void notifyRemoval(long id) throws Exception{
-        ac.da.serverRemovalEvent(id);
+        ac.sem.serverRemovalEvent(id);
     }
     
     @Override
     public void undoRemoval(long id) throws Exception{
-        ac.da.createObject(ac.server.getObject(id));
+        ac.sem.createObject(ac.server.getObject(id));
     }
 
     @Override
@@ -94,7 +109,7 @@ public class GUIEventManager implements GUIObserverInterface{
         
         ServerObject clone = ac.server.copyObject(id, name);
         ac.bom.addCreatedID(clone.id);
-        ac.da.serverCopyEvent(clone);
+        ac.sem.serverCopyEvent(clone);
     }
 
     @Override
@@ -114,31 +129,61 @@ public class GUIEventManager implements GUIObserverInterface{
         if(id == -1)
             throw new Exception();
         
-        ac.da.createObject(ac.server.getObject(id));
+        ac.sem.createObject(ac.server.getObject(id));
     }
 
+
     @Override
-    public void notifyRotation(long id, int x, int y, double rotation) throws Exception{
+    public void notifyRotation(long id, double rot_x, double rot_y, double rot_z)
+            throws Exception {
+        
         ServerObject object = ac.server.getObject(id);
         
         if(object == null)
             throw new Exception();
-   
-        object.rotationX = rotation;
-        notifyTranslationXY(id, x,y);
-        ac.da.serverRotationEvent(id);
+        object.rotationX = rot_x;
+        object.rotationY = rot_y;
+        object.rotationZ = rot_z;
+        
+        ac.sem.serverRotationEvent(id);
+        
     }
 
     @Override
-    public void notifyScaling(long id, int x, int y, double scale) throws Exception{
+    public void notifyScaling(long id, double scale) throws Exception {
         ServerObject object = ac.server.getObject(id);
         
         if(object == null)
             throw new Exception();
         
-        object.scale = scale;        
-        notifyTranslationXY(id, x,y);
-        ac.da.serverScalingEvent(id);
+        object.scale = scale;
+        ac.sem.serverScalingEvent(id);
+    }
+    @Override
+    public void notifyImageChange(long id, String dir, String name) throws Exception{
+        ServerObject object = ac.server.getObject(id);
+        
+        if(object == null)
+            throw new Exception();
+        
+        BufferedImage img = ac.im.getImage(dir, name);
+        
+        ac.sem.serverImageChangeEvent(id, img, dir, name);
+        
+        
+    }
+
+    @Override
+    public void notifyNameChange(Long id, String name) throws Exception{
+        ServerObject object = ac.server.getObject(id);
+        
+        if(object == null)
+            throw new Exception();
+        
+        object.name = name;
+        
+        ac.sem.serverNameChange(id);
+        
     }
 
     @Override
@@ -157,24 +202,22 @@ public class GUIEventManager implements GUIObserverInterface{
     }
 
     @Override
-    public long importKMZ(String name, String image_url, double x, double y,
+    public long importKMZ(String name, String module_name, 
+            String imgName, double x, double y,
             double z, double rotationX, double rotationY, double rotationZ,
             double scale) throws Exception{
         
         BufferedImage img = null;
         
-        try {
-            img = ImageIO.read(new File(image_url));
-            
-        } catch (IOException e) {
-            System.err.println("Reading image was not possible");
+        if(imgName != null){
+            img = ac.im.getImage(AdapterSettings.IMAGEDIR, imgName);
         }
 
         ServerObject tmp = ac.server.createObject((float)x, (float)y, (float)z, 
             rotationX, rotationY, rotationZ, scale, 
-            (float)bounds[0], (float)bounds[1], name, false, img);
+            (float)bounds[0], (float)bounds[1], name, false, img, imgName);
         ac.bom.addCreatedID(tmp.id);
-        ac.da.createObject(tmp);
+        ac.sem.createObject(tmp);
         
         return tmp.id;
     }    
@@ -188,4 +231,62 @@ public class GUIEventManager implements GUIObserverInterface{
     public void cancelImport() {
         //There is nothing to do here.
     }
+
+    public boolean imageFileExists(String name) {
+        return ac.im.imageExists(AdapterSettings.IMAGEDIR, name);
+    }
+
+    @Override
+    public void uploadImage(String imageUrl) {
+        
+        BufferedImage img = null;
+        String imgName = "";
+        
+        if(imageUrl != null){
+            try {
+                File imgFile = new File(imageUrl);
+                img = ImageIO.read(imgFile);
+                imgName = imgFile.getName();
+                ac.im.addImage(AdapterSettings.IMAGEDIR, imgName, img);
+            } catch (IOException e) {
+                System.err.println("Reading image was not possible");
+            }
+        }
+        if(img != null)
+            ac.sem.updateImgLib(img, imgName);
+    }
+
+    @Override
+    public void notifyComponentCreation(long id, byte component) {
+        switch(component){
+            case 1:
+                ac.sem.addRightsComponent(id);
+                break;
+        }
+        
+    }
+
+    @Override
+    public void notifyComponentRemoval(long id, byte component) {
+        switch(component){
+            case 1:
+                ac.sem.removeRightsComponent(id);
+                break;
+        }
+    }
+
+    @Override
+    public void setRight(long id, String oldType, String oldName,
+            String type, String name, boolean owner,
+            boolean addSubObjects, boolean changeAbilities, boolean move,
+            boolean view) {
+        ac.sem.notifyRightsChange(id, oldType, oldName,
+                type, name, owner, addSubObjects, changeAbilities, move, view);
+    }
+
+    @Override
+    public void removeRight(long id, String type, String name) {
+        ac.sem.notifyRightsRemoval(id, type, name);
+    }
+
 }

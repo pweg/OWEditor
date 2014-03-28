@@ -10,6 +10,12 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.frames.
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.menu.IMenu;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.menu.MenuController;
 
+/**
+ * This is the controller for the window package
+ * 
+ * @author Patrick
+ *
+ */
 public class WindowController {
 
     //protected JScrollPane mainScrollPanel = null;
@@ -18,6 +24,7 @@ public class WindowController {
     protected IInputToWindow input = null;
 
     protected IGraphicToWindow graphic = null;
+    protected WindowToGraphic graphicInterface;
     
     //protected MainFrame mainframe = null;
 
@@ -30,13 +37,12 @@ public class WindowController {
     protected IFrame frame = null;
     
     protected IAdapterCommunication adapter = null;
+
     
     public WindowController(IAdapterCommunication adapter, Window mainInterface){
         
         this.window = mainInterface;
         this.adapter = adapter;
-        
-        
 
         //Create graphics package
         graphic = new GraphicController();
@@ -47,6 +53,7 @@ public class WindowController {
         //Create interfaces needed for later
         inputInterface = new WindowToInput(this);
         frameInterface = new WindowToFrame(this);
+        graphicInterface = new WindowToGraphic(this, adapter);
         
         mouseCoords = new MouseCoordinates();
         
@@ -58,7 +65,7 @@ public class WindowController {
     }
 
     private void registerComponents(){
-        graphic.registerWindowInterface(new WindowToGraphic(this, adapter));
+        graphic.registerWindowInterface(graphicInterface);
         
         //mainInterface.registerComponents(drawingPan, mainframe);
         window.registerGraphicInterface(graphic);
@@ -72,11 +79,17 @@ public class WindowController {
         menu.registerWindowInterface(new WindowToMenu(this));
     }
     
+    /**
+     * Setup for menus.
+     */
     private void build(){
         mouseCoords.setToolBar(frame.getBottomToolBar());
         frame.setJMenuBar(menu.buildMenubar());
     }
 
+    /**
+     * Repaints the drawing panel.
+     */
     public void repaint() {
         frame.repaint();
     }

@@ -2,15 +2,19 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.data;
 
 import java.awt.Point;
 import java.awt.geom.Point2D;
+import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.CoordinateTranslatorInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IAdapterObserver;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IDataObject;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IDataToGUI;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IDataToMainController;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IImage;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.ITransformedObject;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.IDataObjectObserver;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.IEnvironmentObserver;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.IUserObserver;
 
 /**
  * This is the main data controller class, which is used to 
@@ -25,15 +29,17 @@ public class DataController implements IDataToMainController,
     protected AdapterObserver du = null;
     protected DataObjectManager dm = null;
     protected EnvironmentManager em = null;
+    protected UserDataManager um = null;
     
     public DataController(){
     }
     
     @Override
     public void initialize() {
+        um = new UserDataManager();
         em = new EnvironmentManager();
         dm = new DataObjectManager(this);
-        du = new AdapterObserver(dm, em);
+        du = new AdapterObserver(dm, em, um);
         
     }
 
@@ -87,6 +93,31 @@ public class DataController implements IDataToMainController,
 
     public String[] getServerList() {
         return em.getServerList();
+    }
+
+    @Override
+    public ArrayList<IImage> getImgLibrary() {
+        return um.getImgLib();
+    }
+
+    @Override
+    public void registerUserObserver(IUserObserver observer) {
+        um.registerObserver(observer);
+    }
+
+    @Override
+    public void removeUserObserver(IUserObserver observer) {
+        um.removeObserver(observer);
+    }
+
+    @Override
+    public String getUserImgDir() {
+        return um.getUserDir();
+    }
+
+    @Override
+    public BufferedImage getImage(String name, String dir) {
+        return um.getImage(name, dir);
     }
 
 

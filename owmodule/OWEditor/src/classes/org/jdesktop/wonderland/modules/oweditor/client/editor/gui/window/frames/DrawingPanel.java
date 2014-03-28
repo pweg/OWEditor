@@ -28,7 +28,7 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.GUISettings;
 public class DrawingPanel extends JPanel implements ChangeListener, IDrawingPanel {  
 
     private static final long serialVersionUID = 1L;
-    private RenderingHints hints;  
+    private final RenderingHints hints;  
     
     private Dimension size;
     private double scale = 1.0;
@@ -38,6 +38,8 @@ public class DrawingPanel extends JPanel implements ChangeListener, IDrawingPane
     private final ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
     private final Lock readLock = lock.readLock();
     private final Lock writeLock = lock.writeLock();
+    
+    private double zoomSpeed = 1;
     
     /*
      * These two translation integers are used to 
@@ -55,7 +57,7 @@ public class DrawingPanel extends JPanel implements ChangeListener, IDrawingPane
     /**
      * Creates a new instance of the drawingPanel
      * 
-     * @param gc A GUIController instance.
+     * @param fc A frame controller instance.
      */
     public DrawingPanel(FrameController fc) {
         
@@ -95,8 +97,19 @@ public class DrawingPanel extends JPanel implements ChangeListener, IDrawingPane
             return;
         }
     
-        scale += toAdd;
-        scale = Math.max(0.01, scale);
+        double newScale = scale + (toAdd*zoomSpeed);
+        
+        //adjust the zoom speed 
+        if(newScale <= (zoomSpeed/5)){
+            zoomSpeed = zoomSpeed/10;
+        }else if(newScale>= zoomSpeed*10 && zoomSpeed < 1){
+            zoomSpeed = zoomSpeed*10;
+        }
+        
+        scale = scale + (toAdd*zoomSpeed);
+        
+        //scale += toAdd;
+        //scale = Math.max(toAdd, scale);
         writeLock.unlock();
 
         repaint();  
@@ -119,10 +132,16 @@ public class DrawingPanel extends JPanel implements ChangeListener, IDrawingPane
         double v_x = r.x/(curScale)*scale;
         double v_y = r.y/(curScale)*scale;
         
-        double add_x = (r.width/curScale-r.width/scale)/2; 
-        double add_y = (r.height/curScale-r.height/scale)/2; 
+        /*
+         * Calculates the width difference between the old and the new scale.
+         * Halves it, in order to center the new viewpoint. And last, the new
+         * scale has to be applied to the result.
+         */
+        double add_x = (r.width/curScale-r.width/scale)/2*curScale; 
+        double add_y = (r.height/curScale-r.height/scale)/2*curScale; 
         readLock.unlock();
         
+        //adds/subtract the viewport difference from the current viewport.
         int new_x = (int) Math.round(v_x+ add_x);
         int new_y = (int) Math.round(v_y+ add_y);
         
@@ -131,12 +150,13 @@ public class DrawingPanel extends JPanel implements ChangeListener, IDrawingPane
         if(new_y < 0)
             new_y = 0;
 
-        Point p = new Point(new_x, new_y);
-        
+        //sets the new view.
+        Point p = new Point(new_x, new_y);        
         fc.mainScrollPanel.getViewport().setView(fc.mainScrollPanel.getViewport().getView());
         fc.mainScrollPanel.getViewport().setViewPosition(p);
     }
    
+    
     public void stateChanged(ChangeEvent e) {   
         repaint();  
         revalidate();  
@@ -148,6 +168,7 @@ public class DrawingPanel extends JPanel implements ChangeListener, IDrawingPane
       paintComponent(g);
     }
    
+    @Override
     protected void paintComponent(Graphics g) {  
         super.paintComponent(g); 
         Graphics2D g2 = (Graphics2D)g;  
@@ -163,7 +184,6 @@ public class DrawingPanel extends JPanel implements ChangeListener, IDrawingPane
         g2.setPaint(GUISettings.BGCOLOR); 
         
         fc.window.drawShapes(g2, at);
-        
     } 
     
     /**
@@ -193,7 +213,10 @@ public class DrawingPanel extends JPanel implements ChangeListener, IDrawingPane
    
     /**
      * Returns the preferred size of the drawing panel.
+     * 
+     * @return The size of the drawing pan.
      */
+    @Override
     public Dimension getPreferredSize() {  
         readLock.lock();
         int w = (int)(scale*size.width);  
@@ -219,7 +242,6 @@ public class DrawingPanel extends JPanel implements ChangeListener, IDrawingPane
      * @param x the new x value.
      */
     public void setNewMinX(int x){
-        
         writeLock.lock();
         int curTrans = translationX;
         translationX = (-x)+ fc.mainframe.getWidth()/(GUISettings.WIDTHDIVISOR*2);
@@ -265,17 +287,16 @@ public class DrawingPanel extends JPanel implements ChangeListener, IDrawingPane
         }
         readLock.unlock();
     }
-    
+    /*
     public int getTranslationX(){
         return translationX;
     }
     
     public int getTranslationY(){
         return translationY;
-    }
+    }*/
 
-    public AffineTransform getTransformation() {
-        
+    private AffineTransform getTransformation() {
         readLock.lock();
         
         AffineTransform at = new AffineTransform();
@@ -296,7 +317,6 @@ public class DrawingPanel extends JPanel implements ChangeListener, IDrawingPane
             at.inverseTransform(p, revert);
             return revert;
         } catch (NoninvertibleTransformException e) {
-            e.printStackTrace();
         }
         return null;
     }

@@ -8,7 +8,7 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IDa
 
 public class CoordinateTranslator implements CoordinateTranslatorInterface{
 
-    private int globalScale = AdapterSettings.initalScale;
+    private int globalScale = AdapterSettings.INITIAL_SCALE;
     
     @Override
     public Point transformCoordinatesInt(float x, float y, float width,

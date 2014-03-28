@@ -9,6 +9,12 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shape
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.stateTransCoordsOrigSize;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.IWindowToGraphic;
 
+/**
+ * Implements the graphictoinput interface
+ * 
+ * @author Patrick
+ *
+ */
 public class GraphicToInputFacade implements IGraphicToInput{
 
     protected ShapeManager sm = null;
@@ -112,8 +118,8 @@ public class GraphicToInputFacade implements IGraphicToInput{
             min_y = Math.min(y, min_y);
         }
         
-        center_x = (int) Math.round((max_x-min_x)/2);
-        center_y = (int) Math.round((max_y-min_y)/2);
+        center_x = (int) Math.round(min_x + (max_x-min_x)/2);
+        center_y = (int) Math.round(min_y + (max_y-min_y)/2);
         
         return new Point(center_x, center_y);
         
@@ -319,6 +325,20 @@ public class GraphicToInputFacade implements IGraphicToInput{
         else
             return true;
     }
+    
+    @Override
+    public boolean isMouseInBGObject(Point point) {
+        
+        ShapeObject shape = sm.getBGShapeSurroundingPoint(point);
+        
+        if(shape == null)
+            return false;
+        else{
+            ssm.clearCurSelection();
+            ssm.setSelected(shape, true);
+            return true;
+        }
+    }
 
     @Override
     public boolean isMouseInBorder(Point p) {
@@ -372,6 +392,7 @@ public class GraphicToInputFacade implements IGraphicToInput{
     public void registerWindowInterface(IWindowToGraphic window) {
         this.window  = window;
     }
+
 
 
 }

@@ -5,6 +5,12 @@ import java.awt.Point;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.DraggingObject;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.ShapeObject;
 
+/**
+ * This class is used for shape translations.
+ * 
+ * @author Patrick
+ *
+ */
 public class TranslationManager {
 
     //These are shapes for updates.

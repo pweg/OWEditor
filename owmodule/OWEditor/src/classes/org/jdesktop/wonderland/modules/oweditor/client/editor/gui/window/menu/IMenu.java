@@ -70,4 +70,11 @@ public interface IMenu {
      */
     public void showPopup(Component invoker, int x, int y);
 
+    /**
+     * Sets the tobackground item of the popup menu visible.
+     * 
+     * @param b If true, the to background item is getting visible,
+     * if false, the to foreground item is getting visible.
+     */
+    public void setToBackgroundVisible(boolean b);
 }

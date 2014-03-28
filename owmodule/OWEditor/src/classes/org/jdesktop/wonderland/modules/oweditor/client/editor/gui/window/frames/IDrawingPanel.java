@@ -13,6 +13,11 @@ public interface IDrawingPanel {
      */
     public Dimension getSize();
     
+    /**
+     * Changes the scale of the drawing panel.
+     * 
+     * @param scale The new scale.
+     */
     public void changeScale(double scale);
     
     /**

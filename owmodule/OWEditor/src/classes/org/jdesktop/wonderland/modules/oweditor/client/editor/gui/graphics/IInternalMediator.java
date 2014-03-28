@@ -1,5 +1,6 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics;
 
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.DraggingObject;
@@ -8,6 +9,13 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shape
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.ITransformationBorder;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.IWindowToGraphic;
 
+/**
+ * package internal mediator, which controls the 
+ * communication between the classes.
+ * 
+ * @author Patrick
+ *
+ */
 public interface IInternalMediator {
     
     /**
@@ -129,5 +137,14 @@ public interface IInternalMediator {
      */
     public void registerWindowInterface(
             IWindowToGraphic frameInterface);
+    
+    /**
+     * Returns an image for the given parameters.
+     * 
+     * @param name The name of the image.
+     * @param dir The user directory of the image.
+     * @return The image, or null if it was not found.
+     */
+    public BufferedImage getImage(String name, String dir);
 
 }

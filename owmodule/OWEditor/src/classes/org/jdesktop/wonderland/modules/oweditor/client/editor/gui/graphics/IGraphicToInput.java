@@ -2,6 +2,12 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics;
 
 import java.awt.Point;
 
+/**
+ * Interface for the input package.
+ * 
+ * @author Patrick
+ *
+ */
 public interface IGraphicToInput {
     
     
@@ -201,13 +207,22 @@ public interface IGraphicToInput {
     public void selectionRectFinished();
 
     /**
-     * Looks, if a point p is surrounded by a shape.
+     * Looks, if a point p is surrounded by a foreground shape.
      * 
      * @param p the point in question
      * @return true, if the point is in a shape, false
      * otherwise.
      */
     public boolean isMouseInObject(Point p);
+    
+    /**
+     * Looks, if a point p is surrounded by a background shape.
+     * 
+     * @param p the point in question
+     * @return true, if the point is in a shape, false
+     * otherwise.
+     */
+    public boolean isMouseInBGObject(Point p);
 
     /**
      * Looks, if a point p is in the edges of the

@@ -4,6 +4,12 @@ import java.util.ArrayList;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.ShapeObject;
 
+/**
+ * The copy manager is used for copy operations.
+ * 
+ * @author Patrick
+ *
+ */
 public class CopyManager {
 
     private ArrayList<ShapeObject> copyShapes = null;

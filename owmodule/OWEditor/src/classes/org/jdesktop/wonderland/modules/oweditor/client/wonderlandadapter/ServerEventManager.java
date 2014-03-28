@@ -14,12 +14,14 @@ import org.jdesktop.wonderland.client.cell.view.AvatarCell;
 import org.jdesktop.wonderland.common.cell.messages.CellServerComponentMessage;
 import org.jdesktop.wonderland.common.messages.ErrorMessage;
 import org.jdesktop.wonderland.common.messages.ResponseMessage;
+import org.jdesktop.wonderland.modules.contentrepo.common.ContentRepositoryException;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IDataObject;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IAdapterObserver;
 import org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter.components.IDCellComponent;
 import org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter.components.ImageCellComponent;
-import org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter.components.ImageChangeListener;
+import org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter.components.CellChangeListener;
 import org.jdesktop.wonderland.modules.oweditor.common.IDCellComponentServerState;
+import org.jdesktop.wonderland.modules.security.client.SecurityQueryComponent;
 
 /**
  * This class is used for updating the data package, when
@@ -34,7 +36,9 @@ public class ServerEventManager {
     private ArrayList<IAdapterObserver> observers = null;
     
     private ComponentChangeListener componentListener = null;
-    private ImageChangeListener imageListener = null;
+    private CellChangeListener imageListener = null;
+    
+    private ImageMonitor imgMonitor = null;
     
     private static final Logger LOGGER =
             Logger.getLogger(GUIEventManager.class.getName());
@@ -47,6 +51,8 @@ public class ServerEventManager {
      */
     public ServerEventManager(WonderlandAdapterController ac){
         this.ac = ac;
+        imgMonitor = new ImageMonitor();
+        
         observers = new ArrayList<IAdapterObserver>();
         
         componentListener = new ComponentChangeListener() {
@@ -59,13 +65,19 @@ public class ServerEventManager {
                 }
                 else if(type == ComponentChangeListener.ChangeType.ADDED && 
                         component instanceof ImageCellComponent){
-                    LOGGER.warning("IMAGE COMPONTENT CREATED");
+                    //LOGGER.warning("IMAGE COMPONTENT CREATED");
                     imageComponentCreated(cell);
+                }else if(type == ComponentChangeListener.ChangeType.ADDED &&
+                        component instanceof SecurityQueryComponent){
+                    securtyComponentCreated(cell);
+                }else if(type == ComponentChangeListener.ChangeType.REMOVED &&
+                        component instanceof SecurityQueryComponent){
+                    securtyComponentRemoved(cell);
                 }
             }
         };
         
-        imageListener = new ImageListener();
+        imageListener = new ChangeListener();
     }
     
     /**
@@ -92,7 +104,7 @@ public class ServerEventManager {
         for(IAdapterObserver observer : observers){
             observer.notifyScaling(id,(double) scale); 
             observer.notifyTranslation(id , x, y, z); 
-            observer.notifyRotation(id, rotation.x, rotation.y, rotation.z);
+            observer.notifyRotation(id, rotation.y, rotation.x, rotation.z);
         }
     }
 
@@ -104,6 +116,16 @@ public class ServerEventManager {
      */
     public void registerDataInterface(IAdapterObserver observer) {
         observers.add(observer);
+    }
+
+    /**
+     * Forwards the serverlist to the data package.
+     * 
+     * @param serverList A string arry containing the server.
+     */
+    public void setServerList(String[] serverList) {
+        for(IAdapterObserver observer : observers)
+            observer.setServerList(serverList);
     }
     
     /**
@@ -118,7 +140,9 @@ public class ServerEventManager {
         
         long id = CellInfoReader.getID(cell);
         id = ac.bm.getOriginalID(id);
+        
         ac.bm.setActive(id, false);
+        imgMonitor.removeID(id);
         
         for(IAdapterObserver observer : observers)
             observer.notifyRemoval(id);
@@ -156,16 +180,22 @@ public class ServerEventManager {
         * do late transform before reading cell data in order to get
         * the changes imideately.
         */
+        
+        //adds an image component
         if(ac.ltm.containsImage(id)){
-            ac.ltm.invokeLateImage(ac.sc, id);
+            try {
+                ac.ltm.invokeLateImage(ac.sc, id, ac.fm.getUserDir());
+            } catch (ContentRepositoryException ex) {
+                Logger.getLogger(ServerEventManager.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         
+        //does transformation (used when copying cells)
         String oldName="";
         if(ac.ltm.containsCell(id, name)){
             //copied names
             if(ac.ltm.containsCell(name)){
                 ac.bm.addNewCopyID(id, name);
-                LOGGER.warning("ADDED COPY ID "+ id);
             }
             ac.ltm.invokeLateTransform(ac.sc, id, name);
             try {
@@ -180,45 +210,51 @@ public class ServerEventManager {
             }
         }
         
+        //gets the image
         BufferedImage img = null;
-        
         ImageCellComponent imageComponent = cell.getComponent(ImageCellComponent.class);
+        String imgName = null;
+        String imgDir = null;
             
         if(imageComponent != null){
-            LOGGER.warning("image component is not null");
-            String imgName = imageComponent.getImage();
-            String imgDir = imageComponent.getDir();
+            imgName = imageComponent.getImage();
+            imgDir = imageComponent.getDir();
             imageComponent.registerChangeListener(imageListener);
-            
-            if(imgName != null && imgDir != null){
-                try {
-                    img = ac.fm.downloadImage(imgName, imgDir);
-                } catch (Exception ex) {
-                    LOGGER.log(Level.SEVERE, "Could not get image", ex);
-
-                    try {
-                        ac.sc.deleteComponent(id, ImageCellComponent.class);
-                    } catch (ServerCommException ex1) {
-                        LOGGER.log(Level.SEVERE, "Could not delete image component", ex1);
-                    }
-                }
+            img = getImage(id, imgName, imgDir);
+        }else{
+            try {
+                ac.sc.changeImage(id, "", "");
+                
+            } catch (ServerCommException ex) {
+                Logger.getLogger(ServerEventManager.class.getName()).log(Level.SEVERE, null, ex);
             }
+            
         }
         
+        //gets the original id, if it was created by undo/redo 
         IDCellComponent idComponent = cell.getComponent(IDCellComponent.class);
         
         if(idComponent != null){
             long oldid = idComponent.getID();
-            LOGGER.warning("old id" + oldid);
             
+            //there is currently no cell with the original id and the 
+            //original id is not -1, so it has to be a recreation of the
+            //original cell.
             if(!ac.bm.isActive(oldid) && oldid != -1){
                 id = oldid;
 
                 ac.bm.addOriginalCell(id, cell);
+            //a cell using the original id already exists.    
             }else if (ac.bm.isActive(oldid)){
                 try {
+                    //if it is on white list, the cell with the name
+                    //already exists, therefore the original id was done
+                    //with copy and can be deleted.
                     if(ac.bm.isOnWhiteList(oldName))
                         ac.sc.deleteComponent(id, IDCellComponentServerState.class);
+                    //the original id was not on the whitelist, therefore it 
+                    //is the same object which already exists, therefor it
+                    //can be deleted.
                     else{
                         ac.sc.remove(id);
                         return;
@@ -228,6 +264,8 @@ public class ServerEventManager {
                     + "original id, which is already used. Current ID:"
                     + id + ", original id "+oldid, ex);
                 }
+            //something else, like original id == -1, therefore the id
+            //component can be deleted.
             }else{
                 try {
                     ac.sc.deleteComponent(id, IDCellComponentServerState.class);
@@ -235,8 +273,6 @@ public class ServerEventManager {
                     LOGGER.log(Level.SEVERE, null, ex);
                 }
             }
-            
-            LOGGER.warning("cur id" + id);
         }
         
         Vector3fInfo coordinates = CellInfoReader.getCoordinates(cell);
@@ -256,14 +292,14 @@ public class ServerEventManager {
 
             object.setID(id);
             object.setCoordinates(x, y, z);
-            object.setRotationX(rotation.x);
-            object.setRotationY(rotation.y);
+            object.setRotationX(rotation.y);
+            object.setRotationY(rotation.x);
             object.setRotationZ(rotation.z);
             object.setScale(scale);
             object.setWidth(width);
             object.setHeight(height);
             object.setName(name);
-            object.setImage(img);
+            object.setImage(img, imgName, imgDir);
 
             if(cell instanceof AvatarCell){
                 object.setType(IDataObject.AVATAR);
@@ -273,7 +309,15 @@ public class ServerEventManager {
 
             object.setName(name);
             observer.notifyObjectCreation(object);
-        }        
+        } 
+        
+        SecurityQueryComponent secComp =
+                cell.getComponent(SecurityQueryComponent.class);
+        if(secComp != null){
+            for(IAdapterObserver observer : observers){
+                observer.notifyRightComponentCreation(id);
+            }
+        }
     }
     
     /**
@@ -292,7 +336,12 @@ public class ServerEventManager {
         ac.ltm.invokeLateTransform(ac.sc, id, name);
     }
     
-    public void imageComponentCreated(Cell cell){        
+    /**
+     * Is called when the image component is created.
+     * 
+     * @param cell The cell.
+     */
+    private void imageComponentCreated(Cell cell){      
         ImageCellComponent imageComponent = 
                 cell.getComponent(ImageCellComponent.class);
         
@@ -300,56 +349,141 @@ public class ServerEventManager {
             return;
         }
         
-        imageComponent.registerChangeListener(imageListener);
-        String imgName = imageComponent.getImage();
-        String imgDir = imageComponent.getDir();
+        imageComponent.registerChangeListener(imageListener);      
+    }
+    
+    private void securtyComponentCreated(Cell cell){
+        long id = CellInfoReader.getID(cell);
+        id = ac.bm.getOriginalID(id);
         
-        if(imgName == null || imgDir == null){
-            LOGGER.warning("IMAGE IS NULL");
-            //ac.ltm.invokeLateImage(ac.sc, id);
-            return;
+        for(IAdapterObserver observer : observers){
+            observer.notifyRightComponentCreation(id);
         }
-        imageChangedEvent(imgName, imgDir, cell);        
     }
     
-
+    private void securtyComponentRemoved(Cell cell){
+        long id = CellInfoReader.getID(cell);
+        id = ac.bm.getOriginalID(id);
+        
+        for(IAdapterObserver observer : observers){
+            observer.notifyRightComponentRemoval(id);
+        }
+    }
+    
     /**
-     * Forwards the serverlist to the data package.
+     * Is called, when an image is changed.
      * 
-     * @param serverList A string arry containing the server.
+     * @param imgName The new name of the image.
+     * @param imgDir The new user directory of the image.
+     * @param cell  The cell where the image is changed.
      */
-    public void setServerList(String[] serverList) {
-        for(IAdapterObserver observer : observers)
-            observer.setServerList(serverList);
-    }
-    
-    public void imageChangedEvent(String imgName, String imgDir, Cell cell){
+    private void imageChangedEvent(String imgName, String imgDir, Cell cell){
         long original_id = CellInfoReader.getID(cell);
         long id = ac.bm.getOriginalID(original_id);
         
-        BufferedImage img = null;
-        
-        try{
-            img = ac.fm.downloadImage(imgName, imgDir);
-        }catch(Exception e){
-            img = null;
-            try {
-                ac.sc.deleteComponent(original_id, ImageCellComponent.class);
-            } catch (ServerCommException ex) {
-                LOGGER.log(Level.SEVERE, "Could not delete image component", ex);
-            }
-        }
+        BufferedImage img = getImage(original_id, imgName, imgDir);
         
         for(IAdapterObserver observer : observers){
-            observer.notifyImageChange(id, img);
+            observer.notifyImageChange(id, img, imgName, imgDir);
         }
-        LOGGER.warning("IMAGE IS NOT NULL");
     }
     
-    class ImageListener extends Marshaller.Listener implements ImageChangeListener{
+    /**
+     * Returns an image for a specific id, name and directory. Also notifies
+     * other images, whith the same image that a change was done.
+     * 
+     * @param id The cell id.
+     * @param imgName The name of the image.
+     * @param imgDir The directory of the image.
+     * @return The image.
+     */
+    private BufferedImage getImage(long id, String imgName, String imgDir){
+        BufferedImage img = null;
+        
+        //get the image
+        if(imgName != null && imgDir != null){
+            try {
+                img = ac.fm.downloadImage(imgName, imgDir);
+            } catch (Exception ex) {
+                LOGGER.log(Level.SEVERE, "Could not get image", ex);
+                /*try {
+                    ac.sc.deleteComponent(id, ImageCellComponent.class);
+                } catch (ServerCommException ex1) {
+                    LOGGER.log(Level.SEVERE, "Could not delete image component", ex1);
+                }*/
+            }
+            
+            //checks if other cells have the same image. This is to
+            //register changes, if an image was overwritten.
+            if(imgMonitor.idsExist(imgName, imgDir)){
+                ArrayList<Long> ids = imgMonitor.getIds(imgName, imgDir);
+
+                for(long lid : ids){
+                    for(IAdapterObserver observer : observers){
+                        long lid_orig = ac.bm.getOriginalID(lid);
+                        observer.notifyImageChange(lid_orig, img, imgName, imgDir);
+                    }
+                }
+            }
+
+            imgMonitor.putID(imgName, imgDir, id);
+        }
+        return img;
+    }
+    
+    /**
+     * Sets the directory of the current user.
+     * 
+     * @param dir The user directory.
+     */
+    public void setUserDir(String dir){
+        for(IAdapterObserver observer : observers){
+            observer.setUserDir(dir);
+        }
+    }
+    
+    /**
+     * Updates the user image library with a new image.
+     * 
+     * @param img The image.
+     * @param imgName The image name.
+     * @param dir  The image user directory.
+     */
+    public void updateUserLib(BufferedImage img, String imgName, String dir){
+        for(IAdapterObserver observer : observers){
+            observer.updateImgLib(img, imgName, dir);
+        }
+    }
+
+    /**
+     * Sets the user library.
+     * 
+     * @param userLib The user library.
+     */
+    void setImageLib(ArrayList<FileManager.ImageClass> userLib) {
+        for(FileManager.ImageClass img : userLib){
+            for(IAdapterObserver observer : observers){
+                observer.updateImgLib(img.img, img.name, img.dir);
+            }
+        }
+    }
+    
+    /**
+     * Inner class for the image change listener.
+     */
+    class ChangeListener extends Marshaller.Listener implements CellChangeListener{
 
         public void imageChanged(String img, String dir, Cell cell) {
             imageChangedEvent(img, dir, cell);
+        }
+
+        public void nameChanged(Cell cell) {
+            long id = CellInfoReader.getID(cell);
+            id = ac.bm.getOriginalID(id);
+            
+            for(IAdapterObserver observer : observers){
+                observer.notifyNameChange(id, cell.getName());
+            }
         }
     }
     

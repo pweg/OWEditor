@@ -36,5 +36,21 @@ public interface IWindowToMenu {
      * Selects all existing shapes.
      */
     public void selectAllShapes();
+    
+    /**
+     * Sends items to the back or foreground
+     * 
+     * @param b If true the shapes are send to the background,
+     * if false, they are send to the foreground.
+     */
+    public void setBackground(boolean b);
+
+    /**
+     * Sets the properties frame visible.
+     * 
+     * @param b If true, the frame becomes visible,
+     * if false it will be hidden.
+     */
+    public void setPropertiesVisible(boolean b);
 
 }

@@ -11,6 +11,13 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shape
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.ShapeObject;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.IWindowToGraphic;
 
+/**
+ * The graphic controller, which creates the graphics classes.
+ * It also implements the window interface.
+ * 
+ * @author Patrick
+ *
+ */
 public class GraphicController implements IGraphicToWindow{
 
 
@@ -150,8 +157,8 @@ public class GraphicController implements IGraphicToWindow{
     }
 
     @Override
-    public void updateShapeImage(long id, BufferedImage img) {
-        sm.getShape(id).setImage(img);
+    public void updateShapeImage(long id, String imgName, String dir) {
+        sm.getShape(id).setImage(imgName, dir);
     }
 
     @Override
@@ -159,6 +166,27 @@ public class GraphicController implements IGraphicToWindow{
         ArrayList<ShapeObject> shapes = sm.getShapes();
         for(ShapeObject shape : shapes)
             ssm.setSelected(shape, true);
+    }
+
+    @Override
+    public void setBackground(boolean b) {
+        ArrayList<ShapeObject> shapes = ssm.getSelection();
+        
+        for(ShapeObject shape : shapes)
+            sm.setBackground(shape.getID(), b);
+
+        ssm.clearCurSelection();
+    }
+
+    @Override
+    public ArrayList<Long> getSelectedShapes() {
+        ArrayList<Long> ids = new ArrayList<Long>();
+        ArrayList<ShapeObject> shapes = ssm.getSelection();
+        
+        for(ShapeObject shape : shapes){
+            ids.add(shape.getID());
+        }
+        return ids;
     }
 
 }

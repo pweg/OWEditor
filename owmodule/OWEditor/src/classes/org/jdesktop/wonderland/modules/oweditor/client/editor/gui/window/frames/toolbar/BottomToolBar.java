@@ -1,4 +1,4 @@
-package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window;
+package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.frames.toolbar;
 
 import java.awt.Dimension;
 
@@ -9,7 +9,7 @@ public class BottomToolBar extends JToolBar{
    
     private static final long serialVersionUID = 1L;
     
-    private String nullString = "0.000";
+    private final String nullString = "0.000";
 
     public BottomToolBar(){ initComponents();
     }

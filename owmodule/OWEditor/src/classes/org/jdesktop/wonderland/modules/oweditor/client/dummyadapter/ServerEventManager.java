@@ -1,5 +1,7 @@
 package org.jdesktop.wonderland.modules.oweditor.client.dummyadapter;
 
+import java.awt.image.BufferedImage;
+
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IAdapterObserver;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IDataObject;
 
@@ -66,15 +68,27 @@ public class ServerEventManager {
         object.setRotationZ(sObject.rotationZ);
         object.setScale(scale);
         object.setName(name);
-        object.setImage(sObject.image);
+        object.setImage(sObject.image, sObject.imgName, "nopath");
         
         if(sObject.isAvatar){
             object.setType(IDataObject.AVATAR);
-            object.setWidth(AdapterSettings.avatarSizeX);
-            object.setHeight(AdapterSettings.avatarSizeY);
+            object.setWidth(AdapterSettings.AVATARSIZEX);
+            object.setHeight(AdapterSettings.AVATARSIZEY);
         }else{
             object.setWidth(sObject.width);
             object.setHeight(sObject.height);
+        }
+        
+        for(Rights rights : sObject.rights){
+            
+            object.addRights(rights.getType(), 
+                    rights.getName(), rights.getOwner(), 
+                    rights.getPermAddSubObjects(),
+                    rights.getPermChangeAbilities(),
+                    rights.getPermMove(),
+                    rights.getPermView(),
+                    rights.isEditable(),
+                    rights.isEverybody());
         }
         
         object.setName(name);
@@ -137,6 +151,21 @@ public class ServerEventManager {
         dui.notifyRotation(id, so.rotationX, so.rotationY ,so.rotationZ);
     }
 
+
+    public void serverNameChange(Long id) {
+        if(dui == null){
+            System.out.println("DataInterface is not in the adapter");
+            return;
+        }
+        
+        ServerObject so = ac.server.getObject(id);
+        
+        if(so == null)
+            return;
+        
+        dui.notifyNameChange(id, so.name);
+    }
+
     public void serverScalingEvent(long id) {
         if(dui == null){
             System.out.println("DataInterface is not in the adapter");
@@ -153,6 +182,45 @@ public class ServerEventManager {
 
     public void setServerList(String[] servers) {
         dui.setServerList(servers); 
+    }
+    
+    public void setUserDir(){
+        dui.setUserDir(AdapterSettings.IMAGEDIR);
+    }
+
+    /**
+     * Updates the image library of the user.
+     * 
+     * @param img A new image.
+     * @param name 
+     */
+    public void updateImgLib(BufferedImage img, String name) {
+        dui.updateImgLib(img, name, AdapterSettings.IMAGEDIR);
+    }
+
+    public void serverImageChangeEvent(long id, BufferedImage img, String dir,
+            String name) {
+        dui.notifyImageChange(id, img, name, dir);
+    }
+
+    public void addRightsComponent(long id) {
+        dui.notifyRightComponentCreation(id);
+    }
+    public void removeRightsComponent(long id) {
+        dui.notifyRightComponentRemoval(id);
+    }
+    
+    public void notifyRightsChange(long id, String oldType,
+            String oldName, String type, String name, boolean owner,
+            boolean addSubObjects, boolean changeAbilities, boolean move,
+            boolean view){
+        dui.notifyRightsChange(id, oldType, oldName, type, name, owner, addSubObjects,
+                changeAbilities, move, view);
+        
+    }
+    
+    public void notifyRightsRemoval(long id, String type, String name) {
+        dui.notifyRightsRemoval(id, type, name);
     }
 
 }
