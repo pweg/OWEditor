@@ -4,8 +4,6 @@ import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.IInternalMediator;
-
 /**
  * An abstract simplified shape object.
  * 

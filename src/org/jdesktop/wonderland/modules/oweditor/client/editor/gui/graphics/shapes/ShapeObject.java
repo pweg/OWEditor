@@ -1,7 +1,6 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes;
 
 import java.awt.Paint;
-import java.awt.image.BufferedImage;
 
 /**
  * An abstract shape object, which is used to represent
@@ -91,6 +90,7 @@ public abstract class ShapeObject extends SimpleShapeObject{
      * 
      * @return A shape object.
      */
+    @Override
     public abstract ShapeObject clone();
     
     /**
@@ -120,7 +120,8 @@ public abstract class ShapeObject extends SimpleShapeObject{
     /**
      * Sets the representational image.
      * 
-     * @param img The image.
+     * @param imgName The image name.
+     * @param dir The image directory.
      */
     public abstract void setImage(String imgName, String dir);
     

@@ -76,8 +76,8 @@ public class ServerSimulator {
                 true,true));
         so = createObject( 
                 (float)-4.331105,  (float)-12.422435, (float)1.4452857,
-                180, 0,0,
-                1, 
+                0, 0,0,
+                5, 
                 (float)1.00, (float)1.00, 
                 "CIRCLE 12", true);
         so.isCircle = true;

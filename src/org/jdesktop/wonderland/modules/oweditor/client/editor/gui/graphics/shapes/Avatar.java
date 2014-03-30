@@ -5,7 +5,6 @@ import java.awt.Paint;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
-import java.awt.image.BufferedImage;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.GUISettings;
 
@@ -14,7 +13,7 @@ public class Avatar extends ShapeObject{
     private long id = 0;
     private Ellipse2D originalShape = null;
     private Shape transformedShape = null;
-    private Paint color = GUISettings.AVATARCOLOR;
+    private final Paint color = GUISettings.AVATARCOLOR;
     private String name = "";
     
     public Avatar(long id, int x, int y, int width, int height){
@@ -39,11 +38,6 @@ public class Avatar extends ShapeObject{
         transformedShape = at.createTransformedShape(originalShape);
         
         g.fill(at.createTransformedShape(originalShape));
-    }
-    
-    private void paintName(Graphics2D g, AffineTransform at) {
-        // Could be implemented, when avatar names should be shown.
-        
     }
 
     @Override

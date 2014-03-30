@@ -43,6 +43,7 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
         this.ic = ic;
     }
     
+    @Override
     public void mousePressed(MouseEvent e) {
         
         Point p = ic.window.revertBack(e.getPoint());
@@ -108,6 +109,7 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
             ic.window.repaint();    
     }
     
+    @Override
     public void mouseClicked(MouseEvent e) {
 
         Point p = e.getPoint();
@@ -118,6 +120,7 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
         }
      }
 
+    @Override
     public void mouseDragged(MouseEvent e) {
         Point p = ic.window.revertBack(e.getPoint());
         
@@ -167,6 +170,7 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
         ic.window.repaint();  
     }
     
+    @Override
     public void mouseMoved(MouseEvent e){
         Point p = ic.window.revertBack(e.getPoint());
         
@@ -181,6 +185,7 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
         ic.window.repaint();  
     }
     
+    @Override
     public void mouseReleased(MouseEvent e){
 
         Point p = ic.window.revertBack(e.getPoint());
@@ -324,7 +329,6 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
                 this.mode = TRANSLATE;
                 break;
             default:
-                return;
         }
     }
     

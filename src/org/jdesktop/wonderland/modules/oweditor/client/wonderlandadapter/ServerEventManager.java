@@ -186,7 +186,7 @@ public class ServerEventManager {
             try {
                 ac.ltm.invokeLateImage(ac.sc, id, ac.fm.getUserDir());
             } catch (ContentRepositoryException ex) {
-                Logger.getLogger(ServerEventManager.class.getName()).log(Level.SEVERE, null, ex);
+                LOGGER.log(Level.SEVERE, null, ex);
             }
         }
         
@@ -226,7 +226,7 @@ public class ServerEventManager {
                 ac.sc.changeImage(id, "", "");
                 
             } catch (ServerCommException ex) {
-                Logger.getLogger(ServerEventManager.class.getName()).log(Level.SEVERE, null, ex);
+                LOGGER.log(Level.SEVERE, null, ex);
             }
             
         }
@@ -305,8 +305,9 @@ public class ServerEventManager {
                 object.setType(IDataObject.AVATAR);
                 object.setWidth(AdapterSettings.avatarSizeX);
                 object.setHeight(AdapterSettings.avatarSizeY);
-            }
-
+            }else if(CellInfoReader.isSphere(cell))
+                object.setType(IDataObject.CIRCLE);
+            
             object.setName(name);
             observer.notifyObjectCreation(object);
         } 

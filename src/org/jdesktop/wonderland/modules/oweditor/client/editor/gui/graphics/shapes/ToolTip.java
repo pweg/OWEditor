@@ -23,8 +23,8 @@ public class ToolTip implements IToolTip{
     private int textY = 0;
     private int fontSize = 0;
     
-    private int marginMouse = GUISettings.TOOLTIPMARGIN;
-    private int marginText = GUISettings.TOOLTIPIN;
+    private final int marginMouse = GUISettings.TOOLTIPMARGIN;
+    private final int marginText = GUISettings.TOOLTIPIN;
     
     public ToolTip(Point coordinates, String text){
         this.text = text;

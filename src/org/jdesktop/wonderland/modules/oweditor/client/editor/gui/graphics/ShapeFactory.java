@@ -4,6 +4,7 @@ import java.awt.Point;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.DraggingEllipse;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.DraggingObject;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.DraggingRect;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.SelectionRectangle;
@@ -83,7 +84,7 @@ public class ShapeFactory {
         
         switch(type){
             case RECTANGLE:
-                return new SelectionRectangle(x,y,width,height); 
+                return new SelectionRectangle(x,y,width,height);   
             default:
                 throw new IllegalArgumentException(
                     "Unknown type");
@@ -113,6 +114,9 @@ public class ShapeFactory {
             case RECTANGLE:
                 return new DraggingRect(x,y,width,height, id, rotation, scale,
                         at);
+            case CIRCLE:
+                return new DraggingEllipse(x,y, width,height, id, rotation, scale, 
+                        at);  
             default:
                 throw new IllegalArgumentException(
                     "Unknown type");  

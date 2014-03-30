@@ -19,7 +19,6 @@ public interface stateDraggingShape {
      * the server uses.
      * 
      * @param shape The shape, which will be probed for the coordinates.
-     * @param at The last global transform.
      * @return The x coordinate.
      */
     public int getX(DraggingObject shape);
@@ -32,7 +31,6 @@ public interface stateDraggingShape {
      * the server uses.
      * 
      * @param shape The shape, which will be probed for the coordinates.
-     * @param at The last global transform.
      * @return The y coordinate.
      */
     public int getY(DraggingObject shape);

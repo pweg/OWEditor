@@ -21,8 +21,6 @@ public interface IWindowToInput {
     /**
      * Shows the popup menu at the specified position.
      * 
-     * @param shapesSelected boolean, should be true, when shapes are selected.
-     * @param copyShapesExist boolean, should be true, when copied shapes are stored.
      * @param x the x position of the popup menu.
      * @param y the y position of the popup menu.
      */
@@ -69,7 +67,7 @@ public interface IWindowToInput {
      * Transforms a point back to the original coordinates,
      * meaning undoing global scaling and translation.
      * 
-     * @param p The point which needs to be reverted.
+     * @param point The point which needs to be reverted.
      * @return The reverted point when possible, null otherwise.
      */
     public Point revertBack(Point point);

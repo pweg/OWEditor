@@ -642,44 +642,44 @@ public class ImportFrame extends javax.swing.JFrame {
         
         try{
             x = Double.valueOf(locationFieldX.getText().replace(",", "."));
-        }catch(Exception ex){
+        }catch(NumberFormatException ex){
             setLabelColorError(xLabel);
             error = true;
         }
         try{
             y = Double.valueOf(locationFieldY.getText().replace(",", "."));
-        }catch(Exception ex){
+        }catch(NumberFormatException ex){
             setLabelColorError(yLabel);
             error = true;
         }
         try{
             z = Double.valueOf(locationFieldZ.getText().replace(",", "."));
-        }catch(Exception ex){
+        }catch(NumberFormatException ex){
             setLabelColorError(zLabel);
             error = true;
         }
         
         try{
             rot_x = Double.valueOf(rotationFieldX.getText().replace(",", "."));
-        }catch(Exception ex){
+        }catch(NumberFormatException ex){
             setLabelColorError(rotXLabel);
             error = true;
         }
         try{
             rot_y = Double.valueOf(rotationFieldY.getText().replace(",", "."));
-        }catch(Exception ex){
+        }catch(NumberFormatException ex){
             setLabelColorError(rotYLabel);
             error = true;
         }
         try{
             rot_z = Double.valueOf(rotationFieldZ.getText().replace(",", "."));
-        }catch(Exception ex){
+        }catch(NumberFormatException ex){
             setLabelColorError(rotZLabel);
             error = true;
         }
         try{
             scale = Double.valueOf(scaleField.getText().replace(",", "."));
-        }catch(Exception ex){
+        }catch(NumberFormatException ex){
             setLabelColorError(scaleLabel);
             error = true;
         }      

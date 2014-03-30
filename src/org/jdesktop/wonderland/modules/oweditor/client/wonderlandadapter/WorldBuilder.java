@@ -58,7 +58,6 @@ public class WorldBuilder {
         }
         
         for(Cell cell : cells){
-            LOGGER.warning(cell.getName());
             createDataObject(cell);
         }
     }

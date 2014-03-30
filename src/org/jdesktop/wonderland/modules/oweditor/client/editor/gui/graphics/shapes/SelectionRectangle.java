@@ -18,8 +18,7 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.GUISettings;
 public class SelectionRectangle extends SimpleShapeObject{
     
     private Rectangle originalShape = null;
-    private Shape transformedShape = null;
-    private Paint color = GUISettings.SELECTIONRECTCOLOR;
+    private final Paint color = GUISettings.SELECTIONRECTCOLOR;
     
     final static BasicStroke dashed = new BasicStroke(
             1.0f,                      // Width
@@ -98,7 +97,7 @@ public class SelectionRectangle extends SimpleShapeObject{
 
     @Override
     public Shape getTransformedShape() {
-        return transformedShape;
+        return null;
     }
 
 }

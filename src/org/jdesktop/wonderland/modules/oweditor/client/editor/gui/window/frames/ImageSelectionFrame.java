@@ -52,6 +52,8 @@ public class ImageSelectionFrame extends javax.swing.JFrame {
     private int active = -1;
     
     private String lastDir = "";
+    
+    private DropTarget dropTarget = null;
 
 
     /**
@@ -145,7 +147,7 @@ public class ImageSelectionFrame extends javax.swing.JFrame {
         //this.setResizable(false);
 
         pack();
-        new DropTarget(this, new DropTargetListener(){
+        dropTarget = new DropTarget(this, new DropTargetListener(){
 
             @Override
             public void dragEnter(DropTargetDragEvent dtde) {}
@@ -163,10 +165,9 @@ public class ImageSelectionFrame extends javax.swing.JFrame {
             @Override
             public void drop(DropTargetDropEvent evt) {
                 evt.acceptDrop(DnDConstants.ACTION_COPY);
-                List<File> droppedFiles = null;
                 
                 try {
-                    droppedFiles = (List<File>) evt
+                    List<File> droppedFiles = (List<File>) evt
                             .getTransferable().getTransferData(
                                     DataFlavor.javaFileListFlavor);
 
@@ -182,11 +183,7 @@ public class ImageSelectionFrame extends javax.swing.JFrame {
                         buttons.get(active).setSelected(true);
                     
                 } catch (UnsupportedFlavorException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
                 } catch (IOException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
                 }
                 
             }
@@ -360,7 +357,7 @@ public class ImageSelectionFrame extends javax.swing.JFrame {
                 else
                     active = -1;
                 
-            }catch(Exception e){
+            }catch(NumberFormatException e){
                 active = -1;
             }
         }

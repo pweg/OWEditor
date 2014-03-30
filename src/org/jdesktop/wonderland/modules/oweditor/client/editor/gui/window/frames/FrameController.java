@@ -38,6 +38,8 @@ public class FrameController implements IFrame{
     protected ImageSelectionFrame imageSelection = null;
     protected PropertiesFrame properties = null;
     
+    private DropTarget dropper = null;
+    
     public FrameController(){
         buildMainFrame();
     }
@@ -50,9 +52,7 @@ public class FrameController implements IFrame{
         mainScrollPanel = new JScrollPane(drawingPan);
         mainScrollPanel.setWheelScrollingEnabled(false);
         
-        new DropTarget(drawingPan, new DropListener());
-
-
+        dropper = new DropTarget(drawingPan, new DropListener());
         mainframe = new MainFrame(mainScrollPanel, this);
     }
     
@@ -66,7 +66,7 @@ public class FrameController implements IFrame{
         
         if(importFrame == null){
             importFrame = new ImportFrame(this, window.getServerList());
-            new DropTarget(importFrame, new DropListener());
+            dropper = new DropTarget(importFrame, new DropListener());
         }
         importFrame.setVisible(true);
     }
@@ -213,10 +213,9 @@ public class FrameController implements IFrame{
         @Override
         public void drop(DropTargetDropEvent evt) {
             evt.acceptDrop(DnDConstants.ACTION_COPY);
-            List<File> droppedFiles = null;
                 
             try {
-                droppedFiles = (List<File>) evt
+                 List<File> droppedFiles = (List<File>) evt
                         .getTransferable().getTransferData(
                                 DataFlavor.javaFileListFlavor);
                     
@@ -229,11 +228,7 @@ public class FrameController implements IFrame{
                 }
                     
             } catch (UnsupportedFlavorException e) {
-                // TODO Auto-generated catch block
-               e.printStackTrace();
             } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
             }
         }
     }

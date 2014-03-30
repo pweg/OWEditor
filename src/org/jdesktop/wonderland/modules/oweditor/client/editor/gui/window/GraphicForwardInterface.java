@@ -73,7 +73,8 @@ public interface GraphicForwardInterface {
      * Updates an image of a shape.
      * 
      * @param id The id of the shape.
-     * @param img The image.
+     * @param imgName The image name.
+     * @param dir The image directory.
      */
     public void updateImage(long id, String imgName, String dir);
 

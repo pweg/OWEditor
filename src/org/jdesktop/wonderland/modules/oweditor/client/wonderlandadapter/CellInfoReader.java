@@ -57,6 +57,15 @@ public class CellInfoReader {
         return v;
     }
     
+    public static boolean isSphere(Cell cell){
+        BoundingVolume bounds = cell.getLocalBounds();
+        
+        if(bounds instanceof BoundingSphere)
+            return true;
+        else 
+            return false;
+    }
+    
     /**
      * Returns the rotation of a given cell.
      * 

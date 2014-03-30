@@ -19,10 +19,6 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.GUISettings;
  * This shape only draws the shape outline and does not fill it.
  * 
  * @author Patrick
- * 
- * Scaling part is from JFreeReport : a free Java reporting library
- * found under
- * http://www.java2s.com/Code/Java/2D-Graphics-GUI/ResizesortranslatesaShape.htm
  *
  */
 public class DraggingRect extends DraggingObject{

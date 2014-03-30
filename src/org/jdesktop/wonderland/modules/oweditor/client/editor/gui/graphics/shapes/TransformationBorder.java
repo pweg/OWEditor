@@ -35,7 +35,7 @@ public class TransformationBorder extends SimpleShapeObject implements ITransfor
     private Shape currentClicked = null;
     private byte currentClickedCode = 0;
     
-    private Paint color = GUISettings.SURROUNDINGBORDERCOLOR;
+    private final Paint color = GUISettings.SURROUNDINGBORDERCOLOR;
 
     //these are the sizes for the tiny corner shapes and the rotation
     //center.
@@ -44,7 +44,7 @@ public class TransformationBorder extends SimpleShapeObject implements ITransfor
     private int tinySizeHalfX = 0;
     private int tinySizeHalfY = 0;
 
-    private int margin = GUISettings.SURROUNDINGBORDERMARGIN;
+    private final int margin = GUISettings.SURROUNDINGBORDERMARGIN;
     private byte mode = 0;
     
     private double rotation = 0;

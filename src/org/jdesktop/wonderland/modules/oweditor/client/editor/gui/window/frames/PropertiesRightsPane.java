@@ -31,6 +31,7 @@ public class PropertiesRightsPane extends JPanel {
 
     /**
      * Creates new form NewJPanel
+     * @param frame The properties frame.
      */
     public PropertiesRightsPane(PropertiesFrame frame) {
         initComponents();

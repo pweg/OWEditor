@@ -38,6 +38,9 @@ public interface ITransformationBorder {
     /**
      * This translates the border, but only after scaling operations have 
      * been completed. 
+     * 
+     * @param distanceX The distance in x.
+     * @param distanceY The distance in y.
      */
     public void setScaleDistance(double distanceX, double distanceY);
 

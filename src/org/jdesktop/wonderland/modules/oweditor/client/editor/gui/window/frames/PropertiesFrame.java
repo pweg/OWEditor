@@ -506,7 +506,7 @@ public class PropertiesFrame extends javax.swing.JFrame {
         if(names == null && coordsX == null && coordsY == null &&
                 coordsZ == null && rotX == null && rotY == null &&
                 rotZ == null && scaleList == null && img_name == null &&
-                rights.size() == 0){
+                rights.isEmpty()){
             setVisible(false);
             return;      
         }
@@ -738,11 +738,11 @@ public class PropertiesFrame extends javax.swing.JFrame {
                 scaleField.setText(scale);
 
             if(initialImg != null){
-                String imgName = object.getImgClass().getName();
+                String imgNameLocal = object.getImgClass().getName();
                 
                 if(initialImg.equals(""))
-                    initialImg = imgName;
-                else if(initialImg.equals(imgName))
+                    initialImg = imgNameLocal;
+                else if(initialImg.equals(imgNameLocal))
                     initialImg = null;
             }
         }

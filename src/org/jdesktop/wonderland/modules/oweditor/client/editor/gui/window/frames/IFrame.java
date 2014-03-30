@@ -81,7 +81,7 @@ public interface IFrame {
      * Sets a new minimal y for the drawing panel,
      * which results in a size change.
      * 
-     * @param x The new minimal y.
+     * @param y The new minimal y.
      */
     void setNewMinY(int y);
 

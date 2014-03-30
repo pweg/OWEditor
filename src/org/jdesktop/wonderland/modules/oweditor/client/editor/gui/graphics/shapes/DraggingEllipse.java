@@ -23,171 +23,248 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.GUISettings;
  */
 public class DraggingEllipse extends DraggingObject{
     
-    private Ellipse2D originalShape = null;
+    private Shape originalShape = null;
+    private Shape scaledShape = null;
     private Shape transformedShape = null;
+    private Shape printShape = null;
     private Paint color = GUISettings.DRAGGINGCOLOR;
-    private long id;
+    private long id = 0;
+    
     private double rotation = 0;
-    private double scale = 0;
+    private double lastRotation = 0;
+    private Point rotationCenter = null;
+    private double initialRotation = 0;
+
+    private double initialScale = 1;
+    private double realScale = 1;
+    private double workingScale = 1;
+    
+    private int initialWidth = 0;
+    private int initialHeight = 0;
+    
+    
+    private stateDraggingShape state = null;
+
+    private double scaleTranslationX = 0;
+    private double scaleTranslationY = 0;
+    
     
     /**
      * Creates a new dragginRect shape object.
      * 
-     * @param x the x coordinate of the shape.
-     * @param y the y coordinate of the shape.
-     * @param width the width of the shape.
-     * @param height the height of the shape.
-     * @param id the id of the shape. Usually this is the id of the shape which
+     * @param x The x coordinate of the shape.
+     * @param y The y coordinate of the shape.
+     * @param width The width of the shape.
+     * @param height The height of the shape.
+     * @param id The id of the shape. Usually this is the id of the shape which
      *               is copied.
+     * @param rotation The rotation of the shape.
+     * @param scale  The scale of the shape.
+     * @param at     The affine transformation, which was used in the last 
+     * draw cycle. 
      */
-    public DraggingEllipse(int x, int y, int width, int height, long id,
-            double rotation){
+    public DraggingEllipse(int x, int y, int width, int height, long id, double rotation,
+            double scale, AffineTransform at){
         originalShape = new Ellipse2D.Double(x, y, width, height);
         this.id = id;
-        this.rotation = rotation;
+        this.initialRotation = rotation;
+        this.initialScale = scale;
+        workingScale = scale;
+        //realScale = scale;
+        initialWidth = width;
+        initialHeight = height;
+        //originalShape = at.createTransformedShape(originalShape);
+        
+        //This is needed for creating the border around dragging shapes
+        //When the border is created, the shapes still have not been drawn.
+        scaledShape = ShapeUtilities.scaleShape(originalShape, initialScale,0,0);
+        transformedShape = ShapeUtilities.rotateShape(scaledShape, initialRotation);  
+        printShape = at.createTransformedShape(transformedShape);
+    }
+
+    @Override
+    public Shape getShape() {
+        return originalShape;
+    }
+    
+    @Override
+    public Shape getTransformedShape() {
+        return transformedShape;
+    }
+
+    @Override
+    public void paintOriginal(Graphics2D g, AffineTransform at) {
+        
+        //Be advised, the following order of this section should not
+        //be disturbed. Otherwise the objects will be all over the place.
+        g.setPaint(color);
+        
+        //AffineTransform af = AffineTransform.getScaleInstance(scale, scale);
+        scaledShape = ShapeUtilities.scaleShape(originalShape, workingScale,
+                scaleTranslationX,scaleTranslationY);
+        transformedShape = ShapeUtilities.rotateShape(scaledShape, initialRotation);
+
+        //This is the rotation, when using the rotate operation.
+        if(rotationCenter != null){
+            AffineTransform transform = new AffineTransform();
+            transform.rotate(Math.toRadians(rotation), 
+                    rotationCenter.getX(), 
+                    rotationCenter.getY());
+            transformedShape = transform.createTransformedShape(transformedShape);
+        }
+
+        printShape = at.createTransformedShape(transformedShape);
+        
+        g.draw(printShape); 
+    }
+
+    /**
+     * NOT IMPLEMENTED for dragging shapes.
+     */
+    @Override
+    public void setLocation(int x, int y) {
+        
+    }
+
+    @Override
+    public void setTranslation(double distance_x, double distance_y) {       
+        originalShape = ShapeUtilities.translateShape(originalShape,
+                distance_x,distance_y);
+        
+        /*
+         * This needs to be done in order for translation affect immediately.
+         * Otherwise all usage of the transformed shape will be from the last
+         * repaint. So, collision detection would be off, for example.
+         */
+        scaledShape = ShapeUtilities.scaleShape(originalShape, workingScale,
+                scaleTranslationX,scaleTranslationY);
+        transformedShape = ShapeUtilities.rotateShape(scaledShape, initialRotation);
+    }
+
+    @Override
+    public int getX() {
+        if(state == null)
+            return originalShape.getBounds().x;
+        else
+            return state.getX(this);
+    }
+    
+
+    @Override
+    public int getY() {
+        if(state == null)
+            return originalShape.getBounds().y;
+        else
+            return state.getY(this);
+    }
+
+    @Override
+    public int getWidth() {
+        return initialWidth;
+    }
+
+    @Override
+    public int getHeight() {
+        return initialHeight;
+    }
+    
+    /**
+     * NOT IMPLEMENTED for dragging shapes.
+     */
+    @Override
+    public void set(int x, int y, int width, int height){
     }
 
     @Override
     public long getID() {
-        // TODO Auto-generated method stub
-        return 0;
+        return id;
     }
 
     @Override
     public void setState(stateDraggingShape state) {
-        // TODO Auto-generated method stub
-        
+        this.state = state;
     }
 
     @Override
     public stateDraggingShape getState() {
-        // TODO Auto-generated method stub
-        return null;
+        return state;
+    }
+    
+    @Override
+    public void setCollision(boolean col){
+        if(!col)
+            color = GUISettings.DRAGGINGCOLOR;
+        else
+            color = GUISettings.COLLISIONCOLOR;
     }
 
     @Override
-    public void setCollision(boolean col) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public void setRotation(double rotation, Point p) {
-        // TODO Auto-generated method stub
-        
+    public void setRotation(double rotation, Point rotationCenter) {
+        this.rotation = rotation;
+        this.rotationCenter = rotationCenter;
     }
 
     @Override
     public double getRotation() {
-        // TODO Auto-generated method stub
-        return 0;
+        return initialRotation+lastRotation;
     }
 
     @Override
     public void setRotationCenterUpdate() {
-        // TODO Auto-generated method stub
+        if(rotationCenter == null)
+            return;
+
+        originalShape = ShapeUtilities.rotateShape(scaledShape, rotation, rotationCenter);
+        lastRotation += rotation;
+        rotation = 0;
+        realScale = (workingScale)*realScale;
+        workingScale = 1;
+        initialScale = 1;
         
     }
 
     @Override
     public void setScale(double scale, double distanceX, double distanceY) {
-        // TODO Auto-generated method stub
-        
+        this.workingScale = initialScale*scale;
+        this.scaleTranslationX = distanceX;
+        this.scaleTranslationY = distanceY; 
     }
 
     @Override
     public void scaleUpdate() {
-        // TODO Auto-generated method stub
-        
+
+        originalShape = ShapeUtilities.scaleShape(originalShape, workingScale, 
+                scaleTranslationX, scaleTranslationY);
+        realScale = (workingScale)*realScale;
+        workingScale = 1;
+        initialScale = 1;
+        scaleTranslationX = 0;
+        scaleTranslationY = 0;
     }
 
     @Override
     public double getScale() {
-        // TODO Auto-generated method stub
-        return 0;
-    }
-
-    @Override
-    public Shape getShape() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Shape getTransformedShape() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public void paintOriginal(Graphics2D g, AffineTransform at) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public void setLocation(int x, int y) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public void setTranslation(double distance_x, double distance_y) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public int getX() {
-        // TODO Auto-generated method stub
-        return 0;
-    }
-
-    @Override
-    public int getY() {
-        // TODO Auto-generated method stub
-        return 0;
-    }
-
-    @Override
-    public int getWidth() {
-        // TODO Auto-generated method stub
-        return 0;
-    }
-
-    @Override
-    public int getHeight() {
-        // TODO Auto-generated method stub
-        return 0;
-    }
-
-    @Override
-    public void set(int x, int y, int width, int height) {
-        // TODO Auto-generated method stub
-        
+        return realScale;
     }
 
     @Override
     public int getTransformedX() {
-        // TODO Auto-generated method stub
-        return 0;
+        return transformedShape.getBounds().x;
     }
 
     @Override
     public int getTransformedY() {
-        // TODO Auto-generated method stub
-        return 0;
+        return transformedShape.getBounds().y;
     }
 
     @Override
     public int getTransformedWidth() {
-        // TODO Auto-generated method stub
-        return 0;
+        return transformedShape.getBounds().width;
     }
 
     @Override
     public int getTransformedHeight() {
-        // TODO Auto-generated method stub
-        return 0;
+        return transformedShape.getBounds().height;
     }
+
 }

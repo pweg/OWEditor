@@ -34,7 +34,7 @@ public class ShapeRectangle extends ShapeObject{
     private boolean isSelected = false;
     
     private Paint color = GUISettings.OBJECTCOLOR;
-    private Paint nameColor = GUISettings.OBJECTNAMECOLOR;
+    private final Paint nameColor = GUISettings.OBJECTNAMECOLOR;
     
     private String name = "";
     private String printName = "";
@@ -54,18 +54,24 @@ public class ShapeRectangle extends ShapeObject{
     //These variables are used to determine, where the name of the object should be.
     private int nameBoundsX = GUISettings.NAMEPOSITIONINX;
     private int nameBoundsAbove = GUISettings.NAMEPOSITIONINY;
-    private int imageMargin = GUISettings.IMGMARGIN;
+    private final int imageMargin = GUISettings.IMGMARGIN;
         
     /**
      * Creates a new ObjectRectangle shape instance.
      * 
      * @param x the x coordinate of the shape.
      * @param y the y coordinate of the shape.
+     * @param z the z coordinate
      * @param width the width of the shape.
      * @param height the height of the shape.
      * @param id the shape id.
      * @param name the name of the shape.
-     * @param img the representational image.
+     * @param rotation the rotation
+     * @param scale the scale
+     * @param imgName the representatinal image name
+     * @param imgDir the representational image directory
+     * @param smi the graphic mediator (used for retrieving 
+     * the representational image).
      */
     public ShapeRectangle(int x, int y, double z,
             int width, int height, long id, String name,
@@ -140,11 +146,11 @@ public class ShapeRectangle extends ShapeObject{
         //moves the shape when affine transform is used on g.
         Shape transformed =  at.createTransformedShape(scaledShape);
         Rectangle r = transformed.getBounds();
-        int imageMargin = (int) Math.round(this.imageMargin*at.getScaleX());
+        int imageMarginLocal = (int) Math.round(this.imageMargin*at.getScaleX());
 
         //Make the image size proportional to the shape size
-        int width = r.width-2*imageMargin;
-        int height = r.height-2*imageMargin;
+        int width = r.width-2*imageMarginLocal;
+        int height = r.height-2*imageMarginLocal;
         int iwidth = img.getWidth();
         int iheight= img.getHeight();
         double scale_w = (double)width/iwidth;
@@ -167,8 +173,8 @@ public class ShapeRectangle extends ShapeObject{
         int x = r.x+(int) Math.round((width-iwidth)/2);
         int y = r.y+(int) Math.round((height-iheight)/2);
         
-        x=Math.max(x+imageMargin, r.x);
-        y=Math.max(y+imageMargin, r.y);
+        x=Math.max(x+imageMarginLocal, r.x);
+        y=Math.max(y+imageMarginLocal, r.y);
         
         //Watermark image
         AlphaComposite alpha = AlphaComposite.getInstance(
@@ -203,14 +209,14 @@ public class ShapeRectangle extends ShapeObject{
     private void paintName(Graphics2D g, AffineTransform at) {
         g.setPaint(nameColor); 
         
-        double scale = at.getScaleX();
+        double scaleFactor = at.getScaleX();
         
         //changes color when selected.
         if(isSelected)
             g.setPaint(GUISettings.SELECTIONCOLOR);
 
         int screenRes = Toolkit.getDefaultToolkit().getScreenResolution();
-        int font_size = (int)Math.round(GUISettings.OBJECTNAMESIZE*scale * screenRes / 72.0);
+        int font_size = (int)Math.round(GUISettings.OBJECTNAMESIZE*scaleFactor * screenRes / 72.0);
 
         Font font = new Font(GUISettings.OBJECTNAMEFONTTYPE, Font.PLAIN, font_size);        
         g.setFont(font);
@@ -220,11 +226,11 @@ public class ShapeRectangle extends ShapeObject{
         
         Shape transformed =  at.createTransformedShape(scaledShape);
         Rectangle r = transformed.getBounds();
-        int x = (int) (r.getX() + Math.round(nameBoundsX*scale));
-        int y = (int) (r.getY() + Math.round(nameBoundsAbove*scale));
+        int x = (int) (r.getX() + Math.round(nameBoundsX*scaleFactor));
+        int y = (int) (r.getY() + Math.round(nameBoundsAbove*scaleFactor));
         
         if(!nameWrapp)
-            nameWrapp(g,scale, font, r);
+            nameWrapp(g,scaleFactor, font, r);
 
         AffineTransform original =  g.getTransform();
         g.rotate(Math.toRadians(rotation), 
