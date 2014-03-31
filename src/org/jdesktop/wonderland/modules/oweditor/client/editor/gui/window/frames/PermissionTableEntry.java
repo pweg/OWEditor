@@ -32,6 +32,8 @@ public class PermissionTableEntry implements IPermissionTableEntry{
         this.view = view;
         this.isEditable = editable;
         this.isEverybody = isEverybody;
+        if(owner)
+            isEditable = false;
     }
 
     @Override

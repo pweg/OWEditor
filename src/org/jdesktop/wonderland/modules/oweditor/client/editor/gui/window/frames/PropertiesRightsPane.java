@@ -345,7 +345,5 @@ public class PropertiesRightsPane extends JPanel {
     private javax.swing.JTable permTable;
     private PermissionTable permTableModel = new PermissionTable();
     // End of variables declaration  
-
-
     
 }

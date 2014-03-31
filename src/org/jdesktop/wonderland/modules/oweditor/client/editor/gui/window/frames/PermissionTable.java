@@ -145,9 +145,10 @@ public class PermissionTable extends AbstractTableModel{
                 return false;
             else
                 return true;
-        }else{
+        }else if(columnIndex >2){
             return entry.isEditable;
         }
+        return true;
     }
     
     @Override
@@ -188,7 +189,6 @@ public class PermissionTable extends AbstractTableModel{
             case 0:
                 if(isEntry((String) value, (String) getValueAt(rowIndex,1))){
                     setValueAt("",rowIndex, 1);
-                    System.out.println("if");
                 }
                 entry.type = (String) value;
                 fireTableCellUpdated(rowIndex, columnIndex);
@@ -202,6 +202,7 @@ public class PermissionTable extends AbstractTableModel{
                 return;
             case 2:
                 entry.owner = (Boolean) value;
+                entry.isEditable = !(Boolean) value;
                 fireTableCellUpdated(rowIndex, columnIndex);
                 return;
             case 3:
