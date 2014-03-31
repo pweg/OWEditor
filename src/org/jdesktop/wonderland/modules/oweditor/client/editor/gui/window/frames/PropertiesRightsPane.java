@@ -145,14 +145,14 @@ public class PropertiesRightsPane extends JPanel {
             );
 
         JComboBox<String> comboBox = new JComboBox<String>();
-        comboBox.addItem("User");
-        comboBox.addItem("UserGroup");
+        comboBox.addItem(BUNDLE.getString("User"));
+        comboBox.addItem(BUNDLE.getString("Group"));
 
         permTable.getColumnModel().getColumn(0).setCellEditor(new DefaultCellEditor(comboBox));
     }// </editor-fold>                        
 
     private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {                                         
-        permTableModel.addEntry("User", "", false, false, 
+        permTableModel.addEntry(BUNDLE.getString("User"), "", false, false, 
                 false, true, true, true, false);
     } 
     private void removeButtonActionPerformed(java.awt.event.ActionEvent evt) {                                         

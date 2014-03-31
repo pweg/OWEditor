@@ -529,7 +529,7 @@ public class ServerCommunication {
      * error.
      * @param cell The cell for which the server state should be fetched.  
      */
-    private CellServerState fetchCellServerState(Cell cell) {
+    public CellServerState fetchCellServerState(Cell cell) {
         // Fetch the setup object from the Cell object. We send a message on
         // the cell channel, so we must fetch that first.
         ResponseMessage response = cell.sendCellMessageAndWait(

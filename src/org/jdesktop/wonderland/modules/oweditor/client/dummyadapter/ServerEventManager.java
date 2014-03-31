@@ -219,7 +219,7 @@ public class ServerEventManager {
             boolean addSubObjects, boolean changeAbilities, boolean move,
             boolean view){
         dui.notifyRightsChange(id, oldType, oldName, type, name, owner, addSubObjects,
-                changeAbilities, move, view);
+                changeAbilities, move, view, false, false);
         
     }
     

@@ -33,7 +33,7 @@ public class Rights implements IRights{
     @Override
     public void set(String type, String name, boolean owner,
             boolean addSubObjects, boolean changeAbilities, boolean move,
-            boolean view) {
+            boolean view, boolean isEditable, boolean isEverybody) {
         this.type = type;
         this.name = name;
         this.isOwner = owner;
@@ -41,6 +41,8 @@ public class Rights implements IRights{
         this.permitAbilityChange = changeAbilities;
         this.permitMove = move;
         this.permitView = view;
+        this.isEditable = isEditable;
+        this.isEverybody = isEverybody;
     }
 
     @Override

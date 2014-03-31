@@ -3,6 +3,11 @@ package org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter;
 import com.jme.math.Vector3f;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.ResourceBundle;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.bind.Marshaller;
@@ -12,6 +17,7 @@ import org.jdesktop.wonderland.client.cell.ComponentChangeListener;
 import org.jdesktop.wonderland.client.cell.MovableComponent;
 import org.jdesktop.wonderland.client.cell.view.AvatarCell;
 import org.jdesktop.wonderland.common.cell.messages.CellServerComponentMessage;
+import org.jdesktop.wonderland.common.cell.state.CellServerState;
 import org.jdesktop.wonderland.common.messages.ErrorMessage;
 import org.jdesktop.wonderland.common.messages.ResponseMessage;
 import org.jdesktop.wonderland.modules.contentrepo.common.ContentRepositoryException;
@@ -22,6 +28,11 @@ import org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter.compone
 import org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter.components.CellChangeListener;
 import org.jdesktop.wonderland.modules.oweditor.common.IDCellComponentServerState;
 import org.jdesktop.wonderland.modules.security.client.SecurityQueryComponent;
+import org.jdesktop.wonderland.modules.security.common.ActionDTO;
+import org.jdesktop.wonderland.modules.security.common.CellPermissions;
+import org.jdesktop.wonderland.modules.security.common.Permission;
+import org.jdesktop.wonderland.modules.security.common.Principal;
+import org.jdesktop.wonderland.modules.security.common.SecurityComponentServerState;
 
 /**
  * This class is used for updating the data package, when
@@ -42,6 +53,8 @@ public class ServerEventManager {
     
     private static final Logger LOGGER =
             Logger.getLogger(GUIEventManager.class.getName());
+    private static final ResourceBundle BUNDLE = ResourceBundle.getBundle(
+            "org/jdesktop/wonderland/modules/oweditor/client/resources/Bundle");
 
     
     /**
@@ -300,7 +313,20 @@ public class ServerEventManager {
             object.setHeight(height);
             object.setName(name);
             object.setImage(img, imgName, imgDir);
+            
+            LinkedHashMap<String, Right> map = getSecurity(cell);
+        
+            for (Map.Entry<String, Right> entry : map.entrySet()) {
+                Right right = entry.getValue();
+                
+                object.addRights(right.type, right.name, 
+                        right.owner, right.permitSubObjects, 
+                        right.permitAbilityChange, right.permitMove, 
+                        right.permitView, right.isEditable,
+                        right.isEverybody);
+            }
 
+            
             if(cell instanceof AvatarCell){
                 object.setType(IDataObject.AVATAR);
                 object.setWidth(AdapterSettings.avatarSizeX);
@@ -312,13 +338,16 @@ public class ServerEventManager {
             observer.notifyObjectCreation(object);
         } 
         
-        SecurityQueryComponent secComp =
+        
+        /*SecurityQueryComponent secComp =
                 cell.getComponent(SecurityQueryComponent.class);
         if(secComp != null){
             for(IAdapterObserver observer : observers){
                 observer.notifyRightComponentCreation(id);
             }
-        }
+           
+        }*/
+        
     }
     
     /**
@@ -360,6 +389,112 @@ public class ServerEventManager {
         for(IAdapterObserver observer : observers){
             observer.notifyRightComponentCreation(id);
         }
+        LinkedHashMap<String, Right> map = getSecurity(cell);
+        
+        for (Map.Entry<String, Right> entry : map.entrySet()) {
+            Right right = entry.getValue();
+            
+            for(IAdapterObserver observer : observers){
+                
+                observer.notifyRightsChange(id, 
+                        null, null, right.name, right.type, 
+                        right.owner, right.permitSubObjects, 
+                        right.permitAbilityChange, 
+                        right.permitMove, right.permitView, right.isEditable,
+                        right.isEverybody);
+            } 
+        }
+    }
+    
+    private LinkedHashMap<String, Right> getSecurity(Cell cell){
+        
+        SecurityQueryComponent component =
+                cell.getComponent(SecurityQueryComponent.class);
+        
+        LinkedHashMap<String, Right> map = new LinkedHashMap<String, Right>();
+        
+        if(component == null)
+            return map;
+       
+        CellServerState cellServerState = ac.sc.fetchCellServerState(cell);
+        
+        if(cellServerState == null)
+            return map ;
+        
+        SecurityComponentServerState state =
+                (SecurityComponentServerState) cellServerState.getComponentServerState(
+                SecurityComponentServerState.class);
+        
+        if(state == null)
+            return map;
+        CellPermissions perms = state.getPermissions();
+        
+        for (Principal p : perms.getOwners()) {
+             
+            Right right = new Right();
+            right.name = p.getId();
+             
+            if(p.getType() == Principal.Type.EVERYBODY){
+                right.name = BUNDLE.getString("Everybody");
+                right.type = BUNDLE.getString("Everybody");
+                right.isEverybody = true;
+            }else if(p.getType() == Principal.Type.GROUP){
+                right.type = BUNDLE.getString("Group");
+            }else if(p.getType() == Principal.Type.USER){
+                right.type = BUNDLE.getString("User");
+            }
+             
+            right.owner = true;
+            right.permitAbilityChange = true;
+            right.permitMove = true;
+            right.permitSubObjects = true;
+            right.permitView = true;
+             
+            map.put(p.getId(), right);
+        }
+        
+        int i=0;
+        
+        for(Permission p : perms.getPermissions()) {
+            String name = p.getPrincipal().getId();
+             
+            Right right = map.get(name);
+             
+            if(right == null){
+                right = new Right();
+                right.name = name;
+                
+                if(p.getPrincipal().getType() == Principal.Type.EVERYBODY){
+                    right.name = BUNDLE.getString("Everybody");
+                    right.type = BUNDLE.getString("Everybody");
+                    right.isEverybody = true;
+                }else if(p.getPrincipal().getType() == Principal.Type.GROUP){
+                    right.type = BUNDLE.getString("Group");
+                }else if(p.getPrincipal().getType() == Principal.Type.USER){
+                    right.type = BUNDLE.getString("User");
+                }
+                map.put(name, right);  
+            }
+            
+            String action = p.getAction().getAction().getName();
+            
+            boolean access = true;
+            if(p.getAccess() == Permission.Access.DENY )
+                access = false;
+            
+            if(action.equals("Move")){
+                right.permitMove = access;
+            }else if(action.equals("View")){
+                right.permitView = access;
+            }else if(action.equals("ChangeCellChildren")){
+                right.permitSubObjects = access;
+            }else if(action.equals("ChangeCellComponent")){
+                right.permitAbilityChange = access;
+            }
+            i++;
+         }
+        
+        return map;
     }
     
     private void securtyComponentRemoved(Cell cell){
@@ -486,6 +621,18 @@ public class ServerEventManager {
                 observer.notifyNameChange(id, cell.getName());
             }
         }
+    }
+    
+    class Right{
+        protected String name = null;
+        protected String type = null;
+        protected boolean owner = false;
+        protected boolean permitSubObjects = true;
+        protected boolean permitAbilityChange = true;
+        protected boolean permitMove = true;
+        protected boolean permitView = true;
+        protected boolean isEditable = true;
+        protected boolean isEverybody = false;
     }
     
 

@@ -459,10 +459,18 @@ public class ImageCellComponentProperties extends JPanel
         // Try to find the pdf/ directory if it exists, otherwise, create it
         ContentCollection root = r.getRepository(session).getUserRoot().getParent();
         
-        ContentCollection imgRoot = (ContentCollection)(
+        ContentCollection directory = (ContentCollection)(
                 (ContentCollection)root.getChild(dir)).getChild(imgString);
         
-        ContentNode node = imgRoot.getChild(filename);
+        if(directory == null)
+            return null;
+        
+        ContentNode node = directory.getChild(filename);
+        
+        if(node == null)
+            return null;
+        
+        
         if(!(node instanceof ContentResource)){
             LOGGER.warning("Downloading File: File is not a Content Resource");
             return null;

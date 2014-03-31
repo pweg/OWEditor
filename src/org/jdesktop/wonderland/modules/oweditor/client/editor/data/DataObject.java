@@ -294,12 +294,14 @@ public class DataObject implements IDataObject{
     public void setRight(String oldType, String oldName,
             String type, String name, boolean owner,
             boolean addSubObjects, boolean changeAbilities, boolean move,
-            boolean view) {
+            boolean view, boolean isEditable, boolean isEverybody) {
         IRights right = getRight(oldName, oldType);
         if(right != null){
-            right.set(type, name, owner, addSubObjects, changeAbilities, move, view);
+            right.set(type, name, owner, addSubObjects, changeAbilities, move, 
+                    view, isEditable, isEverybody);
         }else{
-            addRights(type, name, owner, addSubObjects, changeAbilities, move, view,true,false);
+            addRights(type, name, owner, addSubObjects, changeAbilities, move, 
+                    view,isEditable,isEverybody);
         }
     }
 

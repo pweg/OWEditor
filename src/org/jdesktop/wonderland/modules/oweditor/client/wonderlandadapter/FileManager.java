@@ -251,7 +251,13 @@ public class FileManager {
         ContentCollection directory = (ContentCollection)(
                 (ContentCollection)root.getChild(dirName)).getChild(userDir);
         
+        if(directory == null)
+            return null;
+        
         ContentNode node = directory.getChild(filename);
+        
+        if(node == null)
+            return null;
         
         if(!(node instanceof ContentResource)){
             LOGGER.warning("Downloading File: File is not a Content Resource");

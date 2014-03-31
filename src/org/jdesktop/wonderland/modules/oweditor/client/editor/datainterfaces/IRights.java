@@ -4,7 +4,7 @@ public interface IRights {
     
     public void set(String type, String name, boolean owner,
             boolean addSubObjects, boolean changeAbilities, boolean move,
-            boolean view);
+            boolean view, boolean isEditable, boolean isEverybody);
     
     /**
      * Returns the type of rights owner, aka 

@@ -126,6 +126,8 @@ public interface IAdapterObserver {
      * Notifies a rights change event.
      * 
      * @param id The object id
+     * @param oldType The old rights type.
+     * @param oldName The old name type.
      * @param type The rights type
      * @param name The rights name
      * @param owner The ownership of the object.
@@ -133,11 +135,13 @@ public interface IAdapterObserver {
      * @param changeAbilities The permission to change abilities.
      * @param move The permission to move the object.
      * @param view The permission to view the object.
+     * @param isEditable is editable
+     * @param isEverybody is everybody
      */
     public void notifyRightsChange(long id, String oldType, String oldName,
             String type, String name,
             boolean owner, boolean addSubObjects, boolean changeAbilities,
-            boolean move, boolean view);
+            boolean move, boolean view, boolean isEditable, boolean isEverybody);
 
 
     /**
