@@ -36,6 +36,15 @@ public class SessionManager {
         return session;
     }
     
+    /***
+     * Returns the username.
+     * 
+     * @return The user name.
+     */
+    public String getUserName(){
+        return session.getUserID().getUsername();
+    }
+    
     /**
      * Returns the cell cache of the current session.
      * 

@@ -183,5 +183,12 @@ public interface IAdapterCommunication {
      * @param ids The ids.
      */
     public void addRightsComponent(ArrayList<Long> ids);
+
+    /**
+     * Updates the objects. Used for the rights component
+     * 
+     * @param ids The object ids.
+     */
+    public void updateObjects(ArrayList<Long> ids);
     
 }

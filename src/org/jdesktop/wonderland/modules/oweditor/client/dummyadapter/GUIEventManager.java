@@ -289,4 +289,9 @@ public class GUIEventManager implements GUIObserverInterface{
         ac.sem.notifyRightsRemoval(id, type, name);
     }
 
+    @Override
+    public void updateObjects(long id) {
+        //does nothing
+    }
+
 }

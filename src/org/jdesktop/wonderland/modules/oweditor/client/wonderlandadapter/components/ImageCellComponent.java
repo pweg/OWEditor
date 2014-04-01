@@ -62,11 +62,11 @@ public class ImageCellComponent extends CellComponent {
                 listener.imageChanged(image, dir, cell);
             if(!cell.getName().equals(name)){
                 listener.nameChanged(cell);
+                this.name = cell.getName();
             }
         }
         this.image = image;
         this.dir = dir;
-        this.name = name;
     }
 
     /**

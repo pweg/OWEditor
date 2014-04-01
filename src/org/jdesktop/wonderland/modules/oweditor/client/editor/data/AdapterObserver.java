@@ -96,14 +96,18 @@ public class AdapterObserver implements IAdapterObserver{
     }
 
     @Override
-    public void notifyRightsChange(long id, String oldType,
-            String oldName, String type, String name,
+    public void notifyRightsChange(long id, String type, String name,
             boolean owner, boolean addSubObjects, boolean changeAbilities,
             boolean move, boolean view, boolean isEditable, 
             boolean isEverybody) {
-        dm.rightChange(id, oldType, oldName, 
+        dm.rightChange(id, 
                 type,name, owner, addSubObjects, changeAbilities,
                 move, view, isEditable, isEverybody);        
+    }
+    
+    @Override
+    public void clearRights(long id) {
+        dm.clearRights(id);
     }
 
     @Override

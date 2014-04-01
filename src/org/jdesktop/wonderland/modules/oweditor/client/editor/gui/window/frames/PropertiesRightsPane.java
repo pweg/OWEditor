@@ -15,6 +15,8 @@ import java.util.Set;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IDataObject;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IRights;
@@ -47,7 +49,6 @@ public class PropertiesRightsPane extends JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
     private void initComponents() {
 
-        jScrollPane1 = new javax.swing.JScrollPane();
         permTable = new javax.swing.JTable();
         addButton = new javax.swing.JButton();
         removeButton = new javax.swing.JButton();
@@ -55,10 +56,12 @@ public class PropertiesRightsPane extends JPanel {
         okButton = new javax.swing.JButton();
         resetButton = new javax.swing.JButton();
         cancelButton = new javax.swing.JButton();
-
         permTable.setModel(permTableModel);
-        permTable.setMinimumSize(new Dimension(1000, 100));
-        jScrollPane1.setViewportView(permTable);
+        permTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+
+        jScrollPane1 = new javax.swing.JScrollPane(permTable,  
+                JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, 
+                JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
         addButton.setText(BUNDLE.getString("Add"));
         addButton.addActionListener(new java.awt.event.ActionListener() {
@@ -171,11 +174,6 @@ public class PropertiesRightsPane extends JPanel {
     private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {                                         
         frame.okButtonActionPerformed(evt);
     } 
-    
-/*
-    public ArrayList<PermissionTableEntry> getFurtherActions() {
-        return permTableModel.getEntries();
-    }*/
     
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {                                         
         frame.cancelButtonActionPerformed(evt);

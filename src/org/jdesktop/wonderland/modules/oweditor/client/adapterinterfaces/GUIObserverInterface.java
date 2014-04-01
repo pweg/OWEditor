@@ -250,6 +250,13 @@ public interface GUIObserverInterface {
      * @throws java.lang.Exception
      */
     public void removeRight(long id, String type, String name) throws Exception;
+
+    /**
+     * Updates the object.
+     * 
+     * @param id 
+     */
+    public void updateObjects(long id);
     
 
 }

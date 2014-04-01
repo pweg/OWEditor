@@ -13,6 +13,7 @@ import org.jdesktop.wonderland.client.cell.Cell;
 import org.jdesktop.wonderland.client.cell.CellCache;
 import org.jdesktop.wonderland.common.cell.CellID;
 import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.GUIObserverInterface;
+import org.jdesktop.wonderland.modules.security.client.SecurityQueryComponent;
 
 /**
  * This class is used to receive updates the client does in
@@ -302,7 +303,7 @@ public class GUIEventManager implements GUIObserverInterface{
             } catch (IOException e) {
                 throw new ServerCommException();
             } catch (Exception ex) {
-                Logger.getLogger(GUIEventManager.class.getName()).log(Level.SEVERE, null, ex);
+                LOGGER.log(Level.SEVERE, null, ex);
                 throw new ServerCommException();
             }
         }
@@ -313,19 +314,39 @@ public class GUIEventManager implements GUIObserverInterface{
         id = ac.bm.getActiveID(id);
          
         if(component == GUIObserverInterface.RIGHTSCOMPONENT){
-            ac.sc.addRightsComponent(id);
+            ac.sc.addSecurityComponent(id);
         }
     }
 
-    public void notifyComponentRemoval(long id, byte component) {
+    public void notifyComponentRemoval(long id, byte component) throws Exception{
+        id = ac.bm.getActiveID(id);
+         
+        if(component == GUIObserverInterface.RIGHTSCOMPONENT){
+            ac.sc.deleteComponent(id, SecurityQueryComponent.class);
+        }
+    }
+
+    public void setRight(long id, String oldType, String oldName, 
+            String type, String name, boolean owner, 
+            boolean addSubObjects, boolean changeAbilities, 
+            boolean move, boolean view) throws Exception{
+        id = ac.bm.getActiveID(id);
+        
+        ac.sc.setSecurity(id, ac.secm.changeRight(ac.sc.getCell(id),
+                oldType, oldName, type, name, owner,
+                addSubObjects, changeAbilities, move, view));
+    }
+
+    public void removeRight(long id, String type, String name) throws Exception{
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    public void setRight(long id, String oldType, String oldName, String type, String name, boolean owner, boolean addSubObjects, boolean changeAbilities, boolean move, boolean view) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    public void removeRight(long id, String type, String name) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public void updateObjects(long id) {
+        id = ac.bm.getActiveID(id);
+        try {
+            ac.sem.setSecurity(ac.sc.getCell(id));
+        } catch (ServerCommException ex) {
+            LOGGER.log(Level.SEVERE, null, ex);
+        }
     }
 }

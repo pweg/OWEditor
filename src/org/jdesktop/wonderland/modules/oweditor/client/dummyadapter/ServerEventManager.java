@@ -85,7 +85,7 @@ public class ServerEventManager {
         
         for(Rights rights : sObject.rights){
             
-            object.addRights(rights.getType(), 
+            object.setRight(rights.getType(), 
                     rights.getName(), rights.getOwner(), 
                     rights.getPermAddSubObjects(),
                     rights.getPermChangeAbilities(),
@@ -214,11 +214,14 @@ public class ServerEventManager {
         dui.notifyRightComponentRemoval(id);
     }
     
+    /*
+    not working correctly.
+    */
     public void notifyRightsChange(long id, String oldType,
             String oldName, String type, String name, boolean owner,
             boolean addSubObjects, boolean changeAbilities, boolean move,
             boolean view){
-        dui.notifyRightsChange(id, oldType, oldName, type, name, owner, addSubObjects,
+        dui.notifyRightsChange(id, type, name, owner, addSubObjects,
                 changeAbilities, move, view, false, false);
         
     }

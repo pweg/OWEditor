@@ -27,6 +27,7 @@ public class WonderlandAdapterController implements AdapterControllerMainControl
     protected ServerCommunication sc = null;
     protected LateTransformationManager ltm = null;
     protected CopyNameManager cnm = null;
+    protected SecurityManager secm =null;
     
     public WonderlandAdapterController(){
         
@@ -45,6 +46,7 @@ public class WonderlandAdapterController implements AdapterControllerMainControl
         sm = new SessionManager();
         bm = new BackupManager(sm);
         fm = new FileManager();
+        secm = new SecurityManager(this);
         CellManager.getCellManager().addCellStatusChangeListener(csl);
     }
 

@@ -44,6 +44,8 @@ import org.jdesktop.wonderland.modules.oweditor.common.IDCellComponentServerStat
 import org.jdesktop.wonderland.modules.oweditor.common.ImageCellComponentServerState;
 import org.jdesktop.wonderland.modules.security.client.SecurityComponentFactory;
 import org.jdesktop.wonderland.modules.security.client.SecurityQueryComponent;
+import org.jdesktop.wonderland.modules.security.common.CellPermissions;
+import org.jdesktop.wonderland.modules.security.common.SecurityComponentServerState;
 
 /**
  * This class is used for outgoing communication with the server.
@@ -76,16 +78,8 @@ public class ServerCommunication {
      * @throws org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter.ServerCommException 
      */
     public void translate(long id, Vector3f translation) throws ServerCommException{
-        CellCache cache = ac.sm.getCellCache();
         
-        if (cache == null) {
-            LOGGER.log(Level.WARNING, "Unable to find Cell cache for session {0}", ac.sm.getSession());
-            throw new ServerCommException();
-        }
-        
-        CellID cellid = new CellID(id);
-        Cell cell = cache.getCell(cellid);
-        
+        Cell cell = getCell(id);
         //Do not remove this, because this can shake up the 
         //gui event manager, when creating a cell, because
         //it will throw an exception, which will reach the gui,
@@ -117,16 +111,7 @@ public class ServerCommunication {
      */
     public void rotate(long id, Vector3f rotation) throws ServerCommException{
         
-        CellCache cache = ac.sm.getCellCache();
-
-        if (cache == null) {
-            LOGGER.log(Level.WARNING, "Unable to find Cell cache for session {0}"
-                    , ac.sm.getSession());
-            throw new ServerCommException();
-        }
-        
-        CellID cellid = new CellID(id);
-        Cell cell = cache.getCell(cellid);
+        Cell cell = getCell(id);
                 
         //Do not remove this, because this can shake up the 
         //gui event manager, when creating a cell, because
@@ -158,15 +143,7 @@ public class ServerCommunication {
      */
     public void scale (long id, float scale) throws ServerCommException {
         
-        CellCache cache = ac.sm.getCellCache();
-        
-        if (cache == null) {
-            LOGGER.log(Level.WARNING, "Unable to find Cell cache for session {0}", ac.sm.getSession());
-            throw new ServerCommException();
-        }
-        
-        CellID cellid = new CellID(id);
-        Cell cell = cache.getCell(cellid);
+        Cell cell = getCell(id);
         
         //Do not remove this, because this can shake up the 
         //gui event manager, when creating a cell, because
@@ -187,15 +164,7 @@ public class ServerCommunication {
     }
     
     public void changeName(long id, String name) throws ServerCommException{
-        CellCache cache = ac.sm.getCellCache();
-        
-        if (cache == null) {
-            LOGGER.log(Level.WARNING, "Unable to find Cell cache for session {0}", ac.sm.getSession());
-            throw new ServerCommException();
-        }
-        
-        CellID cellid = new CellID(id);
-        Cell cell = cache.getCell(cellid);
+        Cell cell = getCell(id);
         
         CellServerState state = fetchCellServerState(cell);
         ((CellServerState) state).setName(name);
@@ -210,15 +179,7 @@ public class ServerCommunication {
      */
     public void remove(long id) throws ServerCommException{
         
-        CellCache cache = ac.sm.getCellCache();
-        
-        if (cache == null) {
-            LOGGER.log(Level.WARNING, "Unable to find Cell cache for session {0}", ac.sm.getSession());
-            throw new ServerCommException();
-        }
-        
-        CellID cellid = new CellID(id);
-        Cell cell = cache.getCell(cellid);
+        Cell cell = getCell(id);
         
         if(cell == null)
             throw new ServerCommException();
@@ -270,15 +231,7 @@ public class ServerCommunication {
      * @throws ServerCommException 
      */
     public boolean changeImage(long id, String imgName, String dir) throws ServerCommException{
-        CellCache cache = ac.sm.getCellCache();
-        
-        if (cache == null) {
-            LOGGER.log(Level.WARNING, "Unable to find Cell cache for session {0}", ac.sm.getSession());
-            throw new ServerCommException();
-        }
-        
-        CellID cellid = new CellID(id);
-        Cell cell = cache.getCell(cellid);
+        Cell cell = getCell(id);
         
         //Do not remove this, because this can shake up the 
         //gui event manager, when creating a cell, because
@@ -318,7 +271,6 @@ public class ServerCommunication {
                      LOGGER.log(Level.SEVERE, null, e);
                      throw new ServerCommException();
             }
-            
         }else{
             return false;
         }
@@ -334,22 +286,15 @@ public class ServerCommunication {
      * @throws ServerCommException 
      */
     public void addIDComponent(long cellID, long origID) throws ServerCommException{
-        CellCache cache = ac.sm.getCellCache();
         
-        if (cache == null) {
-            LOGGER.log(Level.WARNING, "Unable to find Cell cache for session {0}", ac.sm.getSession());
-            throw new ServerCommException();
-        }
-        
-        CellID cellid = new CellID(cellID);
-        Cell cell = cache.getCell(cellid);
+        Cell cell = getCell(cellID);
         
         //Do not remove this, because this can shake up the 
         //gui event manager, when creating a cell, because
         //it will throw an exception, which will reach the gui,
         //which is not desireable.
         if(cell == null){
-            LOGGER.warning("No cell found for given id " +cellid);
+            LOGGER.warning("No cell found for given id " +cellID);
             throw new ServerCommException();
         }
         
@@ -375,28 +320,39 @@ public class ServerCommunication {
         }
     }
     
-    void addRightsComponent(long id) throws ServerCommException{
-        CellCache cache = ac.sm.getCellCache();
-        
-        if (cache == null) {
-            LOGGER.log(Level.WARNING, "Unable to find Cell cache for session {0}", ac.sm.getSession());
-            throw new ServerCommException();
-        }
-        
-        CellID cellid = new CellID(id);
-        Cell cell = cache.getCell(cellid);
+    public void addSecurityComponent(long id) throws ServerCommException{
+        Cell cell = getCell(id);
         
         //Do not remove this, because this can shake up the 
         //gui event manager, when creating a cell, because
         //it will throw an exception, which will reach the gui,
         //which is not desireable.
         if(cell == null){
-            LOGGER.warning("No cell found for given id " +cellid);
+            LOGGER.warning("No cell found for given id " +id);
             throw new ServerCommException();
         }
         SecurityQueryComponent idComponent = cell.getComponent(SecurityQueryComponent.class);
         if(idComponent == null){
             addComponent(cell, SecurityQueryComponent.class, securityspi);
+        }
+    }
+    
+    public void setSecurity(long id, CellPermissions perms)throws ServerCommException{
+        Cell cell = getCell(id);
+        
+        LOGGER.warning("1");
+        CellServerState state = fetchCellServerState(cell); 
+        
+        SecurityComponentServerState secState =
+                (SecurityComponentServerState) state.getComponentServerState(
+                SecurityComponentServerState.class);
+        
+        if(secState != null){
+            LOGGER.warning("Setting sec");
+            secState.setPermissions(perms);
+            HashSet<CellComponentServerState> compStateSet = new HashSet();
+            compStateSet.add(secState);
+            sendServerUpdateState(cell, state, compStateSet);
         }
     }
     
@@ -483,15 +439,8 @@ public class ServerCommunication {
      * @throws org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter.ServerCommException 
      */
     public void deleteComponent(long id, Class componentClass) throws ServerCommException{
-        CellCache cache = ac.sm.getCellCache();
-        
-        if (cache == null) {
-            LOGGER.log(Level.WARNING, "Unable to find Cell cache for session {0}", ac.sm.getSession());
-            throw new ServerCommException();
-        }
-        
         CellID cellid = new CellID(id);
-        Cell cell = cache.getCell(cellid);
+        Cell cell = getCell(id);
         
         CellComponentRegistry r = CellComponentRegistry.getCellComponentRegistry();
         CellComponentFactorySPI spi = r.getCellFactoryByStateClass(componentClass);
@@ -528,6 +477,7 @@ public class ServerCommunication {
      * Asks the server for the server state of the cell; returns null upon
      * error.
      * @param cell The cell for which the server state should be fetched.  
+     * @return The state
      */
     public CellServerState fetchCellServerState(Cell cell) {
         // Fetch the setup object from the Cell object. We send a message on
@@ -549,7 +499,7 @@ public class ServerCommunication {
                     response.getClass().getName());
             return null;
          }
-
+        
         // We need to remove the position component first as a special case
         // since we do not want to update it after the cell is created.
         CellServerStateResponseMessage cssrm = (CellServerStateResponseMessage) response;
@@ -560,6 +510,18 @@ public class ServerCommunication {
             state.removeComponentServerState(PositionComponentServerState.class);
         }
         return state;
+    }
+    
+    public Cell getCell(long id) throws ServerCommException{
+        CellCache cache = ac.sm.getCellCache();
+        
+        if (cache == null) {
+            LOGGER.log(Level.WARNING, "Unable to find Cell cache for session {0}", ac.sm.getSession());
+            throw new ServerCommException();
+        }
+        
+        CellID cellid = new CellID(id);
+        return cache.getCell(cellid);
     }
     
     

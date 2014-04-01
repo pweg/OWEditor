@@ -121,13 +121,17 @@ public interface IAdapterObserver {
      */
     public void notifyRightComponentRemoval(long id);
 
+    /**
+     * Clears all rights of one id.
+     * 
+     * @param id The id of the object.
+     */
+    public void clearRights(long id);
 
     /**
      * Notifies a rights change event.
      * 
      * @param id The object id
-     * @param oldType The old rights type.
-     * @param oldName The old name type.
      * @param type The rights type
      * @param name The rights name
      * @param owner The ownership of the object.
@@ -138,8 +142,7 @@ public interface IAdapterObserver {
      * @param isEditable is editable
      * @param isEverybody is everybody
      */
-    public void notifyRightsChange(long id, String oldType, String oldName,
-            String type, String name,
+    public void notifyRightsChange(long id, String type, String name,
             boolean owner, boolean addSubObjects, boolean changeAbilities,
             boolean move, boolean view, boolean isEditable, boolean isEverybody);
 

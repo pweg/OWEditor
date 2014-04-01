@@ -2,6 +2,7 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.data;
 
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.logging.Logger;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IDataObject;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IImage;
@@ -252,18 +253,28 @@ public class DataObject implements IDataObject{
     }
 
     @Override
-    public void addRights(String type, String name, boolean isOwner,
+    public void setRight(String type, String name, boolean isOwner,
             boolean permitSubObjects, boolean permitAbilityChange,
             boolean permitMove, boolean permitView, boolean isEditable,
             boolean isEverybody) {
         if(rights == null)
-            rights = new ArrayList<IRights>();
-        IRights right = new Rights(type, name, isOwner, 
+             rights = new ArrayList<IRights>();
+        
+        Logger.getLogger(DataObject.class.getName()).warning("SET Rights" +name);
+        
+        IRights right = getRight(name, type);
+        
+        if(right != null){
+            right.set(type, name, isOwner, permitSubObjects, 
+                    permitAbilityChange, permitMove, 
+                    permitView, isEditable, isEverybody);
+        }else{
+            right = new Rights(type, name, isOwner, 
                 permitSubObjects, permitAbilityChange,
                 permitMove, permitView, isEditable,
                 isEverybody);
-        rights.add(right);
-        
+            rights.add(right);
+        }     
     }
     
     public void rightComponentCreated(){
@@ -282,6 +293,7 @@ public class DataObject implements IDataObject{
 
     @Override
     public IRights getRight(String name, String type) {
+        
         for(IRights right : rights){
             if(right.getName().equals(name) &&
                     right.getType().equals(type)){
@@ -290,19 +302,10 @@ public class DataObject implements IDataObject{
         }
         return null;
     }
-
-    public void setRight(String oldType, String oldName,
-            String type, String name, boolean owner,
-            boolean addSubObjects, boolean changeAbilities, boolean move,
-            boolean view, boolean isEditable, boolean isEverybody) {
-        IRights right = getRight(oldName, oldType);
-        if(right != null){
-            right.set(type, name, owner, addSubObjects, changeAbilities, move, 
-                    view, isEditable, isEverybody);
-        }else{
-            addRights(type, name, owner, addSubObjects, changeAbilities, move, 
-                    view,isEditable,isEverybody);
-        }
+    
+    public void clearRights(){
+        if(rights != null)
+            rights.clear();
     }
 
 

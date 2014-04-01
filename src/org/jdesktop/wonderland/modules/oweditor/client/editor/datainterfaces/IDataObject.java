@@ -199,7 +199,7 @@ public interface IDataObject extends ITransformedObject{
      * @param isEditable Whether this entry should be editable.
      * @param isEverybody Whether this is an everybody entry.
      */
-    public void addRights(String type, String name, boolean isOwner,
+    public void setRight(String type, String name, boolean isOwner,
             boolean permitSubObjects, boolean permitAbilityChange, 
             boolean permitMove, boolean permitView,
             boolean isEditable, boolean isEverybody);

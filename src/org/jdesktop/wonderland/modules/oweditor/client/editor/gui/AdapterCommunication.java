@@ -454,6 +454,12 @@ public class AdapterCommunication implements IAdapterCommunication{
             redo();
         }
     }
+
+    public void updateObjects(ArrayList<Long> ids) {
+        
+        for(long id : ids)
+            goi.updateObjects(id);
+    }
     
     
 }

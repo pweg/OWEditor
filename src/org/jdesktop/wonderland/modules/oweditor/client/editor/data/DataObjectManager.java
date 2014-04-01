@@ -393,8 +393,7 @@ public class DataObjectManager {
         d.rightComponentRemoved();
     }
 
-    public void rightChange(long id, String oldType, String oldName,
-            String type, String name, boolean owner,
+    public void rightChange(long id, String type, String name, boolean owner,
             boolean addSubObjects, boolean changeAbilities, boolean move,
             boolean view, boolean isEditable, boolean isEverybody) {
 
@@ -402,10 +401,17 @@ public class DataObjectManager {
         if(d == null)
             return;
         
-        d.setRight(oldType, oldName, type,
-                name, owner, addSubObjects, changeAbilities, move,
+        d.setRight(type,name, owner, addSubObjects, changeAbilities, move,
                 view, isEditable, isEverybody);
         
+    }
+    
+    public void clearRights(long id){
+        DataObject d = data.get(id);
+        if(d == null)
+            return;
+        
+        d.clearRights();
     }
 
     public void removeRight(long id, String type, String name) {
