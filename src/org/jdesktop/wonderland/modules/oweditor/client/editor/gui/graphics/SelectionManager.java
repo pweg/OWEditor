@@ -104,10 +104,10 @@ public class SelectionManager {
         int ex = end.x;
         int ey = end.y;
         
-        int width = 0;
-        int height = 0;
-        int x = 0;
-        int y = 0;
+        int width;
+        int height;
+        int x;
+        int y;
 
         if(sx > ex){
             width = sx-ex;

@@ -122,6 +122,11 @@ public class ServerEventManager {
         dui.notifyTranslation(id, so.x, so.y, so.z);
     }
 
+    /**
+     * Called after a copy event.
+     * 
+     * @param object The new object.
+     */
     public void serverCopyEvent(ServerObject object) {
         String name = object.name;
         BackupManager cm = ac.bom;
@@ -141,6 +146,11 @@ public class ServerEventManager {
         createObject(object);
     }
 
+    /**
+     * Rotation event of an object.
+     * 
+     * @param id The id of the object.
+     */
     public void serverRotationEvent(long id) {
         if(dui == null){
             System.out.println("DataInterface is not in the adapter");
@@ -155,7 +165,11 @@ public class ServerEventManager {
         dui.notifyRotation(id, so.rotationX, so.rotationY ,so.rotationZ);
     }
 
-
+    /**
+     * Name change event.
+     * 
+     * @param id Id of the object.
+     */
     public void serverNameChange(Long id) {
         if(dui == null){
             System.out.println("DataInterface is not in the adapter");
@@ -170,6 +184,11 @@ public class ServerEventManager {
         dui.notifyNameChange(id, so.name);
     }
 
+    /**
+     * Scaling event.
+     * 
+     * @param id Object id.
+     */
     public void serverScalingEvent(long id) {
         if(dui == null){
             System.out.println("DataInterface is not in the adapter");
@@ -184,10 +203,18 @@ public class ServerEventManager {
         dui.notifyScaling(id, so.scale);
     }
 
+    /**
+     * Sets the serverlist.
+     * 
+     * @param servers String array containing server names.
+     */
     public void setServerList(String[] servers) {
         dui.setServerList(servers); 
     }
     
+    /**
+     * Sets up the user directory.
+     */
     public void setUserDir(){
         dui.setUserDir(AdapterSettings.IMAGEDIR);
     }
@@ -202,14 +229,33 @@ public class ServerEventManager {
         dui.updateImgLib(img, name, AdapterSettings.IMAGEDIR);
     }
 
+    /**
+     * Image change event.
+     * 
+     * @param id Object id.
+     * @param img The new image.
+     * @param dir The directory.
+     * @param name  The name of the image.
+     */
     public void serverImageChangeEvent(long id, BufferedImage img, String dir,
             String name) {
         dui.notifyImageChange(id, img, name, dir);
     }
 
+    /**
+     * Adds the right component.
+     * 
+     * @param id The objects id.
+     */
     public void addRightsComponent(long id) {
         dui.notifyRightComponentCreation(id);
     }
+    
+    /**
+     * Removes the right component.
+     * 
+     * @param id Object id.
+     */
     public void removeRightsComponent(long id) {
         dui.notifyRightComponentRemoval(id);
     }

@@ -7,7 +7,7 @@ import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.GUIObse
 
 /**
  * This command is used for rotation and translation at the same time.
- *  * 
+ * 
  * @author Patrick
  *
  */

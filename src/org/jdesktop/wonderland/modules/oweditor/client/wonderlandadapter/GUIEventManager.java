@@ -5,7 +5,6 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -23,9 +22,6 @@ import org.jdesktop.wonderland.modules.security.client.SecurityQueryComponent;
  *
  */
 public class GUIEventManager implements GUIObserverInterface{
-    
-    private static final ResourceBundle BUNDLE = ResourceBundle.getBundle(
-            "org/jdesktop/wonderland/modules/oweditor/client/resources/Bundle");
     
     private static final Logger LOGGER =
             Logger.getLogger(GUIEventManager.class.getName());
@@ -47,7 +43,7 @@ public class GUIEventManager implements GUIObserverInterface{
     @Override
     public void notifyTranslationXY(long id, int x, int y ) throws Exception{
         id = ac.bm.getActiveID(id);
-        Cell cell = getCell(id);
+        Cell cell = ac.sc.getCell(id);
         
         if(cell == null)
             throw new GUIEventException();
@@ -58,7 +54,7 @@ public class GUIEventManager implements GUIObserverInterface{
         ac.sc.translate(id, translation);
     }
     
-
+    @Override
     public void notifyTranslation(Long id, double x, double y, double z) throws Exception {
         id = ac.bm.getActiveID(id);
         Vector3f translation = new Vector3f((float) x,(float) z,(float) y);
@@ -74,6 +70,7 @@ public class GUIEventManager implements GUIObserverInterface{
         ac.sc.rotate(id, cell_rot);
     }
 
+    @Override
     public void notifyScaling(long id, double scale) throws Exception {
         id = ac.bm.getActiveID(id);
         ac.sc.scale(id,(float) scale);
@@ -86,7 +83,7 @@ public class GUIEventManager implements GUIObserverInterface{
         try{
             ac.sc.addIDComponent(curid, id);
         }catch(Exception e){
-            LOGGER.warning("ID component not created for " + id);
+            LOGGER.log(Level.WARNING, "ID component not created for {0}", id);
         }
         ac.sc.remove(curid);
     }
@@ -256,23 +253,7 @@ public class GUIEventManager implements GUIObserverInterface{
     @Override
     public void cancelImport() {
         importer.clearModel();
-    }
-    
-    private Cell getCell(long id) throws Exception{
-        CellCache cache = ac.sm.getCellCache();
-        
-        if (cache == null) {
-            LOGGER.log(Level.WARNING, "Unable to find Cell cache for session {0}", ac.sm.getSession());
-            throw new GUIEventException();
-        }
-        CellID cellid = new CellID(id);
-        Cell cell = cache.getCell(cellid);
-        
-        if(cell == null){
-            throw new GUIEventException();
-        }
-        return cell;
-    }
+    }    
 
     @Override
     public boolean imageFileExists(String name) {
@@ -318,6 +299,7 @@ public class GUIEventManager implements GUIObserverInterface{
         }
     }
 
+    @Override
     public void notifyComponentRemoval(long id, byte component) throws Exception{
         id = ac.bm.getActiveID(id);
          
@@ -326,6 +308,7 @@ public class GUIEventManager implements GUIObserverInterface{
         }
     }
 
+    @Override
     public void setRight(long id, String oldType, String oldName, 
             String type, String name, boolean owner, 
             boolean addSubObjects, boolean changeAbilities, 
@@ -337,10 +320,13 @@ public class GUIEventManager implements GUIObserverInterface{
                 addSubObjects, changeAbilities, move, view));
     }
 
+    @Override
     public void removeRight(long id, String type, String name) throws Exception{
-        throw new UnsupportedOperationException("Not supported yet.");
+        id = ac.bm.getActiveID(id);
+        ac.sc.setSecurity(id,ac.secm.removeSecurity(ac.sc.getCell(id), name));
     }
 
+    @Override
     public void updateObjects(long id) {
         id = ac.bm.getActiveID(id);
         try {

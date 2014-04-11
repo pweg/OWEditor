@@ -13,12 +13,12 @@ import javax.swing.KeyStroke;
 
 
 /**
- * This class is the top menu of the main frame.
+ * Builds the top menu.
  * 
  * @author Patrick
  *
  */
-public class TopMenuBuilder implements MenuBuilder{
+public class TopMenuBuilder implements IMenuBuilder{
     
     //tree for menu creation.
     private TreeNode root = null;

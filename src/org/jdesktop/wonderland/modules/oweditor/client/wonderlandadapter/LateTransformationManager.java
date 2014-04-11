@@ -7,9 +7,7 @@
 package org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter;
 
 import com.jme.math.Vector3f;
-import java.io.File;
 import java.util.HashMap;
-import java.util.logging.Logger;
 
 /**
  * This class is used when transformations are not possible, or
@@ -85,6 +83,14 @@ public class LateTransformationManager {
         return translationMap.get(id);
     }
     
+    
+    /**
+     * Gets the translation.
+     * 
+     * @param name The cell name.
+     * @return A vector containing the translation, or null
+     * if there is no entry.
+     */
     public Vector3f getTranslation(String name){
         return copyTranslation.get(name);
     }
@@ -113,21 +119,49 @@ public class LateTransformationManager {
         return -1;
     }
     
+    /**
+     * Removes the translation.
+     * 
+     * @param id The cell id.
+     */
     public void removeTranslate(long id){
         translationMap.remove(id);
     }
     
+    /**
+     * Removes the translation.
+     * 
+     * @param name The cell name.
+     */
     public void removeTranslate(String name){
         copyTranslation.remove(name);
     }
     
+    /**
+     * Removes the rotation.
+     * 
+     * @param id The cells id.
+     */
     public void removeRotate(long id){
         rotationMap.remove(id);
     }
+    
+    /**
+     * Removes the scale.
+     * 
+     * @param id The cells id.
+     */
     public void removeScale(long id){
         scaleMap.remove(id);
     }
     
+    /**
+     * Looks whether the name, or the id is stored here.
+     * 
+     * @param id The id.
+     * @param name The name.
+     * @return True, if the id or the name was found.
+     */
     public boolean containsCell(long id, String name){
         return containsCell(name) || containsCell(id);
         
@@ -142,6 +176,12 @@ public class LateTransformationManager {
                 || scaleMap.containsKey(id);
     }
     
+    /**
+     * Looks whether the id for an image is stored.
+     * 
+     * @param id The id.
+     * @return True, if the id was found, false otherwise.
+     */
     public boolean containsImage(long id){
         return imageMap.containsKey(id);
     }
@@ -165,11 +205,17 @@ public class LateTransformationManager {
             return lateTransform(server, id); 
     }
     
-    public boolean invokeLateImage(ServerCommunication server,long id, String dir){
-        Logger.getLogger(LateTransformationManager.class.getName()).warning("late image invokation");
-        
+    /**
+     * Invokes a late image, if the name, or id was added before.
+     * 
+     * @param server The server communication.
+     * @param id The cell id.
+     * @param dir The user directory.
+     * @return True on success, false otherwise.
+     */
+    public boolean invokeLateImage(ServerCommunication server,long id, 
+            String dir){        
         String img = imageMap.get(id);
-        Logger.getLogger(LateTransformationManager.class.getName()).warning("IMAGE MAP "+ imageMap.size()+ " " + id);
         
         if(img == null)
             return true;
@@ -177,11 +223,9 @@ public class LateTransformationManager {
         try{
             if(server.changeImage(id, img, dir))
                 imageMap.remove(id);
-        }catch(Exception e){
+        }catch(ServerCommException e){
             return false;
         }
-        Logger.getLogger(LateTransformationManager.class.getName()).warning("IMAGE MAP2 "+ imageMap.size());
-       
         return true;
     }
     
@@ -253,14 +297,13 @@ public class LateTransformationManager {
             }
         }
         return b;
-        
     }
 
     /**
      * Adds an image which has to be linked to a cell later.
      * 
      * @param id The cells id.
-     * @param img The image.
+     * @param imgName The image name.
      */
     public void addImage(long id, String imgName) {
         imageMap.put(id, imgName);

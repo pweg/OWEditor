@@ -216,6 +216,7 @@ public interface IDataObject extends ITransformedObject{
      *  
      * @param name The name of the right.
      * @param type The type of the right.
+     * @return The rights instance
      */
     public IRights getRight(String name, String type);
 

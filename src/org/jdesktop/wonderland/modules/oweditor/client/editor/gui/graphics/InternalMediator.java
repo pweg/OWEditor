@@ -9,11 +9,16 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shape
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.SimpleShapeObject;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.IWindowToGraphic;
 
+/**
+ * The internal shape mediator, which is used for communication between
+ * the classes in this package.
+ * 
+ * @author Patrick
+ */
 public class InternalMediator implements IInternalMediator{
     
     private ShapeManager sm = null;
     private SelectionManager ssm = null;
-    private TranslationManager stm = null;
     private IWindowToGraphic window = null;
     
     public InternalMediator() {
@@ -25,15 +30,9 @@ public class InternalMediator implements IInternalMediator{
     }
 
     @Override
-    public void registerTranslationManager(TranslationManager stm) {
-        this.stm = stm;
-    }
-
-    @Override
     public void registerSelectionManager(SelectionManager ssm) {
         this.ssm = ssm;
     }
-
 
     @Override
     public ArrayList<ShapeObject> getAllShapes() {
@@ -106,6 +105,4 @@ public class InternalMediator implements IInternalMediator{
         return window.getImage(name, dir);
     }
     
-    
-
 }

@@ -8,7 +8,7 @@ public interface IAdapterCommunication {
     /**
      * Calls the adapter for an object removal.
      * 
-     * @param id The object id.
+     * @param ids The object ids.
      */
     public void setObjectRemoval(ArrayList<Long> ids);
     
@@ -116,21 +116,6 @@ public interface IAdapterCommunication {
             double scale);
 
     /**
-     * Used during a conflict resolution. Uses an
-     * existing module.
-     * 
-     * @param id The id of the module, which will be copied.
-     *
-    public void importConflictCopy(long id);
-
-    /**
-     * Overwrites a module during conflict resolution.
-     * 
-     * @param id The id of the module, which will be overwritten.
-     *
-    public void importConflictOverwrite(long id);*/
-
-    /**
      * Does an undo action.
      */
     public void undo();
@@ -142,7 +127,7 @@ public interface IAdapterCommunication {
 
     /**
      * TODO currently not used yet.
-     *      * @param name
+     * @param name
      * @return
      */
     public boolean imageExists(String name);
@@ -169,6 +154,7 @@ public interface IAdapterCommunication {
      * @param rotZ The new z rotation.
      * @param scale The new scale.
      * @param imgName The new image name.
+     * @param furtherActions further actions
      */
     public void setProperties(ArrayList<Long> ids, ArrayList<String> names,
             ArrayList<Float> coordsX, ArrayList<Float> coordsY,

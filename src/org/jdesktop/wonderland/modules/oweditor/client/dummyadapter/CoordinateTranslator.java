@@ -6,9 +6,14 @@ import java.awt.geom.Point2D;
 import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.CoordinateTranslatorInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IDataObject;
 
+/**
+ * The coordinate translator, which is used to translate the coordinates
+ * to editor coordiantes and back.
+ * @author Patrick
+ */
 public class CoordinateTranslator implements CoordinateTranslatorInterface{
 
-    private int globalScale = AdapterSettings.INITIAL_SCALE;
+    private final int globalScale = AdapterSettings.INITIAL_SCALE;
     
     @Override
     public Point transformCoordinatesInt(float x, float y, float width,
@@ -38,8 +43,6 @@ public class CoordinateTranslator implements CoordinateTranslatorInterface{
         
         return new Vector3D(x_float, y_float, 0);
     }
-    
-    
 
     @Override
     public double getScale(double scale) {

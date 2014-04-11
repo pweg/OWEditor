@@ -49,7 +49,10 @@ import org.jdesktop.wonderland.modules.contentrepo.common.ContentResource;
 import org.jdesktop.wonderland.modules.oweditor.common.ImageCellComponentServerState;
 
 /**
- * The property sheet for the Image Cell Component.
+ * The property sheet for the Image Cell Component. Warning, this is a prototype
+ * class, which means it was the prototype for the OWEditors image 
+ * getting and setting mechanisms. This means this class may not 
+ * function as desired and is not tested very well.
  */
 @PropertiesFactory(ImageCellComponentServerState.class)
 public class ImageCellComponentProperties extends JPanel
@@ -113,51 +116,49 @@ public class ImageCellComponentProperties extends JPanel
 
         // Fetch the tooltip component state from the Cell server state.
         CellServerState state = editor.getCellServerState();
+        
+        if(state == null)
+            return;
+        
         CellComponentServerState compState = state.getComponentServerState(
                 ImageCellComponentServerState.class);
 
-        // If there is a tooltip component server state (there should be), then
-        // populate its values in the GUI.
-        if (state != null) {
-            ImageCellComponentServerState tss =
-                    (ImageCellComponentServerState) compState;
 
-            // Store away the tooltip text and update the GUI
-            originalImageName = tss.getImage();
-            originalImageDir = tss.getDir();
+        ImageCellComponentServerState tss =
+                (ImageCellComponentServerState) compState;
+
+        // Store away the tooltip text and update the GUI
+        originalImageName = tss.getImage();
+        originalImageDir = tss.getDir();
             
-            if(originalImageName == null){
-                imageInfo.setText("No image url stored");
+        if(originalImageName == null){
+            imageInfo.setText("No image url stored");
+            return;
+        }
+            
+        try {
+            ContentNode fileNode = getForeignFile(originalImageName,
+                    originalImageDir);
+            if(fileNode == null){
+                LOGGER.warning("file node is null");
+                imageInfo.setText("No image was found");
                 return;
             }
-            
-            try {
-                ContentNode fileNode = getForeignFile(originalImageName,
-                        originalImageDir);
-                if(fileNode == null){
-                    LOGGER.warning("file node is null");
-                    imageInfo.setText("No image was found");
-                    return;
-                }
                 
-                InputStream is = ((ContentResource) fileNode).getInputStream();
-                image = ImageIO.read(is);
-                is.close();                
-                
-               // InputStream is = ((ContentResource) fileNode).getInputStream();
-                //image = ImageIO.read(is);
-            } catch (ContentRepositoryException ex) {
-                LOGGER.log(Level.SEVERE, "Problem getting the file root", ex);
-            } catch (IOException ex) {
-                LOGGER.log(Level.SEVERE, "could not read input stream", ex);
-            }
+            InputStream is = ((ContentResource) fileNode).getInputStream();
+            image = ImageIO.read(is);
+            is.close();      
             
-            
-            if(image != null){
-                imageInfo.setText(originalImageDir+"/"+originalImageName);
-                repaint();
-            }      
+        } catch (ContentRepositoryException ex) {
+            LOGGER.log(Level.SEVERE, "Problem getting the file root", ex);
+        } catch (IOException ex) {
+            LOGGER.log(Level.SEVERE, "could not read input stream", ex);
         }
+            
+        if(image != null){
+            imageInfo.setText(originalImageDir+"/"+originalImageName);
+            repaint();
+        }      
     }
 
     /**
@@ -175,7 +176,8 @@ public class ImageCellComponentProperties extends JPanel
         try {
             newImageName = uploadContent(new File(imagePath.getText()));
         } catch (IOException ex) {
-            Logger.getLogger(ImageCellComponentProperties.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ImageCellComponentProperties.class.getName())
+                    .log(Level.SEVERE, null, ex);
             return;
         }
                 

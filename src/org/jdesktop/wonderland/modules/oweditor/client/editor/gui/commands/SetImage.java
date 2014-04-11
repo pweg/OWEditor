@@ -1,10 +1,14 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.commands;
 
 import java.util.ArrayList;
-import java.util.logging.Logger;
 
 import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.GUIObserverInterface;
 
+/**
+ * Image setting command.
+ * 
+ * @author Patrick
+ */
 public class SetImage implements Command{
     
     private ArrayList<Long> ids = null;
@@ -23,7 +27,7 @@ public class SetImage implements Command{
         this.newDir = newDir;
         
         if(ids == null)
-            ids = new ArrayList<Long>();
+            this.ids = new ArrayList<Long>();
     }
 
     @Override
@@ -41,6 +45,14 @@ public class SetImage implements Command{
         execute(goi);
     }
     
+    /**
+     * Sets the image.
+     * 
+     * @param goi The gui observer.
+     * @param dirs The image directories.
+     * @param names The image names.
+     * @throws Exception 
+     */
     private void setImage(GUIObserverInterface goi,
             ArrayList<String> dirs, ArrayList<String> names)
                     throws Exception{

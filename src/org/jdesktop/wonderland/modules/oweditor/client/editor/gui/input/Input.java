@@ -8,6 +8,12 @@ import javax.swing.event.MouseInputAdapter;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.IGraphicToInput;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.IWindowToInput;
 
+/**
+ * Implements the input interface and is used to set/get
+ * listeners and interfaces. Furthermore it creates the input controller.
+ * 
+ * @author Patrick
+ */
 public class Input implements IInput{
     
     private InputController ic = null;

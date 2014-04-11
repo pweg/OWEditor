@@ -177,7 +177,7 @@ public class ServerEventManager {
                     cell.getCellID(), className);
             ResponseMessage response = cell.sendCellMessageAndWait(cscm);
             if (response instanceof ErrorMessage) {
-                LOGGER.warning("ERROR Movable component creation"+response);
+                LOGGER.log(Level.WARNING, "ERROR Movable component creation{0}", response);
             }
         }  
         
@@ -274,7 +274,7 @@ public class ServerEventManager {
             }else{
                 try {
                     ac.sc.deleteComponent(id, IDCellComponentServerState.class);
-                } catch (Exception ex) {
+                } catch (ServerCommException ex) {
                     LOGGER.log(Level.SEVERE, null, ex);
                 }
             }
@@ -365,6 +365,11 @@ public class ServerEventManager {
         imageComponent.registerChangeListener(imageListener);      
     }
     
+    /**
+     * Is called, when a new security component is created.
+     * 
+     * @param cell The cell where the component was created.
+     */
     private void securtyComponentCreated(Cell cell){
         long id = CellInfoReader.getID(cell);
         id = ac.bm.getOriginalID(id);
@@ -389,6 +394,12 @@ public class ServerEventManager {
         }
     }
     
+    /**
+     * Sets the security for a cell by notifying the observers from
+     * the data package.
+     * 
+     * @param cell The cell.
+     */
     public void setSecurity(Cell cell){
         long id = CellInfoReader.getID(cell);
         id = ac.bm.getOriginalID(id);
@@ -413,7 +424,11 @@ public class ServerEventManager {
         
     }
     
-    
+    /**
+     * Is called, when a securtiy component is removed.
+     * 
+     * @param cell The cell.
+     */
     private void securtyComponentRemoved(Cell cell){
         long id = CellInfoReader.getID(cell);
         id = ac.bm.getOriginalID(id);
@@ -541,6 +556,5 @@ public class ServerEventManager {
             }
         }
     }
-    
 
 }

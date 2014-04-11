@@ -130,11 +130,11 @@ public class TransformationManager {
         double width = border.getWidth();
         double height = border.getHeight();
         
-        double new_width = 0;
-        double new_height = 0;
+        double new_width;
+        double new_height;
         
-        double scale_x = 0;
-        double scale_y = 0;
+        double scale_x;
+        double scale_y;
 
         //Case for the four different border edges.
         //(Scale calculation is different for every edge)
@@ -179,15 +179,14 @@ public class TransformationManager {
                 return;
                 
         }
-        double scale = 0;
         
-        scale = Math.max(Math.abs(scale_x), Math.abs(scale_y));
+        double scale = Math.max(Math.abs(scale_x), Math.abs(scale_y));
         
         if(scale < 0.1)
             return;
         
-        double distance_x = 0;
-        double distance_y = 0;
+        double distance_x;
+        double distance_y;
              
         //Case for the four different border edges.
         //(Every edge needs different distances)
@@ -276,12 +275,11 @@ public class TransformationManager {
     private double getAngle(Point center, Point p){
         int x = center.x;
         int y = center.y;
-        double rotation = 0f;
         
         int deltaX = p.x - x;
         int deltaY = p.y - y;
         
-        rotation = -Math.atan2(deltaX, deltaY);
+        double rotation = -Math.atan2(deltaX, deltaY);
         rotation = Math.toDegrees(rotation)+180;
         
         return rotation;

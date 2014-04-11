@@ -64,17 +64,6 @@ public class WindowToFrame implements IWindowToFrame{
     public void registerDataManager(IDataToGUI dm) {
         this.dm  = dm;
     }
-    
-    /*
-    @Override
-    public void importConflictCopy(long id) {
-        wc.adapter.importConflictCopy(id);
-    }
-
-    @Override
-    public void importConflictOverwrite(long id) {
-        wc.adapter.importConflictOverwrite(id);
-    }*/
 
     @Override
     public void drawShapes(Graphics2D g2, AffineTransform at) {
@@ -96,6 +85,7 @@ public class WindowToFrame implements IWindowToFrame{
         return dm.getServerList();
     }
 
+    @Override
     public boolean imageExists(String name) {
         return wc.adapter.imageExists(name);
     }
@@ -129,7 +119,6 @@ public class WindowToFrame implements IWindowToFrame{
             ArrayList<Object> furtherActions) {
         wc.adapter.setProperties(ids, names, coordsX, coordsY, coordsZ, 
                 rotX, rotY, rotZ, scale, imgName, furtherActions);
-        
     }
 
     @Override

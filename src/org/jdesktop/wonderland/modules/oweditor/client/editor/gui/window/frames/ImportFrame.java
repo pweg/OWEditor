@@ -480,19 +480,16 @@ public class ImportFrame extends javax.swing.JFrame {
             @Override
             public void componentResized(ComponentEvent e) {
                 // TODO Auto-generated method stub
-                
             }
 
             @Override
             public void componentMoved(ComponentEvent e) {
                 // TODO Auto-generated method stub
-                
             }
 
             @Override
             public void componentShown(ComponentEvent e) {
                 // TODO Auto-generated method stub
-                
             }
 
             @Override
@@ -708,8 +705,6 @@ public class ImportFrame extends javax.swing.JFrame {
             }
         }
         
-        //
-        
         //make everything final for the thread.
         final double xf = x;
         final double yf = y;
@@ -771,7 +766,6 @@ public class ImportFrame extends javax.swing.JFrame {
         super.setVisible(b);   
         setLocationRelativeTo(fc.mainframe);
         resetLabelColor();
-        
         
         //working means, the choose location button was hit.
         if(b && working){

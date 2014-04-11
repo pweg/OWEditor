@@ -70,6 +70,11 @@ public class DataObjectManager {
         }
     }
     
+    /**
+     * Deletes an object.
+     * 
+     * @param id The objects id.
+     */
     public void removeObject(long id){
         if(data.get(id) == null)
             return;
@@ -94,28 +99,12 @@ public class DataObjectManager {
             return;
            
        float scale = (float)object.getScale();
-       //float old_scale = (float) object.getOldScale();
        
        Point p = ct.transformCoordinatesInt(x, y, object.getWidthf()*scale, 
                object.getHeightf()*scale);
-       /*Point p_old = ct.transformCoordinatesInt(object.getX(), object.getY(), 
-               object.getWidthf()*old_scale, 
-               object.getHeightf()*old_scale);*/
        
        
        boolean new_coords = x != object.getX() || y != object.getY();
-       
-       /*
-       * Looks for dimension change of the world.
-       *
-       if(){
-           //dc.em.setX(p.x, ct.transformWidth(object.getWidthf()));
-           new_coords = true;
-       }
-       if(p.y != p_old.y){
-           //dc.em.setY(p.y, ct.transformHeight(object.getHeightf()));
-           new_coords = true;
-       }*/
           
        if(!new_coords){
            return;
@@ -337,6 +326,12 @@ public class DataObjectManager {
         return point;
     }
 
+    /**
+     * Updates an objects name.
+     * 
+     * @param id The id of the object.
+     * @param name The new name.
+     */
     public void updateName(Long id, String name) {
         DataObject d = data.get(id);
         if(d == null)
@@ -371,6 +366,11 @@ public class DataObjectManager {
         }
     }
 
+    /**
+     * Signals a rights component creation.
+     * 
+     * @param id The id of the object.
+     */
     public void rightComponentCreation(long id) {
         DataObject d = data.get(id);
         if(d == null)
@@ -384,6 +384,11 @@ public class DataObjectManager {
         
     }
 
+    /**
+     * Signals a rights component removal.
+     * 
+     * @param id The id of the object.
+     */
     public void rightComponentRemoval(long id) {
 
         DataObject d = data.get(id);
@@ -393,6 +398,20 @@ public class DataObjectManager {
         d.rightComponentRemoved();
     }
 
+    /**
+     * Signals for a rights change.
+     * 
+     * @param id The id of the object.
+     * @param type The user type.
+     * @param name The user name.
+     * @param owner is owner.
+     * @param addSubObjects Permission
+     * @param changeAbilities Permission
+     * @param move Permission
+     * @param view Permission
+     * @param isEditable if true, this permission will not be editable.
+     * @param isEverybody true, if this is a everybody entry.
+     */
     public void rightChange(long id, String type, String name, boolean owner,
             boolean addSubObjects, boolean changeAbilities, boolean move,
             boolean view, boolean isEditable, boolean isEverybody) {
@@ -403,9 +422,13 @@ public class DataObjectManager {
         
         d.setRight(type,name, owner, addSubObjects, changeAbilities, move,
                 view, isEditable, isEverybody);
-        
     }
     
+    /**
+     * Clear all rights.
+     * 
+     * @param id The id of the object.
+     */
     public void clearRights(long id){
         DataObject d = data.get(id);
         if(d == null)
@@ -414,6 +437,13 @@ public class DataObjectManager {
         d.clearRights();
     }
 
+    /**
+     * Removes a specific right.
+     * 
+     * @param id The id of the object.
+     * @param type The user type.
+     * @param name The user name.
+     */
     public void removeRight(long id, String type, String name) {
         DataObject d = data.get(id);
         if(d == null)

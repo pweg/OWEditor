@@ -4,24 +4,12 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.controller.MainCon
 import org.jdesktop.wonderland.modules.oweditor.client.editor.controllerinterfaces.MainControllerPluginInterface;
 
 /**
- * Starts the testing without OW.
+ * Starts the testing without OWL.
  * 
  * @author Patrick
  *
  */
 public class TestMain {
-    
-    /*
-     * usefull patterns which probably can be implemented:
-     * 
-     *  observer
-     *  mediator
-     *  command: for gui and undo
-     *  visitor: for gui shape/copy/translate manager etc.
-     *  bridge
-     *  proxy
-     * 
-     */
     
     public static void main(String[] args) {
         MainControllerPluginInterface main = new MainController();

@@ -1,6 +1,10 @@
 package org.jdesktop.wonderland.modules.oweditor.client.dummyadapter;
 
-
+/**
+ * A rights class.
+ * 
+ * @author Patrick
+ */
 public class Rights{
     
     private String type = null;

@@ -115,10 +115,20 @@ public class EnvironmentManager {
         this.en = en;
     }
 
+    /**
+     * Sets the server list.
+     * 
+     * @param servers The server names.
+     */
     public void setServerList(String[] servers) {
         this.serverList = servers;
     }
     
+    /**
+     * Returns the server list.
+     * 
+     * @return String array containing the server names.
+     */
     public String[] getServerList(){
         return serverList;
     }

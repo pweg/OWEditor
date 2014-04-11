@@ -89,7 +89,7 @@ public class DummyAdapterController implements AdapterControllerMainControllerIn
                     i.name = fileEntry.getName();
                     imgs.add(i);
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    System.err.println(e);
                 }
             }
         }

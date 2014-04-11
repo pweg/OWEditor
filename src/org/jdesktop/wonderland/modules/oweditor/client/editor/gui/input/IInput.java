@@ -9,13 +9,14 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.IGrap
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.IWindowToInput;
 
 /**
- * This interface is used by the guis main controller
+ * This interface is used by the guis main controller. It is only used
+ * for registering and getting other interfaces as well as listeners.
  * 
  * @author Patrick
  *
  */
 public interface IInput {
-    
+        
     public MouseInputAdapter getMouseListener();
     
     public KeyListener getKeyListener();

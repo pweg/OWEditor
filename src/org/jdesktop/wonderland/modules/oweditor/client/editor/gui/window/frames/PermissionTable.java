@@ -5,6 +5,11 @@ import java.util.ResourceBundle;
 
 import javax.swing.table.AbstractTableModel;
 
+/**
+ * The permission table class, which lists the objects rights.
+ * 
+ * @author Patrick
+ */
 public class PermissionTable extends AbstractTableModel{
 
     private static final ResourceBundle BUNDLE = ResourceBundle.getBundle(
@@ -37,15 +42,32 @@ public class PermissionTable extends AbstractTableModel{
         }
     }
     
+    /**
+     * Returns the entries made in the table.
+     * 
+     * @return  A list of entries.
+     */
     public ArrayList<PermissionTableEntry> getEntries(){
         return rightsList;
     }
     
+    /**
+     * Adds an entry to the table.
+     * 
+     * @param type Usertype
+     * @param name Username
+     * @param owner is owner
+     * @param addSubObjects Permission
+     * @param changeAbilities Permission
+     * @param move Permission
+     * @param view Permission
+     * @param editable true, if it should be editable, false otherwise.
+     * @param isEverybody true, if it is the everybody entry, false otherwise.
+     */
     public void addEntry(String type, String name, boolean owner, 
             boolean addSubObjects, boolean changeAbilities,
             boolean move, boolean view, boolean editable, boolean
             isEverybody){
-        
         
         PermissionTableEntry entry = new PermissionTableEntry(type,
                 name, owner, addSubObjects, changeAbilities,
@@ -57,6 +79,11 @@ public class PermissionTable extends AbstractTableModel{
                 rightsList.size() - 1);
     }
     
+    /**
+     * Returns a list containing new entries.
+     * 
+     * @return The list.
+     */
     public ArrayList<PermissionTableEntry> getNewEntries(){
         ArrayList<PermissionTableEntry> table = 
                 new ArrayList<PermissionTableEntry>();
@@ -67,10 +94,16 @@ public class PermissionTable extends AbstractTableModel{
                 entry.isNew = false;
             }
         }
-        
         return table;
     }
     
+    /**
+     * Searches for an entry.
+     * 
+     * @param type The usertype.
+     * @param name The username.
+     * @return True, if such an entry already exists, false otherwise.
+     */
     public boolean isEntry(String type, String name){
         for(PermissionTableEntry entry : rightsList){
             if(entry.name.equals(name) && entry.type.equals(type))
@@ -79,6 +112,11 @@ public class PermissionTable extends AbstractTableModel{
         return false;
     }
     
+    /**
+     * Removes an entry.
+     * 
+     * @param index The index to remove the entry.
+     */
     public void removeEntry(int index){
         
         if(index == -1)
@@ -92,6 +130,9 @@ public class PermissionTable extends AbstractTableModel{
         this.fireTableRowsDeleted(index, index);
     }
     
+    /**
+     * Clears the table.
+     */
     public void clear() {
         int size = rightsList.size();
 

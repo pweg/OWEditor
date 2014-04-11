@@ -1,5 +1,10 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.frames;
 
+/**
+ * This is a permission table entry, which stores all important rights stuff.
+ * 
+ * @author Patrick
+ */
 public class PermissionTableEntry implements IPermissionTableEntry{
 
     protected String oldName;
@@ -59,10 +64,8 @@ public class PermissionTableEntry implements IPermissionTableEntry{
             return false;
         if(entry.isEditable != isEditable)
             return false;
-        if(entry.isEverybody != isEverybody)
-            return false;
         
-        return true;
+        return (entry.isEverybody == isEverybody);
     }
     
     @Override

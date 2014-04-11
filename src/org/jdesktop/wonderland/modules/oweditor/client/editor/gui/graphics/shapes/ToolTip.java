@@ -12,6 +12,12 @@ import java.awt.geom.Rectangle2D;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.GUISettings;
 
+/**
+ * This class represents the tooltip shape, which shows up on hovering
+ * over an object.
+ * 
+ * @author Patrick
+ */
 public class ToolTip implements IToolTip{
     
     private Point coordinates = null;
@@ -29,8 +35,6 @@ public class ToolTip implements IToolTip{
     public ToolTip(Point coordinates, String text){
         this.text = text;
         this.coordinates = coordinates;
-        
-
     }
     
     @Override
@@ -58,7 +62,6 @@ public class ToolTip implements IToolTip{
         
         g.setPaint(GUISettings.TOOLTIPTEXTCOLOR);
         g.draw(transformed);
-        
 
         textX = (int) (transformed.getBounds().getX() + marginText);
         textY = (int) (transformed.getBounds().getY() + marginText+fontSize);
@@ -74,7 +77,6 @@ public class ToolTip implements IToolTip{
         g.transform(invert);
         g.drawString(text, textX, textY);
         g.setTransform(original);
-        
     }
     
     /**
@@ -84,8 +86,6 @@ public class ToolTip implements IToolTip{
      * @param g The graphics2d instance.
      */
     private void createRectangle(Graphics2D g){
-
-
         int screenRes = Toolkit.getDefaultToolkit().getScreenResolution();
         fontSize = (int)Math.round(GUISettings.OBJECTNAMESIZE * screenRes / 72.0);
 

@@ -2,6 +2,11 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces;
 
 import java.awt.image.BufferedImage;
 
+/**
+ * The image interface.
+ * 
+ * @author Patrick
+ */
 public interface IImage {
     
     /**

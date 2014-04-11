@@ -4,6 +4,11 @@ import java.util.ArrayList;
 
 import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.GUIObserverInterface;
 
+/**
+ * Command for setting the objects name.
+ * 
+ * @author Patrick
+ */
 public class SetName implements Command{
     
     private ArrayList<Long> ids = null;
@@ -36,6 +41,13 @@ public class SetName implements Command{
         execute(goi);
     }
     
+    /**
+     * Sets the name.
+     * 
+     * @param goi The gui observer.
+     * @param names The names to set.
+     * @throws Exception 
+     */
     private void setName(GUIObserverInterface goi, ArrayList<String> names)            
             throws Exception{
         int failcount = 0;

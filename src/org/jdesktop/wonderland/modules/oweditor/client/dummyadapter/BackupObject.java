@@ -1,5 +1,10 @@
 package org.jdesktop.wonderland.modules.oweditor.client.dummyadapter;
 
+/**
+ * Backup object class for the backup manager.
+ * 
+ * @author Patrick
+ */
 public class BackupObject {
     
     private double rotationX = 0;

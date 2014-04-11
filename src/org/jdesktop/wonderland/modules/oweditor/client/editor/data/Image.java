@@ -4,6 +4,11 @@ import java.awt.image.BufferedImage;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IImage;
 
+/**
+ * The image class, implementing the image interface.
+ * 
+ * @author Patrick
+ */
 public  class Image implements IImage{
     
     private BufferedImage img = null;

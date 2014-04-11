@@ -4,6 +4,12 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IDa
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IImage;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.ITransformedObject;
 
+/**
+ * This class is for transformed objects, that contain the transformed
+ * coordinates for the gui package.
+ * 
+ * @author Patrick
+ */
 public class TransformedObject implements ITransformedObject{
 
     private int x = 0;
@@ -35,7 +41,6 @@ public class TransformedObject implements ITransformedObject{
         this.img = img;
     }
     
-    
     @Override
     public int getX() {
         return x;
@@ -53,7 +58,6 @@ public class TransformedObject implements ITransformedObject{
 
     @Override
     public double getRotation() {
-        // TODO Auto-generated method stub
         return rotation;
     }
 

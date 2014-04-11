@@ -12,10 +12,15 @@ import javax.swing.KeyStroke;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.IWindowToMenu;
 
+/**
+ * The menu controller, which builds the menus.
+ * 
+ * @author Patrick
+ */
 public class MenuController implements IMenu{
 
-    private MenuBuilder topBuilder = null;
-    private MenuBuilder popupBuilder = null;
+    private IMenuBuilder topBuilder = null;
+    private IMenuBuilder popupBuilder = null;
     private JPopupMenu popupMenu = null;
     private JItemManager itemManager = null;
     private IWindowToMenu window = null;

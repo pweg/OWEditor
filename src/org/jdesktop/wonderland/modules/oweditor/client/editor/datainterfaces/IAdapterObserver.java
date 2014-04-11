@@ -103,7 +103,8 @@ public interface IAdapterObserver {
      * Updates the image library of the user.
      * 
      * @param img A new image.
-     * @param name 
+     * @param name The name of the image.
+     * @param dir The name of the directory
      */
     public void updateImgLib(BufferedImage img, String name, String dir);
 
@@ -146,7 +147,6 @@ public interface IAdapterObserver {
             boolean owner, boolean addSubObjects, boolean changeAbilities,
             boolean move, boolean view, boolean isEditable, boolean isEverybody);
 
-
     /**
      * Removes one right entry.
      * 
@@ -155,8 +155,5 @@ public interface IAdapterObserver {
      * @param name The rights name.
      */
     public void notifyRightsRemoval(long id, String type, String name);
-
-
-    
 
 }

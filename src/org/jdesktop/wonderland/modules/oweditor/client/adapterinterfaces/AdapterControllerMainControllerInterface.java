@@ -39,6 +39,11 @@ public interface AdapterControllerMainControllerInterface {
      */
     public GUIObserverInterface getClientUpdateInterface();
     
+    /**
+     * Returns the instace of the coordiante translator.
+     * 
+     * @return The translator.
+     */
     public CoordinateTranslatorInterface getCoordinateTranslator();
     
 

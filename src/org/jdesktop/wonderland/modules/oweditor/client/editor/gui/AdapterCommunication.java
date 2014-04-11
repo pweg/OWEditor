@@ -341,13 +341,17 @@ public class AdapterCommunication implements IAdapterCommunication{
         executeCom(command);
     }
     
-    
-    
-
+    /**
+     * Builds the rights command.
+     * 
+     * @param ids The ids to update the rights.
+     * @param action The permission table entries.
+     * @return The command.
+     */
     private Command createRightsCom(ArrayList<Long> ids,
             IPermissionTableEntry action) {
         
-        if(ids == null || ids.size() == 0)
+        if(ids == null || ids.isEmpty())
             return null;
         
         IDataObject o = dm.getObject(ids.get(0));
@@ -359,7 +363,7 @@ public class AdapterCommunication implements IAdapterCommunication{
         //shows similar rights.
         IRights right = o.getRight(name, type);
         
-        Command com = null;
+        Command com;
         if(right == null){
             com = new SetRights(ids, null, null, false,false,false,false,false,
                    action.getType(),  action.getName(), action.getOwner(),
@@ -390,7 +394,6 @@ public class AdapterCommunication implements IAdapterCommunication{
             Logger.getLogger(AdapterCommunication.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
 
     /**
      * Executes a command.
@@ -455,6 +458,12 @@ public class AdapterCommunication implements IAdapterCommunication{
         }
     }
 
+    /**
+     * Updates the objects, which is used currently only for the rights,
+     * which is called, when the properties frame is opened.
+     * 
+     * @param ids The ids to update.
+     */
     public void updateObjects(ArrayList<Long> ids) {
         
         for(long id : ids)

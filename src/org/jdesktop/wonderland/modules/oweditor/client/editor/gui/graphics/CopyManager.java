@@ -20,6 +20,11 @@ public class CopyManager {
         copyShapes = new ArrayList<ShapeObject>();
     }
     
+    /**
+     * Initializes a copy.
+     * 
+     * @return The list of ids of shapes that are copied.
+     */
     public ArrayList<Long> initilaizeCopy() {
         copyShapes.clear();
         ArrayList<ShapeObject> shapes = smi.getSelectedShapes();
@@ -32,12 +37,15 @@ public class CopyManager {
             
             ids.add(shape.getID());
         }
-        
         return ids;
-       
     }
     
-    public ArrayList<ShapeObject>getCopyShapes(){
+    /**
+     * Returns shapes that are copied.
+     * 
+     * @return A list of shapes.
+     */
+    public ArrayList<ShapeObject> getCopyShapes(){
         return copyShapes;
     }
 

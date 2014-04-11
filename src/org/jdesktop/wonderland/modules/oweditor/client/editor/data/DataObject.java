@@ -2,14 +2,14 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.data;
 
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-import java.util.logging.Logger;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IDataObject;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IImage;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IRights;
 
 /**
- * This class houses all necessary data of an virtual world item.
+ * This class houses all necessary data of an virtual world item and 
+ * also contains the original coordinates.
  * 
  * @author Patrick
  *
@@ -230,6 +230,7 @@ public class DataObject implements IDataObject{
         rotationZ = rotation;
     }
 
+    @Override
     public double getRotation() {
         return rotationX;
     }
@@ -259,8 +260,6 @@ public class DataObject implements IDataObject{
             boolean isEverybody) {
         if(rights == null)
              rights = new ArrayList<IRights>();
-        
-        Logger.getLogger(DataObject.class.getName()).warning("SET Rights" +name);
         
         IRights right = getRight(name, type);
         
@@ -307,7 +306,6 @@ public class DataObject implements IDataObject{
         if(rights != null)
             rights.clear();
     }
-
 
     public void removeRight(String type, String name){
         

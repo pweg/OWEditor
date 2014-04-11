@@ -70,7 +70,8 @@ public class ServerObject {
         this.rights = new ArrayList<Rights>();
     }
     
-    public ServerObject clone(){
+    @Override
+    public ServerObject clone() throws CloneNotSupportedException{
         return new ServerObject(this.id, this.x,this.y,this.z, this.rotationX,
                 this.rotationY, this.rotationZ,
                 this.scale, this.width, this.height, this.name, this.image,

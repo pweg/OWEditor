@@ -19,6 +19,7 @@ public class WorldBuilder {
     /**
      * Creates a new WorldBuilder instance.
      * 
+     * @param ac adapter controller instance.
      * @param sua: a serverUpdate instance.
      */
     public WorldBuilder( DummyAdapterController ac, ServerEventManager sua){
@@ -35,6 +36,9 @@ public class WorldBuilder {
         initShapes();
     }
     
+    /**
+     * Sets the serverlist.
+     */
     public void setServerList(){
         
         String[] servers = new String[1];

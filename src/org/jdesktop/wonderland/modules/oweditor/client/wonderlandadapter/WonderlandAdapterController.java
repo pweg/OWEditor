@@ -11,6 +11,7 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IAd
 
 /**
  * The adapter controller class, which initiallizes the adapter.
+ * 
  * @author Patrick
  *
  */

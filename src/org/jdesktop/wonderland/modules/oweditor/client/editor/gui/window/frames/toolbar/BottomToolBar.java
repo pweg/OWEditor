@@ -5,6 +5,11 @@ import java.awt.Dimension;
 import javax.swing.JLabel;
 import javax.swing.JToolBar;
 
+/**
+ * This is the bottom toolbar, which houses the mouse coordinates.
+ * 
+ * @author Patrick
+ */
 public class BottomToolBar extends JToolBar{
    
     private static final long serialVersionUID = 1L;

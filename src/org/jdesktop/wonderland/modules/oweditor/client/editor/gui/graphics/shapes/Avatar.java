@@ -8,6 +8,11 @@ import java.awt.geom.Ellipse2D;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.GUISettings;
 
+/**
+ * The 2d graphic implementation of an avatar.
+ * 
+ * @author Patrick
+ */
 public class Avatar extends ShapeObject{
     
     private long id = 0;

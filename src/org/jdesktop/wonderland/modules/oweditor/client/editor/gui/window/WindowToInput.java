@@ -85,6 +85,12 @@ public class WindowToInput implements IWindowToInput {
         menu.setItemsEnabledCopy(copyShapesExist);
     }
     
+    /**
+     * Sets the input state type. Currently only used for 
+     * the import state.
+     * 
+     * @param state The state
+     */
     public void setState(stateInput state){
         this.state  = state;
     }

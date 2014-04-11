@@ -7,7 +7,8 @@
 package org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter;
 
 /**
- *
+ * A file info class.
+ * 
  * @author Patrick
  */
 public class FileInfo {

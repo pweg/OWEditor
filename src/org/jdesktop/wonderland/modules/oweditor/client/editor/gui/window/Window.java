@@ -20,7 +20,6 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.frames.
  */
 public class Window extends GraphicForward implements IWindow {
     
-    
     private WindowController fc = null;
     private IFrame frame = null;
     
@@ -109,5 +108,4 @@ public class Window extends GraphicForward implements IWindow {
     public void updateRightsComponent(long id) {
         this.frame.updateRightsComponent(id);
     }
-
 }

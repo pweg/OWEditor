@@ -11,7 +11,10 @@ import java.util.ResourceBundle;
 import org.jdesktop.wonderland.client.comms.WonderlandSession;
 
 /**
- *
+ * Is used for creating copy names, which is needed in order for
+ * copied cells to be recognized, because OWL does not return an id
+ * for a copied cell.
+ * 
  * @author Patrick
  */
 public class CopyNameManager {
@@ -21,7 +24,7 @@ public class CopyNameManager {
     
     private LinkedHashMap<Long, Integer> copies = null;
     
-    private String separator = "|";
+    private final String separator = "|";
     
     public CopyNameManager(){
         copies = new LinkedHashMap<Long, Integer>();
@@ -53,6 +56,14 @@ public class CopyNameManager {
         return name;
     }
     
+    /**
+     * Creates a name for undo.
+     * 
+     * @param session The session.
+     * @param id The id.
+     * @param name The name.
+     * @return  The name of the undo cell.
+     */
     public String createUndoName(WonderlandSession session, long id, String name){
         return name + separator+"ID"+ session.getID()+"_"+id;
     }

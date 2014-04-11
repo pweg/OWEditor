@@ -3,6 +3,11 @@ package org.jdesktop.wonderland.modules.oweditor.client.dummyadapter;
 import java.awt.image.BufferedImage;
 import java.util.LinkedHashMap;
 
+/**
+ * Manages the images for testing purposes.
+ * 
+ * @author Patrick
+ */
 public class ImageManager {
     
     LinkedHashMap<String,LinkedHashMap<String, BufferedImage>> imgs = null;
@@ -18,6 +23,13 @@ public class ImageManager {
         return imgs.get(path).containsKey(name);
     }
     
+    /**
+     * "Adds" images, but does not store them anywhere on the hdd.
+     * 
+     * @param path The path.
+     * @param name The name of the image.
+     * @param img The image itself.
+     */
     public void addImage(String path, String name, BufferedImage img){
         LinkedHashMap<String, BufferedImage> map = null;
         if(imgs.containsKey(path))

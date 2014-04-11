@@ -9,7 +9,8 @@ import org.jdesktop.wonderland.client.cell.Cell;
 import org.jdesktop.wonderland.client.cell.TransformChangeListener;
 
 /**
- *
+ * A listener for cell transfomation changes.
+ * 
  * @author Patrick
  */
 public class TransformListener implements TransformChangeListener{

@@ -9,7 +9,9 @@ package org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter;
 import com.jme.math.Vector3f;
 
 /**
- *
+ * A simple class, which adds width and height to the normal
+ * vector3f.
+ * 
  * @author Patrick
  */
 public class Vector3fInfo extends Vector3f{

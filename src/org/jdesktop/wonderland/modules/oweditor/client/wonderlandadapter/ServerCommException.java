@@ -7,7 +7,8 @@
 package org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter;
 
 /**
- *
+ * Server communication exception
+ * 
  * @author Patrick
  */
 public class ServerCommException extends Exception{

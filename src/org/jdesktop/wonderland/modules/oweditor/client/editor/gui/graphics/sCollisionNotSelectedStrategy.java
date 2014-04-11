@@ -6,7 +6,11 @@ import java.util.ArrayList;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.DraggingObject;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.ShapeObject;
 
-
+/**
+ * This strategy should be used, when the shape should not collide
+ * with objects currently selected, but with every other objects.
+ * @author Patrick
+ */
 public class sCollisionNotSelectedStrategy implements sCollisionStrategy {
     
     private IInternalMediator smi = null;
@@ -55,17 +59,5 @@ public class sCollisionNotSelectedStrategy implements sCollisionStrategy {
         }
         return is_collision;
     }
-    
-    /*
-    @Override
-    public void createDraggingShapes(ArrayList<ShapeObject> selectedShapes) {
-        
-        //stm.createDraggingShapes(selectedShapes);
-        
-        if(smi.isDraggingShapesEmpty()){
-            smi.setDraggingShapes(smi.createDraggingShapes(selectedShapes));            
-        }
-        
-    }*/
 
 }

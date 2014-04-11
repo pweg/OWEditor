@@ -8,7 +8,11 @@ import java.util.logging.Logger;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IImage;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.IUserObserver;
 
-
+/**
+ * Manages everything concerning the user.
+ * 
+ * @author Patrick
+ */
 public class UserDataManager {
     
     private static final Logger LOGGER =
@@ -83,7 +87,7 @@ public class UserDataManager {
         if(dir.equals(userDir))
             addImgToUserdir(img, name);
         else{
-            HashMap<String, IImage> lib = null;
+            HashMap<String, IImage> lib;
             
             if(foreignImgLib.containsKey(dir))
                 lib = foreignImgLib.get(dir);
@@ -107,7 +111,7 @@ public class UserDataManager {
             return;
         }
         
-        int i=0;
+        int i;
         for(i=0; i<imageLib.size(); i++){
             if(imageLib.get(i).getName().equals(name)){
                 imageLib.remove(i);

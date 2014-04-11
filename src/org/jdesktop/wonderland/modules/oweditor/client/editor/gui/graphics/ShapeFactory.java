@@ -2,7 +2,6 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics;
 
 import java.awt.Point;
 import java.awt.geom.AffineTransform;
-import java.awt.image.BufferedImage;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.DraggingEllipse;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.DraggingObject;
@@ -45,10 +44,15 @@ public class ShapeFactory {
      * @param type The type of shape that should be created.
      * @param x The x coordinate.
      * @param y The y coordinate.
+     * @param z The z coordinate.
      * @param width The width of the rectangle.
      * @param height The height of the rectangle.
      * @param id The id for the object, which has to be the same id as in the virtual world.
-     * @param img The representational image.
+     * @param name The name of the object.
+     * @param rotation The rotation.
+     * @param scale The scale.
+     * @param imgName The representational image.
+     * @param imgDir The images directory
      * @return The created shape.
      */
     public ShapeObject createShapeObject(int type, int x, int y, double z, int width, int height, 

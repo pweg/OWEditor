@@ -54,8 +54,8 @@ public class ImageCellComponent extends CellComponent {
     @Override
     public void setClientState(CellComponentClientState clientState) {
         super.setClientState(clientState);
-        String image = ((ImageCellComponentClientState) clientState).getImage();
-        String dir = ((ImageCellComponentClientState) clientState).getDir();
+        image = ((ImageCellComponentClientState) clientState).getImage();
+        dir = ((ImageCellComponentClientState) clientState).getDir();
         
         for(CellChangeListener listener : listenerList){
             if(!image.equals(this.image) || !dir.equals(this.dir))
@@ -65,8 +65,6 @@ public class ImageCellComponent extends CellComponent {
                 this.name = cell.getName();
             }
         }
-        this.image = image;
-        this.dir = dir;
     }
 
     /**

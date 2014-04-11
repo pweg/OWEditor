@@ -4,6 +4,11 @@ import java.util.concurrent.Callable;
 
 import javax.swing.KeyStroke;
 
+/**
+ * A menu item.
+ * 
+ * @author Patrick
+ */
 public class MenuItem implements IMenuItem{
 
     private Callable<Void> function = null;
@@ -11,6 +16,14 @@ public class MenuItem implements IMenuItem{
     private KeyStroke keyCombination;
     private boolean separator;
     
+    /**
+     * Creates a new instance.
+     * 
+     * @param name The name of the menu entry.
+     * @param function The function which should be called.
+     * @param keyCombination A key short cut (may be null).
+     * @param separator If true, a separator will be build before the item.
+     */
     public MenuItem(String name, Callable<Void> function, KeyStroke keyCombination,
             boolean separator){
         this.name = name;
@@ -24,7 +37,6 @@ public class MenuItem implements IMenuItem{
         try {
             function.call();
         } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 

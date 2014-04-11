@@ -96,7 +96,7 @@ public class ServerCommunication {
             cellTransform.setTranslation(translation);
             movableComponent.localMoveRequest(cellTransform);
         }else{
-            LOGGER.warning("Movable component of cell " + id + "is null");
+            LOGGER.log(Level.WARNING, "Movable component of cell {0}is null", id);
             throw new ServerCommException();
         }
     }
@@ -163,6 +163,13 @@ public class ServerCommunication {
         }
     }
     
+    /**
+     * Changes the name of a cell.
+     * 
+     * @param id The id of the cell.
+     * @param name The new name of the cell.
+     * @throws ServerCommException 
+     */
     public void changeName(long id, String name) throws ServerCommException{
         Cell cell = getCell(id);
         
@@ -224,10 +231,11 @@ public class ServerCommunication {
     
     /**
      * Changes the image of a cell
-     * @param id
-     * @param imgName
-     * @param dir
-     * @return
+     * 
+     * @param id The cell id
+     * @param imgName The image name.
+     * @param dir The image directory.
+     * @return False when not creating a new component, true otherwise.
      * @throws ServerCommException 
      */
     public boolean changeImage(long id, String imgName, String dir) throws ServerCommException{
@@ -294,7 +302,7 @@ public class ServerCommunication {
         //it will throw an exception, which will reach the gui,
         //which is not desireable.
         if(cell == null){
-            LOGGER.warning("No cell found for given id " +cellID);
+            LOGGER.log(Level.WARNING, "No cell found for given id {0}", cellID);
             throw new ServerCommException();
         }
         
@@ -305,7 +313,8 @@ public class ServerCommunication {
         CellServerState state = fetchCellServerState(cell);
             
         if(state == null){
-            LOGGER.warning("Could not find cell server state of cell "+cellID);
+            LOGGER.log(Level.WARNING, "Could not find cell server "
+                    + "state of cell {0}", cellID);
             throw new ServerCommException();
         }
         CellComponentServerState compState = state.getComponentServerState(
@@ -320,6 +329,12 @@ public class ServerCommunication {
         }
     }
     
+    /**
+     * Adds the security component to a cell.
+     * 
+     * @param id The cells id.
+     * @throws ServerCommException 
+     */
     public void addSecurityComponent(long id) throws ServerCommException{
         Cell cell = getCell(id);
         
@@ -328,7 +343,7 @@ public class ServerCommunication {
         //it will throw an exception, which will reach the gui,
         //which is not desireable.
         if(cell == null){
-            LOGGER.warning("No cell found for given id " +id);
+            LOGGER.log(Level.WARNING, "No cell found for given id {0}", id);
             throw new ServerCommException();
         }
         SecurityQueryComponent idComponent = cell.getComponent(SecurityQueryComponent.class);
@@ -337,10 +352,17 @@ public class ServerCommunication {
         }
     }
     
+    /**
+     * Sets the security component.
+     * 
+     * @param id The cell id.
+     * @param perms The new permissions to set (To get the permissions,
+     * call the security manager).
+     * @throws ServerCommException 
+     */
     public void setSecurity(long id, CellPermissions perms)throws ServerCommException{
         Cell cell = getCell(id);
         
-        LOGGER.warning("1");
         CellServerState state = fetchCellServerState(cell); 
         
         SecurityComponentServerState secState =
@@ -348,7 +370,6 @@ public class ServerCommunication {
                 SecurityComponentServerState.class);
         
         if(secState != null){
-            LOGGER.warning("Setting sec");
             secState.setPermissions(perms);
             HashSet<CellComponentServerState> compStateSet = new HashSet();
             compStateSet.add(secState);
@@ -372,9 +393,9 @@ public class ServerCommunication {
         ResponseMessage response = cell.sendCellMessageAndWait(msg);
             
         if(response == null){
-            LOGGER.warning("Received a null reply from cell with id " +
-                    cell.getCellID() + " with name " +
-                    cell.getName() + " setting component state.");
+            LOGGER.log(Level.WARNING, "Received a null reply from cell with "
+                    + "id {0} with name {1} setting component state.", 
+                    new Object[]{cell.getCellID(), cell.getName()});
            throw new ServerCommException();
         }
                
@@ -386,8 +407,6 @@ public class ServerCommunication {
             throw new ServerCommException();
         }
     }
-    
-
     
     /**
      * Adds a component to a given cell.
@@ -411,9 +430,9 @@ public class ServerCommunication {
             
         if (response == null) {
             // log and error and post a dialog box
-            LOGGER.warning("Received a null reply from cell with id " +
-                    cell.getCellID() + " with name " +
-                    cell.getName() + " adding component.");
+            LOGGER.log(Level.WARNING, "Received a null reply from cell with "
+                    + "id {0} with name {1} adding component.", 
+                    new Object[]{cell.getCellID(), cell.getName()});
             throw new ServerCommException();
         }
 
@@ -445,7 +464,7 @@ public class ServerCommunication {
         CellComponentRegistry r = CellComponentRegistry.getCellComponentRegistry();
         CellComponentFactorySPI spi = r.getCellFactoryByStateClass(componentClass);
         if (spi == null) {
-            LOGGER.warning("Could not find cell component factory for " +
+            LOGGER.log(Level.WARNING, "Could not find cell component factory for {0}", 
                     componentClass.getName());
             throw new ServerCommException();
         }
@@ -457,9 +476,9 @@ public class ServerCommunication {
                 CellServerComponentMessage.newRemoveMessage(cellid, className);
         ResponseMessage response = cell.sendCellMessageAndWait(cscm);
         if (response == null) {
-            LOGGER.warning("Received a null reply from cell with id " +
-                    cellid + " with name " + cell.getName() +
-                    " removing component.");
+            LOGGER.log(Level.WARNING, "Received a null reply from cell with "
+                    + "id {0} with name {1} removing component.", 
+                    new Object[]{cellid, cell.getName()});
             throw new ServerCommException();
         }
         if (response instanceof ErrorMessage) {
@@ -469,7 +488,7 @@ public class ServerCommunication {
                     ((ErrorMessage) response).getErrorCause());
             throw new ServerCommException();
         }if (response instanceof OKMessage) {
-            LOGGER.warning("Component DELETED");
+            //LOGGER.warning("Component DELETED");
         }
     }
     
@@ -494,9 +513,8 @@ public class ServerCommunication {
                     em.getErrorMessage(), em.getErrorCause());
             return null;
         }else if (!(response instanceof CellServerStateResponseMessage)){
-            LOGGER.log(Level.SEVERE, "Error fetching server state: "
-                    + "Wrong response"+
-                    response.getClass().getName());
+            LOGGER.log(Level.SEVERE, "Error fetching server state: "+
+                    "Wrong response{0}", response.getClass().getName());
             return null;
          }
         
@@ -512,6 +530,13 @@ public class ServerCommunication {
         return state;
     }
     
+    /**
+     * Returns the cell to a given id.
+     * 
+     * @param id The id.
+     * @return The cell, or null if it was not found.
+     * @throws ServerCommException 
+     */
     public Cell getCell(long id) throws ServerCommException{
         CellCache cache = ac.sm.getCellCache();
         
@@ -523,6 +548,5 @@ public class ServerCommunication {
         CellID cellid = new CellID(id);
         return cache.getCell(cellid);
     }
-    
     
 }

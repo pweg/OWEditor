@@ -3,7 +3,6 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.geom.AffineTransform;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.ITransformedObject;
@@ -135,7 +134,8 @@ public interface IGraphicToWindow {
      * Updates the representation image of a specific shape.
      * 
      * @param id The id of the shape.
-     * @param img The new image.
+     * @param imgName The new image name.
+     * @param dir The new images directory.
      */
     public void updateShapeImage(long id, String imgName, String dir);
 
@@ -147,7 +147,6 @@ public interface IGraphicToWindow {
     /**
      * Sends a shape to the background or the foreground.
      * 
-     * @param id The id of the shape.
      * @param b If true, the shape becomes background,
      * if false, it becomes foreground.
      */

@@ -2,6 +2,7 @@ package org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.jdesktop.wonderland.client.cell.Cell;
 import org.jdesktop.wonderland.client.cell.CellCache;
@@ -48,7 +49,8 @@ public class WorldBuilder {
         CellCache cache = ac.sm.getCellCache();
         
         if (cache == null) {
-            LOGGER.warning("Unable to find Cell cache for session " + ac.sm.getSession());
+            LOGGER.log(Level.WARNING, "Unable to find Cell cache for "
+                    + "session {0}", ac.sm.getSession());
             return;
         }
         
@@ -58,10 +60,29 @@ public class WorldBuilder {
         }
         
         for(Cell cell : cells){
-            createDataObject(cell);
+            sua.creationEvent(cell);
         }
     }
     
+    /**
+     * Iterates all children of a cell and adds them to the cell list.
+     * 
+     * @param cell The cell.
+     */
+    private void iterateChilds(Cell cell){
+        cells.add(cell);
+        
+        Collection<Cell> childs = cell.getChildren();
+   
+        for(Cell child : childs)
+        {
+            iterateChilds(child);
+        }
+    }
+    
+    /**
+     * Gets the serverlist and stores it.
+     */
     private void setServer(){
         
         Collection<ServerSessionManager> servers = LoginManager.getAll();
@@ -74,22 +95,5 @@ public class WorldBuilder {
             i++;
         }
         sua.setServerList(serverList);
-    }
-    
-    private void iterateChilds(Cell cell){
-        cells.add(cell);
-        
-        Collection<Cell> childs = cell.getChildren();
-   
-        for(Cell child : childs)
-        {
-            iterateChilds(child);
-        }
-        
-    }
-    
-    private void createDataObject(Cell cell){
-                
-        sua.creationEvent(cell);
     }
 }

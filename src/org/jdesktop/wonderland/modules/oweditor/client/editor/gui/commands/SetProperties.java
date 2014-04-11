@@ -4,6 +4,11 @@ import java.util.ArrayList;
 
 import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.GUIObserverInterface;
 
+/**
+ * Set properties command.
+ * 
+ * @author Patrick
+ */
 public class SetProperties implements Command{
     
     private ArrayList<Command> commands = null;
@@ -56,6 +61,4 @@ public class SetProperties implements Command{
         for(Command command : commands)
             command.redo(goi);
     }
-    
-    
 }

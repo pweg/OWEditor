@@ -42,5 +42,4 @@ public class EnvironmentObserver implements IEnvironmentObserver{
         gc.window.setNewMinY(y);
     }
     
-
 }

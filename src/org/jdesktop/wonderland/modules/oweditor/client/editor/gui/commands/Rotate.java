@@ -4,6 +4,11 @@ import java.util.ArrayList;
 
 import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.GUIObserverInterface;
 
+/**
+ * Rotate command.
+ * 
+ * @author Patrick
+ */
 public class Rotate implements Command{
     
     ArrayList<Long> ids;

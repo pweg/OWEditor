@@ -38,6 +38,7 @@ public class IDCellComponentMO extends CellComponentMO {
 
     /**
      * {@inheritDoc}
+     * @return The client class
      */
     @Override
     protected String getClientClass() {
@@ -47,6 +48,7 @@ public class IDCellComponentMO extends CellComponentMO {
 
     /**
      * {@inheritDoc}
+     * @return The client state
      */
     @Override
     public CellComponentClientState getClientState(
@@ -62,6 +64,7 @@ public class IDCellComponentMO extends CellComponentMO {
 
     /**
      * {@inheritDoc}
+     * @return The server state
      */
     @Override
     public CellComponentServerState getServerState(

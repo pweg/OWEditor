@@ -123,12 +123,26 @@ public interface IGraphicToInput {
      */
     public void rotationUpdate();
 
+    /**
+     * Initializes a scale.
+     */
     public void scaleInitialize();
 
+    /**
+     * This is called durring scaling.
+     * 
+     * @param p The point which is scaled to.
+     */
     public void scale(Point p);
 
+    /**
+     * Updates the scale.
+     */
     public void scaleUpdate();
 
+    /**
+     * Finishes the scale.
+     */
     public void scaleFinished();
     
     /**
@@ -278,9 +292,5 @@ public interface IGraphicToInput {
      * false otherwise.
      */
     public boolean isShapeSelected();
-
-
-
-
 
 }

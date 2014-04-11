@@ -25,7 +25,9 @@ import org.jdesktop.wonderland.modules.contentrepo.common.ContentResource;
 import org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter.components.ImageCellComponentProperties;
 
 /**
- *
+ * The file manager, which tasks are to retrieve files from the server
+ * and to store files on the server.
+ * 
  * @author Patrick
  */
 
@@ -91,8 +93,8 @@ public class FileManager {
         ContentResource fileNode = getOwnFile(fileName, dir);
             
         if(fileNode == null){
-            LOGGER.warning("UPLOAD CONTENT: "
-                    + "Could not create the necessary node for the file "+
+            LOGGER.log(Level.WARNING,"UPLOAD CONTENT: "+
+                    "Could not create the necessary node for the file {0}", 
                     fileName);
             throw new IOException();
         }
@@ -124,8 +126,8 @@ public class FileManager {
           ContentNode fileNode = getForeignFile(fileName, dir,
                         userDir);
           if(fileNode == null){
-              LOGGER.warning("DOWNLOAD CONTENT: "
-                      + "Could not get the necessary node for the file "+
+              LOGGER.log(Level.WARNING,"DOWNLOAD CONTENT: "+
+                      "Could not get the necessary node for the file {0}", 
                       fileName);
               throw new IOException();
           }
@@ -165,11 +167,8 @@ public class FileManager {
                 return false;
             
             ContentNode file = ((ContentCollection) directory).getChild(fileName);
-            
-            if(file == null)
-                return false;
-            
-            return true;
+                        
+            return (file == null);
             
          } catch (ContentRepositoryException ex) {
              Logger.getLogger(FileManager.class.getName()).log(Level.SEVERE, null, ex);

@@ -32,6 +32,7 @@ public class IDCellComponentFactory implements CellComponentFactorySPI {
 
     /**
      * {@inheritDoc}
+     * @param <T>
      */
     public <T extends CellComponentServerState> T getDefaultCellComponentServerState() {
         IDCellComponentServerState state = new IDCellComponentServerState();

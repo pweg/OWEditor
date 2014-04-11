@@ -5,14 +5,13 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map.Entry;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.DataObjectObserver;
-
+/**
+ * Backup manager, like the one in the OWL adapter.
+ * 
+ * @author Patrick
+ */
 public class BackupManager {    
-    private static final Logger LOGGER =
-            Logger.getLogger(DataObjectObserver.class.getName());
     
     private HashMap<Long, BackupObject> backup = null;
     private HashMap<String, Long> stringToID = null;
@@ -28,10 +27,22 @@ public class BackupManager {
         pasteRedo = new ArrayList<Long>();
     }
     
+    /**
+     * Get object with id.
+     * 
+     * @param id The id.
+     * @return The object.
+     */
     public BackupObject getObject(long id){
         return backup.get(id);
     }
 
+    /**
+     * Get object with name.
+     * 
+     * @param name The name.
+     * @return The object.
+     */
     public BackupObject getObject(String name) {
         long id = stringToID.get(name);
         stringToID.remove(name);
@@ -39,7 +50,7 @@ public class BackupManager {
         BackupObject object = backup.get(id);
         
         if(object.isForDeletion()){
-            LOGGER.log(Level.INFO, id + "backup entry was marked for removal " +
+            System.err.println(id + "backup entry was marked for removal " +
                     "before. Removing now.");
             backup.remove(id);
         }
@@ -47,6 +58,11 @@ public class BackupManager {
         return object;
     }
     
+    /**
+     * Adds an object to the backup.
+     * 
+     * @param object The object to store.
+     */
     public void addObject(ServerObject object){
         double rotationX = object.rotationX;
         double rotationY = object.rotationY;
@@ -62,13 +78,16 @@ public class BackupManager {
         backup.put(id, bobject);
     }
     
+    /**
+     * Clears the backup storage.
+     */
     public void clearBackup(){
         
         HashMap<Long, BackupObject> new_map = new LinkedHashMap<Long, BackupObject>();
 
         if(stringToID.size() > 0){
             
-            LOGGER.log(Level.INFO, stringToID.size() + "backup entry/entries found which " +
+            System.err.println(stringToID.size() + "backup entry/entries found which " +
             		"is/are not ready to remove yet. Marking for removal.");
             Iterator<Entry<String, Long>> it = stringToID.entrySet().iterator();
         
@@ -86,12 +105,27 @@ public class BackupManager {
         backup.putAll(new_map);
     }
     
+    /**
+     * Ads a translation to an object.
+     * 
+     * @param id The id of the object.
+     * @param name The name of the object.
+     * @param x The x coordinate.
+     * @param y The y coordinate.
+     * @param z The z coordinate.
+     */
     public void addTranslation(long id, String name, float x, float y, float z){
         BackupObject object = backup.get(id);
         object.setTranslation(x, y, z);
         stringToID.put(name, id);
     }
     
+    /**
+     * Looks if the translation contains the key.
+     * 
+     * @param name Look for the name.
+     * @return True, if found, false otherwise.
+     */
     public boolean translationContainsKey(String name){
         return stringToID.containsKey(name);
     }

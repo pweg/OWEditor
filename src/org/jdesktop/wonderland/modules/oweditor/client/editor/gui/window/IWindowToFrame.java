@@ -147,6 +147,8 @@ public interface IWindowToFrame {
      * @param rotZ The new z rotation.
      * @param scale The new scale.
      * @param imgName The new image name.
+     * @param furtherActions Further actions, when properties are set, like 
+     * rights changes etc.
      */
     public void setProperties(ArrayList<Long> ids, ArrayList<String> names,
             ArrayList<Float> coordsX, ArrayList<Float> coordsY, ArrayList<Float> coordsZ,

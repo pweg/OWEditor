@@ -1,6 +1,5 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.gui;
 
-import java.awt.image.BufferedImage;
 import java.util.logging.Logger;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.ITransformedObject;

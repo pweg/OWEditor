@@ -30,29 +30,8 @@ public class ServerSimulator {
     }
     
     private void initializeObjects(){
-        /*
-        Sphere name: 5, 1.00001 0.0 1.0000589 3.4142137
         
-        WARNING 10:40:39 org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter.WorldBuilder createDataObject
-        Sphere Virtuelles Telefon 1.00001 -8.178859 0.060000006 -5.4412746
-        
-        WARNING 10:40:39 org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter.WorldBuilder createDataObject
-        Sphere name: 12, 1.00001 -4.331105 1.4452587 -12.422435
-        
-        WARNING 10:40:39 org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter.WorldBuilder createDataObject
-        Sphere name: Audiorekorder 1.00001 -7.0 -1.0 -10.0
-        
-        WARNING 10:40:39 org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter.WorldBuilder createDataObject
-        Sphere Block3 1.80001 -20.0 0.0 2.0
-        
-        WARNING 10:40:39 org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter.WorldBuilder createDataObject
-        Sphere 1.00001 0.0 0.0 0.0
-        
-        WARNING 10:40:39 org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter.WorldBuilder createDataObject
-        Sphere Block2, 1.00001 2.9455893 1.0000591 1.7263716
-        */
-        
-        ServerObject so = null;
+        ServerObject so;
         so = createObject( 
                 (float)0.0, (float)3.4142137,(float)1.0000589, 
                 42, 150,58,
@@ -127,21 +106,6 @@ public class ServerSimulator {
                 1, 
                 (float)500, (float)2000, 
                 "verylongnamehasthisblockfortestingBlock2", false);
-        
-        /*createObject(
-                -20,-10,0,
-                30,45,45,10,
-                (float)5, (float)1,
-                "Testblock", false );*/
-        
-        
-        
-        /*
-        createObject(0, 160, 160, 0, 0, 1, 70, 70, "Chair");
-        createObject(2, 260, 260, 0, 0, 1, 80, 80, "ChairofTestinghugelength");
-        createObject(1, 400, 400, 0, 0, 1, 200, 200, "Desk");
-        createObject(3, 0, 0, 0, 0, 1, 10, 10, "Tiny");
-        createObject(4, 100, 100, 0, 0, 1, 150, 25, "TinyVeryLong");*/
     }
 
     public ServerObject createObject(
@@ -206,7 +170,13 @@ public class ServerSimulator {
     public ServerObject copyObject(long id, String name){
         ServerObject object = getObject(id);
         
-        ServerObject clone = object.clone();
+        ServerObject clone;
+        try {
+            clone = object.clone();
+        } catch (CloneNotSupportedException ex) {
+            System.err.println(ex);
+            return null;
+        }
         clone.id = currentID;
         currentID++;
         clone.name = name;

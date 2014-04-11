@@ -57,13 +57,15 @@ public class CellInfoReader {
         return v;
     }
     
+    /**
+     * Returns wether the cell is a sphere or not.
+     * 
+     * @param cell The cell.
+     * @return True, if it is a sphere, false otherwise.
+     */
     public static boolean isSphere(Cell cell){
         BoundingVolume bounds = cell.getLocalBounds();
-        
-        if(bounds instanceof BoundingSphere)
-            return true;
-        else 
-            return false;
+        return bounds instanceof BoundingSphere;
     }
     
     /**

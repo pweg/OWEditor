@@ -4,6 +4,11 @@ import java.util.ArrayList;
 
 import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.GUIObserverInterface;
 
+/**
+ * A command for adding components.
+ * 
+ * @author Patrick
+ */
 public class AddComponent implements Command{
     
     private ArrayList<Long> ids = null;

@@ -2,6 +2,11 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.data;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IRights;
 
+/**
+ * The rights class, implementing the rights interface.
+ * 
+ * @author Patrick
+ */
 public class Rights implements IRights{
     
     private String type = null;
@@ -114,11 +119,8 @@ public class Rights implements IRights{
             return false;
         if(right.getPermAddSubObjects() != permitSubObjects)
             return false;
-        if(right.getPermView() != permitView)
-            return false;
         
-        return true;
-    }
-    
+        return (right.getPermView() == permitView);
+    }    
 
 }

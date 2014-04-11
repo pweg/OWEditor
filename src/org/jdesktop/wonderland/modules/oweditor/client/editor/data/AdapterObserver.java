@@ -19,9 +19,10 @@ public class AdapterObserver implements IAdapterObserver{
     /**
      * Creates a new dataUpdate instance.
      * 
-     * @param dm a dataObjectManager instance, which is called,
+     * @param dm The dataObjectManager instance, which is called,
      * when updates are made.
-     * @param em a environmentManager instance.
+     * @param em The environmentManager instance.
+     * @param um The userdata manager instance.
      */
     public AdapterObserver(DataObjectManager dm, EnvironmentManager em,
             UserDataManager um) {
@@ -114,7 +115,5 @@ public class AdapterObserver implements IAdapterObserver{
     public void notifyRightsRemoval(long id, String type, String name) {
         dm.removeRight(id, type, name);
     }
-
-
 
 }

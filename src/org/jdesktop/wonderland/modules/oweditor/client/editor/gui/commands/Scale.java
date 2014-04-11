@@ -4,6 +4,11 @@ import java.util.ArrayList;
 
 import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.GUIObserverInterface;
 
+/**
+ * Scale command.
+ * 
+ * @author Patrick
+ */
 public class Scale implements Command{
     
     ArrayList<Long> ids;

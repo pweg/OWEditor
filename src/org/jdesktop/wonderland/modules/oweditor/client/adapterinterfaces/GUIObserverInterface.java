@@ -36,10 +36,10 @@ public interface GUIObserverInterface {
      * Makes a translation update for an object. Unlike the XY translation, this
      * method uses virtual world coordinates, which WILL NOT BE TRANSFORMED.
      * 
-     * @param id
-     * @param x
-     * @param y
-     * @param z
+     * @param id the object id.
+     * @param x the x coordinate, the object is moved to.
+     * @param y the y coordinate, the object is moved to.
+     * @param z the z coordinate, the object is moved to.
      * @throws java.lang.Exception
      */
     public void notifyTranslation(Long id, double x, double y, double z) throws Exception;
@@ -136,7 +136,6 @@ public interface GUIObserverInterface {
      */
     public void redoObjectCreation() throws Exception;
 
-
     /**
      * Reads a KMZ file and returns the object bounds in an
      * integer array.
@@ -173,6 +172,7 @@ public interface GUIObserverInterface {
      * the model.
      * 
      * @param name The name of the new model
+     * @param module_name The name of the module.
      * @param imgName The name of the image representation.
      * @param x The x coordinate of the new model.
      * @param y The y coordinate of the new model.

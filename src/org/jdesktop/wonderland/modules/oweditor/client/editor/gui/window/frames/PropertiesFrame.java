@@ -10,7 +10,6 @@ import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
-import java.util.logging.Logger;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -28,9 +27,6 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.GUISettings;
 public class PropertiesFrame extends javax.swing.JFrame {
 
     private static final long serialVersionUID = 1L;
-    
-    private static final Logger LOGGER =
-            Logger.getLogger(PropertiesFrame.class.getName());
     
     private static final ResourceBundle BUNDLE = ResourceBundle.getBundle(
             "org/jdesktop/wonderland/modules/oweditor/client/resources/Bundle");

@@ -53,7 +53,6 @@ public class GraphicController implements IGraphicToWindow{
         
         smi.registerSelectionManager(ssm);
         smi.registerShapeManager(sm);
-        smi.registerTranslationManager(stm);
         
         inputInterface.registerCopyManager(scm);
         inputInterface.registerMediator(smi);
@@ -84,7 +83,7 @@ public class GraphicController implements IGraphicToWindow{
     @Override
     public void createDraggingCircle(int width, int height, int x, int y,
             double rotation, double scale) {
-        sm.createDraggingCircle(width, height, x, y, rotation, scale);
+        sm.createDraggingEllipse(width, height, x, y, rotation, scale);
     }
 
     @Override
@@ -158,7 +157,10 @@ public class GraphicController implements IGraphicToWindow{
 
     @Override
     public void updateShapeImage(long id, String imgName, String dir) {
-        sm.getShape(id).setImage(imgName, dir);
+        ShapeObject shape = sm.getShape(id);
+        
+        if(shape != null)
+            shape.setImage(imgName, dir);
     }
 
     @Override

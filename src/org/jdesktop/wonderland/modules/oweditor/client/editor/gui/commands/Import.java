@@ -11,12 +11,7 @@ import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.GUIObse
  *
  */
 public class Import implements Command{
-    
-    /*private String name;
-    private String image_url;
-    private double x, y, z;
-    private double rotationX, rotationY, rotationZ;
-    private double scale;*/
+  
     private long id = -1;
     
     public Import(){

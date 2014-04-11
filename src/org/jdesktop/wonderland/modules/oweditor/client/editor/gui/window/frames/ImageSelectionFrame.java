@@ -26,12 +26,6 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IImage;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 /**
  * This is the image selection frame, where users can select an image, 
  * which represents the item they currently modify.

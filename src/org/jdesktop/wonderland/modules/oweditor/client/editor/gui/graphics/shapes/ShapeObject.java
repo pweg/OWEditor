@@ -11,7 +11,6 @@ import java.awt.Paint;
  */
 public abstract class ShapeObject extends SimpleShapeObject{
     
-
     /**
      * Returns the z coordinate.
      * 

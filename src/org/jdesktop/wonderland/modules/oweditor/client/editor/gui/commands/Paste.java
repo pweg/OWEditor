@@ -6,6 +6,11 @@ import java.util.Iterator;
 
 import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.GUIObserverInterface;
 
+/**
+ * Paste command.
+ * 
+ * @author Patrick
+ */
 public class Paste implements Command{
     
     ArrayList<Long> ids;

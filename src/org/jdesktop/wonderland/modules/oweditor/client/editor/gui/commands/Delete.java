@@ -4,6 +4,11 @@ import java.util.ArrayList;
 
 import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.GUIObserverInterface;
 
+/**
+ * Delete command.
+ * 
+ * @author Patrick
+ */
 public class Delete implements Command{
     
     ArrayList<Long> ids = null;

@@ -1,6 +1,5 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window;
 
-import java.util.ArrayList;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.input.IInputToWindow;
 
 /**
@@ -67,7 +66,6 @@ public class WindowToMenu implements IWindowToMenu{
 
     @Override
     public void setPropertiesVisible(boolean b) {
-        
         wc.adapter.updateObjects(wc.graphic.getSelectedShapes());
         wc.frame.setPropertiesVisible(b);
     }

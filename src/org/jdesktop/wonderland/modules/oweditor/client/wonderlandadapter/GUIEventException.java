@@ -7,7 +7,8 @@
 package org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter;
 
 /**
- *
+ * GUI Event exception
+ * 
  * @author Patrick
  */
 public class GUIEventException extends Exception{

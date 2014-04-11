@@ -26,13 +26,6 @@ public interface IInternalMediator {
     public void registerShapeManager(ShapeManager sm);
     
     /**
-     * Registers a translation manager instance.
-     * 
-     * @param stm The translation manager instance.
-     */
-    public void registerTranslationManager(TranslationManager stm);
-    
-    /**
      * Registers a selection manager instance.
      * 
      * @param ssm The selection manager instance.
@@ -86,7 +79,7 @@ public interface IInternalMediator {
     /**
      * Sets an object removal message for the adapter.
      * 
-     * @param id The id of the shape, which should be removed.
+     * @param ids The ids of the shapes, which should be removed.
      */
     public void setObjectRemoval(ArrayList<Long> ids);
 

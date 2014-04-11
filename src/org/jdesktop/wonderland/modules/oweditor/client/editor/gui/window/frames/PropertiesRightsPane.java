@@ -6,7 +6,6 @@
 
 package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.frames;
 
-import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.ResourceBundle;
@@ -182,7 +181,11 @@ public class PropertiesRightsPane extends JPanel {
         setObjects();
     } 
     
-
+    /**
+     * Returns all changed entries.
+     * 
+     * @return A list of all changed entries.
+     */
     public ArrayList<PermissionTableEntry> getChanged() {
         
         Set<IRights> allRights = new HashSet<IRights>();
@@ -264,7 +267,9 @@ public class PropertiesRightsPane extends JPanel {
         return checkList;
     }
 
-
+    /**
+     * Sets up the permission table.
+     */
     public void setObjects() {
         permTableModel.clear();
         
@@ -341,7 +346,7 @@ public class PropertiesRightsPane extends JPanel {
     private javax.swing.JButton resetButton;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable permTable;
-    private PermissionTable permTableModel = new PermissionTable();
+    private final PermissionTable permTableModel = new PermissionTable();
     // End of variables declaration  
     
 }

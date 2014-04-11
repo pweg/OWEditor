@@ -48,9 +48,6 @@ public class ShapeManager {
     
     private AffineTransform at = null;
     
-    private static final Logger LOGGER =
-            Logger.getLogger(WorldBuilder.class.getName());
-    private IInternalMediator smi = null;
     
     private final ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
     private final Lock readLock = lock.readLock();
@@ -58,8 +55,6 @@ public class ShapeManager {
     
     private IToolTip nameToolTip = null;
 
-    
-    
     /**
      * Creates a new ShapeManager instance.
      * @param smi
@@ -71,8 +66,6 @@ public class ShapeManager {
         background = new ArrayList<ShapeObject>();
         avatarShapes = new ArrayList<ShapeObject>();
         draggingShapes = new ArrayList<DraggingObject>();
-        
-        this.smi = smi;
     }
     
     /**
@@ -84,6 +77,11 @@ public class ShapeManager {
         return shapes;
     }
     
+    /**
+     * Returns all background shapes.
+     * 
+     * @return Arraylist of shapes.
+     */
     public ArrayList<ShapeObject> getBGShapes(){
         return background;
     }
@@ -190,7 +188,6 @@ public class ShapeManager {
         
         return object; 
     }
-
     
     /**
      * Searches for a background shape object, which surrounds a given point.
@@ -231,7 +228,6 @@ public class ShapeManager {
      * 
      * @param g2 a Graphics2D class.
      * @param at an AffineTransform class, used to draw zoomed shapes correctly.
-     * @param scale the scale
      */
     public void drawShapes(Graphics2D g2, AffineTransform at) {
         
@@ -449,6 +445,16 @@ public class ShapeManager {
         return newShape;
     }
     
+    /**
+     * Creates a dragging rectangle.
+     * 
+     * @param width The width.
+     * @param height The height.
+     * @param x The x coordinate.
+     * @param y The y coordinate.
+     * @param rotation The rotation.
+     * @param scale The scale.
+     */
     public void createDraggingRect(int width, int height, int x, int y,
             double rotation, double scale){
         
@@ -458,7 +464,17 @@ public class ShapeManager {
             draggingShapes.add(shape);
     }
     
-    public void createDraggingCircle(int width, int height, int x, int y,
+    /**
+     * Creates a dragging ellipse.
+     * 
+     * @param width The width.
+     * @param height The height.
+     * @param x The x coordinate.
+     * @param y The y coordinate.
+     * @param rotation The rotation.
+     * @param scale The scale.
+     */
+    public void createDraggingEllipse(int width, int height, int x, int y,
             double rotation, double scale){
         
             DraggingObject shape = factory.createDraggingShapeObject(ShapeFactory.CIRCLE, x, y, 
@@ -482,6 +498,11 @@ public class ShapeManager {
         }
     }
     
+    /**
+     * Returns all dragging shapes currently available.
+     * 
+     * @return Arraylist of dragging shapes.
+     */
     public ArrayList<DraggingObject> getDraggingShapes(){
         return draggingShapes;
     }
@@ -493,14 +514,28 @@ public class ShapeManager {
         draggingShapes.clear();
     }
     
+    /**
+     * Returns the selection rectangle.
+     * 
+     * @return The rectangle.
+     */
     public SimpleShapeObject getSelectionRectangle(){
         return selectionRectangle;
     }
     
+    /**
+     * Removes the transformation border.
+     */
     public void removeBorder(){
         border = null;
     }
     
+    /**
+     * Creates the transformation border.
+     * 
+     * @param shapes The shapes, which the border should sorround.
+     * @param mode The mode of the border.
+     */
     public void createShapeBorder(ArrayList<ShapeObject> shapes, 
             byte mode){
                 
@@ -550,13 +585,20 @@ public class ShapeManager {
                 mode);
     }
     
+    /**
+     * Searches whether a point is in the transformation border or not.
+     * 
+     * @param p The point in question.
+     * @return True, if it is, false otherwise.
+     */
     public byte isInBorderShapes(Point p){
         return border.checkShapes(p);
     }
     
     /**
+     * Returns the transformation border.
      * 
-     * @return
+     * @return The border.
      */
     public ITransformationBorder getShapeBorder(){
         return border;
@@ -617,6 +659,11 @@ public class ShapeManager {
         }
     }
     
+    /**
+     * Removes an object from the background.
+     * 
+     * @param id The id of the object.
+     */
     private void removeBackground(long id){
         
         for(int i = 0;i < background.size(); i++){
@@ -656,5 +703,4 @@ public class ShapeManager {
             addShape(shape);
         }
     }
-    
 }

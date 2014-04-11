@@ -19,8 +19,8 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.GUISettings;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.IInternalMediator;
 
 /**
- * A class for standard rectangles. The rectangles are used as a 
- * representation of non-round objects.
+ * A class for standard ellipse. The ellipses are used as a 
+ * representation for round objects.
  * 
  * @author Patrick
  */

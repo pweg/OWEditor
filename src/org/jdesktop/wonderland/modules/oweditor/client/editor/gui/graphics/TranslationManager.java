@@ -42,6 +42,7 @@ public class TranslationManager {
      * @param x the new x value, where the shape is being dragged.
      * @param y the new y value, where the shape is being dragged.
      * @param start the start point from where the shape has been dragged.
+     * @param strategy The collision strategy.
      */
     public void translateShape(int x, int y, Point start, sCollisionStrategy strategy){
         this.strategy = strategy;
@@ -59,7 +60,6 @@ public class TranslationManager {
      * Translates the dragging shapes(DraggingRectangles), which 
      * are seen, when trying to move objects.
      * 
-     * @param selectedShapes all shapes which are selected and should be moved.
      * @param distance_x the x distance between old and new point.
      * @param distance_y the y distance between old and new point.
      */
@@ -70,6 +70,11 @@ public class TranslationManager {
         }
     }
     
+    /**
+     * Sets a collision strategy.
+     * 
+     * @param strategy The strategy.
+     */
     public void setStrategy(sCollisionStrategy strategy){
         this.strategy = strategy;
     }

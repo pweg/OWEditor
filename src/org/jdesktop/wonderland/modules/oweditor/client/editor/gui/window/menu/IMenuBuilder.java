@@ -7,7 +7,7 @@ import javax.swing.JComponent;
 import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
 
-public interface MenuBuilder {
+public interface IMenuBuilder {
     
     /**
      * Creates and adds a new Menu item to the menu.

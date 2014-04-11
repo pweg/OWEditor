@@ -26,14 +26,14 @@ public class JItemManager {
     
     private static final boolean PASTECOPYEXIST = true;
 
-    private static String COPY = BUNDLE.getString("MenuCopy");
-    private static String CUT = BUNDLE.getString("MenuCut");
-    private static String PASTE = BUNDLE.getString("MenuPaste");
-    private static String ROTATE = BUNDLE.getString("MenuRotate");
-    private static String SCALE = BUNDLE.getString("MenuScale");
-    private static String PROPERTIES = BUNDLE.getString("MenuProperties");
-    private static String TOBACK = BUNDLE.getString("MenuToBackground");
-    private static String TOFORE = BUNDLE.getString("MenuToForeground");
+    private static final String COPY = BUNDLE.getString("MenuCopy");
+    private static final String CUT = BUNDLE.getString("MenuCut");
+    private static final String PASTE = BUNDLE.getString("MenuPaste");
+    private static final String ROTATE = BUNDLE.getString("MenuRotate");
+    private static final String SCALE = BUNDLE.getString("MenuScale");
+    private static final String PROPERTIES = BUNDLE.getString("MenuProperties");
+    private static final String TOBACK = BUNDLE.getString("MenuToBackground");
+    private static final String TOFORE = BUNDLE.getString("MenuToForeground");
     
     private HashMap<String, JMenuItem> topItems;
     private HashMap<String, JMenuItem> popupItems;
@@ -42,14 +42,29 @@ public class JItemManager {
         
     }
     
+    /**
+     * Set top menu items.
+     * 
+     * @param items The items.
+     */
     public void setTopItems(HashMap<String, JMenuItem> items){
         topItems = items;
     }
     
+    /**
+     * Set popup menu items.
+     * 
+     * @param items The items.
+     */
     public void setPopupItems(HashMap<String, JMenuItem> items){
         popupItems = items;
     }
 
+    /**
+     * Enables/disables items, when objects are selected/deselected.
+     * 
+     * @param selected is selected.
+     */
     public void setItemsEnabledSelection(boolean selected) {
         if(topItems != null){
             topItems.get(COPY).setEnabled(selected && COPYSELECTED);
@@ -69,6 +84,11 @@ public class JItemManager {
         }
     }
     
+    /**
+     * Set items enabled, when copied objects exist.
+     * 
+     * @param copyShapesExist copied objects exist.
+     */
     public void setItemsEnabledCopy(boolean copyShapesExist){
         if(topItems != null){
             
@@ -80,6 +100,11 @@ public class JItemManager {
         }
     }
     
+    /**
+     * Sets the menu entry to background visible, invisible.
+     * 
+     * @param b 
+     */
     public void setToBackgroundVisible(boolean b){
         if(popupItems != null){
             popupItems.get(TOBACK).setVisible(b);

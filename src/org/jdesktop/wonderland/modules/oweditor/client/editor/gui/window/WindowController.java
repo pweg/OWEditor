@@ -17,16 +17,11 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.menu.Me
  *
  */
 public class WindowController {
-
-    //protected JScrollPane mainScrollPanel = null;
-    //protected DrawingPanel drawingPan = null;
     
     protected IInputToWindow input = null;
 
     protected IGraphicToWindow graphic = null;
     protected WindowToGraphic graphicInterface;
-    
-    //protected MainFrame mainframe = null;
 
     protected WindowToInput inputInterface = null;
     protected WindowToFrame frameInterface = null;
@@ -37,7 +32,6 @@ public class WindowController {
     protected IFrame frame = null;
     
     protected IAdapterCommunication adapter = null;
-
     
     public WindowController(IAdapterCommunication adapter, Window mainInterface){
         
@@ -57,21 +51,16 @@ public class WindowController {
         
         mouseCoords = new MouseCoordinates();
         
-        
         registerComponents();
         build();
-        
-        //Creating menu
     }
 
     private void registerComponents(){
         graphic.registerWindowInterface(graphicInterface);
         
-        //mainInterface.registerComponents(drawingPan, mainframe);
         window.registerGraphicInterface(graphic);
         window.registerFrameInterface(frame);
         
-        //frame.registerMainFrame(mainframe);
         frame.registerWindow(frameInterface);
         
         inputInterface.registerDrawingPan(frame.getDrawingPan());

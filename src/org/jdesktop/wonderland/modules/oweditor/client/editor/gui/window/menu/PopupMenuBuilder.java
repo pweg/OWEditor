@@ -11,8 +11,12 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.KeyStroke;
 
-public class PopupMenuBuilder implements MenuBuilder{
-    
+/**
+ * Builds the popup menu.
+ * 
+ * @author Patrick
+ */
+public class PopupMenuBuilder implements IMenuBuilder{
     
   //tree for menu creation.
     private TreeNode root = null;
@@ -88,7 +92,6 @@ public class PopupMenuBuilder implements MenuBuilder{
                 buildIterator(child, jmenu);
             }
         }
-        
     }
     
     private JMenuItem createMenuItem(final IMenuItem item){

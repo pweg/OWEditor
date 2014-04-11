@@ -55,14 +55,12 @@ public class GUIController implements IGUIController{
         
         input.registerGraphicInterface(window.getGraphicInputInterface());
         input.registerFrameInterface(window.getInputInterface());
-        
     }
 
     @Override
     public void setVisible(boolean visibility) {
         window.setVisible(visibility);        
     }
-
 
     @Override
     public void registerDataManager(IDataToGUI dm) {
@@ -76,9 +74,7 @@ public class GUIController implements IGUIController{
     public void registerGUIObserver(GUIObserverInterface cui) {
         ac.registerObserver(cui);
     }
-
     
-
     @Override
     public IDataObjectObserver getDataObjectObserver() {
         return domo;
@@ -88,6 +84,4 @@ public class GUIController implements IGUIController{
     public IEnvironmentObserver getEnvironmentObserver() {
         return eo;
     }
-    
-
 }

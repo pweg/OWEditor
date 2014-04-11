@@ -4,6 +4,11 @@ import java.util.ArrayList;
 
 import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.GUIObserverInterface;
 
+/**
+ * Set rights command.
+ * 
+ * @author Patrick
+ */
 public class SetRights implements Command{
 
     private String oldName;

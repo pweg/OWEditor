@@ -6,7 +6,11 @@ import java.util.ArrayList;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.DraggingObject;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.ShapeObject;
 
-
+/**
+ * This strategy is used, when the object should collide with all other objects.
+ * 
+ * @author Patrick
+ */
 public class sCollisionAllStrategy implements sCollisionStrategy {
         
 
@@ -35,14 +39,4 @@ public class sCollisionAllStrategy implements sCollisionStrategy {
             }
         return is_collision;
     }
-
-    /*
-    @Override
-    public void createDraggingShapes(ArrayList<ShapeObject> draggingShapes) {
-        if(stm.isDraggingShapesEmpty()){
-            stm.setDraggingShapes(sm.builtDraggingShapes(scm.getCopyShapes()));
-        }
-        
-    }*/
-
 }

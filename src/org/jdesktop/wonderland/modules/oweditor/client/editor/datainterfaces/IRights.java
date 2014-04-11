@@ -1,7 +1,25 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces;
 
+/**
+ * The interface for a rights entry.
+ * 
+ * @author Patrick
+ */
 public interface IRights {
     
+    /**
+     * Sets the right.
+     * 
+     * @param type Usertype.
+     * @param name Username.
+     * @param owner Is owner.
+     * @param addSubObjects Permission
+     * @param changeAbilities Permission
+     * @param move Permission
+     * @param view Permission
+     * @param isEditable if false, it will an entry, which is not editable.
+     * @param isEverybody true, if it is the everybody entry.
+     */
     public void set(String type, String name, boolean owner,
             boolean addSubObjects, boolean changeAbilities, boolean move,
             boolean view, boolean isEditable, boolean isEverybody);

@@ -7,7 +7,8 @@
 package org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter;
 
 /**
- *
+ * A static class which contains some initial settings for the adapter.
+ * 
  * @author Patrick
  */
 public class AdapterSettings {

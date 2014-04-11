@@ -15,14 +15,9 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.GUISettings;
  * rotation or scaling.
  * 
  * @author Patrick
- *
- * Scaling part is from JFreeReport : a free Java reporting library
- * found under
- * http://www.java2s.com/Code/Java/2D-Graphics-GUI/ResizesortranslatesaShape.htm
  */
 public class TransformationBorder extends SimpleShapeObject implements ITransformationBorder{
     
-
     private Shape originalShape = null;
     private Shape transformedShape = null;
     
@@ -147,49 +142,12 @@ public class TransformationBorder extends SimpleShapeObject implements ITransfor
         if(mode != TransformationBorder.MODEALLCENTER){
             g.draw(transformedCenter); 
         }
-        
     }
 
     @Override
     public void setLocation(int x, int y) { 
         originalShape.getBounds().setLocation(x, y);
     }
-    
-    /**
-     * Scales shapes in a way they keep their initial center value.
-     * It does NOT add the scaling translation.
-     * 
-     * @param shape The shape to scale
-     * @param scaleX The scale x value.
-     * @param scaleY The scale y value.
-     * @return The scaled shape.
-     */
-    /*private Shape scaleShapeCenter(Shape shape, double scaleX, double scaleY){
-        Rectangle2D bounds = shape.getBounds2D();
-        AffineTransform af = AffineTransform.getTranslateInstance(0 - bounds.getX(), 
-                0 - bounds.getY());
-        // apply normalisation translation ...
-        Shape s = af.createTransformedShape(shape);
-        
-        AffineTransform at = new AffineTransform();
-        at.scale(scaleX, scaleY);
-        try {
-            at = at.createInverse();
-            // apply scaling ...
-            s = at.createTransformedShape(s);
-
-            // now retranslate the shape to its original position ...
-            Rectangle2D bounds2 = s.getBounds2D();
-            af = AffineTransform.getTranslateInstance(
-                    bounds.getX()-(bounds2.getWidth()/2-bounds.getWidth()/2), 
-                    bounds.getY()-(bounds2.getHeight()/2-bounds.getHeight()/2));
-            return af.createTransformedShape(s);
-        } catch (NoninvertibleTransformException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        return shape;
-    }*/
     
     /**
      * Creates the four tiny rectangles that are at the corners of a
@@ -232,9 +190,6 @@ public class TransformationBorder extends SimpleShapeObject implements ITransfor
 
     @Override
     public void scaleUpdate(){
-        //Rectangle bounds = transformedShape.getBounds();
-        //originalShape = new Rectangle(bounds.x, bounds.y, bounds.width, bounds.height);
-        //realScale -= (1-workingScale)*realScale;
         originalShape = ShapeUtilities.scaleShape(originalShape, scale, 
                 scaleTranslationX, scaleTranslationY);
         tinyShapes = setTinyRectangle(originalShape);
@@ -277,11 +232,9 @@ public class TransformationBorder extends SimpleShapeObject implements ITransfor
 
     @Override
     public void set(int x, int y, int width, int height) {
-        // TODO Auto-generated method stub
-        
+        //should not be used
     }
-
-
+    
     @Override
     public void setRotation(double rotation) {
         this.rotation = rotation;
@@ -302,7 +255,6 @@ public class TransformationBorder extends SimpleShapeObject implements ITransfor
             }
             i++;
         }
-        
         return TransformationBorder.INNOTHING;
     }
 
@@ -348,14 +300,12 @@ public class TransformationBorder extends SimpleShapeObject implements ITransfor
 
     @Override
     public void setScale(double scale) {
-        //workingScale = workingScale+(scale-this.scale); 
         this.scale = scale;
     }
 
     @Override
     public void setTranslation(double distance_x, double distance_y) {
-        // TODO Auto-generated method stub
-        
+        //should not be used 
     }
 
 }

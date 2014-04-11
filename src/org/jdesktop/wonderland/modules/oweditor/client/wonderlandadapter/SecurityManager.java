@@ -13,7 +13,6 @@ import java.util.Set;
 import java.util.logging.Logger;
 import org.jdesktop.wonderland.client.cell.Cell;
 import org.jdesktop.wonderland.common.cell.state.CellServerState;
-import org.jdesktop.wonderland.common.security.Action;
 import org.jdesktop.wonderland.modules.security.client.SecurityQueryComponent;
 import org.jdesktop.wonderland.modules.security.common.ActionDTO;
 import org.jdesktop.wonderland.modules.security.common.CellPermissions;
@@ -24,37 +23,42 @@ import org.jdesktop.wonderland.modules.security.common.Principal.Type;
 import org.jdesktop.wonderland.modules.security.common.SecurityComponentServerState;
 
 /**
- *
+ * This class deals with the security module in setting and getting
+ * the security parameters.
+ * 
  * @author Patrick
  */
 public class SecurityManager {
-    
-    private static final Logger LOGGER =
-            Logger.getLogger(SecurityManager.class.getName());
     
     private WonderlandAdapterController ac = null;
     private static final ResourceBundle BUNDLE = ResourceBundle.getBundle(
             "org/jdesktop/wonderland/modules/oweditor/client/resources/Bundle");
     
+    private String users = "users";
+    
     //stores the actions. not very elaborate, but there is no
     //obvious way to create a new action.
-    private ActionDTO moveAction = null;
-    private ActionDTO viewAction = null;
-    private ActionDTO changeCompAction = null;
-    private ActionDTO changeSubAction = null;
     
     public SecurityManager(WonderlandAdapterController ac){
         this.ac = ac;
     }
     
-    
+    /**
+     * Gets the security parameters of a cell.
+     * 
+     * @param cell The cell.
+     * @return The rights settings in a linked hash map.
+     */
     public LinkedHashMap<String, Right> getSecurity(Cell cell){
-        
-        SecurityQueryComponent component =
-                cell.getComponent(SecurityQueryComponent.class);
         
         LinkedHashMap<String, Right> map = 
                 new LinkedHashMap<String, Right>();
+        
+        if(cell == null)
+            return map;
+        
+        SecurityQueryComponent component =
+                cell.getComponent(SecurityQueryComponent.class);
         
         if(component == null)
             return map;
@@ -72,12 +76,14 @@ public class SecurityManager {
             return map;
         CellPermissions perms = state.getPermissions();
         
+        //get owners. 
         for (Principal p : perms.getOwners()) {
              
             Right right = new Right();
             right.name = p.getId();
              
             if(p.getType() == Principal.Type.EVERYBODY){
+                users = p.getId();
                 right.name = BUNDLE.getString("Everybody");
                 right.type = BUNDLE.getString("Everybody");
                 right.isEverybody = true;
@@ -96,6 +102,7 @@ public class SecurityManager {
             map.put(p.getId(), right);
         }
         
+        //get permissions other than owners
         for(Permission p : perms.getPermissions()) {
             String name = p.getPrincipal().getId();
              
@@ -106,6 +113,7 @@ public class SecurityManager {
                 right.name = name;
                 
                 if(p.getPrincipal().getType() == Principal.Type.EVERYBODY){
+                    users = p.getPrincipal().getId();
                     right.name = BUNDLE.getString("Everybody");
                     right.type = BUNDLE.getString("Everybody");
                     right.isEverybody = true;
@@ -124,16 +132,12 @@ public class SecurityManager {
                 access = false;
             
             if(action.equals("Move")){
-                moveAction = p.getAction();
                 right.permitMove = access;
             }else if(action.equals("View")){
-                viewAction = p.getAction();
                 right.permitView = access;
             }else if(action.equals("ChangeCellChildren")){
-                changeSubAction = p.getAction();
                 right.permitSubObjects = access;
             }else if(action.equals("ChangeCellComponent")){
-                changeCompAction = p.getAction();
                 right.permitAbilityChange = access;
             }
          }
@@ -141,18 +145,30 @@ public class SecurityManager {
         return map;
     }
 
+    /**
+     * Changes one security entry.
+     * 
+     * @param cell The cell.
+     * @param oldType The old user type.
+     * @param oldName The old user/usergroup name.
+     * @param type The new user type.
+     * @param name The new user name.
+     * @param owner Is owner.
+     * @param addSubObjects Permission
+     * @param changeAbilities Permission
+     * @param move Permission
+     * @param view Permission
+     * @return The permission set.
+     */
     public CellPermissions changeRight(Cell cell, String oldType, String oldName, 
             String type, String name, boolean owner, boolean addSubObjects, 
             boolean changeAbilities, boolean move, boolean view) {
-        
-        LOGGER.warning("CHange right" + oldName);
+        if(cell == null)
+            return null;
         
         SecurityQueryComponent component =
                 cell.getComponent(SecurityQueryComponent.class);
-        
-        LinkedHashMap<String, Right> map = 
-                new LinkedHashMap<String, Right>();
-        
+                
         if(component == null)
             return null;
        
@@ -170,32 +186,40 @@ public class SecurityManager {
         
         CellPermissions perms = state.getPermissions();
         
+        if(oldName == null){
+            addPerm(type, name, owner, addSubObjects, changeAbilities,
+                            move, view, perms);
+            return perms;
+        }
+        
+        if(oldName.equals(BUNDLE.getString("Everybody"))){
+            oldName = users;
+        }
+        
         //search in owners
         for (Principal p : perms.getOwners()) {
              
             if(p.getId().equals(oldName)){
-                LOGGER.warning("found owner");
+                
+                Type t = null;
+
+                if(type.equals(BUNDLE.getString("User"))){
+                    t = Type.USER;
+                }else if(type.equals(BUNDLE.getString("Group"))){
+                    t = Type.GROUP;
+                }
+                p.setId(name);
+
+                if(t == null)
+                    return perms;
+                p.setType(t);
+                
                 if(!owner){
-                LOGGER.warning("not  owner anymore");
                     perms.getOwners().remove(p);
                     addPerm(type, name, owner, addSubObjects, changeAbilities,
                             move, view, perms);
                     return perms;
                 }else{
-                    
-                    LOGGER.warning("still owner");
-                    Type t = null;
-
-                    if(type.equals(BUNDLE.getString("User"))){
-                        t = Type.USER;
-                    }else if(type.equals(BUNDLE.getString("Group"))){
-                        t = Type.GROUP;
-                    }
-                    p.setId(name);
-
-                    if(t == null)
-                        return perms;
-                    p.setType(t);
                     return perms;
                 }
             }
@@ -213,46 +237,48 @@ public class SecurityManager {
             
             if(princ.getId().equals(oldName)){
                 
-                LOGGER.warning("found perms");
-                found = true;
+                if(found == false){
+                    Type t = null;
+
+                    if(type.equals(BUNDLE.getString("User"))){
+                        t = Type.USER;
+                    }else if(type.equals(BUNDLE.getString("Group"))){
+                        t = Type.GROUP;
+                    }
+                    p.getPrincipal().setId(name);
+                    oldName = name;
+
+                    if(t == null)
+                        return perms;
+                    p.getPrincipal().setType(t);
+                    found = true;
+                }
                 
                 if(owner){
-                    
-                    LOGGER.warning("is owner now");
                     perms.getPermissions().remove(p);
                     if(!perms.getOwners().contains(princ)){
                         perms.getOwners().add(princ);
                     }
                 }else{
-                    
-                    LOGGER.warning("normal");
                     String action = p.getAction().getAction().getName();
                     
                     Access access = Permission.Access.DENY;
                     if(action.equals("Move")){
-                        if(moveAction == null)
-                            moveAction = p.getAction();
                         if(move)
                             access = Permission.Access.GRANT;
                         
                         p.setAccess(access);
                     }else if(action.equals("View")){
-                        if(viewAction == null)
-                            viewAction = p.getAction();
                         if(view)
                             access = Permission.Access.GRANT;
                         
                         p.setAccess(access);
                     }else if(action.equals("ChangeCellChildren")){
-                        if(changeSubAction == null)
-                            changeSubAction = p.getAction();
                         if(addSubObjects)
                             access = Permission.Access.GRANT;
                         
                         p.setAccess(access);
                     }else if(action.equals("ChangeCellComponent")){
-                        if(changeCompAction == null)
-                            changeCompAction = p.getAction();
                         if(changeAbilities)
                             access = Permission.Access.GRANT;
                         
@@ -269,6 +295,18 @@ public class SecurityManager {
         
     }
     
+    /**
+     * Adds a permission to a set.
+     * 
+     * @param type The permission type.
+     * @param name The name of the user/usergroup
+     * @param owner Is owner.
+     * @param addSubObjects Permission
+     * @param changeAbilities Permission
+     * @param move Permission
+     * @param view Permission
+     * @param perms The permission set to add the entry.
+     */
     private void addPerm(String type, String name, boolean owner,
             boolean addSubObjects, 
             boolean changeAbilities, boolean move, boolean view,
@@ -280,6 +318,22 @@ public class SecurityManager {
             t = Type.USER;
         }else if(type.equals(BUNDLE.getString("Group"))){
             t = Type.GROUP;
+        }
+        
+        ActionDTO moveAction = null;
+        ActionDTO viewAction = null;
+        ActionDTO changeCompAction = null;
+        ActionDTO changeSubAction = null;
+        
+        for(ActionDTO a : perms.getAllActions()){
+            if(a.getAction().getName().equals("Move"))
+                moveAction = a;
+            else if(a.getAction().getName().equals("View"))
+                viewAction = a;
+            else if(a.getAction().getName().equals("ChangeCellChildren"))
+                changeSubAction = a;
+            else if(a.getAction().getName().equals("ChangeCellComponent"))
+                changeCompAction = a;  
         }
 
         if(t == null)
@@ -313,6 +367,64 @@ public class SecurityManager {
         }else{
             perms.getOwners().add(princ);
         }
+    }
+
+    /**
+     * Removes one security entry.
+     * 
+     * @param cell The cell..
+     * @param name The name of the security entry to remove.
+     * @return The permissions.
+     */
+    public CellPermissions removeSecurity(Cell cell, String name) {
+        if(cell == null)
+            return null;
+        
+        SecurityQueryComponent component =
+                cell.getComponent(SecurityQueryComponent.class);
+                
+        if(component == null)
+            return null;
+       
+        CellServerState cellServerState = ac.sc.fetchCellServerState(cell);
+        
+        if(cellServerState == null)
+            return null;
+        
+        SecurityComponentServerState state =
+                (SecurityComponentServerState) cellServerState.getComponentServerState(
+                SecurityComponentServerState.class);
+        
+        if(state == null)
+            return null;
+        
+        CellPermissions perms = state.getPermissions();
+        
+        if(name.equals(BUNDLE.getString("Everybody"))){
+            return null;
+        }
+        
+        //search in owners
+        for (Principal p : perms.getOwners()) {
+            if(p.getId().equals(name)){
+                perms.getOwners().remove(p);
+                return perms;
+            }
+        }
+        
+        Set<Permission> permission = new LinkedHashSet<Permission>();
+        permission.addAll(perms.getPermissions());
+        
+        for(Permission p : permission) {
+            
+            Principal princ = p.getPrincipal();
+            
+            if(princ.getId().equals(name)){
+                perms.getPermissions().remove(p);
+            }
+        }
+        
+        return perms;
     }
     
     

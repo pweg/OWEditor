@@ -7,7 +7,8 @@
 package org.jdesktop.wonderland.modules.oweditor.client.dummyadapter;
 
 /**
- *
+ * Initial setting for the dummy adapater.
+ * 
  * @author Patrick
  */
 public class AdapterSettings {
