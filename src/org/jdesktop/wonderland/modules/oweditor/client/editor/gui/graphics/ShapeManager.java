@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.ListIterator;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
-import java.util.logging.Logger;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IDataObject;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.ITransformedObject;
@@ -23,7 +22,6 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shape
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.SimpleShapeObject;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.stateDraggingShape;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.shapes.stateTransformedEdge;
-import org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter.WorldBuilder;
 
 /**
  * This class is used for creating and managing all shapes that 

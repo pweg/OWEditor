@@ -272,6 +272,7 @@ public class DataObject implements IDataObject{
                 permitSubObjects, permitAbilityChange,
                 permitMove, permitView, isEditable,
                 isEverybody);
+            
             rights.add(right);
         }     
     }

@@ -363,12 +363,13 @@ public class ImageSelectionFrame extends javax.swing.JFrame {
      * 
      * @param name The name of an image.
      */
-    public void setActive(String name){
+    public void setActive(String name, String dir){
         active = -1;
         
         for(int i = 0; i< imgs.size();i++){
             IImage image = imgs.get(i);
-            if(image.getName().equals(name)){
+            if(image.getName().equals(name) &&
+                    image.getDir().equals(dir)){
                 active = i;
                 break;
             }

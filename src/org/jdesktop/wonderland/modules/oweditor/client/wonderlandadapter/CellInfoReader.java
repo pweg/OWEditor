@@ -65,7 +65,11 @@ public class CellInfoReader {
      */
     public static boolean isSphere(Cell cell){
         BoundingVolume bounds = cell.getLocalBounds();
-        return bounds instanceof BoundingSphere;
+        
+        if(bounds instanceof BoundingSphere)
+            return true;
+        else 
+            return false;
     }
     
     /**

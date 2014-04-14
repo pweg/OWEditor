@@ -77,13 +77,12 @@ public class KMZImporter {
     public void importKMZ(String url){
         
         try{
-        File file = new File(url);
-        
-        ImportSettings importSettings = 
-                new ImportSettings(file.toURI().toURL());
-        importedModel = loadModel(importSettings);
-        
-        }catch(IOException e){
+            File file = new File(url);
+
+            ImportSettings importSettings = 
+                    new ImportSettings(file.toURI().toURL());
+            importedModel = loadModel(importSettings);
+        }catch(Exception e){
             LOGGER.log(Level.SEVERE, "Could not import KMZ file!", e);
         }
     }
@@ -213,9 +212,10 @@ public class KMZImporter {
             return false;
         }
         
-        if(importedModel == null || module_name == null || module_name.equals("")){
-            LOGGER.log(Level.SEVERE, "Imported Model == null or module "
-                    + "name wrong{0}", module_name);
+        if(importedModel == null || module_name == null 
+                || module_name.equals("")){
+             LOGGER.log(Level.SEVERE, "Imported Model == null or module name wrong " 
+                     + module_name);
             return false;
         }
         moduleName = module_name;
@@ -272,13 +272,13 @@ public class KMZImporter {
 
             uploader.upload(moduleJar);
         } catch (MalformedURLException ex) {
-            LOGGER.log(Level.SEVERE, "Deploy to Server: malformed url{0}", ex);
+            LOGGER.log(Level.SEVERE, "Deploy to Server: malformed url ", ex);
             return false;
         } catch (IOException e) {
-            LOGGER.log(Level.SEVERE, "Deploy to Server: IOException{0}", e);
+            LOGGER.log(Level.SEVERE, "Deploy to Server: IOException ", e);
             return false;
         } catch (Throwable t) {
-            LOGGER.log(Level.SEVERE, "Deploy to Server: Error{0}", t);
+            LOGGER.log(Level.SEVERE, "Deploy to Server: Error ", t);
            return false;
         }
 
@@ -335,7 +335,7 @@ public class KMZImporter {
                 deploymentInfo.add(importedModel.getModelLoader().deployToModule(
                         tmpDir, importedModel));
             } catch (IOException ex) {
-                LOGGER.log(Level.SEVERE, "Building module {0}", ex);
+                LOGGER.log(Level.SEVERE, "Building module ", ex);
             }
 
             ModuleJarWriter mjw = new ModuleJarWriter();
@@ -357,9 +357,9 @@ public class KMZImporter {
                 moduleJar = new File(targetDir, moduleName + ".jar");
                 mjw.writeToJar(moduleJar);
             } catch (IOException ex) {
-                LOGGER.log(Level.SEVERE, "Building module {0}", ex);
+                LOGGER.log(Level.SEVERE, "Building module ", ex);
             } catch (JAXBException ex) {
-                LOGGER.log(Level.SEVERE, "Building module {0}", ex);
+                LOGGER.log(Level.SEVERE, "Building module ", ex);
             }
 
             if (moduleJar == null) {
@@ -367,7 +367,7 @@ public class KMZImporter {
                 return null;
             }
         } catch (IOException ex) {
-            LOGGER.log(Level.SEVERE, "Building module {0}", ex);
+            LOGGER.log(Level.SEVERE, "Building module ", ex);
             return null;
         }
 

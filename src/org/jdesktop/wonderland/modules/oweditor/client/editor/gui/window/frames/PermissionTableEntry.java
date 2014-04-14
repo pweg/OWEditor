@@ -64,8 +64,9 @@ public class PermissionTableEntry implements IPermissionTableEntry{
             return false;
         if(entry.isEditable != isEditable)
             return false;
-        
-        return (entry.isEverybody == isEverybody);
+        if(entry.isEverybody != isEverybody)
+            return false;
+        return true;
     }
     
     @Override

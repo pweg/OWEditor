@@ -256,7 +256,10 @@ public class GraphicToInputFacade implements IGraphicToInput{
         ShapeObject shape = sm.getShapeSuroundingPoint(p);
         
         if(shape == null){
-             return !ssm.getSelection().isEmpty();
+            if(ssm.getSelection().isEmpty())
+                return false;
+            else
+                return true;
         }
         
         if(!ssm.isCurrentlySelected(shape)){
@@ -313,7 +316,11 @@ public class GraphicToInputFacade implements IGraphicToInput{
     @Override
     public boolean isMouseInObject(Point point) {
         ShapeObject shape = sm.getShapeSuroundingPoint(point);
-        return (shape != null);
+        
+        if(shape == null)
+            return false;
+        else
+            return true;
     }
     
     @Override
@@ -333,13 +340,21 @@ public class GraphicToInputFacade implements IGraphicToInput{
     @Override
     public boolean isMouseInBorder(Point p) {
         byte value = sm.isInBorderShapes(p);
-        return (value == TransformationBorder.INEDGES);
+        
+        if(value == TransformationBorder.INEDGES){
+            return true;
+        }
+        return false;
     }
     
     @Override
     public boolean isMouseInBorderCenter(Point p){
         byte value = sm.isInBorderShapes(p);
-        return (value == TransformationBorder.INROTATIONCENTER);
+        
+        if (value == TransformationBorder.INROTATIONCENTER){
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -365,9 +380,9 @@ public class GraphicToInputFacade implements IGraphicToInput{
 
     @Override
     public boolean isShapeSelected() {
-        
-        //return ssm.getSelection().size() > 0;
-        return !ssm.getSelection().isEmpty();
+        if(ssm.getSelection().size() > 0)
+            return true;
+        return false;
     }
 
     public void registerWindowInterface(IWindowToGraphic window) {

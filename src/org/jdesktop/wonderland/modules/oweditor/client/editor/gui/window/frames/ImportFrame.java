@@ -11,7 +11,6 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.util.ResourceBundle;
-import java.util.logging.Logger;
 
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
@@ -31,10 +30,6 @@ public class ImportFrame extends javax.swing.JFrame {
 
     private static final long serialVersionUID = 1L;
     
-    private static final Logger LOGGER =
-            Logger.getLogger(ImportFrame.class.getName());
-    
-
     private static final ResourceBundle BUNDLE = ResourceBundle.getBundle(
             "org/jdesktop/wonderland/modules/oweditor/client/resources/Bundle");
 
@@ -54,6 +49,7 @@ public class ImportFrame extends javax.swing.JFrame {
     private final Color errorColor = Color.red;
     private final Color normalColor = Color.black;
     private String imgName = null;
+    private String imgDir = null;
     
     //font for the labels.
     private Font normalFont = null;
@@ -470,7 +466,7 @@ public class ImportFrame extends javax.swing.JFrame {
     protected void imgButtonActionPerformed(ActionEvent evt) {
         ImageSelectionFrame frame = fc.getImageSelectionFrame();
         frame.setLocationRelativeTo(this);
-        frame.setActive(imgName);
+        frame.setActive(imgName, imgDir);
         
         /*
          * Listener for when the image selection frame is closed.
@@ -500,9 +496,11 @@ public class ImportFrame extends javax.swing.JFrame {
                 if(img == null){
                     image.setImage(null);
                     imgName = null;
+                    imgDir = null;
                 }else{
                     image.setImage(img.getImage());
                     imgName = img.getName();
+                    imgDir = img.getDir();
                 }
             }
 
@@ -719,7 +717,8 @@ public class ImportFrame extends javax.swing.JFrame {
         new Thread(){
                 @Override
                 public void run(){
-                    boolean ret_val = fc.window.importKMZ(name, module_name, imgName, 
+                    boolean ret_val = fc.window.importKMZ(name, module_name, 
+                            imgName, imgDir,
                             xf, yf, zf, 
                              rot_xf, rot_yf, rot_zf, scalef);
                     

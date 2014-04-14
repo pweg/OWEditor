@@ -186,7 +186,7 @@ public interface GUIObserverInterface {
      * @throws java.lang.Exception
      */
     public long importKMZ(String name, String module_name,
-            String imgName, double x, double y,
+            String imgName, String imgDir, double x, double y,
             double z, double rotationX, double rotationY, double rotationZ,
             double scale) throws Exception;
 

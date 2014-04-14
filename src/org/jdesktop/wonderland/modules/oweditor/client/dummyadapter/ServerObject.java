@@ -71,7 +71,7 @@ public class ServerObject {
     }
     
     @Override
-    public ServerObject clone() throws CloneNotSupportedException{
+    public ServerObject clone(){
         return new ServerObject(this.id, this.x,this.y,this.z, this.rotationX,
                 this.rotationY, this.rotationZ,
                 this.scale, this.width, this.height, this.name, this.image,

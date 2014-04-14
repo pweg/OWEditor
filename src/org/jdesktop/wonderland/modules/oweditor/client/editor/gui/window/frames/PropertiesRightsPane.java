@@ -346,7 +346,7 @@ public class PropertiesRightsPane extends JPanel {
     private javax.swing.JButton resetButton;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable permTable;
-    private final PermissionTable permTableModel = new PermissionTable();
+    private PermissionTable permTableModel = new PermissionTable();
     // End of variables declaration  
     
 }

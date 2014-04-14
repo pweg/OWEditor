@@ -46,6 +46,7 @@ public class PropertiesFrame extends javax.swing.JFrame {
     protected ArrayList<IDataObject> objects = null;
     
     private String imgName = null;
+    private String imgDir = null;
     
     private String initialX = null;
     private String initialY = null;
@@ -56,6 +57,7 @@ public class PropertiesFrame extends javax.swing.JFrame {
     private String initialScale = null;
     private String initialName = null;
     private String initialImg = null;
+    private String initialImgDir = null;
     
     private JTabbedPane tabbedPane = null;
     protected PropertiesRightsPane rightsPane = null;
@@ -405,7 +407,7 @@ public class PropertiesFrame extends javax.swing.JFrame {
     private void imageButtonActionPerformed(java.awt.event.ActionEvent evt){
         ImageSelectionFrame frame = fc.getImageSelectionFrame();
         frame.setLocationRelativeTo(this);
-        frame.setActive(imgName);
+        frame.setActive(imgName, imgDir);
         
         /*
          * Add a listener for when the image selection frame is
@@ -439,9 +441,11 @@ public class PropertiesFrame extends javax.swing.JFrame {
                 if(img == null){
                     image.setImage(null);
                     imgName = null;
+                    imgDir = null;
                 }else{
                     image.setImage(img.getImage());
                     imgName = img.getName();
+                    imgDir = img.getDir();
                 }
             }
 
@@ -462,6 +466,7 @@ public class PropertiesFrame extends javax.swing.JFrame {
         ArrayList<Double> rotZ = null; 
         ArrayList<Double> scaleList = null; 
         ArrayList<String> img_name = null;
+        ArrayList<String> img_dir = null;
 
         String name = nameField.getText();
         String xs = locationFieldX.getText();
@@ -492,8 +497,10 @@ public class PropertiesFrame extends javax.swing.JFrame {
 
         if((initialImg == null && imgName != null)  || 
                 (initialImg != null && imgName == null)
-                || (imgName != null && !imgName.equals(initialImg))){
+                || (imgName != null && !imgName.equals(initialImg) 
+                || imgDir != null && !imgDir.equals(initialImgDir))){
             img_name = new ArrayList<String>(); 
+            img_dir = new ArrayList<String>();
         }
         
         ArrayList<PermissionTableEntry> rights = rightsPane.getChanged();
@@ -637,16 +644,17 @@ public class PropertiesFrame extends javax.swing.JFrame {
                 else
                     scaleList.add(o.getScale());
             }
-            if(img_name != null)
+            if(img_name != null && img_dir != null){
                 img_name.add(imgName);
+                img_dir.add(imgDir);
+            }
         }
 
         ArrayList<Object> list = new ArrayList<Object>();
         list.addAll(rights);
         
         fc.window.setProperties(ids, names, coordsX, coordsY, coordsZ, 
-                rotX, rotY, rotZ, scaleList, img_name, list);
-        
+                rotX, rotY, rotZ, scaleList, img_name, img_dir, list);
         
         setVisible(false);
         
@@ -699,6 +707,7 @@ public class PropertiesFrame extends javax.swing.JFrame {
     private void setObjects(){
         
         initialImg = "";
+        initialImgDir= "";
         
         for(IDataObject object : objects){
         
@@ -740,6 +749,15 @@ public class PropertiesFrame extends javax.swing.JFrame {
                     initialImg = imgNameLocal;
                 else if(initialImg.equals(imgNameLocal))
                     initialImg = null;
+            }
+
+            if(initialImgDir != null){
+                String imgDirLocal = object.getImgClass().getDir();
+                
+                if(initialImgDir.equals(""))
+                    initialImgDir = imgDirLocal;
+                else if(initialImgDir.equals(imgDirLocal))
+                    initialImgDir = null;
             }
         }
         
@@ -811,6 +829,7 @@ public class PropertiesFrame extends javax.swing.JFrame {
             image.setText(BUNDLE.getString("NoImage"));
             if(img != null){
                 imgName = img.getName();
+                imgDir = img.getDir();
                 image.setImage(img.getImage());
             }else{
                 image.setImage(null);

@@ -41,10 +41,10 @@ public class WindowToFrame implements IWindowToFrame{
 
     @Override
     public boolean importKMZ(String name, String module_name, 
-            String image_url, double x, double y,
+            String imgName, String imgDir, double x, double y,
             double z, double rotationX, double rotationY, double rotationZ,
             double scale) {
-        return wc.adapter.importKMZ(name, module_name, image_url, x, y, z,
+        return wc.adapter.importKMZ(name, module_name, imgName,imgDir, x, y, z,
                 rotationX, rotationY, rotationZ, scale);
     }
 
@@ -116,9 +116,10 @@ public class WindowToFrame implements IWindowToFrame{
             ArrayList<Float> coordsZ, ArrayList<Double> rotX,
             ArrayList<Double> rotY, ArrayList<Double> rotZ,
             ArrayList<Double> scale, ArrayList<String> imgName,
+            ArrayList<String> imgDir,
             ArrayList<Object> furtherActions) {
         wc.adapter.setProperties(ids, names, coordsX, coordsY, coordsZ, 
-                rotX, rotY, rotZ, scale, imgName, furtherActions);
+                rotX, rotY, rotZ, scale, imgName, imgDir, furtherActions);
     }
 
     @Override

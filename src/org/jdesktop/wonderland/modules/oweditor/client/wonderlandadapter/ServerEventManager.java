@@ -177,7 +177,8 @@ public class ServerEventManager {
                     cell.getCellID(), className);
             ResponseMessage response = cell.sendCellMessageAndWait(cscm);
             if (response instanceof ErrorMessage) {
-                LOGGER.log(Level.WARNING, "ERROR Movable component creation{0}", response);
+                LOGGER.log(Level.WARNING, "ERROR Movable component creation", 
+                        response);
             }
         }  
         
@@ -274,7 +275,7 @@ public class ServerEventManager {
             }else{
                 try {
                     ac.sc.deleteComponent(id, IDCellComponentServerState.class);
-                } catch (ServerCommException ex) {
+                } catch (Exception ex) {
                     LOGGER.log(Level.SEVERE, null, ex);
                 }
             }

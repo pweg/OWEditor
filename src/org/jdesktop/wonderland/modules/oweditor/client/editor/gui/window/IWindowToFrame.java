@@ -34,7 +34,8 @@ public interface IWindowToFrame {
      * 
      * @param name The name of the new model
      * @param module_name The name of the module.
-     * @param image_url The url of the image representation
+     * @param imgName The name of the image representation
+     * @param imgDir The image directory.
      * @param x The x coordinate of the new model.
      * @param y The y coordinate of the new model.
      * @param z The z coordinate of the new model.
@@ -46,8 +47,10 @@ public interface IWindowToFrame {
      * @return Return true, if creation is possible, false,
      * if the same name already exists.
      */
-    public boolean importKMZ(String name, String module_name, String image_url, double x,
-            double y, double z, double rotationX, double rotationY, double rotationZ,
+    public boolean importKMZ(String name, String module_name, 
+            String imgName, String imgDir,
+            double x, double y, double z, 
+            double rotationX, double rotationY, double rotationZ,
             double scale);
     
     /**
@@ -147,13 +150,14 @@ public interface IWindowToFrame {
      * @param rotZ The new z rotation.
      * @param scale The new scale.
      * @param imgName The new image name.
+     * @param imgDir The new image directory.
      * @param furtherActions Further actions, when properties are set, like 
      * rights changes etc.
      */
     public void setProperties(ArrayList<Long> ids, ArrayList<String> names,
             ArrayList<Float> coordsX, ArrayList<Float> coordsY, ArrayList<Float> coordsZ,
             ArrayList<Double> rotX, ArrayList<Double> rotY, ArrayList<Double> rotZ,
-            ArrayList<Double> scale, ArrayList<String> imgName,
+            ArrayList<Double> scale, ArrayList<String> imgName, ArrayList<String> imgDir,
             ArrayList<Object> furtherActions);
 
     /**

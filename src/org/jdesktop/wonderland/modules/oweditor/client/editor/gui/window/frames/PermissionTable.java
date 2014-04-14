@@ -73,7 +73,17 @@ public class PermissionTable extends AbstractTableModel{
                 name, owner, addSubObjects, changeAbilities,
                 move, view, editable, isEverybody);
         entry.isNew = true;
-        rightsList.add(entry);
+        
+        int i;
+        for(i=0; i < rightsList.size();i++){
+            PermissionTableEntry e = rightsList.get(i);
+            
+            if(e.getName().compareToIgnoreCase(name)>=0){
+                break;
+            }
+            
+        }
+        rightsList.add(i, entry);
         
         this.fireTableRowsInserted(rightsList.size() - 1,
                 rightsList.size() - 1);
@@ -142,7 +152,6 @@ public class PermissionTable extends AbstractTableModel{
         fireTableDataChanged();
     }
 
-
     @Override
     public String getColumnName(int column) {
         switch (column) {
@@ -182,6 +191,7 @@ public class PermissionTable extends AbstractTableModel{
         
         PermissionTableEntry entry = (PermissionTableEntry)rightsList.get(rowIndex);
         if(entry.isEverybody && entry.isEditable){
+            System.out.println("is everybody");
             if(columnIndex == 0 || columnIndex == 1)
                 return false;
             else

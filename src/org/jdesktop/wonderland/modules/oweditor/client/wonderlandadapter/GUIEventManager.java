@@ -204,7 +204,7 @@ public class GUIEventManager implements GUIObserverInterface{
 
     @Override
     public long importKMZ(String name, String module_name, 
-            String imageName, double x, double y, 
+            String imgName, String imgDir, double x, double y, 
             double z, double rotationX, double rotationY, double rotationZ, 
             double scale) throws Exception{
         
@@ -225,8 +225,8 @@ public class GUIEventManager implements GUIObserverInterface{
         Vector3f rotate = new Vector3f((float)rotationX, (float)rotationZ,
                 (float)rotationY);
         
-        if(imageName != null && !imageName.equals("")){
-            ac.ltm.addImage(id, imageName);
+        if(imgName != null && !imgName.equals("")){
+            ac.ltm.addImage(id, imgName, imgDir);
         }
         
         try{

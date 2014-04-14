@@ -119,7 +119,9 @@ public class BackupManager {
      * @return True, if this original id is stored, false otherwise.
      */
     public boolean containsOriginalID(long originalID){
-        return lastActiveID.containsKey(originalID);
+        if(lastActiveID.containsKey(originalID))
+            return true;
+        return false;
     }
     
     /**

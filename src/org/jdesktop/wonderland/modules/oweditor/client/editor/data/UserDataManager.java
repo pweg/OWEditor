@@ -3,6 +3,7 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.data;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Logger;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IImage;
@@ -21,13 +22,13 @@ public class UserDataManager {
     private String userDir = null;
     
     private ArrayList<IImage> imageLib = null;
-    private HashMap<String, HashMap<String, IImage>> foreignImgLib = null;
+    private HashMap<String, ArrayList<IImage>> foreignImgLib = null;
     private ArrayList<IUserObserver> observers = null;
     
     public UserDataManager(){
         imageLib = new ArrayList<IImage>();
         observers = new ArrayList<IUserObserver>();
-        foreignImgLib = new HashMap<String, HashMap<String, IImage>>();
+        foreignImgLib = new HashMap<String, ArrayList<IImage>>();
     }
     
     /**
@@ -45,7 +46,14 @@ public class UserDataManager {
      * @return Buffered images in an array list.
      */
     public ArrayList<IImage> getImgLib(){
-        return imageLib;
+        ArrayList<IImage> lib = new ArrayList<IImage>();
+        lib.addAll(imageLib);
+        
+        for(Map.Entry<String, ArrayList<IImage>> entry : foreignImgLib.entrySet()){
+            lib.addAll(entry.getValue());
+        }
+        
+        return lib;
     }
     
     /**
@@ -84,17 +92,20 @@ public class UserDataManager {
      * @param name The image name.
      */
     protected void addImage(BufferedImage img, String name, String dir){
+        if(img == null)
+            return;
+        
         if(dir.equals(userDir))
             addImgToUserdir(img, name);
         else{
-            HashMap<String, IImage> lib;
+            ArrayList<IImage> lib;
             
             if(foreignImgLib.containsKey(dir))
                 lib = foreignImgLib.get(dir);
             else
-                lib = new HashMap<String, IImage>();
+                lib = new ArrayList<IImage>();
             
-            lib.put(name, new Image(name, img, dir));
+            lib.add(new Image(name, img, dir));
             foreignImgLib.put(dir, lib);
         }
     }
@@ -141,11 +152,11 @@ public class UserDataManager {
             }
         }else{
             if(foreignImgLib.containsKey(dir)){
-                HashMap<String, IImage> lib = foreignImgLib.get(dir);
-                
-                IImage img = lib.get(name);
-                if(img != null)
-                    return img.getImage();
+                ArrayList<IImage> lib = foreignImgLib.get(dir);
+                for(IImage img : lib){
+                    if(img.getName().equals(name))
+                        return img.getImage();
+                }
             }
         }
         return null;

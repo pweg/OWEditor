@@ -49,8 +49,8 @@ public class WorldBuilder {
         CellCache cache = ac.sm.getCellCache();
         
         if (cache == null) {
-            LOGGER.log(Level.WARNING, "Unable to find Cell cache for "
-                    + "session {0}", ac.sm.getSession());
+            LOGGER.warning("Unable to find Cell cache for session " + 
+                    ac.sm.getSession());
             return;
         }
         

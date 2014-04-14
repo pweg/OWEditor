@@ -8,7 +8,6 @@ import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.logging.Logger;
 
 import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.CoordinateTranslatorInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IDataObject;
@@ -24,9 +23,6 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.IDat
  */
 public class DataObjectManager {
     
-    private static final Logger LOGGER =
-            Logger.getLogger(DataObjectManager.class.getName());
-        
     private DataController dc = null;
     private ArrayList<IDataObjectObserver> observers = null;
     private CoordinateTranslatorInterface ct = null;

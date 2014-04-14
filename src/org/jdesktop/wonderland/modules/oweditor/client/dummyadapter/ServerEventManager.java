@@ -267,8 +267,10 @@ public class ServerEventManager {
             String oldName, String type, String name, boolean owner,
             boolean addSubObjects, boolean changeAbilities, boolean move,
             boolean view){
+        if(oldName != name)
+            dui.notifyRightsRemoval(id, oldType, oldName);
         dui.notifyRightsChange(id, type, name, owner, addSubObjects,
-                changeAbilities, move, view, false, false);
+                changeAbilities, move, view, true, false);
         
     }
     

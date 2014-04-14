@@ -98,7 +98,8 @@ public interface IAdapterCommunication {
      * 
      * @param name The name of the new model
      * @param module_name The name of the module.
-     * @param image_url The url of the image representation
+     * @param imgName The name of the image representation
+     * @param imgDir The directory of the image.
      * @param x The x coordinate of the new model.
      * @param y The y coordinate of the new model.
      * @param z The z coordinate of the new model.
@@ -111,7 +112,7 @@ public interface IAdapterCommunication {
      * if there was an error.
      */
     public boolean importKMZ(String name, String module_name,
-            String image_url, double x, double y,
+            String imgName, String imgDir, double x, double y,
             double z, double rotationX, double rotationY, double rotationZ,
             double scale);
 
@@ -126,9 +127,11 @@ public interface IAdapterCommunication {
     public void redo();
 
     /**
-     * TODO currently not used yet.
-     * @param name
-     * @return
+     * Looks whether or not an image with the name exists in the 
+     * user directory.
+     * 
+     * @param name The image name.
+     * @return True, if it exists, false otherwise.
      */
     public boolean imageExists(String name);
 
@@ -154,6 +157,7 @@ public interface IAdapterCommunication {
      * @param rotZ The new z rotation.
      * @param scale The new scale.
      * @param imgName The new image name.
+     * @param imgDir The directory of the new image.
      * @param furtherActions further actions
      */
     public void setProperties(ArrayList<Long> ids, ArrayList<String> names,
@@ -161,6 +165,7 @@ public interface IAdapterCommunication {
             ArrayList<Float> coordsZ, ArrayList<Double> rotX,
             ArrayList<Double> rotY, ArrayList<Double> rotZ,
             ArrayList<Double> scale, ArrayList<String> imgName,
+            ArrayList<String> imgDir, 
             ArrayList<Object> furtherActions);
 
     /**

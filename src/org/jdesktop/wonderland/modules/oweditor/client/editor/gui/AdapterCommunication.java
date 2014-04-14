@@ -38,10 +38,7 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.frames.
  */
 public class AdapterCommunication implements IAdapterCommunication{
     
-     private static final Logger LOGGER =
-            Logger.getLogger(AdapterCommunication.class.getName());
-
-    private GUIObserverInterface goi = null;
+     private GUIObserverInterface goi = null;
     private IWindow window = null;
     private ArrayList<Command> undoList = null;
     private ArrayList<Command> redoList = null;
@@ -190,12 +187,13 @@ public class AdapterCommunication implements IAdapterCommunication{
 
     @Override
     public boolean importKMZ(String name, String module_name,
-            String image_url, double x, double y,
+            String imgName, String imgDir, double x, double y,
             double z, double rotationX, double rotationY, double rotationZ,
             double scale) {
         
         try {
-            long id = goi.importKMZ(name, module_name, image_url, x,y,z, rotationX, 
+            long id = goi.importKMZ(name, module_name, imgName, imgDir,
+                    x,y,z, rotationX, 
                     rotationY, rotationZ, scale);
             
             //Import does not need all the baggage in order to undo/redo
@@ -222,9 +220,8 @@ public class AdapterCommunication implements IAdapterCommunication{
             ArrayList<Float> coordsX, ArrayList<Float> coordsY, ArrayList<Float> coordsZ,
             ArrayList<Double> rotX, ArrayList<Double> rotY, ArrayList<Double> rotZ,
             ArrayList<Double> scale, ArrayList<String> imgName, 
+            ArrayList<String> imgDir,
             ArrayList<Object> furtherActions){
-        
-        String userDir = dm.getUserImgDir();
 
         ArrayList<String> names_old = new ArrayList<String>();
         ArrayList<Vector3D> coords_old = new ArrayList<Vector3D>();
@@ -235,7 +232,6 @@ public class AdapterCommunication implements IAdapterCommunication{
         ArrayList<Double> scale_new = scale;
         ArrayList<String> img_name_old =  new ArrayList<String>();
         ArrayList<String> img_path_old =  new ArrayList<String>();
-        ArrayList<String> img_path_new =  new ArrayList<String>();
         
         if(coordsX == null && coordsY == null && coordsZ == null){
             coords_new = null;
@@ -296,7 +292,6 @@ public class AdapterCommunication implements IAdapterCommunication{
             if(imgName != null){
                 img_name_old.add(o.getImgClass().getName());
                 img_path_old.add(o.getImgClass().getDir());
-                img_path_new.add(userDir);
             }
             
             double scale_object = o.getScale();
@@ -323,7 +318,7 @@ public class AdapterCommunication implements IAdapterCommunication{
         Command imgCom = null;
         if(imgName != null){
             imgCom = new SetImage(ids, img_name_old, img_path_old, imgName,
-                    img_path_new);
+                    imgDir);
         }
         
         ArrayList<Command> furtherComs = new ArrayList<Command>();

@@ -1,7 +1,5 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.gui;
 
-import java.util.logging.Logger;
-
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.ITransformedObject;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.IDataObjectObserver;
 
@@ -15,8 +13,6 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.IDat
 public class DataObjectObserver implements 
                                 IDataObjectObserver{
 
-    private static final Logger LOGGER =
-            Logger.getLogger(DataObjectObserver.class.getName());
     private GUIController gc = null;
     
     /**

@@ -170,13 +170,8 @@ public class ServerSimulator {
     public ServerObject copyObject(long id, String name){
         ServerObject object = getObject(id);
         
-        ServerObject clone;
-        try {
-            clone = object.clone();
-        } catch (CloneNotSupportedException ex) {
-            System.err.println(ex);
-            return null;
-        }
+        ServerObject clone = object.clone();
+        
         clone.id = currentID;
         currentID++;
         clone.name = name;

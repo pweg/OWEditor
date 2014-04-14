@@ -119,8 +119,10 @@ public class Rights implements IRights{
             return false;
         if(right.getPermAddSubObjects() != permitSubObjects)
             return false;
-        
-        return (right.getPermView() == permitView);
+         if(right.getPermView() != permitView)
+            return false;
+         else
+             return true;
     }    
 
 }

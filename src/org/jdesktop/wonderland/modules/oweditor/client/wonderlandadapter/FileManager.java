@@ -168,7 +168,9 @@ public class FileManager {
             
             ContentNode file = ((ContentCollection) directory).getChild(fileName);
                         
-            return (file == null);
+            if(file == null)
+                return false;
+            return true;
             
          } catch (ContentRepositoryException ex) {
              Logger.getLogger(FileManager.class.getName()).log(Level.SEVERE, null, ex);
