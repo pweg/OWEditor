@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.ListIterator;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
+import java.util.logging.Logger;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IDataObject;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.ITransformedObject;
@@ -295,10 +296,11 @@ public class ShapeManager {
         }
         
         if(!found){
+            writeLock.lock();
             try {
                 for(ShapeObject s : background){
                     if(s.getID() == id){
-                        shapes.remove(s);
+                        background.remove(s);
                         break;
                     }
                 }

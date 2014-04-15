@@ -18,7 +18,7 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IAd
 public class WonderlandAdapterController implements AdapterControllerMainControllerInterface{
     
     protected FileManager fm = null;
-    protected GUIEventManager go = null;
+    protected GUIEventManager gem = null;
     protected CoordinateTranslator ct = null;
     protected ServerEventManager sem = null;
     protected TransformListener tl = null;
@@ -39,7 +39,7 @@ public class WonderlandAdapterController implements AdapterControllerMainControl
         cnm = new CopyNameManager();
         ltm = new LateTransformationManager();
         ct = new CoordinateTranslator();
-        go = new GUIEventManager(this);
+        gem = new GUIEventManager(this);
         sem = new ServerEventManager(this);
         sc = new ServerCommunication(this);
         tl = new TransformListener(sem);
@@ -59,7 +59,7 @@ public class WonderlandAdapterController implements AdapterControllerMainControl
 
     @Override
     public GUIObserverInterface getClientUpdateInterface() {
-        return go;
+        return gem;
     }
 
     @Override

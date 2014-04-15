@@ -48,7 +48,7 @@ import org.jdesktop.wonderland.modules.security.common.CellPermissions;
 import org.jdesktop.wonderland.modules.security.common.SecurityComponentServerState;
 
 /**
- * This class is used for outgoing communication with the server.
+ * This class is used for outgeming communication with the server.
  * 
  * @author Patrick
  */

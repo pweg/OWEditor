@@ -194,6 +194,7 @@ public class SecurityManager {
         
         if(oldName.equals(BUNDLE.getString("Everybody"))){
             oldName = users;
+            name = users;
         }
         
         //search in owners
@@ -207,11 +208,10 @@ public class SecurityManager {
                     t = Type.USER;
                 }else if(type.equals(BUNDLE.getString("Group"))){
                     t = Type.GROUP;
+                }else{
+                    t = Type.EVERYBODY;
                 }
                 p.setId(name);
-
-                if(t == null)
-                    return perms;
                 p.setType(t);
                 
                 if(!owner){
@@ -229,13 +229,16 @@ public class SecurityManager {
         Set<Permission> permission = new LinkedHashSet<Permission>();
         permission.addAll(perms.getPermissions());
         
-        boolean found = false;
-        
         for(Permission p : permission) {
             
             Principal princ = p.getPrincipal();
             
             if(princ.getId().equals(oldName)){
+                
+                perms.getPermissions().remove(p);
+                /*This is old code, which could be used to change permissions.
+                Currently it is easier to remove permissions and then add them
+                new.
                 
                 if(found == false){
                     Type t = null;
@@ -244,12 +247,12 @@ public class SecurityManager {
                         t = Type.USER;
                     }else if(type.equals(BUNDLE.getString("Group"))){
                         t = Type.GROUP;
+                    }else{
+                        t = Type.EVERYBODY;
                     }
+                    
                     p.getPrincipal().setId(name);
                     oldName = name;
-
-                    if(t == null)
-                        return perms;
                     p.getPrincipal().setType(t);
                     found = true;
                 }
@@ -284,13 +287,12 @@ public class SecurityManager {
                         
                         p.setAccess(access);
                     }
-                }
+                }*/
             }
         }
         
-        if(!found)
-            addPerm(type, name, owner, addSubObjects, changeAbilities,
-                            move, view, perms);
+        addPerm(type, name, owner, addSubObjects, changeAbilities,
+                        move, view, perms);
         return perms;
         
     }
@@ -318,6 +320,8 @@ public class SecurityManager {
             t = Type.USER;
         }else if(type.equals(BUNDLE.getString("Group"))){
             t = Type.GROUP;
+        }else{
+            t = Type.EVERYBODY;
         }
         
         ActionDTO moveAction = null;
@@ -335,9 +339,7 @@ public class SecurityManager {
             else if(a.getAction().getName().equals("ChangeCellComponent"))
                 changeCompAction = a;  
         }
-
-        if(t == null)
-            return;
+        
         Principal princ = new Principal(name, t);
 
         if(!owner){

@@ -38,7 +38,7 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.frames.
  */
 public class AdapterCommunication implements IAdapterCommunication{
     
-     private GUIObserverInterface goi = null;
+    private GUIObserverInterface goi = null;
     private IWindow window = null;
     private ArrayList<Command> undoList = null;
     private ArrayList<Command> redoList = null;

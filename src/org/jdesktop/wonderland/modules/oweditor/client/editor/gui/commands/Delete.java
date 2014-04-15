@@ -3,6 +3,7 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.commands;
 import java.util.ArrayList;
 
 import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.GUIObserverInterface;
+import javax.swing.undo.UndoManager;
 
 /**
  * Delete command.
@@ -59,5 +60,6 @@ public class Delete implements Command{
     public void redo(GUIObserverInterface goi)  throws Exception{
         execute(goi);
     }
+    
 
 }
