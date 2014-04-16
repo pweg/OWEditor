@@ -12,6 +12,11 @@ import javax.swing.table.AbstractTableModel;
  */
 public class PermissionTable extends AbstractTableModel{
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 201;
+    
     private static final ResourceBundle BUNDLE = ResourceBundle.getBundle(
             "org/jdesktop/wonderland/modules/oweditor/client/resources/Bundle");
     private ArrayList<PermissionTableEntry> rightsList;

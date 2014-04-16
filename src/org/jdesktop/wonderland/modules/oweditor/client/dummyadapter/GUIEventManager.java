@@ -294,4 +294,15 @@ public class GUIEventManager implements GUIObserverInterface{
         //does nothing
     }
 
+    @Override
+    public void loadWorld(String filepath) {
+        //does nothing
+        
+    }
+
+    @Override
+    public void saveWorld(String filepath) {
+        //does nothing
+    }
+
 }

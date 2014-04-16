@@ -26,7 +26,7 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.GUISettings;
  */
 public class PropertiesFrame extends javax.swing.JFrame {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 11;
     
     private static final ResourceBundle BUNDLE = ResourceBundle.getBundle(
             "org/jdesktop/wonderland/modules/oweditor/client/resources/Bundle");

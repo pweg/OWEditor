@@ -257,6 +257,20 @@ public interface GUIObserverInterface {
      * @param id 
      */
     public void updateObjects(long id);
+
+    /**
+     * Loads a world from a file.
+     * 
+     * @param filepath The filepath.
+     */
+    public void loadWorld(String filepath);
+
+    /**
+     * Saves a world to a file.
+     * 
+     * @param filepath The filepath.
+     */
+    public void saveWorld(String filepath);
     
 
 }

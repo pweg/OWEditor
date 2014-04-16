@@ -23,7 +23,7 @@ import javax.swing.border.EtchedBorder;
  * @author Patrick
  */
 public final class LoadingDialog extends JDialog{
-    private static final long serialVersionUID = 1000L;
+    private static final long serialVersionUID = 1003;
     
     private static final ResourceBundle BUNDLE = ResourceBundle.getBundle(
             "org/jdesktop/wonderland/modules/oweditor/client/resources/Bundle");

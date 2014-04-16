@@ -1,5 +1,11 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window;
 
+import java.io.File;
+import java.util.ResourceBundle;
+
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.input.IInputToWindow;
 
 /**
@@ -11,6 +17,9 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.input.IInputTo
 public class WindowToMenu implements IWindowToMenu{
 
     private WindowController wc = null;
+    private String lastDir = "";
+    private static final ResourceBundle BUNDLE = ResourceBundle.getBundle(
+            "org/jdesktop/wonderland/modules/oweditor/client/resources/Bundle");
 
     public WindowToMenu(WindowController wc){
         this.wc  = wc;
@@ -68,6 +77,58 @@ public class WindowToMenu implements IWindowToMenu{
     public void setPropertiesVisible(boolean b) {
         wc.adapter.updateObjects(wc.graphic.getSelectedShapes());
         wc.frame.setPropertiesVisible(b);
+    }
+
+    @Override
+    public void deleteAll() {
+        int dialogResult = JOptionPane.showConfirmDialog (
+                null, BUNDLE.getString("DialogWarningDeleteAll"),
+                BUNDLE.getString("Warning"),
+                JOptionPane.YES_NO_OPTION);
+        if(dialogResult == JOptionPane.YES_OPTION){
+            wc.adapter.setObjectRemoval(wc.graphic.getAllIDs());  
+        }
+    }
+
+    @Override
+    public void loadWorld() {
+        int dialogResult = JOptionPane.showConfirmDialog (
+                null, BUNDLE.getString("DialogWarningDeleteAll"),
+                BUNDLE.getString("Warning"),
+                JOptionPane.YES_NO_OPTION);
+        
+        if(dialogResult == JOptionPane.NO_OPTION)
+            return;
+        
+        JFileChooser chooser = new JFileChooser(new File (lastDir));
+        chooser.setApproveButtonText(BUNDLE.getString("Load"));
+            
+        int returnVal = chooser.showOpenDialog(wc.frame.getMainframe());
+        chooser.setMultiSelectionEnabled(false);
+            
+        if(returnVal == JFileChooser.APPROVE_OPTION) {
+            File file = chooser.getSelectedFile();
+            lastDir = file.getAbsolutePath();
+
+            wc.adapter.setObjectRemoval(wc.graphic.getAllIDs());  
+            wc.adapter.loadWorld(file.getAbsolutePath());
+        }
+    }
+
+    @Override
+    public void saveWorld() {
+        JFileChooser chooser = new JFileChooser(new File (lastDir));
+        chooser.setApproveButtonText(BUNDLE.getString("Save"));
+        
+        int returnVal = chooser.showOpenDialog(wc.frame.getMainframe());
+        chooser.setMultiSelectionEnabled(false);
+            
+        if(returnVal == JFileChooser.APPROVE_OPTION) {
+            File file = chooser.getSelectedFile();
+            lastDir = file.getAbsolutePath();
+
+            wc.adapter.saveWorld(file.getAbsolutePath());
+        }
     }
 
 }

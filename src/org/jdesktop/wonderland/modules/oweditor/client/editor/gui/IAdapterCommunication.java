@@ -181,5 +181,19 @@ public interface IAdapterCommunication {
      * @param ids The object ids.
      */
     public void updateObjects(ArrayList<Long> ids);
+
+    /**
+     * Loads a world from a file.
+     * 
+     * @param filepath The path to the file to load.
+     */
+    public void loadWorld(String filepath);
+
+    /**
+     * Saves a world from to a file.
+     * 
+     * @param filepath The path to the file to save.
+     */
+    public void saveWorld(String filepath);
     
 }

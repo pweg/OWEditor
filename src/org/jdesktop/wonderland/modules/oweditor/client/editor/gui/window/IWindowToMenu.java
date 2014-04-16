@@ -53,4 +53,21 @@ public interface IWindowToMenu {
      */
     public void setPropertiesVisible(boolean b);
 
+    /**
+     * Deletes all shapes.
+     * 
+     * @return true, if all things were deleted, false otherwise.
+     */
+    public void deleteAll();
+
+    /**
+     * Loads a world.
+     */
+    public void loadWorld();
+
+    /**
+     * Saves a world.
+     */
+    public void saveWorld();
+
 }

@@ -190,4 +190,19 @@ public class GraphicController implements IGraphicToWindow{
         return ids;
     }
 
+    @Override
+    public ArrayList<Long> getAllIDs() {
+        ArrayList<Long> ids = new ArrayList<Long>();
+        
+        for(ShapeObject s : sm.getBGShapes()){
+            ids.add(s.getID());
+        }
+
+        for(ShapeObject s : sm.getShapes()){
+            ids.add(s.getID());
+        }
+        
+        return ids;
+    }
+
 }

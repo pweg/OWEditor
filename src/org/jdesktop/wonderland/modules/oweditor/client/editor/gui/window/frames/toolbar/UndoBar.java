@@ -17,7 +17,7 @@ public class UndoBar extends JToolBar{
     /**
      * 
      */
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 101;
     private JButton undo = null;
     private JButton redo = null;
     private FrameController frame = null;

@@ -3,6 +3,7 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.frames
 import java.awt.event.KeyListener;
 import java.awt.event.MouseWheelListener;
 
+import javax.swing.JFrame;
 import javax.swing.JMenuBar;
 import javax.swing.event.MouseInputAdapter;
 
@@ -141,5 +142,12 @@ public interface IFrame {
      * @param id The object id.
      */
     public void updateRightsComponent(long id);
+    
+    /**
+     * Returns the mainframe.
+     * 
+     * @return The mainframe.
+     */
+    public JFrame getMainframe();
 
 }

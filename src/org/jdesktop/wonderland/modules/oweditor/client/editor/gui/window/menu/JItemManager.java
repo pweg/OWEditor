@@ -71,7 +71,7 @@ public class JItemManager {
             topItems.get(CUT).setEnabled(selected && CUTSELECTED);
             topItems.get(ROTATE).setEnabled(selected && ROTATESELECTED);
             topItems.get(SCALE).setEnabled(selected && SCALESELECTED);
-            //topItems.get(PROPERTIES).setEnabled(selected && PROPERTIESSELECTED);
+            topItems.get(PROPERTIES).setEnabled(selected && PROPERTIESSELECTED);
         }
 
         if(popupItems != null){

@@ -12,7 +12,7 @@ import javax.swing.JToolBar;
  */
 public class BottomToolBar extends JToolBar{
    
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 100;
     
     private final String nullString = "0.000";
 

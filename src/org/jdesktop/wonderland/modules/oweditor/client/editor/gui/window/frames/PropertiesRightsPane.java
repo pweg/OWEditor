@@ -26,6 +26,10 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IRi
  */
 public class PropertiesRightsPane extends JPanel {
     
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 12;
     private PropertiesFrame frame = null;
     private static final ResourceBundle BUNDLE = ResourceBundle.getBundle(
             "org/jdesktop/wonderland/modules/oweditor/client/resources/Bundle");

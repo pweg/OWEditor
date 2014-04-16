@@ -34,6 +34,11 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IIm
  */
 public class ImageSelectionFrame extends javax.swing.JFrame {
     
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 12;
+
     private static final ResourceBundle BUNDLE = ResourceBundle.getBundle(
             "org/jdesktop/wonderland/modules/oweditor/client/resources/Bundle");
 
@@ -46,9 +51,6 @@ public class ImageSelectionFrame extends javax.swing.JFrame {
     private int active = -1;
     
     private String lastDir = "";
-    
-    private DropTarget dropTarget = null;
-
 
     /**
      * Creates new ImageSelectionFrame
@@ -141,7 +143,7 @@ public class ImageSelectionFrame extends javax.swing.JFrame {
         //this.setResizable(false);
 
         pack();
-        dropTarget = new DropTarget(this, new DropTargetListener(){
+        new DropTarget(this, new DropTargetListener(){
 
             @Override
             public void dragEnter(DropTargetDragEvent dtde) {}

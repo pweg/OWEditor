@@ -79,6 +79,10 @@ public class AdapterCommunication implements IAdapterCommunication{
     
     @Override
     public void setObjectRemoval(ArrayList<Long> ids){
+        
+        if(ids == null || ids.isEmpty())
+            return;
+        
         Command command = new Delete(ids);
         executeCom(command);
     }
@@ -86,7 +90,7 @@ public class AdapterCommunication implements IAdapterCommunication{
     @Override
     public void setTranslationUpdate(ArrayList<Long> ids, ArrayList<Point> coordinates) {
         
-        if(ids == null)
+        if(ids == null || ids.isEmpty())
             return;
         
         ArrayList<Point> coordinates_old = new ArrayList<Point>();
@@ -101,12 +105,20 @@ public class AdapterCommunication implements IAdapterCommunication{
     }
     
     @Override
-    public void setCopyUpdate(ArrayList<Long> object_ids){
-        goi.notifyCopy(object_ids);
+    public void setCopyUpdate(ArrayList<Long> ids){
+        
+        if(ids == null || ids.isEmpty())
+            return;
+        
+        goi.notifyCopy(ids);
     }
 
     @Override
     public void setPasteUpdate(ArrayList<Long> ids, ArrayList<Point> coordinates) {
+        
+        if(ids == null || ids.isEmpty())
+            return;
+        
         Command command = new Paste(ids, coordinates);
         executeCom(command);
     }
@@ -115,7 +127,7 @@ public class AdapterCommunication implements IAdapterCommunication{
     public void setRotationUpdate(ArrayList<Long> ids, ArrayList<Point> coordinates,
             ArrayList<Double> rotation) {
         
-        if(ids == null)
+        if(ids == null || ids.isEmpty())
             return;
         
         ArrayList<Point> coordinates_old = new ArrayList<Point>();
@@ -144,7 +156,7 @@ public class AdapterCommunication implements IAdapterCommunication{
     public void setScaleUpdate(ArrayList<Long> ids, ArrayList<Point> coordinates,
             ArrayList<Double> scale) {
         
-        if(ids == null)
+        if(ids == null || ids.isEmpty())
             return;
         
         ArrayList<Point> coordinates_old = new ArrayList<Point>();
@@ -211,6 +223,10 @@ public class AdapterCommunication implements IAdapterCommunication{
 
     @Override
     public void addRightsComponent(ArrayList<Long> ids) {
+        
+        if(ids == null || ids.isEmpty())
+            return;
+        
         AddComponent com = new AddComponent(ids, GUIObserverInterface.RIGHTSCOMPONENT);
         executeCom(com);
     }
@@ -222,6 +238,9 @@ public class AdapterCommunication implements IAdapterCommunication{
             ArrayList<Double> scale, ArrayList<String> imgName, 
             ArrayList<String> imgDir,
             ArrayList<Object> furtherActions){
+        
+        if(ids == null || ids.isEmpty())
+            return;
 
         ArrayList<String> names_old = new ArrayList<String>();
         ArrayList<Vector3D> coords_old = new ArrayList<Vector3D>();
@@ -463,6 +482,19 @@ public class AdapterCommunication implements IAdapterCommunication{
         
         for(long id : ids)
             goi.updateObjects(id);
+    }
+
+    @Override
+    public void loadWorld(String filepath) {
+        redoList.clear();
+        undoList.clear();
+        
+        goi.loadWorld(filepath);
+    }
+
+    @Override
+    public void saveWorld(String filepath) {
+        goi.saveWorld(filepath);
     }
     
     

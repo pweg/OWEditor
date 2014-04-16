@@ -24,7 +24,6 @@ public class MenuController implements IMenu{
     private JPopupMenu popupMenu = null;
     private JItemManager itemManager = null;
     private IWindowToMenu window = null;
-    
 
     private static final ResourceBundle BUNDLE = ResourceBundle.getBundle(
             "org/jdesktop/wonderland/modules/oweditor/client/resources/Bundle");
@@ -49,7 +48,28 @@ public class MenuController implements IMenu{
         String menuImport = BUNDLE.getString("MenuImport");
         
         //create the functions
-        final Callable<Void> newItem = new Callable<Void>() {
+        final Callable<Void> newCall = new Callable<Void>() {
+            public Void call(){
+                window.deleteAll();
+                return null;
+            }
+        };
+        
+        final Callable<Void> loadWorld = new Callable<Void>() {
+            public Void call(){
+                window.loadWorld();
+                return null;
+            }
+        };
+        final Callable<Void> saveWorld = new Callable<Void>() {
+            public Void call(){
+                window.saveWorld();
+                return null;
+            }
+        };
+        
+        
+        final Callable<Void> setProperties = new Callable<Void>() {
             public Void call(){
                 window.setPropertiesVisible(true);
                 return null;
@@ -127,8 +147,15 @@ public class MenuController implements IMenu{
          * Top menu items.
          */
         //file menu
-        topBuilder.addItem(menuFile, "New", newItem, KeyStroke.getKeyStroke(
+        topBuilder.addItem(menuFile, BUNDLE.getString("MenuNew"), 
+                newCall, KeyStroke.getKeyStroke(
                 KeyEvent.VK_N, ActionEvent.CTRL_MASK), false);
+        topBuilder.addItem(menuFile, BUNDLE.getString("MenuLoadWorld"),
+                loadWorld, KeyStroke.getKeyStroke(
+                KeyEvent.VK_L, ActionEvent.CTRL_MASK), true);
+        topBuilder.addItem(menuFile, BUNDLE.getString("MenuSaveWorld"),
+                saveWorld, KeyStroke.getKeyStroke(
+                KeyEvent.VK_S, ActionEvent.CTRL_MASK), false);
         
         //edit menu
         topBuilder.addItem(menuEdit, 
@@ -152,6 +179,8 @@ public class MenuController implements IMenu{
                 BUNDLE.getString("MenuRotate"), rotate, null, false);
         topBuilder.addItem(menuEdit, 
                 BUNDLE.getString("MenuScale"), scale, null, false);
+        topBuilder.addItem(menuEdit, 
+                BUNDLE.getString("MenuProperties"), setProperties, null, true);
         
         //import menu
         topBuilder.addItem(menuImport, 
@@ -183,7 +212,7 @@ public class MenuController implements IMenu{
         popupBuilder.addItem(null, 
                 BUNDLE.getString("MenuScale"), scale, null, false);
         popupBuilder.addItem(null, 
-                BUNDLE.getString("MenuProperties"), newItem, null, true);
+                BUNDLE.getString("MenuProperties"), setProperties, null, true);
         
         popupMenu =  (JPopupMenu) popupBuilder.buildMenu();
         

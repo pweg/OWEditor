@@ -159,4 +159,13 @@ public interface IGraphicToWindow {
      */
     public ArrayList<Long> getSelectedShapes();
 
+
+    /**
+     * Returns all ids, whether in the background, 
+     * or foreground.
+     * 
+     * @return An arraylist containing all ids.
+     */
+    public ArrayList<Long> getAllIDs();
+
 }

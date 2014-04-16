@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+import javax.swing.JFrame;
 import javax.swing.JMenuBar;
 import javax.swing.JScrollPane;
 import javax.swing.event.MouseInputAdapter;
@@ -38,7 +39,7 @@ public class FrameController implements IFrame{
     protected ImageSelectionFrame imageSelection = null;
     protected PropertiesFrame properties = null;
     
-    private DropTarget dropper = null;
+    //private DropTarget dropper = null;
     
     public FrameController(){
         buildMainFrame();
@@ -52,7 +53,7 @@ public class FrameController implements IFrame{
         mainScrollPanel = new JScrollPane(drawingPan);
         mainScrollPanel.setWheelScrollingEnabled(false);
         
-        dropper = new DropTarget(drawingPan, new DropListener());
+        new DropTarget(drawingPan, new DropListener());
         mainframe = new MainFrame(mainScrollPanel, this);
     }
     
@@ -66,7 +67,7 @@ public class FrameController implements IFrame{
         
         if(importFrame == null){
             importFrame = new ImportFrame(this, window.getServerList());
-            dropper = new DropTarget(importFrame, new DropListener());
+            new DropTarget(importFrame, new DropListener());
         }
         importFrame.setVisible(true);
     }
@@ -241,6 +242,11 @@ public class FrameController implements IFrame{
         if(properties.isVisible()){
             properties.rightsPane.setObjects();
         }
+    }
+
+    @Override
+    public JFrame getMainframe() {
+        return mainframe;
     }
 }
 

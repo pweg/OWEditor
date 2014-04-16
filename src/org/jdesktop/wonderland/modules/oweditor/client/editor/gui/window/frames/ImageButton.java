@@ -16,7 +16,7 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.GUISettings;
  */
 public class ImageButton extends JButton{
     
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1001;
     private static final int MARGIN = GUISettings.IMGMARGINPANEL;
     
     private BufferedImage img = null;
