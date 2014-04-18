@@ -5,6 +5,7 @@ import java.util.ResourceBundle;
 
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.input.IInputToWindow;
 
@@ -101,6 +102,7 @@ public class WindowToMenu implements IWindowToMenu{
             return;
         
         JFileChooser chooser = new JFileChooser(new File (lastDir));
+        chooser.setFileFilter(new FileNameExtensionFilter("Wonderland_Export_File", "wlexport"));
         chooser.setApproveButtonText(BUNDLE.getString("Load"));
             
         int returnVal = chooser.showOpenDialog(wc.frame.getMainframe());
@@ -109,9 +111,13 @@ public class WindowToMenu implements IWindowToMenu{
         if(returnVal == JFileChooser.APPROVE_OPTION) {
             File file = chooser.getSelectedFile();
             lastDir = file.getAbsolutePath();
+            
+            if(!(lastDir.endsWith(".wlexport"))){
+                lastDir += ".wlexport";
+            }
 
             wc.adapter.setObjectRemoval(wc.graphic.getAllIDs());  
-            wc.adapter.loadWorld(file.getAbsolutePath());
+            wc.adapter.loadWorld(lastDir);
         }
     }
 
@@ -119,15 +125,19 @@ public class WindowToMenu implements IWindowToMenu{
     public void saveWorld() {
         JFileChooser chooser = new JFileChooser(new File (lastDir));
         chooser.setApproveButtonText(BUNDLE.getString("Save"));
+        chooser.setMultiSelectionEnabled(false);
+        chooser.setFileFilter(new FileNameExtensionFilter("Wonderland_Export_File", "wlexport"));
         
         int returnVal = chooser.showOpenDialog(wc.frame.getMainframe());
-        chooser.setMultiSelectionEnabled(false);
             
         if(returnVal == JFileChooser.APPROVE_OPTION) {
             File file = chooser.getSelectedFile();
             lastDir = file.getAbsolutePath();
+            if(!(lastDir.endsWith(".wlexport"))){
+                lastDir += ".wlexport";
+            }
 
-            wc.adapter.saveWorld(file.getAbsolutePath());
+            wc.adapter.saveWorld(lastDir);
         }
     }
 

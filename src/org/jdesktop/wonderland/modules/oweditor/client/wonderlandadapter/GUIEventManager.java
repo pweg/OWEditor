@@ -12,6 +12,7 @@ import org.jdesktop.wonderland.client.cell.Cell;
 import org.jdesktop.wonderland.client.cell.CellCache;
 import org.jdesktop.wonderland.common.cell.CellID;
 import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.GUIObserverInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter.snapshots.WorldExporter;
 import org.jdesktop.wonderland.modules.security.client.SecurityQueryComponent;
 
 /**
@@ -334,5 +335,15 @@ public class GUIEventManager implements GUIObserverInterface{
         } catch (ServerCommException ex) {
             LOGGER.log(Level.SEVERE, null, ex);
         }
+    }
+
+    public void loadWorld(String filepath) {
+        
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public void saveWorld(String filepath) {
+        WorldExporter.getInstance().exportAllCells(filepath);
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }
