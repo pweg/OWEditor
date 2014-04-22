@@ -103,6 +103,7 @@ public class WindowToMenu implements IWindowToMenu{
         
         JFileChooser chooser = new JFileChooser(new File (lastDir));
         chooser.setFileFilter(new FileNameExtensionFilter("Wonderland_Export_File", "wlexport"));
+        chooser.removeChoosableFileFilter(chooser.getAcceptAllFileFilter());
         chooser.setApproveButtonText(BUNDLE.getString("Load"));
             
         int returnVal = chooser.showOpenDialog(wc.frame.getMainframe());
@@ -116,7 +117,7 @@ public class WindowToMenu implements IWindowToMenu{
                 lastDir += ".wlexport";
             }
 
-            wc.adapter.setObjectRemoval(wc.graphic.getAllIDs());  
+            //wc.adapter.setObjectRemoval(wc.graphic.getAllIDs());  
             wc.adapter.loadWorld(lastDir);
         }
     }

@@ -80,7 +80,12 @@ public class WorldExporter{
         return new Class[] { Cell.class, ModelCell.class };
     }
 
-    public void exportAllCells(String filepath) {     
+    /**
+     * Exports all cells currently available to a file.
+     * 
+     * @param filepath The filepath to export the cells.
+     */
+    public void exportAllCells(File file) {     
 
         try {
             File rootDir = File.createTempFile("subsnapshot", "tmp");
@@ -100,18 +105,12 @@ public class WorldExporter{
                 if(!(cell instanceof AvatarCell))
                     exportCell(cell, origin2, contentDir, serverStateDir);
             }
+            createPackage(rootDir, file);
             
-            LOGGER.warning(filepath);
-            
-            File f = new File(filepath);
-            if (f != null) {
-                createPackage(rootDir, f);
-            }
         } catch (IOException ex) {
             LOGGER.log(Level.WARNING, "Error exporing cells", ex);
         }
     }
-    
     
     public static List<CustomExporterSPI> getCustomExporters(Cell cell) {
         List<CustomExporterSPI> exporters = new ArrayList<CustomExporterSPI>();
