@@ -117,7 +117,7 @@ public class WindowToMenu implements IWindowToMenu{
                 lastDir += ".wlexport";
             }
 
-            //wc.adapter.setObjectRemoval(wc.graphic.getAllIDs());  
+            wc.adapter.setObjectRemoval(wc.graphic.getAllIDs());  
             wc.adapter.loadWorld(lastDir);
         }
     }

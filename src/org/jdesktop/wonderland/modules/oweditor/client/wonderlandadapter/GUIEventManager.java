@@ -346,7 +346,7 @@ public class GUIEventManager implements GUIObserverInterface{
         File file = new File(filepath);
         
         if(file != null && file.exists() && file.canRead())
-            WorldImporter.getInstance().importFile(null);
+            WorldImporter.getInstance().importFile(file);
     }
 
     public void saveWorld(String filepath) {

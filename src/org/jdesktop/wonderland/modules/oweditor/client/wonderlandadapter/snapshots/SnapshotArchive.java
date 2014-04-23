@@ -89,9 +89,10 @@ public class SnapshotArchive {
 
         // unzip fileToUnzip into destination
         final int BUFFER = 2048;
-        BufferedOutputStream dest = null;
         FileInputStream streamToZipFile = new FileInputStream(fileToUnzip);
+        
         ZipInputStream zis = new ZipInputStream(new BufferedInputStream(streamToZipFile));
+        
         ZipEntry entry;
         while ((entry = zis.getNextEntry()) != null) {
             if (entry.isDirectory()) {
@@ -104,13 +105,15 @@ public class SnapshotArchive {
             byte data[] = new byte[BUFFER];
             // write the files to disk
             FileOutputStream fos = new FileOutputStream(destination + File.separator + entry.getName());
-            dest = new BufferedOutputStream(fos, BUFFER);
+            BufferedOutputStream dest = new BufferedOutputStream(fos, BUFFER);
+            
             while ((count = zis.read(data, 0, BUFFER)) != -1) {
                 dest.write(data, 0, count);
             }
             dest.flush();
             dest.close();
         }
+        
         zis.close();
     }
 

@@ -90,12 +90,9 @@ public class WorldImporter  {
         //upload resources to server
 
         try {
-            LOGGER.warning("Bla");
             SnapshotArchive archive = new SnapshotArchive();
-            LOGGER.warning("Bla2");
             archive.unpackArchive(file);
             
-            LOGGER.warning("Bla3");
             uploadContent(archive);
                 
             //2) Recreate server state from xml
@@ -105,6 +102,8 @@ public class WorldImporter  {
         } catch (IOException e) {
             LOGGER.log(Level.WARNING, "Error processing archive " + file,e);
         } catch (RuntimeException ex) {
+            LOGGER.log(Level.WARNING, "Runtime Exception during "
+                    + "processing file.",ex);
         }
     }
 
@@ -271,13 +270,12 @@ public class WorldImporter  {
         // recursively create cells based on tree of ServerStateHolders
         // decode on the fly using restoreServerState()
         
-            LOGGER.warning("Bla2");
         for (ServerStateHolder stateHolder : serverStates) {
-            LOGGER.warning("Creating from state: "+stateHolder.getState().getName());
+            LOGGER.fine("Creating from state: "+stateHolder.getState().getName());
             if(parentID == null) {
-                LOGGER.warning("ParentID is null, creating root cell.");
+                LOGGER.fine("ParentID is null, creating root cell.");
             } else {
-                LOGGER.warning("ParentID is "+ parentID.toString()+ ", creating child cell.");
+                LOGGER.fine("ParentID is "+ parentID.toString()+ ", creating child cell.");
             }
             try {
                 
@@ -327,11 +325,11 @@ public class WorldImporter  {
         CellCreateMessage msg = new CellCreateMessage(parentID, state);
         try {
             ResponseMessage message = connection.sendAndWait(msg);
-            LOGGER.warning("Got response message: "+message);
+            LOGGER.fine("Got response message: "+message);
             if(message instanceof CellCreatedMessage) {
                 //yay
                 CellCreatedMessage cellCreatedMessage = (CellCreatedMessage)message;
-                LOGGER.warning("CellID: "+cellCreatedMessage.getCellID());
+                LOGGER.fine("CellID: "+cellCreatedMessage.getCellID());
                 return cellCreatedMessage.getCellID();
             } else if (message instanceof ErrorMessage) {
                     LOGGER.log(Level.WARNING, ((ErrorMessage) message).getErrorMessage(),

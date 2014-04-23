@@ -224,8 +224,12 @@ public class FrameController implements IFrame{
                     return;
                     
                 for (File file : droppedFiles) {
-                    showImportFrame();
-                    importFrame.loadModel(file);
+                    if(file.getName().endsWith(".kmz")){
+                        showImportFrame();
+                        importFrame.loadModel(file);
+                    }else if(file.getName().endsWith(".wlexport")){
+                        window.loadWorld(file.getAbsolutePath());
+                    }
                 }
                     
             } catch (UnsupportedFlavorException e) {

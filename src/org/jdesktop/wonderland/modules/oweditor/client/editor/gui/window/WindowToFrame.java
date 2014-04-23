@@ -3,6 +3,8 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window;
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
+import java.util.ResourceBundle;
+import javax.swing.JOptionPane;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IDataObject;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IDataToGUI;
@@ -16,6 +18,9 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.input.IInputTo
  *
  */
 public class WindowToFrame implements IWindowToFrame{
+    
+    private static final ResourceBundle BUNDLE = ResourceBundle.getBundle(
+            "org/jdesktop/wonderland/modules/oweditor/client/resources/Bundle");
 
     public WindowController wc = null;
     private IDataToGUI dm = null;
@@ -125,5 +130,19 @@ public class WindowToFrame implements IWindowToFrame{
     @Override
     public void addRightsComponent(ArrayList<Long> ids) {
         wc.adapter.addRightsComponent(ids);
+    }
+
+    @Override
+    public void loadWorld(String file) {
+        int dialogResult = JOptionPane.showConfirmDialog (
+                null, BUNDLE.getString("DialogWarningDeleteAll"),
+                BUNDLE.getString("Warning"),
+                JOptionPane.YES_NO_OPTION);
+        
+        if(dialogResult == JOptionPane.NO_OPTION)
+            return;
+
+        wc.adapter.setObjectRemoval(wc.graphic.getAllIDs());  
+        wc.adapter.loadWorld(file);
     }
 }

@@ -167,4 +167,11 @@ public interface IWindowToFrame {
      */
     public void addRightsComponent(ArrayList<Long> ids);
 
+    /**
+     * Loads a world.
+     * 
+     * @param file The filepath where the world is stored. 
+     */
+    public void loadWorld(String file);
+
 }
