@@ -1,5 +1,8 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.data;
 
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
+
 import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.IEnvironmentObserver;
 
 /**
@@ -10,6 +13,10 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.IEnv
  *
  */
 public class EnvironmentManager {
+    
+    private final ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
+    private final Lock readLock = lock.readLock();
+    private final Lock writeLock = lock.writeLock();
     
     private IEnvironmentObserver en = null;
     
@@ -40,21 +47,25 @@ public class EnvironmentManager {
         /*
          * need to implement, when object is deleted, to find new size, or just stay that way?
          */
-        
-        boolean change = false;
-        if(x + width> maxX){
-            maxX = x+ width;
-            change = true;
-        }
-        if(x < minX){
-            minX = x;
-            change = true;
-            if(en != null){
-                en.notifyMinXChange(x);
+        writeLock.lock();
+        try{
+            boolean change = false;
+            if(x + width> maxX){
+                maxX = x+ width;
+                change = true;
             }
+            if(x < minX){
+                minX = x;
+                change = true;
+                if(en != null){
+                    en.notifyMinXChange(x);
+                }
+            }
+            if(change && en != null)
+                en.notifyWidthChange(getMaxWidth());
+        }finally{
+            writeLock.unlock();
         }
-        if(change && en != null)
-            en.notifyWidthChange(getMaxWidth());
     }
     
     /**
@@ -68,22 +79,27 @@ public class EnvironmentManager {
      * @param height the height of the object.
      */
     public void setY(int y, int height){
-        
-        boolean change = false;
-        
-        if(y + height> maxY){
-            maxY = y + height;
-            change = true;
-        }
-        if(y < minY){
-            minY = y;
-            change = true;
-            if(en != null){
-                en.notifyMinYChange(y);
+
+        writeLock.lock();
+        try{
+            boolean change = false;
+            
+            if(y + height> maxY){
+                maxY = y + height;
+                change = true;
             }
+            if(y < minY){
+                minY = y;
+                change = true;
+                if(en != null){
+                    en.notifyMinYChange(y);
+                }
+            }
+            if(change && en != null)
+                en.notifyHeightChange(getMaxHeight());
+        }finally{
+            writeLock.unlock();
         }
-        if(change && en != null)
-            en.notifyHeightChange(getMaxHeight());
     }
     
     /**
@@ -92,7 +108,12 @@ public class EnvironmentManager {
      * @return the worlds width
      */
     public int getMaxWidth(){
-        return maxX - minX;
+        readLock.lock();
+        try{
+            return maxX - minX;
+        }finally{
+            readLock.unlock();
+        }
     }
     
     /**
@@ -101,7 +122,12 @@ public class EnvironmentManager {
      * @return the worlds height.
      */
     public int getMaxHeight(){
-        return maxY - minY;
+        readLock.lock();
+        try{
+            return maxY - minY;
+        }finally{
+            readLock.unlock();
+        }
     }
 
     /**

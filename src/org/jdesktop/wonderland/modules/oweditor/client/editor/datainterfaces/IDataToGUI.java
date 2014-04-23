@@ -7,7 +7,6 @@ import java.util.ArrayList;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.IDataObjectObserver;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.IEnvironmentObserver;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.IUserObserver;
 
 /**
  * An interface used between the data and gui package.
@@ -105,20 +104,6 @@ public interface IDataToGUI {
      * @param en the observer, which observes the environment manager.
      */
     public void registerEnvironmentObserver(IEnvironmentObserver en);
-    
-    /**
-     * Registers an observer for the user data.
-     * 
-     * @param observer The observer.
-     */
-    public void registerUserObserver(IUserObserver observer);
-    
-    /**
-     * Removes an observer for the user data.
-     * 
-     * @param observer The observer.
-     */
-    public void removeUserObserver(IUserObserver observer);
     
     /**
      * Searches for an image in the user data manager.

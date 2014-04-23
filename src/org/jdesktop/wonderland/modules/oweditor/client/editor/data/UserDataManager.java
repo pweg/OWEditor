@@ -4,10 +4,11 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.logging.Logger;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IImage;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.IUserObserver;
 
 /**
  * Manages everything concerning the user.
@@ -23,11 +24,13 @@ public class UserDataManager {
     
     private ArrayList<IImage> imageLib = null;
     private HashMap<String, ArrayList<IImage>> foreignImgLib = null;
-    private ArrayList<IUserObserver> observers = null;
+    
+    private final ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
+    private final Lock readLock = lock.readLock();
+    private final Lock writeLock = lock.writeLock();
     
     public UserDataManager(){
         imageLib = new ArrayList<IImage>();
-        observers = new ArrayList<IUserObserver>();
         foreignImgLib = new HashMap<String, ArrayList<IImage>>();
     }
     
@@ -46,32 +49,21 @@ public class UserDataManager {
      * @return Buffered images in an array list.
      */
     public ArrayList<IImage> getImgLib(){
+
         ArrayList<IImage> lib = new ArrayList<IImage>();
-        lib.addAll(imageLib);
         
-        for(Map.Entry<String, ArrayList<IImage>> entry : foreignImgLib.entrySet()){
-            lib.addAll(entry.getValue());
+        readLock.lock();
+        try{
+            lib.addAll(imageLib);
+            
+            for(Map.Entry<String, ArrayList<IImage>> entry : foreignImgLib.entrySet()){
+                lib.addAll(entry.getValue());
+            }
+        }finally{
+            readLock.unlock();
         }
         
         return lib;
-    }
-    
-    /**
-     * Registers an observer.
-     * 
-     * @param observer The observer
-     */
-    public void registerObserver(IUserObserver observer){
-        observers.add(observer);
-    }
-    
-    /**
-     * Removes an observer.
-     * 
-     * @param observer The observer.
-     */
-    public void removeObserver(IUserObserver observer){
-        observers.remove(observer);
     }
         
     /**
@@ -80,7 +72,12 @@ public class UserDataManager {
      * @return The name of the user directory.
      */
     public String getUserDir() {
-        return userDir;
+        readLock.lock();
+        try{
+            return userDir;
+        }finally{
+            readLock.unlock();
+        }
     }
     
     /**
@@ -95,45 +92,37 @@ public class UserDataManager {
         if(img == null)
             return;
         
-        if(dir.equals(userDir))
-            addImgToUserdir(img, name);
-        else{
-            ArrayList<IImage> lib;
-            
-            if(foreignImgLib.containsKey(dir))
-                lib = foreignImgLib.get(dir);
-            else
-                lib = new ArrayList<IImage>();
-            
-            lib.add(new Image(name, img, dir));
-            foreignImgLib.put(dir, lib);
-        }
-    }
-
-    /**
-     * Adds a new image to the user library.
-     * 
-     * @param img An image.
-     * @param name 
-     */
-    private void addImgToUserdir(BufferedImage img, String name){
-        if(userDir == null){
-            LOGGER.warning("There is no user directory set");
-            return;
-        }
-        
-        int i;
-        for(i=0; i<imageLib.size(); i++){
-            if(imageLib.get(i).getName().equals(name)){
-                imageLib.remove(i);
-                break;
+        writeLock.lock();
+        try{
+            if(dir.equals(userDir)){
+                if(userDir == null){
+                    LOGGER.warning("There is no user directory set");
+                    return;
+                }
+                
+                int i;
+                for(i=0; i<imageLib.size(); i++){
+                    if(imageLib.get(i).getName().equals(name)){
+                        imageLib.remove(i);
+                        break;
+                    }
+                }
+                
+                imageLib.add(i, new Image(name, img, userDir));
+            }else{
+                ArrayList<IImage> lib;
+                
+                if(foreignImgLib.containsKey(dir))
+                    lib = foreignImgLib.get(dir);
+                else
+                    lib = new ArrayList<IImage>();
+                
+                lib.add(new Image(name, img, dir));
+                foreignImgLib.put(dir, lib);
             }
+        }finally{
+            writeLock.unlock();
         }
-        
-        imageLib.add(i, new Image(name, img, userDir));
-        
-        for(IUserObserver observer : observers)
-            observer.notifyImageChange();
     }
     
     /**
@@ -144,20 +133,24 @@ public class UserDataManager {
      * @return The buffered image.
      */
     public BufferedImage getImage(String name, String dir){
-        
-        if(dir.equals(userDir)){
-            for(IImage img : imageLib){
-                if(img.getName().equals(name))
-                    return img.getImage();
-            }
-        }else{
-            if(foreignImgLib.containsKey(dir)){
-                ArrayList<IImage> lib = foreignImgLib.get(dir);
-                for(IImage img : lib){
+        readLock.lock();
+        try{
+            if(dir.equals(userDir)){
+                for(IImage img : imageLib){
                     if(img.getName().equals(name))
                         return img.getImage();
                 }
+            }else{
+                if(foreignImgLib.containsKey(dir)){
+                    ArrayList<IImage> lib = foreignImgLib.get(dir);
+                    for(IImage img : lib){
+                        if(img.getName().equals(name))
+                            return img.getImage();
+                    }
+                }
             }
+        }finally{
+            readLock.unlock();
         }
         return null;
     }

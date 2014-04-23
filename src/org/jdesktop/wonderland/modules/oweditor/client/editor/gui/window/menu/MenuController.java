@@ -143,6 +143,13 @@ public class MenuController implements IMenu{
             }
         };
         
+        final Callable<Void> close = new Callable<Void>() {
+            public Void call(){
+                window.close();
+                return null;
+            }
+        };
+        
         /*
          * Top menu items.
          */
@@ -156,6 +163,8 @@ public class MenuController implements IMenu{
         topBuilder.addItem(menuFile, BUNDLE.getString("MenuSaveWorld"),
                 saveWorld, KeyStroke.getKeyStroke(
                 KeyEvent.VK_S, ActionEvent.CTRL_MASK), false);
+        topBuilder.addItem(menuFile, BUNDLE.getString("MenuClose"),
+                close, null, true);
         
         //edit menu
         topBuilder.addItem(menuEdit, 

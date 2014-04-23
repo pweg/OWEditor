@@ -48,7 +48,7 @@ public class MainFrame extends JFrame {
         content.add(bottomBar, BorderLayout.SOUTH);
         content.add(mainScrollPanel);
 
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                 
         //f.getContentPane().add(app.getControl(), "Last");  
         setSize(GUISettings.MAINWIDTH, GUISettings.MAINHEIGHT);  

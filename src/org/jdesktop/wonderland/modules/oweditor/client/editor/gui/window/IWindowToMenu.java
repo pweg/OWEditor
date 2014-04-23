@@ -70,4 +70,9 @@ public interface IWindowToMenu {
      */
     public void saveWorld();
 
+    /**
+     * Closes the OW Editor.
+     */
+    public void close();
+
 }

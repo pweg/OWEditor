@@ -14,7 +14,6 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IIm
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.ITransformedObject;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.IDataObjectObserver;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.IEnvironmentObserver;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.IUserObserver;
 
 /**
  * This is the main data controller class, which is used to 
@@ -98,16 +97,6 @@ public class DataController implements IDataToMainController,
     @Override
     public ArrayList<IImage> getImgLibrary() {
         return um.getImgLib();
-    }
-
-    @Override
-    public void registerUserObserver(IUserObserver observer) {
-        um.registerObserver(observer);
-    }
-
-    @Override
-    public void removeUserObserver(IUserObserver observer) {
-        um.removeObserver(observer);
     }
 
     @Override

@@ -142,4 +142,9 @@ public class WindowToMenu implements IWindowToMenu{
         }
     }
 
+    @Override
+    public void close() {
+        wc.frame.getMainframe().dispose();
+    }
+
 }
