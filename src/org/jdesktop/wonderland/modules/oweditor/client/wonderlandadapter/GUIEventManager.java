@@ -151,7 +151,7 @@ public class GUIEventManager implements GUIObserverInterface{
         Cell cell = ac.bm.getActiveCell(id);
         
         if(cell == null)
-                ac.bm.getCell(id);
+                cell = ac.bm.getCell(id);
         
         if(cell == null){
             LOGGER.warning("UNDO REMVOAL FAILED");
