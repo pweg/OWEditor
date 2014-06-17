@@ -416,6 +416,9 @@ public class AdapterCommunication implements IAdapterCommunication{
      */
     private void executeCom(Command command){
         
+        if(undoList.size() >= GUISettings.MAXUNDO)
+            undoList.remove(0);
+        
         undoList.add(command);
         
         try {
@@ -436,8 +439,11 @@ public class AdapterCommunication implements IAdapterCommunication{
         Command command = undoList.get(undoList.size()-1);
         undoList.remove(undoList.size()-1);
         
-        if(undoList.size() <= 0){
+        if(undoList.size() <= 0)
             window.setUndoEnabled(false);
+        
+        if(redoList.size() >= GUISettings.MAXUNDO){
+            redoList.remove(0);
         }
         
         redoList.add(command);
@@ -463,6 +469,10 @@ public class AdapterCommunication implements IAdapterCommunication{
             window.setRedoEnabled(false);
         }
         window.setUndoEnabled(true);
+        
+        if(undoList.size() >= GUISettings.MAXUNDO)
+            undoList.remove(0);
+
         undoList.add(command);
         try {
             command.redo(goi);

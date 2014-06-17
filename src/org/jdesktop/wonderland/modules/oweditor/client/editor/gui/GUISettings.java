@@ -118,4 +118,6 @@ public class GUISettings {
      * The color for image selection (aka the image button)
      */
     public static final Color IMAGESELECT = new Color(0.64f, 0.78f, 0.93f, 0.4f);
+    
+    public static final int MAXUNDO = 100;
 }

@@ -8,7 +8,6 @@ import javax.swing.JButton;
 import javax.swing.JToolBar;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.frames.FrameController;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.frames.IFrame;
 
 /**
  * Bar for the transformations rotation/scale in order to give 
@@ -25,7 +24,6 @@ public class TransformationBar extends JToolBar{
     private JButton confirm = null;
     private JButton cancel = null;
     private FrameController frame = null;
-    private byte mode = 0;
 
     private static final ResourceBundle BUNDLE = ResourceBundle.getBundle(
             "org/jdesktop/wonderland/modules/oweditor/client/resources/Bundle");
