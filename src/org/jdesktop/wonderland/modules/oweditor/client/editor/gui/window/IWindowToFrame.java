@@ -174,4 +174,11 @@ public interface IWindowToFrame {
      */
     public void loadWorld(String file);
 
+    /**
+     * Signals the input for a "key pressed" event
+     * 
+     * @param key The key code for the pressed key.
+     */
+    public void inputKeyPressed(int key);
+
 }

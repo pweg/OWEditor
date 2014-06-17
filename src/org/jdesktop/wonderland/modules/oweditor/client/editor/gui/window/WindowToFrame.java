@@ -145,4 +145,9 @@ public class WindowToFrame implements IWindowToFrame{
         wc.adapter.setObjectRemoval(wc.graphic.getAllIDs());  
         wc.adapter.loadWorld(file);
     }
+
+    @Override
+    public void inputKeyPressed(int key) {
+        wc.input.keyPressed(key);
+    }
 }

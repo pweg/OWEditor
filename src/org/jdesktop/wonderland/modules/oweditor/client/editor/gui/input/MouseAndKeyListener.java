@@ -114,6 +114,17 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
 
         Point p = e.getPoint();
         
+        if (e.getClickCount() == 2 && e.getButton() == MouseEvent.BUTTON1) {
+            if(mode == NOMODE){//properties
+                p = ic.window.revertBack(p);
+                if(ic.graphic.isMouseInObject(p)){
+                    ic.graphic.clearCurSelection();
+                    ic.graphic.selectionSwitch(p, false);
+                    ic.window.setPropertiesVisible(true);
+                }
+            }
+        }
+        
         if (e.getButton() ==  MouseEvent.BUTTON3 && mode <= PASTE){            
             new mlPopupStrategy(ic).mousePressed(p);
             ic.window.repaint();  
@@ -206,18 +217,24 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
 
     @Override
     public void keyPressed(KeyEvent e) {
-        if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
+        keyPressed(e.getKeyCode());
+    }
+    
+    public void keyPressed(int key){
+        if (key == KeyEvent.VK_SHIFT) {
             shiftPressed = true;
-        }//DELETE
-        else if( e.getKeyCode() == KeyEvent.VK_DELETE){
+        }
+        //DELETE
+        else if(key == KeyEvent.VK_DELETE){
             ic.graphic.deleteCurrentSelection();
         }
         //ESCAPE
-        else if(e.getKeyCode() == KeyEvent.VK_ESCAPE){
+        else if(key == KeyEvent.VK_ESCAPE){
             clear();
+            ic.window.setTransformBarVisible(false);
         }
         //ENTER
-        else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+        else if (key == KeyEvent.VK_ENTER) {
             //FINISH ROTATION
             if(mode == ROTATE){
                 ic.graphic.rotateFinished();
@@ -227,7 +244,8 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
             else if(mode == SCALE){
                 ic.graphic.scaleFinished();
                 clear();
-            } 
+            }
+            ic.window.setTransformBarVisible(false);
         }
     }
 

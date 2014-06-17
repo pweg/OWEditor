@@ -150,4 +150,12 @@ public interface IFrame {
      */
     public JFrame getMainframe();
 
+    /**
+     * Sets the transformation bar to visible.
+     * 
+     * @param b If true, the bar will become visible,
+     * if false, the bar will hide :P
+     */
+    public void setTransformBarVisible(boolean b);
+
 }

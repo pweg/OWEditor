@@ -105,5 +105,21 @@ public interface IWindowToInput {
      */
     public void setToBGVisible(boolean b);
 
+    /**
+     * Sets the properties frame visible.
+     * 
+     * @param b If true, the frame becomes visible,
+     * if false it will be hidden.
+     */
+    public void setPropertiesVisible(boolean b);
+
+    /**
+     * Shows/Hides the transformationbar
+     * 
+     * @param b If true, the bar will be visible,
+     * if false it will be hidden.
+     */
+    public void setTransformBarVisible(boolean b);
+
 
 }

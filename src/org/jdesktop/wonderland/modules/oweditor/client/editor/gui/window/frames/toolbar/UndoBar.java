@@ -1,6 +1,7 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.frames.toolbar;
 
 import java.awt.event.ActionEvent;
+import java.util.ResourceBundle;
 
 import javax.swing.JButton;
 import javax.swing.JToolBar;
@@ -22,6 +23,9 @@ public class UndoBar extends JToolBar{
     private JButton redo = null;
     private FrameController frame = null;
 
+    private static final ResourceBundle BUNDLE = ResourceBundle.getBundle(
+            "org/jdesktop/wonderland/modules/oweditor/client/resources/Bundle");
+
     public UndoBar(FrameController frame){
         this.frame = frame;
         
@@ -29,13 +33,13 @@ public class UndoBar extends JToolBar{
     }
     
     private void initComponents(){
-        undo = new JButton("undo");
+        undo = new JButton(BUNDLE.getString("Undo"));
         undo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 undo(evt);
             }
         });
-        redo = new JButton("redo");
+        redo = new JButton(BUNDLE.getString("Redo"));
         redo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 redo(evt);

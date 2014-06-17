@@ -7,9 +7,11 @@ import java.util.ResourceBundle;
 
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
+import javax.swing.JToolBar;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.GUISettings;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.frames.toolbar.BottomToolBar;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.frames.toolbar.TransformationBar;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.frames.toolbar.UndoBar;
 
 /**
@@ -28,6 +30,7 @@ public class MainFrame extends JFrame {
     
     protected BottomToolBar bottomBar = null;
     protected UndoBar undoBar = null;
+    protected TransformationBar transformBar = null;
   
 
     /**
@@ -42,9 +45,18 @@ public class MainFrame extends JFrame {
         
         undoBar = new UndoBar(frame);
         bottomBar = new BottomToolBar();
+        JToolBar topBar = new JToolBar();
+        transformBar = new TransformationBar(frame);
+
+        topBar.add(undoBar);
+        topBar.add(transformBar);
+        
         content.setFocusable(false);
         undoBar.setFocusable(false);
-        content.add(undoBar, BorderLayout.NORTH);
+        topBar.setFloatable(false);
+        topBar.setFocusable(false);
+        transformBar.setFocusable(false);
+        content.add(topBar, BorderLayout.NORTH);
         content.add(bottomBar, BorderLayout.SOUTH);
         content.add(mainScrollPanel);
 

@@ -19,4 +19,9 @@ public class InputToWindow implements IInputToWindow{
         mkListener.setMode(mode);
     }
 
+    @Override
+    public void keyPressed(int key) {
+        mkListener.keyPressed(key);
+    }
+
 }

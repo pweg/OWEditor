@@ -23,4 +23,12 @@ public interface IInputToWindow {
      */
     public void setInputMode(byte mode);
 
+    /**
+     * Throws a key pressed event.
+     * 
+     * @param key The key-code of the pressed
+     * key.
+     */
+    public void keyPressed(int key);
+
 }

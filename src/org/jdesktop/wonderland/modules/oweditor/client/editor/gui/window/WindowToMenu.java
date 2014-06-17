@@ -52,12 +52,14 @@ public class WindowToMenu implements IWindowToMenu{
 
     @Override
     public void rotateShapes() {
+        wc.frame.setTransformBarVisible(true);
         wc.input.setInputMode(IInputToWindow.ROTATE);
         wc.repaint();
     }
 
     @Override
     public void scaleShapes() {
+        wc.frame.setTransformBarVisible(true);
         wc.input.setInputMode(IInputToWindow.SCALE);
         wc.repaint();
     }

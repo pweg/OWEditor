@@ -252,5 +252,10 @@ public class FrameController implements IFrame{
     public JFrame getMainframe() {
         return mainframe;
     }
+
+    @Override
+    public void setTransformBarVisible(boolean b) {
+        mainframe.transformBar.setVisible(b);
+    }
 }
 

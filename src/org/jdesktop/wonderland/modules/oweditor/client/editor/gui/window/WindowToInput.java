@@ -107,4 +107,15 @@ public class WindowToInput implements IWindowToInput {
        wc.menu.setToBackgroundVisible(b);
     }
 
+    @Override
+    public void setPropertiesVisible(boolean b) {
+        wc.adapter.updateObjects(wc.graphic.getSelectedShapes());
+        wc.frame.setPropertiesVisible(b);
+    }
+
+    @Override
+    public void setTransformBarVisible(boolean b) {
+        wc.frame.setTransformBarVisible(b);
+    }
+
 }
