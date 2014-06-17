@@ -42,6 +42,8 @@ public class DraggingEllipse extends DraggingObject{
     private int initialWidth = 0;
     private int initialHeight = 0;
     
+    private boolean first = true;
+    
     
     private stateDraggingShape state = null;
 
@@ -70,7 +72,7 @@ public class DraggingEllipse extends DraggingObject{
         this.initialRotation = rotation;
         this.initialScale = scale;
         workingScale = scale;
-        //realScale = scale;
+        realScale = scale;
         initialWidth = width;
         initialHeight = height;
         //originalShape = at.createTransformedShape(originalShape);
@@ -80,6 +82,7 @@ public class DraggingEllipse extends DraggingObject{
         scaledShape = ShapeUtilities.scaleShape(originalShape, initialScale,0,0);
         transformedShape = ShapeUtilities.rotateShape(scaledShape, initialRotation);  
         printShape = at.createTransformedShape(transformedShape);
+
     }
 
     @Override
@@ -211,6 +214,11 @@ public class DraggingEllipse extends DraggingObject{
 
     @Override
     public void setRotationCenterUpdate() {
+        if(first){
+            realScale = 1;
+            first = false;
+        }
+        
         if(rotationCenter == null)
             return;
 
@@ -232,7 +240,11 @@ public class DraggingEllipse extends DraggingObject{
 
     @Override
     public void scaleUpdate() {
-
+        if(first){
+            realScale = 1;
+            first = false;
+        }
+        
         originalShape = ShapeUtilities.scaleShape(originalShape, workingScale, 
                 scaleTranslationX, scaleTranslationY);
         realScale = (workingScale)*realScale;

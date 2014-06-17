@@ -42,6 +42,7 @@ public class DraggingRect extends DraggingObject{
     private int initialWidth = 0;
     private int initialHeight = 0;
     
+    private boolean first = true;
     
     private stateDraggingShape state = null;
 
@@ -70,7 +71,7 @@ public class DraggingRect extends DraggingObject{
         this.initialRotation = rotation;
         this.initialScale = scale;
         workingScale = scale;
-        //realScale = scale;
+        realScale = scale;
         initialWidth = width;
         initialHeight = height;
         //originalShape = at.createTransformedShape(originalShape);
@@ -211,6 +212,11 @@ public class DraggingRect extends DraggingObject{
 
     @Override
     public void setRotationCenterUpdate() {
+        if(first){
+            realScale = 1;
+            first = false;
+        }
+        
         if(rotationCenter == null)
             return;
 
@@ -232,6 +238,10 @@ public class DraggingRect extends DraggingObject{
 
     @Override
     public void scaleUpdate() {
+        if(first){
+            realScale = 1;
+            first = false;
+        }
 
         originalShape = ShapeUtilities.scaleShape(originalShape, workingScale, 
                 scaleTranslationX, scaleTranslationY);

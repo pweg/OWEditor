@@ -82,7 +82,7 @@ public class ShapeEllipse extends ShapeObject{
             double width, double height, long id, String name,
             double rotation, double scale, String imgName, 
             String imgDir, IInternalMediator smi){
-        
+
         if(scale == 0)
             scale = 1;
         originalShape = new Ellipse2D.Double(x, y, width, height);
@@ -94,6 +94,7 @@ public class ShapeEllipse extends ShapeObject{
         this.imgName = imgName;
         this.z = z;
         this.smi = smi;
+        
     }
     
     @Override
