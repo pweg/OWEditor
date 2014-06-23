@@ -677,7 +677,9 @@ public class ImportFrame extends javax.swing.JFrame {
         }catch(NumberFormatException ex){
             setLabelColorError(scaleLabel);
             error = true;
-        }      
+        }     
+        if(scale == 0)
+            scale = 1;
         
         if(error){
             showError(BUNDLE.getString("ImportMissingError"), 

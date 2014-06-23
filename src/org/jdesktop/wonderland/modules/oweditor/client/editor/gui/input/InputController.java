@@ -23,7 +23,7 @@ public class InputController {
     
     public InputController(){
         mkListener = new MouseAndKeyListener(this);
-        inputInterface = new InputToWindow(mkListener);
+        inputInterface = new InputToWindow(this);
     }
 
     protected MouseInputAdapter getMouseListener(){

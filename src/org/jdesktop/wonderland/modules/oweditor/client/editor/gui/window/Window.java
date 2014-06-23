@@ -20,12 +20,12 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.frames.
  */
 public class Window extends GraphicForward implements IWindow {
     
-    private WindowController fc = null;
+    private WindowController wc = null;
     private IFrame frame = null;
     
     public Window(IAdapterCommunication adapter){
         super(adapter);
-        this.fc = new WindowController(adapter, this);
+        this.wc = new WindowController(adapter, this);
     }
 
     public void registerFrameInterface(IFrame frame) {
@@ -34,13 +34,13 @@ public class Window extends GraphicForward implements IWindow {
 
     @Override
     public void registerDataManager(IDataToGUI dm) {
-        fc.registerDataManager(dm);
-        fc.graphicInterface.registerDataManager(dm);
+        wc.registerDataManager(dm);
+        wc.graphicInterface.registerDataManager(dm);
     }
     
     @Override
     public void registerInputInterface(IInputToWindow input){
-        fc.registerInputInterface(input);
+        wc.registerInputInterface(input);
     }
 
     @Override
@@ -60,7 +60,7 @@ public class Window extends GraphicForward implements IWindow {
 
     @Override
     public void repaint() {
-        fc.repaint();
+        wc.repaint();
     }
 
     @Override
@@ -91,7 +91,7 @@ public class Window extends GraphicForward implements IWindow {
 
     @Override
     public IWindowToInput getInputInterface() {
-        return fc.inputInterface;
+        return wc.inputInterface;
     }
 
     @Override

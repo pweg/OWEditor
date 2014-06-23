@@ -1,10 +1,5 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.input;
 
-import java.awt.event.KeyListener;
-import java.awt.event.MouseWheelListener;
-
-import javax.swing.event.MouseInputAdapter;
-
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.IGraphicToInput;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.IWindowToInput;
 
@@ -16,17 +11,26 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.IWindow
  *
  */
 public interface IInput {
-        
-    public MouseInputAdapter getMouseListener();
     
-    public KeyListener getKeyListener();
-    
-    public MouseWheelListener getMouseWheelListener();
-    
-    public IInputToWindow getFrameInterface();
-    
+    /**
+     * Registers the graphics interface.
+     * 
+     * @param graphic The graphics interface.
+     */
     public void registerGraphicInterface(IGraphicToInput graphic);
     
-    public void registerFrameInterface(IWindowToInput frameToInputInterface);
+    /**
+     * Registers the window interface.
+     * 
+     * @param windowToInputInterface The frame interface.
+     */
+    public void registerWindowInterface(IWindowToInput windowToInputInterface);
+    
+    /**
+     * Returns the interface for window.
+     * 
+     * @return An interface.
+     */
+    public IInputToWindow getWindowInterface();
 
 }

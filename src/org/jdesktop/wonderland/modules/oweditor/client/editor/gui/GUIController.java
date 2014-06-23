@@ -42,19 +42,15 @@ public class GUIController implements IGUIController{
         window = new Window(ac);
         input = new Input();
         
-        window.addMouseListener(input.getMouseListener());
-        window.addKeyListener(input.getKeyListener());
-        window.addMouseWheelListener(input.getMouseWheelListener());
-        
         registerInterfaces();
     }
     
     private void registerInterfaces(){
-        window.registerInputInterface(input.getFrameInterface());
+        window.registerInputInterface(input.getWindowInterface());
         ac.registerWindow(window);
         
         input.registerGraphicInterface(window.getGraphicInputInterface());
-        input.registerFrameInterface(window.getInputInterface());
+        input.registerWindowInterface(window.getInputInterface());
     }
 
     @Override

@@ -1,5 +1,10 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.input;
 
+import java.awt.event.KeyListener;
+import java.awt.event.MouseWheelListener;
+
+import javax.swing.event.MouseInputAdapter;
+
 /**
  * This interface is used to set the input mode, which comes from 
  * the window package..
@@ -30,5 +35,26 @@ public interface IInputToWindow {
      * key.
      */
     public void keyPressed(int key);
+    
+    /**
+     * Returns the mouse listener.
+     * 
+     * @return The mouse listener.
+     */
+    public MouseInputAdapter getMouseListener();
+    
+    /**
+     * Returns the key listener.
+     * 
+     * @return The key listener.
+     */
+    public KeyListener getKeyListener();
+    
+    /**
+     * Returns the mouse wheel listener.
+     * 
+     * @return The mouse wheel listener.
+     */
+    public MouseWheelListener getMouseWheelListener();
 
 }

@@ -90,5 +90,8 @@ public class WindowController {
 
     public void registerInputInterface(IInputToWindow input) {
         this.input = input;
+        window.addMouseListener(input.getMouseListener());
+        window.addKeyListener(input.getKeyListener());
+        window.addMouseWheelListener(input.getMouseWheelListener());
     }
 }
