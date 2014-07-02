@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
-import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.AdapterControllerMainControllerInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.AdapterMainInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.CoordinateTranslatorInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.GUIObserverInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IAdapterObserver;
@@ -17,7 +17,7 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IAd
  * @author Patrick
  *
  */
-public class DummyAdapterController implements AdapterControllerMainControllerInterface{
+public class DummyAdapterController implements AdapterMainInterface{
     
     
     protected GUIEventManager cua = null;

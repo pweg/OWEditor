@@ -111,12 +111,15 @@ public class GUIEventManager implements GUIObserverInterface{
             throw new GUIEventException();
         }
         
+        //get cell from the cell cache.
         CellID cellid = new CellID(id);
         Cell cell = cache.getCell(cellid);
         
+        //if the cell was deleted, take the cell from the backup manager.
         if(cell == null){
             cell = ac.bm.getCell(id);
         }
+        //if no cell was found, copy is not possible!
         if(cell == null){
             throw new GUIEventException();
         }
@@ -280,8 +283,7 @@ public class GUIEventManager implements GUIObserverInterface{
             try{
                 File imgFile = new File(imageUrl);
                 BufferedImage img = ImageIO.read(imgFile);
-                FileInfo info = new FileInfo();
-                ac.fm.uploadImage(imgFile, info);
+                FileInfo info = ac.fm.uploadImage(imgFile);
                 ac.sem.updateUserLib(img, info.fileName, ac.fm.getUserDir());
             } catch (IOException e) {
                 throw new ServerCommException();

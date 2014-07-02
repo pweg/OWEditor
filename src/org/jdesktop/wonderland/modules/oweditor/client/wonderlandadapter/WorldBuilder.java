@@ -23,7 +23,7 @@ public class WorldBuilder {
     private ServerEventManager sua = null;
     private WonderlandAdapterController ac = null;
     
-    private ArrayList<Cell> cells = null;
+    //private ArrayList<Cell> cells = null;
     private static final Logger LOGGER =
             Logger.getLogger(WorldBuilder.class.getName());
     
@@ -36,7 +36,7 @@ public class WorldBuilder {
     public WorldBuilder( WonderlandAdapterController ac, ServerEventManager sua){
         this.sua = sua;
         this.ac = ac;
-        cells = new ArrayList<Cell>();
+        //cells = new ArrayList<Cell>();
     }
     
     /**
@@ -59,9 +59,10 @@ public class WorldBuilder {
             iterateChilds(rootCell);
         }
         
-        for(Cell cell : cells){
+        /*for(Cell cell : cells){
             sua.creationEvent(cell);
         }
+        cells.clear();*/
     }
     
     /**
@@ -70,7 +71,8 @@ public class WorldBuilder {
      * @param cell The cell.
      */
     private void iterateChilds(Cell cell){
-        cells.add(cell);
+       // cells.add(cell);
+        sua.creationEvent(cell);
         
         Collection<Cell> childs = cell.getChildren();
    

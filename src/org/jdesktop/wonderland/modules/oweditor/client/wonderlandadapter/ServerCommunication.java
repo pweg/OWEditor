@@ -223,7 +223,7 @@ public class ServerCommunication {
      */
     public void uploadImage(File img) throws ServerCommException{
         try {
-            ac.fm.uploadImage(img, null);
+            ac.fm.uploadImage(img);
         } catch (Exception ex) {
             Logger.getLogger(ServerCommunication.class.getName()).log(Level.SEVERE, null, ex);
             throw new ServerCommException();

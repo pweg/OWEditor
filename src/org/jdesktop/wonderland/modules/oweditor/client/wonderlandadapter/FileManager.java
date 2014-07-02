@@ -42,13 +42,13 @@ public class FileManager {
       * Loads an image file to the users server directory.
       * 
       * @param file The image file to upload.
-      * @param info The file info, wherre the directory and img name will be
-      *         stored for later use.
+      * @return The file info, which contains information of the files 
+      *     directory and its name.
       * @throws Exception 
       */
-     public void uploadImage(File file, FileInfo info) 
+     public FileInfo uploadImage(File file) 
              throws Exception{
-         uploadFile(file,info, imgRootName);
+         return uploadFile(file, imgRootName);
      }
      
      /**
@@ -78,17 +78,18 @@ public class FileManager {
       * if it exists.
       * 
       * @param file The file to be uploaded to the server.
-      * @param info The file info, which is filled by this method and contains
-      *         information of the files directory and its name.
       * @param dir The directory, where the file should be stored.
+      * @return The file info, which contains information of the files 
+      *     directory and its name.
       * @throws Exception 
       */
-    public void uploadFile(File file, FileInfo info, 
+    public FileInfo uploadFile(File file, 
             String dir)throws Exception{
         String fileName = file.getName();
         
-        if(info != null)
-            info.fileName = fileName;
+        FileInfo info = new FileInfo();
+        
+        info.fileName = fileName;
         
         ContentResource fileNode = getOwnFile(fileName, dir);
             
@@ -103,8 +104,8 @@ public class FileManager {
         fileNode.put(is);
         is.close();
             
-        if(info != null)
-            info.fileDir = fileNode.getParent().getParent().getName();
+        info.fileDir = fileNode.getParent().getParent().getName();
+        return info;
     }
     
     /**

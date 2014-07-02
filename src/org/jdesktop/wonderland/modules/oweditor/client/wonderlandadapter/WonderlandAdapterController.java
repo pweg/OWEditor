@@ -4,7 +4,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.jdesktop.wonderland.client.cell.CellManager;
 import org.jdesktop.wonderland.modules.contentrepo.common.ContentRepositoryException;
-import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.AdapterControllerMainControllerInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.AdapterMainInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.CoordinateTranslatorInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.GUIObserverInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IAdapterObserver;
@@ -15,7 +15,7 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IAd
  * @author Patrick
  *
  */
-public class WonderlandAdapterController implements AdapterControllerMainControllerInterface{
+public class WonderlandAdapterController implements AdapterMainInterface{
     
     protected FileManager fm = null;
     protected GUIEventManager gem = null;

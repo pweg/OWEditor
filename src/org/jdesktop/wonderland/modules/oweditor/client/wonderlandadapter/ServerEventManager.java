@@ -82,7 +82,7 @@ public class ServerEventManager {
             }
         };
         
-        imageListener = new ChangeListener();
+        imageListener = new ChangeListener(this);
     }
     
     /**
@@ -168,6 +168,9 @@ public class ServerEventManager {
         String name = cell.getName();
         long id = CellInfoReader.getID(cell);
         
+        /*
+         * Adds a new movable component to the cell, if it was not created yet. 
+         */
         MovableComponent movableComponent = cell.getComponent(MovableComponent.class);
         if (movableComponent == null) {
             String className = "org.jdesktop.wonderland.server.cell." +
@@ -184,7 +187,7 @@ public class ServerEventManager {
         
         /*
         * do late transform before reading cell data in order to get
-        * the changes imideately.
+        * the changes immediately.
         */
         
         //adds an image component
@@ -259,7 +262,7 @@ public class ServerEventManager {
                     if(ac.bm.isOnWhiteList(oldName))
                         ac.sc.deleteComponent(id, IDCellComponentServerState.class);
                     //the original id was not on the whitelist, therefore it 
-                    //is the same object which already exists, therefor it
+                    //is the same object which already exists, therefore it
                     //can be deleted.
                     else{
                         ac.sc.remove(id);
@@ -375,6 +378,10 @@ public class ServerEventManager {
         long id = CellInfoReader.getID(cell);
         id = ac.bm.getOriginalID(id);
         
+        /*
+         * This are the standard rights the security module
+         * produces when created.
+         */
         for(IAdapterObserver observer : observers){
             observer.notifyRightsChange(id, 
                         BUNDLE.getString("Everybody"), 
@@ -446,7 +453,7 @@ public class ServerEventManager {
      * @param imgDir The new user directory of the image.
      * @param cell  The cell where the image is changed.
      */
-    private void imageChangedEvent(String imgName, String imgDir, Cell cell){
+    public void imageChangedEvent(String imgName, String imgDir, Cell cell){
         long original_id = CellInfoReader.getID(cell);
         long id = ac.bm.getOriginalID(original_id);
         
@@ -501,6 +508,20 @@ public class ServerEventManager {
     }
     
     /**
+     * Name change event.
+     * 
+     * @param cell The cell which name got changed.
+     */
+    public void nameChanged(Cell cell) {
+        long id = CellInfoReader.getID(cell);
+        id = ac.bm.getOriginalID(id);
+            
+        for(IAdapterObserver observer : observers){
+           observer.notifyNameChange(id, cell.getName());
+        }
+    }
+    
+    /**
      * Sets the directory of the current user.
      * 
      * @param dir The user directory.
@@ -533,27 +554,6 @@ public class ServerEventManager {
         for(FileManager.ImageClass img : userLib){
             for(IAdapterObserver observer : observers){
                 observer.updateImgLib(img.img, img.name, img.dir);
-            }
-        }
-    }
-    
-    /**
-     * Inner class for the image change listener.
-     */
-    class ChangeListener extends Marshaller.Listener implements CellChangeListener{
-
-        @Override
-        public void imageChanged(String img, String dir, Cell cell) {
-            imageChangedEvent(img, dir, cell);
-        }
-
-        @Override
-        public void nameChanged(Cell cell) {
-            long id = CellInfoReader.getID(cell);
-            id = ac.bm.getOriginalID(id);
-            
-            for(IAdapterObserver observer : observers){
-                observer.notifyNameChange(id, cell.getName());
             }
         }
     }

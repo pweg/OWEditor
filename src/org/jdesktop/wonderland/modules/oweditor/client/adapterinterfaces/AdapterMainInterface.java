@@ -10,7 +10,7 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IAd
  * @author Patrick
  *
  */
-public interface AdapterControllerMainControllerInterface {
+public interface AdapterMainInterface {
     
     /**
      * Initializes the whole adapter.

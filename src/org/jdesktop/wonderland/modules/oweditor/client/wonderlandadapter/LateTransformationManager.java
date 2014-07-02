@@ -79,7 +79,7 @@ public class LateTransformationManager {
      * @return A vector containing the translation, or null
      * if there is no entry.
      */
-    public Vector3f getTranslation(long id){
+    private Vector3f getTranslation(long id){
         return translationMap.get(id);
     }
     
@@ -91,7 +91,7 @@ public class LateTransformationManager {
      * @return A vector containing the translation, or null
      * if there is no entry.
      */
-    public Vector3f getTranslation(String name){
+    private Vector3f getTranslation(String name){
         return copyTranslation.get(name);
     }
     
@@ -102,7 +102,7 @@ public class LateTransformationManager {
      * @return A vector containing the rotation, or null
      * if there is no entry.
      */
-    public Vector3f getRotation(long id){
+    private Vector3f getRotation(long id){
         return rotationMap.get(id);
     }
     
@@ -112,7 +112,7 @@ public class LateTransformationManager {
      * @param id The cell id.
      * @return The scale, or -1 if there is no entry.
      */
-    public float getScale(long id){
+    private float getScale(long id){
         if(scaleMap.containsKey(id)){
             return scaleMap.get(id);
         }
@@ -124,7 +124,7 @@ public class LateTransformationManager {
      * 
      * @param id The cell id.
      */
-    public void removeTranslate(long id){
+    private void removeTranslate(long id){
         translationMap.remove(id);
     }
     
@@ -133,7 +133,7 @@ public class LateTransformationManager {
      * 
      * @param name The cell name.
      */
-    public void removeTranslate(String name){
+    private void removeTranslate(String name){
         copyTranslation.remove(name);
     }
     
@@ -142,7 +142,7 @@ public class LateTransformationManager {
      * 
      * @param id The cells id.
      */
-    public void removeRotate(long id){
+    private void removeRotate(long id){
         rotationMap.remove(id);
     }
     
@@ -151,7 +151,7 @@ public class LateTransformationManager {
      * 
      * @param id The cells id.
      */
-    public void removeScale(long id){
+    private void removeScale(long id){
         scaleMap.remove(id);
     }
     
@@ -237,7 +237,7 @@ public class LateTransformationManager {
      * @param name The name of the cell.
      * @return True, if the translation was successful
      */
-    public boolean lateTransform(ServerCommunication server, long id,
+    private boolean lateTransform(ServerCommunication server, long id,
             String name){
         Vector3f lateTranslation = getTranslation(name);
         
@@ -261,7 +261,7 @@ public class LateTransformationManager {
      * @param id The id of the cell.
      * @return True, if the translation was successful
      */
-    public boolean lateTransform(ServerCommunication server, long id){
+    private boolean lateTransform(ServerCommunication server, long id){
         
         Vector3f lateTranslation = getTranslation(id);
         Vector3f lateRotation = getRotation(id);
@@ -304,6 +304,7 @@ public class LateTransformationManager {
      * 
      * @param id The cells id.
      * @param imgName The image name.
+     * @param imgDir The image directory
      */
     public void addImage(long id, String imgName, String imgDir) {
         Image img = new Image(imgName, imgDir);

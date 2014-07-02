@@ -146,7 +146,7 @@ public class KMZImporter {
     }
     
     /**
-     * Returns the size of the latet model imported.
+     * Returns the size of the latest model imported.
      * 
      * @return The models size as bounding volume.
      */
@@ -165,7 +165,7 @@ public class KMZImporter {
      * 
      * @param moduleName The name of the module.
      * @param serverName The server, where the module will be saved.
-     * @return True, if the name already exsists, false otherwise.
+     * @return True, if the name already exists, false otherwise.
      */
     public boolean checkName(String moduleName, String serverName) {
         Collection<ServerSessionManager> servers = LoginManager.getAll();

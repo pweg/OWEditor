@@ -67,7 +67,7 @@ public class BackupManager {
     }
     
     /**
-     * Remvoves a cell from the backup.
+     * Removes a cell from the backup.
      * 
      * @param id The id of the cell.
      */
@@ -261,7 +261,7 @@ public class BackupManager {
     }
     
     /**
-     * Searches the whitelist for a name.
+     * Searches the whitelist for a name and removes it.
      * 
      * @param name The name.
      * @return True, if the name is on the list, false otherwise.
