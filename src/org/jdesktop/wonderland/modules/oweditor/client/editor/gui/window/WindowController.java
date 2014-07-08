@@ -1,12 +1,12 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window;
 
-import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IDataToGUI;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.IAdapterCommunication;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.GraphicController;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.IGraphicToWindow;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.IDataManager;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.input.IInputToWindow;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.frames.FrameController;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.frames.IFrame;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.graphics.GraphicController;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.graphics.IGraphicToWindow;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.menu.IMenu;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.menu.MenuController;
 
@@ -83,7 +83,7 @@ public class WindowController {
         frame.repaint();
     }
 
-    public void registerDataManager(IDataToGUI dm) {
+    public void registerDataManager(IDataManager dm) {
         mouseCoords.registerDataManager(dm);
         frameInterface.registerDataManager(dm);
     }

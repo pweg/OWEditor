@@ -12,13 +12,13 @@ import java.awt.Point;
  */
 public class mlSelectionRectStrategy implements mlMouseStrategy{
         
-    private InputController controller = null;
+    private MouseAndKeyListener listener = null;
     private boolean selectionRect = false;
     
     private Point start = new Point();
     
-    mlSelectionRectStrategy(InputController contr){
-        controller = contr;
+    mlSelectionRectStrategy(MouseAndKeyListener listener){
+        this.listener = listener;
     }
 
     @Override
@@ -34,8 +34,8 @@ public class mlSelectionRectStrategy implements mlMouseStrategy{
         if(selectionRect != false){
                selectionRect = false;
                
-               controller.graphic.selectionRectFinished();
-               controller.window.selectionChange(controller.graphic.isShapeSelected());
+               listener.graphic.selectionRectFinished();
+               listener.window.selectionChange(listener.graphic.isShapeSelected());
            }
     }
 
@@ -44,7 +44,7 @@ public class mlSelectionRectStrategy implements mlMouseStrategy{
          if(selectionRect != false){
                 Point end = p;
                
-                controller.graphic.selectionRectUpdate(start, end);
+                listener.graphic.selectionRectUpdate(start, end);
             }
     }
 

@@ -10,32 +10,32 @@ import java.awt.Point;
  */
 public class mlPopupStrategy implements mlMouseStrategy{
     
-    private InputController controller;
+    private MouseAndKeyListener listener;
     
-    public mlPopupStrategy(InputController contr){
-        this.controller = contr;
+    public mlPopupStrategy(MouseAndKeyListener listener){
+        this.listener = listener;
     }
 
     @Override
     public void mousePressed(Point p) {
         
-        Point reverted = controller.window.revertBack(p);
+        Point reverted = listener.window.revertBack(p);
         
         //mouse is in normal shape.
-        if(controller.graphic.selectionSwitch(reverted, false)){
-            controller.window.selectionChange(controller.graphic.isShapeSelected());
-            controller.window.setToBGVisible(true);
+        if(listener.graphic.selectionSwitch(reverted, false)){
+            listener.window.selectionChange(listener.graphic.isShapeSelected());
+            listener.window.setToBGVisible(true);
         //mouse is in background shape
-        }else if(controller.graphic.isMouseInBGObject(reverted)){
-            controller.window.selectionChange(false);
-            controller.window.setToBGVisible(false);
+        }else if(listener.graphic.isMouseInBGObject(reverted)){
+            listener.window.selectionChange(false);
+            listener.window.setToBGVisible(false);
         //mouse is in no shape, but there are shapes selected
-        }else if (!controller.graphic.isShapeSelected()){
-            controller.window.selectionChange(false);
-            controller.window.setToBGVisible(true);
+        }else if (!listener.graphic.isShapeSelected()){
+            listener.window.selectionChange(false);
+            listener.window.setToBGVisible(true);
         }
         
-        controller.window.showPopupMenu(p.x, p.y);            
+        listener.window.showPopupMenu(p.x, p.y);            
     }
 
     @Override

@@ -320,7 +320,7 @@ public class GUIEventManager implements GUIObserverInterface{
         id = ac.bm.getActiveID(id);
         
         ac.sc.setSecurity(id, ac.secm.changeRight(ac.sc.getCell(id),
-                oldType, oldName, type, name, owner,
+                 oldName, type, name, owner,
                 addSubObjects, changeAbilities, move, view));
     }
 

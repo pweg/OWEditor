@@ -19,10 +19,11 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.IGUI
  */
 public class GUIController implements IGUIController{
 
-    protected DataObjectObserver domo = null;
+    protected DataObjectObserver doo = null;
     protected EnvironmentObserver eo = null;
     protected IWindow window = null;
     protected IInput input = null;
+    protected DataManager dr = null;
     
     private AdapterCommunication ac = null;
     
@@ -35,9 +36,10 @@ public class GUIController implements IGUIController{
     @Override
     public void initializeGUI() {
                
-        domo = new DataObjectObserver(this);
+        doo = new DataObjectObserver(this);
         eo = new EnvironmentObserver(this);
         ac = new AdapterCommunication();
+        dr = new DataManager();
         
         window = new Window(ac);
         input = new Input();
@@ -60,10 +62,11 @@ public class GUIController implements IGUIController{
 
     @Override
     public void registerDataManager(IDataToGUI dm) {
-        dm.registerDataObjectObserver(domo);
+        dm.registerDataObjectObserver(doo);
         dm.registerEnvironmentObserver(eo);
+        dr.registerDataInterface(dm);
         ac.registerDataManager(dm);
-        window.registerDataManager(dm);
+        window.registerDataManager(dr);
     }
 
     @Override
@@ -73,7 +76,7 @@ public class GUIController implements IGUIController{
     
     @Override
     public IDataObjectObserver getDataObjectObserver() {
-        return domo;
+        return doo;
     }
 
     @Override

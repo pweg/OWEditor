@@ -4,7 +4,7 @@ import java.awt.Point;
 import java.awt.geom.Point2D;
 import java.text.DecimalFormat;
 
-import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IDataToGUI;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.IDataManager;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.frames.toolbar.BottomToolBar;
 
 /**
@@ -16,7 +16,7 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.frames.
  */
 public class MouseCoordinates {
 
-    private IDataToGUI dm = null;
+    private IDataManager dm = null;
     private BottomToolBar toolBar = null;
 
     private DecimalFormat format = null;
@@ -54,7 +54,7 @@ public class MouseCoordinates {
      * 
      * @param dm The data manager.
      */
-    public void registerDataManager(IDataToGUI dm) {
+    public void registerDataManager(IDataManager dm) {
         this.dm = dm;
     }
 }

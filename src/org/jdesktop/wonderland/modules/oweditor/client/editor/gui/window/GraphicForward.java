@@ -2,8 +2,8 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.ITransformedObject;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.IAdapterCommunication;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.IGraphicToInput;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.IGraphicToWindow;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.graphics.IGraphicToInput;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.graphics.IGraphicToWindow;
 
 /**
  * Implements the frameGraphicInterface, which forwards 
@@ -13,7 +13,7 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.IGrap
  * @author Patrick
  *
  */
-public class GraphicForward implements GraphicForwardInterface{
+public class GraphicForward implements IGraphicForward{
 
     private IGraphicToWindow graphic = null;
     

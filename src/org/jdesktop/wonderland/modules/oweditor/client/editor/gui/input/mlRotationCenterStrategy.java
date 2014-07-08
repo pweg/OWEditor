@@ -12,12 +12,12 @@ import java.awt.Point;
  */
 public class mlRotationCenterStrategy implements mlMouseStrategy{
 
-    private InputController controller;
+    private MouseAndKeyListener listener;
     private Point start = new Point();
     private boolean dragging = false;
     
-    public mlRotationCenterStrategy(InputController contr){
-        controller = contr;
+    public mlRotationCenterStrategy(MouseAndKeyListener listener){
+        this.listener = listener;
     }
 
     @Override
@@ -30,13 +30,13 @@ public class mlRotationCenterStrategy implements mlMouseStrategy{
     @Override
     public void mouseReleased(Point p) {
         dragging = false;
-        controller.graphic.rotationCenterUpdate();
+        listener.graphic.rotationCenterUpdate();
     }
 
     @Override
     public void mouseDragged(Point p) {
         if(dragging) {
-            controller.graphic.rotationCenterTranslate(start, p);
+            listener.graphic.rotationCenterTranslate(start, p);
             start.x = p.x;
             start.y = p.y;
         }

@@ -1,6 +1,5 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.data;
 
-import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IDataObject;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IImage;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.ITransformedObject;
 
@@ -17,12 +16,12 @@ public class TransformedObject implements ITransformedObject{
     private float z = 0;
     private int width = 0;
     private int height = 0;
-    private String name = "";
-    
-    private double scale = 0;
+
     private double rotation = 0;
+    private double scale = 0;
     private long id = 0;
-    private byte type = IDataObject.RECTANGLE;
+    private String name = "";
+    private byte type = ITransformedObject.RECTANGLE;
     private IImage img = null;
     
     public TransformedObject(long id, int x, int y, float z, int width, int height,

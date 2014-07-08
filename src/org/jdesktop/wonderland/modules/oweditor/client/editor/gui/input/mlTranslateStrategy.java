@@ -15,26 +15,24 @@ public class mlTranslateStrategy implements mlMouseStrategy{
     public static final byte TRANSLATE = 0;
     public static final byte PASTE = 1;
 
-    public InputController controller = null;
     public MouseAndKeyListener listener = null;
     private Point start = new Point();
     private boolean dragging = false;
     private Point movePoint = null;
     private byte mode = 0;;
     
-    public mlTranslateStrategy(InputController contr, MouseAndKeyListener listener,
+    public mlTranslateStrategy(MouseAndKeyListener listener,
             byte mode){
-        this.controller = contr;
         this.listener = listener;
         
         this.mode  = mode;
         
         switch(mode){
             case(TRANSLATE):
-                movePoint = controller.graphic.getDraggingCenter();
+                movePoint = listener.graphic.getDraggingCenter();
                 break;                
             case(PASTE):
-                movePoint = controller.graphic.copyInitialize();
+                movePoint = listener.graphic.copyInitialize();
                 break;
         }
     }
@@ -51,8 +49,8 @@ public class mlTranslateStrategy implements mlMouseStrategy{
             start.y = movePoint.y;
 
             if(mode == PASTE){
-                controller.graphic.clearCurSelection();
-                controller.graphic.pasteInitialize();
+                listener.graphic.clearCurSelection();
+                listener.graphic.pasteInitialize();
             }
             
             dragging = true;
@@ -61,10 +59,10 @@ public class mlTranslateStrategy implements mlMouseStrategy{
             
             switch(mode){
                 case(TRANSLATE):
-                    controller.window.translateFinish();
+                    listener.window.translateFinish();
                     break;
                 case(PASTE):
-                    controller.graphic.pasteFinished();
+                    listener.graphic.pasteFinished();
                     break;
             }
             
@@ -80,7 +78,7 @@ public class mlTranslateStrategy implements mlMouseStrategy{
     @Override
     public void mouseMoved(Point p) {
         if(dragging) {
-            controller.graphic.translate(p.x,p.y, start);
+            listener.graphic.translate(p.x,p.y, start);
             start.x = p.x;
             start.y = p.y;
         }

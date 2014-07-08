@@ -10,7 +10,6 @@ import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.ResourceBundle;
 import java.util.Set;
-import java.util.logging.Logger;
 import org.jdesktop.wonderland.client.cell.Cell;
 import org.jdesktop.wonderland.common.cell.state.CellServerState;
 import org.jdesktop.wonderland.modules.security.client.SecurityQueryComponent;
@@ -34,10 +33,8 @@ public class SecurityManager {
     private static final ResourceBundle BUNDLE = ResourceBundle.getBundle(
             "org/jdesktop/wonderland/modules/oweditor/client/resources/Bundle");
     
+    //will be set when the first time of reading out the rights
     private String users = "users";
-    
-    //stores the actions. not very elaborate, but there is no
-    //obvious way to create a new action.
     
     public SecurityManager(WonderlandAdapterController ac){
         this.ac = ac;
@@ -149,7 +146,6 @@ public class SecurityManager {
      * Changes one security entry.
      * 
      * @param cell The cell.
-     * @param oldType The old user type.
      * @param oldName The old user/usergroup name.
      * @param type The new user type.
      * @param name The new user name.
@@ -160,7 +156,7 @@ public class SecurityManager {
      * @param view Permission
      * @return The permission set.
      */
-    public CellPermissions changeRight(Cell cell, String oldType, String oldName, 
+    public CellPermissions changeRight(Cell cell, String oldName, 
             String type, String name, boolean owner, boolean addSubObjects, 
             boolean changeAbilities, boolean move, boolean view) {
         if(cell == null)

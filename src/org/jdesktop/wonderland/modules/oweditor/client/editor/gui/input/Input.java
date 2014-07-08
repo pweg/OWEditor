@@ -1,7 +1,7 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.input;
 
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.graphics.IGraphicToInput;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.IWindowToInput;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.graphics.IGraphicToInput;
 
 /**
  * Implements the input interface and is used to set/get

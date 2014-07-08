@@ -10,10 +10,10 @@ import java.awt.Point;
  */
 public class mlScaleStrategy implements mlMouseStrategy {
     
-    private InputController controller = null;
+    private MouseAndKeyListener listener = null;
     
-    public mlScaleStrategy(InputController contr){
-        this.controller = contr;
+    public mlScaleStrategy(MouseAndKeyListener listener){
+        this.listener = listener;
     }
     @Override
     public void mousePressed(Point p) {
@@ -23,13 +23,12 @@ public class mlScaleStrategy implements mlMouseStrategy {
 
     @Override
     public void mouseReleased(Point p) {
-        controller.mkListener.removeStrategy();
-        controller.graphic.scaleUpdate();
+        listener.graphic.scaleUpdate();
     }
 
     @Override
     public void mouseDragged(Point p) {
-        controller.graphic.scale(p);
+        listener.graphic.scale(p);
     }
 
     @Override

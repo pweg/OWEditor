@@ -12,12 +12,12 @@ import java.awt.Point;
  */
 public class mlTranslateDragStrategy implements mlMouseStrategy{
 
-    private InputController controller;
+    private MouseAndKeyListener listener;
     private Point start = new Point();
     private boolean dragging = false;
     
-    public mlTranslateDragStrategy(InputController contr){
-        controller = contr;
+    public mlTranslateDragStrategy(MouseAndKeyListener listener){
+        this.listener = listener;
     }
     
     /**
@@ -34,13 +34,13 @@ public class mlTranslateDragStrategy implements mlMouseStrategy{
     @Override
     public void mouseReleased(Point p) {
         dragging = false;
-        controller.graphic.translateFinished();
+        listener.graphic.translateFinished();
     }
 
     @Override
     public void mouseDragged(Point p) {
         if(dragging) {
-            controller.graphic.draggingTranslate(p.x, p.y, start);
+            listener.graphic.draggingTranslate(p.x, p.y, start);
             start.x = p.x;
             start.y = p.y;
         }

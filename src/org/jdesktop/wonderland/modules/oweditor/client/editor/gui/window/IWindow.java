@@ -5,7 +5,7 @@ import java.awt.event.MouseWheelListener;
 
 import javax.swing.event.MouseInputAdapter;
 
-import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IDataToGUI;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.IDataManager;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.input.IInputToWindow;
 
 /**
@@ -15,7 +15,7 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.input.IInputTo
  * @author Patrick
  *
  */
-public interface IWindow extends GraphicForwardInterface{
+public interface IWindow extends IGraphicForward{
     
     /**
      * Adds a mouse to the drawing panel
@@ -104,7 +104,7 @@ public interface IWindow extends GraphicForwardInterface{
      * 
      * @param dm The instance
      */
-    public void registerDataManager(IDataToGUI dm);
+    public void registerDataManager(IDataManager dm);
 
     /**
      * Sets the undo option enabled/disabled.

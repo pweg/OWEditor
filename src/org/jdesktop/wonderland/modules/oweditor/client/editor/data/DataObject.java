@@ -17,14 +17,15 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IRi
 public class DataObject implements IDataObject{
     
     private Vector3D coords = null;
+    private float width = 0;
+    private float height = 0;
+    
     private double rotationX = 0;
     private double rotationY = 0;
     private double rotationZ = 0;
     private double scale = 1;
-    private double oldScale = 1;
+    
     private long id = 0;
-    private float width = 0;
-    private float height = 0;
     private String name = "";
     private byte type = IDataObject.RECTANGLE;
     
@@ -63,7 +64,6 @@ public class DataObject implements IDataObject{
         this.rotationY = rotationY;
         this.rotationZ = rotationZ;
         this.scale = scale;
-        oldScale = scale;
         
         this.width = width;
         this.height = height;
@@ -166,7 +166,6 @@ public class DataObject implements IDataObject{
 
     @Override
     public void setScale(double scale) {
-        oldScale = this.scale;
         this.scale = scale;
     }
 
@@ -233,10 +232,6 @@ public class DataObject implements IDataObject{
     @Override
     public double getRotation() {
         return rotationX;
-    }
-    
-    public double getOldScale(){
-        return oldScale;
     }
     
     @Override

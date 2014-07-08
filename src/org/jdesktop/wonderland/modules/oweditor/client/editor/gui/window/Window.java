@@ -5,8 +5,8 @@ import java.awt.event.MouseWheelListener;
 
 import javax.swing.event.MouseInputAdapter;
 
-import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IDataToGUI;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.IAdapterCommunication;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.IDataManager;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.input.IInputToWindow;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.frames.IFrame;
 
@@ -33,7 +33,7 @@ public class Window extends GraphicForward implements IWindow {
     }
 
     @Override
-    public void registerDataManager(IDataToGUI dm) {
+    public void registerDataManager(IDataManager dm) {
         wc.registerDataManager(dm);
         wc.graphicInterface.registerDataManager(dm);
     }

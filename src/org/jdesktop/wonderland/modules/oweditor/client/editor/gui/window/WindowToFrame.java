@@ -4,11 +4,12 @@ import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
+
 import javax.swing.JOptionPane;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IDataObject;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IDataToGUI;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IImage;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.IDataManager;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.input.IInputToWindow;
 
 /**
@@ -23,7 +24,7 @@ public class WindowToFrame implements IWindowToFrame{
             "org/jdesktop/wonderland/modules/oweditor/client/resources/Bundle");
 
     public WindowController wc = null;
-    private IDataToGUI dm = null;
+    private IDataManager dm = null;
     
     public WindowToFrame(WindowController wc) {
         this.wc = wc;
@@ -66,7 +67,7 @@ public class WindowToFrame implements IWindowToFrame{
         wc.input.setInputMode(IInputToWindow.TRANSLATE);
     }
 
-    public void registerDataManager(IDataToGUI dm) {
+    public void registerDataManager(IDataManager dm) {
         this.dm  = dm;
     }
 
@@ -102,12 +103,12 @@ public class WindowToFrame implements IWindowToFrame{
 
     @Override
     public ArrayList<IImage> getImgLib() {
-        return dm.getImgLibrary();
+        return dm.getImgLib();
     }
 
     @Override
     public IDataObject getDataObject(long id) {
-        return dm.getObject(id);
+        return dm.getDataObject(id);
     }
 
     @Override

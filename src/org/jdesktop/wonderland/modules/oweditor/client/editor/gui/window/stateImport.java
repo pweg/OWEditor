@@ -3,7 +3,7 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window;
 import java.awt.Point;
 import java.awt.geom.Point2D;
 
-import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IDataToGUI;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.IDataManager;
 
 /**
  * Sets the import state, which is done during the select position
@@ -15,13 +15,13 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IDa
 public class stateImport implements stateInput{
     
     private WindowController wc = null;
-    private IDataToGUI dm = null;
+    private IDataManager dm = null;
     private int width = 0;
     private int height = 0;
     
     
     public stateImport(WindowController wc,
-            IDataToGUI dm){
+            IDataManager dm){
         this.wc = wc;
         this.dm = dm;
     }
@@ -35,10 +35,10 @@ public class stateImport implements stateInput{
     @Override
     public void finished() {
         Point coords = wc.graphic.getDraggingCoords();
-        Point2D coords_origin = dm.transformCoordsBack(coords,
+        Point2D.Double coords_origin = dm.transformCoordsBack(coords,
                 width, height);
         
-        wc.frame.setImportLocation(coords_origin.getX(), coords_origin.getY());
+        wc.frame.setImportLocation(coords_origin.x, coords_origin.y);
         wc.frame.showImportFrame();
     }
 

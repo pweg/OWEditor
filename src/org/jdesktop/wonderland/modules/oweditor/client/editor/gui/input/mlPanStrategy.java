@@ -21,8 +21,8 @@ public class mlPanStrategy implements mlMouseStrategy{
     private Point here = null;  
     private boolean drag = false;
     
-    public mlPanStrategy(IWindowToInput effi){
-        this.window = effi;
+    public mlPanStrategy(IWindowToInput window){
+        this.window = window;
     }
     
     @Override
