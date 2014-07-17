@@ -13,13 +13,13 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.graphic
 public class CopyManager {
 
     //list of copied shapes.
-    private ArrayList<ShapeObject> copyShapes = null;
+    private ArrayList<Long> copyShapes = null;
     
     private IInternalMediator med = null;
     
     public CopyManager(IInternalMediator med){
         this.med = med;
-        copyShapes = new ArrayList<ShapeObject>();
+        copyShapes = new ArrayList<Long>();
     }
     
     /**
@@ -31,15 +31,15 @@ public class CopyManager {
         copyShapes.clear();
         ArrayList<ShapeObject> shapes = med.getSelectedShapes();
 
-        ArrayList<Long> ids = new ArrayList<Long>();
+       // ArrayList<Long> ids = new ArrayList<Long>();
         
         for(ShapeObject shape : shapes){
-            ShapeObject tmp = shape.clone();
-            copyShapes.add(tmp);
+            //ShapeObject tmp = shape.clone();
+            //copyShapes.add(tmp);
             
-            ids.add(shape.getID());
+            copyShapes.add(shape.getID());
         }
-        return ids;
+        return copyShapes;
     }
     
     /**
@@ -48,7 +48,7 @@ public class CopyManager {
      * @return A list of shapes.
      */
     public ArrayList<ShapeObject> getCopyShapes(){
-        return copyShapes;
+        return med.getShapes(copyShapes);
     }
 
 }

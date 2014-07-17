@@ -21,8 +21,10 @@ public class sCollisionAllStrategy implements sCollisionStrategy {
     public boolean checkForCollision(ArrayList<ShapeObject> shapes,
             ArrayList<DraggingObject> draggingShapes) {
 
-        boolean is_collision = false;
+        boolean ret_col = false;
         for(DraggingObject selected : draggingShapes){
+            boolean is_collision = false;
+            
             Area draggingArea = new Area(selected.getTransformedShape());
             
             for(ShapeObject shape : shapes){
@@ -31,12 +33,13 @@ public class sCollisionAllStrategy implements sCollisionStrategy {
                 area.intersect(draggingArea);
                 if(!area.isEmpty()){
                     is_collision = true;
+                    ret_col = true;
                     break;
                 }
                 
             }
             selected.setCollision(is_collision);
             }
-        return is_collision;
+        return ret_col;
     }
 }
