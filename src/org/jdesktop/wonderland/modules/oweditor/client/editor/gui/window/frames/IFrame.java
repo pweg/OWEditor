@@ -8,7 +8,6 @@ import javax.swing.JMenuBar;
 import javax.swing.event.MouseInputAdapter;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.IWindowToFrame;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.frames.toolbar.BottomToolBar;
 
 public interface IFrame {
     
@@ -106,13 +105,6 @@ public interface IFrame {
     public void setJMenuBar(JMenuBar buildMenubar);
 
     /**
-     * Returns the bottom toolbar.
-     * 
-     * @return A toolbar instance.
-     */
-    public BottomToolBar getBottomToolBar();
-
-    /**
      * Enables/disables the undo option.
      * 
      * @param b If true, the undo bar is enabled,
@@ -157,5 +149,13 @@ public interface IFrame {
      * if false, the bar will hide :P
      */
     public void setTransformBarVisible(boolean b);
+    
+    /**
+     * Sets the coordinates for the bottom toolbar.
+     * 
+     * @param x The x coordinate.
+     * @param y The y coordinate.
+     */
+    public void setToolbarCoords(String x, String y);
 
 }

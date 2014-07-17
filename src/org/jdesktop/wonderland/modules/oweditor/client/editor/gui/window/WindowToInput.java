@@ -5,7 +5,6 @@ import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;
 
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.frames.IDrawingPanel;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.menu.IMenu;
 
 /**
@@ -17,7 +16,7 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.menu.IM
 public class WindowToInput implements IWindowToInput {
 
     private WindowController wc = null;    
-    private IDrawingPanel drawingPan = null;
+    //private IDrawingPanel drawingPan = null;
     private IMenu menu = null;
     private stateInput state = null;
     
@@ -26,9 +25,9 @@ public class WindowToInput implements IWindowToInput {
         menu = fc.menu;
     }
     
-    public void registerDrawingPan(IDrawingPanel drawingPan){
+    /*public void registerDrawingPan(IDrawingPanel drawingPan){
         this.drawingPan = drawingPan;
-    }
+    }*/
 
     @Override
     public void repaint() {
@@ -37,36 +36,36 @@ public class WindowToInput implements IWindowToInput {
 
     @Override
     public Dimension getPanelSize() {
-        return drawingPan.getSize();
+        return wc.frame.getDrawingPan().getSize();
     }
     
     @Override
     public void showPopupMenu(int x, int y) {
         //menu.setItemsEnabled(shapesSelected, copyShapesExist);
         wc.repaint();
-        menu.showPopup((Component)drawingPan, x, y);
+        menu.showPopup((Component)wc.frame.getDrawingPan(), x, y);
     }
 
     @Override
     public void changeScale(double scale) {
         //double curScale = drawingPan.getScale();
-        drawingPan.changeScale(scale);
+        wc.frame.getDrawingPan().changeScale(scale);
         //drawingPan.changeViewPort(curScale);
     }
 
     @Override
     public Point getMousePosition() {
-        return drawingPan.getMousePosition();
+        return wc.frame.getDrawingPan().getMousePosition();
     }
 
     @Override
     public Rectangle getVisibleRect() {
-        return drawingPan.getVisibleRect();
+        return wc.frame.getDrawingPan().getVisibleRect();
     }
 
     @Override
     public void scrollRectToVisible(Rectangle rect) {
-        drawingPan.scrollRectToVisible(rect);
+        wc.frame.getDrawingPan().scrollRectToVisible(rect);
     }
     @Override
     public void paintMouseCoords(int x, int y) {
@@ -74,7 +73,7 @@ public class WindowToInput implements IWindowToInput {
     }
     @Override
     public Point revertBack(Point point) {
-        return drawingPan.transformBack(point);
+        return wc.frame.getDrawingPan().transformBack(point);
     }
     @Override
     public void selectionChange(boolean shapesSelected) {

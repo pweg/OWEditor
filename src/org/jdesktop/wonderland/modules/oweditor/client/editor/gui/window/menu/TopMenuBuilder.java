@@ -37,7 +37,7 @@ public class TopMenuBuilder implements IMenuBuilder{
     public void addItem(String menuName, String itemName, Callable<Void> function,
             KeyStroke keyCombination, boolean separator){
         
-        if( (menuName != null && menuName.equals("")) || itemName == null || 
+        if( menuName == null || menuName.equals("") || itemName == null || 
                 itemName.equals("")){
             return;
         }

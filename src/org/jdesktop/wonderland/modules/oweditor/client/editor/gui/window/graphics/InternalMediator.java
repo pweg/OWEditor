@@ -88,6 +88,20 @@ public class InternalMediator implements IInternalMediator{
     public ShapeObject getShape(long id) {
         return sm.getShape(id);
     }
+    @Override
+    public ArrayList<ShapeObject> getShapes(ArrayList<Long> ids) {
+        ArrayList<ShapeObject> list = new ArrayList<ShapeObject>();
+        
+        if(ids != null){
+            for(Long id : ids){
+                ShapeObject shape = sm.getShape(id);
+                if(shape != null)
+                    list.add(shape);
+            }
+        }
+        
+        return list;
+    }
 
     @Override
     public ITransformationBorder getShapeBorder() {
@@ -104,5 +118,4 @@ public class InternalMediator implements IInternalMediator{
     public BufferedImage getImage(String name, String dir) {
         return window.getImage(name, dir);
     }
-    
 }

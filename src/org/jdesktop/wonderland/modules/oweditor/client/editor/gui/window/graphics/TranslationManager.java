@@ -15,11 +15,11 @@ public class TranslationManager {
 
     //These are shapes for updates.
     private sCollisionStrategy strategy = null;
-    private IInternalMediator smi = null;
+    private IInternalMediator med = null;
 
-    public TranslationManager(IInternalMediator smi){
+    public TranslationManager(IInternalMediator med){
         
-        this.smi = smi;
+        this.med = med;
     }
 
     /**
@@ -32,7 +32,7 @@ public class TranslationManager {
      * @param y the new y coordinate.
      */
     public void translateShape(long id, int x, int y){
-        ShapeObject shape = smi.getShape(id);
+        ShapeObject shape = med.getShape(id);
         shape.setLocation(x, y);
     }
 
@@ -52,7 +52,7 @@ public class TranslationManager {
         translateDraggingShapes(-distance_x, -distance_y);
         checkForCollision();
           
-        smi.repaint();
+        med.repaint();
         
     }
 
@@ -65,7 +65,7 @@ public class TranslationManager {
      */
     public void translateDraggingShapes(double distance_x, double distance_y){
         
-        for(DraggingObject shape : smi.getDraggingShapes()){
+        for(DraggingObject shape : med.getDraggingShapes()){
             shape.setTranslation(distance_x, distance_y);
         }
     }
@@ -88,7 +88,7 @@ public class TranslationManager {
         if(strategy == null)
             return false;
         
-        return strategy.checkForCollision(smi.getAllShapes(), smi.getDraggingShapes());
+        return strategy.checkForCollision(med.getAllShapes(), med.getDraggingShapes());
     }
 
 }

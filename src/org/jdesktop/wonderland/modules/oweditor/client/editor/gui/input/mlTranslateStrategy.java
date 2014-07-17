@@ -3,9 +3,10 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.input;
 import java.awt.Point;
 
 /**
- * This strategy is used for normal translation, without dragging the mouse.
+ * This strategy is used for normal translation, without dragging the mouse
+ * (Currently only when importing kmz).
  * It has two modes, the first is for translation, which is done for
- * normal translation behavoir. The second is for paste translation.
+ * normal translation behavior. The second is for paste translation.
  * 
  * @author Patrick
  *

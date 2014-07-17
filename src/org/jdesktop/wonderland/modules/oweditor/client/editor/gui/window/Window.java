@@ -8,7 +8,6 @@ import javax.swing.event.MouseInputAdapter;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.IAdapterCommunication;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.IDataManager;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.input.IInputToWindow;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.frames.IFrame;
 
 /**
  * Implements the FrameInterface for the gui package and also
@@ -21,21 +20,15 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.frames.
 public class Window extends GraphicForward implements IWindow {
     
     private WindowController wc = null;
-    private IFrame frame = null;
     
     public Window(IAdapterCommunication adapter){
         super(adapter);
         this.wc = new WindowController(adapter, this);
     }
 
-    public void registerFrameInterface(IFrame frame) {
-        this.frame = frame;
-    }
-
     @Override
     public void registerDataManager(IDataManager dm) {
         wc.registerDataManager(dm);
-        wc.graphicInterface.registerDataManager(dm);
     }
     
     @Override
@@ -45,17 +38,17 @@ public class Window extends GraphicForward implements IWindow {
 
     @Override
     public void addMouseListener(MouseInputAdapter mkListener){
-        frame.addMouseListener(mkListener);
+        wc.frame.addMouseListener(mkListener);
     }
     
     @Override
     public void addKeyListener(KeyListener mkListener){
-        frame.addKeyListener(mkListener);
+        wc.frame.addKeyListener(mkListener);
     }
     
     @Override
     public void addMouseWheelListener(MouseWheelListener mouseWheelListener){
-        frame.addMouseWheelListener(mouseWheelListener);
+        wc.frame.addMouseWheelListener(mouseWheelListener);
     }
 
     @Override
@@ -65,28 +58,28 @@ public class Window extends GraphicForward implements IWindow {
 
     @Override
     public void setVisible(boolean visibility) {
-        frame.setMainFrameVisible(visibility);
+        wc.frame.setMainFrameVisible(visibility);
     }
 
     @Override
     public void setNewWidth(int width) {
-        frame.setNewWidth(width);
+        wc.frame.setNewWidth(width);
         
     }
 
     @Override
     public void setNewHeight(int height) {
-        frame.setNewHeight(height);
+        wc.frame.setNewHeight(height);
     }
 
     @Override
     public void setNewMinX(int x) {
-        frame.setNewMinX(x);
+        wc.frame.setNewMinX(x);
     }
 
     @Override
     public void setNewMinY(int y) {
-        frame.setNewMinY(y);
+        wc.frame.setNewMinY(y);
     }
 
     @Override
@@ -96,16 +89,16 @@ public class Window extends GraphicForward implements IWindow {
 
     @Override
     public void setUndoEnabled(boolean b) {
-      this.frame.setUndoEnabled(b);
+        wc.frame.setUndoEnabled(b);
     }
 
     @Override
     public void setRedoEnabled(boolean b) {
-        this.frame.setRedoEnabled(b);
+        wc.frame.setRedoEnabled(b);
     }
 
     @Override
     public void updateRightsComponent(long id) {
-        this.frame.updateRightsComponent(id);
+        wc.frame.updateRightsComponent(id);
     }
 }

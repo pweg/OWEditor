@@ -16,16 +16,16 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.graphic
  */
 public class TransformationManager {
     
-    private IInternalMediator smi = null;
+    private IInternalMediator med = null;
     private ArrayList<DraggingObject> transformedShapes = null;
     
     /**
      * Creates a new TransformationManager instance.
      * @param smi The internal mediator instance.
      */
-    public TransformationManager(IInternalMediator smi){
+    public TransformationManager(IInternalMediator med){
         transformedShapes = new ArrayList<DraggingObject>();
-        this.smi = smi;
+        this.med = med;
     }
     
     /**
@@ -34,7 +34,7 @@ public class TransformationManager {
      */
     public void initializeTransformation(){
         transformedShapes.clear();
-        transformedShapes.addAll(smi.getDraggingShapes());
+        transformedShapes.addAll(med.getDraggingShapes());
     }
     
     /**
@@ -54,7 +54,7 @@ public class TransformationManager {
      * the rotation angle.
      */
     public void rotate(Point p){
-        ITransformationBorder border = smi.getShapeBorder();
+        ITransformationBorder border = med.getShapeBorder();
         
         Point rot_center = border.getOriginalCenter();
         
@@ -78,7 +78,7 @@ public class TransformationManager {
      * @param rotation The rotation angle.
      */
     public void setRotation(long id, double rotation) {
-        ShapeObject shape = smi.getShape(id);
+        ShapeObject shape = med.getShape(id);
         shape.setRotation(rotation);
     }
 
@@ -120,7 +120,7 @@ public class TransformationManager {
      * scale.
      */
     public void scale(Point p){
-        ITransformationBorder border = smi.getShapeBorder();
+        ITransformationBorder border = med.getShapeBorder();
 
         byte clicked = border.getCurrentClicked();
         
@@ -246,7 +246,7 @@ public class TransformationManager {
      * to do further scale operations.
      */
     public void scaleUpdate() {
-        ITransformationBorder border = smi.getShapeBorder();
+        ITransformationBorder border = med.getShapeBorder();
         border.scaleUpdate();
         
         for(DraggingObject shape : transformedShapes){
@@ -261,7 +261,7 @@ public class TransformationManager {
      * @param scale The new scale.
      */
     public void setScale(long id, double scale) {
-        ShapeObject shape = smi.getShape(id);
+        ShapeObject shape = med.getShape(id);
         shape.setScale(scale);
     }
 

@@ -36,7 +36,9 @@ public class ShapeManager {
     
     private ShapeFactory factory = null;
     
+    //shapes in the foreground
     private ArrayList<ShapeObject> shapes = null;
+    //shapes in the background
     private ArrayList<ShapeObject> background = null;
     private ArrayList<ShapeObject> avatarShapes = null;
     private ArrayList<DraggingObject> draggingShapes = null;

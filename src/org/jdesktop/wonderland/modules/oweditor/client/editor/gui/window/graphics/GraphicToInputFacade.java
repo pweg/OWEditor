@@ -19,11 +19,11 @@ public class GraphicToInputFacade implements IGraphicToInput{
 
     protected ShapeManager sm = null;
     protected CopyManager cm = null;
-    protected TransformationManager tm = null;
+    protected TransformationManager strm = null;
     protected SelectionManager ssm = null;
     protected TranslationManager stm = null;
     
-    protected IInternalMediator smi = null;
+    protected IInternalMediator med = null;
     private IWindowToGraphic window = null;
     
     public GraphicToInputFacade(){
@@ -38,7 +38,7 @@ public class GraphicToInputFacade implements IGraphicToInput{
     }
     
     public void registerTransformationManager(TransformationManager tm){
-        this.tm = tm;
+        this.strm = tm;
     }
     
     public void registerSelectionManager(SelectionManager ssm){
@@ -49,8 +49,8 @@ public class GraphicToInputFacade implements IGraphicToInput{
         this.stm = stm;
     }
     
-    public void registerMediator(IInternalMediator smi){
-        this.smi = smi;
+    public void registerMediator(IInternalMediator med){
+        this.med = med;
     }
 
     @Override
@@ -73,7 +73,7 @@ public class GraphicToInputFacade implements IGraphicToInput{
     
     @Override
     public void draggingTranslate(int x, int y, Point start){
-        stm.translateShape(x, y, start, new sCollisionNotSelectedStrategy(smi));
+        stm.translateShape(x, y, start, new sCollisionNotSelectedStrategy(med));
     }
     
     @Override
@@ -164,24 +164,24 @@ public class GraphicToInputFacade implements IGraphicToInput{
         sm.createShapeBorder(ssm.getSelection(),
                 TransformationBorder.MODEONECENTER);
 
-        tm.initializeTransformation();
+        strm.initializeTransformation();
     }
     
     @Override
     public void rotate(Point p) {
-        tm.rotate(p);
-        stm.setStrategy(new sCollisionNotSelectedStrategy(smi));
+        strm.rotate(p);
+        stm.setStrategy(new sCollisionNotSelectedStrategy(med));
         stm.checkForCollision();
     }
     
     @Override
     public void rotationCenterUpdate() {
-        tm.setRotationCenterUpdate(sm.getShapeBorder());
+        strm.setRotationCenterUpdate(sm.getShapeBorder());
     }
 
     @Override
     public void rotationCenterTranslate(Point start, Point end) {
-        tm.setRotationCenter(sm.getShapeBorder(), start, end);
+        strm.setRotationCenter(sm.getShapeBorder(), start, end);
     }
 
     @Override
@@ -202,7 +202,7 @@ public class GraphicToInputFacade implements IGraphicToInput{
         ArrayList<Point> coords = new ArrayList<Point>();
         ArrayList<Double> rotation = new ArrayList<Double>();
         
-        for(DraggingObject shape : tm.getTransformedShapes()){
+        for(DraggingObject shape : strm.getTransformedShapes()){
             ids.add(shape.getID());
             coords.add(new Point(shape.getX(), shape.getY()));
             rotation.add(shape.getRotation());
@@ -217,20 +217,20 @@ public class GraphicToInputFacade implements IGraphicToInput{
         sm.createShapeBorder(ssm.getSelection(),
                 TransformationBorder.MODEALLCENTER);
 
-        tm.initializeTransformation();
+        strm.initializeTransformation();
     }
 
 
     @Override
     public void scale(Point p) {
-        tm.scale(p);
-        stm.setStrategy(new sCollisionNotSelectedStrategy(smi));
+        strm.scale(p);
+        stm.setStrategy(new sCollisionNotSelectedStrategy(med));
         stm.checkForCollision();
     }
 
     @Override
     public void scaleUpdate() {
-        tm.scaleUpdate();
+        strm.scaleUpdate();
     }
     
     @Override
@@ -242,7 +242,7 @@ public class GraphicToInputFacade implements IGraphicToInput{
         ArrayList<Point> coords = new ArrayList<Point>();
         ArrayList<Double> scale = new ArrayList<Double>();
         
-        for(DraggingObject shape : tm.getTransformedShapes()){
+        for(DraggingObject shape : strm.getTransformedShapes()){
             ids.add(shape.getID());
             coords.add(new Point(shape.getX(), shape.getY()));
             scale.add(shape.getScale());

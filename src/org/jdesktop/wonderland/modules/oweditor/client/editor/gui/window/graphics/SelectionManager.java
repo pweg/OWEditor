@@ -17,13 +17,13 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.graphic
  */
 public class SelectionManager {
 
-    private ArrayList<ShapeObject> selectedShapes = null;
-    private IInternalMediator smi = null;
+    private ArrayList<Long> selectedShapes = null;
+    private IInternalMediator med = null;
     
-    public SelectionManager(IInternalMediator smi){
-        selectedShapes = new ArrayList<ShapeObject>();     
+    public SelectionManager(IInternalMediator med){ 
+        selectedShapes = new ArrayList<Long>();
         
-        this.smi = smi;
+        this.med = med;
     }
     
     /**
@@ -39,9 +39,9 @@ public class SelectionManager {
         shape.setSelected(selected);
         
         if(selected){
-            selectedShapes.add(shape);
+            selectedShapes.add(shape.getID());
         }else{
-            selectedShapes.remove(shape);
+            selectedShapes.remove(shape.getID());
         }
     }
     
@@ -57,14 +57,14 @@ public class SelectionManager {
               
         if(shape.isSelected()){
             if(mode == true){
-                selectedShapes.remove(shape);   
+                selectedShapes.remove(shape.getID());   
             }
             else
                 return;
         }else{
             if(mode == false)
                 clearCurSelection();
-            selectedShapes.add(shape);
+            selectedShapes.add(shape.getID());
         }
         shape.switchSelection();
     }
@@ -73,19 +73,20 @@ public class SelectionManager {
      * Removes all shapes from the current selection.
      */
     public void clearCurSelection(){
+        ArrayList<ShapeObject> shapes = med.getShapes(selectedShapes);
         
-        for(ShapeObject shape : selectedShapes){
+        for(ShapeObject shape : shapes){
             shape.setSelected(false);
         }
-        smi.clearDraggingShapes();
+        med.clearDraggingShapes();
         selectedShapes.clear();
     }
         
     public boolean isCurrentlySelected(ShapeObject shape){
         long id = shape.getID();
         
-        for(ShapeObject s : selectedShapes){
-            if(id == s.getID())
+        for(Long shape_id : selectedShapes){
+            if(id == shape_id)
                 return true;
         }
         return false;
@@ -124,10 +125,10 @@ public class SelectionManager {
             height = ey-sy;
             y=sy;
         }
-        SimpleShapeObject r = smi.getSelectionRectangle();
+        SimpleShapeObject r = med.getSelectionRectangle();
         
         if (r == null)
-            smi.createSelectionRect(x,y,width,height); 
+            med.createSelectionRect(x,y,width,height); 
         else
             r.set(x, y, width, height);
         
@@ -141,7 +142,7 @@ public class SelectionManager {
      */
     public void selectionRectReleased() {
         
-        ArrayList<ShapeObject> list = smi.getShapesInSelectionRect();
+        ArrayList<ShapeObject> list = med.getShapesInSelectionRect();
         
         for(ShapeObject shape : list){
             switchSelection(shape, true);
@@ -156,21 +157,15 @@ public class SelectionManager {
      * selected.
      */
     public ArrayList<ShapeObject> getSelection(){
-        return selectedShapes;
+        return med.getShapes(selectedShapes);
     }
         
     /**
      * Deletes all shapes, which are in the current selection.
      */
     public void deleteCurrentSelection(){   
-        
-        ArrayList<Long> ids = new ArrayList<Long>();
-        
-        for(ShapeObject shape : selectedShapes){
-            ids.add(shape.getID());
-        }
-        smi.setObjectRemoval(ids);
-        smi.clearCurSelection();
+        med.setObjectRemoval(selectedShapes);
+        med.clearCurSelection();
     }
     
     /**
@@ -187,7 +182,9 @@ public class SelectionManager {
         int min_y = Integer.MAX_VALUE;
         int max_y = Integer.MIN_VALUE;
         
-        for(ShapeObject shape : selectedShapes){
+        ArrayList<ShapeObject> shapes = med.getShapes(selectedShapes);
+        
+        for(ShapeObject shape : shapes){
             Rectangle bounds = shape.getTransformedShape().getBounds();
             int s_x = (int) Math.round(bounds.getX()+bounds.getWidth()/2);
             int s_y = (int) Math.round(bounds.getY()+bounds.getHeight()/2);
@@ -217,13 +214,13 @@ public class SelectionManager {
         ArrayList<ShapeObject> list = new ArrayList<ShapeObject>();
         
         
-        if(smi.getSelectionRectangle() == null)
+        if(med.getSelectionRectangle() == null)
             return list;
         
-        for(ShapeObject shape : smi.getAllShapes()){
+        for(ShapeObject shape : med.getAllShapes()){
             Rectangle bounds = shape.getTransformedShape().getBounds();
             
-            if(smi.getSelectionRectangle().getShape().contains(bounds)){
+            if(med.getSelectionRectangle().getShape().contains(bounds)){
                 list.add(shape);
             }
         }

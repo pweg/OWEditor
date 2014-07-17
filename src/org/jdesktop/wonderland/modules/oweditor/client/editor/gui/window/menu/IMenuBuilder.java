@@ -13,7 +13,9 @@ public interface IMenuBuilder {
      * Creates and adds a new Menu item to the menu.
      * 
      * @param menuName The name of the submenu, if the submenu is not
-     * found or is null, a new entry of it will be created at the root.
+     * found or is null, a new entry of it will be created at the root. 
+     * Note: Only when using the PopupMenuBuilder, a menuName with null
+     * will be accepted!
      * @param itemName The name of the item.
      * @param function The function the new menu item should call. If it is null
      * a normal submenu category will be created under menuName.

@@ -13,10 +13,10 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.graphic
  */
 public class sCollisionNotSelectedStrategy implements sCollisionStrategy {
     
-    private IInternalMediator smi = null;
+    private IInternalMediator med = null;
     
-    public sCollisionNotSelectedStrategy(IInternalMediator smi){
-        this.smi = smi;
+    public sCollisionNotSelectedStrategy(IInternalMediator med){
+        this.med = med;
     }
 
     @Override
@@ -26,7 +26,7 @@ public class sCollisionNotSelectedStrategy implements sCollisionStrategy {
         ArrayList<ShapeObject> shapes2 = new ArrayList<ShapeObject>();
         
         //Get every shape that is not moving at the moment.
-        for(ShapeObject shape : smi.getAllShapes()){
+        for(ShapeObject shape : med.getAllShapes()){
             boolean isMoving = false;
             for(DraggingObject selected : draggingShapes){
                 if(selected.getID() == shape.getID()){

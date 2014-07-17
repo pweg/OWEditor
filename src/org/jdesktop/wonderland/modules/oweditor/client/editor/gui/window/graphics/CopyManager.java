@@ -12,11 +12,13 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.graphic
  */
 public class CopyManager {
 
+    //list of copied shapes.
     private ArrayList<ShapeObject> copyShapes = null;
-    private IInternalMediator smi = null;
     
-    public CopyManager(IInternalMediator smi){
-        this.smi = smi;
+    private IInternalMediator med = null;
+    
+    public CopyManager(IInternalMediator med){
+        this.med = med;
         copyShapes = new ArrayList<ShapeObject>();
     }
     
@@ -27,7 +29,7 @@ public class CopyManager {
      */
     public ArrayList<Long> initilaizeCopy() {
         copyShapes.clear();
-        ArrayList<ShapeObject> shapes = smi.getSelectedShapes();
+        ArrayList<ShapeObject> shapes = med.getSelectedShapes();
 
         ArrayList<Long> ids = new ArrayList<Long>();
         

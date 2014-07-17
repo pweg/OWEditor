@@ -113,6 +113,14 @@ public interface IInternalMediator {
      * with the id was not found.
      */
     public ShapeObject getShape(long id);
+
+    /**
+     * Returns a list of shapes, given ids.
+     * 
+     * @param ids A list containing ids of shapes that should be returned
+     * @return A list of shapes.
+     */
+    public ArrayList<ShapeObject> getShapes(ArrayList<Long> ids);
     
     /**
      * Returns the shape border, which is the border
@@ -139,5 +147,6 @@ public interface IInternalMediator {
      * @return The image, or null if it was not found.
      */
     public BufferedImage getImage(String name, String dir);
+
 
 }

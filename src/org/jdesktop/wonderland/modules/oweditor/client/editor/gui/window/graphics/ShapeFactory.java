@@ -32,10 +32,10 @@ public class ShapeFactory {
     //public static final int DRAGGINGRECTANGLE = 11;
    // public static final int DRAGGINGRELLIPSE = 12;
     
-    public IInternalMediator smi = null;
+    public IInternalMediator med = null;
     
-    public ShapeFactory(IInternalMediator smi){
-        this.smi = smi;
+    public ShapeFactory(IInternalMediator med){
+        this.med = med;
     }
 
     /**
@@ -63,10 +63,10 @@ public class ShapeFactory {
                 return new Avatar(id, x,y,width, height);
             case RECTANGLE:
                 return new ShapeRectangle(x,y,z,
-                        width, height, id, name, rotation, scale, imgName, imgDir, smi);
+                        width, height, id, name, rotation, scale, imgName, imgDir, med);
             case CIRCLE:
                 return new ShapeEllipse(x,y,z,
-                        width,height, id, name, rotation, scale, imgName, imgDir, smi);
+                        width,height, id, name, rotation, scale, imgName, imgDir, med);
             default:
                 throw new IllegalArgumentException(
                     "Unknown type");

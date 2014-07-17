@@ -30,6 +30,8 @@ public class WindowController {
     protected IMenu menu = null;
     protected Window window = null;
     protected IFrame frame = null;
+
+    protected IDataManager dm = null;
     
     protected IAdapterCommunication adapter = null;
     
@@ -47,9 +49,9 @@ public class WindowController {
         //Create interfaces needed for later
         inputInterface = new WindowToInput(this);
         frameInterface = new WindowToFrame(this);
-        graphicInterface = new WindowToGraphic(this, adapter);
+        graphicInterface = new WindowToGraphic(this);
         
-        mouseCoords = new MouseCoordinates();
+        mouseCoords = new MouseCoordinates(this);
         
         registerComponents();
         build();
@@ -57,13 +59,8 @@ public class WindowController {
 
     private void registerComponents(){
         graphic.registerWindowInterface(graphicInterface);
-        
-        window.registerGraphicInterface(graphic);
-        window.registerFrameInterface(frame);
-        
+        window.registerGraphicInterface(graphic);        
         frame.registerWindow(frameInterface);
-        
-        inputInterface.registerDrawingPan(frame.getDrawingPan());
         
         menu.registerWindowInterface(new WindowToMenu(this));
     }
@@ -72,8 +69,7 @@ public class WindowController {
      * Setup for menus.
      */
     private void build(){
-        mouseCoords.setToolBar(frame.getBottomToolBar());
-        frame.setJMenuBar(menu.buildMenubar());
+        frame.setJMenuBar(menu.getMenubar());
     }
 
     /**
@@ -84,7 +80,7 @@ public class WindowController {
     }
 
     public void registerDataManager(IDataManager dm) {
-        mouseCoords.registerDataManager(dm);
+        this.dm = dm;
         frameInterface.registerDataManager(dm);
     }
 

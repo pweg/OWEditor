@@ -19,9 +19,8 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.IWindow
  */
 public class MenuController implements IMenu{
 
-    private IMenuBuilder topBuilder = null;
-    private IMenuBuilder popupBuilder = null;
     private JPopupMenu popupMenu = null;
+    private JMenuBar topMenu = null;
     private JItemManager itemManager = null;
     private IWindowToMenu window = null;
 
@@ -29,8 +28,6 @@ public class MenuController implements IMenu{
             "org/jdesktop/wonderland/modules/oweditor/client/resources/Bundle");
     
     public MenuController(){
-        topBuilder = new TopMenuBuilder();
-        popupBuilder = new PopupMenuBuilder();
         itemManager = new JItemManager();
         
         createMenu();
@@ -149,6 +146,10 @@ public class MenuController implements IMenu{
                 return null;
             }
         };
+
+
+        IMenuBuilder topBuilder = new TopMenuBuilder();;
+        IMenuBuilder popupBuilder = new PopupMenuBuilder();
         
         /*
          * Top menu items.
@@ -222,32 +223,23 @@ public class MenuController implements IMenu{
                 BUNDLE.getString("MenuScale"), scale, null, false);
         popupBuilder.addItem(null, 
                 BUNDLE.getString("MenuProperties"), setProperties, null, true);
-        
+
+        //builds the menus
+        topMenu = (JMenuBar) topBuilder.buildMenu();
         popupMenu =  (JPopupMenu) popupBuilder.buildMenu();
         
         //sets the popup menu and deactivates the entries.
-        itemManager.setPopupItems(popupBuilder.getMenuItems());
-        itemManager.setItemsEnabledSelection(false);
-        itemManager.setItemsEnabledCopy(false);
-    }
-
-    @Override
-    public void addMenuItem(String menuName, String itemName,
-            Callable<Void> function, KeyStroke keyCombination, boolean separator) {
-
-        topBuilder.addItem(menuName, itemName, function, keyCombination, separator);
-    }
-
-    @Override
-    public JMenuBar buildMenubar() {
-        JMenuBar menu = (JMenuBar) topBuilder.buildMenu();
-        
-        //deactivates the entries of the new menu.
         itemManager.setTopItems(topBuilder.getMenuItems());
+        itemManager.setPopupItems(popupBuilder.getMenuItems());
+        
         itemManager.setItemsEnabledSelection(false);
         itemManager.setItemsEnabledCopy(false);
         
-        return menu;
+    }
+
+    @Override
+    public JMenuBar getMenubar() {
+        return topMenu;
     }
     
     @Override

@@ -4,9 +4,6 @@ import java.awt.Point;
 import java.awt.geom.Point2D;
 import java.text.DecimalFormat;
 
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.IDataManager;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.frames.toolbar.BottomToolBar;
-
 /**
  * This class is used for displaying the mouse coordinates on the 
  * bottom toolbar.
@@ -16,13 +13,13 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.frames.
  */
 public class MouseCoordinates {
 
-    private IDataManager dm = null;
-    private BottomToolBar toolBar = null;
+    private WindowController wc = null;
 
     private DecimalFormat format = null;
     
-    public MouseCoordinates() {
+    public MouseCoordinates(WindowController wc) {
         format = new DecimalFormat("0.000");
+        this.wc = wc;
     }
 
     /**
@@ -33,28 +30,9 @@ public class MouseCoordinates {
      */
     public void paintCoordinates(int x, int y){
         
-        if(dm != null){
-            Point2D.Double coords = dm.transformCoordsBack(new Point(x,y));
-            toolBar.setCoordinates(format.format(coords.x), format.format(coords.y));
+        if(wc.dm != null){
+            Point2D.Double coords = wc.dm.transformCoordsBack(new Point(x,y));
+            wc.frame.setToolbarCoords(format.format(coords.x), format.format(coords.y));
         }
-    }
-    
-    /**
-     * Sets the tool bar.
-     * 
-     * @param toolBar The toolbar instance.
-     */
-    public void setToolBar(BottomToolBar toolBar){
-        this.toolBar = toolBar;
-    }
-
-    /**
-     * Registers the data manager. It is needed
-     * to revert the coordinates back to their origin.
-     * 
-     * @param dm The data manager.
-     */
-    public void registerDataManager(IDataManager dm) {
-        this.dm = dm;
     }
 }

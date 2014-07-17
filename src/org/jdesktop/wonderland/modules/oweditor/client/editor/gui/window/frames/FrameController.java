@@ -20,7 +20,6 @@ import javax.swing.JScrollPane;
 import javax.swing.event.MouseInputAdapter;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.IWindowToFrame;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.frames.toolbar.BottomToolBar;
 
 /**
  * Controller for the frame package.
@@ -133,11 +132,6 @@ public class FrameController implements IFrame{
     @Override
     public void setJMenuBar(JMenuBar buildMenubar) {
        mainframe.setJMenuBar(buildMenubar);
-    }
-
-    @Override
-    public BottomToolBar getBottomToolBar() {
-        return mainframe.getBottomToolBar();
     }
 
     @Override
@@ -256,6 +250,11 @@ public class FrameController implements IFrame{
     @Override
     public void setTransformBarVisible(boolean b) {
         mainframe.transformBar.setVisible(b);
+    }
+
+    @Override
+    public void setToolbarCoords(String x, String y) {
+        mainframe.getBottomToolBar().setCoordinates(x, y);
     }
 }
 
