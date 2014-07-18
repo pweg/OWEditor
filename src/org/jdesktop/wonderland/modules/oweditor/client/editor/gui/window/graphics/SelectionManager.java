@@ -8,9 +8,8 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.graphic
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.graphics.shapes.SimpleShapeObject;
 
 /**
- * This class handles the pick up and drag feature for shapes,
- * as well as their selection and forwards changes for key presses
- * to the ShapeManager.
+ * This class handles everything regarding selecting 
+ * shapes.
  * 
  * @author Patrick
  *

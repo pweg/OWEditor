@@ -72,8 +72,8 @@ public class GraphicToInputFacade implements IGraphicToInput{
     }
     
     @Override
-    public void draggingTranslate(int x, int y, Point start){
-        stm.translateShape(x, y, start, new sCollisionNotSelectedStrategy(med));
+    public void draggingTranslate(Point end, Point start){
+        stm.translateShape(end, start, new sCollisionNotSelectedStrategy());
     }
     
     @Override
@@ -137,8 +137,8 @@ public class GraphicToInputFacade implements IGraphicToInput{
     }
 
     @Override
-    public void translate(int x, int y, Point start) {
-        stm.translateShape(x,y,start, new sCollisionAllStrategy());
+    public void translate(Point end, Point start) {
+        stm.translateShape(end, start, new sCollisionAllStrategy());
     }
 
     @Override
@@ -170,7 +170,7 @@ public class GraphicToInputFacade implements IGraphicToInput{
     @Override
     public void rotate(Point p) {
         strm.rotate(p);
-        stm.setStrategy(new sCollisionNotSelectedStrategy(med));
+        stm.setStrategy(new sCollisionNotSelectedStrategy());
         stm.checkForCollision();
     }
     
@@ -224,7 +224,7 @@ public class GraphicToInputFacade implements IGraphicToInput{
     @Override
     public void scale(Point p) {
         strm.scale(p);
-        stm.setStrategy(new sCollisionNotSelectedStrategy(med));
+        stm.setStrategy(new sCollisionNotSelectedStrategy());
         stm.checkForCollision();
     }
 

@@ -40,7 +40,7 @@ public class mlTranslateDragStrategy implements mlMouseStrategy{
     @Override
     public void mouseDragged(Point p) {
         if(dragging) {
-            listener.graphic.draggingTranslate(p.x, p.y, start);
+            listener.graphic.draggingTranslate(p, start);
             start.x = p.x;
             start.y = p.y;
         }

@@ -39,15 +39,14 @@ public class TranslationManager {
     /**
      * Moves the dragging shapes, which are shown, when shapes are dragged. 
      * 
-     * @param x the new x value, where the shape is being dragged.
-     * @param y the new y value, where the shape is being dragged.
+     * @param end The end point to where the shape has been dragged.
      * @param start the start point from where the shape has been dragged.
      * @param strategy The collision strategy.
      */
-    public void translateShape(int x, int y, Point start, sCollisionStrategy strategy){
+    public void translateShape(Point end, Point start, sCollisionStrategy strategy){
         this.strategy = strategy;
-        double distance_x = start.x - x;
-        double distance_y = start.y - y;
+        double distance_x = start.x - end.x;
+        double distance_y = start.y - end.y;
 
         translateDraggingShapes(-distance_x, -distance_y);
         checkForCollision();

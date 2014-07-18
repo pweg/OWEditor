@@ -30,13 +30,8 @@ public class CopyManager {
     public ArrayList<Long> initilaizeCopy() {
         copyShapes.clear();
         ArrayList<ShapeObject> shapes = med.getSelectedShapes();
-
-       // ArrayList<Long> ids = new ArrayList<Long>();
         
         for(ShapeObject shape : shapes){
-            //ShapeObject tmp = shape.clone();
-            //copyShapes.add(tmp);
-            
             copyShapes.add(shape.getID());
         }
         return copyShapes;
