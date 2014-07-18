@@ -5,7 +5,7 @@ import java.awt.Shape;
 
 
 /**
- * This method is used for retrieving the coordinates during a rotation.
+ * This state is used for retrieving the coordinates during a rotation.
  * It calculates the coordinate out of the center, using the 
  * the transformed shape, BUT uses the ORIGINALS size in order to
  * get the right x,y coordinates for the server object. 

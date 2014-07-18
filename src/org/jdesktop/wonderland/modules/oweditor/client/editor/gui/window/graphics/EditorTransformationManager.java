@@ -29,7 +29,7 @@ public class EditorTransformationManager {
      * @param start the start point from where the shape has been dragged.
      * @param strategy The collision strategy.
      */
-    public void translateShape(Point end, Point start, sCollisionStrategy strategy){
+    public void translate(Point end, Point start, sCollisionStrategy strategy){
         double distance_x = end.x - start.x;
         double distance_y = end.y - start.y;
 
@@ -60,7 +60,7 @@ public class EditorTransformationManager {
      * @param p The  point, which is used to calculate
      * the rotation angle.
      */
-    public void rotate(Point p){
+    public void rotate(Point p, sCollisionStrategy strategy){
         ITransformationBorder border = med.getShapeBorder();
         
         Point rot_center = border.getOriginalCenter();
@@ -75,6 +75,8 @@ public class EditorTransformationManager {
         for(DraggingObject shape : med.getDraggingShapes()){
             shape.setRotation(rotation-edge_rotation, border.getOriginalCenter());
         }
+
+        checkForCollision(strategy);
         
     }
     /**
@@ -114,7 +116,7 @@ public class EditorTransformationManager {
      * @param p The point, which is used to calculate the 
      * scale.
      */
-    public void scale(Point p){
+    public void scale(Point p, sCollisionStrategy strategy){
         ITransformationBorder border = med.getShapeBorder();
 
         byte clicked = border.getCurrentClicked();
@@ -232,6 +234,7 @@ public class EditorTransformationManager {
   
             shape.setScale(scale, newDistanceX, newDistanceY);
         }
+        checkForCollision(strategy);
         
     }
     
@@ -248,6 +251,16 @@ public class EditorTransformationManager {
             shape.scaleUpdate();
         }
     }
+    
+    /**
+     * Checks for collision when dragging shapes, using the last 
+     * strategy set in a previous check.
+     *  
+     * @return returns true, if a collision is detected and false otherwise.
+     */
+    public boolean checkForCollision(){
+        return checkForCollision(null);
+    }
 
     /**
      * Checks for collision when dragging shapes.
@@ -257,7 +270,7 @@ public class EditorTransformationManager {
      * 
      * @return returns true, if a collision is detected and false otherwise.
      */
-    public boolean checkForCollision(sCollisionStrategy strategy) {
+    private boolean checkForCollision(sCollisionStrategy strategy) {
         if(strategy == null && this.strategy == null)
             return false;
         if(strategy == null)

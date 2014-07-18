@@ -63,13 +63,13 @@ public class GraphicToInputFacade implements IGraphicToInput{
     
     @Override
     public void draggingTranslate(Point end, Point start){
-        etm.translateShape(end, start, new sCollisionNotSelectedStrategy());
+        etm.translate(end, start, new sCollisionNotSelectedStrategy());
     }
     
     @Override
     public void translateFinished() {
 
-        if(!etm.checkForCollision(null)){
+        if(!etm.checkForCollision()){
             ArrayList<Long> ids = new ArrayList<Long>();
             ArrayList<Point> coords = new ArrayList<Point>();
             
@@ -128,12 +128,12 @@ public class GraphicToInputFacade implements IGraphicToInput{
 
     @Override
     public void translate(Point end, Point start) {
-        etm.translateShape(end, start, new sCollisionAllStrategy());
+        etm.translate(end, start, new sCollisionAllStrategy());
     }
 
     @Override
     public void pasteFinished() {
-        if(!etm.checkForCollision(null)){
+        if(!etm.checkForCollision()){
             ArrayList<Long> ids = new ArrayList<Long>();
             ArrayList<Point> coords = new ArrayList<Point>();
             
@@ -157,9 +157,7 @@ public class GraphicToInputFacade implements IGraphicToInput{
     
     @Override
     public void rotate(Point p) {
-        etm.rotate(p);
-        //etm.setStrategy();
-        etm.checkForCollision(new sCollisionNotSelectedStrategy());
+        etm.rotate(p, new sCollisionNotSelectedStrategy());
     }
     
     @Override
@@ -183,7 +181,7 @@ public class GraphicToInputFacade implements IGraphicToInput{
     @Override
     public void rotateFinished() {
         
-        if(etm.checkForCollision(null))
+        if(etm.checkForCollision())
             return;
         
         ArrayList<Long> ids = new ArrayList<Long>();
@@ -209,9 +207,7 @@ public class GraphicToInputFacade implements IGraphicToInput{
 
     @Override
     public void scale(Point p) {
-        etm.scale(p);
-        //stm.setStrategy();
-        etm.checkForCollision(new sCollisionNotSelectedStrategy());
+        etm.scale(p, new sCollisionNotSelectedStrategy());
     }
 
     @Override
@@ -221,7 +217,7 @@ public class GraphicToInputFacade implements IGraphicToInput{
     
     @Override
     public void scaleFinished(){
-        if(etm.checkForCollision(null))
+        if(etm.checkForCollision())
             return;
         
         ArrayList<Long> ids = new ArrayList<Long>();
