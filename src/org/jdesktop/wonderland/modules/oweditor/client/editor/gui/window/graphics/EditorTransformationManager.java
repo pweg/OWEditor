@@ -4,27 +4,55 @@ import java.awt.Point;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.graphics.shapes.DraggingObject;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.graphics.shapes.ITransformationBorder;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.graphics.shapes.ShapeObject;
 
 /**
- * This class is used for transforming shapes (other
- * than translations), like rotation and scaling.
- * 
+ * This class is used for transforming dragging shapes,
+ * which is usually done by user input from the input
+ * package.  
+ *   
  * @author Patrick
  *
  */
-public class TransformationManager {
-    
+public class EditorTransformationManager {
+
     private IInternalMediator med = null;
+    private sCollisionStrategy strategy = null;
     
-    /**
-     * Creates a new TransformationManager instance.
-     * @param smi The internal mediator instance.
-     */
-    public TransformationManager(IInternalMediator med){
+    public EditorTransformationManager(IInternalMediator med){
         this.med = med;
     }
+    
+    /**
+     * Moves the dragging shapes, which are shown, when shapes are dragged. 
+     * 
+     * @param end The end point to where the shape has been dragged.
+     * @param start the start point from where the shape has been dragged.
+     * @param strategy The collision strategy.
+     */
+    public void translateShape(Point end, Point start, sCollisionStrategy strategy){
+        double distance_x = end.x - start.x;
+        double distance_y = end.y - start.y;
 
+        translateDraggingShapes(distance_x, distance_y);
+        checkForCollision(strategy);
+          
+        med.repaint();
+    }
+
+    /**
+     * Translates the dragging shapes(DraggingRectangles), which 
+     * are seen, when trying to move objects.
+     * 
+     * @param distance_x the x distance between old and new point.
+     * @param distance_y the y distance between old and new point.
+     */
+    public void translateDraggingShapes(double distance_x, double distance_y){
+        
+        for(DraggingObject shape : med.getDraggingShapes()){
+            shape.setTranslation(distance_x, distance_y);
+        }
+    }
+    
     /**
      * Rotates the shapes in its list.
      * The point is used to calculate the angle.
@@ -49,18 +77,6 @@ public class TransformationManager {
         }
         
     }
-
-    /**
-     * Sets the rotation of one shape.
-     * 
-     * @param id The id of the shape.
-     * @param rotation The rotation angle.
-     */
-    public void setRotation(long id, double rotation) {
-        ShapeObject shape = med.getShape(id);
-        shape.setRotation(rotation);
-    }
-
     /**
      * Translates the rotation center.
      * 
@@ -218,7 +234,7 @@ public class TransformationManager {
         }
         
     }
-
+    
     /**
      * Updates the scale of the border and the dragging shapes,
      * which means their original shapes are overwritten in order
@@ -234,16 +250,21 @@ public class TransformationManager {
     }
 
     /**
-     * Sets the scale of a specific shape.
+     * Checks for collision when dragging shapes.
      * 
-     * @param id The id of the shape.
-     * @param scale The new scale.
+     * @return returns true, if a collision is detected and false otherwise.
      */
-    public void setScale(long id, double scale) {
-        ShapeObject shape = med.getShape(id);
-        shape.setScale(scale);
+    public boolean checkForCollision(sCollisionStrategy strategy) {
+        if(strategy == null && this.strategy == null)
+            return false;
+        if(strategy == null)
+            strategy = this.strategy;
+        else
+            this.strategy = strategy;
+        
+        return strategy.checkForCollision(med.getAllShapes(), med.getDraggingShapes());
     }
-
+    
     /**
      * Calculates the rotation angle.
      * 
@@ -263,5 +284,6 @@ public class TransformationManager {
         
         return rotation;
     }
+
 
 }

@@ -17,13 +17,11 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.graphic
  */
 public class GraphicToInputFacade implements IGraphicToInput{
 
-    protected ShapeManager sm = null;
-    protected CopyManager cm = null;
-    protected TransformationManager strm = null;
-    protected SelectionManager ssm = null;
-    protected TranslationManager stm = null;
+    private ShapeManager sm = null;
+    private CopyManager cm = null;
+    private EditorTransformationManager etm = null;
+    private SelectionManager ssm = null;
     
-    protected IInternalMediator med = null;
     private IWindowToGraphic window = null;
     
     public GraphicToInputFacade(){
@@ -37,20 +35,12 @@ public class GraphicToInputFacade implements IGraphicToInput{
         this.cm = cm;
     }
     
-    public void registerTransformationManager(TransformationManager tm){
-        this.strm = tm;
-    }
-    
     public void registerSelectionManager(SelectionManager ssm){
         this.ssm = ssm;
     }
     
-    public void registerTranslationManager(TranslationManager stm){
-        this.stm = stm;
-    }
-    
-    public void registerMediator(IInternalMediator med){
-        this.med = med;
+    public void registerEditorTransformManager(EditorTransformationManager etm){
+        this.etm = etm;
     }
 
     @Override
@@ -73,13 +63,13 @@ public class GraphicToInputFacade implements IGraphicToInput{
     
     @Override
     public void draggingTranslate(Point end, Point start){
-        stm.translateShape(end, start, new sCollisionNotSelectedStrategy());
+        etm.translateShape(end, start, new sCollisionNotSelectedStrategy());
     }
     
     @Override
     public void translateFinished() {
 
-        if(!stm.checkForCollision()){
+        if(!etm.checkForCollision(null)){
             ArrayList<Long> ids = new ArrayList<Long>();
             ArrayList<Point> coords = new ArrayList<Point>();
             
@@ -138,12 +128,12 @@ public class GraphicToInputFacade implements IGraphicToInput{
 
     @Override
     public void translate(Point end, Point start) {
-        stm.translateShape(end, start, new sCollisionAllStrategy());
+        etm.translateShape(end, start, new sCollisionAllStrategy());
     }
 
     @Override
     public void pasteFinished() {
-        if(!stm.checkForCollision()){
+        if(!etm.checkForCollision(null)){
             ArrayList<Long> ids = new ArrayList<Long>();
             ArrayList<Point> coords = new ArrayList<Point>();
             
@@ -167,19 +157,19 @@ public class GraphicToInputFacade implements IGraphicToInput{
     
     @Override
     public void rotate(Point p) {
-        strm.rotate(p);
-        stm.setStrategy(new sCollisionNotSelectedStrategy());
-        stm.checkForCollision();
+        etm.rotate(p);
+        //etm.setStrategy();
+        etm.checkForCollision(new sCollisionNotSelectedStrategy());
     }
     
     @Override
     public void rotationCenterUpdate() {
-        strm.setRotationCenterUpdate(sm.getShapeBorder());
+        etm.setRotationCenterUpdate(sm.getShapeBorder());
     }
 
     @Override
     public void rotationCenterTranslate(Point start, Point end) {
-        strm.setRotationCenter(sm.getShapeBorder(), start, end);
+        etm.setRotationCenter(sm.getShapeBorder(), start, end);
     }
 
     @Override
@@ -193,7 +183,7 @@ public class GraphicToInputFacade implements IGraphicToInput{
     @Override
     public void rotateFinished() {
         
-        if(stm.checkForCollision())
+        if(etm.checkForCollision(null))
             return;
         
         ArrayList<Long> ids = new ArrayList<Long>();
@@ -219,19 +209,19 @@ public class GraphicToInputFacade implements IGraphicToInput{
 
     @Override
     public void scale(Point p) {
-        strm.scale(p);
-        stm.setStrategy(new sCollisionNotSelectedStrategy());
-        stm.checkForCollision();
+        etm.scale(p);
+        //stm.setStrategy();
+        etm.checkForCollision(new sCollisionNotSelectedStrategy());
     }
 
     @Override
     public void scaleUpdate() {
-        strm.scaleUpdate();
+        etm.scaleUpdate();
     }
     
     @Override
     public void scaleFinished(){
-        if(stm.checkForCollision())
+        if(etm.checkForCollision(null))
             return;
         
         ArrayList<Long> ids = new ArrayList<Long>();

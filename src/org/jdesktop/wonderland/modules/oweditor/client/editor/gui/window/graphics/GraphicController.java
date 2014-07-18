@@ -20,26 +20,23 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.graphic
 public class GraphicController implements IGraphicToWindow{
 
 
-    protected IInternalMediator med = null;
-    protected ShapeManager sm = null;
-    protected TransformationManager strm = null;
-    protected TranslationManager stm = null;
-    protected SelectionManager ssm = null;
-    protected CopyManager scm = null;
+    private IInternalMediator med = null;
+    private ShapeManager sm = null;
+    //protected TransformationManager strm = null;
+    //protected TranslationManager stm = null;
+    private SelectionManager ssm = null;
+    private CopyManager scm = null;
+    private ServerTransformationManager stm = null;
     
-    protected GraphicToInputFacade inputInterface = null;
-    protected IGraphicToWindow shapeFacadeInterface = null;
-
-    protected IWindowToGraphic window = null;
+    private GraphicToInputFacade inputInterface = null;
     
     public GraphicController(){
         
         med = new InternalMediator();
         
         sm = new ShapeManager(med);
-        stm = new TranslationManager(med);
+        stm = new ServerTransformationManager(med);
         ssm = new SelectionManager(med);
-        strm = new TransformationManager(med);
         scm = new CopyManager(med);
         
         //frameInterface = new ExternalShapeToFrame(sm);
@@ -54,11 +51,10 @@ public class GraphicController implements IGraphicToWindow{
         med.registerShapeManager(sm);
         
         inputInterface.registerCopyManager(scm);
-        inputInterface.registerMediator(med);
         inputInterface.registerSelectionManager(ssm);
-        inputInterface.registerShapeManager(sm);
-        inputInterface.registerTransformationManager(strm);
-        inputInterface.registerTranslationManager(stm);
+        inputInterface.registerShapeManager(sm);;
+        inputInterface.registerEditorTransformManager(
+                new EditorTransformationManager(med));
     }
 
 
@@ -103,19 +99,18 @@ public class GraphicController implements IGraphicToWindow{
 
     @Override
     public void updateShapeRotation(long id, double rotation) {
-        strm.setRotation(id, rotation);
+        stm.setRotation(id, rotation);
         
     }
 
     @Override
     public void updateShapeScale(long id, double scale) {
-        strm.setScale(id, scale);
+        stm.setScale(id, scale);
     }
 
 
     @Override
     public void registerWindowInterface(IWindowToGraphic window) {
-        this.window = window;
         med.registerWindowInterface(window);
         inputInterface.registerWindowInterface(window);
     }
