@@ -252,6 +252,9 @@ public class EditorTransformationManager {
     /**
      * Checks for collision when dragging shapes.
      * 
+     * @param strategy The strategy which should be used. If it is null
+     * the last known strategy will be used.
+     * 
      * @return returns true, if a collision is detected and false otherwise.
      */
     public boolean checkForCollision(sCollisionStrategy strategy) {

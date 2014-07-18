@@ -10,7 +10,7 @@ public interface ITransformationBorder {
     //rotation mode, with either one center, or every shape uses their
     //own center
     public static final byte MODEONECENTER   = 0;
-    public static final byte MODEALLCENTER     = 1;
+    public static final byte MODENOCENTER     = 1;
     
     //determining wheter a point is in the four edges, in the 
     //rotation center shape, or in nothing

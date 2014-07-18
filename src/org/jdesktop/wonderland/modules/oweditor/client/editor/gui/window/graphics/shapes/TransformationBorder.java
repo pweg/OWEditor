@@ -139,7 +139,7 @@ public class TransformationBorder extends SimpleShapeObject implements ITransfor
         }
 
         transformedCenter = at.createTransformedShape(originalCenter);
-        if(mode != TransformationBorder.MODEALLCENTER){
+        if(mode != TransformationBorder.MODENOCENTER){
             g.draw(transformedCenter); 
         }
     }

@@ -203,7 +203,7 @@ public class GraphicToInputFacade implements IGraphicToInput{
         sm.createDraggingShapes(ssm.getSelection());
         
         sm.createShapeBorder(ssm.getSelection(),
-                TransformationBorder.MODEALLCENTER);
+                TransformationBorder.MODENOCENTER);
     }
 
 
