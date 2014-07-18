@@ -163,8 +163,6 @@ public class GraphicToInputFacade implements IGraphicToInput{
         
         sm.createShapeBorder(ssm.getSelection(),
                 TransformationBorder.MODEONECENTER);
-
-        strm.initializeTransformation();
     }
     
     @Override
@@ -202,7 +200,7 @@ public class GraphicToInputFacade implements IGraphicToInput{
         ArrayList<Point> coords = new ArrayList<Point>();
         ArrayList<Double> rotation = new ArrayList<Double>();
         
-        for(DraggingObject shape : strm.getTransformedShapes()){
+        for(DraggingObject shape : sm.getDraggingShapes()){
             ids.add(shape.getID());
             coords.add(new Point(shape.getX(), shape.getY()));
             rotation.add(shape.getRotation());
@@ -216,8 +214,6 @@ public class GraphicToInputFacade implements IGraphicToInput{
         
         sm.createShapeBorder(ssm.getSelection(),
                 TransformationBorder.MODEALLCENTER);
-
-        strm.initializeTransformation();
     }
 
 
@@ -242,7 +238,7 @@ public class GraphicToInputFacade implements IGraphicToInput{
         ArrayList<Point> coords = new ArrayList<Point>();
         ArrayList<Double> scale = new ArrayList<Double>();
         
-        for(DraggingObject shape : strm.getTransformedShapes()){
+        for(DraggingObject shape : sm.getDraggingShapes()){
             ids.add(shape.getID());
             coords.add(new Point(shape.getX(), shape.getY()));
             scale.add(shape.getScale());

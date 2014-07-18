@@ -1,7 +1,6 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.graphics;
 
 import java.awt.Point;
-import java.util.ArrayList;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.graphics.shapes.DraggingObject;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.graphics.shapes.ITransformationBorder;
@@ -17,33 +16,13 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.graphic
 public class TransformationManager {
     
     private IInternalMediator med = null;
-    private ArrayList<DraggingObject> transformedShapes = null;
     
     /**
      * Creates a new TransformationManager instance.
      * @param smi The internal mediator instance.
      */
     public TransformationManager(IInternalMediator med){
-        transformedShapes = new ArrayList<DraggingObject>();
         this.med = med;
-    }
-    
-    /**
-     * Initializes a transformation. Adds all
-     * created dragging shapes to its own list.
-     */
-    public void initializeTransformation(){
-        transformedShapes.clear();
-        transformedShapes.addAll(med.getDraggingShapes());
-    }
-    
-    /**
-     * Returns all transformed shapes.
-     * 
-     * @return A ArrayList containing all transformed shapes.
-     */
-    public ArrayList<DraggingObject> getTransformedShapes(){
-        return transformedShapes;
     }
 
     /**
@@ -65,7 +44,7 @@ public class TransformationManager {
                 
         border.setRotation(rotation-edge_rotation);
         
-        for(DraggingObject shape : transformedShapes){
+        for(DraggingObject shape : med.getDraggingShapes()){
             shape.setRotation(rotation-edge_rotation, border.getOriginalCenter());
         }
         
@@ -108,7 +87,7 @@ public class TransformationManager {
     public void setRotationCenterUpdate(ITransformationBorder border) {
         border.setRotationCenterUpdate();
 
-        for(DraggingObject shape : transformedShapes){
+        for(DraggingObject shape : med.getDraggingShapes()){
             shape.setRotationCenterUpdate();
         }
     } 
@@ -225,7 +204,7 @@ public class TransformationManager {
          * The position for the shapes in the border is calculated
          * with the distance to the border.
          */
-        for(DraggingObject shape : transformedShapes){
+        for(DraggingObject shape : med.getDraggingShapes()){
             
             int shapeX = shape.getX();
             int shapeY = shape.getY();
@@ -249,7 +228,7 @@ public class TransformationManager {
         ITransformationBorder border = med.getShapeBorder();
         border.scaleUpdate();
         
-        for(DraggingObject shape : transformedShapes){
+        for(DraggingObject shape : med.getDraggingShapes()){
             shape.scaleUpdate();
         }
     }
