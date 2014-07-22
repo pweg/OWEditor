@@ -57,8 +57,8 @@ public class ServerSimulator {
                 (float)-4.331105,  (float)-12.422435, (float)1.4452857,
                 0, 0,0,
                 5, 
-                (float)1.00, (float)1.00, 
-                "CIRCLE 12", true);
+                (float)0.50, (float)0.50, 
+                "CIRCLE 12", false);
         so.isCircle = true;
         so = createObject(
                 (float)-7.0,(float)-10.0, (float)-1.0,  
@@ -139,7 +139,7 @@ public class ServerSimulator {
             String imgName){
         ServerObject o = new ServerObject(currentID, x, y, z, rotationX, 
                 rotationY, rotationZ,
-                scale, width, height, name, image, imgName);
+                scale, width, height, name, image, imgName, false);
 
         o.rotationY = rotationY;
         o.rotationZ = rotationZ;

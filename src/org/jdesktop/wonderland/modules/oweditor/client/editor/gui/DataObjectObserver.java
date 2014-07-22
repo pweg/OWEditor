@@ -38,8 +38,8 @@ public class DataObjectObserver implements
     }
 
     @Override
-    public void notifyTranslation(long id, int x, int y) {
-        gc.window.updateShapeCoordinates(id, x, y);
+    public void notifyTranslation(long id, int x, int y, double z) {
+        gc.window.updateShapeCoordinates(id, x, y, z);
         gc.window.repaint();
     }
 

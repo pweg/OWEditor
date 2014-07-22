@@ -301,8 +301,9 @@ public class ShapeRectangle extends ShapeObject{
     }
 
     @Override
-    public void setLocation(int x, int y) {
+    public void setLocation(int x, int y, double z) {
         originalShape.setLocation(x, y);
+        this.z = z;
     }
 
     @Override

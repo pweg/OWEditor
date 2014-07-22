@@ -145,7 +145,7 @@ public class TransformationBorder extends SimpleShapeObject implements ITransfor
     }
 
     @Override
-    public void setLocation(int x, int y) { 
+    public void setLocation(int x, int y, double z) { 
         originalShape.getBounds().setLocation(x, y);
     }
     

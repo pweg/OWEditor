@@ -42,7 +42,7 @@ public abstract class SimpleShapeObject {
      * @param x the x coordinate.
      * @param y the y coordinate.
      */
-    public abstract void setLocation(int x, int y);
+    public abstract void setLocation(int x, int y, double z);
 
     /**
      * Sets a new location for the shape.

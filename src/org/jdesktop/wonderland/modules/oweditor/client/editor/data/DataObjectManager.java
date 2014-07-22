@@ -135,7 +135,7 @@ public class DataObjectManager {
        
         if(p!= null)
             for(IDataObjectObserver observer : observers)
-                observer.notifyTranslation(id, p.x, p.y);
+                observer.notifyTranslation(id, p.x, p.y, z);
     }
 
     /**

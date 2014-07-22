@@ -27,8 +27,9 @@ public interface IDataObjectObserver {
      * @param id The object id.
      * @param x The new x coordinate.
      * @param y The new y coordinate.
+     * @param z The new z coordinate.
      */
-    public void notifyTranslation(long id, int x, int y);
+    public void notifyTranslation(long id, int x, int y, double z);
     
     /**
      * Notifies an object removal.

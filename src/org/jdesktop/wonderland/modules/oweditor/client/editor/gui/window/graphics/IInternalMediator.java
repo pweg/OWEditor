@@ -148,5 +148,19 @@ public interface IInternalMediator {
      */
     public BufferedImage getImage(String name, String dir);
 
+    /**
+     * Deletes a shape.
+     * 
+     * @param id The id of the shape to delete.
+     */
+    public void removeShape(long id);
+
+    /**
+     * Adds a shape.
+     * 
+     * @param shape The shape to add.
+     */
+    public void addShape(ShapeObject shape);
+
 
 }

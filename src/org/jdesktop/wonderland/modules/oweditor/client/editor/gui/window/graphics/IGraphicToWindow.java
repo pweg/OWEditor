@@ -96,8 +96,9 @@ public interface IGraphicToWindow {
      * @param id The id of the shape.
      * @param x The new x coordinate.
      * @param y The new y coordinate.
+     * @param z The new z coordinate.
      */
-    public void updateShapeCoordinates(long id, int x, int y);
+    public void updateShapeCoordinates(long id, int x, int y, double z);
 
     /**
      * Updates the name of a shape.

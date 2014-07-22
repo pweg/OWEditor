@@ -27,9 +27,16 @@ public class ServerTransformationManager {
      * @param x the new x coordinate.
      * @param y the new y coordinate.
      */
-    public void translateShape(long id, int x, int y){
+    public void translateShape(long id, int x, int y, double z){
         ShapeObject shape = med.getShape(id);
-        shape.setLocation(x, y);
+        double old_z = shape.getZ();
+        shape.setLocation(x, y, z);
+        
+        if(old_z != z){
+            med.removeShape(id);
+            med.addShape(shape);
+            med.repaint();
+        }
     }
 
     /**

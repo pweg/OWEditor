@@ -118,4 +118,14 @@ public class InternalMediator implements IInternalMediator{
     public BufferedImage getImage(String name, String dir) {
         return window.getImage(name, dir);
     }
+
+    @Override
+    public void removeShape(long id) {
+        sm.removeShape(id);
+    }
+
+    @Override
+    public void addShape(ShapeObject shape) {
+        sm.addShape(shape);
+    }
 }

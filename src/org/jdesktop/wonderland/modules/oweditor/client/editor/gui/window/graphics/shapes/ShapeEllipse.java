@@ -309,8 +309,9 @@ public class ShapeEllipse extends ShapeObject{
     }
 
     @Override
-    public void setLocation(int x, int y) {
+    public void setLocation(int x, int y, double z) {
         originalShape.setFrame(x, y, originalShape.getWidth(), originalShape.getWidth());
+        this.z = z;
     }
 
     @Override

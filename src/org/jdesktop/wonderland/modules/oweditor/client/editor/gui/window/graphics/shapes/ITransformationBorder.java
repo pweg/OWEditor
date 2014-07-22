@@ -52,7 +52,7 @@ public interface ITransformationBorder {
      * @param x The x coordinate.
      * @param y The y coordinate.
      */
-    public void setLocation(int x, int y);
+    public void setLocation(int x, int y, double z);
     
     /**
      * This has to be called, after one scaling operation, in order

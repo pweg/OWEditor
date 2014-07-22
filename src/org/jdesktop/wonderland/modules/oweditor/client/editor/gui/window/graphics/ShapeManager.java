@@ -174,9 +174,11 @@ public class ShapeManager {
         
         readLock.lock();
         try {
-            for(ShapeObject shape_obj : shapes){
-                
-                Shape shape = shape_obj.getTransformedShape();
+            ListIterator<ShapeObject> li = shapes.listIterator(shapes.size());
+            
+            while(li.hasPrevious()){
+                ShapeObject shape_obj = li.previous();
+                Shape shape =  shape_obj.getTransformedShape();
                 
                 if(shape != null && shape.contains(p)) {
                     object = shape_obj;
@@ -203,7 +205,6 @@ public class ShapeManager {
         readLock.lock();
         try {
             ListIterator<ShapeObject> li = background.listIterator(background.size());
-
             
             while(li.hasPrevious()){
                 ShapeObject shape_obj = li.previous();
@@ -333,7 +334,7 @@ public class ShapeManager {
         }
         
         shape.setName(dataObject.getName());
-        shape.setLocation(dataObject.getX(), dataObject.getY());
+        shape.setLocation(dataObject.getX(), dataObject.getY(), dataObject.getZf());
         shape.setRotation(dataObject.getRotation());
         shape.setScale(dataObject.getScale());
     }
@@ -676,6 +677,19 @@ public class ShapeManager {
         }
     }
     
+    private void addBackground(ShapeObject shape){
+        double z = shape.getZ();
+        
+        int i = 0;
+        for(ShapeObject s : background){
+            if(s.getZ() > z){
+                break;
+            }
+            i++;
+        }
+        background.add(i, shape);
+    }
+    
     /**
      * Sends a shape to the background or the foreground.
      * 
@@ -693,7 +707,7 @@ public class ShapeManager {
 
             shape.setColor(GUISettings.BGOBJECTCOLOR);
             removeShape(id);
-            background.add(shape);
+            addBackground(shape);
         }else{
             ShapeObject shape = getShape(id);
             

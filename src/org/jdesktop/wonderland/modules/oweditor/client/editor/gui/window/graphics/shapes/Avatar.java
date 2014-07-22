@@ -46,7 +46,7 @@ public class Avatar extends ShapeObject{
     }
 
     @Override
-    public void setLocation(int x, int y) {
+    public void setLocation(int x, int y, double z) {
         originalShape.setFrame(x, y, originalShape.getWidth(), originalShape.getHeight());
     }
 

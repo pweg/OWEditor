@@ -68,7 +68,7 @@ public class SelectionRectangle extends SimpleShapeObject{
     }
 
     @Override
-    public void setLocation(int x, int y) {
+    public void setLocation(int x, int y, double z) {
         originalShape.setLocation(x, y); 
     }
 

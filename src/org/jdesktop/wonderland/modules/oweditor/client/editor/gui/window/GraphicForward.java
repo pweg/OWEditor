@@ -32,8 +32,8 @@ public class GraphicForward implements IGraphicForward{
     }
 
     @Override
-    public void updateShape(long id, int x, int y, String name) {
-        graphic.updateShapeCoordinates(id, x, y);
+    public void updateShape(long id, int x, int y, double z, String name) {
+        graphic.updateShapeCoordinates(id, x, y, z);
         graphic.updateShapeName(id, name);
     }
 
@@ -43,8 +43,8 @@ public class GraphicForward implements IGraphicForward{
     }
 
     @Override
-    public void updateShapeCoordinates(long id, int x, int y) {
-        graphic.updateShapeCoordinates(id, x, y);
+    public void updateShapeCoordinates(long id, int x, int y, double z) {
+        graphic.updateShapeCoordinates(id, x, y, z);
     }
 
     @Override

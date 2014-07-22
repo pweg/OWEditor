@@ -125,7 +125,7 @@ public class DraggingEllipse extends DraggingObject{
      * NOT IMPLEMENTED for dragging shapes.
      */
     @Override
-    public void setLocation(int x, int y) {
+    public void setLocation(int x, int y, double z) {
         
     }
 

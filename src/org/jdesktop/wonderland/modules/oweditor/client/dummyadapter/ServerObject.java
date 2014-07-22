@@ -53,7 +53,7 @@ public class ServerObject {
     ServerObject(long id, float x, float y, float z, double rotationX, 
             double rotationY, double rotationZ,
             double scale, float width, float height, String name,
-            BufferedImage image, String imgName){
+            BufferedImage image, String imgName, boolean isCircle){
         this.x = x;
         this.y = y;
         this.z = z;
@@ -62,12 +62,13 @@ public class ServerObject {
         this.rotationZ = rotationZ;
         this.scale = scale;
         this.id = id;
-        this.name = name;    
+        this.name = name; 
         this.height = height;
         this.width = width;
         this.image = image;
         this.imgName = imgName;
         this.rights = new ArrayList<Rights>();
+        this.isCircle = isCircle;
     }
     
     @Override
@@ -75,7 +76,7 @@ public class ServerObject {
         return new ServerObject(this.id, this.x,this.y,this.z, this.rotationX,
                 this.rotationY, this.rotationZ,
                 this.scale, this.width, this.height, this.name, this.image,
-                this.imgName);
+                this.imgName, this.isCircle);
     }
     
 

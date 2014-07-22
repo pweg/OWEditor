@@ -87,8 +87,8 @@ public class GraphicController implements IGraphicToWindow{
     }
 
     @Override
-    public void updateShapeCoordinates(long id, int x, int y) {
-        stm.translateShape(id, x, y);
+    public void updateShapeCoordinates(long id, int x, int y, double z) {
+        stm.translateShape(id, x, y, z);
     }
 
     @Override

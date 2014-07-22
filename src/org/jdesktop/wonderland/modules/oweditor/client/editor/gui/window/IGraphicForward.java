@@ -35,7 +35,7 @@ public interface IGraphicForward {
      * @param y The y coordinate of the object.
      * @param name The name of the object.
      */
-    public void updateShape(long id, int x, int y, String name);
+    public void updateShape(long id, int x, int y, double z, String name);
 
     /**
      * Deletes a shape.
@@ -50,8 +50,9 @@ public interface IGraphicForward {
      * @param id The id of the shape.
      * @param x The x coordinate.
      * @param y The y coordinate.
+     * @param z The z coordinate.
      */
-    public void updateShapeCoordinates(long id, int x, int y);
+    public void updateShapeCoordinates(long id, int x, int y, double z);
 
     /**
      * Updates the rotation of a shape.
