@@ -26,7 +26,6 @@ public class WindowController {
     protected WindowToInput inputInterface = null;
     protected WindowToFrame frameInterface = null;
     
-    protected MouseCoordinates mouseCoords = null;
     protected IMenu menu = null;
     protected Window window = null;
     protected IFrame frame = null;
@@ -50,8 +49,6 @@ public class WindowController {
         inputInterface = new WindowToInput(this);
         frameInterface = new WindowToFrame(this);
         graphicInterface = new WindowToGraphic(this);
-        
-        mouseCoords = new MouseCoordinates(this);
         
         registerComponents();
         build();
@@ -81,7 +78,6 @@ public class WindowController {
 
     public void registerDataManager(IDataManager dm) {
         this.dm = dm;
-        frameInterface.registerDataManager(dm);
     }
 
     public void registerInputInterface(IInputToWindow input) {

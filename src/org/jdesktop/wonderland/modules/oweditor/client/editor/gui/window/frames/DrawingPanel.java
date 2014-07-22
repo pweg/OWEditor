@@ -100,16 +100,14 @@ public class DrawingPanel extends JPanel implements ChangeListener, IDrawingPane
         double newScale = scale + (toAdd*zoomSpeed);
         
         //adjust the zoom speed 
-        if(newScale <= (zoomSpeed/5)){
+        if(newScale <= (zoomSpeed/10)){
             zoomSpeed = zoomSpeed/10;
-        }else if(newScale>= zoomSpeed*10 && zoomSpeed < 1){
+        }else if(newScale> zoomSpeed && newScale>scale && zoomSpeed < 1){
             zoomSpeed = zoomSpeed*10;
         }
         
         scale = scale + (toAdd*zoomSpeed);
         
-        //scale += toAdd;
-        //scale = Math.max(toAdd, scale);
         writeLock.unlock();
 
         repaint();  
@@ -137,8 +135,8 @@ public class DrawingPanel extends JPanel implements ChangeListener, IDrawingPane
          * Halves it, in order to center the new viewpoint. And last, the new
          * scale has to be applied to the result.
          */
-        double add_x = (r.width/curScale-r.width/scale)/2*curScale; 
-        double add_y = (r.height/curScale-r.height/scale)/2*curScale; 
+        double add_x = (r.width/curScale-r.width/scale)/2*scale; 
+        double add_y = (r.height/curScale-r.height/scale)/2*scale; 
         readLock.unlock();
         
         //adds/subtract the viewport difference from the current viewport.
@@ -287,14 +285,6 @@ public class DrawingPanel extends JPanel implements ChangeListener, IDrawingPane
         }
         readLock.unlock();
     }
-    /*
-    public int getTranslationX(){
-        return translationX;
-    }
-    
-    public int getTranslationY(){
-        return translationY;
-    }*/
 
     private AffineTransform getTransformation() {
         readLock.lock();

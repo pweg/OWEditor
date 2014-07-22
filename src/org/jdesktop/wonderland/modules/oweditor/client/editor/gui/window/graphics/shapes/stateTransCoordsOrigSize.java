@@ -27,7 +27,7 @@ public class stateTransCoordsOrigSize implements stateDraggingShape{
         //Shapes original width has to be used , because we want to get 
         //the originals coordinates. This may have to be considered, when
         //building the coordinate translator in the adapter package.
-        return (int) Math.round(x - shape.getWidth()/2*shape.getScale());
+        return (int) Math.round(x - (shape.getWidth()/2)*shape.getScale());
 
     }
 

@@ -9,7 +9,6 @@ import javax.swing.JOptionPane;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IDataObject;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IImage;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.IDataManager;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.input.IInputToWindow;
 
 /**
@@ -24,7 +23,6 @@ public class WindowToFrame implements IWindowToFrame{
             "org/jdesktop/wonderland/modules/oweditor/client/resources/Bundle");
 
     public WindowController wc = null;
-    private IDataManager dm = null;
     
     public WindowToFrame(WindowController wc) {
         this.wc = wc;
@@ -59,16 +57,12 @@ public class WindowToFrame implements IWindowToFrame{
             double scale) {
         wc.graphic.createDraggingRect(width, height, 0, 0, rotation, scale);
         
-        stateInput state = new stateImport(wc, dm);
+        stateInput state = new stateImport(wc);
         
         state.setBounds(width, height);
         wc.inputInterface.setState(state);
         
         wc.input.setInputMode(IInputToWindow.TRANSLATE);
-    }
-
-    public void registerDataManager(IDataManager dm) {
-        this.dm  = dm;
     }
 
     @Override
@@ -88,7 +82,7 @@ public class WindowToFrame implements IWindowToFrame{
 
     @Override
     public String[] getServerList() {
-        return dm.getServerList();
+        return wc.dm.getServerList();
     }
 
     @Override
@@ -103,12 +97,12 @@ public class WindowToFrame implements IWindowToFrame{
 
     @Override
     public ArrayList<IImage> getImgLib() {
-        return dm.getImgLib();
+        return wc.dm.getImgLib();
     }
 
     @Override
     public IDataObject getDataObject(long id) {
-        return dm.getDataObject(id);
+        return wc.dm.getDataObject(id);
     }
 
     @Override

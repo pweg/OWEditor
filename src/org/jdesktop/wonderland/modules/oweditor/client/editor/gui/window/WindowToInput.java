@@ -5,8 +5,6 @@ import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;
 
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.menu.IMenu;
-
 /**
  * The interface implementation for the input package.
  * 
@@ -16,13 +14,14 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.menu.IM
 public class WindowToInput implements IWindowToInput {
 
     private WindowController wc = null;    
-    //private IDrawingPanel drawingPan = null;
-    private IMenu menu = null;
     private stateInput state = null;
+
+    protected MouseCoordinates mouseCoords = null;
     
-    public WindowToInput(WindowController fc){
-        this.wc = fc;
-        menu = fc.menu;
+    public WindowToInput(WindowController wc){
+        this.wc = wc;
+        
+        mouseCoords = new MouseCoordinates(wc);
     }
     
     /*public void registerDrawingPan(IDrawingPanel drawingPan){
@@ -43,7 +42,7 @@ public class WindowToInput implements IWindowToInput {
     public void showPopupMenu(int x, int y) {
         //menu.setItemsEnabled(shapesSelected, copyShapesExist);
         wc.repaint();
-        menu.showPopup((Component)wc.frame.getDrawingPan(), x, y);
+        wc.menu.showPopup((Component)wc.frame.getDrawingPan(), x, y);
     }
 
     @Override
@@ -69,7 +68,7 @@ public class WindowToInput implements IWindowToInput {
     }
     @Override
     public void paintMouseCoords(int x, int y) {
-        wc.mouseCoords.paintCoordinates(x,y);
+        mouseCoords.paintCoordinates(x,y);
     }
     @Override
     public Point revertBack(Point point) {
@@ -77,11 +76,11 @@ public class WindowToInput implements IWindowToInput {
     }
     @Override
     public void selectionChange(boolean shapesSelected) {
-        menu.setItemsEnabledSelection(shapesSelected);
+        wc.menu.setItemsEnabledSelection(shapesSelected);
     }
     @Override
     public void copyChange(boolean copyShapesExist) {
-        menu.setItemsEnabledCopy(copyShapesExist);
+        wc.menu.setItemsEnabledCopy(copyShapesExist);
     }
     
     /**

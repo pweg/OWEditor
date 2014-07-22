@@ -41,11 +41,10 @@ public class TopMenuBuilder implements IMenuBuilder{
                 itemName.equals("")){
             return;
         }
-
-        IMenuItem item = new MenuItem(itemName, function, keyCombination, separator);
         
+        TreeNode node = removeNode(itemName);
         TreeNode parent = root.findNode(menuName);
-        
+
         if(parent == null && menuName != null){
             MenuItem parent_item = new MenuItem(menuName, null,null, false);
             parent = root.addChild(parent_item);
@@ -53,7 +52,28 @@ public class TopMenuBuilder implements IMenuBuilder{
             parent = root;
         }
         
-        parent.addChild(item);
+        if(node == null){
+            IMenuItem item = new MenuItem(itemName, function, keyCombination, separator);
+            parent.addChild(item);
+        }else{
+            parent.addChild(node);
+        }
+    }
+
+    /**
+     * Removes one item from the root and returns it.
+     * 
+     * @param itemName The name of the item.
+     * @return The removed node.
+     */
+    private TreeNode removeNode(String itemName){
+        for(TreeNode child : root.getChildren()){
+            if(child.getMenuItem().getName().equals(itemName)){
+                root.removeChild(child);
+                return child;
+            }
+        }
+        return null;
     }
     
     @Override

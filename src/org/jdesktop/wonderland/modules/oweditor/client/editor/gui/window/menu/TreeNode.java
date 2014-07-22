@@ -117,5 +117,9 @@ public class TreeNode {
         }
         return null;
     }
+
+    public void removeChild(TreeNode node) {
+        children.remove(node);
+    }
    
 }

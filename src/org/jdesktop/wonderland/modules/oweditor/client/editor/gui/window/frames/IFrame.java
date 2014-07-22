@@ -9,6 +9,12 @@ import javax.swing.event.MouseInputAdapter;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.IWindowToFrame;
 
+/**
+ * The interface for the Window package.
+ * 
+ * @author Patrick
+ *
+ */
 public interface IFrame {
     
     public void registerWindow(IWindowToFrame window);
