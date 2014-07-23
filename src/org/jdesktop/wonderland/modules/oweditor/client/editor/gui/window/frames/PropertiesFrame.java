@@ -475,7 +475,7 @@ public class PropertiesFrame extends javax.swing.JFrame {
         String rot_xs = rotationFieldX.getText();
         String rot_ys = rotationFieldY.getText();
         String rot_zs = rotationFieldZ.getText();
-        String scales = scaleField.getText(); 
+        String scales = scaleField.getText();
         
         //look for changes.
         if(objects.size() == 1 && !initialName.equals(name))
@@ -589,6 +589,9 @@ public class PropertiesFrame extends javax.swing.JFrame {
                 error = true;
             }
         }
+        
+        if(scale == 0)
+            scale = 1;
         
         if(error){
             showError(BUNDLE.getString("ImportMissingError"), 
