@@ -68,6 +68,7 @@ public class TransformationBorder extends SimpleShapeObject implements ITransfor
         tinySizeHalfY = (int) Math.round((tinySizeY/2)/initialScaleY);
         tinySizeX = (int) Math.round(tinySizeX/initialScaleX);
         tinySizeY = (int) Math.round(tinySizeY/initialScaleY);
+        
 
         tinyShapes = new ArrayList<Shape>();
         transformedTinyShapes = new ArrayList<Shape>();
@@ -86,7 +87,7 @@ public class TransformationBorder extends SimpleShapeObject implements ITransfor
         originalShape = new Rectangle (x, y, width+2*margin, height+2*margin);
         //originalShape = transform.createTransformedShape(originalShape);
 
-        tinyShapes = setTinyRectangle(originalShape);
+        tinyShapes = setTinyRectangle(originalShape ,1);
     }
     
     @Override
@@ -120,8 +121,8 @@ public class TransformationBorder extends SimpleShapeObject implements ITransfor
             transformedShape = ShapeUtilities.scaleShape(transformedShape, scale, 
                     scaleTranslationX*globalScale, scaleTranslationY*globalScale);
                     
-                    //scaleShape(transformedShape, scale,scale, globalScale);
-            transformedTinyShapes = setTinyRectangle(transformedShape);
+            //scaleShape(transformedShape, scale,scale, globalScale);
+            transformedTinyShapes = setTinyRectangle(transformedShape, globalScale);
         }else{
             for(Shape r : tinyShapes){
                 Shape transformedRect = ShapeUtilities.rotateShape(r, 
@@ -155,9 +156,10 @@ public class TransformationBorder extends SimpleShapeObject implements ITransfor
      * 
      * @param main The main rectangle as a shape instance, where the 
      * tiny rectangles will sit.
+     * @param globalScale 
      * @param rights The list, where the rectangles will be saved.
      */
-    private ArrayList<Shape> setTinyRectangle(Shape main){
+    private ArrayList<Shape> setTinyRectangle(Shape main, double globalScale){
         ArrayList<Shape> list = new ArrayList<Shape>();
         
         Rectangle bounds = main.getBounds();
@@ -166,23 +168,25 @@ public class TransformationBorder extends SimpleShapeObject implements ITransfor
         int width = bounds.width;
         int height = bounds.height;
 
-        AffineTransform transform = new AffineTransform();
-        transform.scale(initialScaleX, initialScaleY);
+        int widthTiny = (int) Math.round(tinySizeX*globalScale);
+        int heightTiny = (int) Math.round(tinySizeY*globalScale);
+        int halfWidth = (int) Math.round(widthTiny/2);
+        int halfHeight = (int) Math.round(heightTiny/2);
         
-        Shape tiny = new Rectangle(x-tinySizeHalfX,y-tinySizeHalfY,
-                tinySizeX,tinySizeY);
+        Shape tiny = new Rectangle(x-halfWidth,y-halfHeight,
+                widthTiny,heightTiny);
         list.add(tiny);
         
-        Shape tiny2 = new Rectangle(x+width+-tinySizeHalfX,y-tinySizeHalfY,
-                tinySizeX,tinySizeY);
+        Shape tiny2 = new Rectangle(x+width+-halfWidth,y-halfHeight,
+                widthTiny,heightTiny);
         list.add(tiny2);
         
-        Shape tiny3 = new Rectangle(x-tinySizeHalfX,y+height+
-                -tinySizeHalfY,tinySizeX,tinySizeY);
+        Shape tiny3 = new Rectangle(x-halfWidth,y+height+
+                -halfHeight,widthTiny,heightTiny);
         list.add(tiny3);
         
-        Shape tiny4 = new Rectangle(x+width-tinySizeHalfX,
-                y+height-tinySizeHalfY,tinySizeX,tinySizeY);
+        Shape tiny4 = new Rectangle(x+width-halfWidth,
+                y+height-halfHeight,widthTiny,heightTiny);
         list.add(tiny4);
         
         return list;
@@ -192,7 +196,7 @@ public class TransformationBorder extends SimpleShapeObject implements ITransfor
     public void scaleUpdate(){
         originalShape = ShapeUtilities.scaleShape(originalShape, scale, 
                 scaleTranslationX, scaleTranslationY);
-        tinyShapes = setTinyRectangle(originalShape);
+        tinyShapes = setTinyRectangle(originalShape, 1);
         scale = 1;
     }
 
