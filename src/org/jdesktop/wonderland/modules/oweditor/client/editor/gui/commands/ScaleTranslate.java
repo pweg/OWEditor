@@ -32,20 +32,21 @@ public class ScaleTranslate implements Command{
 
     @Override
     public void execute(GUIObserverInterface goi)  throws Exception{
-        translate.execute(goi);
+        //the order of the commands is important here
         scale.execute(goi);
+        translate.execute(goi);
     }
 
     @Override
     public void undo(GUIObserverInterface goi)  throws Exception{
-        translate.undo(goi);
         scale.undo(goi);
+        translate.undo(goi);
     }
 
     @Override
     public void redo(GUIObserverInterface goi)  throws Exception{
-        translate.redo(goi);
         scale.redo(goi);
+        translate.redo(goi);
     }
     
 

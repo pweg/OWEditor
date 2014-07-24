@@ -31,7 +31,6 @@ public class RotateTranslate implements Command{
 
     @Override
     public void execute(GUIObserverInterface goi)  throws Exception{
-        //rotate(goi, coordsNew, rotationNew);
         rotate.execute(goi);
         translate.execute(goi);
     }

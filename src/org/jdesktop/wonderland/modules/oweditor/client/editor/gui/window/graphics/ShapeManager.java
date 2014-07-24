@@ -287,15 +287,30 @@ public class ShapeManager {
         
         writeLock.lock();
         try {
-            for(ShapeObject s : shapes){
+            for(ShapeObject s : avatarShapes){
                 if(s.getID() == id){
-                    shapes.remove(s);
+                    avatarShapes.remove(s);
                     found = true;
                     break;
                 }
             }
         } finally {
             writeLock.unlock();
+        }
+        
+        if(!found){
+            writeLock.lock();
+            try {
+                for(ShapeObject s : shapes){
+                    if(s.getID() == id){
+                        shapes.remove(s);
+                        found = true;
+                        break;
+                    }
+                }
+            } finally {
+                writeLock.unlock();
+            }
         }
         
         if(!found){
