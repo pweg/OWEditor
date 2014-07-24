@@ -59,7 +59,8 @@ public class WindowToFrame implements IWindowToFrame{
         
         stateInput state = new stateImport(wc);
         
-        state.setBounds(width, height);
+        state.setBounds((int)Math.round(width*scale), 
+                (int) Math.round(height*scale));
         wc.inputInterface.setState(state);
         
         wc.input.setInputMode(IInputToWindow.TRANSLATE);

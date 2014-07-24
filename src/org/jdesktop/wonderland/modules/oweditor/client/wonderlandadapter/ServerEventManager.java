@@ -168,38 +168,15 @@ public class ServerEventManager {
         String name = cell.getName();
         long id = CellInfoReader.getID(cell);
         
-        /*
-         * Adds a new movable component to the cell, if it was not created yet. 
-         */
-        MovableComponent movableComponent = cell.getComponent(MovableComponent.class);
-        if (movableComponent == null) {
-            String className = "org.jdesktop.wonderland.server.cell." +
-                    "MovableComponentMO";
-            CellServerComponentMessage cscm = 
-                    CellServerComponentMessage.newAddMessage(
-                    cell.getCellID(), className);
-            ResponseMessage response = cell.sendCellMessageAndWait(cscm);
-            if (response instanceof ErrorMessage) {
-                LOGGER.log(Level.WARNING, "ERROR Movable component creation", 
-                        response);
-            }
-        }  
+        checkMovableComponent(cell);
+        
+        lateImage(cell);
         
         /*
+        * does transformation (used when copying cells)
         * do late transform before reading cell data in order to get
         * the changes immediately.
         */
-        
-        //adds an image component
-        if(ac.ltm.containsImage(id)){
-            try {
-                ac.ltm.invokeLateImage(ac.sc, id, ac.fm.getUserDir());
-            } catch (ContentRepositoryException ex) {
-                LOGGER.log(Level.SEVERE, null, ex);
-            }
-        }
-        
-        //does transformation (used when copying cells)
         String oldName="";
         if(ac.ltm.containsCell(id, name)){
             //copied names
@@ -219,70 +196,9 @@ public class ServerEventManager {
             }
         }
         
-        //gets the image
-        BufferedImage img = null;
-        ImageCellComponent imageComponent = cell.getComponent(ImageCellComponent.class);
-        String imgName = null;
-        String imgDir = null;
-            
-        if(imageComponent != null){
-            imgName = imageComponent.getImage();
-            imgDir = imageComponent.getDir();
-            imageComponent.registerChangeListener(imageListener);
-            img = getImage(id, imgName, imgDir);
-        }else{
-            try {
-                ac.sc.changeImage(id, "", "");
-                
-            } catch (ServerCommException ex) {
-                LOGGER.log(Level.SEVERE, null, ex);
-            }
-            
-        }
+        ImageClass img = getImage(cell);
         
-        //gets the original id, if it was created by undo/redo 
-        IDCellComponent idComponent = cell.getComponent(IDCellComponent.class);
-        
-        if(idComponent != null){
-            long oldid = idComponent.getID();
-            
-            //there is currently no cell with the original id and the 
-            //original id is not -1, so it has to be a recreation of the
-            //original cell.
-            if(!ac.bm.isActive(oldid) && oldid != -1){
-                id = oldid;
-
-                ac.bm.addOriginalCell(id, cell);
-            //a cell using the original id already exists.    
-            }else if (ac.bm.isActive(oldid)){
-                try {
-                    //if it is on white list, the cell with the name
-                    //already exists, therefore the original id was done
-                    //with copy and can be deleted.
-                    if(ac.bm.isOnWhiteList(oldName))
-                        ac.sc.deleteComponent(id, IDCellComponentServerState.class);
-                    //the original id was not on the whitelist, therefore it 
-                    //is the same object which already exists, therefore it
-                    //can be deleted.
-                    else{
-                        ac.sc.remove(id);
-                        return;
-                    }
-                } catch (ServerCommException ex) {
-                    LOGGER.log(Level.WARNING,"Could not delete cell with the same "
-                    + "original id, which is already used. Current ID:"
-                    + id + ", original id "+oldid, ex);
-                }
-            //something else, like original id == -1, therefore the id
-            //component can be deleted.
-            }else{
-                try {
-                    ac.sc.deleteComponent(id, IDCellComponentServerState.class);
-                } catch (Exception ex) {
-                    LOGGER.log(Level.SEVERE, null, ex);
-                }
-            }
-        }
+        id = checkID(cell, oldName);
         
         Vector3fInfo coordinates = CellInfoReader.getCoordinates(cell);
         Vector3f rotation = CellInfoReader.getRotation(cell);
@@ -308,22 +224,10 @@ public class ServerEventManager {
             object.setWidth(width);
             object.setHeight(height);
             object.setName(name);
-            object.setImage(img, imgName, imgDir);
-            
-            //is not needed anymore
-            /*
-            LinkedHashMap<String, SecurityManager.Right> map = 
-                    ac.secm.getSecurity(cell);
-        
-            for (Map.Entry<String, SecurityManager.Right> entry : map.entrySet()) {
-                SecurityManager.Right right = entry.getValue();
-                
-                object.setRight(right.type, right.name, 
-                        right.owner, right.permitSubObjects, 
-                        right.permitAbilityChange, right.permitMove, 
-                        right.permitView, right.isEditable,
-                        right.isEverybody);
-            }*/
+            if(img != null)
+                object.setImage(img.img, img.imgName, img.imgDir);
+            else
+                object.setImage(null, "", "");
 
             if(cell instanceof AvatarCell){
                 object.setType(IDataObject.AVATAR);
@@ -336,6 +240,134 @@ public class ServerEventManager {
             observer.notifyObjectCreation(object);
         } 
     }
+    
+
+    /**
+    * Adds a new movable component to the cell, if it was not created yet. 
+    * 
+    * @param cell The cell.
+    */
+    private void checkMovableComponent(Cell cell){
+        
+        MovableComponent movableComponent = cell.getComponent(MovableComponent.class);
+        if (movableComponent == null) {
+            String className = "org.jdesktop.wonderland.server.cell." +
+                    "MovableComponentMO";
+            CellServerComponentMessage cscm = 
+                    CellServerComponentMessage.newAddMessage(
+                    cell.getCellID(), className);
+            ResponseMessage response = cell.sendCellMessageAndWait(cscm);
+            if (response instanceof ErrorMessage) {
+                LOGGER.log(Level.WARNING, "ERROR Movable component creation", 
+                        response);
+            }
+        }  
+    }
+    
+    /**
+     * Tries to add an image component to the cell.
+     * 
+     * @param cell The cell. 
+     */
+    private void lateImage(Cell cell){
+        long id = CellInfoReader.getID(cell);
+        
+        if(ac.ltm.containsImage(id)){
+            try {
+                ac.ltm.invokeLateImage(ac.sc, id, ac.fm.getUserDir());
+            } catch (ContentRepositoryException ex) {
+                LOGGER.log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+    
+    /**
+     * Gets the image from a cell.
+     * 
+     * @param cell The cell.
+     * @return An imageclass containing the image, or null if there is no
+     * image component.
+     */
+    private ImageClass getImage(Cell cell){
+        long id = CellInfoReader.getID(cell);
+        ImageCellComponent imageComponent = cell.getComponent(ImageCellComponent.class);
+            
+        if(imageComponent != null){
+            imageComponent.registerChangeListener(imageListener);
+
+            String imgName = imageComponent.getImage();
+            String imgDir = imageComponent.getDir();
+            ImageClass imgClass = new ImageClass();
+            imgClass.img = getImage(id, imgName, imgDir);
+            imgClass.imgName = imgName;
+            imgClass.imgDir = imgDir;
+            
+            return imgClass;
+        }else{
+            try {
+                ac.sc.changeImage(id, "", "");
+                
+            } catch (ServerCommException ex) {
+                LOGGER.log(Level.SEVERE, null, ex);
+            }
+            return null;
+        }
+    }
+    
+    /**
+     * Checks the id. Gets the original id, if it was created by undo/redo. 
+     * 
+     * @param cell The cell.
+     * @param oldName The old name of the cell.
+     * @return The editor id.
+     */
+    private long checkID(Cell cell, String oldName){
+        IDCellComponent idComponent = cell.getComponent(IDCellComponent.class);
+        long id = CellInfoReader.getID(cell);
+        
+        if(idComponent != null){
+            long oldid = idComponent.getID();
+            
+            //there is currently no cell with the original id and the 
+            //original id is not -1, so it has to be a recreation of the
+            //original cell.
+            if(!ac.bm.isActive(oldid) && oldid != -1){
+                id = oldid;
+
+                ac.bm.addOriginalCell(id, cell);
+            //a cell using the original id already exists.    
+            }else if (ac.bm.isActive(oldid)){
+                try {
+                    //if it is on white list, the cell with the name
+                    //already exists, therefore the original id was done
+                    //with copy and can be deleted.
+                    if(ac.bm.isOnWhiteList(oldName))
+                        ac.sc.deleteComponent(id, IDCellComponentServerState.class);
+                    //the original id was not on the whitelist, therefore it 
+                    //is the same object which already exists, therefore it
+                    //can be deleted.
+                    else{
+                        ac.sc.remove(id);
+                        return id;
+                    }
+                } catch (ServerCommException ex) {
+                    LOGGER.log(Level.WARNING,"Could not delete cell with the same "
+                    + "original id, which is already used. Current ID:"
+                    + id + ", original id "+oldid, ex);
+                }
+            //something else, like original id == -1, therefore the id
+            //component can be deleted.
+            }else{
+                try {
+                    ac.sc.deleteComponent(id, IDCellComponentServerState.class);
+                } catch (Exception ex) {
+                    LOGGER.log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+        return id;
+    }
+    
     
     /**
      * Is called through a cell compoment listener. This is needed,
@@ -556,6 +588,12 @@ public class ServerEventManager {
                 observer.updateImgLib(img.img, img.name, img.dir);
             }
         }
+    }
+    
+    class ImageClass{
+        public BufferedImage img = null;
+        public String imgName;
+        public String imgDir;
     }
 
 }

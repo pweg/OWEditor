@@ -11,14 +11,13 @@ import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.GUIObse
  */
 public class Delete implements Command{
     
-    ArrayList<Long> ids = null;
+    
+    ArrayList<Long> ids = new ArrayList<Long>();
     
     public Delete(ArrayList<Long> ids){
-        this.ids = ids;
-
-        //null pointer prevention
-        if(ids == null)
-            this.ids = new ArrayList<Long>();
+        
+        if(ids != null)
+            this.ids.addAll(ids);
     }
 
     @Override

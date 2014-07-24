@@ -244,7 +244,7 @@ public class LateTransformationManager {
         if(lateTranslation != null){
             try{
                 server.translate(id, lateTranslation);
-                removeTranslate(id);
+                removeTranslate(name);
                 return true;
             }catch(ServerCommException e){
                 return false;
@@ -269,24 +269,6 @@ public class LateTransformationManager {
         
         boolean b = true;
         
-        if(lateTranslation != null){
-            try{
-                server.translate(id, lateTranslation);
-                removeTranslate(id);
-
-            }catch(ServerCommException e){
-                b = false;
-            }
-        }
-        if(lateRotation != null){
-            try{
-                server.rotate(id, lateRotation);
-                removeRotate(id);
-            }catch(ServerCommException e){
-                b = false;
-            }
-        }
-        
         if(lateScale != -1){
             try{
             server.scale(id, lateScale);
@@ -296,6 +278,26 @@ public class LateTransformationManager {
                 b = false;
             }
         }
+        
+        if(lateTranslation != null){
+            try{
+                server.translate(id, lateTranslation);
+                removeTranslate(id);
+
+            }catch(ServerCommException e){
+                b = false;
+            }
+        }
+        
+        if(lateRotation != null){
+            try{
+                server.rotate(id, lateRotation);
+                removeRotate(id);
+            }catch(ServerCommException e){
+                b = false;
+            }
+        }
+        
         return b;
     }
 

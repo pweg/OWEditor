@@ -146,34 +146,43 @@ public class GUIEventManager implements GUIObserverInterface{
     public void undoRemoval(long id) throws Exception{
         
         //if the object currently exists, no udno removal is necessary.
+        
+        LOGGER.warning("1");
         if(ac.bm.isActive(id)){
             LOGGER.warning("UNDOING active removal");
             throw new GUIEventException();
         }
         
+        LOGGER.warning("2");
         Cell cell = ac.bm.getActiveCell(id);
         
         if(cell == null)
                 cell = ac.bm.getCell(id);
         
+        LOGGER.warning("3");
         if(cell == null){
             LOGGER.warning("UNDO REMVOAL FAILED");
             throw new GUIEventException();
         }
+        LOGGER.warning("4");
         
         Vector3f coordinates = CellInfoReader.getCoordinates(cell);
         String name = cell.getName() ;
         name = ac.cnm.createUndoName(ac.sm.getSession(), id, name);
         
+        LOGGER.warning("5");
         float y = coordinates.z;
         float z = coordinates.y;
         
+        LOGGER.warning("6");
         //swap coordinates in order to not get mixed up later.
         coordinates.y = y;
         coordinates.z = z;
+        LOGGER.warning("7");
         
         ac.ltm.addTranslation(name, coordinates);        
         ac.sc.paste(cell, name);
+        LOGGER.warning("8");
     }
 
     @Override
@@ -214,6 +223,12 @@ public class GUIEventManager implements GUIObserverInterface{
             double scale) throws Exception{
         
         
+        //Remember: z and y are reversed
+        Vector3f translate = new Vector3f((float)x, (float)z, (float)y);
+        Vector3f rotate = new Vector3f((float) Math.toRadians(-rotationY),
+                (float) Math.toRadians(-rotationX),
+                (float) Math.toRadians(-rotationZ));
+        
         if(!importer.importToServer(module_name, name)){
             LOGGER.warning("Import to server failed.");
             throw new GUIEventException();
@@ -225,13 +240,14 @@ public class GUIEventManager implements GUIObserverInterface{
             throw new GUIEventException();
         }
         
-        //Remember: z and y are reversed
-        Vector3f translate = new Vector3f((float)x, (float)z, (float)y);
-        Vector3f rotate = new Vector3f((float)rotationX, (float)rotationZ,
-                (float)rotationY);
-        
         if(imgName != null && !imgName.equals("")){
             ac.ltm.addImage(id, imgName, imgDir);
+        }
+            
+        try{
+            ac.sc.scale(id, (float)scale);
+        }catch(ServerCommException e){
+            ac.ltm.addScale(id, (float) scale);
         }
         
         try{
@@ -244,12 +260,6 @@ public class GUIEventManager implements GUIObserverInterface{
             ac.sc.rotate(id, rotate);
         }catch(ServerCommException e){
             ac.ltm.addRotation(id, rotate);
-        }
-            
-        try{
-            ac.sc.scale(id, (float)scale);
-        }catch(ServerCommException e){
-            ac.ltm.addScale(id, (float) scale);
         }
         
         return id;        
