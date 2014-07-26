@@ -23,7 +23,6 @@ public class WorldBuilder {
     private ServerEventManager sua = null;
     private WonderlandAdapterController ac = null;
     
-    //private ArrayList<Cell> cells = null;
     private static final Logger LOGGER =
             Logger.getLogger(WorldBuilder.class.getName());
     
@@ -36,7 +35,6 @@ public class WorldBuilder {
     public WorldBuilder( WonderlandAdapterController ac, ServerEventManager sua){
         this.sua = sua;
         this.ac = ac;
-        //cells = new ArrayList<Cell>();
     }
     
     /**

@@ -13,16 +13,19 @@ import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.GUIObse
  */
 public class Paste implements Command{
     
-    ArrayList<Long> ids;
-    ArrayList<Point> coords;
+    ArrayList<Long> ids = new ArrayList<Long>();
+    ArrayList<Point> coords  = new ArrayList<Point>();
     
     public Paste(ArrayList<Long> ids, ArrayList<Point> coords) {
-        this.ids = ids;
-        this.coords = coords;
-
+        
         //null pointer prevention
-        if(ids == null)
-            this.ids = new ArrayList<Long>();
+        if(ids == null || coords == null)
+            return;
+        
+
+        this.ids.addAll(ids);
+        this.coords.addAll(coords);
+        
     }
 
     @Override

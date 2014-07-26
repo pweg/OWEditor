@@ -11,19 +11,21 @@ import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.GUIObse
  */
 public class Scale implements Command{
     
-    ArrayList<Long> ids;
-    ArrayList<Double> scaleOld;
-    ArrayList<Double> scaleNew;
+    ArrayList<Long> ids = new ArrayList<Long>();
+    ArrayList<Double> scaleOld  = new ArrayList<Double>();
+    ArrayList<Double> scaleNew = new ArrayList<Double>();
     
     public Scale(ArrayList<Long> ids,
             ArrayList<Double> scaleOld, ArrayList<Double> scaleNew){
-        this.ids = ids;
-        this.scaleOld = scaleOld;
-        this.scaleNew = scaleNew;
 
         //null pointer prevention
-        if(ids == null)
-            this.ids = new ArrayList<Long>();
+        if(ids == null || scaleOld == null | scaleNew == null)
+            return;
+        
+        this.ids.addAll(ids);
+        this.scaleOld.addAll(scaleOld);
+        this.scaleNew.addAll(scaleNew);
+
     }
 
     @Override

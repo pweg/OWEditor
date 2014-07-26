@@ -16,12 +16,6 @@ public class RotateTranslate implements Command{
     Command translate = null;
     Command rotate = null;
     
-    ArrayList<Long> ids;
-    ArrayList<Point> coordsOld;
-    ArrayList<Double> rotationOld;
-    ArrayList<Point> coordsNew;
-    ArrayList<Double> rotationNew;
-    
     public RotateTranslate(ArrayList<Long> ids, ArrayList<Point> coordsOld,
             ArrayList<Vector3D> rotationOld, ArrayList<Point> coordsNew,
             ArrayList<Vector3D> rotationNew){

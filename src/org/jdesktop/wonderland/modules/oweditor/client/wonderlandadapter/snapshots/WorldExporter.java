@@ -54,6 +54,7 @@ import org.jdesktop.wonderland.common.cell.state.CellServerStateFactory;
 import org.jdesktop.wonderland.common.cell.state.PositionComponentServerState;
 import org.jdesktop.wonderland.common.messages.ResponseMessage;
 import org.jdesktop.wonderland.common.utils.ScannedClassLoader;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.IWaitingDialog;
 
 /**
  *
@@ -83,9 +84,10 @@ public class WorldExporter{
     /**
      * Exports all cells currently available to a file.
      * 
-     * @param filepath The filepath to export the cells.
+     * @param file The filepath to export the cells.
+     * @param dialog A waiting dialog
      */
-    public void exportAllCells(File file) {     
+    public void exportAllCells(File file, IWaitingDialog dialog) {     
 
         try {
             File rootDir = File.createTempFile("subsnapshot", "tmp");
@@ -102,8 +104,9 @@ public class WorldExporter{
             Collection<Cell> rootCells = cache.getRootCells();
             for (Cell cell : rootCells) {
                 //avatarcells can not be exported!
-                if(!(cell instanceof AvatarCell))
-                    exportCell(cell, origin2, contentDir, serverStateDir);
+                if(!(cell instanceof AvatarCell)){
+                    exportCell(cell, origin2, contentDir, serverStateDir, dialog);
+                }
             }
             createPackage(rootDir, file);
             
@@ -134,7 +137,8 @@ public class WorldExporter{
     }
 
     public void exportCell(Cell cell, CellTransform origin, 
-                           File contentDir, File serverStateDir)
+                           File contentDir, File serverStateDir, 
+                           IWaitingDialog dialog)
     {
         CellServerState state = getServerState(cell);
         if(state == null) {
@@ -180,9 +184,10 @@ public class WorldExporter{
             LOGGER.log(Level.SEVERE,null,e);
         }
         File childDir = new File(serverStateDir, getStateFilename(cell, state)+"-children");
+        dialog.setText(cell.getName());
 
         for(Cell child: cell.getChildren()) {
-            exportCell(child, origin, contentDir, childDir);
+            exportCell(child, origin, contentDir, childDir, dialog);
         }
     }
 

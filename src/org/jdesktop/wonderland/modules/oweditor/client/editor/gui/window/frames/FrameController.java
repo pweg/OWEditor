@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
 import javax.swing.JScrollPane;
@@ -255,6 +256,11 @@ public class FrameController implements IFrame{
     @Override
     public void setToolbarCoords(String x, String y) {
         mainframe.getBottomToolBar().setCoordinates(x, y);
+    }
+
+    @Override
+    public JDialog getWaitingDialog(String text) {
+        return new WaitingDialog(mainframe, text);
     }
 }
 

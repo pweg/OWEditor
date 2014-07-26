@@ -11,18 +11,20 @@ import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.GUIObse
  */
 public class SetName implements Command{
     
-    private ArrayList<Long> ids = null;
-    private ArrayList<String> oldNames = null;
-    private ArrayList<String> newNames = null;
+    private ArrayList<Long> ids  = new ArrayList<Long>();
+    private ArrayList<String> oldNames = new ArrayList<String>();
+    private ArrayList<String> newNames = new ArrayList<String>();
     
     public SetName(ArrayList<Long> ids, ArrayList<String> oldNames,
             ArrayList<String> newNames){
-        this.ids = ids;
-        this.oldNames = oldNames;
-        this.newNames = newNames;
         
-        if(ids == null)
-            this.ids = new ArrayList<Long>();
+        if(ids == null || oldNames == null || newNames == null)
+            return;
+        
+        this.ids.addAll(ids);
+        this.oldNames.addAll(oldNames);
+        this.newNames.addAll(newNames);
+        
     }
 
     @Override

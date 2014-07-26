@@ -5,11 +5,13 @@ import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
+import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IDataObject;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IImage;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.input.IInputToWindow;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.IWaitingDialog;
 
 /**
  * The interface implementation for the frame package.
@@ -129,7 +131,7 @@ public class WindowToFrame implements IWindowToFrame{
     }
 
     @Override
-    public void loadWorld(String file) {
+    public void loadWorld(final String file) {
         int dialogResult = JOptionPane.showConfirmDialog (
                 null, BUNDLE.getString("DialogWarningDeleteAll"),
                 BUNDLE.getString("Warning"),
@@ -139,7 +141,26 @@ public class WindowToFrame implements IWindowToFrame{
             return;
 
         wc.adapter.setObjectRemoval(wc.graphic.getAllIDs());  
-        wc.adapter.loadWorld(file);
+        
+        final JDialog dialog = 
+                wc.frame.getWaitingDialog(BUNDLE.getString("Dialog_Loading"));
+        
+        new Thread(){
+            @Override
+            public void run(){
+                wc.adapter.loadWorld(file, (IWaitingDialog) dialog);
+                
+                //wait for loading dialog to be ready.
+                while(!dialog.isVisible()){
+                    yield();
+                }
+                dialog.dispose();
+                
+            }
+        
+        }.start();
+        dialog.setLocationRelativeTo(wc.frame.getMainframe());
+        dialog.setVisible(true);
     }
 
     @Override

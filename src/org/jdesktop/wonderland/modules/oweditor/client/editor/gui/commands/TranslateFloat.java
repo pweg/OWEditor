@@ -13,15 +13,19 @@ import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.GUIObse
  */
 public class TranslateFloat implements Command{
 
-    ArrayList<Long> ids;
-    ArrayList<Vector3D> coordsOld;
-    ArrayList<Vector3D> coordsNew;
+    ArrayList<Long> ids = new ArrayList<Long>();
+    ArrayList<Vector3D> coordsOld = new ArrayList<Vector3D>();
+    ArrayList<Vector3D> coordsNew = new ArrayList<Vector3D>();
     
     public TranslateFloat(ArrayList<Long> ids, ArrayList<Vector3D> coordsOld,
             ArrayList<Vector3D> coordsNew){
-        this.ids = ids;
-        this.coordsOld = coordsOld;
-        this.coordsNew = coordsNew;
+        
+        if(ids == null || coordsOld == null || coordsNew == null)
+            return;
+        
+        this.ids.addAll(ids);
+        this.coordsOld.addAll(coordsOld);
+        this.coordsNew.addAll(coordsNew);
         
     }
 

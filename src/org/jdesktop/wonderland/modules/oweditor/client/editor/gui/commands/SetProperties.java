@@ -11,7 +11,7 @@ import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.GUIObse
  */
 public class SetProperties implements Command{
     
-    private ArrayList<Command> commands = null;
+    private ArrayList<Command> commands = new ArrayList<Command>();
     
     /**
      * Creates a new properties changed command.
@@ -25,8 +25,6 @@ public class SetProperties implements Command{
      */
     public SetProperties(Command rename, Command translation, Command rotation, 
             Command scale, Command setImage, ArrayList<Command> furtherCommands){
-        
-        commands = new ArrayList<Command>();
         
         if(rename != null)
             commands.add(rename);

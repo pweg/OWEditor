@@ -16,11 +16,6 @@ public class ScaleTranslate implements Command{
     
     Command translate = null;
     Command scale = null;
-    ArrayList<Long> ids;
-    ArrayList<Point> coordsOld;
-    ArrayList<Double> scaleOld;
-    ArrayList<Point> coordsNew;
-    ArrayList<Double> scaleNew;
     
     public ScaleTranslate(ArrayList<Long> ids, ArrayList<Point> coordsOld,
             ArrayList<Double> scaleOld, ArrayList<Point> coordsNew,

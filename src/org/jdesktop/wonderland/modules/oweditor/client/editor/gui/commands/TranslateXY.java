@@ -16,15 +16,19 @@ import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.GUIObse
  */
 public class TranslateXY implements Command{
 
-    ArrayList<Long> ids;
-    ArrayList<Point> coordsOld;
-    ArrayList<Point> coordsNew;
+    ArrayList<Long> ids = new ArrayList<Long>();
+    ArrayList<Point> coordsOld = new ArrayList<Point>();
+    ArrayList<Point> coordsNew = new ArrayList<Point>();
     
     public TranslateXY(ArrayList<Long> ids, ArrayList<Point> coordsOld,
             ArrayList<Point> coordsNew){
-        this.ids = ids;
-        this.coordsOld = coordsOld;
-        this.coordsNew = coordsNew;
+        
+        if(ids == null || coordsOld == null || coordsNew == null)
+            return;
+        
+        this.ids.addAll(ids);
+        this.coordsOld.addAll(coordsOld);
+        this.coordsNew.addAll(coordsNew);
         
     }
 

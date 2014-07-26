@@ -11,23 +11,26 @@ import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.GUIObse
  */
 public class SetImage implements Command{
     
-    private ArrayList<Long> ids = null;
-    private ArrayList<String> oldName = null;
-    private ArrayList<String> oldDir = null;
-    private ArrayList<String> newName = null;
-    private ArrayList<String> newDir = null;
+    private ArrayList<Long> ids = new ArrayList<Long>();
+    private ArrayList<String> oldName = new ArrayList<String>();
+    private ArrayList<String> oldDir = new ArrayList<String>();
+    private ArrayList<String> newName = new ArrayList<String>();
+    private ArrayList<String> newDir = new ArrayList<String>();
     
     public SetImage(ArrayList<Long> ids, 
             ArrayList<String> oldName, ArrayList<String> oldDir, 
             ArrayList<String> newName, ArrayList<String> newDir){
-        this.ids = ids;
-        this.oldName = oldName;
-        this.oldDir = oldDir;
-        this.newName = newName;
-        this.newDir = newDir;
         
-        if(ids == null)
-            this.ids = new ArrayList<Long>();
+        if(ids == null || oldName == null || oldDir == null ||
+                newName == null || newDir == null)
+            return;
+        
+        this.ids.addAll(ids);
+        this.oldName.addAll(oldName);
+        this.oldDir.addAll(oldDir);
+        this.newName.addAll(newName);
+        this.newDir.addAll(newDir);
+        
     }
 
     @Override

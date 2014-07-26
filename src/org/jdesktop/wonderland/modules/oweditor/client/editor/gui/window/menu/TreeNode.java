@@ -33,7 +33,8 @@ public class TreeNode {
      * @param children The children.
      */
     public void setChildren(ArrayList<TreeNode> children) {
-        this.children = children;
+        this.children.clear();
+        this.children.addAll(children);
     }
     
     /**

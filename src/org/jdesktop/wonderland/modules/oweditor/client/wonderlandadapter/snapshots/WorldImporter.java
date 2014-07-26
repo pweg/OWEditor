@@ -60,6 +60,7 @@ import org.jdesktop.wonderland.modules.contentrepo.common.ContentNode;
 import org.jdesktop.wonderland.modules.contentrepo.common.ContentRepositoryException;
 import org.jdesktop.wonderland.modules.contentrepo.common.ContentResource;
 import org.jdesktop.wonderland.modules.contentrepo.common.ContentNode.Type;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.IWaitingDialog;
 import org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter.snapshots.SnapshotArchive.ServerStateHolder;
 
 /**
@@ -82,22 +83,24 @@ public class WorldImporter  {
      * Imports a file.
      * 
      * @param file The file to import.
+     * @param dialog A waiting dialog.
      */
-    public void importFile(File file) 
+    public void importFile(File file, IWaitingDialog dialog) 
     {
         //1) Unpackage the .wlexport archive
         //Unpack into temporary directory
         //upload resources to server
 
         try {
+            dialog.setText("unpacking");
             SnapshotArchive archive = new SnapshotArchive();
             archive.unpackArchive(file);
             
-            uploadContent(archive);
+            uploadContent(archive, dialog);
                 
             //2) Recreate server state from xml
             //3) Create cells from server states
-            createCells(archive.getServerStates(), null);
+            createCells(archive.getServerStates(), null, dialog);
             
         } catch (IOException e) {
             LOGGER.log(Level.WARNING, "Error processing archive " + file,e);
@@ -107,7 +110,8 @@ public class WorldImporter  {
         }
     }
 
-    public void uploadContent(SnapshotArchive archive) throws RuntimeException{
+    public void uploadContent(SnapshotArchive archive, IWaitingDialog dialog) 
+            throws RuntimeException{
         Cell cell = ClientContextJME.getViewManager().getPrimaryViewCell();
         WonderlandSession session = cell.getCellCache().getSession();
         ContentRepositoryRegistry registry = ContentRepositoryRegistry.getInstance();
@@ -128,6 +132,8 @@ public class WorldImporter  {
 
             //for each resource file in the archive...
             for(File file : archive.getContent()) {
+                
+                dialog.setText("uploading " + file.getName());
                                 
                 //grab directory pointer if available
                 File fileRoot = new File(archive.getArchiveRoot(),"content");
@@ -266,7 +272,8 @@ public class WorldImporter  {
         return text.substring(0, startIndex) + "wlcontent://users/"+ username + text.substring(i1);
 
     }
-    public void createCells(List <ServerStateHolder> serverStates, CellID parentID) {
+    public void createCells(List <ServerStateHolder> serverStates, CellID parentID,
+            IWaitingDialog dialog) {
         // recursively create cells based on tree of ServerStateHolders
         // decode on the fly using restoreServerState()
         
@@ -308,7 +315,8 @@ public class WorldImporter  {
 
                 CellID cellID = createCell(state, parentID);
                 if (cellID != null) {
-                    createCells(stateHolder.getHolders(), cellID);
+                    dialog.setText(stateHolder.getState().getName());
+                    createCells(stateHolder.getHolders(), cellID, dialog);
                 }
             } catch (IOException e) {
                 LOGGER.warning("Could not restore state, continuing...");

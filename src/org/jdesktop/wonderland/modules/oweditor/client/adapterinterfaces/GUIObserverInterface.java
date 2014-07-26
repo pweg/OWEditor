@@ -2,6 +2,8 @@ package org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces;
 
 import java.util.ArrayList;
 
+import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.IWaitingDialog;
+
 /**
  * This interface is used between the adapter and the gui,
  * in order to set updates made in the gui.
@@ -263,14 +265,14 @@ public interface GUIObserverInterface {
      * 
      * @param filepath The filepath.
      */
-    public void loadWorld(String filepath);
+    public void loadWorld(String filepath, IWaitingDialog dialog);
 
     /**
      * Saves a world to a file.
      * 
      * @param filepath The filepath.
      */
-    public void saveWorld(String filepath);
+    public void saveWorld(String filepath, IWaitingDialog dialog);
     
 
 }

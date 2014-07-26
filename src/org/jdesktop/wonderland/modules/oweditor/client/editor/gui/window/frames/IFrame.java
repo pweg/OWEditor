@@ -3,6 +3,7 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.frames
 import java.awt.event.KeyListener;
 import java.awt.event.MouseWheelListener;
 
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
 import javax.swing.event.MouseInputAdapter;
@@ -163,5 +164,13 @@ public interface IFrame {
      * @param y The y coordinate.
      */
     public void setToolbarCoords(String x, String y);
+
+    /**
+     * Returns the waiting dialog used for loading and saving.
+     * 
+     * @param string The text of the dialog
+     * @return The dialog
+     */
+    public JDialog getWaitingDialog(String text);
 
 }

@@ -11,11 +11,12 @@ import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.GUIObse
  */
 public class AddComponent implements Command{
     
-    private ArrayList<Long> ids = null;
+    private ArrayList<Long> ids = new ArrayList<Long>();
     private byte component;
     
     public AddComponent(ArrayList<Long> ids, byte component){
-        this.ids = ids;
+        if(ids != null)
+            this.ids.addAll(ids);
         this.component = component;
     }
 

@@ -572,7 +572,7 @@ public class ImportFrame extends javax.swing.JFrame {
             moduleNameField.setText(tokens[0]);
         }
         
-        loadingDialog = new LoadingDialog(this);
+        loadingDialog = new WaitingDialog(this, BUNDLE.getString("Dialog_Loading"));
         //a new thread is created because loading blocks
         //the frame thread.
         new Thread(){
@@ -714,7 +714,7 @@ public class ImportFrame extends javax.swing.JFrame {
         final double rot_zf = rot_z;
         final double scalef = scale;
 
-        loadingDialog = new LoadingDialog(this);
+        loadingDialog = new WaitingDialog(this, BUNDLE.getString("Dialog_Loading"));
         
         new Thread(){
                 @Override

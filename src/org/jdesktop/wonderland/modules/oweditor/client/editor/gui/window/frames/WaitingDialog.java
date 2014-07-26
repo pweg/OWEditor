@@ -2,7 +2,6 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.frames
 
 import java.awt.Font;
 import java.awt.GridBagLayout;
-import java.util.ResourceBundle;
 
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -10,6 +9,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRootPane;
 import javax.swing.border.EtchedBorder;
+
+import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.IWaitingDialog;
 
 /**
  * This is a dialog that should be shown, when loading.
@@ -22,15 +23,15 @@ import javax.swing.border.EtchedBorder;
  * 
  * @author Patrick
  */
-public final class LoadingDialog extends JDialog{
+public final class WaitingDialog extends JDialog implements IWaitingDialog {
     private static final long serialVersionUID = 1003;
     
-    private static final ResourceBundle BUNDLE = ResourceBundle.getBundle(
-            "org/jdesktop/wonderland/modules/oweditor/client/resources/Bundle");
+    private String title = "";
         
-    public LoadingDialog(JFrame frame){
+    public WaitingDialog(JFrame frame, String title){
         //super(BUNDLE.getString("Dialog_Loading"));
-        super(frame, BUNDLE.getString("Dialog_Loading"), true);
+        super(frame, title, true);
+        this.title = title;
         
         initComponents();
         setLocationRelativeTo(frame);
@@ -41,12 +42,12 @@ public final class LoadingDialog extends JDialog{
         setUndecorated(true);
         getRootPane().setWindowDecorationStyle(JRootPane.NONE);
         
-        setSize(200, 100);
+        setSize(300, 120);
         
         JPanel pan=new JPanel();
         pan.setLayout(new GridBagLayout());
         
-        JLabel label = new JLabel(BUNDLE.getString("Dialog_Loading"));
+        label = new JLabel(title);
         Font labelFont = label.getFont();
         label.setFont(new Font(labelFont.getName(), Font.PLAIN, 15));
         
@@ -56,5 +57,14 @@ public final class LoadingDialog extends JDialog{
         
         add(pan);
     }
-
+    
+    @Override
+    public void setText(String text){
+        if(text.length() > 28)
+            text = text.substring(0,25)+"...";
+        
+        label.setText(title + " " + text);
+    }
+    
+    JLabel label;
 }

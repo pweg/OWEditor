@@ -12,6 +12,7 @@ import org.jdesktop.wonderland.client.cell.Cell;
 import org.jdesktop.wonderland.client.cell.CellCache;
 import org.jdesktop.wonderland.common.cell.CellID;
 import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.GUIObserverInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.IWaitingDialog;
 import org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter.snapshots.WorldExporter;
 import org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter.snapshots.WorldImporter;
 import org.jdesktop.wonderland.modules.security.client.SecurityQueryComponent;
@@ -147,42 +148,34 @@ public class GUIEventManager implements GUIObserverInterface{
         
         //if the object currently exists, no udno removal is necessary.
         
-        LOGGER.warning("1");
         if(ac.bm.isActive(id)){
             LOGGER.warning("UNDOING active removal");
             throw new GUIEventException();
         }
         
-        LOGGER.warning("2");
         Cell cell = ac.bm.getActiveCell(id);
         
         if(cell == null)
                 cell = ac.bm.getCell(id);
         
-        LOGGER.warning("3");
         if(cell == null){
             LOGGER.warning("UNDO REMVOAL FAILED");
             throw new GUIEventException();
         }
-        LOGGER.warning("4");
         
         Vector3f coordinates = CellInfoReader.getCoordinates(cell);
         String name = cell.getName() ;
         name = ac.cnm.createUndoName(ac.sm.getSession(), id, name);
         
-        LOGGER.warning("5");
         float y = coordinates.z;
         float z = coordinates.y;
         
-        LOGGER.warning("6");
         //swap coordinates in order to not get mixed up later.
         coordinates.y = y;
         coordinates.z = z;
-        LOGGER.warning("7");
         
         ac.ltm.addTranslation(name, coordinates);        
         ac.sc.paste(cell, name);
-        LOGGER.warning("8");
     }
 
     @Override
@@ -350,23 +343,23 @@ public class GUIEventManager implements GUIObserverInterface{
         }
     }
 
-    public void loadWorld(String filepath) {
+    @Override
+    public void loadWorld(String filepath, IWaitingDialog dialog) {
         LOGGER.warning(filepath);
         if(filepath == null)
             return;
         
         File file = new File(filepath);
         
-        if(file != null && file.exists() && file.canRead())
-            WorldImporter.getInstance().importFile(file);
+        if(file.exists() && file.canRead())
+            WorldImporter.getInstance().importFile(file, dialog);
     }
 
-    public void saveWorld(String filepath) {
+    @Override
+    public void saveWorld(String filepath, IWaitingDialog dialog) {
         if(filepath == null)
             return;
-        
-        File file = new File(filepath);
-        if (file != null && file.exists() && file.canWrite()) 
-            WorldExporter.getInstance().exportAllCells(file);
+        File file = new File(filepath); 
+        WorldExporter.getInstance().exportAllCells(file, dialog);
     }
 }

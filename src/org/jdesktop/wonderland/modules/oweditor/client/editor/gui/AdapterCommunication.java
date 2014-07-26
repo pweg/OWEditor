@@ -28,6 +28,7 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.commands.Trans
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.commands.Vector3D;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.IWindow;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.frames.IPermissionTableEntry;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.IWaitingDialog;
 
 /**
  * This class is used to forward events from the gui to the 
@@ -495,17 +496,18 @@ public class AdapterCommunication implements IAdapterCommunication{
     }
 
     @Override
-    public void loadWorld(String filepath) {
+    public void loadWorld(String filepath, IWaitingDialog dialog) {
         redoList.clear();
         undoList.clear();
         
-        goi.loadWorld(filepath);
+        goi.loadWorld(filepath, dialog);
     }
 
     @Override
-    public void saveWorld(String filepath) {
-        goi.saveWorld(filepath);
+    public void saveWorld(String filepath, IWaitingDialog dialog) {
+        goi.saveWorld(filepath, dialog);
     }
+
     
     
 }

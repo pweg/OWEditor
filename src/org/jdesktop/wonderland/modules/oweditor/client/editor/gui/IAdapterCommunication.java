@@ -3,6 +3,8 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.gui;
 import java.awt.Point;
 import java.util.ArrayList;
 
+import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.IWaitingDialog;
+
 public interface IAdapterCommunication {
     
     /**
@@ -187,13 +189,13 @@ public interface IAdapterCommunication {
      * 
      * @param filepath The path to the file to load.
      */
-    public void loadWorld(String filepath);
+    public void loadWorld(String filepath, IWaitingDialog dialog);
 
     /**
      * Saves a world from to a file.
      * 
      * @param filepath The path to the file to save.
      */
-    public void saveWorld(String filepath);
+    public void saveWorld(String filepath, IWaitingDialog dialog);
     
 }

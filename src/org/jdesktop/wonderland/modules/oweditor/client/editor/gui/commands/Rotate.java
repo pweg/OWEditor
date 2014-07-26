@@ -11,20 +11,21 @@ import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.GUIObse
  */
 public class Rotate implements Command{
     
-    ArrayList<Long> ids;
-    ArrayList<Vector3D> rotationOld;
-    ArrayList<Vector3D> rotationNew;
+    ArrayList<Long> ids = new ArrayList<Long>();
+    ArrayList<Vector3D> rotationOld = new ArrayList<Vector3D>();
+    ArrayList<Vector3D> rotationNew= new ArrayList<Vector3D>();
     
     public Rotate(ArrayList<Long> ids, 
             ArrayList<Vector3D> rotationOld, ArrayList<Vector3D> rotationNew){
         
-        this.ids = ids;
-        this.rotationOld = rotationOld;
-        this.rotationNew = rotationNew;
-
         //null pointer prevention
-        if(ids == null)
-            this.ids = new ArrayList<Long>();
+        if(ids == null || rotationOld == null || rotationNew == null)
+            return;
+        
+        this.ids.addAll(ids);
+        this.rotationOld.addAll(rotationOld);
+        this.rotationNew.addAll(rotationNew);
+
     }
 
 

@@ -2,12 +2,16 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window;
 
 import java.io.File;
 import java.util.ResourceBundle;
+import java.util.logging.Logger;
 
+import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.input.IInputToWindow;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.IWaitingDialog;
+import org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter.snapshots.WorldExporter;
 
 /**
  * The interface implementation for the menu package.
@@ -119,13 +123,34 @@ public class WindowToMenu implements IWindowToMenu{
                 lastDir += ".wlexport";
             }
 
-            wc.adapter.setObjectRemoval(wc.graphic.getAllIDs());  
-            wc.adapter.loadWorld(lastDir);
+            wc.adapter.setObjectRemoval(wc.graphic.getAllIDs());
+            
+            final JDialog dialog = 
+                    wc.frame.getWaitingDialog(BUNDLE.getString("Dialog_Loading"));
+            
+            new Thread(){
+                @Override
+                public void run(){
+                    wc.adapter.loadWorld(lastDir, (IWaitingDialog) dialog);
+                    
+                    //wait for loading dialog to be ready.
+                    while(!dialog.isVisible()){
+                        yield();
+                    }
+                    dialog.dispose();
+                    
+                }
+            
+            }.start();
+            dialog.setLocationRelativeTo(wc.frame.getMainframe());
+            dialog.setVisible(true);
+            
         }
     }
 
     @Override
     public void saveWorld() {
+        final Logger LOGGER = Logger.getLogger(WorldExporter.class.getName());
         JFileChooser chooser = new JFileChooser(new File (lastDir));
         chooser.setApproveButtonText(BUNDLE.getString("Save"));
         chooser.setMultiSelectionEnabled(false);
@@ -140,7 +165,29 @@ public class WindowToMenu implements IWindowToMenu{
                 lastDir += ".wlexport";
             }
 
-            wc.adapter.saveWorld(lastDir);
+            
+            final JDialog dialog = 
+                    wc.frame.getWaitingDialog(BUNDLE.getString("Dialog_Saving"));
+            
+            new Thread(){
+                @Override
+                public void run(){
+                    wc.adapter.saveWorld(lastDir, (IWaitingDialog) dialog);
+                    
+                    //wait for loading dialog to be ready.
+                    while(!dialog.isVisible()){
+                        yield();
+                    }
+                    dialog.dispose();
+                    
+                }
+            
+            }.start();
+            dialog.setLocationRelativeTo(wc.frame.getMainframe());
+            dialog.setVisible(true);
+        }else{
+            
+        LOGGER.warning("disabprove");
         }
     }
 

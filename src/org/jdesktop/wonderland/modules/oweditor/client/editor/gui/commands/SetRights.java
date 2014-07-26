@@ -26,7 +26,7 @@ public class SetRights implements Command{
     private boolean newMove;
     private boolean newView;
     private boolean toRemove;
-    private ArrayList<Long> ids;
+    private ArrayList<Long> ids = new ArrayList<Long>();
     
     public SetRights(ArrayList<Long> ids,
             String oldType, String oldName, boolean oldOwner, 
@@ -35,7 +35,10 @@ public class SetRights implements Command{
             String newType, String newName, boolean newOwner, 
             boolean newAddSubObjects, boolean newChangeAbilities,
             boolean newMove, boolean newView, boolean toRemove){
-        this.ids = ids;
+        if(ids == null)
+            return;
+        
+        this.ids.addAll(ids);
         this.oldName = oldName;
         this.oldType = oldType;
         this.oldOwner = oldOwner;

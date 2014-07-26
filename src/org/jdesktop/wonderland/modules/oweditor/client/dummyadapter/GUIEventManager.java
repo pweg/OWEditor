@@ -9,6 +9,7 @@ import java.util.ResourceBundle;
 import javax.imageio.ImageIO;
 
 import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.GUIObserverInterface;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.IWaitingDialog;
 
 /**
  * This class is used to make updates the client makes in
@@ -295,13 +296,13 @@ public class GUIEventManager implements GUIObserverInterface{
     }
 
     @Override
-    public void loadWorld(String filepath) {
+    public void loadWorld(String filepath, IWaitingDialog dialog) {
         //does nothing
         
     }
 
     @Override
-    public void saveWorld(String filepath) {
+    public void saveWorld(String filepath, IWaitingDialog dialog) {
         //does nothing
     }
 
