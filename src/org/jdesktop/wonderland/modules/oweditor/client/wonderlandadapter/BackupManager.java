@@ -2,7 +2,9 @@ package org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.Set;
 import java.util.logging.Logger;
 import org.jdesktop.wonderland.client.cell.Cell;
 
@@ -79,6 +81,27 @@ public class BackupManager {
             return;
         
         backup.remove(id);
+    }
+    
+    /**
+     * Cleans all lists, except copy and backup.
+     * Backup only keeps the items with ids in the copy list.
+     */
+    public void clean(){
+        
+        Set<Long> keys = new HashSet<Long>();
+        keys.addAll(backup.keySet());
+
+        for (long key : keys) {
+            if(!copyList.contains(key))
+                backup.remove(key);
+        }
+            
+        originalIDs.clear();
+        lastActiveID.clear();
+        undoCreationList.clear();
+        redoCreationList.clear();
+        whiteList.clear();
     }
     
     /**

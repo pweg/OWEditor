@@ -345,7 +345,6 @@ public class GUIEventManager implements GUIObserverInterface{
 
     @Override
     public void loadWorld(String filepath, IWaitingDialog dialog) {
-        LOGGER.warning(filepath);
         if(filepath == null)
             return;
         
@@ -361,5 +360,11 @@ public class GUIEventManager implements GUIObserverInterface{
             return;
         File file = new File(filepath); 
         WorldExporter.getInstance().exportAllCells(file, dialog);
+    }
+
+    @Override
+    public void removeAllObjects() {
+        ac.bm.clean();
+        ac.sc.removeAll();
     }
 }

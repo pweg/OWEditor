@@ -10,6 +10,7 @@ import com.jme.math.Quaternion;
 import com.jme.math.Vector3f;
 import java.io.File;
 import java.text.MessageFormat;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -21,10 +22,13 @@ import org.jdesktop.wonderland.client.cell.registry.CellComponentRegistry;
 import org.jdesktop.wonderland.client.cell.registry.spi.CellComponentFactorySPI;
 import org.jdesktop.wonderland.client.cell.utils.CellUtils;
 import org.jdesktop.wonderland.client.comms.WonderlandSession;
+import org.jdesktop.wonderland.client.jme.utils.ScenegraphUtils;
 import org.jdesktop.wonderland.common.cell.CellEditConnectionType;
 import org.jdesktop.wonderland.common.cell.CellID;
 import org.jdesktop.wonderland.common.cell.CellTransform;
+import org.jdesktop.wonderland.common.cell.MultipleParentException;
 import org.jdesktop.wonderland.common.cell.messages.CellDuplicateMessage;
+import org.jdesktop.wonderland.common.cell.messages.CellReparentMessage;
 import org.jdesktop.wonderland.common.cell.messages.CellServerComponentMessage;
 import org.jdesktop.wonderland.common.cell.messages.CellServerComponentResponseMessage;
 import org.jdesktop.wonderland.common.cell.messages.CellServerStateRequestMessage;
@@ -186,13 +190,47 @@ public class ServerCommunication {
      * @throws org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter.ServerCommException
      */
     public void remove(long id) throws ServerCommException{
-        
         Cell cell = getCell(id);
-        
+            
         if(cell == null)
             throw new ServerCommException();
-        
+            
+        Collection<Cell> childs = cell.getChildren();
+        Cell newParent = cell.getParent();
+            
+        for(Cell child : childs){
+            changeChild(newParent, child);
+        }
+            
         CellUtils.deleteCell(cell);
+    }
+    
+    public void changeChild(Cell newParent, Cell child){
+        CellID newParentID = CellID.getInvalidCellID();
+        
+        CellTransform newParentWorld = new CellTransform(null, null);
+        if (newParent != null) {
+            newParentWorld = newParent.getWorldTransform();
+            newParentID = newParent.getCellID();
+        }
+        
+        CellTransform newChildLocal = ScenegraphUtils.computeChildTransform(
+                    newParentWorld, child.getWorldTransform());
+        
+        CellEditChannelConnection connection =
+                   (CellEditChannelConnection) ac.sm.getSession().getConnection(
+                   CellEditConnectionType.CLIENT_TYPE);
+        connection.send(new CellReparentMessage(child.getCellID(), 
+                newParentID, newChildLocal));
+    }
+    
+    public void removeAll() {
+         CellCache cache = ac.sm.getCellCache();
+         
+        Collection<Cell> rootCells = cache.getRootCells();
+        for (Cell rootCell : rootCells) {
+            CellUtils.deleteCell(rootCell);
+        }
     }
     
     /**

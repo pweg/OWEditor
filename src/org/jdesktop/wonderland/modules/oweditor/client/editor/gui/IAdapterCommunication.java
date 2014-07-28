@@ -183,6 +183,11 @@ public interface IAdapterCommunication {
      * @param ids The object ids.
      */
     public void updateObjects(ArrayList<Long> ids);
+    
+    /**
+     * Removes all objects on the server.
+     */
+    public void removeAll();
 
     /**
      * Loads a world from a file.

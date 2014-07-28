@@ -264,6 +264,7 @@ public interface GUIObserverInterface {
      * Loads a world from a file.
      * 
      * @param filepath The filepath.
+     * @param dialog The waiting dialog to be filled with infos.
      */
     public void loadWorld(String filepath, IWaitingDialog dialog);
 
@@ -271,8 +272,14 @@ public interface GUIObserverInterface {
      * Saves a world to a file.
      * 
      * @param filepath The filepath.
+     * @param dialog The waiting dialog to be filled with infos.
      */
     public void saveWorld(String filepath, IWaitingDialog dialog);
+
+    /**
+     * Removes all objects from the current world. 
+     */
+    public void removeAllObjects();
     
 
 }

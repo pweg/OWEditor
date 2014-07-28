@@ -55,7 +55,9 @@ public class WorldBuilder {
         Collection<Cell> rootCells = cache.getRootCells();
         for (Cell rootCell : rootCells) {
             iterateChilds(rootCell);
+            changeChildren(rootCell);
         }
+        
         
         /*for(Cell cell : cells){
             sua.creationEvent(cell);
@@ -81,6 +83,22 @@ public class WorldBuilder {
     }
     
     /**
+     * Gives every child to the root cell. This is important, because
+     * OWL changes the cell coordinates when the cells have other parents.
+     * 
+     * @param cell The cell to iterate through the children.
+     */
+    private void changeChildren(Cell cell){
+        Collection<Cell> childs = cell.getChildren();
+   
+        for(Cell child : childs)
+        {
+            changeChildren(child);
+            ac.sc.changeChild(null, child);
+        }
+    }
+    
+    /**
      * Gets the serverlist and stores it.
      */
     private void setServer(){
@@ -88,7 +106,7 @@ public class WorldBuilder {
         Collection<ServerSessionManager> servers = LoginManager.getAll();
         
         String[] serverList = new String[servers.size()];
-            //@Todo: Make a selection option in the gui!
+        
         int i = 0;
         for (ServerSessionManager server : servers) {
             serverList[i] = server.getServerNameAndPort();

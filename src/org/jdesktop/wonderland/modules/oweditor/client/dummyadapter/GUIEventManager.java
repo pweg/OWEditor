@@ -306,4 +306,10 @@ public class GUIEventManager implements GUIObserverInterface{
         //does nothing
     }
 
+    @Override
+    public void removeAllObjects() {
+        for(ServerObject o : ac.server.getObjects())
+            ac.sem.serverRemovalEvent(o.id);
+    }
+
 }

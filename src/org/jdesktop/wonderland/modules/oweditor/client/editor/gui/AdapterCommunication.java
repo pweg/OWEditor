@@ -494,6 +494,14 @@ public class AdapterCommunication implements IAdapterCommunication{
         for(long id : ids)
             goi.updateObjects(id);
     }
+    
+    @Override
+    public void removeAll() {
+        redoList.clear();
+        undoList.clear();
+        goi.removeAllObjects();
+    }
+
 
     @Override
     public void loadWorld(String filepath, IWaitingDialog dialog) {
@@ -507,7 +515,6 @@ public class AdapterCommunication implements IAdapterCommunication{
     public void saveWorld(String filepath, IWaitingDialog dialog) {
         goi.saveWorld(filepath, dialog);
     }
-
     
     
 }

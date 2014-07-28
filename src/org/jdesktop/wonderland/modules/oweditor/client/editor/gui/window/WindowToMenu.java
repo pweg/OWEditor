@@ -11,6 +11,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.input.IInputToWindow;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.IWaitingDialog;
+import org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter.GUIEventManager;
 import org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter.snapshots.WorldExporter;
 
 /**
@@ -88,12 +89,13 @@ public class WindowToMenu implements IWindowToMenu{
 
     @Override
     public void deleteAll() {
+        
         int dialogResult = JOptionPane.showConfirmDialog (
                 null, BUNDLE.getString("DialogWarningDeleteAll"),
                 BUNDLE.getString("Warning"),
                 JOptionPane.YES_NO_OPTION);
         if(dialogResult == JOptionPane.YES_OPTION){
-            wc.adapter.setObjectRemoval(wc.graphic.getAllIDs());  
+            wc.adapter.removeAll();
         }
     }
 
