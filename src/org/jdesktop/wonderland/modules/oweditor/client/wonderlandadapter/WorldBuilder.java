@@ -1,8 +1,6 @@
 package org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.jdesktop.wonderland.client.cell.Cell;
 import org.jdesktop.wonderland.client.cell.CellCache;
@@ -55,7 +53,7 @@ public class WorldBuilder {
         Collection<Cell> rootCells = cache.getRootCells();
         for (Cell rootCell : rootCells) {
             iterateChilds(rootCell);
-            changeChildren(rootCell);
+            //changeChildren(rootCell);
         }
         
         
@@ -79,22 +77,6 @@ public class WorldBuilder {
         for(Cell child : childs)
         {
             iterateChilds(child);
-        }
-    }
-    
-    /**
-     * Gives every child to the root cell. This is important, because
-     * OWL changes the cell coordinates when the cells have other parents.
-     * 
-     * @param cell The cell to iterate through the children.
-     */
-    private void changeChildren(Cell cell){
-        Collection<Cell> childs = cell.getChildren();
-   
-        for(Cell child : childs)
-        {
-            changeChildren(child);
-            ac.sc.changeChild(null, child);
         }
     }
     

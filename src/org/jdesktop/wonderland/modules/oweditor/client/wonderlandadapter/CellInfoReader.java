@@ -11,6 +11,7 @@ import com.jme.bounding.BoundingSphere;
 import com.jme.bounding.BoundingVolume;
 import com.jme.math.Quaternion;
 import com.jme.math.Vector3f;
+import java.util.logging.Logger;
 import org.jdesktop.wonderland.client.cell.Cell;
 import org.jdesktop.wonderland.common.cell.CellTransform;
 
@@ -43,7 +44,7 @@ public class CellInfoReader {
             v.width= sphere.radius*2;
             v.height= sphere.radius*2;
         }
-        CellTransform transform = cell.getLocalTransform();
+        CellTransform transform = cell.getWorldTransform();
         Vector3f transl = transform.getTranslation(null);
                 
         /*
@@ -82,7 +83,7 @@ public class CellInfoReader {
     public static Vector3f getRotation(Cell cell){
         Vector3f vector = new Vector3f();
         
-        CellTransform transform = cell.getLocalTransform();
+        CellTransform transform = cell.getWorldTransform();
         Quaternion rotation = transform.getRotation(null);
         float[] angles = rotation.toAngles(new float[3]);
         
@@ -100,7 +101,7 @@ public class CellInfoReader {
      * @return A float value, holding the cells scale.
      */
     public static float getScale(Cell cell){
-        CellTransform transform = cell.getLocalTransform();
+        CellTransform transform = cell.getWorldTransform();
         
         return transform.getScaling();
     }

@@ -26,7 +26,6 @@ import org.jdesktop.wonderland.client.jme.utils.ScenegraphUtils;
 import org.jdesktop.wonderland.common.cell.CellEditConnectionType;
 import org.jdesktop.wonderland.common.cell.CellID;
 import org.jdesktop.wonderland.common.cell.CellTransform;
-import org.jdesktop.wonderland.common.cell.MultipleParentException;
 import org.jdesktop.wonderland.common.cell.messages.CellDuplicateMessage;
 import org.jdesktop.wonderland.common.cell.messages.CellReparentMessage;
 import org.jdesktop.wonderland.common.cell.messages.CellServerComponentMessage;
@@ -97,13 +96,32 @@ public class ServerCommunication {
 
         if (movableComponent != null) {
             CellTransform cellTransform = cell.getLocalTransform();
-            cellTransform.setTranslation(translation);
+            
+            Vector3f trans = getTranslation(cell, translation); 
+            
+            cellTransform.setTranslation(trans);
             movableComponent.localMoveRequest(cellTransform);
         }else{
             LOGGER.log(Level.WARNING, "Movable component of cell " +id+
                     " is null");
             throw new ServerCommException();
         }
+    }
+    
+    private Vector3f getTranslation(Cell cell, Vector3f coords){
+        CellTransform cellTransform = cell.getLocalTransform();
+        
+        cellTransform.setTranslation(coords);
+        
+        Cell parent = cell.getParent();
+        
+        if(parent == null)
+            return coords;
+        
+        CellTransform parentTransform = parent.getWorldTransform();
+        
+        return ScenegraphUtils.computeChildTransform(
+                parentTransform, cellTransform).getTranslation(null);
     }
     
     /**
