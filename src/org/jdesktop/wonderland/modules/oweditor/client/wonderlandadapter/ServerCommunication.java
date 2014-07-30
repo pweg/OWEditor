@@ -95,11 +95,8 @@ public class ServerCommunication {
         MovableComponent movableComponent = cell.getComponent(MovableComponent.class);
 
         if (movableComponent != null) {
-            CellTransform cellTransform = cell.getLocalTransform();
             
-            Vector3f trans = getTranslation(cell, translation); 
-            
-            cellTransform.setTranslation(trans);
+            CellTransform cellTransform = getLocalTranslation(cell, translation); 
             movableComponent.localMoveRequest(cellTransform);
         }else{
             LOGGER.log(Level.WARNING, "Movable component of cell " +id+
@@ -108,20 +105,29 @@ public class ServerCommunication {
         }
     }
     
-    private Vector3f getTranslation(Cell cell, Vector3f coords){
-        CellTransform cellTransform = cell.getLocalTransform();
+    /**
+     * Transforms world cell transform into local transform for 
+     * translation.
+     * 
+     * @param cell The cell to transform.
+     * @param coords The coordinates
+     * @return The local cell transform
+     */
+    private CellTransform getLocalTranslation(Cell cell, Vector3f coords){
+        CellTransform cellTransform = cell.getWorldTransform();
         
         cellTransform.setTranslation(coords);
         
         Cell parent = cell.getParent();
         
+        //These cells are directly in the root cell.
         if(parent == null)
-            return coords;
+            return cellTransform;
         
         CellTransform parentTransform = parent.getWorldTransform();
         
         return ScenegraphUtils.computeChildTransform(
-                parentTransform, cellTransform).getTranslation(null);
+                parentTransform, cellTransform);
     }
     
     /**
@@ -149,12 +155,36 @@ public class ServerCommunication {
                 { rotation.x, rotation.y, rotation.z });
         
         if (movableComponent != null) {
-            CellTransform cellTransform = cell.getLocalTransform();
-            cellTransform.setRotation(newRotation);
+            CellTransform cellTransform = getLocalRotation(cell, newRotation);
             movableComponent.localMoveRequest(cellTransform);
         }else{
             throw new ServerCommException();
         }
+    }
+    
+    /**
+     * Transforms world cell transform into local transform for 
+     * rotation.
+     * 
+     * @param cell The cell to transform.
+     * @param coords The coordinates
+     * @return The local cell transform
+     */
+    private CellTransform getLocalRotation(Cell cell, Quaternion rotation){
+        CellTransform cellTransform = cell.getWorldTransform();
+        
+        cellTransform.setRotation(rotation);
+        
+        Cell parent = cell.getParent();
+        
+        //These cells are directly in the root cell.
+        if(parent == null)
+            return cellTransform;
+        
+        CellTransform parentTransform = parent.getWorldTransform();
+        
+        return ScenegraphUtils.computeChildTransform(
+                parentTransform, cellTransform);
     }
     
     /**
@@ -178,12 +208,36 @@ public class ServerCommunication {
         MovableComponent movableComponent = cell.getComponent(MovableComponent.class);
         
         if (movableComponent != null) {
-            CellTransform cellTransform = cell.getLocalTransform();
-            cellTransform.setScaling((float) scale);
+            CellTransform cellTransform = getLocalScale(cell, scale);
             movableComponent.localMoveRequest(cellTransform);
         }else{
             throw new ServerCommException();
         }
+    }
+    
+    /**
+     * Transforms world cell transform into local transform for 
+     * scaling.
+     * 
+     * @param cell The cell to transform.
+     * @param scale The new scale.
+     * @return The local cell transform
+     */
+    private CellTransform getLocalScale(Cell cell, float scale){
+        CellTransform cellTransform = cell.getWorldTransform();
+        
+        cellTransform.setScaling(scale);
+        
+        Cell parent = cell.getParent();
+        
+        //These cells are directly in the root cell.
+        if(parent == null)
+            return cellTransform;
+        
+        CellTransform parentTransform = parent.getWorldTransform();
+        
+        return ScenegraphUtils.computeChildTransform(
+                parentTransform, cellTransform);
     }
     
     /**

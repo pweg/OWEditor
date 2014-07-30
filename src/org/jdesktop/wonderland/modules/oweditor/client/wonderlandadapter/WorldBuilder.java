@@ -53,14 +53,7 @@ public class WorldBuilder {
         Collection<Cell> rootCells = cache.getRootCells();
         for (Cell rootCell : rootCells) {
             iterateChilds(rootCell);
-            //changeChildren(rootCell);
         }
-        
-        
-        /*for(Cell cell : cells){
-            sua.creationEvent(cell);
-        }
-        cells.clear();*/
     }
     
     /**

@@ -68,7 +68,7 @@ public class WonderlandAdapterController implements AdapterMainInterface{
             sem.setUserDir(fm.getUserDir());
             sem.setImageLib(fm.getUserLib());
         } catch (ContentRepositoryException ex) {
-            Logger.getLogger(WonderlandAdapterController.class.getName()).log(Level.SEVERE, null, ex);
+            //Logger.getLogger(WonderlandAdapterController.class.getName()).log(Level.SEVERE, null, ex);
         }
         
         WorldBuilder builder = new WorldBuilder(this, sem);
