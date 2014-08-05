@@ -1,7 +1,5 @@
 package org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.jdesktop.wonderland.client.cell.CellManager;
 import org.jdesktop.wonderland.modules.contentrepo.common.ContentRepositoryException;
 import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.AdapterMainInterface;
