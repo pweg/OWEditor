@@ -1,5 +1,6 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.frames.toolbar;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.util.ResourceBundle;
 
@@ -56,10 +57,18 @@ public class UndoBar extends JToolBar{
     
     public void setUndoEnabled(boolean b){
         undo.setEnabled(b);
+        if(b)
+            undo.setForeground(Color.black);
+        else
+            undo.setForeground(Color.LIGHT_GRAY);
     }
     
     public void setRedoEnabled(boolean b){
         redo.setEnabled(b);
+        if(b)
+            redo.setForeground(Color.black);
+        else
+            redo.setForeground(Color.LIGHT_GRAY);
     }
 
     private void undo(ActionEvent evt) {

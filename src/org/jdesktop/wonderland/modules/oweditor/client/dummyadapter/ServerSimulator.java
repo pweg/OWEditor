@@ -106,6 +106,13 @@ public class ServerSimulator {
                 1, 
                 (float)500, (float)2000, 
                 "verylongnamehasthisblockfortestingBlock2", false);
+        
+        so = createObject(
+                (float)-6.0, (float)-11.0,(float)1.0,  
+                0,10,20, 
+                1, 
+                (float)3.00, (float)3.00, 
+                "Avatar", true);
     }
 
     public ServerObject createObject(

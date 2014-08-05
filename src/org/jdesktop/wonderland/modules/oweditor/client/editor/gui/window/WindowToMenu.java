@@ -11,7 +11,6 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.input.IInputToWindow;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.guiinterfaces.IWaitingDialog;
-import org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter.GUIEventManager;
 import org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter.snapshots.WorldExporter;
 
 /**

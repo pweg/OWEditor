@@ -275,7 +275,7 @@ public class ServerEventManager {
             try {
                 ac.ltm.invokeLateImage(ac.sc, id, ac.fm.getUserDir());
             } catch (ContentRepositoryException ex) {
-                LOGGER.log(Level.SEVERE, null, ex);
+                LOGGER.warning("Chaning image after creation failed");
             }
         }
     }
@@ -307,7 +307,7 @@ public class ServerEventManager {
                 ac.sc.changeImage(id, "", "");
                 
             } catch (ServerCommException ex) {
-                LOGGER.log(Level.SEVERE, null, ex);
+                LOGGER.warning( "Changing image failed");
             }
             return null;
         }
@@ -360,7 +360,7 @@ public class ServerEventManager {
                 try {
                     ac.sc.deleteComponent(id, IDCellComponentServerState.class);
                 } catch (Exception ex) {
-                    LOGGER.log(Level.SEVERE, null, ex);
+                    LOGGER.log(Level.SEVERE, "Deleting cell component failed", ex);
                 }
             }
         }
@@ -460,7 +460,6 @@ public class ServerEventManager {
                         right.isEverybody);
             } 
         }
-        
     }
     
     /**

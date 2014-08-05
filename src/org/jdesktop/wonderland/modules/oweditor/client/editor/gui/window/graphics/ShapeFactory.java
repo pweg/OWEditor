@@ -60,7 +60,7 @@ public class ShapeFactory {
             String imgDir){
         switch(type){
             case AVATAR:
-                return new Avatar(id, x,y,width, height);
+                return new Avatar(id, x,y,width, height, name);
             case RECTANGLE:
                 return new ShapeRectangle(x,y,z,
                         width, height, id, name, rotation, scale, imgName, imgDir, med);

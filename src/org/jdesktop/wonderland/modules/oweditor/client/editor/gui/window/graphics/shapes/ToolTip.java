@@ -109,7 +109,8 @@ public class ToolTip implements IToolTip{
         //is used for dragging shapes too.
         int x = p.x;
         int y = p.y;
-        shape.setLocation(x,y);
+        if(shape != null)
+            shape.setLocation(x,y);
     }
 
     @Override

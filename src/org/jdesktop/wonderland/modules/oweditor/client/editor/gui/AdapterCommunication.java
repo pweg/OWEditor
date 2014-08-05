@@ -2,7 +2,6 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.gui;
 
 import java.awt.Point;
 import java.util.ArrayList;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.GUIObserverInterface;
@@ -13,15 +12,15 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.ITr
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.commands.AddComponent;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.commands.Command;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.commands.Delete;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.commands.Import;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.commands.Paste;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.commands.SetName;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.commands.SetProperties;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.commands.Rotate;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.commands.RotateTranslate;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.commands.Scale;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.commands.ScaleTranslate;
-import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.commands.Import;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.commands.SetImage;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.commands.SetName;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.commands.SetProperties;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.commands.SetRights;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.commands.TranslateFloat;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.commands.TranslateXY;
@@ -179,7 +178,8 @@ public class AdapterCommunication implements IAdapterCommunication{
         try {
             return goi.loadKMZ(url);
         } catch (Exception ex) {
-            Logger.getLogger(AdapterCommunication.class.getName()).log(Level.WARNING, null, ex);
+            Logger.getLogger(AdapterCommunication.class.getName()).warning( 
+                    "Loading KMZ failed");
             return null;
         }
     }
@@ -216,7 +216,8 @@ public class AdapterCommunication implements IAdapterCommunication{
             executeCom(imp);
             return true;
         } catch (Exception ex) {
-            Logger.getLogger(AdapterCommunication.class.getName()).log(Level.WARNING, null, ex);
+            Logger.getLogger(AdapterCommunication.class.getName()).warning( 
+                    "Importing KMZ failed");
             return false;
         }
     }
@@ -406,7 +407,8 @@ public class AdapterCommunication implements IAdapterCommunication{
         try {
             goi.uploadImage(imgUrl);
         } catch (Exception ex) {
-            Logger.getLogger(AdapterCommunication.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(AdapterCommunication.class.getName()).warning(
+                    "Uploading image failed");
         }
     }
 
@@ -425,7 +427,8 @@ public class AdapterCommunication implements IAdapterCommunication{
         try {
             command.execute(goi);
         } catch (Exception ex) {
-            Logger.getLogger(AdapterCommunication.class.getName()).log(Level.WARNING, null, ex);
+            Logger.getLogger(AdapterCommunication.class.getName()).warning( 
+                    "Executing command failed");
         }
         redoList.clear();
         window.setUndoEnabled(true);
@@ -453,7 +456,8 @@ public class AdapterCommunication implements IAdapterCommunication{
         try {
             command.undo(goi);
         } catch (Exception ex) {
-            Logger.getLogger(AdapterCommunication.class.getName()).log(Level.WARNING, null, ex);
+            Logger.getLogger(AdapterCommunication.class.getName()).warning(
+                    "Undo failed");
             undo();
         }
     }
@@ -478,7 +482,8 @@ public class AdapterCommunication implements IAdapterCommunication{
         try {
             command.redo(goi);
         } catch (Exception ex) {
-            Logger.getLogger(AdapterCommunication.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(AdapterCommunication.class.getName()).warning( 
+                    "Redo failed");
             redo();
         }
     }

@@ -1,10 +1,15 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.graphics.shapes;
 
+import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Paint;
+import java.awt.Rectangle;
 import java.awt.Shape;
+import java.awt.Toolkit;
+import java.awt.font.FontRenderContext;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
+import java.awt.geom.Rectangle2D;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.GUISettings;
 
@@ -21,9 +26,16 @@ public class Avatar extends ShapeObject{
     private final Paint color = GUISettings.AVATARCOLOR;
     private String name = "";
     
-    public Avatar(long id, int x, int y, int width, int height){
+    private int nameBoundsAbove = GUISettings.AVATARNAMEPOSITIONTINY;
+    
+    public Avatar(long id, int x, int y, int width, int height, String name){
         originalShape = new Ellipse2D.Double(x, y, width, height);
         this.id = id;
+        
+        if(name.length() > 10){
+            name = name.substring(0,7)+"...";
+        }
+        this.name = name;
     }
 
     @Override
@@ -43,6 +55,49 @@ public class Avatar extends ShapeObject{
         transformedShape = at.createTransformedShape(originalShape);
         
         g.fill(at.createTransformedShape(originalShape));
+        paintName(g, at);
+    }
+    
+    /**
+     * Paints the name of the object. This is not implemented in the
+     * normal paint function, because the names have to be painted
+     * later, in order to see them, if another object is blocking the view.
+     * 
+     * @param g the graphics2d instance.
+     * @param at the affine transformation.
+     * @param scale
+     */
+    private void paintName(Graphics2D g, AffineTransform at) {
+        g.setPaint(color); 
+        
+        double scaleFactor = at.getScaleX();       
+
+        int screenRes = Toolkit.getDefaultToolkit().getScreenResolution();
+        int font_size = (int)Math.round(GUISettings.OBJECTNAMESIZE*scaleFactor * screenRes / 72.0);
+
+        Font font = new Font(GUISettings.OBJECTNAMEFONTTYPE, Font.PLAIN, font_size);        
+        g.setFont(font);
+        
+        Rectangle r = transformedShape.getBounds();
+        System.out.println(r.getCenterX() + " " +r.getY());
+        int x = (int) (r.getCenterX() - Math.round(getXAdding(g,font)));
+        int y = (int) (r.getY() - Math.round(nameBoundsAbove*scaleFactor));
+        
+        System.out.println(x + " " + y);
+
+        g.drawString(name, x, y);  
+    }
+    
+    private double getXAdding(Graphics2D g, Font font){
+        
+        FontRenderContext context = g.getFontRenderContext();
+        
+        Rectangle2D bounds_r = font.getStringBounds(name, context);
+        
+        double width = bounds_r.getWidth();
+        
+        return width/2;
+        
     }
 
     @Override

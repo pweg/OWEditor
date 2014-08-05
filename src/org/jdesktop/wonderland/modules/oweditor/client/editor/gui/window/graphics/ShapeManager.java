@@ -250,7 +250,7 @@ public class ShapeManager {
                     shape.paintOriginal(g2, at);
             }
              for(ShapeObject shape : selected){
-            shape.paintOriginal(g2, at);
+                 shape.paintOriginal(g2, at);
             }
 
             for(ShapeObject shape : avatarShapes){

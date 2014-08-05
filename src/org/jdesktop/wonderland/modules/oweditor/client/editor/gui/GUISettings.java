@@ -36,7 +36,7 @@ public class GUISettings {
     public static final Paint DRAGGINGCOLOR = Color.lightGray;
     public static final Paint COLLISIONCOLOR = Color.red;
     
-    public static final Paint SELECTIONCOLOR = Color.red;
+    public static final Paint SELECTIONCOLOR = new Color(14,186,1);
     public static final Paint SELECTIONRECTCOLOR = Color.lightGray;
     
     public static final Paint TOOLTIPTEXTCOLOR = Color.black;
@@ -65,6 +65,8 @@ public class GUISettings {
     public static final int NAMEPOSITIONINY = OBJECTNAMESIZE+NAMEPOSITIONINYADD;
     public static final int NAMEPOSITIONOUTX = 0;
     public static final int NAMEPOSITIONOUTY = -5;
+    
+    public static final int AVATARNAMEPOSITIONTINY = 5;
     
     //The margin of images in objects and its watermark value.
     public static final int IMGMARGIN = 5;
