@@ -17,6 +17,7 @@ import javax.swing.JTabbedPane;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IDataObject;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IImage;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IRights;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.GUISettings;
 
 /**
@@ -699,11 +700,56 @@ public class PropertiesFrame extends javax.swing.JFrame {
             rightsPane.setObjects();
             setObjects();
             setImage();   
+            checkRights();
             resetLabelColor();  
         }
         super.setVisible(b);
     }
     
+    /**
+     * Checks the right, if user can change picture.
+     * 
+     */
+    private void checkRights() {
+        image.setEnabled(true);
+        String user = fc.window.getUserName();
+        
+        for(IDataObject object : objects){
+            ArrayList<IRights> rights = object.getRights();
+            
+            if(rights != null){
+                boolean userfound = false;
+                boolean everybodyperm = true;
+                
+                for(IRights right : rights){
+                    String name = right.getName();
+                    
+                    //user found, therefore no other check necessary.
+                    if(name.equals(user)){
+                        if(!right.getOwner()){
+                            image.setEnabled(false);
+                            return;
+                        }else{
+                            image.setEnabled(true);
+                            userfound = true;
+                            break;
+                        }
+                    //if no user found, use everybody
+                    }if(name.equals((BUNDLE).getString("Everybody"))){
+                        everybodyperm = right.getOwner();
+                    }
+                }
+                if(!userfound){
+                    image.setEnabled(everybodyperm);
+                    if(!everybodyperm){
+                        return;
+                    }
+                }
+                
+            }
+        }
+    }
+
     /**
      * Fills the fields with data.
      */

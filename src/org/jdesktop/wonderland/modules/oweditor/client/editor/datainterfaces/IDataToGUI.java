@@ -82,6 +82,13 @@ public interface IDataToGUI {
     public ArrayList<IImage> getImgLibrary();
     
     /**
+     * Returns the user name.
+     * 
+     * @return The user name.
+     */
+    public String getUserName();
+    
+    /**
      * Returns the users image library directory.
      * 
      * @return The directory.

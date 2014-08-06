@@ -167,4 +167,9 @@ public class WindowToFrame implements IWindowToFrame{
     public void inputKeyPressed(int key) {
         wc.input.keyPressed(key);
     }
+
+    @Override
+    public String getUserName() {
+        return wc.dm.getUserName();
+    }
 }

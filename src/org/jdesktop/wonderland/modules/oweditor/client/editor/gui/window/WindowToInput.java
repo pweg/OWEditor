@@ -116,4 +116,9 @@ public class WindowToInput implements IWindowToInput {
         wc.frame.setTransformBarVisible(b);
     }
 
+    @Override
+    public void clearToolbarText() {
+        wc.frame.clearToolbarText();
+    }
+
 }

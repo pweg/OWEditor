@@ -196,7 +196,6 @@ public class PermissionTable extends AbstractTableModel{
         
         PermissionTableEntry entry = (PermissionTableEntry)rightsList.get(rowIndex);
         if(entry.isEverybody && entry.isEditable){
-            System.out.println("is everybody");
             if(columnIndex == 0 || columnIndex == 1)
                 return false;
             else

@@ -217,6 +217,7 @@ public class ServerEventManager {
      */
     public void setUserDir(){
         dui.setUserDir(AdapterSettings.IMAGEDIR);
+        dui.setUserName(AdapterSettings.USERNAME);
     }
 
     /**

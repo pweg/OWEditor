@@ -120,6 +120,11 @@ public interface IWindowToInput {
      * if false it will be hidden.
      */
     public void setTransformBarVisible(boolean b);
+    
+    /**
+     * Clears the text on the bottom toolbar.
+     */
+    public void clearToolbarText();
 
 
 }

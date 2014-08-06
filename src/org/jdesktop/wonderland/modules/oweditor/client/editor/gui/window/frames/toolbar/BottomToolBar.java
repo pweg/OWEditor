@@ -31,6 +31,7 @@ public class BottomToolBar extends JToolBar{
         jSeparator1 = new Separator();
         yLabel = new JLabel();
         yField = new JLabel();
+        textField = new JLabel();
         
         this.setFloatable(false);
         
@@ -54,13 +55,25 @@ public class BottomToolBar extends JToolBar{
         yField.setText(nullString);
         yField.setEnabled(false);
         this.add(yField);
+        
+
+        this.add(jSeparator1);
+        this.add(textField);
+        textField.setEnabled(false);
     }   
     
     public void setCoordinates(String x, String y){
         xField.setText(x);
         yField.setText(y);
     }
+    
+    public void setText(String text){
+        textField.setText(text);
+    }
 
+    public void clearText(){
+        textField.setText("");
+    }
 
     // Variables declaration - do not modify                     
     private Separator jSeparator1;
@@ -68,5 +81,6 @@ public class BottomToolBar extends JToolBar{
     private JLabel xLabel;
     private JLabel yField;
     private JLabel yLabel;
+    private JLabel textField;
     
 }

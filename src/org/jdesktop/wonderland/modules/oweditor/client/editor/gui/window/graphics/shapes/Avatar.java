@@ -79,11 +79,8 @@ public class Avatar extends ShapeObject{
         g.setFont(font);
         
         Rectangle r = transformedShape.getBounds();
-        System.out.println(r.getCenterX() + " " +r.getY());
         int x = (int) (r.getCenterX() - Math.round(getXAdding(g,font)));
         int y = (int) (r.getY() - Math.round(nameBoundsAbove*scaleFactor));
-        
-        System.out.println(x + " " + y);
 
         g.drawString(name, x, y);  
     }

@@ -58,4 +58,9 @@ public class DataManager implements IDataManager{
                 width, height);
     }
 
+    @Override
+    public String getUserName() {
+        return dm.getUserName();
+    }
+
 }

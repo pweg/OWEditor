@@ -75,6 +75,11 @@ public class AdapterObserver implements IAdapterObserver{
     public void notifyImageChange(long id, BufferedImage img, String name, String path){
         dm.updateImage(id, img, name, path);
     }
+    
+    @Override
+    public void setUserName(String name){
+        um.setUserName(name);
+    }
 
     @Override
     public void setUserDir(String dir) {

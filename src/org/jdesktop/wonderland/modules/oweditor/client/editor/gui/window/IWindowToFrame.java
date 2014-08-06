@@ -181,4 +181,11 @@ public interface IWindowToFrame {
      */
     public void inputKeyPressed(int key);
 
+    /**
+     * Returns the current user name.
+     * 
+     * @return The username.
+     */
+    public String getUserName();
+
 }

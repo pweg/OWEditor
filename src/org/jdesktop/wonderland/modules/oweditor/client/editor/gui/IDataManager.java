@@ -66,4 +66,11 @@ public interface IDataManager {
      */
     public Point2D.Double transformCoordsBack(Point coords, int width, int height);
 
+    /**
+     * Returns the current user name.
+     * 
+     * @return The username.
+     */
+    public String getUserName();
+
 }

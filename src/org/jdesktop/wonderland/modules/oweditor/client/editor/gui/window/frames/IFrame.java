@@ -164,6 +164,18 @@ public interface IFrame {
      * @param y The y coordinate.
      */
     public void setToolbarCoords(String x, String y);
+    
+    /**
+     * Sets a text to the bottom toolbar.
+     * 
+     * @param txt The text.
+     */
+    public void setToolbarText(String txt);
+    
+    /**
+     * Clears the text on the bottom toolbar.
+     */
+    public void clearToolbarText();
 
     /**
      * Returns the waiting dialog used for loading and saving.

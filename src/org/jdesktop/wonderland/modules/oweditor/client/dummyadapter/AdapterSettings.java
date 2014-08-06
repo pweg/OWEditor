@@ -20,4 +20,6 @@ public class AdapterSettings {
     
     public static String IMAGEDIR = "testimages";
     
+    public static String USERNAME = "U1";
+    
 }

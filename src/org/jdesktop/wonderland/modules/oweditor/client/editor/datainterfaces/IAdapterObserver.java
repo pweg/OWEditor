@@ -92,6 +92,13 @@ public interface IAdapterObserver {
             String dir);
 
     /**
+     * Sets the user name of this session.
+     * 
+     * @param name The username.
+     */
+    public void setUserName(String name);
+    
+    /**
      * Sets up the name of the users directory.
      * 
      * @param dir The directory where the user stores his

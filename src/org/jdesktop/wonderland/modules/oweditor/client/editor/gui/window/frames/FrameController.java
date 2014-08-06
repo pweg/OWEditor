@@ -257,10 +257,21 @@ public class FrameController implements IFrame{
     public void setToolbarCoords(String x, String y) {
         mainframe.getBottomToolBar().setCoordinates(x, y);
     }
+    
+    @Override
+    public void setToolbarText(String txt) {
+        mainframe.getBottomToolBar().setText(txt);
+    }
+
+    @Override
+    public void clearToolbarText() {
+        mainframe.getBottomToolBar().clearText();
+    }
 
     @Override
     public JDialog getWaitingDialog(String text) {
         return new WaitingDialog(mainframe, text);
     }
+
 }
 

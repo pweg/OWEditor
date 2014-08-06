@@ -58,6 +58,7 @@ public class WindowToMenu implements IWindowToMenu{
     public void rotateShapes() {
         wc.frame.setTransformBarVisible(true);
         wc.input.setInputMode(IInputToWindow.ROTATE);
+        wc.frame.setToolbarText(BUNDLE.getString("TransformText"));
         wc.repaint();
     }
 
@@ -65,6 +66,7 @@ public class WindowToMenu implements IWindowToMenu{
     public void scaleShapes() {
         wc.frame.setTransformBarVisible(true);
         wc.input.setInputMode(IInputToWindow.SCALE);
+        wc.frame.setToolbarText(BUNDLE.getString("TransformText"));
         wc.repaint();
     }
 

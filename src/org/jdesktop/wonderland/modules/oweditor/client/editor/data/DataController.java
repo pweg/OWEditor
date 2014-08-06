@@ -100,6 +100,11 @@ public class DataController implements IDataToMainController,
     }
 
     @Override
+    public String getUserName() {
+        return um.getUserName();
+    }
+    
+    @Override
     public String getUserImgDir() {
         return um.getUserDir();
     }
@@ -108,6 +113,7 @@ public class DataController implements IDataToMainController,
     public BufferedImage getImage(String name, String dir) {
         return um.getImage(name, dir);
     }
+
 
 
 }

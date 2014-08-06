@@ -20,6 +20,7 @@ public class UserDataManager {
     private static final Logger LOGGER =
             Logger.getLogger(UserDataManager.class.getName());
     
+    private String userName = "";
     private String userDir = null;
     
     private ArrayList<IImage> imageLib = null;
@@ -43,6 +44,10 @@ public class UserDataManager {
         this.userDir = userDir;
     }
     
+    public void setUserName(String name) {
+        this.userName = name;
+    }
+    
     /**
      * Returns the user image library.
      * 
@@ -64,6 +69,15 @@ public class UserDataManager {
         }
         
         return lib;
+    }
+    
+    /**
+     * Returns the user name.
+     * 
+     * @return The user name.
+     */
+    public String getUserName(){
+        return userName;
     }
         
     /**
@@ -133,6 +147,10 @@ public class UserDataManager {
      * @return The buffered image.
      */
     public BufferedImage getImage(String name, String dir){
+        
+        if(userDir == null)
+            return null;
+        
         readLock.lock();
         try{
             if(dir.equals(userDir)){
