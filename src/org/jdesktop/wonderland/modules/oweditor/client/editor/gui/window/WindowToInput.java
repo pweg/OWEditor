@@ -115,10 +115,21 @@ public class WindowToInput implements IWindowToInput {
     public void setTransformBarVisible(boolean b) {
         wc.frame.setTransformBarVisible(b);
     }
+    
+    @Override
+    public void setToolbarText(String txt) {
+        wc.frame.setToolbarText(txt);
+    }
 
     @Override
     public void clearToolbarText() {
         wc.frame.clearToolbarText();
     }
+
+    @Override
+    public boolean checkRightsMove(long id) {
+        return wc.dm.checkRightsMove(id);
+    }
+
 
 }

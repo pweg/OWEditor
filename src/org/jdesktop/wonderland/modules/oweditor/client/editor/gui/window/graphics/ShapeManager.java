@@ -47,8 +47,7 @@ public class ShapeManager {
     private SimpleShapeObject selectionRectangle = null;
     private ITransformationBorder border = null;
     
-    private AffineTransform at = null;
-    
+    private AffineTransform at = null;    
     
     private final ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
     private final Lock readLock = lock.readLock();
@@ -362,7 +361,8 @@ public class ShapeManager {
      */
     public void renameShape(long id, String name){
         ShapeObject shape = getShape(id);
-        shape.setName(name);
+        if(shape != null)
+            shape.setName(name);
     }
     
     /**
@@ -433,6 +433,11 @@ public class ShapeManager {
         } finally {
             writeLock.unlock();
         }
+    }
+    
+    public void readdShape(ShapeObject shape) {
+        shapes.remove(shape);
+        addShape(shape);
     }
     
     /**

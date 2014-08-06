@@ -1,6 +1,8 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.graphics;
 
 import java.awt.Point;
+import java.util.ArrayList;
+
 
 /**
  * Interface for the input package.
@@ -260,10 +262,19 @@ public interface IGraphicToInput {
     /**
      * Returns the name of a shape, which surrounds 
      * the point p, if the name is abbreviated.
+     * 
      * @param p The point.
      * @return The name of the shape, or null otherwise.
      */
     public String getShapeName(Point p);
+
+    /**
+     * Returns the name of a shape, which has the id.
+     * 
+     * @param The id.
+     * @return The name of the shape, or "" otherwise.
+     */
+    public String getShapeName(long id);
 
     /**
      * Paints the shape name on the position given by the point.
@@ -290,5 +301,13 @@ public interface IGraphicToInput {
      * false otherwise.
      */
     public boolean isShapeSelected();
+
+    /**
+     * Returns a list of selected shapes in ids.
+     * 
+     * @return An list with ids of selected shapes.
+     */
+    public ArrayList<Long> getSelectedShapes();
+
 
 }

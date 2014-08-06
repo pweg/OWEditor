@@ -69,7 +69,7 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
                 }           
             }
         }else{
-             //dragging shapes/selection rectangle
+             //translating/selection rectangle
              if(e.getButton() ==  MouseEvent.BUTTON1){
                  if(mode == NOMODE){//translate
                      if(graphic.isMouseInObject(p)){

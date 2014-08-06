@@ -14,8 +14,6 @@ import java.awt.Point;
 import java.awt.geom.Point2D;
 import java.util.logging.Logger;
 import org.jdesktop.wonderland.client.cell.Cell;
-import org.jdesktop.wonderland.client.jme.utils.ScenegraphUtils;
-import org.jdesktop.wonderland.common.cell.CellTransform;
 import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.CoordinateTranslatorInterface;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IDataObject;
 

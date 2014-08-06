@@ -169,4 +169,12 @@ public interface IGraphicToWindow {
      */
     public ArrayList<Long> getAllIDs();
 
+    /**
+     * Returns the name of a shape.
+     * 
+     * @param id The id of the shape.
+     * @return The name of the shape.
+     */
+    public String getShapeName(long id);
+
 }

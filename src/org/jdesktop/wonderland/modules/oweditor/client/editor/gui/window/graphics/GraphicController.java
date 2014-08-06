@@ -200,4 +200,13 @@ public class GraphicController implements IGraphicToWindow{
         return ids;
     }
 
+    @Override
+    public String getShapeName(long id) {
+        ShapeObject s = sm.getShape(id);
+        
+        if(s == null)
+            return "";
+        return s.getName();
+    }
+
 }

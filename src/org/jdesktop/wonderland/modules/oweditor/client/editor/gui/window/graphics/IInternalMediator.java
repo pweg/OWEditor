@@ -162,5 +162,12 @@ public interface IInternalMediator {
      */
     public void addShape(ShapeObject shape);
 
+    /**
+     * Readds a shape to the list. This is used on z-axis changes.
+     * 
+     * @param shape The shape to readd
+     */
+    public void readdShape(ShapeObject shape);
+
 
 }

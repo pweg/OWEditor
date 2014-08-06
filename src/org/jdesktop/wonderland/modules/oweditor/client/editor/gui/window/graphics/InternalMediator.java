@@ -128,4 +128,9 @@ public class InternalMediator implements IInternalMediator{
     public void addShape(ShapeObject shape) {
         sm.addShape(shape);
     }
+
+    @Override
+    public void readdShape(ShapeObject shape) {
+        sm.readdShape(shape);
+    }
 }

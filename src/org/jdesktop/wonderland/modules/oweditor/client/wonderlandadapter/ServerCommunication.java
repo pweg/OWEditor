@@ -249,8 +249,14 @@ public class ServerCommunication {
      */
     public void changeName(long id, String name) throws ServerCommException{
         Cell cell = getCell(id);
+        if(cell == null)
+            throw new ServerCommException();
         
         CellServerState state = fetchCellServerState(cell);
+        
+        if(state == null)
+             throw new ServerCommException();
+        
         ((CellServerState) state).setName(name);
         sendServerUpdateState(cell, state, new HashSet());
     }
@@ -612,10 +618,15 @@ public class ServerCommunication {
     public CellServerState fetchCellServerState(Cell cell) {
         // Fetch the setup object from the Cell object. We send a message on
         // the cell channel, so we must fetch that first.
+        
+        if(cell == null)
+            return null;
+        
         ResponseMessage response = cell.sendCellMessageAndWait(
                 new CellServerStateRequestMessage(cell.getCellID()));
         
         if (response == null) {
+            LOGGER.warning("Response was null");
             return null;
         }else if (response instanceof ErrorMessage) {
             
@@ -633,6 +644,10 @@ public class ServerCommunication {
         // We need to remove the position component first as a special case
         // since we do not want to update it after the cell is created.
         CellServerStateResponseMessage cssrm = (CellServerStateResponseMessage) response;
+        
+        if(cssrm == null)
+            return null;
+        
         CellServerState state = cssrm.getCellServerState();
         
         if (state != null) {

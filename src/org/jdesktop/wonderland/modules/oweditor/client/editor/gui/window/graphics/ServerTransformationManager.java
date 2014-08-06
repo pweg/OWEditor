@@ -33,8 +33,8 @@ public class ServerTransformationManager {
         shape.setLocation(x, y, z);
         
         if(old_z != z){
-            med.removeShape(id);
-            med.addShape(shape);
+            //med.removeShape(id);
+            med.readdShape(shape);
             med.repaint();
         }
     }

@@ -1,6 +1,7 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
 
@@ -56,14 +57,23 @@ public class WindowToMenu implements IWindowToMenu{
 
     @Override
     public void rotateShapes() {
+        
+        if(!checkRights())
+            return;
+        
         wc.frame.setTransformBarVisible(true);
         wc.input.setInputMode(IInputToWindow.ROTATE);
         wc.frame.setToolbarText(BUNDLE.getString("TransformText"));
         wc.repaint();
     }
+    
 
     @Override
     public void scaleShapes() {
+
+        if(!checkRights())
+            return;
+        
         wc.frame.setTransformBarVisible(true);
         wc.input.setInputMode(IInputToWindow.SCALE);
         wc.frame.setToolbarText(BUNDLE.getString("TransformText"));
@@ -197,6 +207,21 @@ public class WindowToMenu implements IWindowToMenu{
     @Override
     public void close() {
         wc.frame.getMainframe().dispose();
+    }
+    
+    private boolean checkRights(){
+        ArrayList<Long> list = wc.graphic.getSelectedShapes();
+        
+        for(long id : list){
+            if(!wc.dm.checkRightsMove(id)){
+
+                wc.frame.setToolbarText(BUNDLE.getString("NoPermissionText")+
+                        wc.graphic.getShapeName(id));
+                return false;
+            }
+        }
+        wc.frame.setToolbarText("");
+        return true;
     }
 
 }

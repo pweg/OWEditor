@@ -120,11 +120,28 @@ public interface IWindowToInput {
      * if false it will be hidden.
      */
     public void setTransformBarVisible(boolean b);
+
+    /**
+     * Sets the text in the bottom toolbar.
+     * 
+     * @param string The text.
+     */
+    public void setToolbarText(String txt);
     
     /**
      * Clears the text on the bottom toolbar.
      */
     public void clearToolbarText();
+
+    /**
+     * Checks rights of an id, if it is possible for the user
+     * to move it
+     * 
+     * @param id The id of an object.
+     * @return True if it is possible to move the object, false otherwise.
+     */
+    public boolean checkRightsMove(long id);
+
 
 
 }

@@ -72,5 +72,14 @@ public interface IDataManager {
      * @return The username.
      */
     public String getUserName();
+    
+    /**
+     * Checks, whether the user has the rights to move an
+     * object or not.
+     * 
+     * @param id The id of the object.
+     * @return True, if it is possible to move, false otherwise.
+     */
+    public boolean checkRightsMove(long id);
 
 }

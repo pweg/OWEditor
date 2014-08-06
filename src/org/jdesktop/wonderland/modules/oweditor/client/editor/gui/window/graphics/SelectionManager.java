@@ -158,6 +158,10 @@ public class SelectionManager {
     public ArrayList<ShapeObject> getSelection(){
         return med.getShapes(selectedShapes);
     }
+    
+    public ArrayList<Long> getSelectionID(){
+        return selectedShapes;
+    }
         
     /**
      * Deletes all shapes, which are in the current selection.

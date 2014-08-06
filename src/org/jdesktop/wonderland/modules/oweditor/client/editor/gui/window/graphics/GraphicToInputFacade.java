@@ -349,6 +349,16 @@ public class GraphicToInputFacade implements IGraphicToInput{
         
         return shape.getName();
     }
+
+
+    @Override
+    public String getShapeName(long id) {
+        ShapeObject shape = sm.getShape(id);
+        
+        if(shape == null)
+            return "";
+        return shape.getName();
+    }
     
     @Override
     public boolean paintShapeName(Point p, String name) {
@@ -369,5 +379,11 @@ public class GraphicToInputFacade implements IGraphicToInput{
 
     public void registerWindowInterface(IWindowToGraphic window) {
         this.window  = window;
+    }
+
+    @Override
+    public ArrayList<Long> getSelectedShapes() {
+        
+        return ssm.getSelectionID();
     }
 }

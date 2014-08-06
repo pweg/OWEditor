@@ -4,10 +4,12 @@ import java.awt.Point;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.ResourceBundle;
 
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IDataObject;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IDataToGUI;
 import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IImage;
+import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IRights;
 
 /**
  * This class is used to retrieve data from the data package.
@@ -17,7 +19,9 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.datainterfaces.IIm
  */
 public class DataManager implements IDataManager{
     
-    IDataToGUI dm = null;
+    private IDataToGUI dm = null;
+    private static final ResourceBundle BUNDLE = ResourceBundle.getBundle(
+            "org/jdesktop/wonderland/modules/oweditor/client/resources/Bundle");
     
     public DataManager(){
     }
@@ -61,6 +65,32 @@ public class DataManager implements IDataManager{
     @Override
     public String getUserName() {
         return dm.getUserName();
+    }
+
+    @Override
+    public boolean checkRightsMove(long id) {
+        IDataObject object = dm.getObject(id);
+        String username = dm.getUserName();
+        
+        if(object == null)
+            return true;
+        ArrayList<IRights> rights = object.getRights();
+        
+        if(rights == null)
+            return true;
+        
+        
+        boolean everybody = false;
+        for(IRights right : rights){
+            
+            if(right.getName().equals(username)){
+                return right.getOwner() || right.getPermMove();
+            }else if(right.getName().equals(BUNDLE.getString("Everybody"))){
+                everybody = right.getOwner() || right.getPermMove();
+            }
+        }
+        
+        return everybody;
     }
 
 }

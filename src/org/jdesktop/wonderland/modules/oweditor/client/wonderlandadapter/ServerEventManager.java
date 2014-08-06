@@ -13,6 +13,7 @@ import org.jdesktop.wonderland.client.cell.CellComponent;
 import org.jdesktop.wonderland.client.cell.ComponentChangeListener;
 import org.jdesktop.wonderland.client.cell.MovableComponent;
 import org.jdesktop.wonderland.client.cell.view.AvatarCell;
+import org.jdesktop.wonderland.client.cell.view.ViewCell;
 import org.jdesktop.wonderland.common.cell.messages.CellServerComponentMessage;
 import org.jdesktop.wonderland.common.messages.ErrorMessage;
 import org.jdesktop.wonderland.common.messages.ResponseMessage;
@@ -176,28 +177,20 @@ public class ServerEventManager {
         * do late transform before reading cell data in order to get
         * the changes immediately.
         */
-        String oldName="";
-        if(ac.ltm.containsCell(id, name)){
+            
             //copied names
             if(ac.ltm.containsCell(name)){
                 ac.bm.addNewCopyID(id, name);
             }
             ac.ltm.invokeLateTransform(ac.sc, id, name);
-            try {
-                String realName = ac.cnm.getRealName(name);
-                if(!realName.equals(name)){
-                    ac.sc.changeName(id, realName);
-                    oldName = name;
-                    name = realName;
-                }
-            } catch (ServerCommException ex) {
-                LOGGER.log(Level.SEVERE, "Could not change name back.", ex);
-            }
-        }
+        
         
         ImageClass img = getImage(cell);
         
-        id = checkID(cell, oldName);
+        long oldID = id;
+        id = checkID(cell, name);
+        
+        name = checkName(oldID, name);
         
         Vector3fInfo coordinates = CellInfoReader.getCoordinates(cell);
         Vector3f rotation = CellInfoReader.getRotation(cell);
@@ -229,6 +222,7 @@ public class ServerEventManager {
                 object.setImage(null, "", "");
 
             if(cell instanceof AvatarCell){
+                name = ((ViewCell) cell).getIdentity().getUsername();
                 object.setType(IDataObject.AVATAR);
                 object.setWidth(AdapterSettings.avatarSizeX);
                 object.setHeight(AdapterSettings.avatarSizeY);
@@ -238,6 +232,27 @@ public class ServerEventManager {
             object.setName(name);
             observer.notifyObjectCreation(object);
         } 
+    }
+    
+    /**
+     * Checks if the name is from a copy name and corrects it.
+     * 
+     * @param id The id of the cell.
+     * @param name The name of the cell.
+     * @return Returns the real name.
+     */
+    private String checkName(long id, String name){
+        
+        String realName = ac.cnm.getRealName(ac.sm.getSession(), name);
+        
+        try {
+            if(!realName.equals(name)){
+                ac.sc.changeName(id, realName);
+            }
+        } catch (ServerCommException ex) {
+            LOGGER.log(Level.SEVERE, "Could not change name back.", ex);
+        }
+        return realName;
     }
     
 
@@ -522,7 +537,12 @@ public class ServerEventManager {
             //checks if other cells have the same image. This is to
             //register changes, if an image was overwritten.
             if(imgMonitor.idsExist(imgName, imgDir)){
-                ArrayList<Long> ids = imgMonitor.getIds(imgName, imgDir);
+                ArrayList<Long> ids = new ArrayList<Long>();
+                ArrayList<Long> ids2 = imgMonitor.getIds(imgName, imgDir);
+                if(ids2 == null)
+                    return null;
+                
+                ids.addAll(ids2);
 
                 for(long lid : ids){
                     for(IAdapterObserver observer : observers){

@@ -8,6 +8,7 @@ package org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter;
 
 import com.jme.math.Vector3f;
 import java.util.HashMap;
+import java.util.logging.Logger;
 
 /**
  * This class is used when transformations are not possible, or
@@ -243,12 +244,15 @@ public class LateTransformationManager {
         
         if(lateTranslation != null){
             try{
+                Logger LOGGER =
+            Logger.getLogger(GUIEventManager.class.getName());
+                LOGGER.warning(id + " " +name + " ltm");
                 server.translate(id, lateTranslation);
-                removeTranslate(name);
-                return true;
             }catch(ServerCommException e){
                 return false;
             }
+            removeTranslate(name);
+            return true;
             
         }
         return false;

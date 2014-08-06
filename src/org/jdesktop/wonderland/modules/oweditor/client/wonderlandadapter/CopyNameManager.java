@@ -70,15 +70,15 @@ public class CopyNameManager {
     
     /**
      * Returns the real name of the cell, which should be used for the copy.
+     * @param session The wonderland session
      * @param name The copy name of the cell.
      * @return The real name of the cell.
      */
-    public String getRealName(String name){
+    public String getRealName(WonderlandSession session, String name){
+        if(name.lastIndexOf(separator+"ID"+ session.getID()+"_") == -1)
+            return name;
         
         int index = name.lastIndexOf(separator);
-        
-        if(index == -1)
-            return name;
         
         return name.substring(0,index);
     }

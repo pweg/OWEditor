@@ -718,8 +718,7 @@ public class PropertiesFrame extends javax.swing.JFrame {
             ArrayList<IRights> rights = object.getRights();
             
             if(rights != null){
-                boolean userfound = false;
-                boolean everybodyperm = true;
+                boolean everybodyperm = false;
                 
                 for(IRights right : rights){
                     String name = right.getName();
@@ -728,24 +727,19 @@ public class PropertiesFrame extends javax.swing.JFrame {
                     if(name.equals(user)){
                         if(!right.getOwner()){
                             image.setEnabled(false);
-                            return;
                         }else{
                             image.setEnabled(true);
-                            userfound = true;
-                            break;
                         }
+                        return;
                     //if no user found, use everybody
-                    }if(name.equals((BUNDLE).getString("Everybody"))){
+                    }else if(name.equals(BUNDLE.getString("Everybody"))){
                         everybodyperm = right.getOwner();
                     }
                 }
-                if(!userfound){
-                    image.setEnabled(everybodyperm);
-                    if(!everybodyperm){
-                        return;
-                    }
+                image.setEnabled(everybodyperm);
+                if(!everybodyperm){
+                    return;
                 }
-                
             }
         }
     }
