@@ -4,6 +4,7 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.util.ArrayList;
 
 /**
  * The interface implementation for the input package.
@@ -128,6 +129,9 @@ public class WindowToInput implements IWindowToInput {
 
     @Override
     public boolean checkRightsMove(long id) {
+        ArrayList<Long> list = new ArrayList<Long>();
+        list.add(id);
+        wc.adapter.updateObjects(list);
         return wc.dm.checkRightsMove(id);
     }
 

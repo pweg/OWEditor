@@ -82,7 +82,7 @@ public class GUIEventManager implements GUIObserverInterface{
     @Override
     public void notifyRemoval(long id) throws Exception{
         long curid = ac.bm.getActiveID(id);
-        //tires to add an id component, in case the cell gets restored.
+        //tries to add an id component, in case the cell gets restored.
         try{
             ac.sc.addIDComponent(curid, id);
         }catch(Exception e){

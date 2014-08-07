@@ -75,6 +75,12 @@ public class CopyNameManager {
      * @return The real name of the cell.
      */
     public String getRealName(WonderlandSession session, String name){
+        
+        if(name == null)
+            return "";
+        if(session == null)
+            return name;
+        
         if(name.lastIndexOf(separator+"ID"+ session.getID()+"_") == -1)
             return name;
         

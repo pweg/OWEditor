@@ -54,6 +54,8 @@ public class WorldBuilder {
         for (Cell rootCell : rootCells) {
             iterateChilds(rootCell);
         }
+        
+        sua.setUserName(ac.sm.getSession().getUserID().getUsername());
     }
     
     /**

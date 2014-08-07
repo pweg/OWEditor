@@ -135,6 +135,11 @@ public class LateTransformationManager {
      * @param name The cell name.
      */
     private void removeTranslate(String name){
+        
+                Logger LOGGER =
+            Logger.getLogger(GUIEventManager.class.getName());
+                LOGGER.warning(copyTranslation.size() +" " +name + " ltm + remove");
+                
         copyTranslation.remove(name);
     }
     
@@ -169,6 +174,11 @@ public class LateTransformationManager {
     }
     
     public boolean containsCell(String name){
+        
+                Logger LOGGER =
+            Logger.getLogger(GUIEventManager.class.getName());
+                LOGGER.warning(copyTranslation.size() +" " +name + " ltm");
+                
         return copyTranslation.containsKey(name);
     }
     
@@ -244,9 +254,6 @@ public class LateTransformationManager {
         
         if(lateTranslation != null){
             try{
-                Logger LOGGER =
-            Logger.getLogger(GUIEventManager.class.getName());
-                LOGGER.warning(id + " " +name + " ltm");
                 server.translate(id, lateTranslation);
             }catch(ServerCommException e){
                 return false;

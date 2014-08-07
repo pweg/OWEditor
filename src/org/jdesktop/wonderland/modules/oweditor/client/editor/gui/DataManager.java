@@ -69,6 +69,7 @@ public class DataManager implements IDataManager{
 
     @Override
     public boolean checkRightsMove(long id) {
+        
         IDataObject object = dm.getObject(id);
         String username = dm.getUserName();
         
@@ -82,7 +83,6 @@ public class DataManager implements IDataManager{
         
         boolean everybody = false;
         for(IRights right : rights){
-            
             if(right.getName().equals(username)){
                 return right.getOwner() || right.getPermMove();
             }else if(right.getName().equals(BUNDLE.getString("Everybody"))){

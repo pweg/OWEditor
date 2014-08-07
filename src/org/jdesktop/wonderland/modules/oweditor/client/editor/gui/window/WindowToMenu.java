@@ -209,8 +209,15 @@ public class WindowToMenu implements IWindowToMenu{
         wc.frame.getMainframe().dispose();
     }
     
+    /**
+     * Checks for the rights, whether or not the shapes can be moved.
+     * 
+     * @return True, if the user has permission to move the shapes,
+     * false otherwise.
+     */
     private boolean checkRights(){
         ArrayList<Long> list = wc.graphic.getSelectedShapes();
+        wc.adapter.updateObjects(list);
         
         for(long id : list){
             if(!wc.dm.checkRightsMove(id)){

@@ -33,7 +33,6 @@ public class mlTranslateDragStrategy implements mlMouseStrategy{
     public void mousePressed(Point p) {
         ArrayList<Long> list = listener.graphic.getSelectedShapes();
         
-        
         boolean perm = true;
         
         for(long id : list){

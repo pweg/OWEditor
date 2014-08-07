@@ -38,6 +38,8 @@ public class ServerEventManager {
     private WonderlandAdapterController ac = null;
     private ArrayList<IAdapterObserver> observers = null;
     
+    private ArrayList<Long> namesToChange = null;
+    
     private ComponentChangeListener componentListener = null;
     private CellChangeListener imageListener = null;
     
@@ -59,6 +61,7 @@ public class ServerEventManager {
         imgMonitor = new ImageMonitor();
         
         observers = new ArrayList<IAdapterObserver>();
+        namesToChange = new ArrayList<Long>();
         
         componentListener = new ComponentChangeListener() {
             public void componentChanged(Cell cell, 
@@ -104,6 +107,7 @@ public class ServerEventManager {
         float z =  vector.z;
         
         long id = CellInfoReader.getID(cell);
+        
         id = ac.bm.getOriginalID(id);
         
         for(IAdapterObserver observer : observers){
@@ -179,19 +183,24 @@ public class ServerEventManager {
         */
             
             //copied names
-            if(ac.ltm.containsCell(name)){
-                ac.bm.addNewCopyID(id, name);
-            }
-            ac.ltm.invokeLateTransform(ac.sc, id, name);
+        if(ac.ltm.containsCell(name)){
+            ac.bm.addNewCopyID(id, name);
+        }
+        
+        String oldName = name;
+        if(ac.ltm.invokeLateTransform(ac.sc, id, name)){
+            LOGGER.warning("creation");
+            name = checkName(id, name);
+        }else{
+            namesToChange.add(id);
+        }
         
         
         ImageClass img = getImage(cell);
         
-        long oldID = id;
-        id = checkID(cell, name);
+        id = checkID(cell, oldName);
         
-        name = checkName(oldID, name);
-        
+     
         Vector3fInfo coordinates = CellInfoReader.getCoordinates(cell);
         Vector3f rotation = CellInfoReader.getRotation(cell);
         float scale = CellInfoReader.getScale(cell);
@@ -244,9 +253,10 @@ public class ServerEventManager {
     private String checkName(long id, String name){
         
         String realName = ac.cnm.getRealName(ac.sm.getSession(), name);
+        LOGGER.warning("name change " + realName);
         
         try {
-            if(!realName.equals(name)){
+            if(!realName.equals(name) && !ac.ltm.containsCell(name)){
                 ac.sc.changeName(id, realName);
             }
         } catch (ServerCommException ex) {
@@ -397,6 +407,14 @@ public class ServerEventManager {
         //id = ac.bm.getOriginalID(id);
         
         ac.ltm.invokeLateTransform(ac.sc, id, name);
+        
+        if(namesToChange.contains(id) && false){
+            
+            LOGGER.warning("translation");
+            checkName(id, cell.getName());
+            nameChanged(cell);
+            namesToChange.remove(id);
+        }
     }
     
     /**
@@ -605,6 +623,12 @@ public class ServerEventManager {
             for(IAdapterObserver observer : observers){
                 observer.updateImgLib(img.img, img.name, img.dir);
             }
+        }
+    }
+
+    void setUserName(String username) {
+        for(IAdapterObserver observer : observers){
+            observer.setUserName(username);
         }
     }
     
