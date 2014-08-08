@@ -332,11 +332,12 @@ public class ShapeManager {
      * object.
      * 
      * @param dataObject which is the updated object.
+     * @return Returns true, if a new shape had to be created.
      */
-    public void setDataUpdate(ITransformedObject dataObject) {
+    public boolean setDataUpdate(ITransformedObject dataObject) {
         
         if(dataObject == null)
-            return;
+            return false;
         
         long id = dataObject.getID();
         
@@ -344,13 +345,14 @@ public class ShapeManager {
         
         if(shape == null){
             createShape(dataObject);
-            return;
+            return true;
         }
         
         shape.setName(dataObject.getName());
         shape.setLocation(dataObject.getX(), dataObject.getY(), dataObject.getZf());
         shape.setRotation(dataObject.getRotation());
         shape.setScale(dataObject.getScale());
+        return false;
     }
     
     /**

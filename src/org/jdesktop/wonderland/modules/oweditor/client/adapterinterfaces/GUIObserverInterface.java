@@ -101,7 +101,7 @@ public interface GUIObserverInterface {
      * @param y The y coordinate of the new object.
      * @throws java.lang.Exception
      */
-    public void notifyPaste(long id, int x, int y) throws Exception;
+    public long notifyPaste(long id, int x, int y) throws Exception;
     /**
      * Notifies a change of the representational image.
      * 
@@ -121,22 +121,6 @@ public interface GUIObserverInterface {
      * @throws Exception 
      */
     public void notifyNameChange(Long id, String name) throws Exception;
-    
-    /**
-     * Undoes creational actions, which generate a new
-     * object, like the paste, or import command, if there was 
-     * no id given back.
-     * @throws java.lang.Exception
-     */
-    public void undoObjectCreation() throws Exception;
-
-    /**
-     * Redoes creational actions, which generate a new
-     * object, like the paste, or import command, if there was no
-     * id given back.
-     * @throws java.lang.Exception
-     */
-    public void redoObjectCreation() throws Exception;
 
     /**
      * Reads a KMZ file and returns the object bounds in an

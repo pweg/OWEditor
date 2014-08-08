@@ -8,7 +8,8 @@ package org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter;
 
 import com.jme.math.Vector3f;
 import java.util.HashMap;
-import java.util.logging.Logger;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
  * This class is used when transformations are not possible, or
@@ -19,16 +20,19 @@ import java.util.logging.Logger;
 public class LateTransformationManager {
     
     private HashMap<Long, Vector3f> translationMap = null;
-    private HashMap<String, Vector3f> copyTranslation = null;
     private HashMap<Long, Vector3f> rotationMap = null;
     private HashMap<Long, Float> scaleMap = null;
     private HashMap<Long, Image> imageMap = null;
+    
+    private final ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
+    private final Lock readLock = lock.readLock();
+    private final Lock writeLock = lock.writeLock();
+
     
     public LateTransformationManager(){
         translationMap = new HashMap<Long, Vector3f>();
         rotationMap = new HashMap<Long, Vector3f>();
         scaleMap = new HashMap<Long, Float>();
-        copyTranslation  = new HashMap<String, Vector3f>();
         imageMap = new HashMap<Long, Image>();
     }
     
@@ -39,18 +43,12 @@ public class LateTransformationManager {
      * @param translation The translation.
      */
     public void addTranslation(long id, Vector3f translation){
-        translationMap.put(id, translation);
-    }
-    
-    /**
-     * Adds translation for later use, but it saves it with 
-     * the name instead of the id.
-     * 
-     * @param name The cells name.
-     * @param translation The translation.
-     */
-    public void addTranslation(String name, Vector3f translation){
-        copyTranslation.put(name, translation);
+        writeLock.lock();
+        try{
+            translationMap.put(id, translation);
+        }finally{
+            writeLock.unlock();
+        }
     }
     
     /**
@@ -60,7 +58,12 @@ public class LateTransformationManager {
      * @param rotation The rotation.
      */
     public void addRotation(long id, Vector3f rotation){
-        rotationMap.put(id, rotation);
+        writeLock.lock();
+        try{
+            rotationMap.put(id, rotation);
+        }finally{
+            writeLock.unlock();
+        }
     }
     
     /**
@@ -70,7 +73,12 @@ public class LateTransformationManager {
      * @param scale The scale.
      */
     public void addScale(long id, float scale){
-        scaleMap.put(id, scale);
+        writeLock.lock();
+        try{
+            scaleMap.put(id, scale);
+        }finally{
+            writeLock.unlock();
+        }
     }
     
     /**
@@ -81,19 +89,12 @@ public class LateTransformationManager {
      * if there is no entry.
      */
     private Vector3f getTranslation(long id){
-        return translationMap.get(id);
-    }
-    
-    
-    /**
-     * Gets the translation.
-     * 
-     * @param name The cell name.
-     * @return A vector containing the translation, or null
-     * if there is no entry.
-     */
-    private Vector3f getTranslation(String name){
-        return copyTranslation.get(name);
+        readLock.lock();
+        try{
+            return translationMap.get(id);
+        }finally{
+            readLock.unlock();
+        }
     }
     
     /**
@@ -104,7 +105,12 @@ public class LateTransformationManager {
      * if there is no entry.
      */
     private Vector3f getRotation(long id){
-        return rotationMap.get(id);
+        readLock.lock();
+        try{
+            return rotationMap.get(id);
+        }finally{
+            readLock.unlock();
+        }
     }
     
     /**
@@ -114,10 +120,15 @@ public class LateTransformationManager {
      * @return The scale, or -1 if there is no entry.
      */
     private float getScale(long id){
-        if(scaleMap.containsKey(id)){
-            return scaleMap.get(id);
+        readLock.lock();
+        try{
+            if(scaleMap.containsKey(id)){
+                return scaleMap.get(id);
+            }
+            return -1;
+        }finally{
+            readLock.unlock();
         }
-        return -1;
     }
     
     /**
@@ -125,22 +136,13 @@ public class LateTransformationManager {
      * 
      * @param id The cell id.
      */
-    private void removeTranslate(long id){
-        translationMap.remove(id);
-    }
-    
-    /**
-     * Removes the translation.
-     * 
-     * @param name The cell name.
-     */
-    private void removeTranslate(String name){
-        
-                Logger LOGGER =
-            Logger.getLogger(GUIEventManager.class.getName());
-                LOGGER.warning(copyTranslation.size() +" " +name + " ltm + remove");
-                
-        copyTranslation.remove(name);
+    public void removeTranslate(long id){
+        writeLock.lock();
+        try{
+            translationMap.remove(id);
+        }finally{
+            writeLock.unlock();
+        }
     }
     
     /**
@@ -149,7 +151,12 @@ public class LateTransformationManager {
      * @param id The cells id.
      */
     private void removeRotate(long id){
-        rotationMap.remove(id);
+        writeLock.lock();
+        try{
+            rotationMap.remove(id);
+        }finally{
+            writeLock.unlock();
+        }
     }
     
     /**
@@ -158,33 +165,28 @@ public class LateTransformationManager {
      * @param id The cells id.
      */
     private void removeScale(long id){
-        scaleMap.remove(id);
+        writeLock.lock();
+        try{
+            scaleMap.remove(id);
+        }finally{
+            writeLock.unlock();
+        }
     }
     
     /**
-     * Looks whether the name, or the id is stored here.
+     * Looks whether the id is stored here.
      * 
      * @param id The id.
-     * @param name The name.
      * @return True, if the id or the name was found.
-     */
-    public boolean containsCell(long id, String name){
-        return containsCell(name) || containsCell(id);
-        
-    }
-    
-    public boolean containsCell(String name){
-        
-                Logger LOGGER =
-            Logger.getLogger(GUIEventManager.class.getName());
-                LOGGER.warning(copyTranslation.size() +" " +name + " ltm");
-                
-        return copyTranslation.containsKey(name);
-    }
-    
+     */    
     public boolean containsCell(long id){
-        return translationMap.containsKey(id) || rotationMap.containsKey(id)
-                || scaleMap.containsKey(id);
+        readLock.lock();
+        try{
+            return translationMap.containsKey(id) || rotationMap.containsKey(id)
+                    || scaleMap.containsKey(id);
+        }finally{
+            readLock.unlock();
+        }
     }
     
     /**
@@ -194,26 +196,12 @@ public class LateTransformationManager {
      * @return True, if the id was found, false otherwise.
      */
     public boolean containsImage(long id){
-        return imageMap.containsKey(id);
-    }
-    
-    /**
-     * Invokes a tranfsormation, if the name, or the id was added
-     * before.
-     * 
-     * @param server The server communication.
-     * @param id The id of the cell.
-     * @param name The name of the cell.
-     * @return True, if all translation events were successfull,
-     *  false otherwise.
-     */
-    public boolean invokeLateTransform(ServerCommunication server, long id, 
-            String name){
-        
-        if(getTranslation(name) != null)
-            return lateTransform(server, id, name);
-        else
-            return lateTransform(server, id); 
+        readLock.lock();
+        try{
+            return imageMap.containsKey(id);
+        }finally{
+            readLock.unlock();
+        }
     }
     
     /**
@@ -225,44 +213,24 @@ public class LateTransformationManager {
      * @return True on success, false otherwise.
      */
     public boolean invokeLateImage(ServerCommunication server,long id, 
-            String dir){        
-        Image img = imageMap.get(id);
-        
-        if(img == null)
-            return true;
-        
+            String dir){  
+        writeLock.lock();
         try{
-            if(server.changeImage(id, img.name, img.dir))
-                imageMap.remove(id);
-        }catch(Exception e){
-            return false;
-        }
-        return true;
-    }
-    
-    /**
-     * Does a translation, if the name was stored before. 
-     * 
-     * @param server The server communication.
-     * @param id The id of the cell.
-     * @param name The name of the cell.
-     * @return True, if the translation was successful
-     */
-    private boolean lateTransform(ServerCommunication server, long id,
-            String name){
-        Vector3f lateTranslation = getTranslation(name);
-        
-        if(lateTranslation != null){
+            Image img = imageMap.get(id);
+
+            if(img == null)
+                return true;
+
             try{
-                server.translate(id, lateTranslation);
-            }catch(ServerCommException e){
+                if(server.changeImage(id, img.name, img.dir))
+                    imageMap.remove(id);
+            }catch(Exception e){
                 return false;
             }
-            removeTranslate(name);
             return true;
-            
+        }finally{
+            writeLock.unlock();
         }
-        return false;
     }
     
     /**
@@ -272,7 +240,7 @@ public class LateTransformationManager {
      * @param id The id of the cell.
      * @return True, if the translation was successful
      */
-    private boolean lateTransform(ServerCommunication server, long id){
+    public boolean lateTransform(ServerCommunication server, long id){
         
         Vector3f lateTranslation = getTranslation(id);
         Vector3f lateRotation = getRotation(id);
@@ -321,7 +289,12 @@ public class LateTransformationManager {
      */
     public void addImage(long id, String imgName, String imgDir) {
         Image img = new Image(imgName, imgDir);
-        imageMap.put(id, img);
+        readLock.lock();
+        try{
+            imageMap.put(id, img);
+        }finally{
+            readLock.unlock();
+        }
     }
     
     private class Image{

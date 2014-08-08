@@ -93,17 +93,11 @@ public class GUIEventManager implements GUIObserverInterface{
 
     @Override
     public void notifyCopy(ArrayList<Long> object_ids) {
-        
-        ac.bm.clearCopy();
-        
-        for(long id : object_ids){
-            id = ac.bm.getActiveID(id);
-            ac.bm.addCopy(id);
-        }
+        //nothing has to be done here, in order for copy to work
     }
 
     @Override
-    public void notifyPaste(long id, int x, int y) throws Exception{
+    public long notifyPaste(long id, int x, int y) throws Exception{
         id = ac.bm.getActiveID(id);
         CellCache cache = ac.sm.getCellCache();
         
@@ -129,8 +123,7 @@ public class GUIEventManager implements GUIObserverInterface{
         coordinates.x = x;
         coordinates.y = y;
         
-        String name = cell.getName();
-        name = ac.cnm.createCopyName(ac.sm.getSession(), id, name);
+        String name = ac.cnm.createCopyName(id,cell.getName());
         
         Vector3fInfo coords = CellInfoReader.getCoordinates(cell);
         coordinates = ac.ct.transformCoordinatesBack(cell, (float)x, 
@@ -138,15 +131,19 @@ public class GUIEventManager implements GUIObserverInterface{
         
         //Do not change order of this, or this could lead to some problems
         //if the server is faster than the addTranslation command.
-        ac.ltm.addTranslation(name, coordinates);
-        ac.bm.addCopyWhiteList(name);
-        ac.sc.paste(cell, name);        
+        //ac.ltm.addTranslation(name, coordinates);
+        
+        long cid = doPaste(cell, name, coordinates);
+        
+        ac.bm.addCopyWhiteList(cid);
+        
+        return cid;
     }
 
     @Override
     public void undoRemoval(long id) throws Exception{
         
-        //if the object currently exists, no udno removal is necessary.
+        //if the object currently exists, no undo removal is necessary.
         
         if(ac.bm.isActive(id)){
             LOGGER.warning("UNDOING active removal");
@@ -164,8 +161,7 @@ public class GUIEventManager implements GUIObserverInterface{
         }
         
         Vector3f coordinates = CellInfoReader.getCoordinates(cell);
-        String name = cell.getName() ;
-        name = ac.cnm.createUndoName(ac.sm.getSession(), id, name);
+        //name = ac.cnm.createUndoName(ac.sm.getSession(), id, name);
         
         float y = coordinates.z;
         float z = coordinates.y;
@@ -174,27 +170,31 @@ public class GUIEventManager implements GUIObserverInterface{
         coordinates.y = y;
         coordinates.z = z;
         
-        ac.ltm.addTranslation(name, coordinates);        
-        ac.sc.paste(cell, name);
+        doPaste(cell, cell.getName(), coordinates);
     }
-
-    @Override
-    public void undoObjectCreation() throws Exception{
-        long id = ac.bm.getUndoID();
+    
+    /**
+     * Does the copy and some preparations in order to move the cell to its
+     * destined postiion.
+     * 
+     * @param cell The cell which is copied.
+     * @param name The name the copy should have.
+     * @param coordinates The coordinates of the new copy.
+     * @throws Exception 
+     */
+    private long doPaste(Cell cell, String name, Vector3f coordinates) 
+            throws Exception{
         
-        if(id == -1)
-            throw new ServerCommException();
-        notifyRemoval(id);
-    }
-
-    @Override
-    public void redoObjectCreation() throws Exception{
-        long id = ac.bm.getRedoID();
+        long copyID = ac.sc.paste(cell, name);
+        ac.ltm.addTranslation(copyID, coordinates);
+        try{
+            ac.sc.translate(copyID, coordinates);
+            ac.ltm.removeTranslate(copyID);
+        }catch(Exception e){
+            
+        }
         
-        if(id == -1)
-            throw new ServerCommException();
-        
-        undoRemoval(id);
+        return copyID;
     }
 
     @Override
@@ -214,7 +214,6 @@ public class GUIEventManager implements GUIObserverInterface{
             String imgName, String imgDir, double x, double y, 
             double z, double rotationX, double rotationY, double rotationZ, 
             double scale) throws Exception{
-        
         
         //Remember: z and y are reversed
         Vector3f translate = new Vector3f((float)x, (float)z, (float)y);

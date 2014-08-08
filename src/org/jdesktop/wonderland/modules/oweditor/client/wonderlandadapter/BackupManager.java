@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
-import java.util.Set;
 import java.util.logging.Logger;
 import org.jdesktop.wonderland.client.cell.Cell;
 
@@ -24,7 +23,6 @@ public class BackupManager {
             Logger.getLogger(DataObjectObserver.class.getName());
     
     private HashMap<Long, Cell> backup = null;
-    private ArrayList<Long> copyList = null;
     
     //maps the actual id to the original id.
     private HashMap<Long, Long> originalIDs = null;
@@ -32,20 +30,14 @@ public class BackupManager {
     //last active cell contains the last cell with the original id
     private HashMap<Long, ActiveCell> lastActiveID = null;
     
-    private ArrayList<Long> undoCreationList = null;
-    private ArrayList<Long> redoCreationList = null;
-    
     //contains names, which are done by copy.
-    private ArrayList<String> whiteList = null;
+    private ArrayList<Long> whiteList = null;
     
     public BackupManager(SessionManager sm){
         backup = new LinkedHashMap<Long, Cell>();
-        copyList = new ArrayList<Long>();
         originalIDs = new HashMap<Long,Long>();
         lastActiveID= new HashMap<Long, ActiveCell>();
-        undoCreationList = new ArrayList<Long>();
-        redoCreationList = new ArrayList<Long>();
-        whiteList = new ArrayList<String>();
+        whiteList = new ArrayList<Long>();
     }
     
     /**
@@ -77,8 +69,6 @@ public class BackupManager {
         
         //copy cells may not be removed from backup, 
         //because they are needed for further copies.
-        if(isCopy(id))
-            return;
         
         backup.remove(id);
     }
@@ -89,26 +79,12 @@ public class BackupManager {
      */
     public void clean(){
         
-        Set<Long> keys = new HashSet<Long>();
+        HashSet<Long> keys = new HashSet<Long>();
         keys.addAll(backup.keySet());
-
-        for (long key : keys) {
-            if(!copyList.contains(key))
-                backup.remove(key);
-        }
             
         originalIDs.clear();
         lastActiveID.clear();
-        undoCreationList.clear();
-        redoCreationList.clear();
         whiteList.clear();
-    }
-    
-    /**
-     * Clears the copy backup list.
-     */
-    public void clearCopy(){
-        copyList.clear();
     }
     
     /**
@@ -116,23 +92,7 @@ public class BackupManager {
      * 
      * @param id The id.
      */
-    public void addCopy(long id){
-        copyList.add(id);
-    }
     
-    /**
-     * Returns true, if the id is a copy.
-     * 
-     * @param id The id.
-     * @return True, if it is a copy, false otherwise.
-     */
-    public boolean isCopy(long id){
-        for(long id2 : copyList){
-            if(id2 == id)
-                return true;
-        }
-        return false;
-    }
     
     /**
      * Searches whether an original id is stored in the
@@ -142,9 +102,7 @@ public class BackupManager {
      * @return True, if this original id is stored, false otherwise.
      */
     public boolean containsOriginalID(long originalID){
-        if(lastActiveID.containsKey(originalID))
-            return true;
-        return false;
+        return lastActiveID.containsKey(originalID);
     }
     
     /**
@@ -231,67 +189,23 @@ public class BackupManager {
     }
     
     /**
-     * Adds a new copy id to the undo list.
-     * 
-     * @param id The id.
-     * @param name The name.
-     */
-    public void addNewCopyID(long id, String name){
-        
-        if(whiteList.contains(name)){
-            undoCreationList.add(id);
-            redoCreationList.clear();
-        }
-    }
-    
-    /**
-     * Gets the last undo id.
-     * 
-     * @return The id.
-     */
-    public long getUndoID(){
-        if(undoCreationList.size() <= 0)
-            return -1;
-        
-        long id = undoCreationList.get(undoCreationList.size()-1);
-        redoCreationList.add(id);
-        undoCreationList.remove(undoCreationList.size()-1);
-        return id;
-    }
-    
-    /**
-     * Gets the last redo id.
-     * 
-     * @return The id.
-     */
-    public long getRedoID(){
-        if(redoCreationList.size() <= 0)
-            return -1;
-        
-        long id = redoCreationList.get(redoCreationList.size()-1);
-        undoCreationList.add(id);
-        redoCreationList.remove(redoCreationList.size()-1);
-        return id;
-    }
-    
-    /**
      * Puts a name to the whitelist.
      * 
-     * @param name The name.
+     * @param id The cell id.
      */
-    public void addCopyWhiteList(String name){
-        whiteList.add(name);
+    public void addCopyWhiteList(long id){
+        whiteList.add(id);
     }
     
     /**
      * Searches the whitelist for a name and removes it.
      * 
-     * @param name The name.
+     * @param id The cell id.
      * @return True, if the name is on the list, false otherwise.
      */
-    public boolean isOnWhiteList(String name){
-        boolean b= whiteList.contains(name);
-        whiteList.remove(name);
+    public boolean isOnWhiteList(long id){
+        boolean b= whiteList.contains(id);
+        whiteList.remove(id);
         return b;
     }
     

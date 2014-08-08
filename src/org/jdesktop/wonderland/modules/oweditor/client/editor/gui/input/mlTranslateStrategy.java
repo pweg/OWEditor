@@ -4,7 +4,7 @@ import java.awt.Point;
 
 /**
  * This strategy is used for normal translation, without dragging the mouse
- * (Currently only when importing kmz).
+ * (Currently used when copying objects, or importing kmz).
  * It has two modes, the first is for translation, which is done for
  * normal translation behavior. The second is for paste translation.
  * 

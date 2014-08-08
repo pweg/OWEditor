@@ -66,7 +66,8 @@ public class GraphicController implements IGraphicToWindow{
 
     @Override
     public void createShape(ITransformedObject dataObject) {
-        sm.setDataUpdate(dataObject);
+        if(sm.setDataUpdate(dataObject))
+            stm.lateTransform(dataObject.getID());
     }
 
     @Override

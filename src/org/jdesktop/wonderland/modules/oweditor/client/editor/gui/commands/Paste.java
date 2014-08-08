@@ -2,7 +2,6 @@ package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.commands;
 
 import java.awt.Point;
 import java.util.ArrayList;
-import java.util.Iterator;
 
 import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.GUIObserverInterface;
 
@@ -14,6 +13,7 @@ import org.jdesktop.wonderland.modules.oweditor.client.adapterinterfaces.GUIObse
 public class Paste implements Command{
     
     ArrayList<Long> ids = new ArrayList<Long>();
+    ArrayList<Long> copyIDs = new ArrayList<Long>();
     ArrayList<Point> coords  = new ArrayList<Point>();
     
     public Paste(ArrayList<Long> ids, ArrayList<Point> coords) {
@@ -32,13 +32,17 @@ public class Paste implements Command{
     public void execute(GUIObserverInterface goi)  throws Exception{
         
         int failcount = 0;
+        copyIDs.clear();
         
         try{
             for(int i=0; i<ids.size();i++){
                 Long id = ids.get(i);
                 Point p = coords.get(i);
                 try{
-                    goi.notifyPaste(id, p.x, p.y);
+                    long cid = goi.notifyPaste(id, p.x, p.y);
+                    if(cid != -1)
+                        copyIDs.add(cid);
+                    
                 }catch(Exception e){
                     failcount++;
                 }
@@ -57,13 +61,12 @@ public class Paste implements Command{
     public void undo(GUIObserverInterface goi)  throws Exception{
         int failcount = 0;
         
-        for (Iterator<Long> iterator = ids.iterator(); iterator.hasNext();) {
+        for (long cid : copyIDs) {
             try{
-                goi.undoObjectCreation();
+                goi.notifyRemoval(cid);
             }catch(Exception e){
                 failcount++;
             }
-            iterator.next();
         }
         
         //the command only failed, when every operation failed!
@@ -73,20 +76,7 @@ public class Paste implements Command{
 
     @Override
     public void redo(GUIObserverInterface goi)  throws Exception{
-        int failcount = 0;
-        
-        for (Iterator<Long> iterator = ids.iterator(); iterator.hasNext();) {
-            try{
-                goi.redoObjectCreation();
-            }catch(Exception e){
-                failcount++;
-            }
-            iterator.next();
-        }
-        
-        //the command only failed, when every operation failed!
-        if(failcount == ids.size())
-            throw new CommandException();
+        execute(goi);
     }
     
 

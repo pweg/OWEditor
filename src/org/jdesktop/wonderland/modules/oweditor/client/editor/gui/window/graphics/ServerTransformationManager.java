@@ -1,5 +1,8 @@
 package org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.graphics;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.graphics.shapes.ShapeObject;
 
 /**
@@ -13,6 +16,9 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.graphic
 public class ServerTransformationManager {
     
     private IInternalMediator med = null;
+    
+    private HashMap<Long, ArrayList<Object>> lateTranslate = 
+            new HashMap<Long, ArrayList<Object>>();
     
     public ServerTransformationManager(IInternalMediator med){
         this.med = med;
@@ -29,6 +35,18 @@ public class ServerTransformationManager {
      */
     public void translateShape(long id, int x, int y, double z){
         ShapeObject shape = med.getShape(id);
+        
+        if(shape == null){
+            ArrayList<Object> list = new ArrayList<Object>();
+
+            list.add(x);
+            list.add(y);
+            list.add(z);
+            lateTranslate.put(id, list);
+            
+            return;
+        }
+        
         double old_z = shape.getZ();
         shape.setLocation(x, y, z);
         
@@ -36,6 +54,23 @@ public class ServerTransformationManager {
             //med.removeShape(id);
             med.readdShape(shape);
             med.repaint();
+        }
+    }
+    
+    public void lateTransform(long id){
+        if(lateTranslate.containsKey(id)){
+            lateTranslate.remove(id);
+            ArrayList<Object> list = lateTranslate.get(id);
+            
+            try{
+                int x = (Integer) list.get(0);
+                int y = (Integer) list.get(1);
+                double z = (Double) list.get(2);
+
+                translateShape(id, x,y,z);
+            }catch(Exception ex){
+                
+            }
         }
     }
 

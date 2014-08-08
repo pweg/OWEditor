@@ -26,8 +26,6 @@ public class Import implements Command{
     public void undo(GUIObserverInterface goi)  throws Exception{
         if(id != -1){
             goi.notifyRemoval(id);
-        }else{
-            goi.undoObjectCreation();
         }
     }
 
@@ -35,8 +33,6 @@ public class Import implements Command{
     public void redo(GUIObserverInterface goi)  throws Exception{
         if(id != -1)
             goi.undoRemoval(id);
-        else
-            goi.redoObjectCreation();
     }
 
     public void setID(long id) {

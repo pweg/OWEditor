@@ -38,8 +38,6 @@ public class ServerEventManager {
     private WonderlandAdapterController ac = null;
     private ArrayList<IAdapterObserver> observers = null;
     
-    private ArrayList<Long> namesToChange = null;
-    
     private ComponentChangeListener componentListener = null;
     private CellChangeListener imageListener = null;
     
@@ -49,7 +47,7 @@ public class ServerEventManager {
             Logger.getLogger(GUIEventManager.class.getName());
     private static final ResourceBundle BUNDLE = ResourceBundle.getBundle(
             "org/jdesktop/wonderland/modules/oweditor/client/resources/Bundle");
-
+    
     
     /**
      * Creates a new instance.
@@ -61,7 +59,6 @@ public class ServerEventManager {
         imgMonitor = new ImageMonitor();
         
         observers = new ArrayList<IAdapterObserver>();
-        namesToChange = new ArrayList<Long>();
         
         componentListener = new ComponentChangeListener() {
             public void componentChanged(Cell cell, 
@@ -181,26 +178,12 @@ public class ServerEventManager {
         * do late transform before reading cell data in order to get
         * the changes immediately.
         */
-            
-            //copied names
-        if(ac.ltm.containsCell(name)){
-            ac.bm.addNewCopyID(id, name);
-        }
-        
-        String oldName = name;
-        if(ac.ltm.invokeLateTransform(ac.sc, id, name)){
-            LOGGER.warning("creation");
-            name = checkName(id, name);
-        }else{
-            namesToChange.add(id);
-        }
-        
+        ac.ltm.lateTransform(ac.sc, id);  
         
         ImageClass img = getImage(cell);
         
-        id = checkID(cell, oldName);
         
-     
+        id = checkID(cell);
         Vector3fInfo coordinates = CellInfoReader.getCoordinates(cell);
         Vector3f rotation = CellInfoReader.getRotation(cell);
         float scale = CellInfoReader.getScale(cell);
@@ -214,7 +197,6 @@ public class ServerEventManager {
 
             float height = coordinates.height;
             float width = coordinates.width;
-
 
             object.setID(id);
             object.setCoordinates(x, y, z);
@@ -241,28 +223,6 @@ public class ServerEventManager {
             object.setName(name);
             observer.notifyObjectCreation(object);
         } 
-    }
-    
-    /**
-     * Checks if the name is from a copy name and corrects it.
-     * 
-     * @param id The id of the cell.
-     * @param name The name of the cell.
-     * @return Returns the real name.
-     */
-    private String checkName(long id, String name){
-        
-        String realName = ac.cnm.getRealName(ac.sm.getSession(), name);
-        LOGGER.warning("name change " + realName);
-        
-        try {
-            if(!realName.equals(name) && !ac.ltm.containsCell(name)){
-                ac.sc.changeName(id, realName);
-            }
-        } catch (ServerCommException ex) {
-            LOGGER.log(Level.SEVERE, "Could not change name back.", ex);
-        }
-        return realName;
     }
     
 
@@ -342,10 +302,9 @@ public class ServerEventManager {
      * Checks the id. Gets the original id, if it was created by undo/redo. 
      * 
      * @param cell The cell.
-     * @param oldName The old name of the cell.
      * @return The editor id.
      */
-    private long checkID(Cell cell, String oldName){
+    private long checkID(Cell cell){
         IDCellComponent idComponent = cell.getComponent(IDCellComponent.class);
         long id = CellInfoReader.getID(cell);
         
@@ -365,7 +324,7 @@ public class ServerEventManager {
                     //if it is on white list, the cell with the name
                     //already exists, therefore the original id was done
                     //with copy and can be deleted.
-                    if(ac.bm.isOnWhiteList(oldName))
+                    if(ac.bm.isOnWhiteList(id))
                         ac.sc.deleteComponent(id, IDCellComponentServerState.class);
                     //the original id was not on the whitelist, therefore it 
                     //is the same object which already exists, therefore it
@@ -401,20 +360,10 @@ public class ServerEventManager {
      * @param cell The cell to transform.
      */
     private void movableComponentCreated(Cell cell){
-        
-        String name = cell.getName();
         long id = CellInfoReader.getID(cell);
         //id = ac.bm.getOriginalID(id);
         
-        ac.ltm.invokeLateTransform(ac.sc, id, name);
-        
-        if(namesToChange.contains(id) && false){
-            
-            LOGGER.warning("translation");
-            checkName(id, cell.getName());
-            nameChanged(cell);
-            namesToChange.remove(id);
-        }
+        ac.ltm.lateTransform(ac.sc, id);
     }
     
     /**
@@ -626,12 +575,21 @@ public class ServerEventManager {
         }
     }
 
+    /**
+     * Sets the user name of the current user.
+     * 
+     * @param username The name.
+     */
     void setUserName(String username) {
         for(IAdapterObserver observer : observers){
             observer.setUserName(username);
         }
     }
     
+    /**
+     * A class used for images, containing an image and it's 
+     * directory and name on the server.
+     */
     class ImageClass{
         public BufferedImage img = null;
         public String imgName;

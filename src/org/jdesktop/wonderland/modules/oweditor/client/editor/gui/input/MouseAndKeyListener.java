@@ -121,7 +121,6 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
     
     @Override
     public void mouseClicked(MouseEvent e) {
-
         Point p = e.getPoint();
         
         if (e.getClickCount() == 2 && e.getButton() == MouseEvent.BUTTON1) {
@@ -133,6 +132,8 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
                     window.setPropertiesVisible(true);
                 }
             }
+        }else{
+            
         }
         
         if (e.getButton() ==  MouseEvent.BUTTON3 && mode <= PASTE){            

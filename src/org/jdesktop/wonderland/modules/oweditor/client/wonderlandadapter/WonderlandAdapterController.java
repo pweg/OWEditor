@@ -25,8 +25,8 @@ public class WonderlandAdapterController implements AdapterMainInterface{
     protected SessionManager sm = null;
     protected ServerCommunication sc = null;
     protected LateTransformationManager ltm = null;
-    protected CopyNameManager cnm = null;
     protected SecurityManager secm =null;
+    protected CopyNameManager cnm = null;
     
     public WonderlandAdapterController(){
         
@@ -34,7 +34,6 @@ public class WonderlandAdapterController implements AdapterMainInterface{
 
     @Override
     public void initialize() {
-        cnm = new CopyNameManager();
         ltm = new LateTransformationManager();
         ct = new CoordinateTranslator();
         gem = new GUIEventManager(this);
@@ -46,6 +45,7 @@ public class WonderlandAdapterController implements AdapterMainInterface{
         bm = new BackupManager(sm);
         fm = new FileManager();
         secm = new SecurityManager(this);
+        cnm = new CopyNameManager();
         CellManager.getCellManager().addCellStatusChangeListener(csl);
     }
 

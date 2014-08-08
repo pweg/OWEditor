@@ -97,7 +97,7 @@ public class GUIEventManager implements GUIObserverInterface{
     }
 
     @Override
-    public void notifyPaste(long id, int x, int y) throws Exception{
+    public long notifyPaste(long id, int x, int y) throws Exception{
         
         ServerObject o = ac.server.getObject(id);
         if(o == null)
@@ -111,28 +111,8 @@ public class GUIEventManager implements GUIObserverInterface{
         ServerObject clone = ac.server.copyObject(id, name);
         ac.bom.addCreatedID(clone.id);
         ac.sem.serverCopyEvent(clone);
+        return clone.id;
     }
-
-    @Override
-    public void undoObjectCreation() throws Exception{
-        long id = ac.bom.getCreationUndoID();
-
-        if(id == -1)
-            throw new Exception();
-        
-        notifyRemoval(id);
-    }
-    
-    @Override
-    public void redoObjectCreation() throws Exception{
-        long id = ac.bom.getCreationRedoID();
-        
-        if(id == -1)
-            throw new Exception();
-        
-        ac.sem.createObject(ac.server.getObject(id));
-    }
-
 
     @Override
     public void notifyRotation(long id, double rot_x, double rot_y, double rot_z)

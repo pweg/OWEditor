@@ -8,7 +8,6 @@ package org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter;
 
 import java.util.LinkedHashMap;
 import java.util.ResourceBundle;
-import org.jdesktop.wonderland.client.comms.WonderlandSession;
 
 /**
  * Is used for creating copy names, which is needed in order for
@@ -24,7 +23,6 @@ public class CopyNameManager {
     
     private LinkedHashMap<Long, Integer> copies = null;
     
-    private final String separator = "|";
     
     public CopyNameManager(){
         copies = new LinkedHashMap<Long, Integer>();
@@ -34,12 +32,11 @@ public class CopyNameManager {
      * Creates a copy name for the late translation, which 
      * should be changed later.
      * 
-     * @param session a Wonderland session.
      * @param id The cell id of the cell to copy.
      * @param name The name of the cell to copy.
      * @return The name for the copied cell.
      */
-    public String createCopyName(WonderlandSession session, long id, String name){
+    public String createCopyName(long id, String name){
         
         String count = "1";
            
@@ -51,42 +48,8 @@ public class CopyNameManager {
             copies.put(id, 1);
         }
         
-        name = BUNDLE.getString("CopyName")+ name+"_"+count+separator
-                +"ID"+session.getID()+"_"+id;
+        name = BUNDLE.getString("CopyName")+ name+"_"+count;
         return name;
-    }
-    
-    /**
-     * Creates a name for undo.
-     * 
-     * @param session The session.
-     * @param id The id.
-     * @param name The name.
-     * @return  The name of the undo cell.
-     */
-    public String createUndoName(WonderlandSession session, long id, String name){
-        return name + separator+"ID"+ session.getID()+"_"+id;
-    }
-    
-    /**
-     * Returns the real name of the cell, which should be used for the copy.
-     * @param session The wonderland session
-     * @param name The copy name of the cell.
-     * @return The real name of the cell.
-     */
-    public String getRealName(WonderlandSession session, String name){
-        
-        if(name == null)
-            return "";
-        if(session == null)
-            return name;
-        
-        if(name.lastIndexOf(separator+"ID"+ session.getID()+"_") == -1)
-            return name;
-        
-        int index = name.lastIndexOf(separator);
-        
-        return name.substring(0,index);
     }
     
     

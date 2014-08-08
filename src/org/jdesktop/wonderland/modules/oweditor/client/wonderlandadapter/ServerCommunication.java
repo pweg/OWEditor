@@ -26,6 +26,7 @@ import org.jdesktop.wonderland.client.jme.utils.ScenegraphUtils;
 import org.jdesktop.wonderland.common.cell.CellEditConnectionType;
 import org.jdesktop.wonderland.common.cell.CellID;
 import org.jdesktop.wonderland.common.cell.CellTransform;
+import org.jdesktop.wonderland.common.cell.messages.CellCreatedMessage;
 import org.jdesktop.wonderland.common.cell.messages.CellDuplicateMessage;
 import org.jdesktop.wonderland.common.cell.messages.CellReparentMessage;
 import org.jdesktop.wonderland.common.cell.messages.CellServerComponentMessage;
@@ -318,7 +319,7 @@ public class ServerCommunication {
      * @param name The name of the new cell.
      * @throws org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter.ServerCommException
      */
-    public void paste(Cell cell, String name) throws ServerCommException{
+    public long paste(Cell cell, String name) throws ServerCommException{
         WonderlandSession session = ac.sm.getSession();
         
         String message = MessageFormat.format(name, cell.getName());
@@ -328,7 +329,20 @@ public class ServerCommunication {
                 CellEditConnectionType.CLIENT_TYPE);
         CellDuplicateMessage msg =
                 new CellDuplicateMessage(cell.getCellID(), message);
-        connection.send(msg);
+        try {
+            ResponseMessage response = connection.sendAndWait(msg);
+            
+            if(response != null && response instanceof CellCreatedMessage){
+                
+                return Long.valueOf((
+                        (CellCreatedMessage) response).getCellID().toString());
+            }
+                
+            
+        } catch (InterruptedException ex) {
+            Logger.getLogger(ServerCommunication.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return -1;
     }
     
     /**

@@ -144,7 +144,9 @@ public class SelectionManager {
         ArrayList<ShapeObject> list = med.getShapesInSelectionRect();
         
         for(ShapeObject shape : list){
-            switchSelection(shape, true);
+            shape.setSelected(true);
+            selectedShapes.add(shape.getID());
+            //switchSelection(shape, true);
         }
     }
     
