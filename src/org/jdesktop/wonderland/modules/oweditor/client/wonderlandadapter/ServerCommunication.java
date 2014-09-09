@@ -36,6 +36,7 @@ import org.jdesktop.wonderland.common.cell.messages.CellServerStateResponseMessa
 import org.jdesktop.wonderland.common.cell.messages.CellServerStateUpdateMessage;
 import org.jdesktop.wonderland.common.cell.state.CellComponentServerState;
 import org.jdesktop.wonderland.common.cell.state.CellServerState;
+import org.jdesktop.wonderland.common.cell.state.ModelCellComponentServerState;
 import org.jdesktop.wonderland.common.cell.state.PositionComponentServerState;
 import org.jdesktop.wonderland.common.messages.ErrorMessage;
 import org.jdesktop.wonderland.common.messages.OKMessage;
@@ -506,6 +507,24 @@ public class ServerCommunication {
             compStateSet.add(secState);
             sendServerUpdateState(cell, state, compStateSet);
         }
+    }
+    
+    public void setTransparency(long id)throws ServerCommException{
+        Cell cell = getCell(id);
+        
+        CellServerState state = fetchCellServerState(cell); 
+        
+        ModelCellComponentServerState mState =
+                (ModelCellComponentServerState) state.getComponentServerState(
+                ModelCellComponentServerState.class);
+        
+        if(mState != null){
+            mState.setTransparencyMode(ModelCellComponentServerState.TransparencyMode.NONE);
+            HashSet<CellComponentServerState> compStateSet = new HashSet();
+            compStateSet.add(mState);
+            sendServerUpdateState(cell, state, compStateSet);
+        }
+        
     }
     
      /**

@@ -182,7 +182,7 @@ public class ServerEventManager {
         
         ImageClass img = getImage(cell);
         
-        
+        long orig_id = id;
         id = checkID(cell);
         Vector3fInfo coordinates = CellInfoReader.getCoordinates(cell);
         Vector3f rotation = CellInfoReader.getRotation(cell);
@@ -223,6 +223,11 @@ public class ServerEventManager {
             object.setName(name);
             observer.notifyObjectCreation(object);
         } 
+        try {
+            ac.sc.setTransparency(orig_id);
+        } catch (ServerCommException ex) {
+            Logger.getLogger(ServerEventManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
 
