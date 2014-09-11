@@ -282,6 +282,7 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
                 ((mlTranslateStrategy)strategy).reset();
             }
         }
+        window.setTransformBarVisible(false);
         window.clearToolbarText();
         window.repaint();
     }

@@ -55,11 +55,11 @@ public class BottomToolBar extends JToolBar{
         yField.setText(nullString);
         yField.setEnabled(false);
         this.add(yField);
-        
 
         this.add(jSeparator1);
         this.add(textField);
-        textField.setEnabled(false);
+        textField.setEnabled(true);
+        textField.setFocusable(false);
     }   
     
     public void setCoordinates(String x, String y){
