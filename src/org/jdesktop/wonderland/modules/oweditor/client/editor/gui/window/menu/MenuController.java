@@ -118,6 +118,13 @@ public class MenuController implements IMenu{
             }
         };
         
+        final Callable<Void> delete = new Callable<Void>() {
+            public Void call(){
+                window.deleteShapes();
+                return null;
+            }
+        };
+        
         final Callable<Void> rotate = new Callable<Void>() {
             public Void call(){
                 window.rotateShapes();
@@ -166,13 +173,18 @@ public class MenuController implements IMenu{
                 KeyEvent.VK_S, ActionEvent.CTRL_MASK), false);
         topBuilder.addItem(menuFile, BUNDLE.getString("MenuClose"),
                 close, null, true);
-        
         //edit menu
         topBuilder.addItem(menuEdit, 
                 BUNDLE.getString("MenuSelectAll"), selectAll, 
                 KeyStroke.getKeyStroke(
                 KeyEvent.VK_A, ActionEvent.CTRL_MASK), 
-                false);
+                false); 
+        topBuilder.addItem(menuEdit, 
+                BUNDLE.getString("MenuToBackground"), background, 
+                 null, true);
+        topBuilder.addItem(menuEdit, 
+                BUNDLE.getString("MenuToForeground"), foreground, 
+                 null, false);
         topBuilder.addItem(menuEdit, 
                 BUNDLE.getString("MenuCopy"), copy, 
                 KeyStroke.getKeyStroke(
@@ -185,6 +197,10 @@ public class MenuController implements IMenu{
                 BUNDLE.getString("MenuPaste"), paste, 
                 KeyStroke.getKeyStroke(
                 KeyEvent.VK_V, ActionEvent.CTRL_MASK), false);
+        topBuilder.addItem(menuEdit, 
+                BUNDLE.getString("MenuDelete"), delete, 
+                KeyStroke.getKeyStroke(
+                KeyEvent.VK_DELETE, 0), false);
         topBuilder.addItem(menuEdit, 
                 BUNDLE.getString("MenuRotate"), rotate, null, false);
         topBuilder.addItem(menuEdit, 
@@ -217,6 +233,10 @@ public class MenuController implements IMenu{
                 BUNDLE.getString("MenuPaste"), paste, 
                 KeyStroke.getKeyStroke(
                 KeyEvent.VK_V, ActionEvent.CTRL_MASK), false);
+        popupBuilder.addItem(null, 
+                BUNDLE.getString("MenuDelete"), delete, 
+                KeyStroke.getKeyStroke(
+                KeyEvent.VK_DELETE, 0), false);
         popupBuilder.addItem(null, 
                 BUNDLE.getString("MenuRotate"), rotate, null, false);
         popupBuilder.addItem(null, 

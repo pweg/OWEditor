@@ -231,4 +231,9 @@ public class WindowToMenu implements IWindowToMenu{
         return true;
     }
 
+    @Override
+    public void deleteShapes() {
+        wc.graphic.deleteCurrentSelection();
+    }
+
 }

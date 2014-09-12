@@ -235,10 +235,6 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
         if (key == KeyEvent.VK_SHIFT) {
             shiftPressed = true;
         }
-        //DELETE
-        else if(key == KeyEvent.VK_DELETE){
-            graphic.deleteCurrentSelection();
-        }
         //ESCAPE
         else if(key == KeyEvent.VK_ESCAPE){
             clear();

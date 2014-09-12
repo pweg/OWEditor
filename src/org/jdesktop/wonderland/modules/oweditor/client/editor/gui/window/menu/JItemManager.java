@@ -17,12 +17,17 @@ public class JItemManager {
     private static final ResourceBundle BUNDLE = ResourceBundle.getBundle(
             "org/jdesktop/wonderland/modules/oweditor/client/resources/Bundle");
 
+    /*
+     * This is in order to make quick changes, for deactivating items in the
+     * menu in another order.
+     */
     private static final boolean COPYSELECTED = true;
     private static final boolean CUTSELECTED = true;
     private static final boolean ROTATESELECTED = true;
     private static final boolean SCALESELECTED = true;
     private static final boolean PROPERTIESSELECTED = true; 
     private static final boolean TOBACKSELECTED = true; 
+    private static final boolean DELETESELECTED = true;
     
     private static final boolean PASTECOPYEXIST = true;
 
@@ -34,6 +39,7 @@ public class JItemManager {
     private static final String PROPERTIES = BUNDLE.getString("MenuProperties");
     private static final String TOBACK = BUNDLE.getString("MenuToBackground");
     private static final String TOFORE = BUNDLE.getString("MenuToForeground");
+    private static final String DELETE = BUNDLE.getString("MenuDelete");
     
     private HashMap<String, JMenuItem> topItems;
     private HashMap<String, JMenuItem> popupItems;
@@ -69,14 +75,17 @@ public class JItemManager {
         if(topItems != null){
             topItems.get(COPY).setEnabled(selected && COPYSELECTED);
             topItems.get(CUT).setEnabled(selected && CUTSELECTED);
+            topItems.get(DELETE).setEnabled(selected && DELETESELECTED);
             topItems.get(ROTATE).setEnabled(selected && ROTATESELECTED);
             topItems.get(SCALE).setEnabled(selected && SCALESELECTED);
             topItems.get(PROPERTIES).setEnabled(selected && PROPERTIESSELECTED);
+            topItems.get(TOBACK).setEnabled(selected && TOBACKSELECTED);
         }
 
         if(popupItems != null){
             popupItems.get(COPY).setEnabled(selected && COPYSELECTED);
             popupItems.get(CUT).setEnabled(selected && CUTSELECTED);
+            popupItems.get(DELETE).setEnabled(selected && DELETESELECTED);
             popupItems.get(ROTATE).setEnabled(selected && ROTATESELECTED);
             popupItems.get(SCALE).setEnabled(selected && SCALESELECTED);
             popupItems.get(PROPERTIES).setEnabled(selected && PROPERTIESSELECTED);
@@ -109,6 +118,8 @@ public class JItemManager {
         if(popupItems != null){
             popupItems.get(TOBACK).setVisible(b);
             popupItems.get(TOFORE).setVisible(!b);
+            topItems.get(TOBACK).setVisible(b);
+            topItems.get(TOFORE).setVisible(!b);
         }
     }
 

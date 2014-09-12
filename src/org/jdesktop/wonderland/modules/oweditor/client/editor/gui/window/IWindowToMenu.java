@@ -75,4 +75,9 @@ public interface IWindowToMenu {
      */
     public void close();
 
+    /**
+     * Deletes the selected shapes.
+     */
+    public void deleteShapes();
+
 }

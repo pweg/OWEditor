@@ -177,4 +177,9 @@ public interface IGraphicToWindow {
      */
     public String getShapeName(long id);
 
+    /**
+     * Deletes the current selection
+     */
+    public void deleteCurrentSelection();
+
 }

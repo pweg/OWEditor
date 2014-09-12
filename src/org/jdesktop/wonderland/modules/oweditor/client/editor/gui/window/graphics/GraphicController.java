@@ -210,4 +210,9 @@ public class GraphicController implements IGraphicToWindow{
         return s.getName();
     }
 
+    @Override
+    public void deleteCurrentSelection() {
+        ssm.deleteCurrentSelection();
+    }
+
 }
