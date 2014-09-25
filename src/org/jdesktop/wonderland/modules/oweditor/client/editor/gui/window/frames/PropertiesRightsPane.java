@@ -59,6 +59,7 @@ public class PropertiesRightsPane extends JPanel {
         okButton = new javax.swing.JButton();
         resetButton = new javax.swing.JButton();
         cancelButton = new javax.swing.JButton();
+        applyButton = new javax.swing.JButton();
         permTable.setModel(permTableModel);
         permTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 
@@ -90,7 +91,7 @@ public class PropertiesRightsPane extends JPanel {
         okButton.setText(BUNDLE.getString("OK"));
         okButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                okButtonActionPerformed(evt);
+                okButtonActionPerformed(evt, true);
             }
         });
 
@@ -98,6 +99,13 @@ public class PropertiesRightsPane extends JPanel {
         cancelButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cancelButtonActionPerformed(evt);
+            }
+        });
+        
+        applyButton.setText(BUNDLE.getString("Apply"));
+        applyButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                okButtonActionPerformed(evt, false);
             }
         });
         
@@ -126,6 +134,8 @@ public class PropertiesRightsPane extends JPanel {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(removeButton))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                               .addComponent(applyButton)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(resetButton)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(cancelButton)
@@ -146,7 +156,8 @@ public class PropertiesRightsPane extends JPanel {
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(okButton)
                         .addComponent(cancelButton)
-                        .addComponent(resetButton))
+                        .addComponent(resetButton)
+                        .addComponent(applyButton))
                     .addContainerGap())
             );
 
@@ -174,8 +185,8 @@ public class PropertiesRightsPane extends JPanel {
         frame.fc.window.addRightsComponent(ids);
     } 
     
-    private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {                                         
-        frame.okButtonActionPerformed(evt);
+    private void okButtonActionPerformed(java.awt.event.ActionEvent evt, boolean close) {                                         
+        frame.okButtonActionPerformed(evt,close);
     } 
     
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {                                         
@@ -342,7 +353,8 @@ public class PropertiesRightsPane extends JPanel {
     }
 
     // Variables declaration - do not modify                     
-    private javax.swing.JButton addButton;                 
+    private javax.swing.JButton addButton;  
+    private javax.swing.JButton applyButton;               
     private javax.swing.JButton removeButton;
     private javax.swing.JButton addCompButton;              
     private javax.swing.JButton okButton;

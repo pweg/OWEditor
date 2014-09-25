@@ -124,6 +124,7 @@ public class PropertiesFrame extends javax.swing.JFrame {
         scaleField = new javax.swing.JFormattedTextField(doubleFormat);
         okButton = new javax.swing.JButton();
         cancelButton = new javax.swing.JButton();
+        applyButton = new javax.swing.JButton();
         resetButton = new javax.swing.JButton();
 
         jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -326,7 +327,7 @@ public class PropertiesFrame extends javax.swing.JFrame {
         okButton.setText(BUNDLE.getString("OK"));
         okButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                okButtonActionPerformed(evt);
+                okButtonActionPerformed(evt, true);
             }
         });
 
@@ -334,6 +335,13 @@ public class PropertiesFrame extends javax.swing.JFrame {
         cancelButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cancelButtonActionPerformed(evt);
+            }
+        });
+        
+        applyButton.setText(BUNDLE.getString("Apply"));
+        applyButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                okButtonActionPerformed(evt, false);
             }
         });
 
@@ -364,6 +372,8 @@ public class PropertiesFrame extends javax.swing.JFrame {
                             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(applyButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(resetButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(cancelButton)
@@ -387,7 +397,8 @@ public class PropertiesFrame extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(okButton)
                     .addComponent(cancelButton)
-                    .addComponent(resetButton))
+                    .addComponent(resetButton)
+                    .addComponent(applyButton))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         
@@ -454,7 +465,7 @@ public class PropertiesFrame extends javax.swing.JFrame {
         frame.setVisible(true);
     }
 
-    protected void okButtonActionPerformed(java.awt.event.ActionEvent evt) {  
+    protected void okButtonActionPerformed(java.awt.event.ActionEvent evt, boolean close) {  
         resetLabelColor();
         
         ArrayList<Long> ids = new ArrayList<Long>();
@@ -511,19 +522,27 @@ public class PropertiesFrame extends javax.swing.JFrame {
                 coordsZ == null && rotX == null && rotY == null &&
                 rotZ == null && scaleList == null && img_name == null &&
                 rights.isEmpty()){
-            setVisible(false);
+            if(close)
+                setVisible(false);
             return;      
         }
         
-        float x = -1;
-        float y = -1;
-        float z = -1;
-        double rot_x = -1;
-        double rot_y = -1;
-        double rot_z = -1;
-        double scale = -1;
-        
+        float x = 0;
+        float y = 0;
+        float z = 0;
+        double rot_x = 0;
+        double rot_y = 0;
+        double rot_z = 0;
+        double scale = 1;
+
         boolean error = false;
+        boolean errorX = false;
+        boolean errorY = false;
+        boolean errorZ = false;
+        boolean errorRotX = false;
+        boolean errorRotY = false;
+        boolean errorRotZ = false;
+        boolean errorScale = false;
         
         //check name and position only if one object is selected.
         if(objects.size() == 1){
@@ -537,19 +556,19 @@ public class PropertiesFrame extends javax.swing.JFrame {
                 x = Float.parseFloat(xs);
             }catch(NumberFormatException e){
                 setLabelColorError(xLabel);
-                error = true;
+                errorX = true;
             }
             try{
                 y = Float.parseFloat(ys);
             }catch(NumberFormatException e){
                 setLabelColorError(yLabel);
-                error = true;
+                errorY = true;
             }
             try{
                 z = Float.parseFloat(zs);
             }catch(NumberFormatException e){
                 setLabelColorError(zLabel);
-                error = true;
+                errorZ = true;
             }
         }
         //check other objects only, if either one is selected, or
@@ -560,7 +579,7 @@ public class PropertiesFrame extends javax.swing.JFrame {
                 rot_x = Double.parseDouble(rot_xs);
             }catch(NumberFormatException e){
                 setLabelColorError(rotXLabel);
-                error = true;
+                errorRotX = true;
             }
         }
         if((objects.size() > 1 && !rot_ys.equals(BUNDLE.getString("DifferentValues")))
@@ -569,7 +588,7 @@ public class PropertiesFrame extends javax.swing.JFrame {
                 rot_y = Double.parseDouble(rot_ys);
             }catch(NumberFormatException e){
                 setLabelColorError(rotYLabel);
-                error = true;
+                errorRotY = true;
             }
         }
         if((objects.size() > 1 && !rot_zs.equals(BUNDLE.getString("DifferentValues")))
@@ -578,7 +597,7 @@ public class PropertiesFrame extends javax.swing.JFrame {
                 rot_z = Double.parseDouble(rot_zs);
             }catch(NumberFormatException e){
                 setLabelColorError(rotZLabel);
-                error = true;
+                errorRotZ = true;
             }
         }
         if((objects.size() > 1 && !scales.equals(BUNDLE.getString("DifferentValues")))
@@ -587,14 +606,15 @@ public class PropertiesFrame extends javax.swing.JFrame {
                 scale = Double.parseDouble(scales);  
             }catch(NumberFormatException e){
                 setLabelColorError(scaleLabel);
-                error = true;
+                errorScale = true;
             }
         }
         
         if(scale == 0)
             scale = 1;
         
-        if(error){
+        if(error || errorX || errorY || errorZ
+                || errorRotX || errorRotY || errorRotZ || errorScale){
             showError(BUNDLE.getString("ImportMissingError"), 
                     BUNDLE.getString("ImportMissingErrorTitle"));
             return;
@@ -607,43 +627,43 @@ public class PropertiesFrame extends javax.swing.JFrame {
             if(names != null)
                 names.add(name);
             if(coordsX != null){
-                if(x != -1)
+                if(!errorX && objects.size() == 1)
                     coordsX.add(x);
                 else
                     coordsX.add(o.getXf());
             }
             if(coordsY != null){
-                if(y != -1)
+                if(!errorY && objects.size() == 1)
                     coordsY.add(y);
                 else
                     coordsY.add(o.getYf());
             }
             if(coordsZ != null){
-                if(z != -1)
+                if(!errorZ && objects.size() == 1)
                     coordsZ.add(z);
                 else
                     coordsZ.add(o.getZf());
             }
             if(rotX != null){
-                if(rot_x != -1)
+                if(!errorRotX)
                     rotX.add(rot_x);
                 else
                     rotX.add(o.getRotationX());
             }
             if(rotY != null){
-                if(rot_y != -1)
+                if(!errorRotY)
                     rotY.add(rot_y);
                 else
                     rotY.add(o.getRotationY());
             }
             if(rotZ != null){
-                if(rot_z != -1)
+                if(!errorRotZ)
                     rotZ.add(rot_z);
                 else
                     rotZ.add(o.getRotationZ());
             }
             if(scaleList != null){
-                if(scale != -1)
+                if(!errorScale)
                     scaleList.add(scale);
                 else
                     scaleList.add(o.getScale());
@@ -660,7 +680,11 @@ public class PropertiesFrame extends javax.swing.JFrame {
         fc.window.setProperties(ids, names, coordsX, coordsY, coordsZ, 
                 rotX, rotY, rotZ, scaleList, img_name, img_dir, list);
         
-        setVisible(false);
+        if(close)
+            setVisible(false);
+        else{
+            setVisible(true);
+        }
         
     } 
 
@@ -675,8 +699,8 @@ public class PropertiesFrame extends javax.swing.JFrame {
     @Override
     public void setVisible(boolean b){
         fc.mainframe.setEnabled(!b);
+        objects.clear();
         if(!b){
-            objects.clear();
             fc.setImageSelectionVisible(b);
             image.setImage(null);
             
@@ -692,7 +716,6 @@ public class PropertiesFrame extends javax.swing.JFrame {
             ArrayList<Long> ids = fc.window.getSelectedIDs();
             if(ids == null)
                 return;
-            
             for(long id : ids){
                 IDataObject object = fc.window.getDataObject(id);
                 objects.add(object);
@@ -751,6 +774,8 @@ public class PropertiesFrame extends javax.swing.JFrame {
         
         initialImg = "";
         initialImgDir= "";
+        boolean first = true;
+        
         
         for(IDataObject object : objects){
         
@@ -765,22 +790,22 @@ public class PropertiesFrame extends javax.swing.JFrame {
             String scale = doubleFormat.format(object.getScale());
             
             //if more items are selected, check if they are different.
-            if(!rotationFieldX.getText().equals("0.00") && !rotationFieldX.getText().equals(rotX))
+            if(!first && !rotationFieldX.getText().equals(rotX))
                 rotationFieldX.setText(BUNDLE.getString("DifferentValues"));
             else
                 rotationFieldX.setText(rotX);
             
-            if(!rotationFieldY.getText().equals("0.00") && !rotationFieldY.getText().equals(rotY))
+            if(!first && !rotationFieldY.getText().equals(rotY))
                 rotationFieldY.setText(BUNDLE.getString("DifferentValues"));
             else
                 rotationFieldY.setText(rotY);
             
-            if(!rotationFieldZ.getText().equals("0.00") && !rotationFieldZ.getText().equals(rotZ))
+            if(!first && !rotationFieldZ.getText().equals(rotZ))
                 rotationFieldZ.setText(BUNDLE.getString("DifferentValues"));
             else
                 rotationFieldZ.setText(rotZ);
             
-            if(!scaleField.getText().equals("1.00") && !scaleField.getText().equals(scale))
+            if(!first && !scaleField.getText().equals(scale))
                 scaleField.setText(BUNDLE.getString("DifferentValues"));
             else
                 scaleField.setText(scale);
@@ -802,6 +827,8 @@ public class PropertiesFrame extends javax.swing.JFrame {
                 else if(initialImgDir.equals(imgDirLocal))
                     initialImgDir = null;
             }
+            if(first)
+                first = false;
         }
         
         initialX = locationFieldX.getText();
@@ -957,6 +984,7 @@ public class PropertiesFrame extends javax.swing.JFrame {
     // Variables declaration - do not modify                     
     private ImageButton image;
     private javax.swing.JButton cancelButton;
+    private javax.swing.JButton applyButton;
     private javax.swing.JButton okButton;
     private javax.swing.JButton resetButton;
     private javax.swing.JLabel nameLabel;

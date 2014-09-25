@@ -148,7 +148,7 @@ public class UserDataManager {
      */
     public BufferedImage getImage(String name, String dir){
         
-        if(userDir == null)
+        if(userDir == null || dir == null)
             return null;
         
         readLock.lock();
