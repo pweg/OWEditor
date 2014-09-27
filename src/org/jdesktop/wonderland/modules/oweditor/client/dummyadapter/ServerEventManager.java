@@ -139,9 +139,9 @@ public class ServerEventManager {
 
             object.scale = backup.getScale();
 
-            object.rotationX = backup.getRotationX();
+            object.rotationX = backup.getRotationZ();
             object.rotationY = backup.getRotationY();
-            object.rotationZ = backup.getRotationZ();
+            object.rotationZ = backup.getRotationX();
         }
         createObject(object);
     }

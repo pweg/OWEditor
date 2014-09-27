@@ -46,7 +46,7 @@ public class ServerSimulator {
                 "5", false);
         so = createObject(
                 (float)-8.178859,  (float)-5.4412746, (float)0.060006, 
-                90, 50,10,
+                10, 50,90,
                 0.8, 
                 (float)2.00, (float)0.20, "Virtuelles Telefon", false);
         so.rights.add(new Rights("User", "U1", true, true,true,true,true,
@@ -76,14 +76,14 @@ public class ServerSimulator {
                 true,false));
         so = createObject(
                 (float)-20, (float)2.0,(float)0.0,  
-                0, 180,355,
+                45, 180,0,
                 1.3, 
                 (float)1.80, (float)1.80, 
                 "Circle long name long", false);
         so.isCircle = true;
         so = createObject(
                 (float)-20, (float)2.0,(float)0.0,  
-                0, 180,355,
+                54, 180,0,
                 1.3, 
                 (float)1.80, (float)1.80, 
                 "Block 3", false);
@@ -95,7 +95,7 @@ public class ServerSimulator {
                 "nothing", false);
         so = createObject(
                 (float)2.9455893, (float)1.7263716,(float)1.000591,  
-                0,10,20, 
+                20,10,0, 
                 1, 
                 (float)3.00, (float)3.00, 
                 "Block2", false);
@@ -109,7 +109,7 @@ public class ServerSimulator {
         
         so = createObject(
                 (float)-6.0, (float)-11.0,(float)1.0,  
-                0,10,20, 
+                20,10,0, 
                 1, 
                 (float)3.00, (float)3.00, 
                 "Avatar", true);

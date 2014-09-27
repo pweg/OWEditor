@@ -122,9 +122,9 @@ public class GUIEventManager implements GUIObserverInterface{
         
         if(object == null)
             throw new Exception();
-        object.rotationX = rot_x;
+        object.rotationX = rot_z;
         object.rotationY = rot_y;
-        object.rotationZ = rot_z;
+        object.rotationZ = rot_x;
         
         ac.sem.serverRotationEvent(id);
         

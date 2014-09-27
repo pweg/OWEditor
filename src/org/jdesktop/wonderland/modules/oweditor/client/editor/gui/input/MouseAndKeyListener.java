@@ -37,6 +37,7 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
     protected IWindowToInput window = null;
     
     private boolean shiftPressed = false;
+    private boolean controlPressed = false;
     
     private byte mode = 0;
     //private boolean copy = false;
@@ -59,7 +60,7 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
         Point p = window.revertBack(e.getPoint());
         
         //operations with shift pressed
-        if(shiftPressed && mode == NOMODE){
+        if((shiftPressed || controlPressed)&& mode == NOMODE){
             if(e.getButton() ==  MouseEvent.BUTTON1){
                 //switch selection, or selection rectangle
                 //in shift mode
@@ -105,7 +106,7 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
              //Panning
              else if ((e.getButton() ==  MouseEvent.BUTTON2 || e.getButton() ==  MouseEvent.BUTTON3)){
                  if(mode == NOMODE || mode == PASTE)
-                     graphic.cleanHelpingShapes();
+                     graphic.cleanHelpingShapes();                     
                  strategy = new mlPanStrategy(window);
                  //mlPanStrategy needs the panel coordinates in order to
                  //work properly.
@@ -132,14 +133,23 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
                     window.setPropertiesVisible(true);
                 }
             }
-        }else{
-            
-        }
-        
-        if (e.getButton() ==  MouseEvent.BUTTON3 && mode <= PASTE){            
-            new mlPopupStrategy(this).mousePressed(p);
-            window.repaint();  
-        }
+        }else if (e.getButton() ==  MouseEvent.BUTTON3)
+        {
+            //POPUP MENU
+            if(mode <= PASTE){            
+                new mlPopupStrategy(this).mousePressed(p);
+                window.repaint();  
+            //FINISH ROTATING
+            }else if(mode == ROTATE){
+                graphic.rotateFinished();
+                clear();
+            }
+            //FINISH SCALING
+            else if(mode == SCALE){
+                graphic.scaleFinished();
+                clear();
+            }
+        } 
      }
 
     @Override
@@ -235,6 +245,9 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
         if (key == KeyEvent.VK_SHIFT) {
             shiftPressed = true;
         }
+        else if(key == KeyEvent.VK_CONTROL){
+            controlPressed = true;
+        }
         //ESCAPE
         else if(key == KeyEvent.VK_ESCAPE){
             clear();
@@ -259,7 +272,9 @@ public class MouseAndKeyListener extends MouseInputAdapter implements KeyListene
     @Override
     public void keyReleased(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
-                shiftPressed = false;
+            shiftPressed = false;
+        }else if (e.getKeyCode() == KeyEvent.VK_CONTROL){
+            controlPressed = false;
         }
     }
     

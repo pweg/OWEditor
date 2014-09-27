@@ -860,9 +860,9 @@ public class PropertiesFrame extends javax.swing.JFrame {
             locationFieldY.setEnabled(true);
             locationFieldZ.setEnabled(true);
             nameField.setEnabled(true);
-            setLabelColorStandard(xLabel, normalColor);
-            setLabelColorStandard(yLabel, normalColor);
-            setLabelColorStandard(zLabel, normalColor);
+            setLabelColorStandard(xLabel, Color.red);
+            setLabelColorStandard(yLabel, Color.blue);
+            setLabelColorStandard(zLabel, Color.green);
             setLabelColorStandard(nameLabel, normalColor);
         }
     }
@@ -958,22 +958,21 @@ public class PropertiesFrame extends javax.swing.JFrame {
      * Resets the color for every label to standard (usually black).
      */
     private void resetLabelColor(){
-        if(normalFont == null)
-            return;
         setLabelColorStandard(nameLabel, normalColor);
-        setLabelColorStandard(xLabel, normalColor);
-        setLabelColorStandard(yLabel, normalColor);
-        setLabelColorStandard(zLabel, normalColor);
-        setLabelColorStandard(rotXLabel, normalColor);
-        setLabelColorStandard(rotYLabel, normalColor);
-        setLabelColorStandard(rotZLabel, normalColor);
+        setLabelColorStandard(xLabel, Color.red);
+        setLabelColorStandard(yLabel, Color.blue);
+        setLabelColorStandard(zLabel, Color.green);
+        setLabelColorStandard(rotXLabel, Color.red);
+        setLabelColorStandard(rotYLabel, Color.blue);
+        setLabelColorStandard(rotZLabel, Color.green);
         setLabelColorStandard(scaleLabel, normalColor);
     }
     
     /**
-     * Sets one label to standard color.
+     * Sets one label to a color.
      * 
      * @param label The label.
+     * @param color The color.
      */
     private void setLabelColorStandard(JLabel label, Color color){
         if(normalFont != null)

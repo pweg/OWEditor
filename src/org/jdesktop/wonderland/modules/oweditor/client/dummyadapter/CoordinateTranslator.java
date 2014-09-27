@@ -61,7 +61,7 @@ public class CoordinateTranslator implements CoordinateTranslatorInterface{
 
     @Override
     public double getRotation(IDataObject object) {
-        return object.getRotationX();
+        return object.getRotationZ();
     }
     
 

@@ -816,6 +816,8 @@ public class ImportFrame extends javax.swing.JFrame {
      * Resets the form. Means it sets all field values to zero.
      */
     private void reset(){
+        if(normalFont == null)
+            normalFont = jLabel2.getFont();
         
         locationFieldX.setText("0");
         locationFieldY.setText("0");
@@ -857,14 +859,13 @@ public class ImportFrame extends javax.swing.JFrame {
      * Resets the color for every label to standard (usually black).
      */
     private void resetLabelColor(){
-        if(normalFont == null)
-            return;
-        setLabelColorStandard(xLabel);
-        setLabelColorStandard(yLabel);
-        setLabelColorStandard(zLabel);
-        setLabelColorStandard(rotXLabel);
-        setLabelColorStandard(rotYLabel);
-        setLabelColorStandard(rotZLabel);
+        
+        setLabelColorStandard(xLabel, Color.red);
+        setLabelColorStandard(yLabel, Color.blue);
+        setLabelColorStandard(zLabel, Color.green);
+        setLabelColorStandard(rotXLabel, Color.red);
+        setLabelColorStandard(rotYLabel, Color.blue);
+        setLabelColorStandard(rotZLabel, Color.green);
         setLabelColorStandard(scaleLabel);
         setLabelColorStandard(modelNameLabel);
         setLabelColorStandard(moduleNameLabel);
@@ -878,6 +879,18 @@ public class ImportFrame extends javax.swing.JFrame {
     private void setLabelColorStandard(JLabel label){
         label.setFont(normalFont);
         label.setForeground(normalColor);
+    }
+    
+    /**
+     * Sets one label to a color.
+     * 
+     * @param label The label.
+     * @param color The color.
+     */
+    private void setLabelColorStandard(JLabel label, Color color){
+        if(normalFont != null)
+            label.setFont(normalFont);
+        label.setForeground(color);
     }
 
     // Variables declaration - do not modify                     
