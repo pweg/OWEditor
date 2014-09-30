@@ -417,13 +417,13 @@ public class ShapeManager {
      * @param shape The shape to add.
      * @param list The list to add the shape to.
      */
-
     private void addShape(ShapeObject shape, ArrayList<ShapeObject> list){
         double z = shape.getZ();
         Rectangle r = shape.getShape().getBounds();
         
         int i = 0;
         int position = 0;
+        boolean found = false;
         
         readLock.lock();
         try{
@@ -431,11 +431,13 @@ public class ShapeManager {
                 Rectangle r2 = s.getShape().getBounds();
                 
                 if(r.contains(r2)){
-                    position = i;
+                    if(!found)
+                        position = i;
                     break;
                 }
                 
                 if(s.getZ() > z){
+                    found = true;
                     position = i;
                 }
                 if(r2.contains(r)){
@@ -456,6 +458,11 @@ public class ShapeManager {
         }
     }
     
+    /**
+     * Readds shapes.
+     * 
+     * @param shape The shape to be readded.
+     */
     public void readdShape(ShapeObject shape) {
         shapes.remove(shape);
         addShape(shape, shapes);

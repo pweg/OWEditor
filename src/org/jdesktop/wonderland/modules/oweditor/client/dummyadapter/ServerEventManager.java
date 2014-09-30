@@ -118,7 +118,6 @@ public class ServerEventManager {
         
         if(so == null)
             return;
-        
         dui.notifyTranslation(id, so.x, so.y, so.z);
     }
 

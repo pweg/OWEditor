@@ -120,13 +120,12 @@ public class DataObjectManager {
            p = ct.transformCoordinatesInt(x, y, object.getWidthf()*scale, 
                    object.getHeightf()*scale);
            
-           boolean new_coords = x != object.getX() || y != object.getY();
-        
+           boolean new_coords = x != object.getX() || y != object.getY() 
+                   || z != object.getZf();        
               
            if(!new_coords){
                return;
            }
-           
            object.setCoordinates(x, y, z);
            checkDimensionChange(createTransformedObject(object));
         }finally{
