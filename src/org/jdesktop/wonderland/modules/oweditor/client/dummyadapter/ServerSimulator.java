@@ -2,6 +2,7 @@ package org.jdesktop.wonderland.modules.oweditor.client.dummyadapter;
 
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.ResourceBundle;
 
 /**
  * This is a simple class which simulates the server objects and
@@ -18,6 +19,11 @@ public class ServerSimulator {
     
     public ServerEventManager sua = null;
     public String name = "DummyServer";
+    private static final ResourceBundle BUNDLE = ResourceBundle.getBundle(
+            "org/jdesktop/wonderland/modules/oweditor/client/resources/Bundle");
+    public String everybody = BUNDLE.getString("Everybody");
+    public String user = BUNDLE.getString("User");
+    public String group = BUNDLE.getString("Group");
     
     public ServerSimulator(){
         objects = new ArrayList<ServerObject> ();
@@ -49,9 +55,9 @@ public class ServerSimulator {
                 10, 50,90,
                 0.8, 
                 (float)2.00, (float)0.20, "Virtuelles Telefon", false);
-        so.rights.add(new Rights("User", "U1", true, true,true,true,true,
+        so.rights.add(new Rights(user, "U1", true, true,true,true,true,
                 false,false));
-        so.rights.add(new Rights("Everybody", "everybody", true, true,true,true,true,
+        so.rights.add(new Rights(everybody, everybody, true, true,true,true,true,
                 true,true));
         so = createObject( 
                 (float)-4.331105,  (float)-12.422435, (float)1.4452857,
@@ -66,13 +72,13 @@ public class ServerSimulator {
                 1, 
                 (float)1.00, (float)1.00, 
                 "Audiorekorder", false);
-        so.rights.add(new Rights("User", "U1", true, true,true,true,true,
+        so.rights.add(new Rights(user, "U1", true, true,true,true,true,
                 false,false));
-        so.rights.add(new Rights("Everybody", "everybody", true, true,true,true,true,
+        so.rights.add(new Rights(everybody, everybody, true, true,true,true,true,
                 true,true));
-        so.rights.add(new Rights("UserGroup", "G1", true, true,true,true,true,
+        so.rights.add(new Rights(group, "G1", true, true,true,true,true,
                 true,false));
-        so.rights.add(new Rights("User", "U2", true, false,false,true,false,
+        so.rights.add(new Rights(user, "U2", true, false,false,true,false,
                 true,false));
         so = createObject(
                 (float)-20, (float)2.0,(float)0.0,  

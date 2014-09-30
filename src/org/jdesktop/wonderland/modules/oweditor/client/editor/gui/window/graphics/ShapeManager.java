@@ -400,46 +400,65 @@ public class ShapeManager {
             ShapeObject shape = factory.createShapeObject(ShapeFactory.RECTANGLE, 
                     x, y, z, width, height, id, name, rotation, scale, imgName,
                     imgDir);
-            addShape(shape);
+            addShape(shape, shapes);
         }else if (dataObject.getType() == IDataObject.CIRCLE){
             ShapeObject shape = factory.createShapeObject(ShapeFactory.CIRCLE, 
                 x, y, z, width, height, id, name, rotation, scale, imgName,
                 imgDir);
-            addShape(shape);
+            addShape(shape, shapes);
         }
     }
     
     /**
-     * Adds the shape in z order to the shapes list.
+     * Adds the shape a given shapes list.
+     * This method orders the shapes in Z-Position, but when a shape
+     * does surround other shapes, this will be considered.
      * 
      * @param shape The shape to add.
+     * @param list The list to add the shape to.
      */
-    public void addShape(ShapeObject shape){
+
+    private void addShape(ShapeObject shape, ArrayList<ShapeObject> list){
         double z = shape.getZ();
+        Rectangle r = shape.getShape().getBounds();
+        
+        int i = 0;
+        int position = 0;
+        
+        readLock.lock();
+        try{
+            for(ShapeObject s : list){
+                Rectangle r2 = s.getShape().getBounds();
+                
+                if(r.contains(r2)){
+                    position = i;
+                    break;
+                }
+                
+                if(s.getZ() > z){
+                    position = i;
+                }
+                if(r2.contains(r)){
+                    position = i+1;
+                }
+                
+                i++;
+            }
+        }finally{
+            readLock.unlock();
+        }
         
         writeLock.lock();
-        try {
-            boolean found = false;
-
-            //This is for an initial z sorted list.
-            //Could be done with a better algorithm though.
-            for(int i=0; i<shapes.size();i++){
-                if(shapes.get(i).getZ() >= z){
-                    shapes.add(i, shape);
-                    found = true;
-                    break;                        
-                }
-            }
-            if(!found)
-                shapes.add(shape);
-        } finally {
+        try{
+            list.add(position, shape);
+        }finally{
             writeLock.unlock();
         }
     }
     
     public void readdShape(ShapeObject shape) {
         shapes.remove(shape);
-        addShape(shape);
+        addShape(shape, shapes);
     }
     
     /**
@@ -699,19 +718,6 @@ public class ShapeManager {
         }
     }
     
-    private void addBackground(ShapeObject shape){
-        double z = shape.getZ();
-        
-        int i = 0;
-        for(ShapeObject s : background){
-            if(s.getZ() > z){
-                break;
-            }
-            i++;
-        }
-        background.add(i, shape);
-    }
-    
     /**
      * Sends a shape to the background or the foreground.
      * 
@@ -729,7 +735,7 @@ public class ShapeManager {
 
             shape.setColor(GUISettings.BGOBJECTCOLOR);
             removeShape(id);
-            addBackground(shape);
+            addShape(shape, background);
         }else{
             ShapeObject shape = getShape(id);
             
@@ -738,7 +744,7 @@ public class ShapeManager {
 
             shape.setColor(GUISettings.OBJECTCOLOR);
             removeBackground(id);
-            addShape(shape);
+            addShape(shape, shapes);
         }
     }
 }

@@ -60,11 +60,6 @@ public class InternalMediator implements IInternalMediator{
     }
 
     @Override
-    public ArrayList<ShapeObject> getShapesInSelectionRect() {
-        return ssm.getShapesInSelectionRect();
-    }
-
-    @Override
     public void setObjectRemoval(ArrayList<Long> ids) {
         window.setObjectRemoval(ids);
     }
@@ -122,11 +117,6 @@ public class InternalMediator implements IInternalMediator{
     @Override
     public void removeShape(long id) {
         sm.removeShape(id);
-    }
-
-    @Override
-    public void addShape(ShapeObject shape) {
-        sm.addShape(shape);
     }
 
     @Override

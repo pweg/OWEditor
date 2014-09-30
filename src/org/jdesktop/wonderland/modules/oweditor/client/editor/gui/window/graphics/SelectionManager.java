@@ -141,7 +141,7 @@ public class SelectionManager {
      */
     public void selectionRectReleased() {
         
-        ArrayList<ShapeObject> list = med.getShapesInSelectionRect();
+        ArrayList<ShapeObject> list = getShapesInSelectionRect();
         
         for(ShapeObject shape : list){
             shape.setSelected(true);

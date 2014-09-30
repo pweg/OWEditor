@@ -67,14 +67,6 @@ public interface IInternalMediator {
      */
     public void createSelectionRect(int x, int y, int width, int height);
 
-    /**
-     * Returns a list of shapes, which are in the
-     * selection rectangle.
-     * 
-     * @return An arraylist containing all shapes 
-     * which are in the current selection rectangle.
-     */
-    public ArrayList<ShapeObject> getShapesInSelectionRect();
 
     /**
      * Sets an object removal message for the adapter.
@@ -154,13 +146,6 @@ public interface IInternalMediator {
      * @param id The id of the shape to delete.
      */
     public void removeShape(long id);
-
-    /**
-     * Adds a shape.
-     * 
-     * @param shape The shape to add.
-     */
-    public void addShape(ShapeObject shape);
 
     /**
      * Readds a shape to the list. This is used on z-axis changes.

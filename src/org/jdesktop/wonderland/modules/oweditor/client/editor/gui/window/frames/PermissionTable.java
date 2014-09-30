@@ -137,8 +137,7 @@ public class PermissionTable extends AbstractTableModel{
         if(index == -1)
             return;
         
-        if(!rightsList.get(index).isEditable ||
-                rightsList.get(index).isEverybody)
+        if(rightsList.get(index).isEverybody)
             return;
         
         rightsList.remove(index);
@@ -195,11 +194,11 @@ public class PermissionTable extends AbstractTableModel{
             throw new IllegalStateException("Unknown row " + rowIndex);
         
         PermissionTableEntry entry = (PermissionTableEntry)rightsList.get(rowIndex);
-        if(entry.isEverybody && entry.isEditable){
+        if(entry.isEverybody){
             if(columnIndex == 0 || columnIndex == 1)
                 return false;
             else
-                return true;
+                return entry.isEditable;
         }else if(columnIndex >2){
             return entry.isEditable;
         }
@@ -242,9 +241,6 @@ public class PermissionTable extends AbstractTableModel{
         
         switch (columnIndex) {
             case 0:
-                if(isEntry((String) value, (String) getValueAt(rowIndex,1))){
-                    setValueAt("",rowIndex, 1);
-                }
                 entry.type = (String) value;
                 fireTableCellUpdated(rowIndex, columnIndex);
                 return;
