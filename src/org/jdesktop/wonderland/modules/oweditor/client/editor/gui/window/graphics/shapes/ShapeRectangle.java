@@ -89,6 +89,9 @@ public class ShapeRectangle extends ShapeObject{
         this.imgName = imgName;
         this.z = z;
         this.smi = smi;
+        
+        scaledShape = ShapeUtilities.scaleShape(originalShape, scale, 0,0);
+        transformedShape = ShapeUtilities.rotateShape(scaledShape, rotation);
     }
     
     @Override

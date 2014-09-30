@@ -12,7 +12,6 @@ import org.jdesktop.wonderland.modules.oweditor.client.editor.gui.window.graphic
  * @author Patrick
  *
  */
-
 public class ServerTransformationManager {
     
     private IInternalMediator med = null;
@@ -51,12 +50,16 @@ public class ServerTransformationManager {
         shape.setLocation(x, y, z);
         
         if(old_z != z){
-            //med.removeShape(id);
             med.readdShape(shape);
             med.repaint();
         }
     }
     
+    /**
+     * Does a late translation with backed up coordinates.
+     * 
+     * @param id Id of the shape.
+     */
     public void lateTransform(long id){
         if(lateTranslate.containsKey(id)){
             lateTranslate.remove(id);

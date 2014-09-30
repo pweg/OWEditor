@@ -212,7 +212,7 @@ public class SelectionManager {
      * Searches for shape objects which are enclosed by the 
      * selection rectangle. 
      * 
-     * @return an arraylist with shape objects. If
+     * @return An ArrayList with shape objects. If
      * no object is in the selection rectangle, it returns an empty list.
      */
     public ArrayList<ShapeObject> getShapesInSelectionRect(){

@@ -71,7 +71,7 @@ public class ShapeManager {
     /**
      * Returns all created shapes in an ArrayList.
      * 
-     * @return Arraylist of shapes.
+     * @return ArrayList of shapes.
      */
     public ArrayList<ShapeObject> getShapes(){
         return shapes;
@@ -80,7 +80,7 @@ public class ShapeManager {
     /**
      * Returns all background shapes.
      * 
-     * @return Arraylist of shapes.
+     * @return ArrayList of shapes.
      */
     public ArrayList<ShapeObject> getBGShapes(){
         return background;
@@ -419,16 +419,17 @@ public class ShapeManager {
      */
     private void addShape(ShapeObject shape, ArrayList<ShapeObject> list){
         double z = shape.getZ();
-        Rectangle r = shape.getShape().getBounds();
+        Rectangle r = shape.getTransformedShape().getBounds();
         
         int i = 0;
-        int position = 0;
         boolean found = false;
+        int position = list.size();
         
         readLock.lock();
         try{
+            
             for(ShapeObject s : list){
-                Rectangle r2 = s.getShape().getBounds();
+                Rectangle r2 = s.getTransformedShape().getBounds();
                 
                 if(r.contains(r2)){
                     if(!found)
@@ -436,7 +437,7 @@ public class ShapeManager {
                     break;
                 }
                 
-                if(s.getZ() > z){
+                if(s.getZ() > z && !found){
                     found = true;
                     position = i;
                 }
@@ -449,7 +450,6 @@ public class ShapeManager {
         }finally{
             readLock.unlock();
         }
-        
         writeLock.lock();
         try{
             list.add(position, shape);
@@ -537,7 +537,7 @@ public class ShapeManager {
      * Creates multiple dragging shapes from a given list of 
      * shapes.
      * 
-     * @param shapes an arraylist which holds all shapes from 
+     * @param shapes an ArrayList which holds all shapes from 
      * which the dragging shapes will be built
      * 
      */
@@ -552,7 +552,7 @@ public class ShapeManager {
     /**
      * Returns all dragging shapes currently available.
      * 
-     * @return Arraylist of dragging shapes.
+     * @return ArrayList of dragging shapes.
      */
     public ArrayList<DraggingObject> getDraggingShapes(){
         return draggingShapes;
@@ -584,7 +584,7 @@ public class ShapeManager {
     /**
      * Creates the transformation border.
      * 
-     * @param shapes The shapes, which the border should sorround.
+     * @param shapes The shapes, which the border should surround.
      * @param mode The mode of the border.
      */
     public void createShapeBorder(ArrayList<ShapeObject> shapes, 
