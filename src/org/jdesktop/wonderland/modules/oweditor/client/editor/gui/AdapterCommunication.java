@@ -143,8 +143,8 @@ public class AdapterCommunication implements IAdapterCommunication{
             
             rotation_old.add(new Vector3D(o.getRotationX(), o.getRotationY(),
                     o.getRotationZ()));
-            rotation_new.add(new Vector3D(rotation.get(i), o.getRotationY(),
-                    o.getRotationZ()));
+            rotation_new.add(new Vector3D(o.getRotationX(), o.getRotationY(),
+                    rotation.get(i)));
         }
         
         Command command = new RotateTranslate(ids, coordinates_old, rotation_old, 

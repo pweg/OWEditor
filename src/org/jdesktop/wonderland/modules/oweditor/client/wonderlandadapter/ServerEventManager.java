@@ -107,10 +107,24 @@ public class ServerEventManager {
         
         id = ac.bm.getOriginalID(id);
         
+        if(rotation.x > 0)
+            rotation.x = 360 - rotation.x;
+        else
+            rotation.x *= (-1);
+        if(rotation.y > 0)
+            rotation.y = 360 - rotation.y;
+        else
+            rotation.y *= (-1);
+        if(rotation.z > 0)
+            rotation.z = 360 - rotation.z;
+        else
+            rotation.z *= (-1);
+        
         for(IAdapterObserver observer : observers){
             observer.notifyScaling(id,(double) scale); 
             observer.notifyTranslation(id , x, y, z); 
-            observer.notifyRotation(id, rotation.y, rotation.x, rotation.z);
+            
+            observer.notifyRotation(id, rotation.x, rotation.z, rotation.y);
         }
     }
 
@@ -197,12 +211,25 @@ public class ServerEventManager {
 
             float height = coordinates.height;
             float width = coordinates.width;
+            
+            if(rotation.x > 0)
+                rotation.x = 360 - rotation.x;
+            else
+                rotation.x *= (-1);
+            if(rotation.y > 0)
+                rotation.y = 360 - rotation.y;
+            else
+                rotation.y *= (-1);
+            if(rotation.z > 0)
+                rotation.z = 360 - rotation.z;
+            else
+                rotation.z *= (-1);
 
             object.setID(id);
             object.setCoordinates(x, y, z);
-            object.setRotationX(rotation.y);
-            object.setRotationY(rotation.x);
-            object.setRotationZ(rotation.z);
+            object.setRotationX(rotation.x);
+            object.setRotationY(rotation.z);
+            object.setRotationZ(rotation.y);
             object.setScale(scale);
             object.setWidth(width);
             object.setHeight(height);

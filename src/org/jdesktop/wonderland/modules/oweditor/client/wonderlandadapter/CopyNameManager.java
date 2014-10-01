@@ -52,6 +52,4 @@ public class CopyNameManager {
         return name;
     }
     
-    
-    
 }

@@ -515,7 +515,7 @@ public class ImportFrame extends javax.swing.JFrame {
         //otherwise null pointer!
         this.setVisible(false);
         
-        double rotation = Double.valueOf(rotationFieldX.getText());
+        double rotation = Double.valueOf(rotationFieldZ.getText());
         double scale = Double.valueOf(scaleField.getText());
         fc.mainframe.toFront();
         fc.window.chooseLocation(boundsX, boundsY, rotation, scale);

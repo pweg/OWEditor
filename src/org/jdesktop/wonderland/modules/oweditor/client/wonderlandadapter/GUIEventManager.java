@@ -67,9 +67,9 @@ public class GUIEventManager implements GUIObserverInterface{
     @Override
     public void notifyRotation(long id, double rot_x, double rot_y, double rot_z) throws Exception {      
         id = ac.bm.getActiveID(id);
-        Vector3f cell_rot = new Vector3f((float) Math.toRadians(-rot_y),
-                (float) Math.toRadians(-rot_x),
-                (float) Math.toRadians(-rot_z));
+        Vector3f cell_rot = new Vector3f((float) Math.toRadians(-rot_x),
+                (float) Math.toRadians(-rot_z),
+                (float) Math.toRadians(-rot_y));
         ac.sc.rotate(id, cell_rot);
     }
 
@@ -217,9 +217,9 @@ public class GUIEventManager implements GUIObserverInterface{
         
         //Remember: z and y are reversed
         Vector3f translate = new Vector3f((float)x, (float)z, (float)y);
-        Vector3f rotate = new Vector3f((float) Math.toRadians(-rotationY),
-                (float) Math.toRadians(-rotationX),
-                (float) Math.toRadians(-rotationZ));
+        Vector3f rotate = new Vector3f((float) Math.toRadians(-rotationX),
+                (float) Math.toRadians(-rotationZ),
+                (float) Math.toRadians(-rotationY));
         
         if(!importer.importToServer(module_name, name)){
             LOGGER.warning("Import to server failed.");
