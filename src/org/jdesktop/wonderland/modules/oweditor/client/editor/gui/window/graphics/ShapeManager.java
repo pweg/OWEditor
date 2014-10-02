@@ -74,7 +74,7 @@ public class ShapeManager {
      * @return ArrayList of shapes.
      */
     public ArrayList<ShapeObject> getShapes(){
-        return shapes;
+        return (ArrayList<ShapeObject>) shapes.clone();
     }
     
     /**
@@ -83,7 +83,7 @@ public class ShapeManager {
      * @return ArrayList of shapes.
      */
     public ArrayList<ShapeObject> getBGShapes(){
-        return background;
+        return (ArrayList<ShapeObject>) background.clone();
     }
     
     /**
@@ -464,7 +464,12 @@ public class ShapeManager {
      * @param shape The shape to be readded.
      */
     public void readdShape(ShapeObject shape) {
-        shapes.remove(shape);
+        writeLock.lock();
+        try{
+            shapes.remove(shape);
+        }finally{
+            writeLock.unlock();
+        }
         addShape(shape, shapes);
     }
     

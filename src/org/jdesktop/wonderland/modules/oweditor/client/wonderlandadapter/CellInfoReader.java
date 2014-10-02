@@ -114,5 +114,21 @@ public class CellInfoReader {
     public static long getID(Cell cell){
         return Long.valueOf(cell.getCellID().toString());
     }
+
+    /**
+     * Returns the y-Extent (half height) of the cell.
+     * @param cell The cell.
+     * @return The y-Extent.
+     */
+    public static float getHeight(Cell cell) {
+        BoundingVolume bounds = cell.getLocalBounds();
+        
+        if(bounds instanceof BoundingBox){
+            return ((BoundingBox) bounds).yExtent;            
+        }else if(bounds instanceof BoundingSphere){
+            return ((BoundingSphere) bounds).radius;
+        }else
+            return 0;
+    }
     
 }

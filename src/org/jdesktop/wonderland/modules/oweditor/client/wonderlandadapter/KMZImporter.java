@@ -18,6 +18,8 @@
 
 package org.jdesktop.wonderland.modules.oweditor.client.wonderlandadapter;
 
+import com.jme.bounding.BoundingBox;
+import com.jme.bounding.BoundingSphere;
 import com.jme.bounding.BoundingVolume;
 import com.jme.scene.Node;
 import java.io.File;
@@ -396,6 +398,20 @@ public class KMZImporter {
         }catch(Exception e){
             LOGGER.log(Level.INFO, "Clear model exception", e);
         }
+    }
+
+    public float getHeight(){
+        if(importedModel == null)
+            return 0;
+        
+        BoundingVolume bounds = importedModel.getModelBG().getWorldBound();
+        
+        if(bounds instanceof BoundingBox){
+            return ((BoundingBox) bounds).yExtent;            
+        }else if(bounds instanceof BoundingSphere){
+            return ((BoundingSphere) bounds).radius;
+        }else
+            return 0;
     }
 
     

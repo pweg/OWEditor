@@ -76,7 +76,24 @@ public class GUIEventManager implements GUIObserverInterface{
     @Override
     public void notifyScaling(long id, double scale) throws Exception {
         id = ac.bm.getActiveID(id);
+        
+        Cell cell = ac.sc.getCell(id);
+        
+        if(cell == null)
+            throw new GUIEventException();
+        
+        float scale_old = CellInfoReader.getScale(cell);
+        float height = CellInfoReader.getHeight(cell);
+        Vector3fInfo coords = CellInfoReader.getCoordinates(cell);
+        
         ac.sc.scale(id,(float) scale);
+        
+        float normalizer = (height*(float)scale)-(height*scale_old);
+        coords.z = coords.z+normalizer;
+        
+        //to normalize the z-axis, so that scaled objects don't move in height.
+        ac.sc.translate(id, new Vector3f((float) coords.x,(float) coords.z,
+                (float) coords.y));
     }
     
     @Override
@@ -215,11 +232,18 @@ public class GUIEventManager implements GUIObserverInterface{
             double z, double rotationX, double rotationY, double rotationZ, 
             double scale) throws Exception{
         
+        //in order to set the coordinate to the ground, so that all objects
+        //can be set to the same height.
+        float height = importer.getHeight();
+        z += height;
+        
         //Remember: z and y are reversed
         Vector3f translate = new Vector3f((float)x, (float)z, (float)y);
         Vector3f rotate = new Vector3f((float) Math.toRadians(-rotationX),
                 (float) Math.toRadians(-rotationZ),
                 (float) Math.toRadians(-rotationY));
+        
+        
         
         if(!importer.importToServer(module_name, name)){
             LOGGER.warning("Import to server failed.");
