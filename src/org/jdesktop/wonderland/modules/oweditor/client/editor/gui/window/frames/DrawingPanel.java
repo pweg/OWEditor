@@ -127,8 +127,10 @@ public class DrawingPanel extends JPanel implements ChangeListener, IDrawingPane
         Rectangle r = getVisibleRect();
         
         readLock.lock();
-        double v_x = r.x/(curScale)*scale;
-        double v_y = r.y/(curScale)*scale;
+        double v_x = r.x/curScale*scale;
+        double v_y = r.y/curScale*scale;
+
+        Point mouse = this.getMousePosition();   
         
         /*
          * Calculates the width difference between the old and the new scale.
@@ -139,9 +141,21 @@ public class DrawingPanel extends JPanel implements ChangeListener, IDrawingPane
         double add_y = (r.height/curScale-r.height/scale)/2*scale; 
         readLock.unlock();
         
+        /*
+         * Calculates the mouse position differences to the viewport.
+         * This is done to make the viewport zoom in to the mouse position.
+         */
+        double mouse_x = ((r.x+r.width/2)-mouse.x)/10;
+        double mouse_y = ((r.y+r.height/2)-mouse.y)/10;
+        
+        if(scale>curScale){
+            mouse_x *= -1;
+            mouse_y *= -1;
+        }
+        
         //adds/subtract the viewport difference from the current viewport.
-        int new_x = (int) Math.round(v_x+ add_x);
-        int new_y = (int) Math.round(v_y+ add_y);
+        int new_x = (int) Math.round(v_x+ add_x + mouse_x);
+        int new_y = (int) Math.round(v_y+ add_y + mouse_y);
         
         if(new_x < 0)
             new_x = 0;
