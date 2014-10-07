@@ -161,7 +161,7 @@ public class ServerEventManager {
         if(so == null)
             return;
         
-        dui.notifyRotation(id, so.rotationX, so.rotationY ,so.rotationZ);
+        dui.notifyRotation(id, so.rotationZ, so.rotationY ,so.rotationX);
     }
 
     /**

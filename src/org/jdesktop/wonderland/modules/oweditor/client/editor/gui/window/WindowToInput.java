@@ -48,9 +48,7 @@ public class WindowToInput implements IWindowToInput {
 
     @Override
     public void changeScale(double scale) {
-        //double curScale = drawingPan.getScale();
         wc.frame.getDrawingPan().changeScale(scale);
-        //drawingPan.changeViewPort(curScale);
     }
 
     @Override

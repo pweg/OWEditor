@@ -26,7 +26,6 @@ public class DraggingEllipse extends DraggingObject{
     private Shape originalShape = null;
     private Shape scaledShape = null;
     private Shape transformedShape = null;
-    private Shape printShape = null;
     private Paint color = GUISettings.DRAGGINGCOLOR;
     private long id = 0;
     
@@ -81,7 +80,6 @@ public class DraggingEllipse extends DraggingObject{
         //When the border is created, the shapes still have not been drawn.
         scaledShape = ShapeUtilities.scaleShape(originalShape, initialScale,0,0);
         transformedShape = ShapeUtilities.rotateShape(scaledShape, initialRotation);  
-        printShape = at.createTransformedShape(transformedShape);
 
     }
 
@@ -115,10 +113,8 @@ public class DraggingEllipse extends DraggingObject{
                     rotationCenter.getY());
             transformedShape = transform.createTransformedShape(transformedShape);
         }
-
-        printShape = at.createTransformedShape(transformedShape);
         
-        g.draw(printShape); 
+        g.draw(at.createTransformedShape(transformedShape)); 
     }
 
     /**

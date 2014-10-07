@@ -103,9 +103,11 @@ public class DrawingPanel extends JPanel implements ChangeListener, IDrawingPane
         if(newScale <= (zoomSpeed/10)){
             zoomSpeed = zoomSpeed/10;
         }else if(newScale> zoomSpeed && newScale>scale && zoomSpeed < 1){
+            scale += (toAdd*zoomSpeed);
             zoomSpeed = zoomSpeed*10;
+            scale -= (toAdd*zoomSpeed);
         }
-        
+
         scale = scale + (toAdd*zoomSpeed);
         
         writeLock.unlock();
@@ -133,35 +135,24 @@ public class DrawingPanel extends JPanel implements ChangeListener, IDrawingPane
         Point mouse = this.getMousePosition();   
         
         /*
-         * Calculates the width difference between the old and the new scale.
-         * Halves it, in order to center the new viewpoint. And last, the new
-         * scale has to be applied to the result.
+         * Calculates the distance the mouse has to the 
+         * coordinates of the viewport
          */
-        double add_x = (r.width/curScale-r.width/scale)/2*scale; 
-        double add_y = (r.height/curScale-r.height/scale)/2*scale; 
-        readLock.unlock();
+        double mouse_x = mouse.x-r.x;
+        double mouse_y = mouse.y-r.y;
         
         /*
          * Calculates the mouse position differences to the viewport.
          * This is done to make the viewport zoom in to the mouse position.
          */
-        double mouse_x = ((r.x+r.width/2)-mouse.x)/10;
-        double mouse_y = ((r.y+r.height/2)-mouse.y)/10;
-        
-        if(scale>curScale){
-            mouse_x *= -1;
-            mouse_y *= -1;
-        }
+        double add_x = mouse_x - (mouse_x/curScale*scale);
+        double add_y = mouse_y - (mouse_y/curScale*scale);
+        readLock.unlock();
         
         //adds/subtract the viewport difference from the current viewport.
-        int new_x = (int) Math.round(v_x+ add_x + mouse_x);
-        int new_y = (int) Math.round(v_y+ add_y + mouse_y);
+        int new_x = (int) Math.round(v_x - add_x);
+        int new_y = (int) Math.round(v_y - add_y);
         
-        if(new_x < 0)
-            new_x = 0;
-        if(new_y < 0)
-            new_y = 0;
-
         //sets the new view.
         Point p = new Point(new_x, new_y);        
         fc.mainScrollPanel.getViewport().setView(fc.mainScrollPanel.getViewport().getView());

@@ -28,7 +28,6 @@ public class ShapeRectangle extends ShapeObject{
     private Rectangle originalShape = null;
     private Shape scaledShape = null;
     private Shape transformedShape = null;
-    private Shape printShape = null;
     
     private long id = -1;
     private boolean isSelected = false;
@@ -116,7 +115,7 @@ public class ShapeRectangle extends ShapeObject{
         transformedShape = ShapeUtilities.rotateShape(scaledShape, rotation);
         
         //image transformation
-        printShape =  at.createTransformedShape(transformedShape);
+        Shape printShape =  at.createTransformedShape(transformedShape);
         
         g.fill(printShape);
         
