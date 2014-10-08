@@ -150,8 +150,8 @@ public class DrawingPanel extends JPanel implements ChangeListener, IDrawingPane
         readLock.unlock();
         
         //adds/subtract the viewport difference from the current viewport.
-        int new_x = (int) Math.round(v_x - add_x);
-        int new_y = (int) Math.round(v_y - add_y);
+        int new_x = (int) Math.max(0,Math.round(v_x - add_x));
+        int new_y = (int) Math.max(0,Math.round(v_y - add_y));
         
         //sets the new view.
         Point p = new Point(new_x, new_y);        
