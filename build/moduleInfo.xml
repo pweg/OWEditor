@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<wonderland-module>
+    <name>OW-Editor</name>
+    <version>
+        <major>0</major>
+        <minor>2</minor>
+        <mini>0</mini>
+    </version>
+    <description>An editor for world creation</description>
+</wonderland-module>
